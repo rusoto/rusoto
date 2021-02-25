@@ -44,7 +44,7 @@ pub struct AssociateInstanceStorageConfigRequest {
     pub instance_id: String,
     /// <p>A valid resource type.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: InstanceStorageResourceType,
     /// <p>A valid storage type.</p>
     #[serde(rename = "StorageConfig")]
     pub storage_config: InstanceStorageConfig,
@@ -122,11 +122,116 @@ pub struct Attribute {
     /// <p>The type of attribute.</p>
     #[serde(rename = "AttributeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attribute_type: Option<String>,
+    pub attribute_type: Option<InstanceAttributeType>,
     /// <p>The value of the attribute.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Channel {
+    Chat,
+    Task,
+    Voice,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannel),
+}
+
+impl Default for Channel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Channel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Channel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Channel {
+    fn into(self) -> String {
+        match self {
+            Channel::Chat => "CHAT".to_string(),
+            Channel::Task => "TASK".to_string(),
+            Channel::Voice => "VOICE".to_string(),
+            Channel::UnknownVariant(UnknownChannel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Channel {
+    fn into(self) -> &'a str {
+        match self {
+            Channel::Chat => &"CHAT",
+            Channel::Task => &"TASK",
+            Channel::Voice => &"VOICE",
+            Channel::UnknownVariant(UnknownChannel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Channel {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHAT" => Channel::Chat,
+            "TASK" => Channel::Task,
+            "VOICE" => Channel::Voice,
+            _ => Channel::UnknownVariant(UnknownChannel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Channel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHAT" => Channel::Chat,
+            "TASK" => Channel::Task,
+            "VOICE" => Channel::Voice,
+            _ => Channel::UnknownVariant(UnknownChannel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Channel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Channel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Channel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A chat message.</p>
@@ -139,6 +244,101 @@ pub struct ChatMessage {
     /// <p>The type of the content. Supported types are text/plain.</p>
     #[serde(rename = "ContentType")]
     pub content_type: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparison {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Comparison {
+    Lt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparison),
+}
+
+impl Default for Comparison {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Comparison {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Comparison {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Comparison {
+    fn into(self) -> String {
+        match self {
+            Comparison::Lt => "LT".to_string(),
+            Comparison::UnknownVariant(UnknownComparison { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Comparison {
+    fn into(self) -> &'a str {
+        match self {
+            Comparison::Lt => &"LT",
+            Comparison::UnknownVariant(UnknownComparison { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Comparison {
+    fn from(name: &str) -> Self {
+        match name {
+            "LT" => Comparison::Lt,
+            _ => Comparison::UnknownVariant(UnknownComparison {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Comparison {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LT" => Comparison::Lt,
+            _ => Comparison::UnknownVariant(UnknownComparison { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Comparison {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Comparison {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Comparison {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a contact flow.</p>
@@ -172,7 +372,7 @@ pub struct ContactFlow {
     /// <p>The type of the contact flow. For descriptions of the available types, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/create-contact-flow.html#contact-flow-types">Choose a Contact Flow Type</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ContactFlowType>,
 }
 
 /// <p>Contains summary information about a contact flow.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
@@ -186,7 +386,7 @@ pub struct ContactFlowSummary {
     /// <p>The type of contact flow.</p>
     #[serde(rename = "ContactFlowType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_flow_type: Option<String>,
+    pub contact_flow_type: Option<ContactFlowType>,
     /// <p>The identifier of the contact flow.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -195,6 +395,141 @@ pub struct ContactFlowSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactFlowType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactFlowType {
+    AgentHold,
+    AgentTransfer,
+    AgentWhisper,
+    ContactFlow,
+    CustomerHold,
+    CustomerQueue,
+    CustomerWhisper,
+    OutboundWhisper,
+    QueueTransfer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactFlowType),
+}
+
+impl Default for ContactFlowType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactFlowType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactFlowType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactFlowType {
+    fn into(self) -> String {
+        match self {
+            ContactFlowType::AgentHold => "AGENT_HOLD".to_string(),
+            ContactFlowType::AgentTransfer => "AGENT_TRANSFER".to_string(),
+            ContactFlowType::AgentWhisper => "AGENT_WHISPER".to_string(),
+            ContactFlowType::ContactFlow => "CONTACT_FLOW".to_string(),
+            ContactFlowType::CustomerHold => "CUSTOMER_HOLD".to_string(),
+            ContactFlowType::CustomerQueue => "CUSTOMER_QUEUE".to_string(),
+            ContactFlowType::CustomerWhisper => "CUSTOMER_WHISPER".to_string(),
+            ContactFlowType::OutboundWhisper => "OUTBOUND_WHISPER".to_string(),
+            ContactFlowType::QueueTransfer => "QUEUE_TRANSFER".to_string(),
+            ContactFlowType::UnknownVariant(UnknownContactFlowType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactFlowType {
+    fn into(self) -> &'a str {
+        match self {
+            ContactFlowType::AgentHold => &"AGENT_HOLD",
+            ContactFlowType::AgentTransfer => &"AGENT_TRANSFER",
+            ContactFlowType::AgentWhisper => &"AGENT_WHISPER",
+            ContactFlowType::ContactFlow => &"CONTACT_FLOW",
+            ContactFlowType::CustomerHold => &"CUSTOMER_HOLD",
+            ContactFlowType::CustomerQueue => &"CUSTOMER_QUEUE",
+            ContactFlowType::CustomerWhisper => &"CUSTOMER_WHISPER",
+            ContactFlowType::OutboundWhisper => &"OUTBOUND_WHISPER",
+            ContactFlowType::QueueTransfer => &"QUEUE_TRANSFER",
+            ContactFlowType::UnknownVariant(UnknownContactFlowType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactFlowType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AGENT_HOLD" => ContactFlowType::AgentHold,
+            "AGENT_TRANSFER" => ContactFlowType::AgentTransfer,
+            "AGENT_WHISPER" => ContactFlowType::AgentWhisper,
+            "CONTACT_FLOW" => ContactFlowType::ContactFlow,
+            "CUSTOMER_HOLD" => ContactFlowType::CustomerHold,
+            "CUSTOMER_QUEUE" => ContactFlowType::CustomerQueue,
+            "CUSTOMER_WHISPER" => ContactFlowType::CustomerWhisper,
+            "OUTBOUND_WHISPER" => ContactFlowType::OutboundWhisper,
+            "QUEUE_TRANSFER" => ContactFlowType::QueueTransfer,
+            _ => ContactFlowType::UnknownVariant(UnknownContactFlowType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactFlowType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AGENT_HOLD" => ContactFlowType::AgentHold,
+            "AGENT_TRANSFER" => ContactFlowType::AgentTransfer,
+            "AGENT_WHISPER" => ContactFlowType::AgentWhisper,
+            "CONTACT_FLOW" => ContactFlowType::ContactFlow,
+            "CUSTOMER_HOLD" => ContactFlowType::CustomerHold,
+            "CUSTOMER_QUEUE" => ContactFlowType::CustomerQueue,
+            "CUSTOMER_WHISPER" => ContactFlowType::CustomerWhisper,
+            "OUTBOUND_WHISPER" => ContactFlowType::OutboundWhisper,
+            "QUEUE_TRANSFER" => ContactFlowType::QueueTransfer,
+            _ => ContactFlowType::UnknownVariant(UnknownContactFlowType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactFlowType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactFlowType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactFlowType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -219,7 +554,7 @@ pub struct CreateContactFlowRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of the contact flow. For descriptions of the available types, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/create-contact-flow.html#contact-flow-types">Choose a Contact Flow Type</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ContactFlowType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -248,7 +583,7 @@ pub struct CreateInstanceRequest {
     pub directory_id: Option<String>,
     /// <p>The type of identity management for your Amazon Connect users.</p>
     #[serde(rename = "IdentityManagementType")]
-    pub identity_management_type: String,
+    pub identity_management_type: DirectoryType,
     /// <p>Whether your contact center handles incoming contacts.</p>
     #[serde(rename = "InboundCallsEnabled")]
     pub inbound_calls_enabled: bool,
@@ -285,7 +620,7 @@ pub struct CreateIntegrationAssociationRequest {
     pub integration_arn: String,
     /// <p>The type of information to be ingested.</p>
     #[serde(rename = "IntegrationType")]
-    pub integration_type: String,
+    pub integration_type: IntegrationType,
     /// <p>The name of the external application.</p>
     #[serde(rename = "SourceApplicationName")]
     pub source_application_name: String,
@@ -294,7 +629,7 @@ pub struct CreateIntegrationAssociationRequest {
     pub source_application_url: String,
     /// <p>The type of the data source.</p>
     #[serde(rename = "SourceType")]
-    pub source_type: String,
+    pub source_type: SourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -397,7 +732,7 @@ pub struct CreateUseCaseRequest {
     pub integration_association_id: String,
     /// <p>The type of use case to associate to the AppIntegration association. Each AppIntegration association can have only one of each use case type.</p>
     #[serde(rename = "UseCaseType")]
-    pub use_case_type: String,
+    pub use_case_type: UseCaseType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -522,11 +857,11 @@ pub struct CurrentMetric {
     /// <p>The name of the metric.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<CurrentMetricName>,
     /// <p>The unit for the metric.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<Unit>,
 }
 
 /// <p>Contains the data for a real-time metric.</p>
@@ -541,6 +876,167 @@ pub struct CurrentMetricData {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<f64>,
+}
+
+/// <p>The current metric names.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCurrentMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CurrentMetricName {
+    AgentsAfterContactWork,
+    AgentsAvailable,
+    AgentsError,
+    AgentsNonProductive,
+    AgentsOnline,
+    AgentsOnCall,
+    AgentsOnContact,
+    AgentsStaffed,
+    ContactsInQueue,
+    ContactsScheduled,
+    OldestContactAge,
+    SlotsActive,
+    SlotsAvailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCurrentMetricName),
+}
+
+impl Default for CurrentMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CurrentMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CurrentMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CurrentMetricName {
+    fn into(self) -> String {
+        match self {
+            CurrentMetricName::AgentsAfterContactWork => "AGENTS_AFTER_CONTACT_WORK".to_string(),
+            CurrentMetricName::AgentsAvailable => "AGENTS_AVAILABLE".to_string(),
+            CurrentMetricName::AgentsError => "AGENTS_ERROR".to_string(),
+            CurrentMetricName::AgentsNonProductive => "AGENTS_NON_PRODUCTIVE".to_string(),
+            CurrentMetricName::AgentsOnline => "AGENTS_ONLINE".to_string(),
+            CurrentMetricName::AgentsOnCall => "AGENTS_ON_CALL".to_string(),
+            CurrentMetricName::AgentsOnContact => "AGENTS_ON_CONTACT".to_string(),
+            CurrentMetricName::AgentsStaffed => "AGENTS_STAFFED".to_string(),
+            CurrentMetricName::ContactsInQueue => "CONTACTS_IN_QUEUE".to_string(),
+            CurrentMetricName::ContactsScheduled => "CONTACTS_SCHEDULED".to_string(),
+            CurrentMetricName::OldestContactAge => "OLDEST_CONTACT_AGE".to_string(),
+            CurrentMetricName::SlotsActive => "SLOTS_ACTIVE".to_string(),
+            CurrentMetricName::SlotsAvailable => "SLOTS_AVAILABLE".to_string(),
+            CurrentMetricName::UnknownVariant(UnknownCurrentMetricName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CurrentMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            CurrentMetricName::AgentsAfterContactWork => &"AGENTS_AFTER_CONTACT_WORK",
+            CurrentMetricName::AgentsAvailable => &"AGENTS_AVAILABLE",
+            CurrentMetricName::AgentsError => &"AGENTS_ERROR",
+            CurrentMetricName::AgentsNonProductive => &"AGENTS_NON_PRODUCTIVE",
+            CurrentMetricName::AgentsOnline => &"AGENTS_ONLINE",
+            CurrentMetricName::AgentsOnCall => &"AGENTS_ON_CALL",
+            CurrentMetricName::AgentsOnContact => &"AGENTS_ON_CONTACT",
+            CurrentMetricName::AgentsStaffed => &"AGENTS_STAFFED",
+            CurrentMetricName::ContactsInQueue => &"CONTACTS_IN_QUEUE",
+            CurrentMetricName::ContactsScheduled => &"CONTACTS_SCHEDULED",
+            CurrentMetricName::OldestContactAge => &"OLDEST_CONTACT_AGE",
+            CurrentMetricName::SlotsActive => &"SLOTS_ACTIVE",
+            CurrentMetricName::SlotsAvailable => &"SLOTS_AVAILABLE",
+            CurrentMetricName::UnknownVariant(UnknownCurrentMetricName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CurrentMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AGENTS_AFTER_CONTACT_WORK" => CurrentMetricName::AgentsAfterContactWork,
+            "AGENTS_AVAILABLE" => CurrentMetricName::AgentsAvailable,
+            "AGENTS_ERROR" => CurrentMetricName::AgentsError,
+            "AGENTS_NON_PRODUCTIVE" => CurrentMetricName::AgentsNonProductive,
+            "AGENTS_ONLINE" => CurrentMetricName::AgentsOnline,
+            "AGENTS_ON_CALL" => CurrentMetricName::AgentsOnCall,
+            "AGENTS_ON_CONTACT" => CurrentMetricName::AgentsOnContact,
+            "AGENTS_STAFFED" => CurrentMetricName::AgentsStaffed,
+            "CONTACTS_IN_QUEUE" => CurrentMetricName::ContactsInQueue,
+            "CONTACTS_SCHEDULED" => CurrentMetricName::ContactsScheduled,
+            "OLDEST_CONTACT_AGE" => CurrentMetricName::OldestContactAge,
+            "SLOTS_ACTIVE" => CurrentMetricName::SlotsActive,
+            "SLOTS_AVAILABLE" => CurrentMetricName::SlotsAvailable,
+            _ => CurrentMetricName::UnknownVariant(UnknownCurrentMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CurrentMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AGENTS_AFTER_CONTACT_WORK" => CurrentMetricName::AgentsAfterContactWork,
+            "AGENTS_AVAILABLE" => CurrentMetricName::AgentsAvailable,
+            "AGENTS_ERROR" => CurrentMetricName::AgentsError,
+            "AGENTS_NON_PRODUCTIVE" => CurrentMetricName::AgentsNonProductive,
+            "AGENTS_ONLINE" => CurrentMetricName::AgentsOnline,
+            "AGENTS_ON_CALL" => CurrentMetricName::AgentsOnCall,
+            "AGENTS_ON_CONTACT" => CurrentMetricName::AgentsOnContact,
+            "AGENTS_STAFFED" => CurrentMetricName::AgentsStaffed,
+            "CONTACTS_IN_QUEUE" => CurrentMetricName::ContactsInQueue,
+            "CONTACTS_SCHEDULED" => CurrentMetricName::ContactsScheduled,
+            "OLDEST_CONTACT_AGE" => CurrentMetricName::OldestContactAge,
+            "SLOTS_ACTIVE" => CurrentMetricName::SlotsActive,
+            "SLOTS_AVAILABLE" => CurrentMetricName::SlotsAvailable,
+            _ => CurrentMetricName::UnknownVariant(UnknownCurrentMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CurrentMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CurrentMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CurrentMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a set of real-time metrics.</p>
@@ -648,7 +1144,7 @@ pub struct DescribeContactFlowResponse {
 pub struct DescribeInstanceAttributeRequest {
     /// <p>The type of attribute.</p>
     #[serde(rename = "AttributeType")]
-    pub attribute_type: String,
+    pub attribute_type: InstanceAttributeType,
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -691,7 +1187,7 @@ pub struct DescribeInstanceStorageConfigRequest {
     pub instance_id: String,
     /// <p>A valid resource type.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: InstanceStorageResourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -807,11 +1303,116 @@ pub struct Dimensions {
     /// <p>The channel used for grouping and filters.</p>
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel: Option<String>,
+    pub channel: Option<Channel>,
     /// <p>Information about the queue for which metrics are returned.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue: Option<QueueReference>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectoryType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectoryType {
+    ConnectManaged,
+    ExistingDirectory,
+    Saml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectoryType),
+}
+
+impl Default for DirectoryType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectoryType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectoryType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectoryType {
+    fn into(self) -> String {
+        match self {
+            DirectoryType::ConnectManaged => "CONNECT_MANAGED".to_string(),
+            DirectoryType::ExistingDirectory => "EXISTING_DIRECTORY".to_string(),
+            DirectoryType::Saml => "SAML".to_string(),
+            DirectoryType::UnknownVariant(UnknownDirectoryType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectoryType {
+    fn into(self) -> &'a str {
+        match self {
+            DirectoryType::ConnectManaged => &"CONNECT_MANAGED",
+            DirectoryType::ExistingDirectory => &"EXISTING_DIRECTORY",
+            DirectoryType::Saml => &"SAML",
+            DirectoryType::UnknownVariant(UnknownDirectoryType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectoryType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECT_MANAGED" => DirectoryType::ConnectManaged,
+            "EXISTING_DIRECTORY" => DirectoryType::ExistingDirectory,
+            "SAML" => DirectoryType::Saml,
+            _ => DirectoryType::UnknownVariant(UnknownDirectoryType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectoryType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECT_MANAGED" => DirectoryType::ConnectManaged,
+            "EXISTING_DIRECTORY" => DirectoryType::ExistingDirectory,
+            "SAML" => DirectoryType::Saml,
+            _ => DirectoryType::UnknownVariant(UnknownDirectoryType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DirectoryType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectoryType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -836,7 +1437,7 @@ pub struct DisassociateInstanceStorageConfigRequest {
     pub instance_id: String,
     /// <p>A valid resource type.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: InstanceStorageResourceType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -894,10 +1495,105 @@ pub struct DisassociateSecurityKeyRequest {
 pub struct EncryptionConfig {
     /// <p>The type of encryption.</p>
     #[serde(rename = "EncryptionType")]
-    pub encryption_type: String,
+    pub encryption_type: EncryptionType,
     /// <p>The identifier of the encryption key.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionType {
+    Kms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionType),
+}
+
+impl Default for EncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionType {
+    fn into(self) -> String {
+        match self {
+            EncryptionType::Kms => "KMS".to_string(),
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionType::Kms => &"KMS",
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KMS" => EncryptionType::Kms,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KMS" => EncryptionType::Kms,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains the filter to apply when retrieving metrics.</p>
@@ -907,7 +1603,7 @@ pub struct Filters {
     /// <p>The channel to use to filter the metrics.</p>
     #[serde(rename = "Channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channels: Option<Vec<String>>,
+    pub channels: Option<Vec<Channel>>,
     /// <p>The queues to use to filter the metrics. You can specify up to 100 queues per request.</p>
     #[serde(rename = "Queues")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -946,7 +1642,7 @@ pub struct GetCurrentMetricDataRequest {
     /// <p>The grouping applied to the metrics returned. For example, when grouped by <code>QUEUE</code>, the metrics returned apply to each queue rather than aggregated for all queues. If you group by <code>CHANNEL</code>, you should include a Channels filter. VOICE, CHAT, and TASK channels are supported.</p> <p>If no <code>Grouping</code> is included in the request, a summary of metrics is returned.</p>
     #[serde(rename = "Groupings")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub groupings: Option<Vec<String>>,
+    pub groupings: Option<Vec<Grouping>>,
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -1006,7 +1702,7 @@ pub struct GetMetricDataRequest {
     /// <p>The grouping applied to the metrics returned. For example, when results are grouped by queue, the metrics returned are grouped by queue. The values returned apply to the metrics for each queue rather than aggregated for all queues.</p> <p>The only supported grouping is <code>QUEUE</code>.</p> <p>If no grouping is specified, a summary of metrics for all queues is returned.</p>
     #[serde(rename = "Groupings")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub groupings: Option<Vec<String>>,
+    pub groupings: Option<Vec<Grouping>>,
     /// <p><p>The metrics to retrieve. Specify the name, unit, and statistic for each metric. The following historical metrics are available. For a description of each metric, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/historical-metrics-definitions.html">Historical Metrics Definitions</a> in the <i>Amazon Connect Administrator Guide</i>.</p> <dl> <dt>ABANDON<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>AFTER</em>CONTACT<em>WORK</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>API<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CALLBACK<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>ABANDONED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>AGENT<em>HUNG</em>UP<em>FIRST</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>CONSULTED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HANDLED<em>INCOMING</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HANDLED<em>OUTBOUND</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HOLD<em>ABANDONS</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>MISSED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>QUEUED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>IN</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>IN</em>FROM<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>OUT</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>OUT</em>FROM<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>HANDLE</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>HOLD<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>INTERACTION</em>AND<em>HOLD</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>INTERACTION<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>OCCUPANCY</dt> <dd> <p>Unit: PERCENT</p> <p>Statistic: AVG</p> </dd> <dt>QUEUE</em>ANSWER<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>QUEUED</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: MAX</p> </dd> <dt>SERVICE_LEVEL</dt> <dd> <p>Unit: PERCENT</p> <p>Statistic: AVG</p> <p>Threshold: Only &quot;Less than&quot; comparisons are supported, with the following service level thresholds: 15, 20, 25, 30, 45, 60, 90, 120, 180, 240, 300, 600</p> </dd> </dl></p>
     #[serde(rename = "HistoricalMetrics")]
     pub historical_metrics: Vec<HistoricalMetric>,
@@ -1037,6 +1733,107 @@ pub struct GetMetricDataResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGrouping {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Grouping {
+    Channel,
+    Queue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGrouping),
+}
+
+impl Default for Grouping {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Grouping {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Grouping {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Grouping {
+    fn into(self) -> String {
+        match self {
+            Grouping::Channel => "CHANNEL".to_string(),
+            Grouping::Queue => "QUEUE".to_string(),
+            Grouping::UnknownVariant(UnknownGrouping { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Grouping {
+    fn into(self) -> &'a str {
+        match self {
+            Grouping::Channel => &"CHANNEL",
+            Grouping::Queue => &"QUEUE",
+            Grouping::UnknownVariant(UnknownGrouping { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Grouping {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHANNEL" => Grouping::Channel,
+            "QUEUE" => Grouping::Queue,
+            _ => Grouping::UnknownVariant(UnknownGrouping {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Grouping {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHANNEL" => Grouping::Channel,
+            "QUEUE" => Grouping::Queue,
+            _ => Grouping::UnknownVariant(UnknownGrouping { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Grouping {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Grouping {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Grouping {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a hierarchy group.</p>
@@ -1194,11 +1991,11 @@ pub struct HistoricalMetric {
     /// <p>The name of the metric.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<HistoricalMetricName>,
     /// <p>The statistic for the metric.</p>
     #[serde(rename = "Statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statistic: Option<String>,
+    pub statistic: Option<Statistic>,
     /// <p>The threshold for the metric, used with service level metrics.</p>
     #[serde(rename = "Threshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1206,7 +2003,7 @@ pub struct HistoricalMetric {
     /// <p>The unit for the metric.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<Unit>,
 }
 
 /// <p>Contains the data for a historical metric.</p>
@@ -1221,6 +2018,251 @@ pub struct HistoricalMetricData {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<f64>,
+}
+
+/// <p>The historical metric names.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHistoricalMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HistoricalMetricName {
+    AbandonTime,
+    AfterContactWorkTime,
+    ApiContactsHandled,
+    CallbackContactsHandled,
+    ContactsAbandoned,
+    ContactsAgentHungUpFirst,
+    ContactsConsulted,
+    ContactsHandled,
+    ContactsHandledIncoming,
+    ContactsHandledOutbound,
+    ContactsHoldAbandons,
+    ContactsMissed,
+    ContactsQueued,
+    ContactsTransferredIn,
+    ContactsTransferredInFromQueue,
+    ContactsTransferredOut,
+    ContactsTransferredOutFromQueue,
+    HandleTime,
+    HoldTime,
+    InteractionAndHoldTime,
+    InteractionTime,
+    Occupancy,
+    QueuedTime,
+    QueueAnswerTime,
+    ServiceLevel,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHistoricalMetricName),
+}
+
+impl Default for HistoricalMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HistoricalMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HistoricalMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HistoricalMetricName {
+    fn into(self) -> String {
+        match self {
+            HistoricalMetricName::AbandonTime => "ABANDON_TIME".to_string(),
+            HistoricalMetricName::AfterContactWorkTime => "AFTER_CONTACT_WORK_TIME".to_string(),
+            HistoricalMetricName::ApiContactsHandled => "API_CONTACTS_HANDLED".to_string(),
+            HistoricalMetricName::CallbackContactsHandled => {
+                "CALLBACK_CONTACTS_HANDLED".to_string()
+            }
+            HistoricalMetricName::ContactsAbandoned => "CONTACTS_ABANDONED".to_string(),
+            HistoricalMetricName::ContactsAgentHungUpFirst => {
+                "CONTACTS_AGENT_HUNG_UP_FIRST".to_string()
+            }
+            HistoricalMetricName::ContactsConsulted => "CONTACTS_CONSULTED".to_string(),
+            HistoricalMetricName::ContactsHandled => "CONTACTS_HANDLED".to_string(),
+            HistoricalMetricName::ContactsHandledIncoming => {
+                "CONTACTS_HANDLED_INCOMING".to_string()
+            }
+            HistoricalMetricName::ContactsHandledOutbound => {
+                "CONTACTS_HANDLED_OUTBOUND".to_string()
+            }
+            HistoricalMetricName::ContactsHoldAbandons => "CONTACTS_HOLD_ABANDONS".to_string(),
+            HistoricalMetricName::ContactsMissed => "CONTACTS_MISSED".to_string(),
+            HistoricalMetricName::ContactsQueued => "CONTACTS_QUEUED".to_string(),
+            HistoricalMetricName::ContactsTransferredIn => "CONTACTS_TRANSFERRED_IN".to_string(),
+            HistoricalMetricName::ContactsTransferredInFromQueue => {
+                "CONTACTS_TRANSFERRED_IN_FROM_QUEUE".to_string()
+            }
+            HistoricalMetricName::ContactsTransferredOut => "CONTACTS_TRANSFERRED_OUT".to_string(),
+            HistoricalMetricName::ContactsTransferredOutFromQueue => {
+                "CONTACTS_TRANSFERRED_OUT_FROM_QUEUE".to_string()
+            }
+            HistoricalMetricName::HandleTime => "HANDLE_TIME".to_string(),
+            HistoricalMetricName::HoldTime => "HOLD_TIME".to_string(),
+            HistoricalMetricName::InteractionAndHoldTime => "INTERACTION_AND_HOLD_TIME".to_string(),
+            HistoricalMetricName::InteractionTime => "INTERACTION_TIME".to_string(),
+            HistoricalMetricName::Occupancy => "OCCUPANCY".to_string(),
+            HistoricalMetricName::QueuedTime => "QUEUED_TIME".to_string(),
+            HistoricalMetricName::QueueAnswerTime => "QUEUE_ANSWER_TIME".to_string(),
+            HistoricalMetricName::ServiceLevel => "SERVICE_LEVEL".to_string(),
+            HistoricalMetricName::UnknownVariant(UnknownHistoricalMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HistoricalMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            HistoricalMetricName::AbandonTime => &"ABANDON_TIME",
+            HistoricalMetricName::AfterContactWorkTime => &"AFTER_CONTACT_WORK_TIME",
+            HistoricalMetricName::ApiContactsHandled => &"API_CONTACTS_HANDLED",
+            HistoricalMetricName::CallbackContactsHandled => &"CALLBACK_CONTACTS_HANDLED",
+            HistoricalMetricName::ContactsAbandoned => &"CONTACTS_ABANDONED",
+            HistoricalMetricName::ContactsAgentHungUpFirst => &"CONTACTS_AGENT_HUNG_UP_FIRST",
+            HistoricalMetricName::ContactsConsulted => &"CONTACTS_CONSULTED",
+            HistoricalMetricName::ContactsHandled => &"CONTACTS_HANDLED",
+            HistoricalMetricName::ContactsHandledIncoming => &"CONTACTS_HANDLED_INCOMING",
+            HistoricalMetricName::ContactsHandledOutbound => &"CONTACTS_HANDLED_OUTBOUND",
+            HistoricalMetricName::ContactsHoldAbandons => &"CONTACTS_HOLD_ABANDONS",
+            HistoricalMetricName::ContactsMissed => &"CONTACTS_MISSED",
+            HistoricalMetricName::ContactsQueued => &"CONTACTS_QUEUED",
+            HistoricalMetricName::ContactsTransferredIn => &"CONTACTS_TRANSFERRED_IN",
+            HistoricalMetricName::ContactsTransferredInFromQueue => {
+                &"CONTACTS_TRANSFERRED_IN_FROM_QUEUE"
+            }
+            HistoricalMetricName::ContactsTransferredOut => &"CONTACTS_TRANSFERRED_OUT",
+            HistoricalMetricName::ContactsTransferredOutFromQueue => {
+                &"CONTACTS_TRANSFERRED_OUT_FROM_QUEUE"
+            }
+            HistoricalMetricName::HandleTime => &"HANDLE_TIME",
+            HistoricalMetricName::HoldTime => &"HOLD_TIME",
+            HistoricalMetricName::InteractionAndHoldTime => &"INTERACTION_AND_HOLD_TIME",
+            HistoricalMetricName::InteractionTime => &"INTERACTION_TIME",
+            HistoricalMetricName::Occupancy => &"OCCUPANCY",
+            HistoricalMetricName::QueuedTime => &"QUEUED_TIME",
+            HistoricalMetricName::QueueAnswerTime => &"QUEUE_ANSWER_TIME",
+            HistoricalMetricName::ServiceLevel => &"SERVICE_LEVEL",
+            HistoricalMetricName::UnknownVariant(UnknownHistoricalMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HistoricalMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABANDON_TIME" => HistoricalMetricName::AbandonTime,
+            "AFTER_CONTACT_WORK_TIME" => HistoricalMetricName::AfterContactWorkTime,
+            "API_CONTACTS_HANDLED" => HistoricalMetricName::ApiContactsHandled,
+            "CALLBACK_CONTACTS_HANDLED" => HistoricalMetricName::CallbackContactsHandled,
+            "CONTACTS_ABANDONED" => HistoricalMetricName::ContactsAbandoned,
+            "CONTACTS_AGENT_HUNG_UP_FIRST" => HistoricalMetricName::ContactsAgentHungUpFirst,
+            "CONTACTS_CONSULTED" => HistoricalMetricName::ContactsConsulted,
+            "CONTACTS_HANDLED" => HistoricalMetricName::ContactsHandled,
+            "CONTACTS_HANDLED_INCOMING" => HistoricalMetricName::ContactsHandledIncoming,
+            "CONTACTS_HANDLED_OUTBOUND" => HistoricalMetricName::ContactsHandledOutbound,
+            "CONTACTS_HOLD_ABANDONS" => HistoricalMetricName::ContactsHoldAbandons,
+            "CONTACTS_MISSED" => HistoricalMetricName::ContactsMissed,
+            "CONTACTS_QUEUED" => HistoricalMetricName::ContactsQueued,
+            "CONTACTS_TRANSFERRED_IN" => HistoricalMetricName::ContactsTransferredIn,
+            "CONTACTS_TRANSFERRED_IN_FROM_QUEUE" => {
+                HistoricalMetricName::ContactsTransferredInFromQueue
+            }
+            "CONTACTS_TRANSFERRED_OUT" => HistoricalMetricName::ContactsTransferredOut,
+            "CONTACTS_TRANSFERRED_OUT_FROM_QUEUE" => {
+                HistoricalMetricName::ContactsTransferredOutFromQueue
+            }
+            "HANDLE_TIME" => HistoricalMetricName::HandleTime,
+            "HOLD_TIME" => HistoricalMetricName::HoldTime,
+            "INTERACTION_AND_HOLD_TIME" => HistoricalMetricName::InteractionAndHoldTime,
+            "INTERACTION_TIME" => HistoricalMetricName::InteractionTime,
+            "OCCUPANCY" => HistoricalMetricName::Occupancy,
+            "QUEUED_TIME" => HistoricalMetricName::QueuedTime,
+            "QUEUE_ANSWER_TIME" => HistoricalMetricName::QueueAnswerTime,
+            "SERVICE_LEVEL" => HistoricalMetricName::ServiceLevel,
+            _ => HistoricalMetricName::UnknownVariant(UnknownHistoricalMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HistoricalMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABANDON_TIME" => HistoricalMetricName::AbandonTime,
+            "AFTER_CONTACT_WORK_TIME" => HistoricalMetricName::AfterContactWorkTime,
+            "API_CONTACTS_HANDLED" => HistoricalMetricName::ApiContactsHandled,
+            "CALLBACK_CONTACTS_HANDLED" => HistoricalMetricName::CallbackContactsHandled,
+            "CONTACTS_ABANDONED" => HistoricalMetricName::ContactsAbandoned,
+            "CONTACTS_AGENT_HUNG_UP_FIRST" => HistoricalMetricName::ContactsAgentHungUpFirst,
+            "CONTACTS_CONSULTED" => HistoricalMetricName::ContactsConsulted,
+            "CONTACTS_HANDLED" => HistoricalMetricName::ContactsHandled,
+            "CONTACTS_HANDLED_INCOMING" => HistoricalMetricName::ContactsHandledIncoming,
+            "CONTACTS_HANDLED_OUTBOUND" => HistoricalMetricName::ContactsHandledOutbound,
+            "CONTACTS_HOLD_ABANDONS" => HistoricalMetricName::ContactsHoldAbandons,
+            "CONTACTS_MISSED" => HistoricalMetricName::ContactsMissed,
+            "CONTACTS_QUEUED" => HistoricalMetricName::ContactsQueued,
+            "CONTACTS_TRANSFERRED_IN" => HistoricalMetricName::ContactsTransferredIn,
+            "CONTACTS_TRANSFERRED_IN_FROM_QUEUE" => {
+                HistoricalMetricName::ContactsTransferredInFromQueue
+            }
+            "CONTACTS_TRANSFERRED_OUT" => HistoricalMetricName::ContactsTransferredOut,
+            "CONTACTS_TRANSFERRED_OUT_FROM_QUEUE" => {
+                HistoricalMetricName::ContactsTransferredOutFromQueue
+            }
+            "HANDLE_TIME" => HistoricalMetricName::HandleTime,
+            "HOLD_TIME" => HistoricalMetricName::HoldTime,
+            "INTERACTION_AND_HOLD_TIME" => HistoricalMetricName::InteractionAndHoldTime,
+            "INTERACTION_TIME" => HistoricalMetricName::InteractionTime,
+            "OCCUPANCY" => HistoricalMetricName::Occupancy,
+            "QUEUED_TIME" => HistoricalMetricName::QueuedTime,
+            "QUEUE_ANSWER_TIME" => HistoricalMetricName::QueueAnswerTime,
+            "SERVICE_LEVEL" => HistoricalMetricName::ServiceLevel,
+            _ => HistoricalMetricName::UnknownVariant(UnknownHistoricalMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HistoricalMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HistoricalMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HistoricalMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about the historical metrics retrieved.</p>
@@ -1274,7 +2316,7 @@ pub struct Instance {
     /// <p>The identity management type.</p>
     #[serde(rename = "IdentityManagementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_management_type: Option<String>,
+    pub identity_management_type: Option<DirectoryType>,
     /// <p>Whether inbound calls are enabled.</p>
     #[serde(rename = "InboundCallsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1286,7 +2328,7 @@ pub struct Instance {
     /// <p>The state of the instance.</p>
     #[serde(rename = "InstanceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_status: Option<String>,
+    pub instance_status: Option<InstanceStatus>,
     /// <p>Whether outbound calls are enabled.</p>
     #[serde(rename = "OutboundCallsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1299,6 +2341,241 @@ pub struct Instance {
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<InstanceStatusReason>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceAttributeType {
+    AutoResolveBestVoices,
+    ContactflowLogs,
+    ContactLens,
+    EarlyMedia,
+    InboundCalls,
+    OutboundCalls,
+    UseCustomTtsVoices,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceAttributeType),
+}
+
+impl Default for InstanceAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceAttributeType {
+    fn into(self) -> String {
+        match self {
+            InstanceAttributeType::AutoResolveBestVoices => "AUTO_RESOLVE_BEST_VOICES".to_string(),
+            InstanceAttributeType::ContactflowLogs => "CONTACTFLOW_LOGS".to_string(),
+            InstanceAttributeType::ContactLens => "CONTACT_LENS".to_string(),
+            InstanceAttributeType::EarlyMedia => "EARLY_MEDIA".to_string(),
+            InstanceAttributeType::InboundCalls => "INBOUND_CALLS".to_string(),
+            InstanceAttributeType::OutboundCalls => "OUTBOUND_CALLS".to_string(),
+            InstanceAttributeType::UseCustomTtsVoices => "USE_CUSTOM_TTS_VOICES".to_string(),
+            InstanceAttributeType::UnknownVariant(UnknownInstanceAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceAttributeType::AutoResolveBestVoices => &"AUTO_RESOLVE_BEST_VOICES",
+            InstanceAttributeType::ContactflowLogs => &"CONTACTFLOW_LOGS",
+            InstanceAttributeType::ContactLens => &"CONTACT_LENS",
+            InstanceAttributeType::EarlyMedia => &"EARLY_MEDIA",
+            InstanceAttributeType::InboundCalls => &"INBOUND_CALLS",
+            InstanceAttributeType::OutboundCalls => &"OUTBOUND_CALLS",
+            InstanceAttributeType::UseCustomTtsVoices => &"USE_CUSTOM_TTS_VOICES",
+            InstanceAttributeType::UnknownVariant(UnknownInstanceAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO_RESOLVE_BEST_VOICES" => InstanceAttributeType::AutoResolveBestVoices,
+            "CONTACTFLOW_LOGS" => InstanceAttributeType::ContactflowLogs,
+            "CONTACT_LENS" => InstanceAttributeType::ContactLens,
+            "EARLY_MEDIA" => InstanceAttributeType::EarlyMedia,
+            "INBOUND_CALLS" => InstanceAttributeType::InboundCalls,
+            "OUTBOUND_CALLS" => InstanceAttributeType::OutboundCalls,
+            "USE_CUSTOM_TTS_VOICES" => InstanceAttributeType::UseCustomTtsVoices,
+            _ => InstanceAttributeType::UnknownVariant(UnknownInstanceAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO_RESOLVE_BEST_VOICES" => InstanceAttributeType::AutoResolveBestVoices,
+            "CONTACTFLOW_LOGS" => InstanceAttributeType::ContactflowLogs,
+            "CONTACT_LENS" => InstanceAttributeType::ContactLens,
+            "EARLY_MEDIA" => InstanceAttributeType::EarlyMedia,
+            "INBOUND_CALLS" => InstanceAttributeType::InboundCalls,
+            "OUTBOUND_CALLS" => InstanceAttributeType::OutboundCalls,
+            "USE_CUSTOM_TTS_VOICES" => InstanceAttributeType::UseCustomTtsVoices,
+            _ => InstanceAttributeType::UnknownVariant(UnknownInstanceAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceStatus {
+    Active,
+    CreationFailed,
+    CreationInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceStatus),
+}
+
+impl Default for InstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceStatus {
+    fn into(self) -> String {
+        match self {
+            InstanceStatus::Active => "ACTIVE".to_string(),
+            InstanceStatus::CreationFailed => "CREATION_FAILED".to_string(),
+            InstanceStatus::CreationInProgress => "CREATION_IN_PROGRESS".to_string(),
+            InstanceStatus::UnknownVariant(UnknownInstanceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceStatus::Active => &"ACTIVE",
+            InstanceStatus::CreationFailed => &"CREATION_FAILED",
+            InstanceStatus::CreationInProgress => &"CREATION_IN_PROGRESS",
+            InstanceStatus::UnknownVariant(UnknownInstanceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => InstanceStatus::Active,
+            "CREATION_FAILED" => InstanceStatus::CreationFailed,
+            "CREATION_IN_PROGRESS" => InstanceStatus::CreationInProgress,
+            _ => InstanceStatus::UnknownVariant(UnknownInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => InstanceStatus::Active,
+            "CREATION_FAILED" => InstanceStatus::CreationFailed,
+            "CREATION_IN_PROGRESS" => InstanceStatus::CreationInProgress,
+            _ => InstanceStatus::UnknownVariant(UnknownInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Relevant details why the instance was not successfully created.</p>
@@ -1336,7 +2613,134 @@ pub struct InstanceStorageConfig {
     pub s3_config: Option<S3Config>,
     /// <p>A valid storage type.</p>
     #[serde(rename = "StorageType")]
-    pub storage_type: String,
+    pub storage_type: StorageType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceStorageResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceStorageResourceType {
+    AgentEvents,
+    CallRecordings,
+    ChatTranscripts,
+    ContactTraceRecords,
+    MediaStreams,
+    ScheduledReports,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceStorageResourceType),
+}
+
+impl Default for InstanceStorageResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceStorageResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceStorageResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceStorageResourceType {
+    fn into(self) -> String {
+        match self {
+            InstanceStorageResourceType::AgentEvents => "AGENT_EVENTS".to_string(),
+            InstanceStorageResourceType::CallRecordings => "CALL_RECORDINGS".to_string(),
+            InstanceStorageResourceType::ChatTranscripts => "CHAT_TRANSCRIPTS".to_string(),
+            InstanceStorageResourceType::ContactTraceRecords => "CONTACT_TRACE_RECORDS".to_string(),
+            InstanceStorageResourceType::MediaStreams => "MEDIA_STREAMS".to_string(),
+            InstanceStorageResourceType::ScheduledReports => "SCHEDULED_REPORTS".to_string(),
+            InstanceStorageResourceType::UnknownVariant(UnknownInstanceStorageResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceStorageResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceStorageResourceType::AgentEvents => &"AGENT_EVENTS",
+            InstanceStorageResourceType::CallRecordings => &"CALL_RECORDINGS",
+            InstanceStorageResourceType::ChatTranscripts => &"CHAT_TRANSCRIPTS",
+            InstanceStorageResourceType::ContactTraceRecords => &"CONTACT_TRACE_RECORDS",
+            InstanceStorageResourceType::MediaStreams => &"MEDIA_STREAMS",
+            InstanceStorageResourceType::ScheduledReports => &"SCHEDULED_REPORTS",
+            InstanceStorageResourceType::UnknownVariant(UnknownInstanceStorageResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceStorageResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AGENT_EVENTS" => InstanceStorageResourceType::AgentEvents,
+            "CALL_RECORDINGS" => InstanceStorageResourceType::CallRecordings,
+            "CHAT_TRANSCRIPTS" => InstanceStorageResourceType::ChatTranscripts,
+            "CONTACT_TRACE_RECORDS" => InstanceStorageResourceType::ContactTraceRecords,
+            "MEDIA_STREAMS" => InstanceStorageResourceType::MediaStreams,
+            "SCHEDULED_REPORTS" => InstanceStorageResourceType::ScheduledReports,
+            _ => InstanceStorageResourceType::UnknownVariant(UnknownInstanceStorageResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceStorageResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AGENT_EVENTS" => InstanceStorageResourceType::AgentEvents,
+            "CALL_RECORDINGS" => InstanceStorageResourceType::CallRecordings,
+            "CHAT_TRANSCRIPTS" => InstanceStorageResourceType::ChatTranscripts,
+            "CONTACT_TRACE_RECORDS" => InstanceStorageResourceType::ContactTraceRecords,
+            "MEDIA_STREAMS" => InstanceStorageResourceType::MediaStreams,
+            "SCHEDULED_REPORTS" => InstanceStorageResourceType::ScheduledReports,
+            _ => InstanceStorageResourceType::UnknownVariant(UnknownInstanceStorageResourceType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStorageResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceStorageResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstanceStorageResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the instance.</p>
@@ -1358,7 +2762,7 @@ pub struct InstanceSummary {
     /// <p>The identity management type of the instance.</p>
     #[serde(rename = "IdentityManagementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_management_type: Option<String>,
+    pub identity_management_type: Option<DirectoryType>,
     /// <p>Whether inbound calls are enabled.</p>
     #[serde(rename = "InboundCallsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1370,7 +2774,7 @@ pub struct InstanceSummary {
     /// <p>The state of the instance.</p>
     #[serde(rename = "InstanceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_status: Option<String>,
+    pub instance_status: Option<InstanceStatus>,
     /// <p>Whether outbound calls are enabled.</p>
     #[serde(rename = "OutboundCallsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1404,7 +2808,7 @@ pub struct IntegrationAssociationSummary {
     /// <p>The integration type.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
+    pub integration_type: Option<IntegrationType>,
     /// <p>The user-provided, friendly name for the external application.</p>
     #[serde(rename = "SourceApplicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1416,7 +2820,102 @@ pub struct IntegrationAssociationSummary {
     /// <p>The name of the source.</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIntegrationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IntegrationType {
+    Event,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIntegrationType),
+}
+
+impl Default for IntegrationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IntegrationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IntegrationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IntegrationType {
+    fn into(self) -> String {
+        match self {
+            IntegrationType::Event => "EVENT".to_string(),
+            IntegrationType::UnknownVariant(UnknownIntegrationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IntegrationType {
+    fn into(self) -> &'a str {
+        match self {
+            IntegrationType::Event => &"EVENT",
+            IntegrationType::UnknownVariant(UnknownIntegrationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IntegrationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EVENT" => IntegrationType::Event,
+            _ => IntegrationType::UnknownVariant(UnknownIntegrationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IntegrationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EVENT" => IntegrationType::Event,
+            _ => IntegrationType::UnknownVariant(UnknownIntegrationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IntegrationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IntegrationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration information of a Kinesis Firehose delivery stream.</p>
@@ -1497,7 +2996,7 @@ pub struct ListContactFlowsRequest {
     /// <p>The type of contact flow.</p>
     #[serde(rename = "ContactFlowTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_flow_types: Option<Vec<String>>,
+    pub contact_flow_types: Option<Vec<ContactFlowType>>,
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -1598,7 +3097,7 @@ pub struct ListInstanceStorageConfigsRequest {
     pub next_token: Option<String>,
     /// <p>A valid resource type.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: InstanceStorageResourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1744,11 +3243,11 @@ pub struct ListPhoneNumbersRequest {
     /// <p>The ISO country code.</p>
     #[serde(rename = "PhoneNumberCountryCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_number_country_codes: Option<Vec<String>>,
+    pub phone_number_country_codes: Option<Vec<PhoneNumberCountryCode>>,
     /// <p>The type of phone number.</p>
     #[serde(rename = "PhoneNumberTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_number_types: Option<Vec<String>>,
+    pub phone_number_types: Option<Vec<PhoneNumberType>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1810,7 +3309,7 @@ pub struct ListQueuesRequest {
     /// <p>The type of queue.</p>
     #[serde(rename = "QueueTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub queue_types: Option<Vec<String>>,
+    pub queue_types: Option<Vec<QueueType>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1843,7 +3342,7 @@ pub struct ListQuickConnectsRequest {
     /// <p>The type of quick connect. In the Amazon Connect console, when you create a quick connect, you are prompted to assign one of the following types: Agent (USER), External (PHONE_NUMBER), or Queue (QUEUE).</p>
     #[serde(rename = "QuickConnectTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quick_connect_types: Option<Vec<String>>,
+    pub quick_connect_types: Option<Vec<QuickConnectType>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2091,7 +3590,7 @@ pub struct ListUsersResponse {
 pub struct MediaConcurrency {
     /// <p>The channels that agents can handle in the Contact Control Panel (CCP).</p>
     #[serde(rename = "Channel")]
-    pub channel: String,
+    pub channel: Channel,
     /// <p>The number of contacts an agent can have on a channel simultaneously.</p>
     #[serde(rename = "Concurrency")]
     pub concurrency: i64,
@@ -2104,6 +3603,1285 @@ pub struct ParticipantDetails {
     /// <p>Display name of the participant.</p>
     #[serde(rename = "DisplayName")]
     pub display_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberCountryCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberCountryCode {
+    Ad,
+    Ae,
+    Af,
+    Ag,
+    Ai,
+    Al,
+    Am,
+    An,
+    Ao,
+    Aq,
+    Ar,
+    As,
+    At,
+    Au,
+    Aw,
+    Az,
+    Ba,
+    Bb,
+    Bd,
+    Be,
+    Bf,
+    Bg,
+    Bh,
+    Bi,
+    Bj,
+    Bl,
+    Bm,
+    Bn,
+    Bo,
+    Br,
+    Bs,
+    Bt,
+    Bw,
+    By,
+    Bz,
+    Ca,
+    Cc,
+    Cd,
+    Cf,
+    Cg,
+    Ch,
+    Ci,
+    Ck,
+    Cl,
+    Cm,
+    Cn,
+    Co,
+    Cr,
+    Cu,
+    Cv,
+    Cw,
+    Cx,
+    Cy,
+    Cz,
+    De,
+    Dj,
+    Dk,
+    Dm,
+    Do,
+    Dz,
+    Ec,
+    Ee,
+    Eg,
+    Eh,
+    Er,
+    Es,
+    Et,
+    Fi,
+    Fj,
+    Fk,
+    Fm,
+    Fo,
+    Fr,
+    Ga,
+    Gb,
+    Gd,
+    Ge,
+    Gg,
+    Gh,
+    Gi,
+    Gl,
+    Gm,
+    Gn,
+    Gq,
+    Gr,
+    Gt,
+    Gu,
+    Gw,
+    Gy,
+    Hk,
+    Hn,
+    Hr,
+    Ht,
+    Hu,
+    Id,
+    Ie,
+    Il,
+    Im,
+    In,
+    Io,
+    Iq,
+    Ir,
+    Is,
+    It,
+    Je,
+    Jm,
+    Jo,
+    Jp,
+    Ke,
+    Kg,
+    Kh,
+    Ki,
+    Km,
+    Kn,
+    Kp,
+    Kr,
+    Kw,
+    Ky,
+    Kz,
+    La,
+    Lb,
+    Lc,
+    Li,
+    Lk,
+    Lr,
+    Ls,
+    Lt,
+    Lu,
+    Lv,
+    Ly,
+    Ma,
+    Mc,
+    Md,
+    Me,
+    Mf,
+    Mg,
+    Mh,
+    Mk,
+    Ml,
+    Mm,
+    Mn,
+    Mo,
+    Mp,
+    Mr,
+    Ms,
+    Mt,
+    Mu,
+    Mv,
+    Mw,
+    Mx,
+    My,
+    Mz,
+    Na,
+    Nc,
+    Ne,
+    Ng,
+    Ni,
+    Nl,
+    No,
+    Np,
+    Nr,
+    Nu,
+    Nz,
+    Om,
+    Pa,
+    Pe,
+    Pf,
+    Pg,
+    Ph,
+    Pk,
+    Pl,
+    Pm,
+    Pn,
+    Pr,
+    Pt,
+    Pw,
+    Py,
+    Qa,
+    Re,
+    Ro,
+    Rs,
+    Ru,
+    Rw,
+    Sa,
+    Sb,
+    Sc,
+    Sd,
+    Se,
+    Sg,
+    Sh,
+    Si,
+    Sj,
+    Sk,
+    Sl,
+    Sm,
+    Sn,
+    So,
+    Sr,
+    St,
+    Sv,
+    Sx,
+    Sy,
+    Sz,
+    Tc,
+    Td,
+    Tg,
+    Th,
+    Tj,
+    Tk,
+    Tl,
+    Tm,
+    Tn,
+    To,
+    Tr,
+    Tt,
+    Tv,
+    Tw,
+    Tz,
+    Ua,
+    Ug,
+    Us,
+    Uy,
+    Uz,
+    Va,
+    Vc,
+    Ve,
+    Vg,
+    Vi,
+    Vn,
+    Vu,
+    Wf,
+    Ws,
+    Ye,
+    Yt,
+    Za,
+    Zm,
+    Zw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberCountryCode),
+}
+
+impl Default for PhoneNumberCountryCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberCountryCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberCountryCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberCountryCode {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberCountryCode::Ad => "AD".to_string(),
+            PhoneNumberCountryCode::Ae => "AE".to_string(),
+            PhoneNumberCountryCode::Af => "AF".to_string(),
+            PhoneNumberCountryCode::Ag => "AG".to_string(),
+            PhoneNumberCountryCode::Ai => "AI".to_string(),
+            PhoneNumberCountryCode::Al => "AL".to_string(),
+            PhoneNumberCountryCode::Am => "AM".to_string(),
+            PhoneNumberCountryCode::An => "AN".to_string(),
+            PhoneNumberCountryCode::Ao => "AO".to_string(),
+            PhoneNumberCountryCode::Aq => "AQ".to_string(),
+            PhoneNumberCountryCode::Ar => "AR".to_string(),
+            PhoneNumberCountryCode::As => "AS".to_string(),
+            PhoneNumberCountryCode::At => "AT".to_string(),
+            PhoneNumberCountryCode::Au => "AU".to_string(),
+            PhoneNumberCountryCode::Aw => "AW".to_string(),
+            PhoneNumberCountryCode::Az => "AZ".to_string(),
+            PhoneNumberCountryCode::Ba => "BA".to_string(),
+            PhoneNumberCountryCode::Bb => "BB".to_string(),
+            PhoneNumberCountryCode::Bd => "BD".to_string(),
+            PhoneNumberCountryCode::Be => "BE".to_string(),
+            PhoneNumberCountryCode::Bf => "BF".to_string(),
+            PhoneNumberCountryCode::Bg => "BG".to_string(),
+            PhoneNumberCountryCode::Bh => "BH".to_string(),
+            PhoneNumberCountryCode::Bi => "BI".to_string(),
+            PhoneNumberCountryCode::Bj => "BJ".to_string(),
+            PhoneNumberCountryCode::Bl => "BL".to_string(),
+            PhoneNumberCountryCode::Bm => "BM".to_string(),
+            PhoneNumberCountryCode::Bn => "BN".to_string(),
+            PhoneNumberCountryCode::Bo => "BO".to_string(),
+            PhoneNumberCountryCode::Br => "BR".to_string(),
+            PhoneNumberCountryCode::Bs => "BS".to_string(),
+            PhoneNumberCountryCode::Bt => "BT".to_string(),
+            PhoneNumberCountryCode::Bw => "BW".to_string(),
+            PhoneNumberCountryCode::By => "BY".to_string(),
+            PhoneNumberCountryCode::Bz => "BZ".to_string(),
+            PhoneNumberCountryCode::Ca => "CA".to_string(),
+            PhoneNumberCountryCode::Cc => "CC".to_string(),
+            PhoneNumberCountryCode::Cd => "CD".to_string(),
+            PhoneNumberCountryCode::Cf => "CF".to_string(),
+            PhoneNumberCountryCode::Cg => "CG".to_string(),
+            PhoneNumberCountryCode::Ch => "CH".to_string(),
+            PhoneNumberCountryCode::Ci => "CI".to_string(),
+            PhoneNumberCountryCode::Ck => "CK".to_string(),
+            PhoneNumberCountryCode::Cl => "CL".to_string(),
+            PhoneNumberCountryCode::Cm => "CM".to_string(),
+            PhoneNumberCountryCode::Cn => "CN".to_string(),
+            PhoneNumberCountryCode::Co => "CO".to_string(),
+            PhoneNumberCountryCode::Cr => "CR".to_string(),
+            PhoneNumberCountryCode::Cu => "CU".to_string(),
+            PhoneNumberCountryCode::Cv => "CV".to_string(),
+            PhoneNumberCountryCode::Cw => "CW".to_string(),
+            PhoneNumberCountryCode::Cx => "CX".to_string(),
+            PhoneNumberCountryCode::Cy => "CY".to_string(),
+            PhoneNumberCountryCode::Cz => "CZ".to_string(),
+            PhoneNumberCountryCode::De => "DE".to_string(),
+            PhoneNumberCountryCode::Dj => "DJ".to_string(),
+            PhoneNumberCountryCode::Dk => "DK".to_string(),
+            PhoneNumberCountryCode::Dm => "DM".to_string(),
+            PhoneNumberCountryCode::Do => "DO".to_string(),
+            PhoneNumberCountryCode::Dz => "DZ".to_string(),
+            PhoneNumberCountryCode::Ec => "EC".to_string(),
+            PhoneNumberCountryCode::Ee => "EE".to_string(),
+            PhoneNumberCountryCode::Eg => "EG".to_string(),
+            PhoneNumberCountryCode::Eh => "EH".to_string(),
+            PhoneNumberCountryCode::Er => "ER".to_string(),
+            PhoneNumberCountryCode::Es => "ES".to_string(),
+            PhoneNumberCountryCode::Et => "ET".to_string(),
+            PhoneNumberCountryCode::Fi => "FI".to_string(),
+            PhoneNumberCountryCode::Fj => "FJ".to_string(),
+            PhoneNumberCountryCode::Fk => "FK".to_string(),
+            PhoneNumberCountryCode::Fm => "FM".to_string(),
+            PhoneNumberCountryCode::Fo => "FO".to_string(),
+            PhoneNumberCountryCode::Fr => "FR".to_string(),
+            PhoneNumberCountryCode::Ga => "GA".to_string(),
+            PhoneNumberCountryCode::Gb => "GB".to_string(),
+            PhoneNumberCountryCode::Gd => "GD".to_string(),
+            PhoneNumberCountryCode::Ge => "GE".to_string(),
+            PhoneNumberCountryCode::Gg => "GG".to_string(),
+            PhoneNumberCountryCode::Gh => "GH".to_string(),
+            PhoneNumberCountryCode::Gi => "GI".to_string(),
+            PhoneNumberCountryCode::Gl => "GL".to_string(),
+            PhoneNumberCountryCode::Gm => "GM".to_string(),
+            PhoneNumberCountryCode::Gn => "GN".to_string(),
+            PhoneNumberCountryCode::Gq => "GQ".to_string(),
+            PhoneNumberCountryCode::Gr => "GR".to_string(),
+            PhoneNumberCountryCode::Gt => "GT".to_string(),
+            PhoneNumberCountryCode::Gu => "GU".to_string(),
+            PhoneNumberCountryCode::Gw => "GW".to_string(),
+            PhoneNumberCountryCode::Gy => "GY".to_string(),
+            PhoneNumberCountryCode::Hk => "HK".to_string(),
+            PhoneNumberCountryCode::Hn => "HN".to_string(),
+            PhoneNumberCountryCode::Hr => "HR".to_string(),
+            PhoneNumberCountryCode::Ht => "HT".to_string(),
+            PhoneNumberCountryCode::Hu => "HU".to_string(),
+            PhoneNumberCountryCode::Id => "ID".to_string(),
+            PhoneNumberCountryCode::Ie => "IE".to_string(),
+            PhoneNumberCountryCode::Il => "IL".to_string(),
+            PhoneNumberCountryCode::Im => "IM".to_string(),
+            PhoneNumberCountryCode::In => "IN".to_string(),
+            PhoneNumberCountryCode::Io => "IO".to_string(),
+            PhoneNumberCountryCode::Iq => "IQ".to_string(),
+            PhoneNumberCountryCode::Ir => "IR".to_string(),
+            PhoneNumberCountryCode::Is => "IS".to_string(),
+            PhoneNumberCountryCode::It => "IT".to_string(),
+            PhoneNumberCountryCode::Je => "JE".to_string(),
+            PhoneNumberCountryCode::Jm => "JM".to_string(),
+            PhoneNumberCountryCode::Jo => "JO".to_string(),
+            PhoneNumberCountryCode::Jp => "JP".to_string(),
+            PhoneNumberCountryCode::Ke => "KE".to_string(),
+            PhoneNumberCountryCode::Kg => "KG".to_string(),
+            PhoneNumberCountryCode::Kh => "KH".to_string(),
+            PhoneNumberCountryCode::Ki => "KI".to_string(),
+            PhoneNumberCountryCode::Km => "KM".to_string(),
+            PhoneNumberCountryCode::Kn => "KN".to_string(),
+            PhoneNumberCountryCode::Kp => "KP".to_string(),
+            PhoneNumberCountryCode::Kr => "KR".to_string(),
+            PhoneNumberCountryCode::Kw => "KW".to_string(),
+            PhoneNumberCountryCode::Ky => "KY".to_string(),
+            PhoneNumberCountryCode::Kz => "KZ".to_string(),
+            PhoneNumberCountryCode::La => "LA".to_string(),
+            PhoneNumberCountryCode::Lb => "LB".to_string(),
+            PhoneNumberCountryCode::Lc => "LC".to_string(),
+            PhoneNumberCountryCode::Li => "LI".to_string(),
+            PhoneNumberCountryCode::Lk => "LK".to_string(),
+            PhoneNumberCountryCode::Lr => "LR".to_string(),
+            PhoneNumberCountryCode::Ls => "LS".to_string(),
+            PhoneNumberCountryCode::Lt => "LT".to_string(),
+            PhoneNumberCountryCode::Lu => "LU".to_string(),
+            PhoneNumberCountryCode::Lv => "LV".to_string(),
+            PhoneNumberCountryCode::Ly => "LY".to_string(),
+            PhoneNumberCountryCode::Ma => "MA".to_string(),
+            PhoneNumberCountryCode::Mc => "MC".to_string(),
+            PhoneNumberCountryCode::Md => "MD".to_string(),
+            PhoneNumberCountryCode::Me => "ME".to_string(),
+            PhoneNumberCountryCode::Mf => "MF".to_string(),
+            PhoneNumberCountryCode::Mg => "MG".to_string(),
+            PhoneNumberCountryCode::Mh => "MH".to_string(),
+            PhoneNumberCountryCode::Mk => "MK".to_string(),
+            PhoneNumberCountryCode::Ml => "ML".to_string(),
+            PhoneNumberCountryCode::Mm => "MM".to_string(),
+            PhoneNumberCountryCode::Mn => "MN".to_string(),
+            PhoneNumberCountryCode::Mo => "MO".to_string(),
+            PhoneNumberCountryCode::Mp => "MP".to_string(),
+            PhoneNumberCountryCode::Mr => "MR".to_string(),
+            PhoneNumberCountryCode::Ms => "MS".to_string(),
+            PhoneNumberCountryCode::Mt => "MT".to_string(),
+            PhoneNumberCountryCode::Mu => "MU".to_string(),
+            PhoneNumberCountryCode::Mv => "MV".to_string(),
+            PhoneNumberCountryCode::Mw => "MW".to_string(),
+            PhoneNumberCountryCode::Mx => "MX".to_string(),
+            PhoneNumberCountryCode::My => "MY".to_string(),
+            PhoneNumberCountryCode::Mz => "MZ".to_string(),
+            PhoneNumberCountryCode::Na => "NA".to_string(),
+            PhoneNumberCountryCode::Nc => "NC".to_string(),
+            PhoneNumberCountryCode::Ne => "NE".to_string(),
+            PhoneNumberCountryCode::Ng => "NG".to_string(),
+            PhoneNumberCountryCode::Ni => "NI".to_string(),
+            PhoneNumberCountryCode::Nl => "NL".to_string(),
+            PhoneNumberCountryCode::No => "NO".to_string(),
+            PhoneNumberCountryCode::Np => "NP".to_string(),
+            PhoneNumberCountryCode::Nr => "NR".to_string(),
+            PhoneNumberCountryCode::Nu => "NU".to_string(),
+            PhoneNumberCountryCode::Nz => "NZ".to_string(),
+            PhoneNumberCountryCode::Om => "OM".to_string(),
+            PhoneNumberCountryCode::Pa => "PA".to_string(),
+            PhoneNumberCountryCode::Pe => "PE".to_string(),
+            PhoneNumberCountryCode::Pf => "PF".to_string(),
+            PhoneNumberCountryCode::Pg => "PG".to_string(),
+            PhoneNumberCountryCode::Ph => "PH".to_string(),
+            PhoneNumberCountryCode::Pk => "PK".to_string(),
+            PhoneNumberCountryCode::Pl => "PL".to_string(),
+            PhoneNumberCountryCode::Pm => "PM".to_string(),
+            PhoneNumberCountryCode::Pn => "PN".to_string(),
+            PhoneNumberCountryCode::Pr => "PR".to_string(),
+            PhoneNumberCountryCode::Pt => "PT".to_string(),
+            PhoneNumberCountryCode::Pw => "PW".to_string(),
+            PhoneNumberCountryCode::Py => "PY".to_string(),
+            PhoneNumberCountryCode::Qa => "QA".to_string(),
+            PhoneNumberCountryCode::Re => "RE".to_string(),
+            PhoneNumberCountryCode::Ro => "RO".to_string(),
+            PhoneNumberCountryCode::Rs => "RS".to_string(),
+            PhoneNumberCountryCode::Ru => "RU".to_string(),
+            PhoneNumberCountryCode::Rw => "RW".to_string(),
+            PhoneNumberCountryCode::Sa => "SA".to_string(),
+            PhoneNumberCountryCode::Sb => "SB".to_string(),
+            PhoneNumberCountryCode::Sc => "SC".to_string(),
+            PhoneNumberCountryCode::Sd => "SD".to_string(),
+            PhoneNumberCountryCode::Se => "SE".to_string(),
+            PhoneNumberCountryCode::Sg => "SG".to_string(),
+            PhoneNumberCountryCode::Sh => "SH".to_string(),
+            PhoneNumberCountryCode::Si => "SI".to_string(),
+            PhoneNumberCountryCode::Sj => "SJ".to_string(),
+            PhoneNumberCountryCode::Sk => "SK".to_string(),
+            PhoneNumberCountryCode::Sl => "SL".to_string(),
+            PhoneNumberCountryCode::Sm => "SM".to_string(),
+            PhoneNumberCountryCode::Sn => "SN".to_string(),
+            PhoneNumberCountryCode::So => "SO".to_string(),
+            PhoneNumberCountryCode::Sr => "SR".to_string(),
+            PhoneNumberCountryCode::St => "ST".to_string(),
+            PhoneNumberCountryCode::Sv => "SV".to_string(),
+            PhoneNumberCountryCode::Sx => "SX".to_string(),
+            PhoneNumberCountryCode::Sy => "SY".to_string(),
+            PhoneNumberCountryCode::Sz => "SZ".to_string(),
+            PhoneNumberCountryCode::Tc => "TC".to_string(),
+            PhoneNumberCountryCode::Td => "TD".to_string(),
+            PhoneNumberCountryCode::Tg => "TG".to_string(),
+            PhoneNumberCountryCode::Th => "TH".to_string(),
+            PhoneNumberCountryCode::Tj => "TJ".to_string(),
+            PhoneNumberCountryCode::Tk => "TK".to_string(),
+            PhoneNumberCountryCode::Tl => "TL".to_string(),
+            PhoneNumberCountryCode::Tm => "TM".to_string(),
+            PhoneNumberCountryCode::Tn => "TN".to_string(),
+            PhoneNumberCountryCode::To => "TO".to_string(),
+            PhoneNumberCountryCode::Tr => "TR".to_string(),
+            PhoneNumberCountryCode::Tt => "TT".to_string(),
+            PhoneNumberCountryCode::Tv => "TV".to_string(),
+            PhoneNumberCountryCode::Tw => "TW".to_string(),
+            PhoneNumberCountryCode::Tz => "TZ".to_string(),
+            PhoneNumberCountryCode::Ua => "UA".to_string(),
+            PhoneNumberCountryCode::Ug => "UG".to_string(),
+            PhoneNumberCountryCode::Us => "US".to_string(),
+            PhoneNumberCountryCode::Uy => "UY".to_string(),
+            PhoneNumberCountryCode::Uz => "UZ".to_string(),
+            PhoneNumberCountryCode::Va => "VA".to_string(),
+            PhoneNumberCountryCode::Vc => "VC".to_string(),
+            PhoneNumberCountryCode::Ve => "VE".to_string(),
+            PhoneNumberCountryCode::Vg => "VG".to_string(),
+            PhoneNumberCountryCode::Vi => "VI".to_string(),
+            PhoneNumberCountryCode::Vn => "VN".to_string(),
+            PhoneNumberCountryCode::Vu => "VU".to_string(),
+            PhoneNumberCountryCode::Wf => "WF".to_string(),
+            PhoneNumberCountryCode::Ws => "WS".to_string(),
+            PhoneNumberCountryCode::Ye => "YE".to_string(),
+            PhoneNumberCountryCode::Yt => "YT".to_string(),
+            PhoneNumberCountryCode::Za => "ZA".to_string(),
+            PhoneNumberCountryCode::Zm => "ZM".to_string(),
+            PhoneNumberCountryCode::Zw => "ZW".to_string(),
+            PhoneNumberCountryCode::UnknownVariant(UnknownPhoneNumberCountryCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberCountryCode {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberCountryCode::Ad => &"AD",
+            PhoneNumberCountryCode::Ae => &"AE",
+            PhoneNumberCountryCode::Af => &"AF",
+            PhoneNumberCountryCode::Ag => &"AG",
+            PhoneNumberCountryCode::Ai => &"AI",
+            PhoneNumberCountryCode::Al => &"AL",
+            PhoneNumberCountryCode::Am => &"AM",
+            PhoneNumberCountryCode::An => &"AN",
+            PhoneNumberCountryCode::Ao => &"AO",
+            PhoneNumberCountryCode::Aq => &"AQ",
+            PhoneNumberCountryCode::Ar => &"AR",
+            PhoneNumberCountryCode::As => &"AS",
+            PhoneNumberCountryCode::At => &"AT",
+            PhoneNumberCountryCode::Au => &"AU",
+            PhoneNumberCountryCode::Aw => &"AW",
+            PhoneNumberCountryCode::Az => &"AZ",
+            PhoneNumberCountryCode::Ba => &"BA",
+            PhoneNumberCountryCode::Bb => &"BB",
+            PhoneNumberCountryCode::Bd => &"BD",
+            PhoneNumberCountryCode::Be => &"BE",
+            PhoneNumberCountryCode::Bf => &"BF",
+            PhoneNumberCountryCode::Bg => &"BG",
+            PhoneNumberCountryCode::Bh => &"BH",
+            PhoneNumberCountryCode::Bi => &"BI",
+            PhoneNumberCountryCode::Bj => &"BJ",
+            PhoneNumberCountryCode::Bl => &"BL",
+            PhoneNumberCountryCode::Bm => &"BM",
+            PhoneNumberCountryCode::Bn => &"BN",
+            PhoneNumberCountryCode::Bo => &"BO",
+            PhoneNumberCountryCode::Br => &"BR",
+            PhoneNumberCountryCode::Bs => &"BS",
+            PhoneNumberCountryCode::Bt => &"BT",
+            PhoneNumberCountryCode::Bw => &"BW",
+            PhoneNumberCountryCode::By => &"BY",
+            PhoneNumberCountryCode::Bz => &"BZ",
+            PhoneNumberCountryCode::Ca => &"CA",
+            PhoneNumberCountryCode::Cc => &"CC",
+            PhoneNumberCountryCode::Cd => &"CD",
+            PhoneNumberCountryCode::Cf => &"CF",
+            PhoneNumberCountryCode::Cg => &"CG",
+            PhoneNumberCountryCode::Ch => &"CH",
+            PhoneNumberCountryCode::Ci => &"CI",
+            PhoneNumberCountryCode::Ck => &"CK",
+            PhoneNumberCountryCode::Cl => &"CL",
+            PhoneNumberCountryCode::Cm => &"CM",
+            PhoneNumberCountryCode::Cn => &"CN",
+            PhoneNumberCountryCode::Co => &"CO",
+            PhoneNumberCountryCode::Cr => &"CR",
+            PhoneNumberCountryCode::Cu => &"CU",
+            PhoneNumberCountryCode::Cv => &"CV",
+            PhoneNumberCountryCode::Cw => &"CW",
+            PhoneNumberCountryCode::Cx => &"CX",
+            PhoneNumberCountryCode::Cy => &"CY",
+            PhoneNumberCountryCode::Cz => &"CZ",
+            PhoneNumberCountryCode::De => &"DE",
+            PhoneNumberCountryCode::Dj => &"DJ",
+            PhoneNumberCountryCode::Dk => &"DK",
+            PhoneNumberCountryCode::Dm => &"DM",
+            PhoneNumberCountryCode::Do => &"DO",
+            PhoneNumberCountryCode::Dz => &"DZ",
+            PhoneNumberCountryCode::Ec => &"EC",
+            PhoneNumberCountryCode::Ee => &"EE",
+            PhoneNumberCountryCode::Eg => &"EG",
+            PhoneNumberCountryCode::Eh => &"EH",
+            PhoneNumberCountryCode::Er => &"ER",
+            PhoneNumberCountryCode::Es => &"ES",
+            PhoneNumberCountryCode::Et => &"ET",
+            PhoneNumberCountryCode::Fi => &"FI",
+            PhoneNumberCountryCode::Fj => &"FJ",
+            PhoneNumberCountryCode::Fk => &"FK",
+            PhoneNumberCountryCode::Fm => &"FM",
+            PhoneNumberCountryCode::Fo => &"FO",
+            PhoneNumberCountryCode::Fr => &"FR",
+            PhoneNumberCountryCode::Ga => &"GA",
+            PhoneNumberCountryCode::Gb => &"GB",
+            PhoneNumberCountryCode::Gd => &"GD",
+            PhoneNumberCountryCode::Ge => &"GE",
+            PhoneNumberCountryCode::Gg => &"GG",
+            PhoneNumberCountryCode::Gh => &"GH",
+            PhoneNumberCountryCode::Gi => &"GI",
+            PhoneNumberCountryCode::Gl => &"GL",
+            PhoneNumberCountryCode::Gm => &"GM",
+            PhoneNumberCountryCode::Gn => &"GN",
+            PhoneNumberCountryCode::Gq => &"GQ",
+            PhoneNumberCountryCode::Gr => &"GR",
+            PhoneNumberCountryCode::Gt => &"GT",
+            PhoneNumberCountryCode::Gu => &"GU",
+            PhoneNumberCountryCode::Gw => &"GW",
+            PhoneNumberCountryCode::Gy => &"GY",
+            PhoneNumberCountryCode::Hk => &"HK",
+            PhoneNumberCountryCode::Hn => &"HN",
+            PhoneNumberCountryCode::Hr => &"HR",
+            PhoneNumberCountryCode::Ht => &"HT",
+            PhoneNumberCountryCode::Hu => &"HU",
+            PhoneNumberCountryCode::Id => &"ID",
+            PhoneNumberCountryCode::Ie => &"IE",
+            PhoneNumberCountryCode::Il => &"IL",
+            PhoneNumberCountryCode::Im => &"IM",
+            PhoneNumberCountryCode::In => &"IN",
+            PhoneNumberCountryCode::Io => &"IO",
+            PhoneNumberCountryCode::Iq => &"IQ",
+            PhoneNumberCountryCode::Ir => &"IR",
+            PhoneNumberCountryCode::Is => &"IS",
+            PhoneNumberCountryCode::It => &"IT",
+            PhoneNumberCountryCode::Je => &"JE",
+            PhoneNumberCountryCode::Jm => &"JM",
+            PhoneNumberCountryCode::Jo => &"JO",
+            PhoneNumberCountryCode::Jp => &"JP",
+            PhoneNumberCountryCode::Ke => &"KE",
+            PhoneNumberCountryCode::Kg => &"KG",
+            PhoneNumberCountryCode::Kh => &"KH",
+            PhoneNumberCountryCode::Ki => &"KI",
+            PhoneNumberCountryCode::Km => &"KM",
+            PhoneNumberCountryCode::Kn => &"KN",
+            PhoneNumberCountryCode::Kp => &"KP",
+            PhoneNumberCountryCode::Kr => &"KR",
+            PhoneNumberCountryCode::Kw => &"KW",
+            PhoneNumberCountryCode::Ky => &"KY",
+            PhoneNumberCountryCode::Kz => &"KZ",
+            PhoneNumberCountryCode::La => &"LA",
+            PhoneNumberCountryCode::Lb => &"LB",
+            PhoneNumberCountryCode::Lc => &"LC",
+            PhoneNumberCountryCode::Li => &"LI",
+            PhoneNumberCountryCode::Lk => &"LK",
+            PhoneNumberCountryCode::Lr => &"LR",
+            PhoneNumberCountryCode::Ls => &"LS",
+            PhoneNumberCountryCode::Lt => &"LT",
+            PhoneNumberCountryCode::Lu => &"LU",
+            PhoneNumberCountryCode::Lv => &"LV",
+            PhoneNumberCountryCode::Ly => &"LY",
+            PhoneNumberCountryCode::Ma => &"MA",
+            PhoneNumberCountryCode::Mc => &"MC",
+            PhoneNumberCountryCode::Md => &"MD",
+            PhoneNumberCountryCode::Me => &"ME",
+            PhoneNumberCountryCode::Mf => &"MF",
+            PhoneNumberCountryCode::Mg => &"MG",
+            PhoneNumberCountryCode::Mh => &"MH",
+            PhoneNumberCountryCode::Mk => &"MK",
+            PhoneNumberCountryCode::Ml => &"ML",
+            PhoneNumberCountryCode::Mm => &"MM",
+            PhoneNumberCountryCode::Mn => &"MN",
+            PhoneNumberCountryCode::Mo => &"MO",
+            PhoneNumberCountryCode::Mp => &"MP",
+            PhoneNumberCountryCode::Mr => &"MR",
+            PhoneNumberCountryCode::Ms => &"MS",
+            PhoneNumberCountryCode::Mt => &"MT",
+            PhoneNumberCountryCode::Mu => &"MU",
+            PhoneNumberCountryCode::Mv => &"MV",
+            PhoneNumberCountryCode::Mw => &"MW",
+            PhoneNumberCountryCode::Mx => &"MX",
+            PhoneNumberCountryCode::My => &"MY",
+            PhoneNumberCountryCode::Mz => &"MZ",
+            PhoneNumberCountryCode::Na => &"NA",
+            PhoneNumberCountryCode::Nc => &"NC",
+            PhoneNumberCountryCode::Ne => &"NE",
+            PhoneNumberCountryCode::Ng => &"NG",
+            PhoneNumberCountryCode::Ni => &"NI",
+            PhoneNumberCountryCode::Nl => &"NL",
+            PhoneNumberCountryCode::No => &"NO",
+            PhoneNumberCountryCode::Np => &"NP",
+            PhoneNumberCountryCode::Nr => &"NR",
+            PhoneNumberCountryCode::Nu => &"NU",
+            PhoneNumberCountryCode::Nz => &"NZ",
+            PhoneNumberCountryCode::Om => &"OM",
+            PhoneNumberCountryCode::Pa => &"PA",
+            PhoneNumberCountryCode::Pe => &"PE",
+            PhoneNumberCountryCode::Pf => &"PF",
+            PhoneNumberCountryCode::Pg => &"PG",
+            PhoneNumberCountryCode::Ph => &"PH",
+            PhoneNumberCountryCode::Pk => &"PK",
+            PhoneNumberCountryCode::Pl => &"PL",
+            PhoneNumberCountryCode::Pm => &"PM",
+            PhoneNumberCountryCode::Pn => &"PN",
+            PhoneNumberCountryCode::Pr => &"PR",
+            PhoneNumberCountryCode::Pt => &"PT",
+            PhoneNumberCountryCode::Pw => &"PW",
+            PhoneNumberCountryCode::Py => &"PY",
+            PhoneNumberCountryCode::Qa => &"QA",
+            PhoneNumberCountryCode::Re => &"RE",
+            PhoneNumberCountryCode::Ro => &"RO",
+            PhoneNumberCountryCode::Rs => &"RS",
+            PhoneNumberCountryCode::Ru => &"RU",
+            PhoneNumberCountryCode::Rw => &"RW",
+            PhoneNumberCountryCode::Sa => &"SA",
+            PhoneNumberCountryCode::Sb => &"SB",
+            PhoneNumberCountryCode::Sc => &"SC",
+            PhoneNumberCountryCode::Sd => &"SD",
+            PhoneNumberCountryCode::Se => &"SE",
+            PhoneNumberCountryCode::Sg => &"SG",
+            PhoneNumberCountryCode::Sh => &"SH",
+            PhoneNumberCountryCode::Si => &"SI",
+            PhoneNumberCountryCode::Sj => &"SJ",
+            PhoneNumberCountryCode::Sk => &"SK",
+            PhoneNumberCountryCode::Sl => &"SL",
+            PhoneNumberCountryCode::Sm => &"SM",
+            PhoneNumberCountryCode::Sn => &"SN",
+            PhoneNumberCountryCode::So => &"SO",
+            PhoneNumberCountryCode::Sr => &"SR",
+            PhoneNumberCountryCode::St => &"ST",
+            PhoneNumberCountryCode::Sv => &"SV",
+            PhoneNumberCountryCode::Sx => &"SX",
+            PhoneNumberCountryCode::Sy => &"SY",
+            PhoneNumberCountryCode::Sz => &"SZ",
+            PhoneNumberCountryCode::Tc => &"TC",
+            PhoneNumberCountryCode::Td => &"TD",
+            PhoneNumberCountryCode::Tg => &"TG",
+            PhoneNumberCountryCode::Th => &"TH",
+            PhoneNumberCountryCode::Tj => &"TJ",
+            PhoneNumberCountryCode::Tk => &"TK",
+            PhoneNumberCountryCode::Tl => &"TL",
+            PhoneNumberCountryCode::Tm => &"TM",
+            PhoneNumberCountryCode::Tn => &"TN",
+            PhoneNumberCountryCode::To => &"TO",
+            PhoneNumberCountryCode::Tr => &"TR",
+            PhoneNumberCountryCode::Tt => &"TT",
+            PhoneNumberCountryCode::Tv => &"TV",
+            PhoneNumberCountryCode::Tw => &"TW",
+            PhoneNumberCountryCode::Tz => &"TZ",
+            PhoneNumberCountryCode::Ua => &"UA",
+            PhoneNumberCountryCode::Ug => &"UG",
+            PhoneNumberCountryCode::Us => &"US",
+            PhoneNumberCountryCode::Uy => &"UY",
+            PhoneNumberCountryCode::Uz => &"UZ",
+            PhoneNumberCountryCode::Va => &"VA",
+            PhoneNumberCountryCode::Vc => &"VC",
+            PhoneNumberCountryCode::Ve => &"VE",
+            PhoneNumberCountryCode::Vg => &"VG",
+            PhoneNumberCountryCode::Vi => &"VI",
+            PhoneNumberCountryCode::Vn => &"VN",
+            PhoneNumberCountryCode::Vu => &"VU",
+            PhoneNumberCountryCode::Wf => &"WF",
+            PhoneNumberCountryCode::Ws => &"WS",
+            PhoneNumberCountryCode::Ye => &"YE",
+            PhoneNumberCountryCode::Yt => &"YT",
+            PhoneNumberCountryCode::Za => &"ZA",
+            PhoneNumberCountryCode::Zm => &"ZM",
+            PhoneNumberCountryCode::Zw => &"ZW",
+            PhoneNumberCountryCode::UnknownVariant(UnknownPhoneNumberCountryCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberCountryCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AD" => PhoneNumberCountryCode::Ad,
+            "AE" => PhoneNumberCountryCode::Ae,
+            "AF" => PhoneNumberCountryCode::Af,
+            "AG" => PhoneNumberCountryCode::Ag,
+            "AI" => PhoneNumberCountryCode::Ai,
+            "AL" => PhoneNumberCountryCode::Al,
+            "AM" => PhoneNumberCountryCode::Am,
+            "AN" => PhoneNumberCountryCode::An,
+            "AO" => PhoneNumberCountryCode::Ao,
+            "AQ" => PhoneNumberCountryCode::Aq,
+            "AR" => PhoneNumberCountryCode::Ar,
+            "AS" => PhoneNumberCountryCode::As,
+            "AT" => PhoneNumberCountryCode::At,
+            "AU" => PhoneNumberCountryCode::Au,
+            "AW" => PhoneNumberCountryCode::Aw,
+            "AZ" => PhoneNumberCountryCode::Az,
+            "BA" => PhoneNumberCountryCode::Ba,
+            "BB" => PhoneNumberCountryCode::Bb,
+            "BD" => PhoneNumberCountryCode::Bd,
+            "BE" => PhoneNumberCountryCode::Be,
+            "BF" => PhoneNumberCountryCode::Bf,
+            "BG" => PhoneNumberCountryCode::Bg,
+            "BH" => PhoneNumberCountryCode::Bh,
+            "BI" => PhoneNumberCountryCode::Bi,
+            "BJ" => PhoneNumberCountryCode::Bj,
+            "BL" => PhoneNumberCountryCode::Bl,
+            "BM" => PhoneNumberCountryCode::Bm,
+            "BN" => PhoneNumberCountryCode::Bn,
+            "BO" => PhoneNumberCountryCode::Bo,
+            "BR" => PhoneNumberCountryCode::Br,
+            "BS" => PhoneNumberCountryCode::Bs,
+            "BT" => PhoneNumberCountryCode::Bt,
+            "BW" => PhoneNumberCountryCode::Bw,
+            "BY" => PhoneNumberCountryCode::By,
+            "BZ" => PhoneNumberCountryCode::Bz,
+            "CA" => PhoneNumberCountryCode::Ca,
+            "CC" => PhoneNumberCountryCode::Cc,
+            "CD" => PhoneNumberCountryCode::Cd,
+            "CF" => PhoneNumberCountryCode::Cf,
+            "CG" => PhoneNumberCountryCode::Cg,
+            "CH" => PhoneNumberCountryCode::Ch,
+            "CI" => PhoneNumberCountryCode::Ci,
+            "CK" => PhoneNumberCountryCode::Ck,
+            "CL" => PhoneNumberCountryCode::Cl,
+            "CM" => PhoneNumberCountryCode::Cm,
+            "CN" => PhoneNumberCountryCode::Cn,
+            "CO" => PhoneNumberCountryCode::Co,
+            "CR" => PhoneNumberCountryCode::Cr,
+            "CU" => PhoneNumberCountryCode::Cu,
+            "CV" => PhoneNumberCountryCode::Cv,
+            "CW" => PhoneNumberCountryCode::Cw,
+            "CX" => PhoneNumberCountryCode::Cx,
+            "CY" => PhoneNumberCountryCode::Cy,
+            "CZ" => PhoneNumberCountryCode::Cz,
+            "DE" => PhoneNumberCountryCode::De,
+            "DJ" => PhoneNumberCountryCode::Dj,
+            "DK" => PhoneNumberCountryCode::Dk,
+            "DM" => PhoneNumberCountryCode::Dm,
+            "DO" => PhoneNumberCountryCode::Do,
+            "DZ" => PhoneNumberCountryCode::Dz,
+            "EC" => PhoneNumberCountryCode::Ec,
+            "EE" => PhoneNumberCountryCode::Ee,
+            "EG" => PhoneNumberCountryCode::Eg,
+            "EH" => PhoneNumberCountryCode::Eh,
+            "ER" => PhoneNumberCountryCode::Er,
+            "ES" => PhoneNumberCountryCode::Es,
+            "ET" => PhoneNumberCountryCode::Et,
+            "FI" => PhoneNumberCountryCode::Fi,
+            "FJ" => PhoneNumberCountryCode::Fj,
+            "FK" => PhoneNumberCountryCode::Fk,
+            "FM" => PhoneNumberCountryCode::Fm,
+            "FO" => PhoneNumberCountryCode::Fo,
+            "FR" => PhoneNumberCountryCode::Fr,
+            "GA" => PhoneNumberCountryCode::Ga,
+            "GB" => PhoneNumberCountryCode::Gb,
+            "GD" => PhoneNumberCountryCode::Gd,
+            "GE" => PhoneNumberCountryCode::Ge,
+            "GG" => PhoneNumberCountryCode::Gg,
+            "GH" => PhoneNumberCountryCode::Gh,
+            "GI" => PhoneNumberCountryCode::Gi,
+            "GL" => PhoneNumberCountryCode::Gl,
+            "GM" => PhoneNumberCountryCode::Gm,
+            "GN" => PhoneNumberCountryCode::Gn,
+            "GQ" => PhoneNumberCountryCode::Gq,
+            "GR" => PhoneNumberCountryCode::Gr,
+            "GT" => PhoneNumberCountryCode::Gt,
+            "GU" => PhoneNumberCountryCode::Gu,
+            "GW" => PhoneNumberCountryCode::Gw,
+            "GY" => PhoneNumberCountryCode::Gy,
+            "HK" => PhoneNumberCountryCode::Hk,
+            "HN" => PhoneNumberCountryCode::Hn,
+            "HR" => PhoneNumberCountryCode::Hr,
+            "HT" => PhoneNumberCountryCode::Ht,
+            "HU" => PhoneNumberCountryCode::Hu,
+            "ID" => PhoneNumberCountryCode::Id,
+            "IE" => PhoneNumberCountryCode::Ie,
+            "IL" => PhoneNumberCountryCode::Il,
+            "IM" => PhoneNumberCountryCode::Im,
+            "IN" => PhoneNumberCountryCode::In,
+            "IO" => PhoneNumberCountryCode::Io,
+            "IQ" => PhoneNumberCountryCode::Iq,
+            "IR" => PhoneNumberCountryCode::Ir,
+            "IS" => PhoneNumberCountryCode::Is,
+            "IT" => PhoneNumberCountryCode::It,
+            "JE" => PhoneNumberCountryCode::Je,
+            "JM" => PhoneNumberCountryCode::Jm,
+            "JO" => PhoneNumberCountryCode::Jo,
+            "JP" => PhoneNumberCountryCode::Jp,
+            "KE" => PhoneNumberCountryCode::Ke,
+            "KG" => PhoneNumberCountryCode::Kg,
+            "KH" => PhoneNumberCountryCode::Kh,
+            "KI" => PhoneNumberCountryCode::Ki,
+            "KM" => PhoneNumberCountryCode::Km,
+            "KN" => PhoneNumberCountryCode::Kn,
+            "KP" => PhoneNumberCountryCode::Kp,
+            "KR" => PhoneNumberCountryCode::Kr,
+            "KW" => PhoneNumberCountryCode::Kw,
+            "KY" => PhoneNumberCountryCode::Ky,
+            "KZ" => PhoneNumberCountryCode::Kz,
+            "LA" => PhoneNumberCountryCode::La,
+            "LB" => PhoneNumberCountryCode::Lb,
+            "LC" => PhoneNumberCountryCode::Lc,
+            "LI" => PhoneNumberCountryCode::Li,
+            "LK" => PhoneNumberCountryCode::Lk,
+            "LR" => PhoneNumberCountryCode::Lr,
+            "LS" => PhoneNumberCountryCode::Ls,
+            "LT" => PhoneNumberCountryCode::Lt,
+            "LU" => PhoneNumberCountryCode::Lu,
+            "LV" => PhoneNumberCountryCode::Lv,
+            "LY" => PhoneNumberCountryCode::Ly,
+            "MA" => PhoneNumberCountryCode::Ma,
+            "MC" => PhoneNumberCountryCode::Mc,
+            "MD" => PhoneNumberCountryCode::Md,
+            "ME" => PhoneNumberCountryCode::Me,
+            "MF" => PhoneNumberCountryCode::Mf,
+            "MG" => PhoneNumberCountryCode::Mg,
+            "MH" => PhoneNumberCountryCode::Mh,
+            "MK" => PhoneNumberCountryCode::Mk,
+            "ML" => PhoneNumberCountryCode::Ml,
+            "MM" => PhoneNumberCountryCode::Mm,
+            "MN" => PhoneNumberCountryCode::Mn,
+            "MO" => PhoneNumberCountryCode::Mo,
+            "MP" => PhoneNumberCountryCode::Mp,
+            "MR" => PhoneNumberCountryCode::Mr,
+            "MS" => PhoneNumberCountryCode::Ms,
+            "MT" => PhoneNumberCountryCode::Mt,
+            "MU" => PhoneNumberCountryCode::Mu,
+            "MV" => PhoneNumberCountryCode::Mv,
+            "MW" => PhoneNumberCountryCode::Mw,
+            "MX" => PhoneNumberCountryCode::Mx,
+            "MY" => PhoneNumberCountryCode::My,
+            "MZ" => PhoneNumberCountryCode::Mz,
+            "NA" => PhoneNumberCountryCode::Na,
+            "NC" => PhoneNumberCountryCode::Nc,
+            "NE" => PhoneNumberCountryCode::Ne,
+            "NG" => PhoneNumberCountryCode::Ng,
+            "NI" => PhoneNumberCountryCode::Ni,
+            "NL" => PhoneNumberCountryCode::Nl,
+            "NO" => PhoneNumberCountryCode::No,
+            "NP" => PhoneNumberCountryCode::Np,
+            "NR" => PhoneNumberCountryCode::Nr,
+            "NU" => PhoneNumberCountryCode::Nu,
+            "NZ" => PhoneNumberCountryCode::Nz,
+            "OM" => PhoneNumberCountryCode::Om,
+            "PA" => PhoneNumberCountryCode::Pa,
+            "PE" => PhoneNumberCountryCode::Pe,
+            "PF" => PhoneNumberCountryCode::Pf,
+            "PG" => PhoneNumberCountryCode::Pg,
+            "PH" => PhoneNumberCountryCode::Ph,
+            "PK" => PhoneNumberCountryCode::Pk,
+            "PL" => PhoneNumberCountryCode::Pl,
+            "PM" => PhoneNumberCountryCode::Pm,
+            "PN" => PhoneNumberCountryCode::Pn,
+            "PR" => PhoneNumberCountryCode::Pr,
+            "PT" => PhoneNumberCountryCode::Pt,
+            "PW" => PhoneNumberCountryCode::Pw,
+            "PY" => PhoneNumberCountryCode::Py,
+            "QA" => PhoneNumberCountryCode::Qa,
+            "RE" => PhoneNumberCountryCode::Re,
+            "RO" => PhoneNumberCountryCode::Ro,
+            "RS" => PhoneNumberCountryCode::Rs,
+            "RU" => PhoneNumberCountryCode::Ru,
+            "RW" => PhoneNumberCountryCode::Rw,
+            "SA" => PhoneNumberCountryCode::Sa,
+            "SB" => PhoneNumberCountryCode::Sb,
+            "SC" => PhoneNumberCountryCode::Sc,
+            "SD" => PhoneNumberCountryCode::Sd,
+            "SE" => PhoneNumberCountryCode::Se,
+            "SG" => PhoneNumberCountryCode::Sg,
+            "SH" => PhoneNumberCountryCode::Sh,
+            "SI" => PhoneNumberCountryCode::Si,
+            "SJ" => PhoneNumberCountryCode::Sj,
+            "SK" => PhoneNumberCountryCode::Sk,
+            "SL" => PhoneNumberCountryCode::Sl,
+            "SM" => PhoneNumberCountryCode::Sm,
+            "SN" => PhoneNumberCountryCode::Sn,
+            "SO" => PhoneNumberCountryCode::So,
+            "SR" => PhoneNumberCountryCode::Sr,
+            "ST" => PhoneNumberCountryCode::St,
+            "SV" => PhoneNumberCountryCode::Sv,
+            "SX" => PhoneNumberCountryCode::Sx,
+            "SY" => PhoneNumberCountryCode::Sy,
+            "SZ" => PhoneNumberCountryCode::Sz,
+            "TC" => PhoneNumberCountryCode::Tc,
+            "TD" => PhoneNumberCountryCode::Td,
+            "TG" => PhoneNumberCountryCode::Tg,
+            "TH" => PhoneNumberCountryCode::Th,
+            "TJ" => PhoneNumberCountryCode::Tj,
+            "TK" => PhoneNumberCountryCode::Tk,
+            "TL" => PhoneNumberCountryCode::Tl,
+            "TM" => PhoneNumberCountryCode::Tm,
+            "TN" => PhoneNumberCountryCode::Tn,
+            "TO" => PhoneNumberCountryCode::To,
+            "TR" => PhoneNumberCountryCode::Tr,
+            "TT" => PhoneNumberCountryCode::Tt,
+            "TV" => PhoneNumberCountryCode::Tv,
+            "TW" => PhoneNumberCountryCode::Tw,
+            "TZ" => PhoneNumberCountryCode::Tz,
+            "UA" => PhoneNumberCountryCode::Ua,
+            "UG" => PhoneNumberCountryCode::Ug,
+            "US" => PhoneNumberCountryCode::Us,
+            "UY" => PhoneNumberCountryCode::Uy,
+            "UZ" => PhoneNumberCountryCode::Uz,
+            "VA" => PhoneNumberCountryCode::Va,
+            "VC" => PhoneNumberCountryCode::Vc,
+            "VE" => PhoneNumberCountryCode::Ve,
+            "VG" => PhoneNumberCountryCode::Vg,
+            "VI" => PhoneNumberCountryCode::Vi,
+            "VN" => PhoneNumberCountryCode::Vn,
+            "VU" => PhoneNumberCountryCode::Vu,
+            "WF" => PhoneNumberCountryCode::Wf,
+            "WS" => PhoneNumberCountryCode::Ws,
+            "YE" => PhoneNumberCountryCode::Ye,
+            "YT" => PhoneNumberCountryCode::Yt,
+            "ZA" => PhoneNumberCountryCode::Za,
+            "ZM" => PhoneNumberCountryCode::Zm,
+            "ZW" => PhoneNumberCountryCode::Zw,
+            _ => PhoneNumberCountryCode::UnknownVariant(UnknownPhoneNumberCountryCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberCountryCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AD" => PhoneNumberCountryCode::Ad,
+            "AE" => PhoneNumberCountryCode::Ae,
+            "AF" => PhoneNumberCountryCode::Af,
+            "AG" => PhoneNumberCountryCode::Ag,
+            "AI" => PhoneNumberCountryCode::Ai,
+            "AL" => PhoneNumberCountryCode::Al,
+            "AM" => PhoneNumberCountryCode::Am,
+            "AN" => PhoneNumberCountryCode::An,
+            "AO" => PhoneNumberCountryCode::Ao,
+            "AQ" => PhoneNumberCountryCode::Aq,
+            "AR" => PhoneNumberCountryCode::Ar,
+            "AS" => PhoneNumberCountryCode::As,
+            "AT" => PhoneNumberCountryCode::At,
+            "AU" => PhoneNumberCountryCode::Au,
+            "AW" => PhoneNumberCountryCode::Aw,
+            "AZ" => PhoneNumberCountryCode::Az,
+            "BA" => PhoneNumberCountryCode::Ba,
+            "BB" => PhoneNumberCountryCode::Bb,
+            "BD" => PhoneNumberCountryCode::Bd,
+            "BE" => PhoneNumberCountryCode::Be,
+            "BF" => PhoneNumberCountryCode::Bf,
+            "BG" => PhoneNumberCountryCode::Bg,
+            "BH" => PhoneNumberCountryCode::Bh,
+            "BI" => PhoneNumberCountryCode::Bi,
+            "BJ" => PhoneNumberCountryCode::Bj,
+            "BL" => PhoneNumberCountryCode::Bl,
+            "BM" => PhoneNumberCountryCode::Bm,
+            "BN" => PhoneNumberCountryCode::Bn,
+            "BO" => PhoneNumberCountryCode::Bo,
+            "BR" => PhoneNumberCountryCode::Br,
+            "BS" => PhoneNumberCountryCode::Bs,
+            "BT" => PhoneNumberCountryCode::Bt,
+            "BW" => PhoneNumberCountryCode::Bw,
+            "BY" => PhoneNumberCountryCode::By,
+            "BZ" => PhoneNumberCountryCode::Bz,
+            "CA" => PhoneNumberCountryCode::Ca,
+            "CC" => PhoneNumberCountryCode::Cc,
+            "CD" => PhoneNumberCountryCode::Cd,
+            "CF" => PhoneNumberCountryCode::Cf,
+            "CG" => PhoneNumberCountryCode::Cg,
+            "CH" => PhoneNumberCountryCode::Ch,
+            "CI" => PhoneNumberCountryCode::Ci,
+            "CK" => PhoneNumberCountryCode::Ck,
+            "CL" => PhoneNumberCountryCode::Cl,
+            "CM" => PhoneNumberCountryCode::Cm,
+            "CN" => PhoneNumberCountryCode::Cn,
+            "CO" => PhoneNumberCountryCode::Co,
+            "CR" => PhoneNumberCountryCode::Cr,
+            "CU" => PhoneNumberCountryCode::Cu,
+            "CV" => PhoneNumberCountryCode::Cv,
+            "CW" => PhoneNumberCountryCode::Cw,
+            "CX" => PhoneNumberCountryCode::Cx,
+            "CY" => PhoneNumberCountryCode::Cy,
+            "CZ" => PhoneNumberCountryCode::Cz,
+            "DE" => PhoneNumberCountryCode::De,
+            "DJ" => PhoneNumberCountryCode::Dj,
+            "DK" => PhoneNumberCountryCode::Dk,
+            "DM" => PhoneNumberCountryCode::Dm,
+            "DO" => PhoneNumberCountryCode::Do,
+            "DZ" => PhoneNumberCountryCode::Dz,
+            "EC" => PhoneNumberCountryCode::Ec,
+            "EE" => PhoneNumberCountryCode::Ee,
+            "EG" => PhoneNumberCountryCode::Eg,
+            "EH" => PhoneNumberCountryCode::Eh,
+            "ER" => PhoneNumberCountryCode::Er,
+            "ES" => PhoneNumberCountryCode::Es,
+            "ET" => PhoneNumberCountryCode::Et,
+            "FI" => PhoneNumberCountryCode::Fi,
+            "FJ" => PhoneNumberCountryCode::Fj,
+            "FK" => PhoneNumberCountryCode::Fk,
+            "FM" => PhoneNumberCountryCode::Fm,
+            "FO" => PhoneNumberCountryCode::Fo,
+            "FR" => PhoneNumberCountryCode::Fr,
+            "GA" => PhoneNumberCountryCode::Ga,
+            "GB" => PhoneNumberCountryCode::Gb,
+            "GD" => PhoneNumberCountryCode::Gd,
+            "GE" => PhoneNumberCountryCode::Ge,
+            "GG" => PhoneNumberCountryCode::Gg,
+            "GH" => PhoneNumberCountryCode::Gh,
+            "GI" => PhoneNumberCountryCode::Gi,
+            "GL" => PhoneNumberCountryCode::Gl,
+            "GM" => PhoneNumberCountryCode::Gm,
+            "GN" => PhoneNumberCountryCode::Gn,
+            "GQ" => PhoneNumberCountryCode::Gq,
+            "GR" => PhoneNumberCountryCode::Gr,
+            "GT" => PhoneNumberCountryCode::Gt,
+            "GU" => PhoneNumberCountryCode::Gu,
+            "GW" => PhoneNumberCountryCode::Gw,
+            "GY" => PhoneNumberCountryCode::Gy,
+            "HK" => PhoneNumberCountryCode::Hk,
+            "HN" => PhoneNumberCountryCode::Hn,
+            "HR" => PhoneNumberCountryCode::Hr,
+            "HT" => PhoneNumberCountryCode::Ht,
+            "HU" => PhoneNumberCountryCode::Hu,
+            "ID" => PhoneNumberCountryCode::Id,
+            "IE" => PhoneNumberCountryCode::Ie,
+            "IL" => PhoneNumberCountryCode::Il,
+            "IM" => PhoneNumberCountryCode::Im,
+            "IN" => PhoneNumberCountryCode::In,
+            "IO" => PhoneNumberCountryCode::Io,
+            "IQ" => PhoneNumberCountryCode::Iq,
+            "IR" => PhoneNumberCountryCode::Ir,
+            "IS" => PhoneNumberCountryCode::Is,
+            "IT" => PhoneNumberCountryCode::It,
+            "JE" => PhoneNumberCountryCode::Je,
+            "JM" => PhoneNumberCountryCode::Jm,
+            "JO" => PhoneNumberCountryCode::Jo,
+            "JP" => PhoneNumberCountryCode::Jp,
+            "KE" => PhoneNumberCountryCode::Ke,
+            "KG" => PhoneNumberCountryCode::Kg,
+            "KH" => PhoneNumberCountryCode::Kh,
+            "KI" => PhoneNumberCountryCode::Ki,
+            "KM" => PhoneNumberCountryCode::Km,
+            "KN" => PhoneNumberCountryCode::Kn,
+            "KP" => PhoneNumberCountryCode::Kp,
+            "KR" => PhoneNumberCountryCode::Kr,
+            "KW" => PhoneNumberCountryCode::Kw,
+            "KY" => PhoneNumberCountryCode::Ky,
+            "KZ" => PhoneNumberCountryCode::Kz,
+            "LA" => PhoneNumberCountryCode::La,
+            "LB" => PhoneNumberCountryCode::Lb,
+            "LC" => PhoneNumberCountryCode::Lc,
+            "LI" => PhoneNumberCountryCode::Li,
+            "LK" => PhoneNumberCountryCode::Lk,
+            "LR" => PhoneNumberCountryCode::Lr,
+            "LS" => PhoneNumberCountryCode::Ls,
+            "LT" => PhoneNumberCountryCode::Lt,
+            "LU" => PhoneNumberCountryCode::Lu,
+            "LV" => PhoneNumberCountryCode::Lv,
+            "LY" => PhoneNumberCountryCode::Ly,
+            "MA" => PhoneNumberCountryCode::Ma,
+            "MC" => PhoneNumberCountryCode::Mc,
+            "MD" => PhoneNumberCountryCode::Md,
+            "ME" => PhoneNumberCountryCode::Me,
+            "MF" => PhoneNumberCountryCode::Mf,
+            "MG" => PhoneNumberCountryCode::Mg,
+            "MH" => PhoneNumberCountryCode::Mh,
+            "MK" => PhoneNumberCountryCode::Mk,
+            "ML" => PhoneNumberCountryCode::Ml,
+            "MM" => PhoneNumberCountryCode::Mm,
+            "MN" => PhoneNumberCountryCode::Mn,
+            "MO" => PhoneNumberCountryCode::Mo,
+            "MP" => PhoneNumberCountryCode::Mp,
+            "MR" => PhoneNumberCountryCode::Mr,
+            "MS" => PhoneNumberCountryCode::Ms,
+            "MT" => PhoneNumberCountryCode::Mt,
+            "MU" => PhoneNumberCountryCode::Mu,
+            "MV" => PhoneNumberCountryCode::Mv,
+            "MW" => PhoneNumberCountryCode::Mw,
+            "MX" => PhoneNumberCountryCode::Mx,
+            "MY" => PhoneNumberCountryCode::My,
+            "MZ" => PhoneNumberCountryCode::Mz,
+            "NA" => PhoneNumberCountryCode::Na,
+            "NC" => PhoneNumberCountryCode::Nc,
+            "NE" => PhoneNumberCountryCode::Ne,
+            "NG" => PhoneNumberCountryCode::Ng,
+            "NI" => PhoneNumberCountryCode::Ni,
+            "NL" => PhoneNumberCountryCode::Nl,
+            "NO" => PhoneNumberCountryCode::No,
+            "NP" => PhoneNumberCountryCode::Np,
+            "NR" => PhoneNumberCountryCode::Nr,
+            "NU" => PhoneNumberCountryCode::Nu,
+            "NZ" => PhoneNumberCountryCode::Nz,
+            "OM" => PhoneNumberCountryCode::Om,
+            "PA" => PhoneNumberCountryCode::Pa,
+            "PE" => PhoneNumberCountryCode::Pe,
+            "PF" => PhoneNumberCountryCode::Pf,
+            "PG" => PhoneNumberCountryCode::Pg,
+            "PH" => PhoneNumberCountryCode::Ph,
+            "PK" => PhoneNumberCountryCode::Pk,
+            "PL" => PhoneNumberCountryCode::Pl,
+            "PM" => PhoneNumberCountryCode::Pm,
+            "PN" => PhoneNumberCountryCode::Pn,
+            "PR" => PhoneNumberCountryCode::Pr,
+            "PT" => PhoneNumberCountryCode::Pt,
+            "PW" => PhoneNumberCountryCode::Pw,
+            "PY" => PhoneNumberCountryCode::Py,
+            "QA" => PhoneNumberCountryCode::Qa,
+            "RE" => PhoneNumberCountryCode::Re,
+            "RO" => PhoneNumberCountryCode::Ro,
+            "RS" => PhoneNumberCountryCode::Rs,
+            "RU" => PhoneNumberCountryCode::Ru,
+            "RW" => PhoneNumberCountryCode::Rw,
+            "SA" => PhoneNumberCountryCode::Sa,
+            "SB" => PhoneNumberCountryCode::Sb,
+            "SC" => PhoneNumberCountryCode::Sc,
+            "SD" => PhoneNumberCountryCode::Sd,
+            "SE" => PhoneNumberCountryCode::Se,
+            "SG" => PhoneNumberCountryCode::Sg,
+            "SH" => PhoneNumberCountryCode::Sh,
+            "SI" => PhoneNumberCountryCode::Si,
+            "SJ" => PhoneNumberCountryCode::Sj,
+            "SK" => PhoneNumberCountryCode::Sk,
+            "SL" => PhoneNumberCountryCode::Sl,
+            "SM" => PhoneNumberCountryCode::Sm,
+            "SN" => PhoneNumberCountryCode::Sn,
+            "SO" => PhoneNumberCountryCode::So,
+            "SR" => PhoneNumberCountryCode::Sr,
+            "ST" => PhoneNumberCountryCode::St,
+            "SV" => PhoneNumberCountryCode::Sv,
+            "SX" => PhoneNumberCountryCode::Sx,
+            "SY" => PhoneNumberCountryCode::Sy,
+            "SZ" => PhoneNumberCountryCode::Sz,
+            "TC" => PhoneNumberCountryCode::Tc,
+            "TD" => PhoneNumberCountryCode::Td,
+            "TG" => PhoneNumberCountryCode::Tg,
+            "TH" => PhoneNumberCountryCode::Th,
+            "TJ" => PhoneNumberCountryCode::Tj,
+            "TK" => PhoneNumberCountryCode::Tk,
+            "TL" => PhoneNumberCountryCode::Tl,
+            "TM" => PhoneNumberCountryCode::Tm,
+            "TN" => PhoneNumberCountryCode::Tn,
+            "TO" => PhoneNumberCountryCode::To,
+            "TR" => PhoneNumberCountryCode::Tr,
+            "TT" => PhoneNumberCountryCode::Tt,
+            "TV" => PhoneNumberCountryCode::Tv,
+            "TW" => PhoneNumberCountryCode::Tw,
+            "TZ" => PhoneNumberCountryCode::Tz,
+            "UA" => PhoneNumberCountryCode::Ua,
+            "UG" => PhoneNumberCountryCode::Ug,
+            "US" => PhoneNumberCountryCode::Us,
+            "UY" => PhoneNumberCountryCode::Uy,
+            "UZ" => PhoneNumberCountryCode::Uz,
+            "VA" => PhoneNumberCountryCode::Va,
+            "VC" => PhoneNumberCountryCode::Vc,
+            "VE" => PhoneNumberCountryCode::Ve,
+            "VG" => PhoneNumberCountryCode::Vg,
+            "VI" => PhoneNumberCountryCode::Vi,
+            "VN" => PhoneNumberCountryCode::Vn,
+            "VU" => PhoneNumberCountryCode::Vu,
+            "WF" => PhoneNumberCountryCode::Wf,
+            "WS" => PhoneNumberCountryCode::Ws,
+            "YE" => PhoneNumberCountryCode::Ye,
+            "YT" => PhoneNumberCountryCode::Yt,
+            "ZA" => PhoneNumberCountryCode::Za,
+            "ZM" => PhoneNumberCountryCode::Zm,
+            "ZW" => PhoneNumberCountryCode::Zw,
+            _ => PhoneNumberCountryCode::UnknownVariant(UnknownPhoneNumberCountryCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberCountryCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PhoneNumberCountryCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberCountryCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a phone number for a quick connect.</p>
@@ -2133,11 +4911,211 @@ pub struct PhoneNumberSummary {
     /// <p>The ISO country code.</p>
     #[serde(rename = "PhoneNumberCountryCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_number_country_code: Option<String>,
+    pub phone_number_country_code: Option<PhoneNumberCountryCode>,
     /// <p>The type of phone number.</p>
     #[serde(rename = "PhoneNumberType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_number_type: Option<String>,
+    pub phone_number_type: Option<PhoneNumberType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberType {
+    Did,
+    TollFree,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberType),
+}
+
+impl Default for PhoneNumberType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberType {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberType::Did => "DID".to_string(),
+            PhoneNumberType::TollFree => "TOLL_FREE".to_string(),
+            PhoneNumberType::UnknownVariant(UnknownPhoneNumberType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberType {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberType::Did => &"DID",
+            PhoneNumberType::TollFree => &"TOLL_FREE",
+            PhoneNumberType::UnknownVariant(UnknownPhoneNumberType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DID" => PhoneNumberType::Did,
+            "TOLL_FREE" => PhoneNumberType::TollFree,
+            _ => PhoneNumberType::UnknownVariant(UnknownPhoneNumberType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DID" => PhoneNumberType::Did,
+            "TOLL_FREE" => PhoneNumberType::TollFree,
+            _ => PhoneNumberType::UnknownVariant(UnknownPhoneNumberType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PhoneNumberType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneType {
+    DeskPhone,
+    SoftPhone,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneType),
+}
+
+impl Default for PhoneType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneType {
+    fn into(self) -> String {
+        match self {
+            PhoneType::DeskPhone => "DESK_PHONE".to_string(),
+            PhoneType::SoftPhone => "SOFT_PHONE".to_string(),
+            PhoneType::UnknownVariant(UnknownPhoneType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneType {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneType::DeskPhone => &"DESK_PHONE",
+            PhoneType::SoftPhone => &"SOFT_PHONE",
+            PhoneType::UnknownVariant(UnknownPhoneType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DESK_PHONE" => PhoneType::DeskPhone,
+            "SOFT_PHONE" => PhoneType::SoftPhone,
+            _ => PhoneType::UnknownVariant(UnknownPhoneType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DESK_PHONE" => PhoneType::DeskPhone,
+            "SOFT_PHONE" => PhoneType::SoftPhone,
+            _ => PhoneType::UnknownVariant(UnknownPhoneType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PhoneType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a problem detail.</p>
@@ -2209,7 +5187,107 @@ pub struct QueueSummary {
     /// <p>The type of queue.</p>
     #[serde(rename = "QueueType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub queue_type: Option<String>,
+    pub queue_type: Option<QueueType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueueType {
+    Agent,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueueType),
+}
+
+impl Default for QueueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueueType {
+    fn into(self) -> String {
+        match self {
+            QueueType::Agent => "AGENT".to_string(),
+            QueueType::Standard => "STANDARD".to_string(),
+            QueueType::UnknownVariant(UnknownQueueType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueueType {
+    fn into(self) -> &'a str {
+        match self {
+            QueueType::Agent => &"AGENT",
+            QueueType::Standard => &"STANDARD",
+            QueueType::UnknownVariant(UnknownQueueType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QueueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AGENT" => QueueType::Agent,
+            "STANDARD" => QueueType::Standard,
+            _ => QueueType::UnknownVariant(UnknownQueueType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AGENT" => QueueType::Agent,
+            "STANDARD" => QueueType::Standard,
+            _ => QueueType::UnknownVariant(UnknownQueueType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QueueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a quick connect.</p>
@@ -2255,7 +5333,7 @@ pub struct QuickConnectConfig {
     pub queue_config: Option<QueueQuickConnectConfig>,
     /// <p>The type of quick connect. In the Amazon Connect console, when you create a quick connect, you are prompted to assign one of the following types: Agent (USER), External (PHONE_NUMBER), or Queue (QUEUE). </p>
     #[serde(rename = "QuickConnectType")]
-    pub quick_connect_type: String,
+    pub quick_connect_type: QuickConnectType,
     /// <p>The user configuration. This is required only if QuickConnectType is USER.</p>
     #[serde(rename = "UserConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2281,7 +5359,116 @@ pub struct QuickConnectSummary {
     /// <p>The type of quick connect. In the Amazon Connect console, when you create a quick connect, you are prompted to assign one of the following types: Agent (USER), External (PHONE_NUMBER), or Queue (QUEUE).</p>
     #[serde(rename = "QuickConnectType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quick_connect_type: Option<String>,
+    pub quick_connect_type: Option<QuickConnectType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQuickConnectType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QuickConnectType {
+    PhoneNumber,
+    Queue,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQuickConnectType),
+}
+
+impl Default for QuickConnectType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QuickConnectType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QuickConnectType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QuickConnectType {
+    fn into(self) -> String {
+        match self {
+            QuickConnectType::PhoneNumber => "PHONE_NUMBER".to_string(),
+            QuickConnectType::Queue => "QUEUE".to_string(),
+            QuickConnectType::User => "USER".to_string(),
+            QuickConnectType::UnknownVariant(UnknownQuickConnectType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QuickConnectType {
+    fn into(self) -> &'a str {
+        match self {
+            QuickConnectType::PhoneNumber => &"PHONE_NUMBER",
+            QuickConnectType::Queue => &"QUEUE",
+            QuickConnectType::User => &"USER",
+            QuickConnectType::UnknownVariant(UnknownQuickConnectType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for QuickConnectType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PHONE_NUMBER" => QuickConnectType::PhoneNumber,
+            "QUEUE" => QuickConnectType::Queue,
+            "USER" => QuickConnectType::User,
+            _ => QuickConnectType::UnknownVariant(UnknownQuickConnectType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QuickConnectType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PHONE_NUMBER" => QuickConnectType::PhoneNumber,
+            "QUEUE" => QuickConnectType::Queue,
+            "USER" => QuickConnectType::User,
+            _ => QuickConnectType::UnknownVariant(UnknownQuickConnectType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QuickConnectType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QuickConnectType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QuickConnectType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A link that an agent selects to complete a given task. You can have up to 4,096 UTF-8 bytes across all references for a contact.</p>
@@ -2290,10 +5477,233 @@ pub struct QuickConnectSummary {
 pub struct Reference {
     /// <p>A valid URL.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ReferenceType,
     /// <p>A formatted URL that will be shown to an agent in the Contact Control Panel (CCP)</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReferenceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReferenceType {
+    Url,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReferenceType),
+}
+
+impl Default for ReferenceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReferenceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReferenceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReferenceType {
+    fn into(self) -> String {
+        match self {
+            ReferenceType::Url => "URL".to_string(),
+            ReferenceType::UnknownVariant(UnknownReferenceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReferenceType {
+    fn into(self) -> &'a str {
+        match self {
+            ReferenceType::Url => &"URL",
+            ReferenceType::UnknownVariant(UnknownReferenceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReferenceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "URL" => ReferenceType::Url,
+            _ => ReferenceType::UnknownVariant(UnknownReferenceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReferenceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "URL" => ReferenceType::Url,
+            _ => ReferenceType::UnknownVariant(UnknownReferenceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReferenceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReferenceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReferenceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Contact,
+    ContactFlow,
+    HierarchyGroup,
+    HierarchyLevel,
+    Instance,
+    Participant,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Contact => "CONTACT".to_string(),
+            ResourceType::ContactFlow => "CONTACT_FLOW".to_string(),
+            ResourceType::HierarchyGroup => "HIERARCHY_GROUP".to_string(),
+            ResourceType::HierarchyLevel => "HIERARCHY_LEVEL".to_string(),
+            ResourceType::Instance => "INSTANCE".to_string(),
+            ResourceType::Participant => "PARTICIPANT".to_string(),
+            ResourceType::User => "USER".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Contact => &"CONTACT",
+            ResourceType::ContactFlow => &"CONTACT_FLOW",
+            ResourceType::HierarchyGroup => &"HIERARCHY_GROUP",
+            ResourceType::HierarchyLevel => &"HIERARCHY_LEVEL",
+            ResourceType::Instance => &"INSTANCE",
+            ResourceType::Participant => &"PARTICIPANT",
+            ResourceType::User => &"USER",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTACT" => ResourceType::Contact,
+            "CONTACT_FLOW" => ResourceType::ContactFlow,
+            "HIERARCHY_GROUP" => ResourceType::HierarchyGroup,
+            "HIERARCHY_LEVEL" => ResourceType::HierarchyLevel,
+            "INSTANCE" => ResourceType::Instance,
+            "PARTICIPANT" => ResourceType::Participant,
+            "USER" => ResourceType::User,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTACT" => ResourceType::Contact,
+            "CONTACT_FLOW" => ResourceType::ContactFlow,
+            "HIERARCHY_GROUP" => ResourceType::HierarchyGroup,
+            "HIERARCHY_LEVEL" => ResourceType::HierarchyLevel,
+            "INSTANCE" => ResourceType::Instance,
+            "PARTICIPANT" => ResourceType::Participant,
+            "USER" => ResourceType::User,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2373,7 +5783,7 @@ pub struct RoutingProfileQueueConfig {
 pub struct RoutingProfileQueueConfigSummary {
     /// <p>The channels this queue supports.</p>
     #[serde(rename = "Channel")]
-    pub channel: String,
+    pub channel: Channel,
     /// <p>The delay, in seconds, that a contact should be in the queue before they are routed to an available agent. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing-profiles-priority.html">Queues: priority and delay</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[serde(rename = "Delay")]
     pub delay: i64,
@@ -2397,7 +5807,7 @@ pub struct RoutingProfileQueueConfigSummary {
 pub struct RoutingProfileQueueReference {
     /// <p>The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
     #[serde(rename = "Channel")]
-    pub channel: String,
+    pub channel: Channel,
     /// <p>The identifier of the queue.</p>
     #[serde(rename = "QueueId")]
     pub queue_id: String,
@@ -2470,6 +5880,106 @@ pub struct SecurityProfileSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Salesforce,
+    Zendesk,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Salesforce => "SALESFORCE".to_string(),
+            SourceType::Zendesk => "ZENDESK".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Salesforce => &"SALESFORCE",
+            SourceType::Zendesk => &"ZENDESK",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SALESFORCE" => SourceType::Salesforce,
+            "ZENDESK" => SourceType::Zendesk,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SALESFORCE" => SourceType::Salesforce,
+            "ZENDESK" => SourceType::Zendesk,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2618,6 +6128,111 @@ pub struct StartTaskContactResponse {
     pub contact_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Statistic {
+    Avg,
+    Max,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatistic),
+}
+
+impl Default for Statistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Statistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Statistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        match self {
+            Statistic::Avg => "AVG".to_string(),
+            Statistic::Max => "MAX".to_string(),
+            Statistic::Sum => "SUM".to_string(),
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Statistic {
+    fn into(self) -> &'a str {
+        match self {
+            Statistic::Avg => &"AVG",
+            Statistic::Max => &"MAX",
+            Statistic::Sum => &"SUM",
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Statistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVG" => Statistic::Avg,
+            "MAX" => Statistic::Max,
+            "SUM" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Statistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVG" => Statistic::Avg,
+            "MAX" => Statistic::Max,
+            "SUM" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Statistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Statistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRecordingRequest {
@@ -2650,6 +6265,116 @@ pub struct StopContactRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContactResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageType {
+    KinesisFirehose,
+    KinesisStream,
+    KinesisVideoStream,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageType),
+}
+
+impl Default for StorageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageType {
+    fn into(self) -> String {
+        match self {
+            StorageType::KinesisFirehose => "KINESIS_FIREHOSE".to_string(),
+            StorageType::KinesisStream => "KINESIS_STREAM".to_string(),
+            StorageType::KinesisVideoStream => "KINESIS_VIDEO_STREAM".to_string(),
+            StorageType::S3 => "S3".to_string(),
+            StorageType::UnknownVariant(UnknownStorageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageType {
+    fn into(self) -> &'a str {
+        match self {
+            StorageType::KinesisFirehose => &"KINESIS_FIREHOSE",
+            StorageType::KinesisStream => &"KINESIS_STREAM",
+            StorageType::KinesisVideoStream => &"KINESIS_VIDEO_STREAM",
+            StorageType::S3 => &"S3",
+            StorageType::UnknownVariant(UnknownStorageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KINESIS_FIREHOSE" => StorageType::KinesisFirehose,
+            "KINESIS_STREAM" => StorageType::KinesisStream,
+            "KINESIS_VIDEO_STREAM" => StorageType::KinesisVideoStream,
+            "S3" => StorageType::S3,
+            _ => StorageType::UnknownVariant(UnknownStorageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StorageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KINESIS_FIREHOSE" => StorageType::KinesisFirehose,
+            "KINESIS_STREAM" => StorageType::KinesisStream,
+            "KINESIS_VIDEO_STREAM" => StorageType::KinesisVideoStream,
+            "S3" => StorageType::S3,
+            _ => StorageType::UnknownVariant(UnknownStorageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StorageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2686,11 +6411,116 @@ pub struct Threshold {
     /// <p>The type of comparison. Only "less than" (LT) comparisons are supported.</p>
     #[serde(rename = "Comparison")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison: Option<String>,
+    pub comparison: Option<Comparison>,
     /// <p>The threshold value to compare.</p>
     #[serde(rename = "ThresholdValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threshold_value: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Unit {
+    Count,
+    Percent,
+    Seconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUnit),
+}
+
+impl Default for Unit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Unit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Unit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Unit {
+    fn into(self) -> String {
+        match self {
+            Unit::Count => "COUNT".to_string(),
+            Unit::Percent => "PERCENT".to_string(),
+            Unit::Seconds => "SECONDS".to_string(),
+            Unit::UnknownVariant(UnknownUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Unit {
+    fn into(self) -> &'a str {
+        match self {
+            Unit::Count => &"COUNT",
+            Unit::Percent => &"PERCENT",
+            Unit::Seconds => &"SECONDS",
+            Unit::UnknownVariant(UnknownUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Unit {
+    fn from(name: &str) -> Self {
+        match name {
+            "COUNT" => Unit::Count,
+            "PERCENT" => Unit::Percent,
+            "SECONDS" => Unit::Seconds,
+            _ => Unit::UnknownVariant(UnknownUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Unit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COUNT" => Unit::Count,
+            "PERCENT" => Unit::Percent,
+            "SECONDS" => Unit::Seconds,
+            _ => Unit::UnknownVariant(UnknownUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Unit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Unit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Unit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2760,7 +6590,7 @@ pub struct UpdateContactFlowNameRequest {
 pub struct UpdateInstanceAttributeRequest {
     /// <p>The type of attribute.</p>
     #[serde(rename = "AttributeType")]
-    pub attribute_type: String,
+    pub attribute_type: InstanceAttributeType,
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -2780,7 +6610,7 @@ pub struct UpdateInstanceStorageConfigRequest {
     pub instance_id: String,
     /// <p>A valid resource type.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: InstanceStorageResourceType,
     #[serde(rename = "StorageConfig")]
     pub storage_config: InstanceStorageConfig,
 }
@@ -2990,7 +6820,102 @@ pub struct UseCase {
     /// <p>The type of use case to associate to the AppIntegration association. Each AppIntegration association can have only one of each use case type.</p>
     #[serde(rename = "UseCaseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub use_case_type: Option<String>,
+    pub use_case_type: Option<UseCaseType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUseCaseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UseCaseType {
+    RulesEvaluation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUseCaseType),
+}
+
+impl Default for UseCaseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UseCaseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UseCaseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UseCaseType {
+    fn into(self) -> String {
+        match self {
+            UseCaseType::RulesEvaluation => "RULES_EVALUATION".to_string(),
+            UseCaseType::UnknownVariant(UnknownUseCaseType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UseCaseType {
+    fn into(self) -> &'a str {
+        match self {
+            UseCaseType::RulesEvaluation => &"RULES_EVALUATION",
+            UseCaseType::UnknownVariant(UnknownUseCaseType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UseCaseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RULES_EVALUATION" => UseCaseType::RulesEvaluation,
+            _ => UseCaseType::UnknownVariant(UnknownUseCaseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UseCaseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RULES_EVALUATION" => UseCaseType::RulesEvaluation,
+            _ => UseCaseType::UnknownVariant(UnknownUseCaseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UseCaseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UseCaseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UseCaseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a user account for a Amazon Connect instance.</p>
@@ -3073,7 +6998,7 @@ pub struct UserPhoneConfig {
     pub desk_phone_number: Option<String>,
     /// <p>The phone type.</p>
     #[serde(rename = "PhoneType")]
-    pub phone_type: String,
+    pub phone_type: PhoneType,
 }
 
 /// <p>Contains information about the quick connect configuration settings for a user. The contact flow must be of type Transfer to Agent.</p>
@@ -3112,7 +7037,117 @@ pub struct VoiceRecordingConfiguration {
     /// <p>Identifies which track is being recorded.</p>
     #[serde(rename = "VoiceRecordingTrack")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub voice_recording_track: Option<String>,
+    pub voice_recording_track: Option<VoiceRecordingTrack>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVoiceRecordingTrack {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VoiceRecordingTrack {
+    All,
+    FromAgent,
+    ToAgent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVoiceRecordingTrack),
+}
+
+impl Default for VoiceRecordingTrack {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VoiceRecordingTrack {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VoiceRecordingTrack {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VoiceRecordingTrack {
+    fn into(self) -> String {
+        match self {
+            VoiceRecordingTrack::All => "ALL".to_string(),
+            VoiceRecordingTrack::FromAgent => "FROM_AGENT".to_string(),
+            VoiceRecordingTrack::ToAgent => "TO_AGENT".to_string(),
+            VoiceRecordingTrack::UnknownVariant(UnknownVoiceRecordingTrack { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VoiceRecordingTrack {
+    fn into(self) -> &'a str {
+        match self {
+            VoiceRecordingTrack::All => &"ALL",
+            VoiceRecordingTrack::FromAgent => &"FROM_AGENT",
+            VoiceRecordingTrack::ToAgent => &"TO_AGENT",
+            VoiceRecordingTrack::UnknownVariant(UnknownVoiceRecordingTrack { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for VoiceRecordingTrack {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => VoiceRecordingTrack::All,
+            "FROM_AGENT" => VoiceRecordingTrack::FromAgent,
+            "TO_AGENT" => VoiceRecordingTrack::ToAgent,
+            _ => VoiceRecordingTrack::UnknownVariant(UnknownVoiceRecordingTrack {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VoiceRecordingTrack {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => VoiceRecordingTrack::All,
+            "FROM_AGENT" => VoiceRecordingTrack::FromAgent,
+            "TO_AGENT" => VoiceRecordingTrack::ToAgent,
+            _ => VoiceRecordingTrack::UnknownVariant(UnknownVoiceRecordingTrack { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VoiceRecordingTrack {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VoiceRecordingTrack {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for VoiceRecordingTrack {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateApprovedOrigin

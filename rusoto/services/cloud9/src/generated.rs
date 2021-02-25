@@ -50,6 +50,107 @@ impl Cloud9Client {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionType {
+    ConnectSsh,
+    ConnectSsm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionType),
+}
+
+impl Default for ConnectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionType {
+    fn into(self) -> String {
+        match self {
+            ConnectionType::ConnectSsh => "CONNECT_SSH".to_string(),
+            ConnectionType::ConnectSsm => "CONNECT_SSM".to_string(),
+            ConnectionType::UnknownVariant(UnknownConnectionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionType {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionType::ConnectSsh => &"CONNECT_SSH",
+            ConnectionType::ConnectSsm => &"CONNECT_SSM",
+            ConnectionType::UnknownVariant(UnknownConnectionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECT_SSH" => ConnectionType::ConnectSsh,
+            "CONNECT_SSM" => ConnectionType::ConnectSsm,
+            _ => ConnectionType::UnknownVariant(UnknownConnectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECT_SSH" => ConnectionType::ConnectSsh,
+            "CONNECT_SSM" => ConnectionType::ConnectSsm,
+            _ => ConnectionType::UnknownVariant(UnknownConnectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConnectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentEC2Request {
@@ -64,7 +165,7 @@ pub struct CreateEnvironmentEC2Request {
     /// <p>The connection type used for connecting to an Amazon EC2 environment.</p>
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>The description of the environment to create.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -106,7 +207,7 @@ pub struct CreateEnvironmentMembershipRequest {
     pub environment_id: String,
     /// <p><p>The type of environment member permissions you want to associate with this environment member. Available values include:</p> <ul> <li> <p> <code>read-only</code>: Has read-only access to the environment.</p> </li> <li> <p> <code>read-write</code>: Has read-write access to the environment.</p> </li> </ul></p>
     #[serde(rename = "permissions")]
-    pub permissions: String,
+    pub permissions: MemberPermissions,
     /// <p>The Amazon Resource Name (ARN) of the environment member you want to add.</p>
     #[serde(rename = "userArn")]
     pub user_arn: String,
@@ -166,7 +267,7 @@ pub struct DescribeEnvironmentMembershipsRequest {
     /// <p>The type of environment member permissions to get information about. Available values include:</p> <ul> <li> <p> <code>owner</code>: Owns the environment.</p> </li> <li> <p> <code>read-only</code>: Has read-only access to the environment.</p> </li> <li> <p> <code>read-write</code>: Has read-write access to the environment.</p> </li> </ul> <p>If no value is specified, information about all environment members are returned.</p>
     #[serde(rename = "permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
+    pub permissions: Option<Vec<Permissions>>,
     /// <p>The Amazon Resource Name (ARN) of an individual environment member to get information about. If no value is specified, information about all environment members are returned.</p>
     #[serde(rename = "userArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -204,7 +305,7 @@ pub struct DescribeEnvironmentStatusResult {
     /// <p><p>The status of the environment. Available values include:</p> <ul> <li> <p> <code>connecting</code>: The environment is connecting.</p> </li> <li> <p> <code>creating</code>: The environment is being created.</p> </li> <li> <p> <code>deleting</code>: The environment is being deleted.</p> </li> <li> <p> <code>error</code>: The environment is in an error state.</p> </li> <li> <p> <code>ready</code>: The environment is ready.</p> </li> <li> <p> <code>stopped</code>: The environment is stopped.</p> </li> <li> <p> <code>stopping</code>: The environment is stopping.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EnvironmentStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -235,7 +336,7 @@ pub struct Environment {
     /// <p>The connection type used for connecting to an Amazon EC2 environment.</p>
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>The description for the environment.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -259,7 +360,7 @@ pub struct Environment {
     /// <p><p>The type of environment. Valid values include the following:</p> <ul> <li> <p> <code>ec2</code>: An Amazon Elastic Compute Cloud (Amazon EC2) instance connects to the environment.</p> </li> <li> <p> <code>ssh</code>: Your own server connects to the environment.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EnvironmentType>,
 }
 
 /// <p>Information about the current creation or deletion lifecycle state of an AWS Cloud9 development environment.</p>
@@ -277,7 +378,129 @@ pub struct EnvironmentLifecycle {
     /// <p><p>The current creation or deletion lifecycle state of the environment.</p> <ul> <li> <p> <code>CREATING</code>: The environment is in the process of being created.</p> </li> <li> <p> <code>CREATED</code>: The environment was successfully created.</p> </li> <li> <p> <code>CREATE<em>FAILED</code>: The environment failed to be created.</p> </li> <li> <p> <code>DELETING</code>: The environment is in the process of being deleted.</p> </li> <li> <p> <code>DELETE</em>FAILED</code>: The environment failed to delete.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EnvironmentLifecycleStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentLifecycleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentLifecycleStatus {
+    Created,
+    CreateFailed,
+    Creating,
+    DeleteFailed,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentLifecycleStatus),
+}
+
+impl Default for EnvironmentLifecycleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentLifecycleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentLifecycleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentLifecycleStatus {
+    fn into(self) -> String {
+        match self {
+            EnvironmentLifecycleStatus::Created => "CREATED".to_string(),
+            EnvironmentLifecycleStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            EnvironmentLifecycleStatus::Creating => "CREATING".to_string(),
+            EnvironmentLifecycleStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            EnvironmentLifecycleStatus::Deleting => "DELETING".to_string(),
+            EnvironmentLifecycleStatus::UnknownVariant(UnknownEnvironmentLifecycleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentLifecycleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentLifecycleStatus::Created => &"CREATED",
+            EnvironmentLifecycleStatus::CreateFailed => &"CREATE_FAILED",
+            EnvironmentLifecycleStatus::Creating => &"CREATING",
+            EnvironmentLifecycleStatus::DeleteFailed => &"DELETE_FAILED",
+            EnvironmentLifecycleStatus::Deleting => &"DELETING",
+            EnvironmentLifecycleStatus::UnknownVariant(UnknownEnvironmentLifecycleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EnvironmentLifecycleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => EnvironmentLifecycleStatus::Created,
+            "CREATE_FAILED" => EnvironmentLifecycleStatus::CreateFailed,
+            "CREATING" => EnvironmentLifecycleStatus::Creating,
+            "DELETE_FAILED" => EnvironmentLifecycleStatus::DeleteFailed,
+            "DELETING" => EnvironmentLifecycleStatus::Deleting,
+            _ => EnvironmentLifecycleStatus::UnknownVariant(UnknownEnvironmentLifecycleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentLifecycleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => EnvironmentLifecycleStatus::Created,
+            "CREATE_FAILED" => EnvironmentLifecycleStatus::CreateFailed,
+            "CREATING" => EnvironmentLifecycleStatus::Creating,
+            "DELETE_FAILED" => EnvironmentLifecycleStatus::DeleteFailed,
+            "DELETING" => EnvironmentLifecycleStatus::Deleting,
+            _ => EnvironmentLifecycleStatus::UnknownVariant(UnknownEnvironmentLifecycleStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentLifecycleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EnvironmentLifecycleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentLifecycleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an environment member for an AWS Cloud9 development environment.</p>
@@ -295,7 +518,7 @@ pub struct EnvironmentMember {
     /// <p><p>The type of environment member permissions associated with this environment member. Available values include:</p> <ul> <li> <p> <code>owner</code>: Owns the environment.</p> </li> <li> <p> <code>read-only</code>: Has read-only access to the environment.</p> </li> <li> <p> <code>read-write</code>: Has read-write access to the environment.</p> </li> </ul></p>
     #[serde(rename = "permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<String>,
+    pub permissions: Option<Permissions>,
     /// <p>The Amazon Resource Name (ARN) of the environment member.</p>
     #[serde(rename = "userArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -304,6 +527,237 @@ pub struct EnvironmentMember {
     #[serde(rename = "userId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentStatus {
+    Connecting,
+    Creating,
+    Deleting,
+    Error,
+    Ready,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentStatus),
+}
+
+impl Default for EnvironmentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentStatus {
+    fn into(self) -> String {
+        match self {
+            EnvironmentStatus::Connecting => "connecting".to_string(),
+            EnvironmentStatus::Creating => "creating".to_string(),
+            EnvironmentStatus::Deleting => "deleting".to_string(),
+            EnvironmentStatus::Error => "error".to_string(),
+            EnvironmentStatus::Ready => "ready".to_string(),
+            EnvironmentStatus::Stopped => "stopped".to_string(),
+            EnvironmentStatus::Stopping => "stopping".to_string(),
+            EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentStatus::Connecting => &"connecting",
+            EnvironmentStatus::Creating => &"creating",
+            EnvironmentStatus::Deleting => &"deleting",
+            EnvironmentStatus::Error => &"error",
+            EnvironmentStatus::Ready => &"ready",
+            EnvironmentStatus::Stopped => &"stopped",
+            EnvironmentStatus::Stopping => &"stopping",
+            EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnvironmentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "connecting" => EnvironmentStatus::Connecting,
+            "creating" => EnvironmentStatus::Creating,
+            "deleting" => EnvironmentStatus::Deleting,
+            "error" => EnvironmentStatus::Error,
+            "ready" => EnvironmentStatus::Ready,
+            "stopped" => EnvironmentStatus::Stopped,
+            "stopping" => EnvironmentStatus::Stopping,
+            _ => EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "connecting" => EnvironmentStatus::Connecting,
+            "creating" => EnvironmentStatus::Creating,
+            "deleting" => EnvironmentStatus::Deleting,
+            "error" => EnvironmentStatus::Error,
+            "ready" => EnvironmentStatus::Ready,
+            "stopped" => EnvironmentStatus::Stopped,
+            "stopping" => EnvironmentStatus::Stopping,
+            _ => EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EnvironmentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentType {
+    Ec2,
+    Ssh,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentType),
+}
+
+impl Default for EnvironmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentType {
+    fn into(self) -> String {
+        match self {
+            EnvironmentType::Ec2 => "ec2".to_string(),
+            EnvironmentType::Ssh => "ssh".to_string(),
+            EnvironmentType::UnknownVariant(UnknownEnvironmentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentType {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentType::Ec2 => &"ec2",
+            EnvironmentType::Ssh => &"ssh",
+            EnvironmentType::UnknownVariant(UnknownEnvironmentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EnvironmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ec2" => EnvironmentType::Ec2,
+            "ssh" => EnvironmentType::Ssh,
+            _ => EnvironmentType::UnknownVariant(UnknownEnvironmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ec2" => EnvironmentType::Ec2,
+            "ssh" => EnvironmentType::Ssh,
+            _ => EnvironmentType::UnknownVariant(UnknownEnvironmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EnvironmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -347,6 +801,216 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberPermissions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberPermissions {
+    ReadOnly,
+    ReadWrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberPermissions),
+}
+
+impl Default for MemberPermissions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberPermissions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberPermissions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberPermissions {
+    fn into(self) -> String {
+        match self {
+            MemberPermissions::ReadOnly => "read-only".to_string(),
+            MemberPermissions::ReadWrite => "read-write".to_string(),
+            MemberPermissions::UnknownVariant(UnknownMemberPermissions { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberPermissions {
+    fn into(self) -> &'a str {
+        match self {
+            MemberPermissions::ReadOnly => &"read-only",
+            MemberPermissions::ReadWrite => &"read-write",
+            MemberPermissions::UnknownVariant(UnknownMemberPermissions { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MemberPermissions {
+    fn from(name: &str) -> Self {
+        match name {
+            "read-only" => MemberPermissions::ReadOnly,
+            "read-write" => MemberPermissions::ReadWrite,
+            _ => MemberPermissions::UnknownVariant(UnknownMemberPermissions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberPermissions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "read-only" => MemberPermissions::ReadOnly,
+            "read-write" => MemberPermissions::ReadWrite,
+            _ => MemberPermissions::UnknownVariant(UnknownMemberPermissions { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberPermissions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MemberPermissions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MemberPermissions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermissions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Permissions {
+    Owner,
+    ReadOnly,
+    ReadWrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermissions),
+}
+
+impl Default for Permissions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Permissions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Permissions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Permissions {
+    fn into(self) -> String {
+        match self {
+            Permissions::Owner => "owner".to_string(),
+            Permissions::ReadOnly => "read-only".to_string(),
+            Permissions::ReadWrite => "read-write".to_string(),
+            Permissions::UnknownVariant(UnknownPermissions { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Permissions {
+    fn into(self) -> &'a str {
+        match self {
+            Permissions::Owner => &"owner",
+            Permissions::ReadOnly => &"read-only",
+            Permissions::ReadWrite => &"read-write",
+            Permissions::UnknownVariant(UnknownPermissions { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Permissions {
+    fn from(name: &str) -> Self {
+        match name {
+            "owner" => Permissions::Owner,
+            "read-only" => Permissions::ReadOnly,
+            "read-write" => Permissions::ReadWrite,
+            _ => Permissions::UnknownVariant(UnknownPermissions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Permissions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "owner" => Permissions::Owner,
+            "read-only" => Permissions::ReadOnly,
+            "read-write" => Permissions::ReadWrite,
+            _ => Permissions::UnknownVariant(UnknownPermissions { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Permissions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Permissions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Permissions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Metadata that is associated with AWS resources. In particular, a name-value pair that can be associated with an AWS Cloud9 development environment. There are two types of tags: <i>user tags</i> and <i>system tags</i>. A user tag is created by the user. A system tag is automatically created by AWS services. A system tag is prefixed with "aws:" and cannot be modified by the user.</p>
@@ -398,7 +1062,7 @@ pub struct UpdateEnvironmentMembershipRequest {
     pub environment_id: String,
     /// <p><p>The replacement type of environment member permissions you want to associate with this environment member. Available values include:</p> <ul> <li> <p> <code>read-only</code>: Has read-only access to the environment.</p> </li> <li> <p> <code>read-write</code>: Has read-write access to the environment.</p> </li> </ul></p>
     #[serde(rename = "permissions")]
-    pub permissions: String,
+    pub permissions: MemberPermissions,
     /// <p>The Amazon Resource Name (ARN) of the environment member whose settings you want to change.</p>
     #[serde(rename = "userArn")]
     pub user_arn: String,

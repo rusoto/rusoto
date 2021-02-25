@@ -154,7 +154,7 @@ pub struct Component {
     /// <p>The platform of the component.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,7 +166,7 @@ pub struct Component {
     /// <p>The type of the component denotes whether the component is used to build the image or only to test it.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ComponentType>,
     /// <p>The version of the component.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -179,6 +179,102 @@ pub struct ComponentConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the component. </p>
     #[serde(rename = "componentArn")]
     pub component_arn: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComponentFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComponentFormat {
+    Shell,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComponentFormat),
+}
+
+impl Default for ComponentFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComponentFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComponentFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComponentFormat {
+    fn into(self) -> String {
+        match self {
+            ComponentFormat::Shell => "SHELL".to_string(),
+            ComponentFormat::UnknownVariant(UnknownComponentFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComponentFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ComponentFormat::Shell => &"SHELL",
+            ComponentFormat::UnknownVariant(UnknownComponentFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComponentFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHELL" => ComponentFormat::Shell,
+            _ => ComponentFormat::UnknownVariant(UnknownComponentFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComponentFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHELL" => ComponentFormat::Shell,
+            _ => ComponentFormat::UnknownVariant(UnknownComponentFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComponentFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComponentFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComponentFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A high-level summary of a component.</p>
@@ -212,7 +308,7 @@ pub struct ComponentSummary {
     /// <p>The platform of the component.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -224,11 +320,111 @@ pub struct ComponentSummary {
     /// <p>The type of the component denotes whether the component is used to build the image or only to test it.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ComponentType>,
     /// <p>The version of the component.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComponentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComponentType {
+    Build,
+    Test,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComponentType),
+}
+
+impl Default for ComponentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComponentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComponentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComponentType {
+    fn into(self) -> String {
+        match self {
+            ComponentType::Build => "BUILD".to_string(),
+            ComponentType::Test => "TEST".to_string(),
+            ComponentType::UnknownVariant(UnknownComponentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComponentType {
+    fn into(self) -> &'a str {
+        match self {
+            ComponentType::Build => &"BUILD",
+            ComponentType::Test => &"TEST",
+            ComponentType::UnknownVariant(UnknownComponentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComponentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD" => ComponentType::Build,
+            "TEST" => ComponentType::Test,
+            _ => ComponentType::UnknownVariant(UnknownComponentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComponentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD" => ComponentType::Build,
+            "TEST" => ComponentType::Test,
+            _ => ComponentType::UnknownVariant(UnknownComponentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComponentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComponentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComponentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A high-level overview of a component semantic version.</p>
@@ -258,7 +454,7 @@ pub struct ComponentVersion {
     /// <p>The platform of the component.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p> The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -266,7 +462,7 @@ pub struct ComponentVersion {
     /// <p>The type of the component denotes whether the component is used to build the image or only to test it.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ComponentType>,
     /// <p>The semantic version of the component.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -318,7 +514,7 @@ pub struct ContainerRecipe {
     /// <p>Specifies the type of container, such as Docker.</p>
     #[serde(rename = "containerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub container_type: Option<String>,
+    pub container_type: Option<ContainerType>,
     /// <p>The date when this container recipe was created.</p>
     #[serde(rename = "dateCreated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -354,7 +550,7 @@ pub struct ContainerRecipe {
     /// <p>The system platform for the container, such as Windows or Linux.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>Tags that are attached to the container recipe.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -384,7 +580,7 @@ pub struct ContainerRecipeSummary {
     /// <p>Specifies the type of container, such as "Docker".</p>
     #[serde(rename = "containerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub container_type: Option<String>,
+    pub container_type: Option<ContainerType>,
     /// <p>The date when this container recipe was created.</p>
     #[serde(rename = "dateCreated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -404,11 +600,207 @@ pub struct ContainerRecipeSummary {
     /// <p>The system platform for the container, such as Windows or Linux.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>Tags that are attached to the container recipe.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerRepositoryService {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerRepositoryService {
+    Ecr,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerRepositoryService),
+}
+
+impl Default for ContainerRepositoryService {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerRepositoryService {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerRepositoryService {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerRepositoryService {
+    fn into(self) -> String {
+        match self {
+            ContainerRepositoryService::Ecr => "ECR".to_string(),
+            ContainerRepositoryService::UnknownVariant(UnknownContainerRepositoryService {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerRepositoryService {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerRepositoryService::Ecr => &"ECR",
+            ContainerRepositoryService::UnknownVariant(UnknownContainerRepositoryService {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerRepositoryService {
+    fn from(name: &str) -> Self {
+        match name {
+            "ECR" => ContainerRepositoryService::Ecr,
+            _ => ContainerRepositoryService::UnknownVariant(UnknownContainerRepositoryService {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerRepositoryService {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ECR" => ContainerRepositoryService::Ecr,
+            _ => ContainerRepositoryService::UnknownVariant(UnknownContainerRepositoryService {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerRepositoryService {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerRepositoryService {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerRepositoryService {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerType {
+    Docker,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerType),
+}
+
+impl Default for ContainerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerType {
+    fn into(self) -> String {
+        match self {
+            ContainerType::Docker => "DOCKER".to_string(),
+            ContainerType::UnknownVariant(UnknownContainerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerType {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerType::Docker => &"DOCKER",
+            ContainerType::UnknownVariant(UnknownContainerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOCKER" => ContainerType::Docker,
+            _ => ContainerType::UnknownVariant(UnknownContainerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOCKER" => ContainerType::Docker,
+            _ => ContainerType::UnknownVariant(UnknownContainerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -438,7 +830,7 @@ pub struct CreateComponentRequest {
     pub name: String,
     /// <p>The platform of the component.</p>
     #[serde(rename = "platform")]
-    pub platform: String,
+    pub platform: Platform,
     /// <p>The semantic version of the component. This version follows the semantic version syntax. For example, major.minor.patch. This could be versioned like software (2.0.1) or like a date (2019.12.01).</p>
     #[serde(rename = "semanticVersion")]
     pub semantic_version: String,
@@ -484,7 +876,7 @@ pub struct CreateContainerRecipeRequest {
     pub components: Vec<ComponentConfiguration>,
     /// <p>The type of container to create.</p>
     #[serde(rename = "containerType")]
-    pub container_type: String,
+    pub container_type: ContainerType,
     /// <p>The description of the container recipe.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -513,7 +905,7 @@ pub struct CreateContainerRecipeRequest {
     /// <p>Specifies the operating system platform when you use a custom source image.</p>
     #[serde(rename = "platformOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_override: Option<String>,
+    pub platform_override: Option<Platform>,
     /// <p>The semantic version of the container recipe (&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;).</p>
     #[serde(rename = "semanticVersion")]
     pub semantic_version: String,
@@ -629,7 +1021,7 @@ pub struct CreateImagePipelineRequest {
     /// <p> The status of the image pipeline. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PipelineStatus>,
     /// <p> The tags of the image pipeline. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1097,7 +1489,127 @@ pub struct EbsInstanceBlockDeviceSpecification {
     /// <p>Use to override the device's volume type.</p>
     #[serde(rename = "volumeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub volume_type: Option<String>,
+    pub volume_type: Option<EbsVolumeType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEbsVolumeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EbsVolumeType {
+    Gp2,
+    Io1,
+    Io2,
+    Sc1,
+    St1,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEbsVolumeType),
+}
+
+impl Default for EbsVolumeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EbsVolumeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EbsVolumeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EbsVolumeType {
+    fn into(self) -> String {
+        match self {
+            EbsVolumeType::Gp2 => "gp2".to_string(),
+            EbsVolumeType::Io1 => "io1".to_string(),
+            EbsVolumeType::Io2 => "io2".to_string(),
+            EbsVolumeType::Sc1 => "sc1".to_string(),
+            EbsVolumeType::St1 => "st1".to_string(),
+            EbsVolumeType::Standard => "standard".to_string(),
+            EbsVolumeType::UnknownVariant(UnknownEbsVolumeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EbsVolumeType {
+    fn into(self) -> &'a str {
+        match self {
+            EbsVolumeType::Gp2 => &"gp2",
+            EbsVolumeType::Io1 => &"io1",
+            EbsVolumeType::Io2 => &"io2",
+            EbsVolumeType::Sc1 => &"sc1",
+            EbsVolumeType::St1 => &"st1",
+            EbsVolumeType::Standard => &"standard",
+            EbsVolumeType::UnknownVariant(UnknownEbsVolumeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EbsVolumeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "gp2" => EbsVolumeType::Gp2,
+            "io1" => EbsVolumeType::Io1,
+            "io2" => EbsVolumeType::Io2,
+            "sc1" => EbsVolumeType::Sc1,
+            "st1" => EbsVolumeType::St1,
+            "standard" => EbsVolumeType::Standard,
+            _ => EbsVolumeType::UnknownVariant(UnknownEbsVolumeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EbsVolumeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "gp2" => EbsVolumeType::Gp2,
+            "io1" => EbsVolumeType::Io1,
+            "io2" => EbsVolumeType::Io2,
+            "sc1" => EbsVolumeType::Sc1,
+            "st1" => EbsVolumeType::St1,
+            "standard" => EbsVolumeType::Standard,
+            _ => EbsVolumeType::UnknownVariant(UnknownEbsVolumeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EbsVolumeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EbsVolumeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EbsVolumeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A filter name and value pair that is used to return a more specific list of results from a list operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. </p>
@@ -1398,7 +1910,7 @@ pub struct Image {
     /// <p>The platform of the image.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The Amazon Resource Name (ARN) of the image pipeline that created this image.</p>
     #[serde(rename = "sourcePipelineArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1418,7 +1930,7 @@ pub struct Image {
     /// <p>Specifies whether this is an AMI or container image.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ImageType>,
     /// <p>The semantic version of the image.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1484,7 +1996,7 @@ pub struct ImagePipeline {
     /// <p>The platform of the image pipeline.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The schedule of the image pipeline.</p>
     #[serde(rename = "schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1492,7 +2004,7 @@ pub struct ImagePipeline {
     /// <p>The status of the image pipeline.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PipelineStatus>,
     /// <p>The tags of this image pipeline.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1538,7 +2050,7 @@ pub struct ImageRecipe {
     /// <p>The platform of the image recipe.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The tags of the image recipe.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1546,7 +2058,7 @@ pub struct ImageRecipe {
     /// <p>Specifies which type of image is created by the recipe - an AMI or a container image.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ImageType>,
     /// <p>The version of the image recipe.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1584,7 +2096,7 @@ pub struct ImageRecipeSummary {
     /// <p>The platform of the image recipe.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The tags of the image recipe.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1602,7 +2114,153 @@ pub struct ImageState {
     /// <p>The status of the image. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ImageStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageStatus {
+    Available,
+    Building,
+    Cancelled,
+    Creating,
+    Deleted,
+    Deprecated,
+    Distributing,
+    Failed,
+    Integrating,
+    Pending,
+    Testing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageStatus),
+}
+
+impl Default for ImageStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageStatus {
+    fn into(self) -> String {
+        match self {
+            ImageStatus::Available => "AVAILABLE".to_string(),
+            ImageStatus::Building => "BUILDING".to_string(),
+            ImageStatus::Cancelled => "CANCELLED".to_string(),
+            ImageStatus::Creating => "CREATING".to_string(),
+            ImageStatus::Deleted => "DELETED".to_string(),
+            ImageStatus::Deprecated => "DEPRECATED".to_string(),
+            ImageStatus::Distributing => "DISTRIBUTING".to_string(),
+            ImageStatus::Failed => "FAILED".to_string(),
+            ImageStatus::Integrating => "INTEGRATING".to_string(),
+            ImageStatus::Pending => "PENDING".to_string(),
+            ImageStatus::Testing => "TESTING".to_string(),
+            ImageStatus::UnknownVariant(UnknownImageStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ImageStatus::Available => &"AVAILABLE",
+            ImageStatus::Building => &"BUILDING",
+            ImageStatus::Cancelled => &"CANCELLED",
+            ImageStatus::Creating => &"CREATING",
+            ImageStatus::Deleted => &"DELETED",
+            ImageStatus::Deprecated => &"DEPRECATED",
+            ImageStatus::Distributing => &"DISTRIBUTING",
+            ImageStatus::Failed => &"FAILED",
+            ImageStatus::Integrating => &"INTEGRATING",
+            ImageStatus::Pending => &"PENDING",
+            ImageStatus::Testing => &"TESTING",
+            ImageStatus::UnknownVariant(UnknownImageStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ImageStatus::Available,
+            "BUILDING" => ImageStatus::Building,
+            "CANCELLED" => ImageStatus::Cancelled,
+            "CREATING" => ImageStatus::Creating,
+            "DELETED" => ImageStatus::Deleted,
+            "DEPRECATED" => ImageStatus::Deprecated,
+            "DISTRIBUTING" => ImageStatus::Distributing,
+            "FAILED" => ImageStatus::Failed,
+            "INTEGRATING" => ImageStatus::Integrating,
+            "PENDING" => ImageStatus::Pending,
+            "TESTING" => ImageStatus::Testing,
+            _ => ImageStatus::UnknownVariant(UnknownImageStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ImageStatus::Available,
+            "BUILDING" => ImageStatus::Building,
+            "CANCELLED" => ImageStatus::Cancelled,
+            "CREATING" => ImageStatus::Creating,
+            "DELETED" => ImageStatus::Deleted,
+            "DEPRECATED" => ImageStatus::Deprecated,
+            "DISTRIBUTING" => ImageStatus::Distributing,
+            "FAILED" => ImageStatus::Failed,
+            "INTEGRATING" => ImageStatus::Integrating,
+            "PENDING" => ImageStatus::Pending,
+            "TESTING" => ImageStatus::Testing,
+            _ => ImageStatus::UnknownVariant(UnknownImageStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImageStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An image summary.</p>
@@ -1636,7 +2294,7 @@ pub struct ImageSummary {
     /// <p>The platform of the image.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>The state of the image.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1648,7 +2306,7 @@ pub struct ImageSummary {
     /// <p>Specifies whether this is an AMI or container image.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ImageType>,
     /// <p>The version of the image.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1666,6 +2324,107 @@ pub struct ImageTestsConfiguration {
     #[serde(rename = "timeoutMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_minutes: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageType {
+    Ami,
+    Docker,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageType),
+}
+
+impl Default for ImageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageType {
+    fn into(self) -> String {
+        match self {
+            ImageType::Ami => "AMI".to_string(),
+            ImageType::Docker => "DOCKER".to_string(),
+            ImageType::UnknownVariant(UnknownImageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageType {
+    fn into(self) -> &'a str {
+        match self {
+            ImageType::Ami => &"AMI",
+            ImageType::Docker => &"DOCKER",
+            ImageType::UnknownVariant(UnknownImageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMI" => ImageType::Ami,
+            "DOCKER" => ImageType::Docker,
+            _ => ImageType::UnknownVariant(UnknownImageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMI" => ImageType::Ami,
+            "DOCKER" => ImageType::Docker,
+            _ => ImageType::UnknownVariant(UnknownImageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An image semantic version.</p>
@@ -1695,11 +2454,11 @@ pub struct ImageVersion {
     /// <p>The platform of the image semantic version.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p>Specifies whether this is an AMI or container image.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ImageType>,
     /// <p>The semantic version of the image semantic version.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1726,7 +2485,7 @@ pub struct ImportComponentRequest {
     pub description: Option<String>,
     /// <p>The format of the resource that you want to import as a component. </p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: ComponentFormat,
     /// <p>The ID of the KMS key that should be used to encrypt this component. </p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1736,7 +2495,7 @@ pub struct ImportComponentRequest {
     pub name: String,
     /// <p>The platform of the component. </p>
     #[serde(rename = "platform")]
-    pub platform: String,
+    pub platform: Platform,
     /// <p>The semantic version of the component. This version follows the semantic version syntax. For example, major.minor.patch. This could be versioned like software (2.0.1) or like a date (2019.12.01).</p>
     #[serde(rename = "semanticVersion")]
     pub semantic_version: String,
@@ -1746,7 +2505,7 @@ pub struct ImportComponentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of the component denotes whether the component is used to build the image or only to test it. </p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ComponentType,
     /// <p>The uri of the component. Must be an S3 URL and the requester must have permission to access the S3 bucket. If you use S3, you can specify component content up to your service quota. Either <code>data</code> or <code>uri</code> can be used to specify the data within the component. </p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1959,7 +2718,7 @@ pub struct ListComponentsRequest {
     /// <p>The owner defines which components you want to list. By default, this request will only show components owned by your account. You can use this field to specify if you want to view components owned by yourself, by Amazon, or those components that have been shared with you by other customers. </p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub owner: Option<String>,
+    pub owner: Option<Ownership>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1997,7 +2756,7 @@ pub struct ListContainerRecipesRequest {
     /// <p>Returns container recipes belonging to the specified owner, that have been shared with you. You can omit this field to return container recipes belonging to your account.</p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub owner: Option<String>,
+    pub owner: Option<Ownership>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2177,7 +2936,7 @@ pub struct ListImageRecipesRequest {
     /// <p>The owner defines which image recipes you want to list. By default, this request will only show image recipes owned by your account. You can use this field to specify if you want to view image recipes owned by yourself, by Amazon, or those image recipes that have been shared with you by other customers. </p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub owner: Option<String>,
+    pub owner: Option<Ownership>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2223,7 +2982,7 @@ pub struct ListImagesRequest {
     /// <p>The owner defines which images you want to list. By default, this request will only show images owned by your account. You can use this field to specify if you want to view images owned by yourself, by Amazon, or those images that have been shared with you by other customers. </p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub owner: Option<String>,
+    pub owner: Option<Ownership>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2315,6 +3074,430 @@ pub struct OutputResources {
     #[serde(rename = "containers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub containers: Option<Vec<Container>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOwnership {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Ownership {
+    Amazon,
+    AwsSelf,
+    Shared,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOwnership),
+}
+
+impl Default for Ownership {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Ownership {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Ownership {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Ownership {
+    fn into(self) -> String {
+        match self {
+            Ownership::Amazon => "Amazon".to_string(),
+            Ownership::AwsSelf => "Self".to_string(),
+            Ownership::Shared => "Shared".to_string(),
+            Ownership::UnknownVariant(UnknownOwnership { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Ownership {
+    fn into(self) -> &'a str {
+        match self {
+            Ownership::Amazon => &"Amazon",
+            Ownership::AwsSelf => &"Self",
+            Ownership::Shared => &"Shared",
+            Ownership::UnknownVariant(UnknownOwnership { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Ownership {
+    fn from(name: &str) -> Self {
+        match name {
+            "Amazon" => Ownership::Amazon,
+            "Self" => Ownership::AwsSelf,
+            "Shared" => Ownership::Shared,
+            _ => Ownership::UnknownVariant(UnknownOwnership {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Ownership {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Amazon" => Ownership::Amazon,
+            "Self" => Ownership::AwsSelf,
+            "Shared" => Ownership::Shared,
+            _ => Ownership::UnknownVariant(UnknownOwnership { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Ownership {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Ownership {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Ownership {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPipelineExecutionStartCondition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PipelineExecutionStartCondition {
+    ExpressionMatchAndDependencyUpdatesAvailable,
+    ExpressionMatchOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPipelineExecutionStartCondition),
+}
+
+impl Default for PipelineExecutionStartCondition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PipelineExecutionStartCondition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PipelineExecutionStartCondition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PipelineExecutionStartCondition {
+    fn into(self) -> String {
+        match self {
+            PipelineExecutionStartCondition::ExpressionMatchAndDependencyUpdatesAvailable => {
+                "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE".to_string()
+            }
+            PipelineExecutionStartCondition::ExpressionMatchOnly => {
+                "EXPRESSION_MATCH_ONLY".to_string()
+            }
+            PipelineExecutionStartCondition::UnknownVariant(
+                UnknownPipelineExecutionStartCondition { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PipelineExecutionStartCondition {
+    fn into(self) -> &'a str {
+        match self {
+            PipelineExecutionStartCondition::ExpressionMatchAndDependencyUpdatesAvailable => {
+                &"EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+            }
+            PipelineExecutionStartCondition::ExpressionMatchOnly => &"EXPRESSION_MATCH_ONLY",
+            PipelineExecutionStartCondition::UnknownVariant(
+                UnknownPipelineExecutionStartCondition { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for PipelineExecutionStartCondition {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE" => {
+                PipelineExecutionStartCondition::ExpressionMatchAndDependencyUpdatesAvailable
+            }
+            "EXPRESSION_MATCH_ONLY" => PipelineExecutionStartCondition::ExpressionMatchOnly,
+            _ => PipelineExecutionStartCondition::UnknownVariant(
+                UnknownPipelineExecutionStartCondition {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for PipelineExecutionStartCondition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE" => {
+                PipelineExecutionStartCondition::ExpressionMatchAndDependencyUpdatesAvailable
+            }
+            "EXPRESSION_MATCH_ONLY" => PipelineExecutionStartCondition::ExpressionMatchOnly,
+            _ => PipelineExecutionStartCondition::UnknownVariant(
+                UnknownPipelineExecutionStartCondition { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineExecutionStartCondition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PipelineExecutionStartCondition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PipelineExecutionStartCondition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPipelineStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PipelineStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPipelineStatus),
+}
+
+impl Default for PipelineStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PipelineStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PipelineStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PipelineStatus {
+    fn into(self) -> String {
+        match self {
+            PipelineStatus::Disabled => "DISABLED".to_string(),
+            PipelineStatus::Enabled => "ENABLED".to_string(),
+            PipelineStatus::UnknownVariant(UnknownPipelineStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PipelineStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PipelineStatus::Disabled => &"DISABLED",
+            PipelineStatus::Enabled => &"ENABLED",
+            PipelineStatus::UnknownVariant(UnknownPipelineStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PipelineStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => PipelineStatus::Disabled,
+            "ENABLED" => PipelineStatus::Enabled,
+            _ => PipelineStatus::UnknownVariant(UnknownPipelineStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PipelineStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => PipelineStatus::Disabled,
+            "ENABLED" => PipelineStatus::Enabled,
+            _ => PipelineStatus::UnknownVariant(UnknownPipelineStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PipelineStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PipelineStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Platform {
+    Linux,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatform),
+}
+
+impl Default for Platform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Platform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Platform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Platform {
+    fn into(self) -> String {
+        match self {
+            Platform::Linux => "Linux".to_string(),
+            Platform::Windows => "Windows".to_string(),
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Platform {
+    fn into(self) -> &'a str {
+        match self {
+            Platform::Linux => &"Linux",
+            Platform::Windows => &"Windows",
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Platform {
+    fn from(name: &str) -> Self {
+        match name {
+            "Linux" => Platform::Linux,
+            "Windows" => Platform::Windows,
+            _ => Platform::UnknownVariant(UnknownPlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Platform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Linux" => Platform::Linux,
+            "Windows" => Platform::Windows,
+            _ => Platform::UnknownVariant(UnknownPlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Platform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Platform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Platform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2432,7 +3615,7 @@ pub struct Schedule {
     /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, and you use semantic version filters on the source image or components in your image recipe, EC2 Image Builder will build a new image only when there are new versions of the image or components in your recipe that match the semantic version filter. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time. For semantic version syntax, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_CreateComponent.html">CreateComponent</a> in the <i> EC2 Image Builder API Reference</i>.</p>
     #[serde(rename = "pipelineExecutionStartCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pipeline_execution_start_condition: Option<String>,
+    pub pipeline_execution_start_condition: Option<PipelineExecutionStartCondition>,
     /// <p>The cron expression determines how often EC2 Image Builder evaluates your <code>pipelineExecutionStartCondition</code>.</p> <p>For information on how to format a cron expression in Image Builder, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/userguide/image-builder-cron.html">Use cron expressions in EC2 Image Builder</a>.</p>
     #[serde(rename = "scheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2490,7 +3673,7 @@ pub struct TargetContainerRepository {
     pub repository_name: String,
     /// <p>Specifies the service in which this image was registered.</p>
     #[serde(rename = "service")]
-    pub service: String,
+    pub service: ContainerRepositoryService,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2586,7 +3769,7 @@ pub struct UpdateImagePipelineRequest {
     /// <p>The status of the image pipeline. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PipelineStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

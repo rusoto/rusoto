@@ -84,10 +84,10 @@ pub struct AssociateS3ResourcesResult {
 pub struct ClassificationType {
     /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie Classic begins performing continuous classification after a bucket is successfully associated with Amazon Macie Classic. </p>
     #[serde(rename = "continuous")]
-    pub continuous: String,
+    pub continuous: S3ContinuousClassificationType,
     /// <p>A one-time classification of all of the existing objects in a specified S3 bucket. </p>
     #[serde(rename = "oneTime")]
-    pub one_time: String,
+    pub one_time: S3OneTimeClassificationType,
 }
 
 /// <p>The classification type that Amazon Macie Classic applies to the associated S3 resources. At least one of the classification types (oneTime or continuous) must be specified. </p>
@@ -97,11 +97,11 @@ pub struct ClassificationTypeUpdate {
     /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie Classic begins performing continuous classification after a bucket is successfully associated with Amazon Macie Classic. </p>
     #[serde(rename = "continuous")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub continuous: Option<String>,
+    pub continuous: Option<S3ContinuousClassificationType>,
     /// <p>A one-time classification of all of the existing objects in a specified S3 bucket. </p>
     #[serde(rename = "oneTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub one_time: Option<String>,
+    pub one_time: Option<S3OneTimeClassificationType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -215,6 +215,215 @@ pub struct MemberAccount {
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3ContinuousClassificationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3ContinuousClassificationType {
+    Full,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3ContinuousClassificationType),
+}
+
+impl Default for S3ContinuousClassificationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3ContinuousClassificationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3ContinuousClassificationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3ContinuousClassificationType {
+    fn into(self) -> String {
+        match self {
+            S3ContinuousClassificationType::Full => "FULL".to_string(),
+            S3ContinuousClassificationType::UnknownVariant(
+                UnknownS3ContinuousClassificationType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3ContinuousClassificationType {
+    fn into(self) -> &'a str {
+        match self {
+            S3ContinuousClassificationType::Full => &"FULL",
+            S3ContinuousClassificationType::UnknownVariant(
+                UnknownS3ContinuousClassificationType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for S3ContinuousClassificationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL" => S3ContinuousClassificationType::Full,
+            _ => S3ContinuousClassificationType::UnknownVariant(
+                UnknownS3ContinuousClassificationType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for S3ContinuousClassificationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL" => S3ContinuousClassificationType::Full,
+            _ => S3ContinuousClassificationType::UnknownVariant(
+                UnknownS3ContinuousClassificationType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3ContinuousClassificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3ContinuousClassificationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3ContinuousClassificationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3OneTimeClassificationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3OneTimeClassificationType {
+    Full,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3OneTimeClassificationType),
+}
+
+impl Default for S3OneTimeClassificationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3OneTimeClassificationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3OneTimeClassificationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3OneTimeClassificationType {
+    fn into(self) -> String {
+        match self {
+            S3OneTimeClassificationType::Full => "FULL".to_string(),
+            S3OneTimeClassificationType::None => "NONE".to_string(),
+            S3OneTimeClassificationType::UnknownVariant(UnknownS3OneTimeClassificationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3OneTimeClassificationType {
+    fn into(self) -> &'a str {
+        match self {
+            S3OneTimeClassificationType::Full => &"FULL",
+            S3OneTimeClassificationType::None => &"NONE",
+            S3OneTimeClassificationType::UnknownVariant(UnknownS3OneTimeClassificationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for S3OneTimeClassificationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL" => S3OneTimeClassificationType::Full,
+            "NONE" => S3OneTimeClassificationType::None,
+            _ => S3OneTimeClassificationType::UnknownVariant(UnknownS3OneTimeClassificationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for S3OneTimeClassificationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL" => S3OneTimeClassificationType::Full,
+            "NONE" => S3OneTimeClassificationType::None,
+            _ => S3OneTimeClassificationType::UnknownVariant(UnknownS3OneTimeClassificationType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3OneTimeClassificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3OneTimeClassificationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3OneTimeClassificationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about the S3 resource. This data type is used as a request parameter in the DisassociateS3Resources action and can be used as a response parameter in the AssociateS3Resources and UpdateS3Resources actions. </p>

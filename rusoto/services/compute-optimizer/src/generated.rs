@@ -96,7 +96,7 @@ pub struct AutoScalingGroupRecommendation {
     /// <p><p>The finding classification for the Auto Scaling group.</p> <p>Findings for Auto Scaling groups include:</p> <ul> <li> <p> <b> <code>NotOptimized</code> </b>—An Auto Scaling group is considered not optimized when AWS Compute Optimizer identifies a recommendation that can provide better performance for your workload.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An Auto Scaling group is considered optimized when Compute Optimizer determines that the group is correctly provisioned to run your workload based on the chosen instance type. For optimized resources, Compute Optimizer might recommend a new generation instance type.</p> </li> </ul></p>
     #[serde(rename = "finding")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding: Option<String>,
+    pub finding: Option<Finding>,
     /// <p>The time stamp of when the Auto Scaling group recommendation was last refreshed.</p>
     #[serde(rename = "lastRefreshTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -178,11 +178,319 @@ pub struct EBSFilter {
     /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>Optimized</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<EBSFilterName>,
     /// <p>The value of the filter.</p> <p>The valid values are <code>Optimized</code>, or <code>NotOptimized</code>.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEBSFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EBSFilterName {
+    Finding,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEBSFilterName),
+}
+
+impl Default for EBSFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EBSFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EBSFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EBSFilterName {
+    fn into(self) -> String {
+        match self {
+            EBSFilterName::Finding => "Finding".to_string(),
+            EBSFilterName::UnknownVariant(UnknownEBSFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EBSFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            EBSFilterName::Finding => &"Finding",
+            EBSFilterName::UnknownVariant(UnknownEBSFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EBSFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Finding" => EBSFilterName::Finding,
+            _ => EBSFilterName::UnknownVariant(UnknownEBSFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EBSFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Finding" => EBSFilterName::Finding,
+            _ => EBSFilterName::UnknownVariant(UnknownEBSFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EBSFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EBSFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EBSFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEBSFinding {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EBSFinding {
+    NotOptimized,
+    Optimized,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEBSFinding),
+}
+
+impl Default for EBSFinding {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EBSFinding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EBSFinding {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EBSFinding {
+    fn into(self) -> String {
+        match self {
+            EBSFinding::NotOptimized => "NotOptimized".to_string(),
+            EBSFinding::Optimized => "Optimized".to_string(),
+            EBSFinding::UnknownVariant(UnknownEBSFinding { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EBSFinding {
+    fn into(self) -> &'a str {
+        match self {
+            EBSFinding::NotOptimized => &"NotOptimized",
+            EBSFinding::Optimized => &"Optimized",
+            EBSFinding::UnknownVariant(UnknownEBSFinding { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EBSFinding {
+    fn from(name: &str) -> Self {
+        match name {
+            "NotOptimized" => EBSFinding::NotOptimized,
+            "Optimized" => EBSFinding::Optimized,
+            _ => EBSFinding::UnknownVariant(UnknownEBSFinding {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EBSFinding {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NotOptimized" => EBSFinding::NotOptimized,
+            "Optimized" => EBSFinding::Optimized,
+            _ => EBSFinding::UnknownVariant(UnknownEBSFinding { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EBSFinding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EBSFinding {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EBSFinding {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEBSMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EBSMetricName {
+    VolumeReadBytesPerSecond,
+    VolumeReadOpsPerSecond,
+    VolumeWriteBytesPerSecond,
+    VolumeWriteOpsPerSecond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEBSMetricName),
+}
+
+impl Default for EBSMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EBSMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EBSMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EBSMetricName {
+    fn into(self) -> String {
+        match self {
+            EBSMetricName::VolumeReadBytesPerSecond => "VolumeReadBytesPerSecond".to_string(),
+            EBSMetricName::VolumeReadOpsPerSecond => "VolumeReadOpsPerSecond".to_string(),
+            EBSMetricName::VolumeWriteBytesPerSecond => "VolumeWriteBytesPerSecond".to_string(),
+            EBSMetricName::VolumeWriteOpsPerSecond => "VolumeWriteOpsPerSecond".to_string(),
+            EBSMetricName::UnknownVariant(UnknownEBSMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EBSMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            EBSMetricName::VolumeReadBytesPerSecond => &"VolumeReadBytesPerSecond",
+            EBSMetricName::VolumeReadOpsPerSecond => &"VolumeReadOpsPerSecond",
+            EBSMetricName::VolumeWriteBytesPerSecond => &"VolumeWriteBytesPerSecond",
+            EBSMetricName::VolumeWriteOpsPerSecond => &"VolumeWriteOpsPerSecond",
+            EBSMetricName::UnknownVariant(UnknownEBSMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EBSMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "VolumeReadBytesPerSecond" => EBSMetricName::VolumeReadBytesPerSecond,
+            "VolumeReadOpsPerSecond" => EBSMetricName::VolumeReadOpsPerSecond,
+            "VolumeWriteBytesPerSecond" => EBSMetricName::VolumeWriteBytesPerSecond,
+            "VolumeWriteOpsPerSecond" => EBSMetricName::VolumeWriteOpsPerSecond,
+            _ => EBSMetricName::UnknownVariant(UnknownEBSMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EBSMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "VolumeReadBytesPerSecond" => EBSMetricName::VolumeReadBytesPerSecond,
+            "VolumeReadOpsPerSecond" => EBSMetricName::VolumeReadOpsPerSecond,
+            "VolumeWriteBytesPerSecond" => EBSMetricName::VolumeWriteBytesPerSecond,
+            "VolumeWriteOpsPerSecond" => EBSMetricName::VolumeWriteOpsPerSecond,
+            _ => EBSMetricName::UnknownVariant(UnknownEBSMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EBSMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EBSMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EBSMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a utilization metric of an Amazon Elastic Block Store (Amazon EBS) volume.</p> <p>Compare the utilization metric data of your resource against its projected utilization metric data to determine the performance difference between your current resource and the recommended option.</p>
@@ -192,11 +500,11 @@ pub struct EBSUtilizationMetric {
     /// <p><p>The name of the utilization metric.</p> <p>The following utilization metrics are available:</p> <ul> <li> <p> <code>VolumeReadOpsPerSecond</code> - The completed read operations per second from the volume in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>VolumeWriteOpsPerSecond</code> - The completed write operations per second to the volume in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>VolumeReadBytesPerSecond</code> - The bytes read per second from the volume in a specified period of time.</p> <p>Unit: Bytes</p> </li> <li> <p> <code>VolumeWriteBytesPerSecond</code> - The bytes written to the volume in a specified period of time.</p> <p>Unit: Bytes</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<EBSMetricName>,
     /// <p><p>The statistic of the utilization metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Average</code> - This is the value of Sum / SampleCount during the specified period, or the average value observed during the specified period.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> </ul></p>
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statistic: Option<String>,
+    pub statistic: Option<MetricStatistic>,
     /// <p>The value of the utilization metric.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -213,11 +521,11 @@ pub struct ExportAutoScalingGroupRecommendationsRequest {
     /// <p>The recommendations data to include in the export file. For more information about the fields that can be exported, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files">Exported files</a> in the <i>Compute Optimizer User Guide</i>.</p>
     #[serde(rename = "fieldsToExport")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fields_to_export: Option<Vec<String>>,
+    pub fields_to_export: Option<Vec<ExportableAutoScalingGroupField>>,
     /// <p>The format of the export file.</p> <p>The only export file format currently supported is <code>Csv</code>.</p>
     #[serde(rename = "fileFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_format: Option<String>,
+    pub file_format: Option<FileFormat>,
     /// <p>An array of objects that describe a filter to export a more specific set of Auto Scaling group recommendations.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,11 +572,11 @@ pub struct ExportEC2InstanceRecommendationsRequest {
     /// <p>The recommendations data to include in the export file. For more information about the fields that can be exported, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files">Exported files</a> in the <i>Compute Optimizer User Guide</i>.</p>
     #[serde(rename = "fieldsToExport")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fields_to_export: Option<Vec<String>>,
+    pub fields_to_export: Option<Vec<ExportableInstanceField>>,
     /// <p>The format of the export file.</p> <p>The only export file format currently supported is <code>Csv</code>.</p>
     #[serde(rename = "fileFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_format: Option<String>,
+    pub file_format: Option<FileFormat>,
     /// <p>An array of objects that describe a filter to export a more specific set of instance recommendations.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -295,6 +603,630 @@ pub struct ExportEC2InstanceRecommendationsResponse {
     pub s_3_destination: Option<S3Destination>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportableAutoScalingGroupField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportableAutoScalingGroupField {
+    AccountId,
+    AutoScalingGroupArn,
+    AutoScalingGroupName,
+    CurrentConfigurationDesiredCapacity,
+    CurrentConfigurationInstanceType,
+    CurrentConfigurationMaxSize,
+    CurrentConfigurationMinSize,
+    CurrentMemory,
+    CurrentNetwork,
+    CurrentOnDemandPrice,
+    CurrentStandardOneYearNoUpfrontReservedPrice,
+    CurrentStandardThreeYearNoUpfrontReservedPrice,
+    CurrentStorage,
+    CurrentVCpus,
+    Finding,
+    LastRefreshTimestamp,
+    LookbackPeriodInDays,
+    RecommendationOptionsConfigurationDesiredCapacity,
+    RecommendationOptionsConfigurationInstanceType,
+    RecommendationOptionsConfigurationMaxSize,
+    RecommendationOptionsConfigurationMinSize,
+    RecommendationOptionsMemory,
+    RecommendationOptionsNetwork,
+    RecommendationOptionsOnDemandPrice,
+    RecommendationOptionsPerformanceRisk,
+    RecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
+    RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+    RecommendationOptionsStandardOneYearNoUpfrontReservedPrice,
+    RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice,
+    RecommendationOptionsStorage,
+    RecommendationOptionsVcpus,
+    UtilizationMetricsCpuMaximum,
+    UtilizationMetricsEbsReadBytesPerSecondMaximum,
+    UtilizationMetricsEbsReadOpsPerSecondMaximum,
+    UtilizationMetricsEbsWriteBytesPerSecondMaximum,
+    UtilizationMetricsEbsWriteOpsPerSecondMaximum,
+    UtilizationMetricsMemoryMaximum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportableAutoScalingGroupField),
+}
+
+impl Default for ExportableAutoScalingGroupField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportableAutoScalingGroupField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportableAutoScalingGroupField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportableAutoScalingGroupField {
+    fn into(self) -> String {
+        match self {
+                    ExportableAutoScalingGroupField::AccountId => "AccountId".to_string(),
+ExportableAutoScalingGroupField::AutoScalingGroupArn => "AutoScalingGroupArn".to_string(),
+ExportableAutoScalingGroupField::AutoScalingGroupName => "AutoScalingGroupName".to_string(),
+ExportableAutoScalingGroupField::CurrentConfigurationDesiredCapacity => "CurrentConfigurationDesiredCapacity".to_string(),
+ExportableAutoScalingGroupField::CurrentConfigurationInstanceType => "CurrentConfigurationInstanceType".to_string(),
+ExportableAutoScalingGroupField::CurrentConfigurationMaxSize => "CurrentConfigurationMaxSize".to_string(),
+ExportableAutoScalingGroupField::CurrentConfigurationMinSize => "CurrentConfigurationMinSize".to_string(),
+ExportableAutoScalingGroupField::CurrentMemory => "CurrentMemory".to_string(),
+ExportableAutoScalingGroupField::CurrentNetwork => "CurrentNetwork".to_string(),
+ExportableAutoScalingGroupField::CurrentOnDemandPrice => "CurrentOnDemandPrice".to_string(),
+ExportableAutoScalingGroupField::CurrentStandardOneYearNoUpfrontReservedPrice => "CurrentStandardOneYearNoUpfrontReservedPrice".to_string(),
+ExportableAutoScalingGroupField::CurrentStandardThreeYearNoUpfrontReservedPrice => "CurrentStandardThreeYearNoUpfrontReservedPrice".to_string(),
+ExportableAutoScalingGroupField::CurrentStorage => "CurrentStorage".to_string(),
+ExportableAutoScalingGroupField::CurrentVCpus => "CurrentVCpus".to_string(),
+ExportableAutoScalingGroupField::Finding => "Finding".to_string(),
+ExportableAutoScalingGroupField::LastRefreshTimestamp => "LastRefreshTimestamp".to_string(),
+ExportableAutoScalingGroupField::LookbackPeriodInDays => "LookbackPeriodInDays".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationDesiredCapacity => "RecommendationOptionsConfigurationDesiredCapacity".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationInstanceType => "RecommendationOptionsConfigurationInstanceType".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMaxSize => "RecommendationOptionsConfigurationMaxSize".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMinSize => "RecommendationOptionsConfigurationMinSize".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsMemory => "RecommendationOptionsMemory".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsNetwork => "RecommendationOptionsNetwork".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsOnDemandPrice => "RecommendationOptionsOnDemandPrice".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsPerformanceRisk => "RecommendationOptionsPerformanceRisk".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum => "RecommendationOptionsProjectedUtilizationMetricsCpuMaximum".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum => "RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice => "RecommendationOptionsStandardOneYearNoUpfrontReservedPrice".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice => "RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsStorage => "RecommendationOptionsStorage".to_string(),
+ExportableAutoScalingGroupField::RecommendationOptionsVcpus => "RecommendationOptionsVcpus".to_string(),
+ExportableAutoScalingGroupField::UtilizationMetricsCpuMaximum => "UtilizationMetricsCpuMaximum".to_string(),
+ExportableAutoScalingGroupField::UtilizationMetricsEbsReadBytesPerSecondMaximum => "UtilizationMetricsEbsReadBytesPerSecondMaximum".to_string(),
+ExportableAutoScalingGroupField::UtilizationMetricsEbsReadOpsPerSecondMaximum => "UtilizationMetricsEbsReadOpsPerSecondMaximum".to_string(),
+ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteBytesPerSecondMaximum => "UtilizationMetricsEbsWriteBytesPerSecondMaximum".to_string(),
+ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteOpsPerSecondMaximum => "UtilizationMetricsEbsWriteOpsPerSecondMaximum".to_string(),
+ExportableAutoScalingGroupField::UtilizationMetricsMemoryMaximum => "UtilizationMetricsMemoryMaximum".to_string(),
+                    ExportableAutoScalingGroupField::UnknownVariant(UnknownExportableAutoScalingGroupField{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportableAutoScalingGroupField {
+    fn into(self) -> &'a str {
+        match self {
+                    ExportableAutoScalingGroupField::AccountId => &"AccountId",
+ExportableAutoScalingGroupField::AutoScalingGroupArn => &"AutoScalingGroupArn",
+ExportableAutoScalingGroupField::AutoScalingGroupName => &"AutoScalingGroupName",
+ExportableAutoScalingGroupField::CurrentConfigurationDesiredCapacity => &"CurrentConfigurationDesiredCapacity",
+ExportableAutoScalingGroupField::CurrentConfigurationInstanceType => &"CurrentConfigurationInstanceType",
+ExportableAutoScalingGroupField::CurrentConfigurationMaxSize => &"CurrentConfigurationMaxSize",
+ExportableAutoScalingGroupField::CurrentConfigurationMinSize => &"CurrentConfigurationMinSize",
+ExportableAutoScalingGroupField::CurrentMemory => &"CurrentMemory",
+ExportableAutoScalingGroupField::CurrentNetwork => &"CurrentNetwork",
+ExportableAutoScalingGroupField::CurrentOnDemandPrice => &"CurrentOnDemandPrice",
+ExportableAutoScalingGroupField::CurrentStandardOneYearNoUpfrontReservedPrice => &"CurrentStandardOneYearNoUpfrontReservedPrice",
+ExportableAutoScalingGroupField::CurrentStandardThreeYearNoUpfrontReservedPrice => &"CurrentStandardThreeYearNoUpfrontReservedPrice",
+ExportableAutoScalingGroupField::CurrentStorage => &"CurrentStorage",
+ExportableAutoScalingGroupField::CurrentVCpus => &"CurrentVCpus",
+ExportableAutoScalingGroupField::Finding => &"Finding",
+ExportableAutoScalingGroupField::LastRefreshTimestamp => &"LastRefreshTimestamp",
+ExportableAutoScalingGroupField::LookbackPeriodInDays => &"LookbackPeriodInDays",
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationDesiredCapacity => &"RecommendationOptionsConfigurationDesiredCapacity",
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationInstanceType => &"RecommendationOptionsConfigurationInstanceType",
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMaxSize => &"RecommendationOptionsConfigurationMaxSize",
+ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMinSize => &"RecommendationOptionsConfigurationMinSize",
+ExportableAutoScalingGroupField::RecommendationOptionsMemory => &"RecommendationOptionsMemory",
+ExportableAutoScalingGroupField::RecommendationOptionsNetwork => &"RecommendationOptionsNetwork",
+ExportableAutoScalingGroupField::RecommendationOptionsOnDemandPrice => &"RecommendationOptionsOnDemandPrice",
+ExportableAutoScalingGroupField::RecommendationOptionsPerformanceRisk => &"RecommendationOptionsPerformanceRisk",
+ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum => &"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum",
+ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum => &"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum",
+ExportableAutoScalingGroupField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice => &"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice",
+ExportableAutoScalingGroupField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice => &"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice",
+ExportableAutoScalingGroupField::RecommendationOptionsStorage => &"RecommendationOptionsStorage",
+ExportableAutoScalingGroupField::RecommendationOptionsVcpus => &"RecommendationOptionsVcpus",
+ExportableAutoScalingGroupField::UtilizationMetricsCpuMaximum => &"UtilizationMetricsCpuMaximum",
+ExportableAutoScalingGroupField::UtilizationMetricsEbsReadBytesPerSecondMaximum => &"UtilizationMetricsEbsReadBytesPerSecondMaximum",
+ExportableAutoScalingGroupField::UtilizationMetricsEbsReadOpsPerSecondMaximum => &"UtilizationMetricsEbsReadOpsPerSecondMaximum",
+ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteBytesPerSecondMaximum => &"UtilizationMetricsEbsWriteBytesPerSecondMaximum",
+ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteOpsPerSecondMaximum => &"UtilizationMetricsEbsWriteOpsPerSecondMaximum",
+ExportableAutoScalingGroupField::UtilizationMetricsMemoryMaximum => &"UtilizationMetricsMemoryMaximum",
+                    ExportableAutoScalingGroupField::UnknownVariant(UnknownExportableAutoScalingGroupField{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for ExportableAutoScalingGroupField {
+    fn from(name: &str) -> Self {
+        match name {
+                    "AccountId" => ExportableAutoScalingGroupField::AccountId,
+"AutoScalingGroupArn" => ExportableAutoScalingGroupField::AutoScalingGroupArn,
+"AutoScalingGroupName" => ExportableAutoScalingGroupField::AutoScalingGroupName,
+"CurrentConfigurationDesiredCapacity" => ExportableAutoScalingGroupField::CurrentConfigurationDesiredCapacity,
+"CurrentConfigurationInstanceType" => ExportableAutoScalingGroupField::CurrentConfigurationInstanceType,
+"CurrentConfigurationMaxSize" => ExportableAutoScalingGroupField::CurrentConfigurationMaxSize,
+"CurrentConfigurationMinSize" => ExportableAutoScalingGroupField::CurrentConfigurationMinSize,
+"CurrentMemory" => ExportableAutoScalingGroupField::CurrentMemory,
+"CurrentNetwork" => ExportableAutoScalingGroupField::CurrentNetwork,
+"CurrentOnDemandPrice" => ExportableAutoScalingGroupField::CurrentOnDemandPrice,
+"CurrentStandardOneYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::CurrentStandardOneYearNoUpfrontReservedPrice,
+"CurrentStandardThreeYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::CurrentStandardThreeYearNoUpfrontReservedPrice,
+"CurrentStorage" => ExportableAutoScalingGroupField::CurrentStorage,
+"CurrentVCpus" => ExportableAutoScalingGroupField::CurrentVCpus,
+"Finding" => ExportableAutoScalingGroupField::Finding,
+"LastRefreshTimestamp" => ExportableAutoScalingGroupField::LastRefreshTimestamp,
+"LookbackPeriodInDays" => ExportableAutoScalingGroupField::LookbackPeriodInDays,
+"RecommendationOptionsConfigurationDesiredCapacity" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationDesiredCapacity,
+"RecommendationOptionsConfigurationInstanceType" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationInstanceType,
+"RecommendationOptionsConfigurationMaxSize" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMaxSize,
+"RecommendationOptionsConfigurationMinSize" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMinSize,
+"RecommendationOptionsMemory" => ExportableAutoScalingGroupField::RecommendationOptionsMemory,
+"RecommendationOptionsNetwork" => ExportableAutoScalingGroupField::RecommendationOptionsNetwork,
+"RecommendationOptionsOnDemandPrice" => ExportableAutoScalingGroupField::RecommendationOptionsOnDemandPrice,
+"RecommendationOptionsPerformanceRisk" => ExportableAutoScalingGroupField::RecommendationOptionsPerformanceRisk,
+"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum" => ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
+"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum" => ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice,
+"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice,
+"RecommendationOptionsStorage" => ExportableAutoScalingGroupField::RecommendationOptionsStorage,
+"RecommendationOptionsVcpus" => ExportableAutoScalingGroupField::RecommendationOptionsVcpus,
+"UtilizationMetricsCpuMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsCpuMaximum,
+"UtilizationMetricsEbsReadBytesPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsReadBytesPerSecondMaximum,
+"UtilizationMetricsEbsReadOpsPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsReadOpsPerSecondMaximum,
+"UtilizationMetricsEbsWriteBytesPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteBytesPerSecondMaximum,
+"UtilizationMetricsEbsWriteOpsPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteOpsPerSecondMaximum,
+"UtilizationMetricsMemoryMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsMemoryMaximum,
+                    _ => ExportableAutoScalingGroupField::UnknownVariant(UnknownExportableAutoScalingGroupField{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for ExportableAutoScalingGroupField {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "AccountId" => ExportableAutoScalingGroupField::AccountId,
+"AutoScalingGroupArn" => ExportableAutoScalingGroupField::AutoScalingGroupArn,
+"AutoScalingGroupName" => ExportableAutoScalingGroupField::AutoScalingGroupName,
+"CurrentConfigurationDesiredCapacity" => ExportableAutoScalingGroupField::CurrentConfigurationDesiredCapacity,
+"CurrentConfigurationInstanceType" => ExportableAutoScalingGroupField::CurrentConfigurationInstanceType,
+"CurrentConfigurationMaxSize" => ExportableAutoScalingGroupField::CurrentConfigurationMaxSize,
+"CurrentConfigurationMinSize" => ExportableAutoScalingGroupField::CurrentConfigurationMinSize,
+"CurrentMemory" => ExportableAutoScalingGroupField::CurrentMemory,
+"CurrentNetwork" => ExportableAutoScalingGroupField::CurrentNetwork,
+"CurrentOnDemandPrice" => ExportableAutoScalingGroupField::CurrentOnDemandPrice,
+"CurrentStandardOneYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::CurrentStandardOneYearNoUpfrontReservedPrice,
+"CurrentStandardThreeYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::CurrentStandardThreeYearNoUpfrontReservedPrice,
+"CurrentStorage" => ExportableAutoScalingGroupField::CurrentStorage,
+"CurrentVCpus" => ExportableAutoScalingGroupField::CurrentVCpus,
+"Finding" => ExportableAutoScalingGroupField::Finding,
+"LastRefreshTimestamp" => ExportableAutoScalingGroupField::LastRefreshTimestamp,
+"LookbackPeriodInDays" => ExportableAutoScalingGroupField::LookbackPeriodInDays,
+"RecommendationOptionsConfigurationDesiredCapacity" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationDesiredCapacity,
+"RecommendationOptionsConfigurationInstanceType" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationInstanceType,
+"RecommendationOptionsConfigurationMaxSize" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMaxSize,
+"RecommendationOptionsConfigurationMinSize" => ExportableAutoScalingGroupField::RecommendationOptionsConfigurationMinSize,
+"RecommendationOptionsMemory" => ExportableAutoScalingGroupField::RecommendationOptionsMemory,
+"RecommendationOptionsNetwork" => ExportableAutoScalingGroupField::RecommendationOptionsNetwork,
+"RecommendationOptionsOnDemandPrice" => ExportableAutoScalingGroupField::RecommendationOptionsOnDemandPrice,
+"RecommendationOptionsPerformanceRisk" => ExportableAutoScalingGroupField::RecommendationOptionsPerformanceRisk,
+"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum" => ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
+"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum" => ExportableAutoScalingGroupField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice,
+"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice" => ExportableAutoScalingGroupField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice,
+"RecommendationOptionsStorage" => ExportableAutoScalingGroupField::RecommendationOptionsStorage,
+"RecommendationOptionsVcpus" => ExportableAutoScalingGroupField::RecommendationOptionsVcpus,
+"UtilizationMetricsCpuMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsCpuMaximum,
+"UtilizationMetricsEbsReadBytesPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsReadBytesPerSecondMaximum,
+"UtilizationMetricsEbsReadOpsPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsReadOpsPerSecondMaximum,
+"UtilizationMetricsEbsWriteBytesPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteBytesPerSecondMaximum,
+"UtilizationMetricsEbsWriteOpsPerSecondMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsEbsWriteOpsPerSecondMaximum,
+"UtilizationMetricsMemoryMaximum" => ExportableAutoScalingGroupField::UtilizationMetricsMemoryMaximum,
+                    _ => ExportableAutoScalingGroupField::UnknownVariant(UnknownExportableAutoScalingGroupField{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for ExportableAutoScalingGroupField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExportableAutoScalingGroupField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExportableAutoScalingGroupField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportableInstanceField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportableInstanceField {
+    AccountId,
+    CurrentInstanceType,
+    CurrentMemory,
+    CurrentNetwork,
+    CurrentOnDemandPrice,
+    CurrentStandardOneYearNoUpfrontReservedPrice,
+    CurrentStandardThreeYearNoUpfrontReservedPrice,
+    CurrentStorage,
+    CurrentVCpus,
+    Finding,
+    InstanceArn,
+    InstanceName,
+    LastRefreshTimestamp,
+    LookbackPeriodInDays,
+    RecommendationOptionsInstanceType,
+    RecommendationOptionsMemory,
+    RecommendationOptionsNetwork,
+    RecommendationOptionsOnDemandPrice,
+    RecommendationOptionsPerformanceRisk,
+    RecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
+    RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+    RecommendationOptionsStandardOneYearNoUpfrontReservedPrice,
+    RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice,
+    RecommendationOptionsStorage,
+    RecommendationOptionsVcpus,
+    RecommendationsSourcesRecommendationSourceArn,
+    RecommendationsSourcesRecommendationSourceType,
+    UtilizationMetricsCpuMaximum,
+    UtilizationMetricsEbsReadBytesPerSecondMaximum,
+    UtilizationMetricsEbsReadOpsPerSecondMaximum,
+    UtilizationMetricsEbsWriteBytesPerSecondMaximum,
+    UtilizationMetricsEbsWriteOpsPerSecondMaximum,
+    UtilizationMetricsMemoryMaximum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportableInstanceField),
+}
+
+impl Default for ExportableInstanceField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportableInstanceField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportableInstanceField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportableInstanceField {
+    fn into(self) -> String {
+        match self {
+                    ExportableInstanceField::AccountId => "AccountId".to_string(),
+ExportableInstanceField::CurrentInstanceType => "CurrentInstanceType".to_string(),
+ExportableInstanceField::CurrentMemory => "CurrentMemory".to_string(),
+ExportableInstanceField::CurrentNetwork => "CurrentNetwork".to_string(),
+ExportableInstanceField::CurrentOnDemandPrice => "CurrentOnDemandPrice".to_string(),
+ExportableInstanceField::CurrentStandardOneYearNoUpfrontReservedPrice => "CurrentStandardOneYearNoUpfrontReservedPrice".to_string(),
+ExportableInstanceField::CurrentStandardThreeYearNoUpfrontReservedPrice => "CurrentStandardThreeYearNoUpfrontReservedPrice".to_string(),
+ExportableInstanceField::CurrentStorage => "CurrentStorage".to_string(),
+ExportableInstanceField::CurrentVCpus => "CurrentVCpus".to_string(),
+ExportableInstanceField::Finding => "Finding".to_string(),
+ExportableInstanceField::InstanceArn => "InstanceArn".to_string(),
+ExportableInstanceField::InstanceName => "InstanceName".to_string(),
+ExportableInstanceField::LastRefreshTimestamp => "LastRefreshTimestamp".to_string(),
+ExportableInstanceField::LookbackPeriodInDays => "LookbackPeriodInDays".to_string(),
+ExportableInstanceField::RecommendationOptionsInstanceType => "RecommendationOptionsInstanceType".to_string(),
+ExportableInstanceField::RecommendationOptionsMemory => "RecommendationOptionsMemory".to_string(),
+ExportableInstanceField::RecommendationOptionsNetwork => "RecommendationOptionsNetwork".to_string(),
+ExportableInstanceField::RecommendationOptionsOnDemandPrice => "RecommendationOptionsOnDemandPrice".to_string(),
+ExportableInstanceField::RecommendationOptionsPerformanceRisk => "RecommendationOptionsPerformanceRisk".to_string(),
+ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum => "RecommendationOptionsProjectedUtilizationMetricsCpuMaximum".to_string(),
+ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum => "RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum".to_string(),
+ExportableInstanceField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice => "RecommendationOptionsStandardOneYearNoUpfrontReservedPrice".to_string(),
+ExportableInstanceField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice => "RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice".to_string(),
+ExportableInstanceField::RecommendationOptionsStorage => "RecommendationOptionsStorage".to_string(),
+ExportableInstanceField::RecommendationOptionsVcpus => "RecommendationOptionsVcpus".to_string(),
+ExportableInstanceField::RecommendationsSourcesRecommendationSourceArn => "RecommendationsSourcesRecommendationSourceArn".to_string(),
+ExportableInstanceField::RecommendationsSourcesRecommendationSourceType => "RecommendationsSourcesRecommendationSourceType".to_string(),
+ExportableInstanceField::UtilizationMetricsCpuMaximum => "UtilizationMetricsCpuMaximum".to_string(),
+ExportableInstanceField::UtilizationMetricsEbsReadBytesPerSecondMaximum => "UtilizationMetricsEbsReadBytesPerSecondMaximum".to_string(),
+ExportableInstanceField::UtilizationMetricsEbsReadOpsPerSecondMaximum => "UtilizationMetricsEbsReadOpsPerSecondMaximum".to_string(),
+ExportableInstanceField::UtilizationMetricsEbsWriteBytesPerSecondMaximum => "UtilizationMetricsEbsWriteBytesPerSecondMaximum".to_string(),
+ExportableInstanceField::UtilizationMetricsEbsWriteOpsPerSecondMaximum => "UtilizationMetricsEbsWriteOpsPerSecondMaximum".to_string(),
+ExportableInstanceField::UtilizationMetricsMemoryMaximum => "UtilizationMetricsMemoryMaximum".to_string(),
+                    ExportableInstanceField::UnknownVariant(UnknownExportableInstanceField{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportableInstanceField {
+    fn into(self) -> &'a str {
+        match self {
+                    ExportableInstanceField::AccountId => &"AccountId",
+ExportableInstanceField::CurrentInstanceType => &"CurrentInstanceType",
+ExportableInstanceField::CurrentMemory => &"CurrentMemory",
+ExportableInstanceField::CurrentNetwork => &"CurrentNetwork",
+ExportableInstanceField::CurrentOnDemandPrice => &"CurrentOnDemandPrice",
+ExportableInstanceField::CurrentStandardOneYearNoUpfrontReservedPrice => &"CurrentStandardOneYearNoUpfrontReservedPrice",
+ExportableInstanceField::CurrentStandardThreeYearNoUpfrontReservedPrice => &"CurrentStandardThreeYearNoUpfrontReservedPrice",
+ExportableInstanceField::CurrentStorage => &"CurrentStorage",
+ExportableInstanceField::CurrentVCpus => &"CurrentVCpus",
+ExportableInstanceField::Finding => &"Finding",
+ExportableInstanceField::InstanceArn => &"InstanceArn",
+ExportableInstanceField::InstanceName => &"InstanceName",
+ExportableInstanceField::LastRefreshTimestamp => &"LastRefreshTimestamp",
+ExportableInstanceField::LookbackPeriodInDays => &"LookbackPeriodInDays",
+ExportableInstanceField::RecommendationOptionsInstanceType => &"RecommendationOptionsInstanceType",
+ExportableInstanceField::RecommendationOptionsMemory => &"RecommendationOptionsMemory",
+ExportableInstanceField::RecommendationOptionsNetwork => &"RecommendationOptionsNetwork",
+ExportableInstanceField::RecommendationOptionsOnDemandPrice => &"RecommendationOptionsOnDemandPrice",
+ExportableInstanceField::RecommendationOptionsPerformanceRisk => &"RecommendationOptionsPerformanceRisk",
+ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum => &"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum",
+ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum => &"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum",
+ExportableInstanceField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice => &"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice",
+ExportableInstanceField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice => &"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice",
+ExportableInstanceField::RecommendationOptionsStorage => &"RecommendationOptionsStorage",
+ExportableInstanceField::RecommendationOptionsVcpus => &"RecommendationOptionsVcpus",
+ExportableInstanceField::RecommendationsSourcesRecommendationSourceArn => &"RecommendationsSourcesRecommendationSourceArn",
+ExportableInstanceField::RecommendationsSourcesRecommendationSourceType => &"RecommendationsSourcesRecommendationSourceType",
+ExportableInstanceField::UtilizationMetricsCpuMaximum => &"UtilizationMetricsCpuMaximum",
+ExportableInstanceField::UtilizationMetricsEbsReadBytesPerSecondMaximum => &"UtilizationMetricsEbsReadBytesPerSecondMaximum",
+ExportableInstanceField::UtilizationMetricsEbsReadOpsPerSecondMaximum => &"UtilizationMetricsEbsReadOpsPerSecondMaximum",
+ExportableInstanceField::UtilizationMetricsEbsWriteBytesPerSecondMaximum => &"UtilizationMetricsEbsWriteBytesPerSecondMaximum",
+ExportableInstanceField::UtilizationMetricsEbsWriteOpsPerSecondMaximum => &"UtilizationMetricsEbsWriteOpsPerSecondMaximum",
+ExportableInstanceField::UtilizationMetricsMemoryMaximum => &"UtilizationMetricsMemoryMaximum",
+                    ExportableInstanceField::UnknownVariant(UnknownExportableInstanceField{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for ExportableInstanceField {
+    fn from(name: &str) -> Self {
+        match name {
+                    "AccountId" => ExportableInstanceField::AccountId,
+"CurrentInstanceType" => ExportableInstanceField::CurrentInstanceType,
+"CurrentMemory" => ExportableInstanceField::CurrentMemory,
+"CurrentNetwork" => ExportableInstanceField::CurrentNetwork,
+"CurrentOnDemandPrice" => ExportableInstanceField::CurrentOnDemandPrice,
+"CurrentStandardOneYearNoUpfrontReservedPrice" => ExportableInstanceField::CurrentStandardOneYearNoUpfrontReservedPrice,
+"CurrentStandardThreeYearNoUpfrontReservedPrice" => ExportableInstanceField::CurrentStandardThreeYearNoUpfrontReservedPrice,
+"CurrentStorage" => ExportableInstanceField::CurrentStorage,
+"CurrentVCpus" => ExportableInstanceField::CurrentVCpus,
+"Finding" => ExportableInstanceField::Finding,
+"InstanceArn" => ExportableInstanceField::InstanceArn,
+"InstanceName" => ExportableInstanceField::InstanceName,
+"LastRefreshTimestamp" => ExportableInstanceField::LastRefreshTimestamp,
+"LookbackPeriodInDays" => ExportableInstanceField::LookbackPeriodInDays,
+"RecommendationOptionsInstanceType" => ExportableInstanceField::RecommendationOptionsInstanceType,
+"RecommendationOptionsMemory" => ExportableInstanceField::RecommendationOptionsMemory,
+"RecommendationOptionsNetwork" => ExportableInstanceField::RecommendationOptionsNetwork,
+"RecommendationOptionsOnDemandPrice" => ExportableInstanceField::RecommendationOptionsOnDemandPrice,
+"RecommendationOptionsPerformanceRisk" => ExportableInstanceField::RecommendationOptionsPerformanceRisk,
+"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum" => ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
+"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum" => ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice" => ExportableInstanceField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice,
+"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice" => ExportableInstanceField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice,
+"RecommendationOptionsStorage" => ExportableInstanceField::RecommendationOptionsStorage,
+"RecommendationOptionsVcpus" => ExportableInstanceField::RecommendationOptionsVcpus,
+"RecommendationsSourcesRecommendationSourceArn" => ExportableInstanceField::RecommendationsSourcesRecommendationSourceArn,
+"RecommendationsSourcesRecommendationSourceType" => ExportableInstanceField::RecommendationsSourcesRecommendationSourceType,
+"UtilizationMetricsCpuMaximum" => ExportableInstanceField::UtilizationMetricsCpuMaximum,
+"UtilizationMetricsEbsReadBytesPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsReadBytesPerSecondMaximum,
+"UtilizationMetricsEbsReadOpsPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsReadOpsPerSecondMaximum,
+"UtilizationMetricsEbsWriteBytesPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsWriteBytesPerSecondMaximum,
+"UtilizationMetricsEbsWriteOpsPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsWriteOpsPerSecondMaximum,
+"UtilizationMetricsMemoryMaximum" => ExportableInstanceField::UtilizationMetricsMemoryMaximum,
+                    _ => ExportableInstanceField::UnknownVariant(UnknownExportableInstanceField{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for ExportableInstanceField {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "AccountId" => ExportableInstanceField::AccountId,
+"CurrentInstanceType" => ExportableInstanceField::CurrentInstanceType,
+"CurrentMemory" => ExportableInstanceField::CurrentMemory,
+"CurrentNetwork" => ExportableInstanceField::CurrentNetwork,
+"CurrentOnDemandPrice" => ExportableInstanceField::CurrentOnDemandPrice,
+"CurrentStandardOneYearNoUpfrontReservedPrice" => ExportableInstanceField::CurrentStandardOneYearNoUpfrontReservedPrice,
+"CurrentStandardThreeYearNoUpfrontReservedPrice" => ExportableInstanceField::CurrentStandardThreeYearNoUpfrontReservedPrice,
+"CurrentStorage" => ExportableInstanceField::CurrentStorage,
+"CurrentVCpus" => ExportableInstanceField::CurrentVCpus,
+"Finding" => ExportableInstanceField::Finding,
+"InstanceArn" => ExportableInstanceField::InstanceArn,
+"InstanceName" => ExportableInstanceField::InstanceName,
+"LastRefreshTimestamp" => ExportableInstanceField::LastRefreshTimestamp,
+"LookbackPeriodInDays" => ExportableInstanceField::LookbackPeriodInDays,
+"RecommendationOptionsInstanceType" => ExportableInstanceField::RecommendationOptionsInstanceType,
+"RecommendationOptionsMemory" => ExportableInstanceField::RecommendationOptionsMemory,
+"RecommendationOptionsNetwork" => ExportableInstanceField::RecommendationOptionsNetwork,
+"RecommendationOptionsOnDemandPrice" => ExportableInstanceField::RecommendationOptionsOnDemandPrice,
+"RecommendationOptionsPerformanceRisk" => ExportableInstanceField::RecommendationOptionsPerformanceRisk,
+"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum" => ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsCpuMaximum,
+"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum" => ExportableInstanceField::RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum,
+"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice" => ExportableInstanceField::RecommendationOptionsStandardOneYearNoUpfrontReservedPrice,
+"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice" => ExportableInstanceField::RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice,
+"RecommendationOptionsStorage" => ExportableInstanceField::RecommendationOptionsStorage,
+"RecommendationOptionsVcpus" => ExportableInstanceField::RecommendationOptionsVcpus,
+"RecommendationsSourcesRecommendationSourceArn" => ExportableInstanceField::RecommendationsSourcesRecommendationSourceArn,
+"RecommendationsSourcesRecommendationSourceType" => ExportableInstanceField::RecommendationsSourcesRecommendationSourceType,
+"UtilizationMetricsCpuMaximum" => ExportableInstanceField::UtilizationMetricsCpuMaximum,
+"UtilizationMetricsEbsReadBytesPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsReadBytesPerSecondMaximum,
+"UtilizationMetricsEbsReadOpsPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsReadOpsPerSecondMaximum,
+"UtilizationMetricsEbsWriteBytesPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsWriteBytesPerSecondMaximum,
+"UtilizationMetricsEbsWriteOpsPerSecondMaximum" => ExportableInstanceField::UtilizationMetricsEbsWriteOpsPerSecondMaximum,
+"UtilizationMetricsMemoryMaximum" => ExportableInstanceField::UtilizationMetricsMemoryMaximum,
+                    _ => ExportableInstanceField::UnknownVariant(UnknownExportableInstanceField{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for ExportableInstanceField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExportableInstanceField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExportableInstanceField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileFormat {
+    Csv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileFormat),
+}
+
+impl Default for FileFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileFormat {
+    fn into(self) -> String {
+        match self {
+            FileFormat::Csv => "Csv".to_string(),
+            FileFormat::UnknownVariant(UnknownFileFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileFormat {
+    fn into(self) -> &'a str {
+        match self {
+            FileFormat::Csv => &"Csv",
+            FileFormat::UnknownVariant(UnknownFileFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "Csv" => FileFormat::Csv,
+            _ => FileFormat::UnknownVariant(UnknownFileFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Csv" => FileFormat::Csv,
+            _ => FileFormat::UnknownVariant(UnknownFileFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FileFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a filter that returns a more specific list of recommendations.</p> <p>This filter is used with the <code>GetAutoScalingGroupRecommendations</code> and <code>GetEC2InstanceRecommendations</code> actions.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -302,11 +1234,223 @@ pub struct Filter {
     /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>Overprovisioned</code>).</p> <p>Specify <code>RecommendationSourceType</code> to return recommendations of a specific resource type (e.g., <code>AutoScalingGroup</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<FilterName>,
     /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter and the resource type that you wish to filter results for:</p> <ul> <li> <p>Specify <code>Optimized</code> or <code>NotOptimized</code> if you specified the <code>name</code> parameter as <code>Finding</code> and you want to filter results for Auto Scaling groups.</p> </li> <li> <p>Specify <code>Underprovisioned</code>, <code>Overprovisioned</code>, or <code>Optimized</code> if you specified the <code>name</code> parameter as <code>Finding</code> and you want to filter results for EC2 instances.</p> </li> <li> <p>Specify <code>Ec2Instance</code> or <code>AutoScalingGroup</code> if you specified the <code>name</code> parameter as <code>RecommendationSourceType</code>.</p> </li> </ul></p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterName {
+    Finding,
+    RecommendationSourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterName),
+}
+
+impl Default for FilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterName {
+    fn into(self) -> String {
+        match self {
+            FilterName::Finding => "Finding".to_string(),
+            FilterName::RecommendationSourceType => "RecommendationSourceType".to_string(),
+            FilterName::UnknownVariant(UnknownFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterName {
+    fn into(self) -> &'a str {
+        match self {
+            FilterName::Finding => &"Finding",
+            FilterName::RecommendationSourceType => &"RecommendationSourceType",
+            FilterName::UnknownVariant(UnknownFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Finding" => FilterName::Finding,
+            "RecommendationSourceType" => FilterName::RecommendationSourceType,
+            _ => FilterName::UnknownVariant(UnknownFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Finding" => FilterName::Finding,
+            "RecommendationSourceType" => FilterName::RecommendationSourceType,
+            _ => FilterName::UnknownVariant(UnknownFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFinding {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Finding {
+    NotOptimized,
+    Optimized,
+    Overprovisioned,
+    Underprovisioned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFinding),
+}
+
+impl Default for Finding {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Finding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Finding {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Finding {
+    fn into(self) -> String {
+        match self {
+            Finding::NotOptimized => "NotOptimized".to_string(),
+            Finding::Optimized => "Optimized".to_string(),
+            Finding::Overprovisioned => "Overprovisioned".to_string(),
+            Finding::Underprovisioned => "Underprovisioned".to_string(),
+            Finding::UnknownVariant(UnknownFinding { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Finding {
+    fn into(self) -> &'a str {
+        match self {
+            Finding::NotOptimized => &"NotOptimized",
+            Finding::Optimized => &"Optimized",
+            Finding::Overprovisioned => &"Overprovisioned",
+            Finding::Underprovisioned => &"Underprovisioned",
+            Finding::UnknownVariant(UnknownFinding { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Finding {
+    fn from(name: &str) -> Self {
+        match name {
+            "NotOptimized" => Finding::NotOptimized,
+            "Optimized" => Finding::Optimized,
+            "Overprovisioned" => Finding::Overprovisioned,
+            "Underprovisioned" => Finding::Underprovisioned,
+            _ => Finding::UnknownVariant(UnknownFinding {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Finding {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NotOptimized" => Finding::NotOptimized,
+            "Optimized" => Finding::Optimized,
+            "Overprovisioned" => Finding::Overprovisioned,
+            "Underprovisioned" => Finding::Underprovisioned,
+            _ => Finding::UnknownVariant(UnknownFinding { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Finding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Finding {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Finding {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -452,7 +1596,7 @@ pub struct GetEC2RecommendationProjectedMetricsRequest {
     pub start_time: f64,
     /// <p>The statistic of the projected metrics.</p>
     #[serde(rename = "stat")]
-    pub stat: String,
+    pub stat: MetricStatistic,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -478,7 +1622,7 @@ pub struct GetEnrollmentStatusResponse {
     /// <p>The enrollment status of the account.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The reason for the enrollment status of the account.</p> <p>For example, an account might show a status of <code>Pending</code> because member accounts of an organization require more time to be enrolled in the service.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -548,7 +1692,7 @@ pub struct InstanceRecommendation {
     /// <p><p>The finding classification for the instance.</p> <p>Findings for instances include:</p> <ul> <li> <p> <b> <code>Underprovisioned</code> </b>—An instance is considered under-provisioned when at least one specification of your instance, such as CPU, memory, or network, does not meet the performance requirements of your workload. Under-provisioned instances may lead to poor application performance.</p> </li> <li> <p> <b> <code>Overprovisioned</code> </b>—An instance is considered over-provisioned when at least one specification of your instance, such as CPU, memory, or network, can be sized down while still meeting the performance requirements of your workload, and no specification is under-provisioned. Over-provisioned instances may lead to unnecessary infrastructure cost.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An instance is considered optimized when all specifications of your instance, such as CPU, memory, and network, meet the performance requirements of your workload and is not over provisioned. An optimized instance runs your workloads with optimal performance and infrastructure cost. For optimized resources, AWS Compute Optimizer might recommend a new generation instance type.</p> </li> </ul></p>
     #[serde(rename = "finding")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding: Option<String>,
+    pub finding: Option<Finding>,
     /// <p>The Amazon Resource Name (ARN) of the current instance.</p>
     #[serde(rename = "instanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -608,11 +1752,444 @@ pub struct JobFilter {
     /// <p>The name of the filter.</p> <p>Specify <code>ResourceType</code> to return export jobs of a specific resource type (e.g., <code>Ec2Instance</code>).</p> <p>Specify <code>JobStatus</code> to return export jobs with a specific status (e.g, <code>Complete</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<JobFilterName>,
     /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter:</p> <ul> <li> <p>Specify <code>Ec2Instance</code> or <code>AutoScalingGroup</code> if you specified the <code>name</code> parameter as <code>ResourceType</code>. There is no filter for EBS volumes because volume recommendations cannot be exported at this time.</p> </li> <li> <p>Specify <code>Queued</code>, <code>InProgress</code>, <code>Complete</code>, or <code>Failed</code> if you specified the <code>name</code> parameter as <code>JobStatus</code>.</p> </li> </ul></p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobFilterName {
+    JobStatus,
+    ResourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobFilterName),
+}
+
+impl Default for JobFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobFilterName {
+    fn into(self) -> String {
+        match self {
+            JobFilterName::JobStatus => "JobStatus".to_string(),
+            JobFilterName::ResourceType => "ResourceType".to_string(),
+            JobFilterName::UnknownVariant(UnknownJobFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            JobFilterName::JobStatus => &"JobStatus",
+            JobFilterName::ResourceType => &"ResourceType",
+            JobFilterName::UnknownVariant(UnknownJobFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "JobStatus" => JobFilterName::JobStatus,
+            "ResourceType" => JobFilterName::ResourceType,
+            _ => JobFilterName::UnknownVariant(UnknownJobFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JobStatus" => JobFilterName::JobStatus,
+            "ResourceType" => JobFilterName::ResourceType,
+            _ => JobFilterName::UnknownVariant(UnknownJobFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for JobFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Complete,
+    Failed,
+    InProgress,
+    Queued,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Complete => "Complete".to_string(),
+            JobStatus::Failed => "Failed".to_string(),
+            JobStatus::InProgress => "InProgress".to_string(),
+            JobStatus::Queued => "Queued".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Complete => &"Complete",
+            JobStatus::Failed => &"Failed",
+            JobStatus::InProgress => &"InProgress",
+            JobStatus::Queued => &"Queued",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Complete" => JobStatus::Complete,
+            "Failed" => JobStatus::Failed,
+            "InProgress" => JobStatus::InProgress,
+            "Queued" => JobStatus::Queued,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Complete" => JobStatus::Complete,
+            "Failed" => JobStatus::Failed,
+            "InProgress" => JobStatus::InProgress,
+            "Queued" => JobStatus::Queued,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricName {
+    Cpu,
+    EbsReadBytesPerSecond,
+    EbsReadOpsPerSecond,
+    EbsWriteBytesPerSecond,
+    EbsWriteOpsPerSecond,
+    Memory,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricName),
+}
+
+impl Default for MetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricName {
+    fn into(self) -> String {
+        match self {
+            MetricName::Cpu => "Cpu".to_string(),
+            MetricName::EbsReadBytesPerSecond => "EBS_READ_BYTES_PER_SECOND".to_string(),
+            MetricName::EbsReadOpsPerSecond => "EBS_READ_OPS_PER_SECOND".to_string(),
+            MetricName::EbsWriteBytesPerSecond => "EBS_WRITE_BYTES_PER_SECOND".to_string(),
+            MetricName::EbsWriteOpsPerSecond => "EBS_WRITE_OPS_PER_SECOND".to_string(),
+            MetricName::Memory => "Memory".to_string(),
+            MetricName::UnknownVariant(UnknownMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricName {
+    fn into(self) -> &'a str {
+        match self {
+            MetricName::Cpu => &"Cpu",
+            MetricName::EbsReadBytesPerSecond => &"EBS_READ_BYTES_PER_SECOND",
+            MetricName::EbsReadOpsPerSecond => &"EBS_READ_OPS_PER_SECOND",
+            MetricName::EbsWriteBytesPerSecond => &"EBS_WRITE_BYTES_PER_SECOND",
+            MetricName::EbsWriteOpsPerSecond => &"EBS_WRITE_OPS_PER_SECOND",
+            MetricName::Memory => &"Memory",
+            MetricName::UnknownVariant(UnknownMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cpu" => MetricName::Cpu,
+            "EBS_READ_BYTES_PER_SECOND" => MetricName::EbsReadBytesPerSecond,
+            "EBS_READ_OPS_PER_SECOND" => MetricName::EbsReadOpsPerSecond,
+            "EBS_WRITE_BYTES_PER_SECOND" => MetricName::EbsWriteBytesPerSecond,
+            "EBS_WRITE_OPS_PER_SECOND" => MetricName::EbsWriteOpsPerSecond,
+            "Memory" => MetricName::Memory,
+            _ => MetricName::UnknownVariant(UnknownMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cpu" => MetricName::Cpu,
+            "EBS_READ_BYTES_PER_SECOND" => MetricName::EbsReadBytesPerSecond,
+            "EBS_READ_OPS_PER_SECOND" => MetricName::EbsReadOpsPerSecond,
+            "EBS_WRITE_BYTES_PER_SECOND" => MetricName::EbsWriteBytesPerSecond,
+            "EBS_WRITE_OPS_PER_SECOND" => MetricName::EbsWriteOpsPerSecond,
+            "Memory" => MetricName::Memory,
+            _ => MetricName::UnknownVariant(UnknownMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricStatistic),
+}
+
+impl Default for MetricStatistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricStatistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricStatistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        match self {
+            MetricStatistic::Average => "Average".to_string(),
+            MetricStatistic::Maximum => "Maximum".to_string(),
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricStatistic {
+    fn into(self) -> &'a str {
+        match self {
+            MetricStatistic::Average => &"Average",
+            MetricStatistic::Maximum => &"Maximum",
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricStatistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricStatistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricStatistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricStatistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Describes a projected utilization metric of a recommendation option, such as an Amazon EC2 instance. This represents the projected utilization of a recommendation option had you used that resource during the analyzed period.</p> <p>Compare the utilization metric data of your resource against its projected utilization metric data to determine the performance difference between your current resource and the recommended option.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned when you run the <code>GetEC2RecommendationProjectedMetrics</code> action. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
@@ -622,7 +2199,7 @@ pub struct ProjectedMetric {
     /// <p><p>The name of the projected utilization metric.</p> <p>The following projected utilization metrics are returned:</p> <ul> <li> <p> <code>Cpu</code> - The projected percentage of allocated EC2 compute units that would be in use on the recommendation option had you used that resource during the analyzed period. This metric identifies the processing power required to run an application on the recommendation option.</p> <p>Depending on the instance type, tools in your operating system can show a lower percentage than CloudWatch when the instance is not allocated a full processor core.</p> <p>Units: Percent</p> </li> <li> <p> <code>Memory</code> - The percentage of memory that would be in use on the recommendation option had you used that resource during the analyzed period. This metric identifies the amount of memory required to run an application on the recommendation option.</p> <p>Units: Percent</p> <note> <p>The <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<MetricName>,
     /// <p>The time stamps of the projected utilization metric.</p>
     #[serde(rename = "timestamps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -660,11 +2237,11 @@ pub struct RecommendationExportJob {
     /// <p>The resource type of the exported recommendations.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The status of the export job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JobStatus>,
 }
 
 /// <p>Describes the source of a recommendation, such as an Amazon EC2 instance or Auto Scaling group.</p>
@@ -678,7 +2255,117 @@ pub struct RecommendationSource {
     /// <p>The resource type of the recommendation source.</p>
     #[serde(rename = "recommendationSourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub recommendation_source_type: Option<String>,
+    pub recommendation_source_type: Option<RecommendationSourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecommendationSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecommendationSourceType {
+    AutoScalingGroup,
+    EbsVolume,
+    Ec2Instance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecommendationSourceType),
+}
+
+impl Default for RecommendationSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecommendationSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecommendationSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecommendationSourceType {
+    fn into(self) -> String {
+        match self {
+            RecommendationSourceType::AutoScalingGroup => "AutoScalingGroup".to_string(),
+            RecommendationSourceType::EbsVolume => "EbsVolume".to_string(),
+            RecommendationSourceType::Ec2Instance => "Ec2Instance".to_string(),
+            RecommendationSourceType::UnknownVariant(UnknownRecommendationSourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecommendationSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            RecommendationSourceType::AutoScalingGroup => &"AutoScalingGroup",
+            RecommendationSourceType::EbsVolume => &"EbsVolume",
+            RecommendationSourceType::Ec2Instance => &"Ec2Instance",
+            RecommendationSourceType::UnknownVariant(UnknownRecommendationSourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecommendationSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AutoScalingGroup" => RecommendationSourceType::AutoScalingGroup,
+            "EbsVolume" => RecommendationSourceType::EbsVolume,
+            "Ec2Instance" => RecommendationSourceType::Ec2Instance,
+            _ => RecommendationSourceType::UnknownVariant(UnknownRecommendationSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecommendationSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AutoScalingGroup" => RecommendationSourceType::AutoScalingGroup,
+            "EbsVolume" => RecommendationSourceType::EbsVolume,
+            "Ec2Instance" => RecommendationSourceType::Ec2Instance,
+            _ => RecommendationSourceType::UnknownVariant(UnknownRecommendationSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecommendationSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RecommendationSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecommendationSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A summary of a recommendation.</p>
@@ -692,7 +2379,7 @@ pub struct RecommendationSummary {
     /// <p>The resource type of the recommendation.</p>
     #[serde(rename = "recommendationResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub recommendation_resource_type: Option<String>,
+    pub recommendation_resource_type: Option<RecommendationSourceType>,
     /// <p>An array of objects that describe a recommendation summary.</p>
     #[serde(rename = "summaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -715,6 +2402,107 @@ pub struct RecommendedOptionProjectedMetric {
     #[serde(rename = "recommendedInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recommended_instance_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    AutoScalingGroup,
+    Ec2Instance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::AutoScalingGroup => "AutoScalingGroup".to_string(),
+            ResourceType::Ec2Instance => "Ec2Instance".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::AutoScalingGroup => &"AutoScalingGroup",
+            ResourceType::Ec2Instance => &"Ec2Instance",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AutoScalingGroup" => ResourceType::AutoScalingGroup,
+            "Ec2Instance" => ResourceType::Ec2Instance,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AutoScalingGroup" => ResourceType::AutoScalingGroup,
+            "Ec2Instance" => ResourceType::Ec2Instance,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the destination Amazon Simple Storage Service (Amazon S3) bucket name and object keys of a recommendations export file, and its associated metadata file.</p>
@@ -749,6 +2537,116 @@ pub struct S3DestinationConfig {
     pub key_prefix: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Active,
+    Failed,
+    Inactive,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Active => "Active".to_string(),
+            Status::Failed => "Failed".to_string(),
+            Status::Inactive => "Inactive".to_string(),
+            Status::Pending => "Pending".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Active => &"Active",
+            Status::Failed => &"Failed",
+            Status::Inactive => &"Inactive",
+            Status::Pending => &"Pending",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => Status::Active,
+            "Failed" => Status::Failed,
+            "Inactive" => Status::Inactive,
+            "Pending" => Status::Pending,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => Status::Active,
+            "Failed" => Status::Failed,
+            "Inactive" => Status::Inactive,
+            "Pending" => Status::Pending,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The summary of a recommendation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -756,7 +2654,7 @@ pub struct Summary {
     /// <p>The finding classification of the recommendation.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<Finding>,
     /// <p>The value of the recommendation summary.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -772,7 +2670,7 @@ pub struct UpdateEnrollmentStatusRequest {
     pub include_member_accounts: Option<bool>,
     /// <p>The new enrollment status of the account.</p> <p>Accepted options are <code>Active</code> or <code>Inactive</code>. You will get an error if <code>Pending</code> or <code>Failed</code> are specified.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: Status,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -781,7 +2679,7 @@ pub struct UpdateEnrollmentStatusResponse {
     /// <p>The enrollment status of the account.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The reason for the enrollment status of the account. For example, an account might show a status of <code>Pending</code> because member accounts of an organization require more time to be enrolled in the service.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -795,11 +2693,11 @@ pub struct UtilizationMetric {
     /// <p><p>The name of the utilization metric.</p> <p>The following utilization metrics are available:</p> <ul> <li> <p> <code>Cpu</code> - The percentage of allocated EC2 compute units that are currently in use on the instance. This metric identifies the processing power required to run an application on the instance.</p> <p>Depending on the instance type, tools in your operating system can show a lower percentage than CloudWatch when the instance is not allocated a full processor core.</p> <p>Units: Percent</p> </li> <li> <p> <code>Memory</code> - The percentage of memory that is currently in use on the instance. This metric identifies the amount of memory required to run an application on the instance.</p> <p>Units: Percent</p> <note> <p>The <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note> </li> <li> <p> <code>EBS<em>READ</em>OPS<em>PER</em>SECOND</code> - The completed read operations from all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>EBS<em>WRITE</em>OPS<em>PER</em>SECOND</code> - The completed write operations to all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>EBS<em>READ</em>BYTES<em>PER</em>SECOND</code> - The bytes read from all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Bytes</p> </li> <li> <p> <code>EBS<em>WRITE</em>BYTES<em>PER</em>SECOND</code> - The bytes written to all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Bytes</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<MetricName>,
     /// <p><p>The statistic of the utilization metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Average</code> - This is the value of Sum / SampleCount during the specified period, or the average value observed during the specified period.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> </ul></p>
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statistic: Option<String>,
+    pub statistic: Option<MetricStatistic>,
     /// <p>The value of the utilization metric.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -851,7 +2749,7 @@ pub struct VolumeRecommendation {
     /// <p><p>The finding classification for the volume.</p> <p>Findings for volumes include:</p> <ul> <li> <p> <b> <code>NotOptimized</code> </b>—A volume is considered not optimized when AWS Compute Optimizer identifies a recommendation that can provide better performance for your workload.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An volume is considered optimized when Compute Optimizer determines that the volume is correctly provisioned to run your workload based on the chosen volume type. For optimized resources, Compute Optimizer might recommend a new generation volume type.</p> </li> </ul></p>
     #[serde(rename = "finding")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding: Option<String>,
+    pub finding: Option<EBSFinding>,
     /// <p>The time stamp of when the volume recommendation was last refreshed.</p>
     #[serde(rename = "lastRefreshTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]

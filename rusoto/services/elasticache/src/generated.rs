@@ -60,6 +60,108 @@ impl ElastiCacheClient {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAZMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AZMode {
+    CrossAz,
+    SingleAz,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAZMode),
+}
+
+impl Default for AZMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AZMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AZMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AZMode {
+    fn into(self) -> String {
+        match self {
+            AZMode::CrossAz => "cross-az".to_string(),
+            AZMode::SingleAz => "single-az".to_string(),
+            AZMode::UnknownVariant(UnknownAZMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AZMode {
+    fn into(self) -> &'a str {
+        match self {
+            AZMode::CrossAz => &"cross-az",
+            AZMode::SingleAz => &"single-az",
+            AZMode::UnknownVariant(UnknownAZMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AZMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "cross-az" => AZMode::CrossAz,
+            "single-az" => AZMode::SingleAz,
+            _ => AZMode::UnknownVariant(UnknownAZMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AZMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cross-az" => AZMode::CrossAz,
+            "single-az" => AZMode::SingleAz,
+            _ => AZMode::UnknownVariant(UnknownAZMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AZMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AZMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AZMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the input of an AddTagsToResource operation.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -79,7 +181,10 @@ impl AddTagsToResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(
+            &format!("{}{}", prefix, "ResourceName"),
+            &obj.resource_name.to_string(),
+        );
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
@@ -132,14 +237,238 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthTokenUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthTokenUpdateStatus {
+    Rotating,
+    Setting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthTokenUpdateStatus),
+}
+
+impl Default for AuthTokenUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthTokenUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthTokenUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthTokenUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            AuthTokenUpdateStatus::Rotating => "ROTATING".to_string(),
+            AuthTokenUpdateStatus::Setting => "SETTING".to_string(),
+            AuthTokenUpdateStatus::UnknownVariant(UnknownAuthTokenUpdateStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthTokenUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AuthTokenUpdateStatus::Rotating => &"ROTATING",
+            AuthTokenUpdateStatus::Setting => &"SETTING",
+            AuthTokenUpdateStatus::UnknownVariant(UnknownAuthTokenUpdateStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthTokenUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ROTATING" => AuthTokenUpdateStatus::Rotating,
+            "SETTING" => AuthTokenUpdateStatus::Setting,
+            _ => AuthTokenUpdateStatus::UnknownVariant(UnknownAuthTokenUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthTokenUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ROTATING" => AuthTokenUpdateStatus::Rotating,
+            "SETTING" => AuthTokenUpdateStatus::Setting,
+            _ => AuthTokenUpdateStatus::UnknownVariant(UnknownAuthTokenUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthTokenUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AuthTokenUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuthTokenUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AuthTokenUpdateStatusDeserializer;
 impl AuthTokenUpdateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AuthTokenUpdateStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthTokenUpdateStrategyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthTokenUpdateStrategyType {
+    Delete,
+    Rotate,
+    Set,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthTokenUpdateStrategyType),
+}
+
+impl Default for AuthTokenUpdateStrategyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthTokenUpdateStrategyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthTokenUpdateStrategyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthTokenUpdateStrategyType {
+    fn into(self) -> String {
+        match self {
+            AuthTokenUpdateStrategyType::Delete => "DELETE".to_string(),
+            AuthTokenUpdateStrategyType::Rotate => "ROTATE".to_string(),
+            AuthTokenUpdateStrategyType::Set => "SET".to_string(),
+            AuthTokenUpdateStrategyType::UnknownVariant(UnknownAuthTokenUpdateStrategyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthTokenUpdateStrategyType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthTokenUpdateStrategyType::Delete => &"DELETE",
+            AuthTokenUpdateStrategyType::Rotate => &"ROTATE",
+            AuthTokenUpdateStrategyType::Set => &"SET",
+            AuthTokenUpdateStrategyType::UnknownVariant(UnknownAuthTokenUpdateStrategyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthTokenUpdateStrategyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => AuthTokenUpdateStrategyType::Delete,
+            "ROTATE" => AuthTokenUpdateStrategyType::Rotate,
+            "SET" => AuthTokenUpdateStrategyType::Set,
+            _ => AuthTokenUpdateStrategyType::UnknownVariant(UnknownAuthTokenUpdateStrategyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthTokenUpdateStrategyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => AuthTokenUpdateStrategyType::Delete,
+            "ROTATE" => AuthTokenUpdateStrategyType::Rotate,
+            "SET" => AuthTokenUpdateStrategyType::Set,
+            _ => AuthTokenUpdateStrategyType::UnknownVariant(UnknownAuthTokenUpdateStrategyType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthTokenUpdateStrategyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AuthTokenUpdateStrategyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuthTokenUpdateStrategyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Indicates whether the user requires a password to authenticate.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -147,7 +476,7 @@ pub struct Authentication {
     /// <p>The number of passwords belonging to the user. The maximum is two.</p>
     pub password_count: Option<i64>,
     /// <p>Indicates whether the user requires a password to authenticate.</p>
-    pub type_: Option<String>,
+    pub type_: Option<AuthenticationType>,
 }
 
 #[allow(dead_code)]
@@ -175,12 +504,122 @@ impl AuthenticationDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthenticationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthenticationType {
+    NoPassword,
+    Password,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthenticationType),
+}
+
+impl Default for AuthenticationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthenticationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthenticationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthenticationType {
+    fn into(self) -> String {
+        match self {
+            AuthenticationType::NoPassword => "no-password".to_string(),
+            AuthenticationType::Password => "password".to_string(),
+            AuthenticationType::UnknownVariant(UnknownAuthenticationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthenticationType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthenticationType::NoPassword => &"no-password",
+            AuthenticationType::Password => &"password",
+            AuthenticationType::UnknownVariant(UnknownAuthenticationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AuthenticationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "no-password" => AuthenticationType::NoPassword,
+            "password" => AuthenticationType::Password,
+            _ => AuthenticationType::UnknownVariant(UnknownAuthenticationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthenticationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "no-password" => AuthenticationType::NoPassword,
+            "password" => AuthenticationType::Password,
+            _ => AuthenticationType::UnknownVariant(UnknownAuthenticationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AuthenticationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuthenticationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AuthenticationTypeDeserializer;
 impl AuthenticationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AuthenticationType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>
@@ -206,15 +645,15 @@ impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name,
+            &obj.cache_security_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupName"),
-            &obj.ec2_security_group_name,
+            &obj.ec2_security_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-            &obj.ec2_security_group_owner_id,
+            &obj.ec2_security_group_owner_id.to_string(),
         );
     }
 }
@@ -252,12 +691,132 @@ impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutomaticFailoverStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutomaticFailoverStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutomaticFailoverStatus),
+}
+
+impl Default for AutomaticFailoverStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutomaticFailoverStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutomaticFailoverStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutomaticFailoverStatus {
+    fn into(self) -> String {
+        match self {
+            AutomaticFailoverStatus::Disabled => "disabled".to_string(),
+            AutomaticFailoverStatus::Disabling => "disabling".to_string(),
+            AutomaticFailoverStatus::Enabled => "enabled".to_string(),
+            AutomaticFailoverStatus::Enabling => "enabling".to_string(),
+            AutomaticFailoverStatus::UnknownVariant(UnknownAutomaticFailoverStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutomaticFailoverStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AutomaticFailoverStatus::Disabled => &"disabled",
+            AutomaticFailoverStatus::Disabling => &"disabling",
+            AutomaticFailoverStatus::Enabled => &"enabled",
+            AutomaticFailoverStatus::Enabling => &"enabling",
+            AutomaticFailoverStatus::UnknownVariant(UnknownAutomaticFailoverStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutomaticFailoverStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "disabled" => AutomaticFailoverStatus::Disabled,
+            "disabling" => AutomaticFailoverStatus::Disabling,
+            "enabled" => AutomaticFailoverStatus::Enabled,
+            "enabling" => AutomaticFailoverStatus::Enabling,
+            _ => AutomaticFailoverStatus::UnknownVariant(UnknownAutomaticFailoverStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutomaticFailoverStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "disabled" => AutomaticFailoverStatus::Disabled,
+            "disabling" => AutomaticFailoverStatus::Disabling,
+            "enabled" => AutomaticFailoverStatus::Enabled,
+            "enabling" => AutomaticFailoverStatus::Enabling,
+            _ => AutomaticFailoverStatus::UnknownVariant(UnknownAutomaticFailoverStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomaticFailoverStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AutomaticFailoverStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AutomaticFailoverStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AutomaticFailoverStatusDeserializer;
 impl AutomaticFailoverStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AutomaticFailoverStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Describes an Availability Zone in which the cluster is launched.</p>
@@ -312,7 +871,7 @@ impl AvailabilityZonesListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -353,7 +912,7 @@ impl BatchApplyUpdateActionMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ServiceUpdateName"),
-            &obj.service_update_name,
+            &obj.service_update_name.to_string(),
         );
     }
 }
@@ -394,7 +953,7 @@ impl BatchStopUpdateActionMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ServiceUpdateName"),
-            &obj.service_update_name,
+            &obj.service_update_name.to_string(),
         );
     }
 }
@@ -659,7 +1218,7 @@ impl CacheClusterIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -940,7 +1499,7 @@ impl CacheNodeIdsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -972,7 +1531,7 @@ pub struct CacheNodeTypeSpecificParameter {
     /// <p>A list of cache node types and their corresponding values for this parameter.</p>
     pub cache_node_type_specific_values: Option<Vec<CacheNodeTypeSpecificValue>>,
     /// <p>Indicates whether a change to the parameter is applied immediately or requires a reboot for the change to be applied. You can force a reboot or wait until the next maintenance window's reboot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a>.</p>
-    pub change_type: Option<String>,
+    pub change_type: Option<ChangeType>,
     /// <p>The valid data type for the parameter.</p>
     pub data_type: Option<String>,
     /// <p>A description of the parameter.</p>
@@ -1137,13 +1696,13 @@ pub struct CacheNodeUpdateStatus {
     /// <p>The end date of the update for a node</p>
     pub node_update_end_date: Option<String>,
     /// <p>Reflects whether the update was initiated by the customer or automatically applied</p>
-    pub node_update_initiated_by: Option<String>,
+    pub node_update_initiated_by: Option<NodeUpdateInitiatedBy>,
     /// <p>The date when the update is triggered</p>
     pub node_update_initiated_date: Option<String>,
     /// <p>The start date of the update for a node</p>
     pub node_update_start_date: Option<String>,
     /// <p>The update status of the node</p>
-    pub node_update_status: Option<String>,
+    pub node_update_status: Option<NodeUpdateStatus>,
     /// <p>The date when the NodeUpdateStatus was last modified&gt;</p>
     pub node_update_status_modified_date: Option<String>,
 }
@@ -1639,7 +2198,7 @@ impl CacheSecurityGroupNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1779,12 +2338,118 @@ impl CacheSubnetGroupsDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeType {
+    Immediate,
+    RequiresReboot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeType),
+}
+
+impl Default for ChangeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeType {
+    fn into(self) -> String {
+        match self {
+            ChangeType::Immediate => "immediate".to_string(),
+            ChangeType::RequiresReboot => "requires-reboot".to_string(),
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeType {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeType::Immediate => &"immediate",
+            ChangeType::RequiresReboot => &"requires-reboot",
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "immediate" => ChangeType::Immediate,
+            "requires-reboot" => ChangeType::RequiresReboot,
+            _ => ChangeType::UnknownVariant(UnknownChangeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "immediate" => ChangeType::Immediate,
+            "requires-reboot" => ChangeType::RequiresReboot,
+            _ => ChangeType::UnknownVariant(UnknownChangeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangeType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -1828,7 +2493,7 @@ impl CompleteMigrationMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
     }
 }
@@ -1892,7 +2557,10 @@ impl ConfigureShardSerializer {
             &format!("{}{}", prefix, "NewReplicaCount"),
             &obj.new_replica_count,
         );
-        params.put(&format!("{}{}", prefix, "NodeGroupId"), &obj.node_group_id);
+        params.put(
+            &format!("{}{}", prefix, "NodeGroupId"),
+            &obj.node_group_id.to_string(),
+        );
         if let Some(ref field_value) = obj.preferred_availability_zones {
             PreferredAvailabilityZoneListSerializer::serialize(
                 params,
@@ -1934,18 +2602,24 @@ impl CopySnapshotMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "SourceSnapshotName"),
-            &obj.source_snapshot_name,
+            &obj.source_snapshot_name.to_string(),
         );
         if let Some(ref field_value) = obj.target_bucket {
-            params.put(&format!("{}{}", prefix, "TargetBucket"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetBucket"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "TargetSnapshotName"),
-            &obj.target_snapshot_name,
+            &obj.target_snapshot_name.to_string(),
         );
     }
 }
@@ -1980,7 +2654,7 @@ impl CopySnapshotResultDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCacheClusterMessage {
     /// <p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>
-    pub az_mode: Option<String>,
+    pub az_mode: Option<AZMode>,
     /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>The only permitted printable special characters are !, &amp;, #, $, ^, &lt;, &gt;, and -. Other printable special characters cannot be used in the AUTH token.</p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
@@ -2004,7 +2678,7 @@ pub struct CreateCacheClusterMessage {
     /// <p>The initial number of cache nodes that the cluster has.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <p>If you need more than 20 nodes for your Memcached cluster, please fill out the ElastiCache Limit Increase Request form at <a href="http://aws.amazon.com/contact-us/elasticache-node-limit-request/">http://aws.amazon.com/contact-us/elasticache-node-limit-request/</a>.</p>
     pub num_cache_nodes: Option<i64>,
     /// <p>Specifies whether the nodes in the cluster are created in a single outpost or across multiple outposts.</p>
-    pub outpost_mode: Option<String>,
+    pub outpost_mode: Option<OutpostMode>,
     /// <p>The port number on which each of the cache nodes accepts connections.</p>
     pub port: Option<i64>,
     /// <p>The EC2 Availability Zone in which the cluster is created.</p> <p>All nodes belonging to this cluster are placed in the preferred Availability Zone. If you want to create your nodes across multiple Availability Zones, use <code>PreferredAvailabilityZones</code>.</p> <p>Default: System chosen Availability Zone.</p>
@@ -2043,10 +2717,13 @@ impl CreateCacheClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.az_mode {
-            params.put(&format!("{}{}", prefix, "AZMode"), &field_value);
+            params.put(&format!("{}{}", prefix, "AZMode"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.auth_token {
-            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AuthToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
@@ -2056,15 +2733,18 @@ impl CreateCacheClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id,
+            &obj.cache_cluster_id.to_string(),
         );
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -2077,26 +2757,32 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EngineVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.num_cache_nodes {
             params.put(&format!("{}{}", prefix, "NumCacheNodes"), &field_value);
         }
         if let Some(ref field_value) = obj.outpost_mode {
-            params.put(&format!("{}{}", prefix, "OutpostMode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OutpostMode"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
@@ -2104,7 +2790,7 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_availability_zone {
             params.put(
                 &format!("{}{}", prefix, "PreferredAvailabilityZone"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.preferred_availability_zones {
@@ -2117,13 +2803,13 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.preferred_outpost_arn {
             params.put(
                 &format!("{}{}", prefix, "PreferredOutpostArn"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.preferred_outpost_arns {
@@ -2134,7 +2820,10 @@ impl CreateCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReplicationGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
@@ -2151,7 +2840,10 @@ impl CreateCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
-            params.put(&format!("{}{}", prefix, "SnapshotName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
@@ -2160,7 +2852,10 @@ impl CreateCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotWindow"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2223,13 +2918,16 @@ impl CreateCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupFamily"),
-            &obj.cache_parameter_group_family,
+            &obj.cache_parameter_group_family.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name,
+            &obj.cache_parameter_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
     }
 }
 
@@ -2287,9 +2985,12 @@ impl CreateCacheSecurityGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name,
+            &obj.cache_security_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
     }
 }
 
@@ -2349,11 +3050,11 @@ impl CreateCacheSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupDescription"),
-            &obj.cache_subnet_group_description,
+            &obj.cache_subnet_group_description.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupName"),
-            &obj.cache_subnet_group_name,
+            &obj.cache_subnet_group_name.to_string(),
         );
         SubnetIdentifierListSerializer::serialize(
             params,
@@ -2418,16 +3119,16 @@ impl CreateGlobalReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.global_replication_group_description {
             params.put(
                 &format!("{}{}", prefix, "GlobalReplicationGroupDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupIdSuffix"),
-            &obj.global_replication_group_id_suffix,
+            &obj.global_replication_group_id_suffix.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "PrimaryReplicationGroupId"),
-            &obj.primary_replication_group_id,
+            &obj.primary_replication_group_id.to_string(),
         );
     }
 }
@@ -2551,7 +3252,10 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.auth_token {
-            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AuthToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
@@ -2566,12 +3270,15 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -2584,23 +3291,29 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EngineVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.global_replication_group_id {
             params.put(
                 &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.multi_az_enabled {
             params.put(&format!("{}{}", prefix, "MultiAZEnabled"), &field_value);
@@ -2615,7 +3328,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.num_cache_clusters {
@@ -2637,11 +3350,14 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.primary_cluster_id {
-            params.put(&format!("{}{}", prefix, "PrimaryClusterId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PrimaryClusterId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.replicas_per_node_group {
             params.put(
@@ -2651,11 +3367,11 @@ impl CreateReplicationGroupMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupDescription"),
-            &obj.replication_group_description,
+            &obj.replication_group_description.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
@@ -2672,7 +3388,10 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
-            params.put(&format!("{}{}", prefix, "SnapshotName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshot_retention_limit {
             params.put(
@@ -2681,7 +3400,10 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotWindow"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2758,15 +3480,27 @@ impl CreateSnapshotMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheClusterId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReplicationGroupId"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "SnapshotName"), &obj.snapshot_name);
+        params.put(
+            &format!("{}{}", prefix, "SnapshotName"),
+            &obj.snapshot_name.to_string(),
+        );
     }
 }
 
@@ -2815,8 +3549,11 @@ impl CreateUserGroupMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Engine"), &obj.engine);
-        params.put(&format!("{}{}", prefix, "UserGroupId"), &obj.user_group_id);
+        params.put(&format!("{}{}", prefix, "Engine"), &obj.engine.to_string());
+        params.put(
+            &format!("{}{}", prefix, "UserGroupId"),
+            &obj.user_group_id.to_string(),
+        );
         if let Some(ref field_value) = obj.user_ids {
             UserIdListInputSerializer::serialize(
                 params,
@@ -2853,8 +3590,11 @@ impl CreateUserMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccessString"), &obj.access_string);
-        params.put(&format!("{}{}", prefix, "Engine"), &obj.engine);
+        params.put(
+            &format!("{}{}", prefix, "AccessString"),
+            &obj.access_string.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Engine"), &obj.engine.to_string());
         if let Some(ref field_value) = obj.no_password_required {
             params.put(&format!("{}{}", prefix, "NoPasswordRequired"), &field_value);
         }
@@ -2865,8 +3605,11 @@ impl CreateUserMessageSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id.to_string());
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -2890,7 +3633,10 @@ impl CustomerNodeEndpointSerializer {
         }
 
         if let Some(ref field_value) = obj.address {
-            params.put(&format!("{}{}", prefix, "Address"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Address"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
@@ -2957,7 +3703,7 @@ impl DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "NodeGroupCount"),
@@ -3046,7 +3792,7 @@ impl DecreaseReplicaCountMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
     }
 }
@@ -3104,12 +3850,12 @@ impl DeleteCacheClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id,
+            &obj.cache_cluster_id.to_string(),
         );
         if let Some(ref field_value) = obj.final_snapshot_identifier {
             params.put(
                 &format!("{}{}", prefix, "FinalSnapshotIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -3166,7 +3912,7 @@ impl DeleteCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name,
+            &obj.cache_parameter_group_name.to_string(),
         );
     }
 }
@@ -3190,7 +3936,7 @@ impl DeleteCacheSecurityGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name,
+            &obj.cache_security_group_name.to_string(),
         );
     }
 }
@@ -3214,7 +3960,7 @@ impl DeleteCacheSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupName"),
-            &obj.cache_subnet_group_name,
+            &obj.cache_subnet_group_name.to_string(),
         );
     }
 }
@@ -3239,7 +3985,7 @@ impl DeleteGlobalReplicationGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "RetainPrimaryReplicationGroup"),
@@ -3305,12 +4051,12 @@ impl DeleteReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.final_snapshot_identifier {
             params.put(
                 &format!("{}{}", prefix, "FinalSnapshotIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
         if let Some(ref field_value) = obj.retain_primary_cluster {
             params.put(
@@ -3370,7 +4116,10 @@ impl DeleteSnapshotMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "SnapshotName"), &obj.snapshot_name);
+        params.put(
+            &format!("{}{}", prefix, "SnapshotName"),
+            &obj.snapshot_name.to_string(),
+        );
     }
 }
 
@@ -3415,7 +4164,10 @@ impl DeleteUserGroupMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserGroupId"), &obj.user_group_id);
+        params.put(
+            &format!("{}{}", prefix, "UserGroupId"),
+            &obj.user_group_id.to_string(),
+        );
     }
 }
 
@@ -3435,7 +4187,7 @@ impl DeleteUserMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id);
+        params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id.to_string());
     }
 }
 
@@ -3465,10 +4217,13 @@ impl DescribeCacheClustersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheClusterId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3515,20 +4270,23 @@ impl DescribeCacheEngineVersionsMessageSerializer {
         if let Some(ref field_value) = obj.cache_parameter_group_family {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupFamily"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.default_only {
             params.put(&format!("{}{}", prefix, "DefaultOnly"), &field_value);
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EngineVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3560,11 +4318,11 @@ impl DescribeCacheParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3597,16 +4355,16 @@ impl DescribeCacheParametersMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name,
+            &obj.cache_parameter_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.source {
-            params.put(&format!("{}{}", prefix, "Source"), &field_value);
+            params.put(&format!("{}{}", prefix, "Source"), &field_value.to_string());
         }
     }
 }
@@ -3635,11 +4393,11 @@ impl DescribeCacheSecurityGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cache_security_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSecurityGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3671,11 +4429,11 @@ impl DescribeCacheSubnetGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3706,10 +4464,10 @@ impl DescribeEngineDefaultParametersMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupFamily"),
-            &obj.cache_parameter_group_family,
+            &obj.cache_parameter_group_family.to_string(),
         );
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3764,7 +4522,7 @@ pub struct DescribeEventsMessage {
     /// <p>The identifier of the event source for which events are returned. If not specified, all sources are included in the response.</p>
     pub source_identifier: Option<String>,
     /// <p>The event source to retrieve events for. If no value is specified, all events are returned.</p>
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
     /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>
     pub start_time: Option<String>,
 }
@@ -3785,16 +4543,22 @@ impl DescribeEventsMessageSerializer {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.source_identifier {
-            params.put(&format!("{}{}", prefix, "SourceIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -3827,11 +4591,11 @@ impl DescribeGlobalReplicationGroupsMessageSerializer {
         if let Some(ref field_value) = obj.global_replication_group_id {
             params.put(
                 &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -3904,13 +4668,16 @@ impl DescribeReplicationGroupsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReplicationGroupId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3947,33 +4714,45 @@ impl DescribeReservedCacheNodesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.duration {
-            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Duration"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.offering_type {
-            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OfferingType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.product_description {
-            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ProductDescription"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.reserved_cache_node_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodeId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.reserved_cache_nodes_offering_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -4013,27 +4792,39 @@ impl DescribeReservedCacheNodesOfferingsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.duration {
-            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Duration"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.offering_type {
-            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OfferingType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.product_description {
-            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ProductDescription"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.reserved_cache_nodes_offering_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -4049,7 +4840,7 @@ pub struct DescribeServiceUpdatesMessage {
     /// <p>The unique ID of the service update</p>
     pub service_update_name: Option<String>,
     /// <p>The status of the service update</p>
-    pub service_update_status: Option<Vec<String>>,
+    pub service_update_status: Option<Vec<ServiceUpdateStatus>>,
 }
 
 /// Serialize `DescribeServiceUpdatesMessage` contents to a `SignedRequest`.
@@ -4062,13 +4853,16 @@ impl DescribeServiceUpdatesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.service_update_name {
-            params.put(&format!("{}{}", prefix, "ServiceUpdateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ServiceUpdateName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.service_update_status {
             ServiceUpdateStatusListSerializer::serialize(
@@ -4148,16 +4942,22 @@ impl DescribeSnapshotsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheClusterId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReplicationGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.show_node_group_config {
             params.put(
@@ -4166,10 +4966,16 @@ impl DescribeSnapshotsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_name {
-            params.put(&format!("{}{}", prefix, "SnapshotName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshot_source {
-            params.put(&format!("{}{}", prefix, "SnapshotSource"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotSource"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4190,13 +4996,13 @@ pub struct DescribeUpdateActionsMessage {
     /// <p>The unique ID of the service update</p>
     pub service_update_name: Option<String>,
     /// <p>The status of the service update</p>
-    pub service_update_status: Option<Vec<String>>,
+    pub service_update_status: Option<Vec<ServiceUpdateStatus>>,
     /// <p>The range of time specified to search for service updates that are in available status</p>
     pub service_update_time_range: Option<TimeRangeFilter>,
     /// <p>Dictates whether to include node level update status in the response </p>
     pub show_node_level_update_status: Option<bool>,
     /// <p>The status of the update action.</p>
-    pub update_action_status: Option<Vec<String>>,
+    pub update_action_status: Option<Vec<UpdateActionStatus>>,
 }
 
 /// Serialize `DescribeUpdateActionsMessage` contents to a `SignedRequest`.
@@ -4216,10 +5022,10 @@ impl DescribeUpdateActionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.engine {
-            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4232,7 +5038,10 @@ impl DescribeUpdateActionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.service_update_name {
-            params.put(&format!("{}{}", prefix, "ServiceUpdateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ServiceUpdateName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.service_update_status {
             ServiceUpdateStatusListSerializer::serialize(
@@ -4285,13 +5094,16 @@ impl DescribeUserGroupsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.user_group_id {
-            params.put(&format!("{}{}", prefix, "UserGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserGroupId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4358,7 +5170,7 @@ impl DescribeUsersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.engine {
-            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
@@ -4368,13 +5180,13 @@ impl DescribeUsersMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.user_id {
-            params.put(&format!("{}{}", prefix, "UserId"), &field_value);
+            params.put(&format!("{}{}", prefix, "UserId"), &field_value.to_string());
         }
     }
 }
@@ -4434,15 +5246,15 @@ impl DisassociateGlobalReplicationGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupRegion"),
-            &obj.replication_group_region,
+            &obj.replication_group_region.to_string(),
         );
     }
 }
@@ -4657,7 +5469,7 @@ pub struct Event {
     /// <p>The identifier for the source of the event. For example, if the event occurred at the cluster level, the identifier would be the name of the cluster.</p>
     pub source_identifier: Option<String>,
     /// <p>Specifies the origin of this event - a cluster, a parameter group, a security group, etc.</p>
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
 }
 
 #[allow(dead_code)]
@@ -4761,15 +5573,15 @@ impl FailoverGlobalReplicationGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "PrimaryRegion"),
-            &obj.primary_region,
+            &obj.primary_region.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "PrimaryReplicationGroupId"),
-            &obj.primary_replication_group_id,
+            &obj.primary_replication_group_id.to_string(),
         );
     }
 }
@@ -4826,7 +5638,7 @@ impl FilterSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         FilterValueListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Values"),
@@ -4852,7 +5664,7 @@ impl FilterValueListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4897,7 +5709,7 @@ impl GlobalNodeGroupIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5106,7 +5918,7 @@ impl GlobalReplicationGroupListDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GlobalReplicationGroupMember {
     /// <p>Indicates whether automatic failover is enabled for the replication group.</p>
-    pub automatic_failover: Option<String>,
+    pub automatic_failover: Option<AutomaticFailoverStatus>,
     /// <p>The replication group id of the Global Datastore member.</p>
     pub replication_group_id: Option<String>,
     /// <p>The AWS region of the Global Datastore member.</p>
@@ -5215,7 +6027,7 @@ impl IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "NodeGroupCount"),
@@ -5302,7 +6114,7 @@ impl IncreaseReplicaCountMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
     }
 }
@@ -5362,7 +6174,7 @@ impl KeyListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5387,10 +6199,16 @@ impl ListAllowedNodeTypeModificationsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cache_cluster_id {
-            params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheClusterId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.replication_group_id {
-            params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReplicationGroupId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5412,7 +6230,10 @@ impl ListTagsForResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(
+            &format!("{}{}", prefix, "ResourceName"),
+            &obj.resource_name.to_string(),
+        );
     }
 }
 
@@ -5421,13 +6242,13 @@ impl ListTagsForResourceMessageSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCacheClusterMessage {
     /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. </p> </note></p>
-    pub az_mode: Option<String>,
+    pub az_mode: Option<AZMode>,
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cluster.</p> <p>If <code>false</code>, changes to the cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
     /// <p>Reserved parameter. The password used to access a password protected server. This parameter must be specified with the <code>auth-token-update</code> parameter. Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@', '%'</p> </li> </ul> <p> For more information, see AUTH password at <a href="http://redis.io/commands/AUTH">AUTH</a>.</p>
     pub auth_token: Option<String>,
     /// <p>Specifies the strategy to use to update the AUTH token. This parameter must be specified with the <code>auth-token</code> parameter. Possible values:</p> <ul> <li> <p>Rotate</p> </li> <li> <p>Set</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/auth.html">Authenticating Users with Redis AUTH</a> </p>
-    pub auth_token_update_strategy: Option<String>,
+    pub auth_token_update_strategy: Option<AuthTokenUpdateStrategyType>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The cluster identifier. This value is stored as a lowercase string.</p>
@@ -5470,18 +6291,21 @@ impl ModifyCacheClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.az_mode {
-            params.put(&format!("{}{}", prefix, "AZMode"), &field_value);
+            params.put(&format!("{}{}", prefix, "AZMode"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
         }
         if let Some(ref field_value) = obj.auth_token {
-            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AuthToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.auth_token_update_strategy {
             params.put(
                 &format!("{}{}", prefix, "AuthTokenUpdateStrategy"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -5492,7 +6316,7 @@ impl ModifyCacheClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id,
+            &obj.cache_cluster_id.to_string(),
         );
         if let Some(ref field_value) = obj.cache_node_ids_to_remove {
             CacheNodeIdsListSerializer::serialize(
@@ -5502,12 +6326,15 @@ impl ModifyCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -5518,7 +6345,10 @@ impl ModifyCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EngineVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.new_availability_zones {
             PreferredAvailabilityZoneListSerializer::serialize(
@@ -5530,13 +6360,13 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.notification_topic_status {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicStatus"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.num_cache_nodes {
@@ -5545,7 +6375,7 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.security_group_ids {
@@ -5562,7 +6392,10 @@ impl ModifyCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotWindow"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5620,7 +6453,7 @@ impl ModifyCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name,
+            &obj.cache_parameter_group_name.to_string(),
         );
         ParameterNameValueListSerializer::serialize(
             params,
@@ -5654,12 +6487,12 @@ impl ModifyCacheSubnetGroupMessageSerializer {
         if let Some(ref field_value) = obj.cache_subnet_group_description {
             params.put(
                 &format!("{}{}", prefix, "CacheSubnetGroupDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "CacheSubnetGroupName"),
-            &obj.cache_subnet_group_name,
+            &obj.cache_subnet_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.subnet_ids {
             SubnetIdentifierListSerializer::serialize(
@@ -5740,20 +6573,26 @@ impl ModifyGlobalReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EngineVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.global_replication_group_description {
             params.put(
                 &format!("{}{}", prefix, "GlobalReplicationGroupDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
     }
 }
@@ -5800,7 +6639,7 @@ pub struct ModifyReplicationGroupMessage {
     /// <p>Reserved parameter. The password used to access a password protected server. This parameter must be specified with the <code>auth-token-update-strategy </code> parameter. Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@', '%'</p> </li> </ul> <p> For more information, see AUTH password at <a href="http://redis.io/commands/AUTH">AUTH</a>.</p>
     pub auth_token: Option<String>,
     /// <p>Specifies the strategy to use to update the AUTH token. This parameter must be specified with the <code>auth-token</code> parameter. Possible values:</p> <ul> <li> <p>Rotate</p> </li> <li> <p>Set</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/auth.html">Authenticating Users with Redis AUTH</a> </p>
-    pub auth_token_update_strategy: Option<String>,
+    pub auth_token_update_strategy: Option<AuthTokenUpdateStrategyType>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p>
@@ -5856,12 +6695,15 @@ impl ModifyReplicationGroupMessageSerializer {
             params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
         }
         if let Some(ref field_value) = obj.auth_token {
-            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AuthToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.auth_token_update_strategy {
             params.put(
                 &format!("{}{}", prefix, "AuthTokenUpdateStrategy"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
@@ -5877,12 +6719,15 @@ impl ModifyReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CacheNodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.cache_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "CacheParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cache_security_group_names {
@@ -5893,7 +6738,10 @@ impl ModifyReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.engine_version {
-            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EngineVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.multi_az_enabled {
             params.put(&format!("{}{}", prefix, "MultiAZEnabled"), &field_value);
@@ -5902,23 +6750,26 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicArn"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.notification_topic_status {
             params.put(
                 &format!("{}{}", prefix, "NotificationTopicStatus"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.primary_cluster_id {
-            params.put(&format!("{}{}", prefix, "PrimaryClusterId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PrimaryClusterId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.remove_user_groups {
             params.put(&format!("{}{}", prefix, "RemoveUserGroups"), &field_value);
@@ -5926,12 +6777,12 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.replication_group_description {
             params.put(
                 &format!("{}{}", prefix, "ReplicationGroupDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
@@ -5947,12 +6798,15 @@ impl ModifyReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.snapshot_window {
-            params.put(&format!("{}{}", prefix, "SnapshotWindow"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotWindow"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshotting_cluster_id {
             params.put(
                 &format!("{}{}", prefix, "SnapshottingClusterId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.user_group_ids_to_add {
@@ -6059,7 +6913,7 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
         if let Some(ref field_value) = obj.resharding_configuration {
             ReshardingConfigurationListSerializer::serialize(
@@ -6123,7 +6977,10 @@ impl ModifyUserGroupMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserGroupId"), &obj.user_group_id);
+        params.put(
+            &format!("{}{}", prefix, "UserGroupId"),
+            &obj.user_group_id.to_string(),
+        );
         if let Some(ref field_value) = obj.user_ids_to_add {
             UserIdListInputSerializer::serialize(
                 params,
@@ -6166,10 +7023,16 @@ impl ModifyUserMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.access_string {
-            params.put(&format!("{}{}", prefix, "AccessString"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AccessString"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.append_access_string {
-            params.put(&format!("{}{}", prefix, "AppendAccessString"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AppendAccessString"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.no_password_required {
             params.put(&format!("{}{}", prefix, "NoPasswordRequired"), &field_value);
@@ -6181,7 +7044,109 @@ impl ModifyUserMessageSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id);
+        params.put(&format!("{}{}", prefix, "UserId"), &obj.user_id.to_string());
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMultiAZStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MultiAZStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMultiAZStatus),
+}
+
+impl Default for MultiAZStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MultiAZStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MultiAZStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MultiAZStatus {
+    fn into(self) -> String {
+        match self {
+            MultiAZStatus::Disabled => "disabled".to_string(),
+            MultiAZStatus::Enabled => "enabled".to_string(),
+            MultiAZStatus::UnknownVariant(UnknownMultiAZStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MultiAZStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MultiAZStatus::Disabled => &"disabled",
+            MultiAZStatus::Enabled => &"enabled",
+            MultiAZStatus::UnknownVariant(UnknownMultiAZStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MultiAZStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "disabled" => MultiAZStatus::Disabled,
+            "enabled" => MultiAZStatus::Enabled,
+            _ => MultiAZStatus::UnknownVariant(UnknownMultiAZStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MultiAZStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "disabled" => MultiAZStatus::Disabled,
+            "enabled" => MultiAZStatus::Enabled,
+            _ => MultiAZStatus::UnknownVariant(UnknownMultiAZStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MultiAZStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MultiAZStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MultiAZStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -6189,8 +7154,11 @@ impl ModifyUserMessageSerializer {
 struct MultiAZStatusDeserializer;
 impl MultiAZStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MultiAZStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Represents a collection of cache nodes in a replication group. One node in the node group is the read/write primary node. All the other nodes are read-only Replica nodes.</p>
@@ -6336,16 +7304,22 @@ impl NodeGroupConfigurationSerializer {
         }
 
         if let Some(ref field_value) = obj.node_group_id {
-            params.put(&format!("{}{}", prefix, "NodeGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NodeGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.primary_availability_zone {
             params.put(
                 &format!("{}{}", prefix, "PrimaryAvailabilityZone"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.primary_outpost_arn {
-            params.put(&format!("{}{}", prefix, "PrimaryOutpostArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PrimaryOutpostArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.replica_availability_zones {
             AvailabilityZonesListSerializer::serialize(
@@ -6365,7 +7339,7 @@ impl NodeGroupConfigurationSerializer {
             );
         }
         if let Some(ref field_value) = obj.slots {
-            params.put(&format!("{}{}", prefix, "Slots"), &field_value);
+            params.put(&format!("{}{}", prefix, "Slots"), &field_value.to_string());
         }
     }
 }
@@ -6494,13 +7468,13 @@ pub struct NodeGroupMemberUpdateStatus {
     /// <p>The end date of the update for a node</p>
     pub node_update_end_date: Option<String>,
     /// <p>Reflects whether the update was initiated by the customer or automatically applied</p>
-    pub node_update_initiated_by: Option<String>,
+    pub node_update_initiated_by: Option<NodeUpdateInitiatedBy>,
     /// <p>The date when the update is triggered</p>
     pub node_update_initiated_date: Option<String>,
     /// <p>The start date of the update for a node</p>
     pub node_update_start_date: Option<String>,
     /// <p>The update status of the node</p>
-    pub node_update_status: Option<String>,
+    pub node_update_status: Option<NodeUpdateStatus>,
     /// <p>The date when the NodeUpdateStatus was last modified</p>
     pub node_update_status_modified_date: Option<String>,
 }
@@ -6658,7 +7632,7 @@ impl NodeGroupsToRemoveListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6669,7 +7643,7 @@ impl NodeGroupsToRetainListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6783,20 +7757,260 @@ impl NodeTypeListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodeUpdateInitiatedBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodeUpdateInitiatedBy {
+    Customer,
+    System,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodeUpdateInitiatedBy),
+}
+
+impl Default for NodeUpdateInitiatedBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodeUpdateInitiatedBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodeUpdateInitiatedBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodeUpdateInitiatedBy {
+    fn into(self) -> String {
+        match self {
+            NodeUpdateInitiatedBy::Customer => "customer".to_string(),
+            NodeUpdateInitiatedBy::System => "system".to_string(),
+            NodeUpdateInitiatedBy::UnknownVariant(UnknownNodeUpdateInitiatedBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodeUpdateInitiatedBy {
+    fn into(self) -> &'a str {
+        match self {
+            NodeUpdateInitiatedBy::Customer => &"customer",
+            NodeUpdateInitiatedBy::System => &"system",
+            NodeUpdateInitiatedBy::UnknownVariant(UnknownNodeUpdateInitiatedBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NodeUpdateInitiatedBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "customer" => NodeUpdateInitiatedBy::Customer,
+            "system" => NodeUpdateInitiatedBy::System,
+            _ => NodeUpdateInitiatedBy::UnknownVariant(UnknownNodeUpdateInitiatedBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodeUpdateInitiatedBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "customer" => NodeUpdateInitiatedBy::Customer,
+            "system" => NodeUpdateInitiatedBy::System,
+            _ => NodeUpdateInitiatedBy::UnknownVariant(UnknownNodeUpdateInitiatedBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeUpdateInitiatedBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for NodeUpdateInitiatedBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NodeUpdateInitiatedBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct NodeUpdateInitiatedByDeserializer;
 impl NodeUpdateInitiatedByDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NodeUpdateInitiatedBy, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodeUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodeUpdateStatus {
+    Complete,
+    InProgress,
+    NotApplied,
+    Stopped,
+    Stopping,
+    WaitingToStart,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodeUpdateStatus),
+}
+
+impl Default for NodeUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodeUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodeUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodeUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            NodeUpdateStatus::Complete => "complete".to_string(),
+            NodeUpdateStatus::InProgress => "in-progress".to_string(),
+            NodeUpdateStatus::NotApplied => "not-applied".to_string(),
+            NodeUpdateStatus::Stopped => "stopped".to_string(),
+            NodeUpdateStatus::Stopping => "stopping".to_string(),
+            NodeUpdateStatus::WaitingToStart => "waiting-to-start".to_string(),
+            NodeUpdateStatus::UnknownVariant(UnknownNodeUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodeUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NodeUpdateStatus::Complete => &"complete",
+            NodeUpdateStatus::InProgress => &"in-progress",
+            NodeUpdateStatus::NotApplied => &"not-applied",
+            NodeUpdateStatus::Stopped => &"stopped",
+            NodeUpdateStatus::Stopping => &"stopping",
+            NodeUpdateStatus::WaitingToStart => &"waiting-to-start",
+            NodeUpdateStatus::UnknownVariant(UnknownNodeUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NodeUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "complete" => NodeUpdateStatus::Complete,
+            "in-progress" => NodeUpdateStatus::InProgress,
+            "not-applied" => NodeUpdateStatus::NotApplied,
+            "stopped" => NodeUpdateStatus::Stopped,
+            "stopping" => NodeUpdateStatus::Stopping,
+            "waiting-to-start" => NodeUpdateStatus::WaitingToStart,
+            _ => NodeUpdateStatus::UnknownVariant(UnknownNodeUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodeUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "complete" => NodeUpdateStatus::Complete,
+            "in-progress" => NodeUpdateStatus::InProgress,
+            "not-applied" => NodeUpdateStatus::NotApplied,
+            "stopped" => NodeUpdateStatus::Stopped,
+            "stopping" => NodeUpdateStatus::Stopping,
+            "waiting-to-start" => NodeUpdateStatus::WaitingToStart,
+            _ => NodeUpdateStatus::UnknownVariant(UnknownNodeUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for NodeUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NodeUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct NodeUpdateStatusDeserializer;
 impl NodeUpdateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NodeUpdateStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Describes a notification topic and its status. Notification topics are used for publishing ElastiCache events to subscribers using Amazon Simple Notification Service (SNS).</p>
@@ -6861,8 +8075,110 @@ impl OutpostArnsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOutpostMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OutpostMode {
+    CrossOutpost,
+    SingleOutpost,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOutpostMode),
+}
+
+impl Default for OutpostMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OutpostMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OutpostMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OutpostMode {
+    fn into(self) -> String {
+        match self {
+            OutpostMode::CrossOutpost => "cross-outpost".to_string(),
+            OutpostMode::SingleOutpost => "single-outpost".to_string(),
+            OutpostMode::UnknownVariant(UnknownOutpostMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OutpostMode {
+    fn into(self) -> &'a str {
+        match self {
+            OutpostMode::CrossOutpost => &"cross-outpost",
+            OutpostMode::SingleOutpost => &"single-outpost",
+            OutpostMode::UnknownVariant(UnknownOutpostMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OutpostMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "cross-outpost" => OutpostMode::CrossOutpost,
+            "single-outpost" => OutpostMode::SingleOutpost,
+            _ => OutpostMode::UnknownVariant(UnknownOutpostMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OutpostMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cross-outpost" => OutpostMode::CrossOutpost,
+            "single-outpost" => OutpostMode::SingleOutpost,
+            _ => OutpostMode::UnknownVariant(UnknownOutpostMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutpostMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OutpostMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OutpostMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -6873,7 +8189,7 @@ pub struct Parameter {
     /// <p>The valid range of values for the parameter.</p>
     pub allowed_values: Option<String>,
     /// <p>Indicates whether a change to the parameter is applied immediately or requires a reboot for the change to be applied. You can force a reboot or wait until the next maintenance window's reboot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a>.</p>
-    pub change_type: Option<String>,
+    pub change_type: Option<ChangeType>,
     /// <p>The valid data type for the parameter.</p>
     pub data_type: Option<String>,
     /// <p>A description of the parameter.</p>
@@ -6961,10 +8277,16 @@ impl ParameterNameValueSerializer {
         }
 
         if let Some(ref field_value) = obj.parameter_name {
-            params.put(&format!("{}{}", prefix, "ParameterName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.parameter_value {
-            params.put(&format!("{}{}", prefix, "ParameterValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterValue"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7005,8 +8327,118 @@ impl PasswordListInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPendingAutomaticFailoverStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PendingAutomaticFailoverStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPendingAutomaticFailoverStatus),
+}
+
+impl Default for PendingAutomaticFailoverStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PendingAutomaticFailoverStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PendingAutomaticFailoverStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PendingAutomaticFailoverStatus {
+    fn into(self) -> String {
+        match self {
+            PendingAutomaticFailoverStatus::Disabled => "disabled".to_string(),
+            PendingAutomaticFailoverStatus::Enabled => "enabled".to_string(),
+            PendingAutomaticFailoverStatus::UnknownVariant(
+                UnknownPendingAutomaticFailoverStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PendingAutomaticFailoverStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PendingAutomaticFailoverStatus::Disabled => &"disabled",
+            PendingAutomaticFailoverStatus::Enabled => &"enabled",
+            PendingAutomaticFailoverStatus::UnknownVariant(
+                UnknownPendingAutomaticFailoverStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for PendingAutomaticFailoverStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "disabled" => PendingAutomaticFailoverStatus::Disabled,
+            "enabled" => PendingAutomaticFailoverStatus::Enabled,
+            _ => PendingAutomaticFailoverStatus::UnknownVariant(
+                UnknownPendingAutomaticFailoverStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for PendingAutomaticFailoverStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "disabled" => PendingAutomaticFailoverStatus::Disabled,
+            "enabled" => PendingAutomaticFailoverStatus::Enabled,
+            _ => PendingAutomaticFailoverStatus::UnknownVariant(
+                UnknownPendingAutomaticFailoverStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PendingAutomaticFailoverStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PendingAutomaticFailoverStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PendingAutomaticFailoverStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -7014,8 +8446,11 @@ impl PasswordListInputSerializer {
 struct PendingAutomaticFailoverStatusDeserializer;
 impl PendingAutomaticFailoverStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PendingAutomaticFailoverStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A group of settings that are applied to the cluster in the future, or that are currently being applied.</p>
@@ -7023,7 +8458,7 @@ impl PendingAutomaticFailoverStatusDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingModifiedValues {
     /// <p>The auth token status</p>
-    pub auth_token_status: Option<String>,
+    pub auth_token_status: Option<AuthTokenUpdateStatus>,
     /// <p>A list of cache node IDs that are being removed (or will be removed) from the cluster. A node ID is a 4-digit numeric identifier (0001, 0002, etc.).</p>
     pub cache_node_ids_to_remove: Option<Vec<String>>,
     /// <p>The cache node type that this cluster or replication group is scaled to.</p>
@@ -7082,7 +8517,7 @@ impl PreferredAvailabilityZoneListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7093,7 +8528,7 @@ impl PreferredOutpostArnListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7109,7 +8544,7 @@ pub struct ProcessedUpdateAction {
     /// <p>The unique ID of the service update</p>
     pub service_update_name: Option<String>,
     /// <p>The status of the update action on the Redis cluster</p>
-    pub update_action_status: Option<String>,
+    pub update_action_status: Option<UpdateActionStatus>,
 }
 
 #[allow(dead_code)]
@@ -7196,12 +8631,12 @@ impl PurchaseReservedCacheNodesOfferingMessageSerializer {
         if let Some(ref field_value) = obj.reserved_cache_node_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedCacheNodeId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-            &obj.reserved_cache_nodes_offering_id,
+            &obj.reserved_cache_nodes_offering_id.to_string(),
         );
     }
 }
@@ -7266,7 +8701,7 @@ impl RebalanceSlotsInGlobalReplicationGroupMessageSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "GlobalReplicationGroupId"),
-            &obj.global_replication_group_id,
+            &obj.global_replication_group_id.to_string(),
         );
     }
 }
@@ -7325,7 +8760,7 @@ impl RebootCacheClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheClusterId"),
-            &obj.cache_cluster_id,
+            &obj.cache_cluster_id.to_string(),
         );
         CacheNodeIdsListSerializer::serialize(
             params,
@@ -7449,11 +8884,11 @@ impl RegionalConfigurationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupRegion"),
-            &obj.replication_group_region,
+            &obj.replication_group_region.to_string(),
         );
         ReshardingConfigurationListSerializer::serialize(
             params,
@@ -7480,7 +8915,7 @@ impl RemoveReplicasListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7504,7 +8939,10 @@ impl RemoveTagsFromResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(
+            &format!("{}{}", prefix, "ResourceName"),
+            &obj.resource_name.to_string(),
+        );
         KeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
     }
 }
@@ -7533,7 +8971,7 @@ pub struct ReplicationGroup {
     /// <p>The date the auth token was last modified</p>
     pub auth_token_last_modified_date: Option<String>,
     /// <p>Indicates the status of automatic failover for this Redis replication group.</p>
-    pub automatic_failover: Option<String>,
+    pub automatic_failover: Option<AutomaticFailoverStatus>,
     /// <p>The name of the compute and memory capacity node type for each node in the replication group.</p>
     pub cache_node_type: Option<String>,
     /// <p>A flag indicating whether or not this replication group is cluster enabled; i.e., whether its data can be partitioned across multiple shards (API/CLI: node groups).</p> <p>Valid values: <code>true</code> | <code>false</code> </p>
@@ -7551,7 +8989,7 @@ pub struct ReplicationGroup {
     /// <p>The outpost ARNs of the replication group's member clusters.</p>
     pub member_clusters_outpost_arns: Option<Vec<String>>,
     /// <p>A flag indicating if you have Multi-AZ enabled to enhance fault tolerance. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html">Minimizing Downtime: Multi-AZ</a> </p>
-    pub multi_az: Option<String>,
+    pub multi_az: Option<MultiAZStatus>,
     /// <p>A list of node groups in this replication group. For Redis (cluster mode disabled) replication groups, this is a single-element list. For Redis (cluster mode enabled) replication groups, the list contains an entry for each node group (shard).</p>
     pub node_groups: Option<Vec<NodeGroup>>,
     /// <p>A group of settings to be applied to the replication group, either immediately or during the next maintenance window.</p>
@@ -7717,7 +9155,7 @@ impl ReplicationGroupIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7810,9 +9248,9 @@ impl ReplicationGroupOutpostArnListDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplicationGroupPendingModifiedValues {
     /// <p>The auth token status</p>
-    pub auth_token_status: Option<String>,
+    pub auth_token_status: Option<AuthTokenUpdateStatus>,
     /// <p>Indicates the status of automatic failover for this Redis replication group.</p>
-    pub automatic_failover_status: Option<String>,
+    pub automatic_failover_status: Option<PendingAutomaticFailoverStatus>,
     /// <p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>
     pub primary_cluster_id: Option<String>,
     /// <p>The status of an online resharding operation.</p>
@@ -8200,7 +9638,7 @@ impl ResetCacheParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheParameterGroupName"),
-            &obj.cache_parameter_group_name,
+            &obj.cache_parameter_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.parameter_name_values {
             ParameterNameValueListSerializer::serialize(
@@ -8235,7 +9673,10 @@ impl ReshardingConfigurationSerializer {
         }
 
         if let Some(ref field_value) = obj.node_group_id {
-            params.put(&format!("{}{}", prefix, "NodeGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NodeGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.preferred_availability_zones {
             AvailabilityZonesListSerializer::serialize(
@@ -8311,15 +9752,15 @@ impl RevokeCacheSecurityGroupIngressMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CacheSecurityGroupName"),
-            &obj.cache_security_group_name,
+            &obj.cache_security_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupName"),
-            &obj.ec2_security_group_name,
+            &obj.ec2_security_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-            &obj.ec2_security_group_owner_id,
+            &obj.ec2_security_group_owner_id.to_string(),
         );
     }
 }
@@ -8364,7 +9805,7 @@ impl SecurityGroupIdsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -8449,11 +9890,11 @@ pub struct ServiceUpdate {
     /// <p>The date when the service update is initially available</p>
     pub service_update_release_date: Option<String>,
     /// <p>The severity of the service update</p>
-    pub service_update_severity: Option<String>,
+    pub service_update_severity: Option<ServiceUpdateSeverity>,
     /// <p>The status of the service update</p>
-    pub service_update_status: Option<String>,
+    pub service_update_status: Option<ServiceUpdateStatus>,
     /// <p>Reflects the nature of the service update</p>
-    pub service_update_type: Option<String>,
+    pub service_update_type: Option<ServiceUpdateType>,
 }
 
 #[allow(dead_code)]
@@ -8561,31 +10002,367 @@ impl ServiceUpdateListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceUpdateSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceUpdateSeverity {
+    Critical,
+    Important,
+    Low,
+    Medium,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceUpdateSeverity),
+}
+
+impl Default for ServiceUpdateSeverity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceUpdateSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceUpdateSeverity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceUpdateSeverity {
+    fn into(self) -> String {
+        match self {
+            ServiceUpdateSeverity::Critical => "critical".to_string(),
+            ServiceUpdateSeverity::Important => "important".to_string(),
+            ServiceUpdateSeverity::Low => "low".to_string(),
+            ServiceUpdateSeverity::Medium => "medium".to_string(),
+            ServiceUpdateSeverity::UnknownVariant(UnknownServiceUpdateSeverity {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceUpdateSeverity {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceUpdateSeverity::Critical => &"critical",
+            ServiceUpdateSeverity::Important => &"important",
+            ServiceUpdateSeverity::Low => &"low",
+            ServiceUpdateSeverity::Medium => &"medium",
+            ServiceUpdateSeverity::UnknownVariant(UnknownServiceUpdateSeverity {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceUpdateSeverity {
+    fn from(name: &str) -> Self {
+        match name {
+            "critical" => ServiceUpdateSeverity::Critical,
+            "important" => ServiceUpdateSeverity::Important,
+            "low" => ServiceUpdateSeverity::Low,
+            "medium" => ServiceUpdateSeverity::Medium,
+            _ => ServiceUpdateSeverity::UnknownVariant(UnknownServiceUpdateSeverity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceUpdateSeverity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "critical" => ServiceUpdateSeverity::Critical,
+            "important" => ServiceUpdateSeverity::Important,
+            "low" => ServiceUpdateSeverity::Low,
+            "medium" => ServiceUpdateSeverity::Medium,
+            _ => ServiceUpdateSeverity::UnknownVariant(UnknownServiceUpdateSeverity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceUpdateSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ServiceUpdateSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceUpdateSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ServiceUpdateSeverityDeserializer;
 impl ServiceUpdateSeverityDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceUpdateSeverity, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceUpdateStatus {
+    Available,
+    Cancelled,
+    Expired,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceUpdateStatus),
+}
+
+impl Default for ServiceUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            ServiceUpdateStatus::Available => "available".to_string(),
+            ServiceUpdateStatus::Cancelled => "cancelled".to_string(),
+            ServiceUpdateStatus::Expired => "expired".to_string(),
+            ServiceUpdateStatus::UnknownVariant(UnknownServiceUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceUpdateStatus::Available => &"available",
+            ServiceUpdateStatus::Cancelled => &"cancelled",
+            ServiceUpdateStatus::Expired => &"expired",
+            ServiceUpdateStatus::UnknownVariant(UnknownServiceUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ServiceUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => ServiceUpdateStatus::Available,
+            "cancelled" => ServiceUpdateStatus::Cancelled,
+            "expired" => ServiceUpdateStatus::Expired,
+            _ => ServiceUpdateStatus::UnknownVariant(UnknownServiceUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => ServiceUpdateStatus::Available,
+            "cancelled" => ServiceUpdateStatus::Cancelled,
+            "expired" => ServiceUpdateStatus::Expired,
+            _ => ServiceUpdateStatus::UnknownVariant(UnknownServiceUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ServiceUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ServiceUpdateStatusDeserializer;
 impl ServiceUpdateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceUpdateStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
 /// Serialize `ServiceUpdateStatusList` contents to a `SignedRequest`.
 struct ServiceUpdateStatusListSerializer;
 impl ServiceUpdateStatusListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ServiceUpdateStatus>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceUpdateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceUpdateType {
+    SecurityUpdate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceUpdateType),
+}
+
+impl Default for ServiceUpdateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceUpdateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceUpdateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceUpdateType {
+    fn into(self) -> String {
+        match self {
+            ServiceUpdateType::SecurityUpdate => "security-update".to_string(),
+            ServiceUpdateType::UnknownVariant(UnknownServiceUpdateType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceUpdateType {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceUpdateType::SecurityUpdate => &"security-update",
+            ServiceUpdateType::UnknownVariant(UnknownServiceUpdateType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ServiceUpdateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "security-update" => ServiceUpdateType::SecurityUpdate,
+            _ => ServiceUpdateType::UnknownVariant(UnknownServiceUpdateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceUpdateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "security-update" => ServiceUpdateType::SecurityUpdate,
+            _ => ServiceUpdateType::UnknownVariant(UnknownServiceUpdateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceUpdateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ServiceUpdateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceUpdateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -8593,8 +10370,11 @@ impl ServiceUpdateStatusListSerializer {
 struct ServiceUpdateTypeDeserializer;
 impl ServiceUpdateTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceUpdateType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -8630,12 +10410,120 @@ impl ServiceUpdatesMessageDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSlaMet {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SlaMet {
+    NA,
+    No,
+    Yes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSlaMet),
+}
+
+impl Default for SlaMet {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SlaMet {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SlaMet {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SlaMet {
+    fn into(self) -> String {
+        match self {
+            SlaMet::NA => "n/a".to_string(),
+            SlaMet::No => "no".to_string(),
+            SlaMet::Yes => "yes".to_string(),
+            SlaMet::UnknownVariant(UnknownSlaMet { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SlaMet {
+    fn into(self) -> &'a str {
+        match self {
+            SlaMet::NA => &"n/a",
+            SlaMet::No => &"no",
+            SlaMet::Yes => &"yes",
+            SlaMet::UnknownVariant(UnknownSlaMet { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SlaMet {
+    fn from(name: &str) -> Self {
+        match name {
+            "n/a" => SlaMet::NA,
+            "no" => SlaMet::No,
+            "yes" => SlaMet::Yes,
+            _ => SlaMet::UnknownVariant(UnknownSlaMet {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SlaMet {
+    fn from(name: String) -> Self {
+        match &*name {
+            "n/a" => SlaMet::NA,
+            "no" => SlaMet::No,
+            "yes" => SlaMet::Yes,
+            _ => SlaMet::UnknownVariant(UnknownSlaMet { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SlaMet {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SlaMet {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SlaMet {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SlaMetDeserializer;
 impl SlaMetDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SlaMet, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Represents the progress of an online resharding operation.</p>
@@ -8677,7 +10565,7 @@ pub struct Snapshot {
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>Indicates the status of automatic failover for the source Redis replication group.</p>
-    pub automatic_failover: Option<String>,
+    pub automatic_failover: Option<AutomaticFailoverStatus>,
     /// <p>The date and time when the source cluster was created.</p>
     pub cache_cluster_create_time: Option<String>,
     /// <p>The user-supplied identifier of the source cluster.</p>
@@ -8881,7 +10769,7 @@ impl SnapshotArnsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -8904,12 +10792,143 @@ impl SnapshotListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    CacheCluster,
+    CacheParameterGroup,
+    CacheSecurityGroup,
+    CacheSubnetGroup,
+    ReplicationGroup,
+    User,
+    UserGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::CacheCluster => "cache-cluster".to_string(),
+            SourceType::CacheParameterGroup => "cache-parameter-group".to_string(),
+            SourceType::CacheSecurityGroup => "cache-security-group".to_string(),
+            SourceType::CacheSubnetGroup => "cache-subnet-group".to_string(),
+            SourceType::ReplicationGroup => "replication-group".to_string(),
+            SourceType::User => "user".to_string(),
+            SourceType::UserGroup => "user-group".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::CacheCluster => &"cache-cluster",
+            SourceType::CacheParameterGroup => &"cache-parameter-group",
+            SourceType::CacheSecurityGroup => &"cache-security-group",
+            SourceType::CacheSubnetGroup => &"cache-subnet-group",
+            SourceType::ReplicationGroup => &"replication-group",
+            SourceType::User => &"user",
+            SourceType::UserGroup => &"user-group",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "cache-cluster" => SourceType::CacheCluster,
+            "cache-parameter-group" => SourceType::CacheParameterGroup,
+            "cache-security-group" => SourceType::CacheSecurityGroup,
+            "cache-subnet-group" => SourceType::CacheSubnetGroup,
+            "replication-group" => SourceType::ReplicationGroup,
+            "user" => SourceType::User,
+            "user-group" => SourceType::UserGroup,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cache-cluster" => SourceType::CacheCluster,
+            "cache-parameter-group" => SourceType::CacheParameterGroup,
+            "cache-security-group" => SourceType::CacheSecurityGroup,
+            "cache-subnet-group" => SourceType::CacheSubnetGroup,
+            "replication-group" => SourceType::ReplicationGroup,
+            "user" => SourceType::User,
+            "user-group" => SourceType::UserGroup,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SourceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -8937,7 +10956,7 @@ impl StartMigrationMessageSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
     }
 }
@@ -9026,7 +11045,7 @@ impl SubnetIdentifierListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -9126,10 +11145,10 @@ impl TagSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -9211,10 +11230,13 @@ impl TestFailoverMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "NodeGroupId"), &obj.node_group_id);
+        params.put(
+            &format!("{}{}", prefix, "NodeGroupId"),
+            &obj.node_group_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
+            &obj.replication_group_id.to_string(),
         );
     }
 }
@@ -9396,17 +11418,17 @@ pub struct UpdateAction {
     /// <p>The date the update is first available</p>
     pub service_update_release_date: Option<String>,
     /// <p>The severity of the service update</p>
-    pub service_update_severity: Option<String>,
+    pub service_update_severity: Option<ServiceUpdateSeverity>,
     /// <p>The status of the service update</p>
-    pub service_update_status: Option<String>,
+    pub service_update_status: Option<ServiceUpdateStatus>,
     /// <p>Reflects the nature of the service update </p>
-    pub service_update_type: Option<String>,
+    pub service_update_type: Option<ServiceUpdateType>,
     /// <p>If yes, all nodes in the replication group have been updated by the recommended apply-by date. If no, at least one node in the replication group have not been updated by the recommended apply-by date. If N/A, the replication group was created after the recommended apply-by date.</p>
-    pub sla_met: Option<String>,
+    pub sla_met: Option<SlaMet>,
     /// <p>The date that the service update is available to a replication group</p>
     pub update_action_available_date: Option<String>,
     /// <p>The status of the update action</p>
-    pub update_action_status: Option<String>,
+    pub update_action_status: Option<UpdateActionStatus>,
     /// <p>The date when the UpdateActionStatus was last modified</p>
     pub update_action_status_modified_date: Option<String>,
 }
@@ -9589,22 +11611,167 @@ impl UpdateActionResultsMessageDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateActionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateActionStatus {
+    Complete,
+    InProgress,
+    NotApplicable,
+    NotApplied,
+    Scheduled,
+    Scheduling,
+    Stopped,
+    Stopping,
+    WaitingToStart,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateActionStatus),
+}
+
+impl Default for UpdateActionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateActionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateActionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateActionStatus {
+    fn into(self) -> String {
+        match self {
+            UpdateActionStatus::Complete => "complete".to_string(),
+            UpdateActionStatus::InProgress => "in-progress".to_string(),
+            UpdateActionStatus::NotApplicable => "not-applicable".to_string(),
+            UpdateActionStatus::NotApplied => "not-applied".to_string(),
+            UpdateActionStatus::Scheduled => "scheduled".to_string(),
+            UpdateActionStatus::Scheduling => "scheduling".to_string(),
+            UpdateActionStatus::Stopped => "stopped".to_string(),
+            UpdateActionStatus::Stopping => "stopping".to_string(),
+            UpdateActionStatus::WaitingToStart => "waiting-to-start".to_string(),
+            UpdateActionStatus::UnknownVariant(UnknownUpdateActionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateActionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateActionStatus::Complete => &"complete",
+            UpdateActionStatus::InProgress => &"in-progress",
+            UpdateActionStatus::NotApplicable => &"not-applicable",
+            UpdateActionStatus::NotApplied => &"not-applied",
+            UpdateActionStatus::Scheduled => &"scheduled",
+            UpdateActionStatus::Scheduling => &"scheduling",
+            UpdateActionStatus::Stopped => &"stopped",
+            UpdateActionStatus::Stopping => &"stopping",
+            UpdateActionStatus::WaitingToStart => &"waiting-to-start",
+            UpdateActionStatus::UnknownVariant(UnknownUpdateActionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UpdateActionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "complete" => UpdateActionStatus::Complete,
+            "in-progress" => UpdateActionStatus::InProgress,
+            "not-applicable" => UpdateActionStatus::NotApplicable,
+            "not-applied" => UpdateActionStatus::NotApplied,
+            "scheduled" => UpdateActionStatus::Scheduled,
+            "scheduling" => UpdateActionStatus::Scheduling,
+            "stopped" => UpdateActionStatus::Stopped,
+            "stopping" => UpdateActionStatus::Stopping,
+            "waiting-to-start" => UpdateActionStatus::WaitingToStart,
+            _ => UpdateActionStatus::UnknownVariant(UnknownUpdateActionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateActionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "complete" => UpdateActionStatus::Complete,
+            "in-progress" => UpdateActionStatus::InProgress,
+            "not-applicable" => UpdateActionStatus::NotApplicable,
+            "not-applied" => UpdateActionStatus::NotApplied,
+            "scheduled" => UpdateActionStatus::Scheduled,
+            "scheduling" => UpdateActionStatus::Scheduling,
+            "stopped" => UpdateActionStatus::Stopped,
+            "stopping" => UpdateActionStatus::Stopping,
+            "waiting-to-start" => UpdateActionStatus::WaitingToStart,
+            _ => UpdateActionStatus::UnknownVariant(UnknownUpdateActionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateActionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for UpdateActionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UpdateActionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct UpdateActionStatusDeserializer;
 impl UpdateActionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateActionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
 /// Serialize `UpdateActionStatusList` contents to a `SignedRequest`.
 struct UpdateActionStatusListSerializer;
 impl UpdateActionStatusListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<UpdateActionStatus>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -9806,7 +11973,7 @@ impl UserGroupIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -9817,7 +11984,7 @@ impl UserGroupIdListInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -9949,7 +12116,7 @@ impl UserIdListInputSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }

@@ -95,11 +95,11 @@ pub struct BatchPermissionsRequestEntry {
     /// <p>The permissions to be granted.</p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
+    pub permissions: Option<Vec<Permission>>,
     /// <p>Indicates if the option to pass permissions is granted.</p>
     #[serde(rename = "PermissionsWithGrantOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions_with_grant_option: Option<Vec<String>>,
+    pub permissions_with_grant_option: Option<Vec<Permission>>,
     /// <p>The principal to be granted a permission.</p>
     #[serde(rename = "Principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,6 +144,156 @@ pub struct ColumnWildcard {
     pub excluded_column_names: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    BeginsWith,
+    Between,
+    Contains,
+    Eq,
+    Ge,
+    Gt,
+    In,
+    Le,
+    Lt,
+    Ne,
+    NotContains,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::BeginsWith => "BEGINS_WITH".to_string(),
+            ComparisonOperator::Between => "BETWEEN".to_string(),
+            ComparisonOperator::Contains => "CONTAINS".to_string(),
+            ComparisonOperator::Eq => "EQ".to_string(),
+            ComparisonOperator::Ge => "GE".to_string(),
+            ComparisonOperator::Gt => "GT".to_string(),
+            ComparisonOperator::In => "IN".to_string(),
+            ComparisonOperator::Le => "LE".to_string(),
+            ComparisonOperator::Lt => "LT".to_string(),
+            ComparisonOperator::Ne => "NE".to_string(),
+            ComparisonOperator::NotContains => "NOT_CONTAINS".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::BeginsWith => &"BEGINS_WITH",
+            ComparisonOperator::Between => &"BETWEEN",
+            ComparisonOperator::Contains => &"CONTAINS",
+            ComparisonOperator::Eq => &"EQ",
+            ComparisonOperator::Ge => &"GE",
+            ComparisonOperator::Gt => &"GT",
+            ComparisonOperator::In => &"IN",
+            ComparisonOperator::Le => &"LE",
+            ComparisonOperator::Lt => &"LT",
+            ComparisonOperator::Ne => &"NE",
+            ComparisonOperator::NotContains => &"NOT_CONTAINS",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEGINS_WITH" => ComparisonOperator::BeginsWith,
+            "BETWEEN" => ComparisonOperator::Between,
+            "CONTAINS" => ComparisonOperator::Contains,
+            "EQ" => ComparisonOperator::Eq,
+            "GE" => ComparisonOperator::Ge,
+            "GT" => ComparisonOperator::Gt,
+            "IN" => ComparisonOperator::In,
+            "LE" => ComparisonOperator::Le,
+            "LT" => ComparisonOperator::Lt,
+            "NE" => ComparisonOperator::Ne,
+            "NOT_CONTAINS" => ComparisonOperator::NotContains,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEGINS_WITH" => ComparisonOperator::BeginsWith,
+            "BETWEEN" => ComparisonOperator::Between,
+            "CONTAINS" => ComparisonOperator::Contains,
+            "EQ" => ComparisonOperator::Eq,
+            "GE" => ComparisonOperator::Ge,
+            "GT" => ComparisonOperator::Gt,
+            "IN" => ComparisonOperator::In,
+            "LE" => ComparisonOperator::Le,
+            "LT" => ComparisonOperator::Lt,
+            "NE" => ComparisonOperator::Ne,
+            "NOT_CONTAINS" => ComparisonOperator::NotContains,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The AWS Lake Formation principal. Supported principals are IAM users or IAM roles.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakePrincipal {
@@ -151,6 +301,121 @@ pub struct DataLakePrincipal {
     #[serde(rename = "DataLakePrincipalIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_lake_principal_identifier: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataLakeResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataLakeResourceType {
+    Catalog,
+    Database,
+    DataLocation,
+    Table,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataLakeResourceType),
+}
+
+impl Default for DataLakeResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataLakeResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataLakeResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataLakeResourceType {
+    fn into(self) -> String {
+        match self {
+            DataLakeResourceType::Catalog => "CATALOG".to_string(),
+            DataLakeResourceType::Database => "DATABASE".to_string(),
+            DataLakeResourceType::DataLocation => "DATA_LOCATION".to_string(),
+            DataLakeResourceType::Table => "TABLE".to_string(),
+            DataLakeResourceType::UnknownVariant(UnknownDataLakeResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataLakeResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            DataLakeResourceType::Catalog => &"CATALOG",
+            DataLakeResourceType::Database => &"DATABASE",
+            DataLakeResourceType::DataLocation => &"DATA_LOCATION",
+            DataLakeResourceType::Table => &"TABLE",
+            DataLakeResourceType::UnknownVariant(UnknownDataLakeResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataLakeResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CATALOG" => DataLakeResourceType::Catalog,
+            "DATABASE" => DataLakeResourceType::Database,
+            "DATA_LOCATION" => DataLakeResourceType::DataLocation,
+            "TABLE" => DataLakeResourceType::Table,
+            _ => DataLakeResourceType::UnknownVariant(UnknownDataLakeResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataLakeResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CATALOG" => DataLakeResourceType::Catalog,
+            "DATABASE" => DataLakeResourceType::Database,
+            "DATA_LOCATION" => DataLakeResourceType::DataLocation,
+            "TABLE" => DataLakeResourceType::Table,
+            _ => DataLakeResourceType::UnknownVariant(UnknownDataLakeResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataLakeResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataLakeResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DataLakeResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators and lists of principal permission entries for default create database and default create table permissions.</p>
@@ -251,6 +516,112 @@ pub struct ErrorDetail {
     pub error_message: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFieldNameString {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FieldNameString {
+    LastModified,
+    ResourceArn,
+    RoleArn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFieldNameString),
+}
+
+impl Default for FieldNameString {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FieldNameString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FieldNameString {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FieldNameString {
+    fn into(self) -> String {
+        match self {
+            FieldNameString::LastModified => "LAST_MODIFIED".to_string(),
+            FieldNameString::ResourceArn => "RESOURCE_ARN".to_string(),
+            FieldNameString::RoleArn => "ROLE_ARN".to_string(),
+            FieldNameString::UnknownVariant(UnknownFieldNameString { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FieldNameString {
+    fn into(self) -> &'a str {
+        match self {
+            FieldNameString::LastModified => &"LAST_MODIFIED",
+            FieldNameString::ResourceArn => &"RESOURCE_ARN",
+            FieldNameString::RoleArn => &"ROLE_ARN",
+            FieldNameString::UnknownVariant(UnknownFieldNameString { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FieldNameString {
+    fn from(name: &str) -> Self {
+        match name {
+            "LAST_MODIFIED" => FieldNameString::LastModified,
+            "RESOURCE_ARN" => FieldNameString::ResourceArn,
+            "ROLE_ARN" => FieldNameString::RoleArn,
+            _ => FieldNameString::UnknownVariant(UnknownFieldNameString {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FieldNameString {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LAST_MODIFIED" => FieldNameString::LastModified,
+            "RESOURCE_ARN" => FieldNameString::ResourceArn,
+            "ROLE_ARN" => FieldNameString::RoleArn,
+            _ => FieldNameString::UnknownVariant(UnknownFieldNameString { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FieldNameString {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FieldNameString {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FieldNameString {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>This structure describes the filtering of columns in a table based on a filter condition.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -258,11 +629,11 @@ pub struct FilterCondition {
     /// <p>The comparison operator used in the filter condition.</p>
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperator>,
     /// <p>The field to filter in the filter condition.</p>
     #[serde(rename = "Field")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub field: Option<String>,
+    pub field: Option<FieldNameString>,
     /// <p>A string with values used in evaluating the filter condition.</p>
     #[serde(rename = "StringValueList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -329,11 +700,11 @@ pub struct GrantPermissionsRequest {
     pub catalog_id: Option<String>,
     /// <p>The permissions granted to the principal on the resource. AWS Lake Formation defines privileges to grant and revoke access to metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3. AWS Lake Formation requires that each principal be authorized to perform a specific task on AWS Lake Formation resources. </p>
     #[serde(rename = "Permissions")]
-    pub permissions: Vec<String>,
+    pub permissions: Vec<Permission>,
     /// <p>Indicates a list of the granted permissions that the principal may pass to other users. These permissions may only be a subset of the permissions granted in the <code>Privileges</code>.</p>
     #[serde(rename = "PermissionsWithGrantOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions_with_grant_option: Option<Vec<String>>,
+    pub permissions_with_grant_option: Option<Vec<Permission>>,
     /// <p>The principal to be granted the permissions on the resource. Supported principals are IAM users or IAM roles, and they are defined by their principal type and their ARN.</p> <p>Note that if you define a resource with a particular ARN, then later delete, and recreate a resource with that same ARN, the resource maintains the permissions already granted. </p>
     #[serde(rename = "Principal")]
     pub principal: DataLakePrincipal,
@@ -372,7 +743,7 @@ pub struct ListPermissionsRequest {
     /// <p>Specifies a resource type to filter the permissions returned.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<DataLakeResourceType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -418,13 +789,153 @@ pub struct ListResourcesResponse {
     pub resource_info_list: Option<Vec<ResourceInfo>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Permission {
+    All,
+    Alter,
+    CreateDatabase,
+    CreateTable,
+    DataLocationAccess,
+    Delete,
+    Describe,
+    Drop,
+    Insert,
+    Select,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermission),
+}
+
+impl Default for Permission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Permission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Permission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Permission {
+    fn into(self) -> String {
+        match self {
+            Permission::All => "ALL".to_string(),
+            Permission::Alter => "ALTER".to_string(),
+            Permission::CreateDatabase => "CREATE_DATABASE".to_string(),
+            Permission::CreateTable => "CREATE_TABLE".to_string(),
+            Permission::DataLocationAccess => "DATA_LOCATION_ACCESS".to_string(),
+            Permission::Delete => "DELETE".to_string(),
+            Permission::Describe => "DESCRIBE".to_string(),
+            Permission::Drop => "DROP".to_string(),
+            Permission::Insert => "INSERT".to_string(),
+            Permission::Select => "SELECT".to_string(),
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Permission {
+    fn into(self) -> &'a str {
+        match self {
+            Permission::All => &"ALL",
+            Permission::Alter => &"ALTER",
+            Permission::CreateDatabase => &"CREATE_DATABASE",
+            Permission::CreateTable => &"CREATE_TABLE",
+            Permission::DataLocationAccess => &"DATA_LOCATION_ACCESS",
+            Permission::Delete => &"DELETE",
+            Permission::Describe => &"DESCRIBE",
+            Permission::Drop => &"DROP",
+            Permission::Insert => &"INSERT",
+            Permission::Select => &"SELECT",
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Permission {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => Permission::All,
+            "ALTER" => Permission::Alter,
+            "CREATE_DATABASE" => Permission::CreateDatabase,
+            "CREATE_TABLE" => Permission::CreateTable,
+            "DATA_LOCATION_ACCESS" => Permission::DataLocationAccess,
+            "DELETE" => Permission::Delete,
+            "DESCRIBE" => Permission::Describe,
+            "DROP" => Permission::Drop,
+            "INSERT" => Permission::Insert,
+            "SELECT" => Permission::Select,
+            _ => Permission::UnknownVariant(UnknownPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Permission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => Permission::All,
+            "ALTER" => Permission::Alter,
+            "CREATE_DATABASE" => Permission::CreateDatabase,
+            "CREATE_TABLE" => Permission::CreateTable,
+            "DATA_LOCATION_ACCESS" => Permission::DataLocationAccess,
+            "DELETE" => Permission::Delete,
+            "DESCRIBE" => Permission::Describe,
+            "DROP" => Permission::Drop,
+            "INSERT" => Permission::Insert,
+            "SELECT" => Permission::Select,
+            _ => Permission::UnknownVariant(UnknownPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Permission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Permission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Permission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Permissions granted to a principal.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PrincipalPermissions {
     /// <p>The permissions that are granted to the principal.</p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
+    pub permissions: Option<Vec<Permission>>,
     /// <p>The principal who is granted permissions.</p>
     #[serde(rename = "Principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -442,11 +953,11 @@ pub struct PrincipalResourcePermissions {
     /// <p>The permissions to be granted or revoked on the resource.</p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
+    pub permissions: Option<Vec<Permission>>,
     /// <p>Indicates whether to grant the ability to grant permissions (as a subset of permissions granted).</p>
     #[serde(rename = "PermissionsWithGrantOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions_with_grant_option: Option<Vec<String>>,
+    pub permissions_with_grant_option: Option<Vec<Permission>>,
     /// <p>The Data Lake principal to be granted or revoked permissions.</p>
     #[serde(rename = "Principal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -545,11 +1056,11 @@ pub struct RevokePermissionsRequest {
     pub catalog_id: Option<String>,
     /// <p>The permissions revoked to the principal on the resource. For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     #[serde(rename = "Permissions")]
-    pub permissions: Vec<String>,
+    pub permissions: Vec<Permission>,
     /// <p>Indicates a list of permissions for which to revoke the grant option allowing the principal to pass permissions to other principals.</p>
     #[serde(rename = "PermissionsWithGrantOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions_with_grant_option: Option<Vec<String>>,
+    pub permissions_with_grant_option: Option<Vec<Permission>>,
     /// <p>The principal to be revoked permissions on the resource.</p>
     #[serde(rename = "Principal")]
     pub principal: DataLakePrincipal,

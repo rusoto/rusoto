@@ -139,6 +139,107 @@ pub struct AttackDetail {
     pub sub_resources: Option<Vec<SubResourceSummary>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttackLayer {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttackLayer {
+    Application,
+    Network,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttackLayer),
+}
+
+impl Default for AttackLayer {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttackLayer {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttackLayer {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttackLayer {
+    fn into(self) -> String {
+        match self {
+            AttackLayer::Application => "APPLICATION".to_string(),
+            AttackLayer::Network => "NETWORK".to_string(),
+            AttackLayer::UnknownVariant(UnknownAttackLayer { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttackLayer {
+    fn into(self) -> &'a str {
+        match self {
+            AttackLayer::Application => &"APPLICATION",
+            AttackLayer::Network => &"NETWORK",
+            AttackLayer::UnknownVariant(UnknownAttackLayer { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AttackLayer {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION" => AttackLayer::Application,
+            "NETWORK" => AttackLayer::Network,
+            _ => AttackLayer::UnknownVariant(UnknownAttackLayer {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttackLayer {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION" => AttackLayer::Application,
+            "NETWORK" => AttackLayer::Network,
+            _ => AttackLayer::UnknownVariant(UnknownAttackLayer { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttackLayer {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AttackLayer {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AttackLayer {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details of the described attack.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -146,11 +247,11 @@ pub struct AttackProperty {
     /// <p>The type of distributed denial of service (DDoS) event that was observed. <code>NETWORK</code> indicates layer 3 and layer 4 events and <code>APPLICATION</code> indicates layer 7 events.</p>
     #[serde(rename = "AttackLayer")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attack_layer: Option<String>,
+    pub attack_layer: Option<AttackLayer>,
     /// <p>Defines the DDoS attack property information that is provided. The <code>WORDPRESS_PINGBACK_REFLECTOR</code> and <code>WORDPRESS_PINGBACK_SOURCE</code> values are valid only for WordPress reflective pingback DDoS attacks.</p>
     #[serde(rename = "AttackPropertyIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attack_property_identifier: Option<String>,
+    pub attack_property_identifier: Option<AttackPropertyIdentifier>,
     /// <p>The array of contributor objects that includes the top five contributors to an attack. </p>
     #[serde(rename = "TopContributors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,7 +263,146 @@ pub struct AttackProperty {
     /// <p>The unit of the <code>Value</code> of the contributions.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<Unit>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttackPropertyIdentifier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttackPropertyIdentifier {
+    DestinationUrl,
+    Referrer,
+    SourceAsn,
+    SourceCountry,
+    SourceIpAddress,
+    SourceUserAgent,
+    WordpressPingbackReflector,
+    WordpressPingbackSource,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttackPropertyIdentifier),
+}
+
+impl Default for AttackPropertyIdentifier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttackPropertyIdentifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttackPropertyIdentifier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttackPropertyIdentifier {
+    fn into(self) -> String {
+        match self {
+            AttackPropertyIdentifier::DestinationUrl => "DESTINATION_URL".to_string(),
+            AttackPropertyIdentifier::Referrer => "REFERRER".to_string(),
+            AttackPropertyIdentifier::SourceAsn => "SOURCE_ASN".to_string(),
+            AttackPropertyIdentifier::SourceCountry => "SOURCE_COUNTRY".to_string(),
+            AttackPropertyIdentifier::SourceIpAddress => "SOURCE_IP_ADDRESS".to_string(),
+            AttackPropertyIdentifier::SourceUserAgent => "SOURCE_USER_AGENT".to_string(),
+            AttackPropertyIdentifier::WordpressPingbackReflector => {
+                "WORDPRESS_PINGBACK_REFLECTOR".to_string()
+            }
+            AttackPropertyIdentifier::WordpressPingbackSource => {
+                "WORDPRESS_PINGBACK_SOURCE".to_string()
+            }
+            AttackPropertyIdentifier::UnknownVariant(UnknownAttackPropertyIdentifier {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttackPropertyIdentifier {
+    fn into(self) -> &'a str {
+        match self {
+            AttackPropertyIdentifier::DestinationUrl => &"DESTINATION_URL",
+            AttackPropertyIdentifier::Referrer => &"REFERRER",
+            AttackPropertyIdentifier::SourceAsn => &"SOURCE_ASN",
+            AttackPropertyIdentifier::SourceCountry => &"SOURCE_COUNTRY",
+            AttackPropertyIdentifier::SourceIpAddress => &"SOURCE_IP_ADDRESS",
+            AttackPropertyIdentifier::SourceUserAgent => &"SOURCE_USER_AGENT",
+            AttackPropertyIdentifier::WordpressPingbackReflector => &"WORDPRESS_PINGBACK_REFLECTOR",
+            AttackPropertyIdentifier::WordpressPingbackSource => &"WORDPRESS_PINGBACK_SOURCE",
+            AttackPropertyIdentifier::UnknownVariant(UnknownAttackPropertyIdentifier {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AttackPropertyIdentifier {
+    fn from(name: &str) -> Self {
+        match name {
+            "DESTINATION_URL" => AttackPropertyIdentifier::DestinationUrl,
+            "REFERRER" => AttackPropertyIdentifier::Referrer,
+            "SOURCE_ASN" => AttackPropertyIdentifier::SourceAsn,
+            "SOURCE_COUNTRY" => AttackPropertyIdentifier::SourceCountry,
+            "SOURCE_IP_ADDRESS" => AttackPropertyIdentifier::SourceIpAddress,
+            "SOURCE_USER_AGENT" => AttackPropertyIdentifier::SourceUserAgent,
+            "WORDPRESS_PINGBACK_REFLECTOR" => AttackPropertyIdentifier::WordpressPingbackReflector,
+            "WORDPRESS_PINGBACK_SOURCE" => AttackPropertyIdentifier::WordpressPingbackSource,
+            _ => AttackPropertyIdentifier::UnknownVariant(UnknownAttackPropertyIdentifier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttackPropertyIdentifier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DESTINATION_URL" => AttackPropertyIdentifier::DestinationUrl,
+            "REFERRER" => AttackPropertyIdentifier::Referrer,
+            "SOURCE_ASN" => AttackPropertyIdentifier::SourceAsn,
+            "SOURCE_COUNTRY" => AttackPropertyIdentifier::SourceCountry,
+            "SOURCE_IP_ADDRESS" => AttackPropertyIdentifier::SourceIpAddress,
+            "SOURCE_USER_AGENT" => AttackPropertyIdentifier::SourceUserAgent,
+            "WORDPRESS_PINGBACK_REFLECTOR" => AttackPropertyIdentifier::WordpressPingbackReflector,
+            "WORDPRESS_PINGBACK_SOURCE" => AttackPropertyIdentifier::WordpressPingbackSource,
+            _ => AttackPropertyIdentifier::UnknownVariant(UnknownAttackPropertyIdentifier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttackPropertyIdentifier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AttackPropertyIdentifier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AttackPropertyIdentifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A single attack statistics data record. This is returned by <a>DescribeAttackStatistics</a> along with a time range indicating the time period that the attack statistics apply to. </p>
@@ -240,6 +480,106 @@ pub struct AttackVolumeStatistics {
     pub max: f64,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoRenew {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoRenew {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoRenew),
+}
+
+impl Default for AutoRenew {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoRenew {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoRenew {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoRenew {
+    fn into(self) -> String {
+        match self {
+            AutoRenew::Disabled => "DISABLED".to_string(),
+            AutoRenew::Enabled => "ENABLED".to_string(),
+            AutoRenew::UnknownVariant(UnknownAutoRenew { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoRenew {
+    fn into(self) -> &'a str {
+        match self {
+            AutoRenew::Disabled => &"DISABLED",
+            AutoRenew::Enabled => &"ENABLED",
+            AutoRenew::UnknownVariant(UnknownAutoRenew { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoRenew {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => AutoRenew::Disabled,
+            "ENABLED" => AutoRenew::Enabled,
+            _ => AutoRenew::UnknownVariant(UnknownAutoRenew {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoRenew {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => AutoRenew::Disabled,
+            "ENABLED" => AutoRenew::Enabled,
+            _ => AutoRenew::UnknownVariant(UnknownAutoRenew { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoRenew {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoRenew {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoRenew {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A contributor to the attack and their contribution.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -259,21 +599,21 @@ pub struct Contributor {
 pub struct CreateProtectionGroupRequest {
     /// <p><p>Defines how AWS Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don&#39;t share traffic and for resources that share that traffic in a non-uniform way. Examples include CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul></p>
     #[serde(rename = "Aggregation")]
-    pub aggregation: String,
+    pub aggregation: ProtectionGroupAggregation,
     /// <p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<String>>,
     /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type. </p>
     #[serde(rename = "Pattern")]
-    pub pattern: String,
+    pub pattern: ProtectionGroupPattern,
     /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
     #[serde(rename = "ProtectionGroupId")]
     pub protection_group_id: String,
     /// <p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. Newly protected resources of this type are automatically added to the group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ProtectedResourceType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -528,7 +868,7 @@ pub struct GetSubscriptionStateRequest {}
 pub struct GetSubscriptionStateResponse {
     /// <p>The status of the subscription.</p>
     #[serde(rename = "SubscriptionState")]
-    pub subscription_state: String,
+    pub subscription_state: SubscriptionState,
 }
 
 /// <p>Specifies how many protections of a given type you can create.</p>
@@ -672,6 +1012,244 @@ pub struct Mitigation {
     pub mitigation_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProactiveEngagementStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProactiveEngagementStatus {
+    Disabled,
+    Enabled,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProactiveEngagementStatus),
+}
+
+impl Default for ProactiveEngagementStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProactiveEngagementStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProactiveEngagementStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProactiveEngagementStatus {
+    fn into(self) -> String {
+        match self {
+            ProactiveEngagementStatus::Disabled => "DISABLED".to_string(),
+            ProactiveEngagementStatus::Enabled => "ENABLED".to_string(),
+            ProactiveEngagementStatus::Pending => "PENDING".to_string(),
+            ProactiveEngagementStatus::UnknownVariant(UnknownProactiveEngagementStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProactiveEngagementStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProactiveEngagementStatus::Disabled => &"DISABLED",
+            ProactiveEngagementStatus::Enabled => &"ENABLED",
+            ProactiveEngagementStatus::Pending => &"PENDING",
+            ProactiveEngagementStatus::UnknownVariant(UnknownProactiveEngagementStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProactiveEngagementStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ProactiveEngagementStatus::Disabled,
+            "ENABLED" => ProactiveEngagementStatus::Enabled,
+            "PENDING" => ProactiveEngagementStatus::Pending,
+            _ => ProactiveEngagementStatus::UnknownVariant(UnknownProactiveEngagementStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProactiveEngagementStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ProactiveEngagementStatus::Disabled,
+            "ENABLED" => ProactiveEngagementStatus::Enabled,
+            "PENDING" => ProactiveEngagementStatus::Pending,
+            _ => {
+                ProactiveEngagementStatus::UnknownVariant(UnknownProactiveEngagementStatus { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProactiveEngagementStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProactiveEngagementStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProactiveEngagementStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtectedResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtectedResourceType {
+    ApplicationLoadBalancer,
+    ClassicLoadBalancer,
+    CloudfrontDistribution,
+    ElasticIpAllocation,
+    GlobalAccelerator,
+    Route53HostedZone,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtectedResourceType),
+}
+
+impl Default for ProtectedResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtectedResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtectedResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtectedResourceType {
+    fn into(self) -> String {
+        match self {
+            ProtectedResourceType::ApplicationLoadBalancer => {
+                "APPLICATION_LOAD_BALANCER".to_string()
+            }
+            ProtectedResourceType::ClassicLoadBalancer => "CLASSIC_LOAD_BALANCER".to_string(),
+            ProtectedResourceType::CloudfrontDistribution => "CLOUDFRONT_DISTRIBUTION".to_string(),
+            ProtectedResourceType::ElasticIpAllocation => "ELASTIC_IP_ALLOCATION".to_string(),
+            ProtectedResourceType::GlobalAccelerator => "GLOBAL_ACCELERATOR".to_string(),
+            ProtectedResourceType::Route53HostedZone => "ROUTE_53_HOSTED_ZONE".to_string(),
+            ProtectedResourceType::UnknownVariant(UnknownProtectedResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtectedResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ProtectedResourceType::ApplicationLoadBalancer => &"APPLICATION_LOAD_BALANCER",
+            ProtectedResourceType::ClassicLoadBalancer => &"CLASSIC_LOAD_BALANCER",
+            ProtectedResourceType::CloudfrontDistribution => &"CLOUDFRONT_DISTRIBUTION",
+            ProtectedResourceType::ElasticIpAllocation => &"ELASTIC_IP_ALLOCATION",
+            ProtectedResourceType::GlobalAccelerator => &"GLOBAL_ACCELERATOR",
+            ProtectedResourceType::Route53HostedZone => &"ROUTE_53_HOSTED_ZONE",
+            ProtectedResourceType::UnknownVariant(UnknownProtectedResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProtectedResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION_LOAD_BALANCER" => ProtectedResourceType::ApplicationLoadBalancer,
+            "CLASSIC_LOAD_BALANCER" => ProtectedResourceType::ClassicLoadBalancer,
+            "CLOUDFRONT_DISTRIBUTION" => ProtectedResourceType::CloudfrontDistribution,
+            "ELASTIC_IP_ALLOCATION" => ProtectedResourceType::ElasticIpAllocation,
+            "GLOBAL_ACCELERATOR" => ProtectedResourceType::GlobalAccelerator,
+            "ROUTE_53_HOSTED_ZONE" => ProtectedResourceType::Route53HostedZone,
+            _ => ProtectedResourceType::UnknownVariant(UnknownProtectedResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtectedResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION_LOAD_BALANCER" => ProtectedResourceType::ApplicationLoadBalancer,
+            "CLASSIC_LOAD_BALANCER" => ProtectedResourceType::ClassicLoadBalancer,
+            "CLOUDFRONT_DISTRIBUTION" => ProtectedResourceType::CloudfrontDistribution,
+            "ELASTIC_IP_ALLOCATION" => ProtectedResourceType::ElasticIpAllocation,
+            "GLOBAL_ACCELERATOR" => ProtectedResourceType::GlobalAccelerator,
+            "ROUTE_53_HOSTED_ZONE" => ProtectedResourceType::Route53HostedZone,
+            _ => ProtectedResourceType::UnknownVariant(UnknownProtectedResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtectedResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProtectedResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProtectedResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that represents a resource that is under DDoS protection.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -700,20 +1278,131 @@ pub struct Protection {
 pub struct ProtectionGroup {
     /// <p><p>Defines how AWS Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don&#39;t share traffic and for resources that share that traffic in a non-uniform way. Examples include CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul></p>
     #[serde(rename = "Aggregation")]
-    pub aggregation: String,
+    pub aggregation: ProtectionGroupAggregation,
     /// <p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>
     #[serde(rename = "Members")]
     pub members: Vec<String>,
     /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.</p>
     #[serde(rename = "Pattern")]
-    pub pattern: String,
+    pub pattern: ProtectionGroupPattern,
     /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
     #[serde(rename = "ProtectionGroupId")]
     pub protection_group_id: String,
     /// <p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ProtectedResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtectionGroupAggregation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtectionGroupAggregation {
+    Max,
+    Mean,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtectionGroupAggregation),
+}
+
+impl Default for ProtectionGroupAggregation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtectionGroupAggregation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtectionGroupAggregation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtectionGroupAggregation {
+    fn into(self) -> String {
+        match self {
+            ProtectionGroupAggregation::Max => "MAX".to_string(),
+            ProtectionGroupAggregation::Mean => "MEAN".to_string(),
+            ProtectionGroupAggregation::Sum => "SUM".to_string(),
+            ProtectionGroupAggregation::UnknownVariant(UnknownProtectionGroupAggregation {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtectionGroupAggregation {
+    fn into(self) -> &'a str {
+        match self {
+            ProtectionGroupAggregation::Max => &"MAX",
+            ProtectionGroupAggregation::Mean => &"MEAN",
+            ProtectionGroupAggregation::Sum => &"SUM",
+            ProtectionGroupAggregation::UnknownVariant(UnknownProtectionGroupAggregation {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProtectionGroupAggregation {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX" => ProtectionGroupAggregation::Max,
+            "MEAN" => ProtectionGroupAggregation::Mean,
+            "SUM" => ProtectionGroupAggregation::Sum,
+            _ => ProtectionGroupAggregation::UnknownVariant(UnknownProtectionGroupAggregation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtectionGroupAggregation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX" => ProtectionGroupAggregation::Max,
+            "MEAN" => ProtectionGroupAggregation::Mean,
+            "SUM" => ProtectionGroupAggregation::Sum,
+            _ => ProtectionGroupAggregation::UnknownVariant(UnknownProtectionGroupAggregation {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtectionGroupAggregation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProtectionGroupAggregation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProtectionGroupAggregation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Limits settings on protection groups with arbitrary pattern type. </p>
@@ -735,6 +1424,115 @@ pub struct ProtectionGroupLimits {
     /// <p>Limits settings by pattern type in the protection groups for your subscription. </p>
     #[serde(rename = "PatternTypeLimits")]
     pub pattern_type_limits: ProtectionGroupPatternTypeLimits,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtectionGroupPattern {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtectionGroupPattern {
+    All,
+    Arbitrary,
+    ByResourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtectionGroupPattern),
+}
+
+impl Default for ProtectionGroupPattern {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtectionGroupPattern {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtectionGroupPattern {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtectionGroupPattern {
+    fn into(self) -> String {
+        match self {
+            ProtectionGroupPattern::All => "ALL".to_string(),
+            ProtectionGroupPattern::Arbitrary => "ARBITRARY".to_string(),
+            ProtectionGroupPattern::ByResourceType => "BY_RESOURCE_TYPE".to_string(),
+            ProtectionGroupPattern::UnknownVariant(UnknownProtectionGroupPattern {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtectionGroupPattern {
+    fn into(self) -> &'a str {
+        match self {
+            ProtectionGroupPattern::All => &"ALL",
+            ProtectionGroupPattern::Arbitrary => &"ARBITRARY",
+            ProtectionGroupPattern::ByResourceType => &"BY_RESOURCE_TYPE",
+            ProtectionGroupPattern::UnknownVariant(UnknownProtectionGroupPattern {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProtectionGroupPattern {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => ProtectionGroupPattern::All,
+            "ARBITRARY" => ProtectionGroupPattern::Arbitrary,
+            "BY_RESOURCE_TYPE" => ProtectionGroupPattern::ByResourceType,
+            _ => ProtectionGroupPattern::UnknownVariant(UnknownProtectionGroupPattern {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtectionGroupPattern {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => ProtectionGroupPattern::All,
+            "ARBITRARY" => ProtectionGroupPattern::Arbitrary,
+            "BY_RESOURCE_TYPE" => ProtectionGroupPattern::ByResourceType,
+            _ => ProtectionGroupPattern::UnknownVariant(UnknownProtectionGroupPattern { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtectionGroupPattern {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProtectionGroupPattern {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProtectionGroupPattern {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Limits settings by pattern type in the protection groups for your subscription. </p>
@@ -774,7 +1572,108 @@ pub struct SubResourceSummary {
     /// <p>The <code>SubResource</code> type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SubResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubResourceType {
+    Ip,
+    Url,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubResourceType),
+}
+
+impl Default for SubResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubResourceType {
+    fn into(self) -> String {
+        match self {
+            SubResourceType::Ip => "IP".to_string(),
+            SubResourceType::Url => "URL".to_string(),
+            SubResourceType::UnknownVariant(UnknownSubResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SubResourceType::Ip => &"IP",
+            SubResourceType::Url => &"URL",
+            SubResourceType::UnknownVariant(UnknownSubResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SubResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "IP" => SubResourceType::Ip,
+            "URL" => SubResourceType::Url,
+            _ => SubResourceType::UnknownVariant(UnknownSubResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IP" => SubResourceType::Ip,
+            "URL" => SubResourceType::Url,
+            _ => SubResourceType::UnknownVariant(UnknownSubResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SubResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the AWS Shield Advanced subscription for an account.</p>
@@ -784,7 +1683,7 @@ pub struct Subscription {
     /// <p>If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period.</p> <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
     #[serde(rename = "AutoRenew")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_renew: Option<String>,
+    pub auto_renew: Option<AutoRenew>,
     /// <p>The date and time your subscription will end.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -796,7 +1695,7 @@ pub struct Subscription {
     /// <p>If <code>ENABLED</code>, the DDoS Response Team (DRT) will use email and phone to notify contacts about escalations to the DRT and to initiate proactive customer support.</p> <p>If <code>PENDING</code>, you have requested proactive engagement and the request is pending. The status changes to <code>ENABLED</code> when your request is fully processed.</p> <p>If <code>DISABLED</code>, the DRT will not proactively notify contacts about escalations or to initiate proactive customer support. </p>
     #[serde(rename = "ProactiveEngagementStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub proactive_engagement_status: Option<String>,
+    pub proactive_engagement_status: Option<ProactiveEngagementStatus>,
     /// <p>The start time of the subscription, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -820,6 +1719,111 @@ pub struct SubscriptionLimits {
     /// <p>Limits settings on protections for your subscription. </p>
     #[serde(rename = "ProtectionLimits")]
     pub protection_limits: ProtectionLimits,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriptionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriptionState {
+    Active,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriptionState),
+}
+
+impl Default for SubscriptionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriptionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriptionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriptionState {
+    fn into(self) -> String {
+        match self {
+            SubscriptionState::Active => "ACTIVE".to_string(),
+            SubscriptionState::Inactive => "INACTIVE".to_string(),
+            SubscriptionState::UnknownVariant(UnknownSubscriptionState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriptionState {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriptionState::Active => &"ACTIVE",
+            SubscriptionState::Inactive => &"INACTIVE",
+            SubscriptionState::UnknownVariant(UnknownSubscriptionState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SubscriptionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => SubscriptionState::Active,
+            "INACTIVE" => SubscriptionState::Inactive,
+            _ => SubscriptionState::UnknownVariant(UnknownSubscriptionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriptionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => SubscriptionState::Active,
+            "INACTIVE" => SubscriptionState::Inactive,
+            _ => SubscriptionState::UnknownVariant(UnknownSubscriptionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SubscriptionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubscriptionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A summary of information about the attack.</p>
@@ -878,6 +1882,117 @@ pub struct TimeRange {
     pub to_exclusive: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Unit {
+    Bits,
+    Bytes,
+    Packets,
+    Requests,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUnit),
+}
+
+impl Default for Unit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Unit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Unit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Unit {
+    fn into(self) -> String {
+        match self {
+            Unit::Bits => "BITS".to_string(),
+            Unit::Bytes => "BYTES".to_string(),
+            Unit::Packets => "PACKETS".to_string(),
+            Unit::Requests => "REQUESTS".to_string(),
+            Unit::UnknownVariant(UnknownUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Unit {
+    fn into(self) -> &'a str {
+        match self {
+            Unit::Bits => &"BITS",
+            Unit::Bytes => &"BYTES",
+            Unit::Packets => &"PACKETS",
+            Unit::Requests => &"REQUESTS",
+            Unit::UnknownVariant(UnknownUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Unit {
+    fn from(name: &str) -> Self {
+        match name {
+            "BITS" => Unit::Bits,
+            "BYTES" => Unit::Bytes,
+            "PACKETS" => Unit::Packets,
+            "REQUESTS" => Unit::Requests,
+            _ => Unit::UnknownVariant(UnknownUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Unit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BITS" => Unit::Bits,
+            "BYTES" => Unit::Bytes,
+            "PACKETS" => Unit::Packets,
+            "REQUESTS" => Unit::Requests,
+            _ => Unit::UnknownVariant(UnknownUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Unit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Unit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Unit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmergencyContactSettingsRequest {
@@ -896,21 +2011,21 @@ pub struct UpdateEmergencyContactSettingsResponse {}
 pub struct UpdateProtectionGroupRequest {
     /// <p><p>Defines how AWS Shield combines resource data for the group in order to detect, mitigate, and report events.</p> <ul> <li> <p>Sum - Use the total traffic across the group. This is a good choice for most cases. Examples include Elastic IP addresses for EC2 instances that scale manually or automatically.</p> </li> <li> <p>Mean - Use the average of the traffic across the group. This is a good choice for resources that share traffic uniformly. Examples include accelerators and load balancers.</p> </li> <li> <p>Max - Use the highest traffic from each resource. This is useful for resources that don&#39;t share traffic and for resources that share that traffic in a non-uniform way. Examples include CloudFront distributions and origin resources for CloudFront distributions.</p> </li> </ul></p>
     #[serde(rename = "Aggregation")]
-    pub aggregation: String,
+    pub aggregation: ProtectionGroupAggregation,
     /// <p>The Amazon Resource Names (ARNs) of the resources to include in the protection group. You must set this when you set <code>Pattern</code> to <code>ARBITRARY</code> and you must not set it for any other <code>Pattern</code> setting. </p>
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<String>>,
     /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.</p>
     #[serde(rename = "Pattern")]
-    pub pattern: String,
+    pub pattern: ProtectionGroupPattern,
     /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
     #[serde(rename = "ProtectionGroupId")]
     pub protection_group_id: String,
     /// <p>The resource type to include in the protection group. All protected resources of this type are included in the protection group. You must set this when you set <code>Pattern</code> to <code>BY_RESOURCE_TYPE</code> and you must not set it for any other <code>Pattern</code> setting. </p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ProtectedResourceType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -923,7 +2038,7 @@ pub struct UpdateSubscriptionRequest {
     /// <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
     #[serde(rename = "AutoRenew")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_renew: Option<String>,
+    pub auto_renew: Option<AutoRenew>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -937,6 +2052,116 @@ pub struct ValidationExceptionField {
     pub message: String,
     /// <p>The name of the parameter that failed validation.</p>
     pub name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidationExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidationExceptionReason {
+    FieldValidationFailed,
+    Other,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidationExceptionReason),
+}
+
+impl Default for ValidationExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidationExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidationExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidationExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ValidationExceptionReason::FieldValidationFailed => {
+                "FIELD_VALIDATION_FAILED".to_string()
+            }
+            ValidationExceptionReason::Other => "OTHER".to_string(),
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidationExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ValidationExceptionReason::FieldValidationFailed => &"FIELD_VALIDATION_FAILED",
+            ValidationExceptionReason::Other => &"OTHER",
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ValidationExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "FIELD_VALIDATION_FAILED" => ValidationExceptionReason::FieldValidationFailed,
+            "OTHER" => ValidationExceptionReason::Other,
+            _ => ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidationExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FIELD_VALIDATION_FAILED" => ValidationExceptionReason::FieldValidationFailed,
+            "OTHER" => ValidationExceptionReason::Other,
+            _ => {
+                ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ValidationExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ValidationExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateDRTLogBucket

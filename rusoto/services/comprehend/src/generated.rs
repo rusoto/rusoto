@@ -113,7 +113,7 @@ pub struct BatchDetectEntitiesItemResult {
 pub struct BatchDetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "TextList")]
     pub text_list: Vec<String>,
@@ -149,7 +149,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 pub struct BatchDetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "TextList")]
     pub text_list: Vec<String>,
@@ -177,7 +177,7 @@ pub struct BatchDetectSentimentItemResult {
     /// <p>The sentiment detected in the document.</p>
     #[serde(rename = "Sentiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sentiment: Option<String>,
+    pub sentiment: Option<SentimentType>,
     /// <p>The level of confidence that Amazon Comprehend has in the accuracy of its sentiment detection.</p>
     #[serde(rename = "SentimentScore")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -189,7 +189,7 @@ pub struct BatchDetectSentimentItemResult {
 pub struct BatchDetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "TextList")]
     pub text_list: Vec<String>,
@@ -225,7 +225,7 @@ pub struct BatchDetectSyntaxItemResult {
 pub struct BatchDetectSyntaxRequest {
     /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: SyntaxLanguageCode,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "TextList")]
     pub text_list: Vec<String>,
@@ -362,11 +362,11 @@ pub struct CreateDocumentClassifierRequest {
     pub input_data_config: DocumentClassifierInputDataConfig,
     /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>Indicates the mode in which the classifier will be trained. The classifier can be trained in multi-class mode, which identifies one and only one class for each document, or multi-label mode, which identifies one or more labels for each document. In multi-label mode, multiple labels for an individual document are separated by a delimiter. The default delimiter between labels is a pipe (|).</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<DocumentClassifierMode>,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -440,7 +440,7 @@ pub struct CreateEntityRecognizerRequest {
     pub input_data_config: EntityRecognizerInputDataConfig,
     /// <p> You can specify any of the following languages supported by Amazon Comprehend: English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), German ("de"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>The name given to the newly created recognizer. Recognizer names can be a maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores (_) are allowed. The name must be unique in the account/region.</p>
     #[serde(rename = "RecognizerName")]
     pub recognizer_name: String,
@@ -716,7 +716,7 @@ pub struct DetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p> <p>If your request includes the endpoint for a custom entity recognition model, Amazon Comprehend uses the language of your custom model, and it ignores any language code that you specify here.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
@@ -736,7 +736,7 @@ pub struct DetectEntitiesResponse {
 pub struct DetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
@@ -756,7 +756,7 @@ pub struct DetectKeyPhrasesResponse {
 pub struct DetectPiiEntitiesRequest {
     /// <p>The language of the input documents.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
@@ -776,7 +776,7 @@ pub struct DetectPiiEntitiesResponse {
 pub struct DetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
@@ -788,7 +788,7 @@ pub struct DetectSentimentResponse {
     /// <p>The inferred sentiment that Amazon Comprehend has the highest level of confidence in.</p>
     #[serde(rename = "Sentiment")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sentiment: Option<String>,
+    pub sentiment: Option<SentimentType>,
     /// <p>An object that lists the sentiments, and their corresponding confidence levels.</p>
     #[serde(rename = "SentimentScore")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -800,7 +800,7 @@ pub struct DetectSentimentResponse {
 pub struct DetectSyntaxRequest {
     /// <p>The language code of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: SyntaxLanguageCode,
     /// <p>A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
@@ -840,7 +840,7 @@ pub struct DocumentClassificationJobFilter {
     /// <p>Filters the list based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -882,7 +882,7 @@ pub struct DocumentClassificationJobProperties {
     /// <p>The current status of the document classification job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>A description of the status of the job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -905,6 +905,116 @@ pub struct DocumentClassificationJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentClassifierDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentClassifierDataFormat {
+    AugmentedManifest,
+    ComprehendCsv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentClassifierDataFormat),
+}
+
+impl Default for DocumentClassifierDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentClassifierDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentClassifierDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentClassifierDataFormat {
+    fn into(self) -> String {
+        match self {
+            DocumentClassifierDataFormat::AugmentedManifest => "AUGMENTED_MANIFEST".to_string(),
+            DocumentClassifierDataFormat::ComprehendCsv => "COMPREHEND_CSV".to_string(),
+            DocumentClassifierDataFormat::UnknownVariant(UnknownDocumentClassifierDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentClassifierDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentClassifierDataFormat::AugmentedManifest => &"AUGMENTED_MANIFEST",
+            DocumentClassifierDataFormat::ComprehendCsv => &"COMPREHEND_CSV",
+            DocumentClassifierDataFormat::UnknownVariant(UnknownDocumentClassifierDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentClassifierDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUGMENTED_MANIFEST" => DocumentClassifierDataFormat::AugmentedManifest,
+            "COMPREHEND_CSV" => DocumentClassifierDataFormat::ComprehendCsv,
+            _ => {
+                DocumentClassifierDataFormat::UnknownVariant(UnknownDocumentClassifierDataFormat {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for DocumentClassifierDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUGMENTED_MANIFEST" => DocumentClassifierDataFormat::AugmentedManifest,
+            "COMPREHEND_CSV" => DocumentClassifierDataFormat::ComprehendCsv,
+            _ => {
+                DocumentClassifierDataFormat::UnknownVariant(UnknownDocumentClassifierDataFormat {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentClassifierDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentClassifierDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentClassifierDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides information for filtering a list of document classifiers. You can only specify one filtering parameter in a request. For more information, see the operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -912,7 +1022,7 @@ pub struct DocumentClassifierFilter {
     /// <p>Filters the list of classifiers based on status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ModelStatus>,
     /// <p>Filters the list of classifiers based on the time that the classifier was submitted for processing. Returns only classifiers submitted after the specified time. Classifiers are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -933,7 +1043,7 @@ pub struct DocumentClassifierInputDataConfig {
     /// <p>The format of your training data:</p> <ul> <li> <p> <code>COMPREHEND_CSV</code>: A two-column CSV file, where labels are provided in the first column, and documents are provided in the second. If you use this value, you must provide the <code>S3Uri</code> parameter in your request.</p> </li> <li> <p> <code>AUGMENTED_MANIFEST</code>: A labeled dataset that is produced by Amazon SageMaker Ground Truth. This file is in JSON lines format. Each line is a complete JSON object that contains a training document and its associated labels. </p> <p>If you use this value, you must provide the <code>AugmentedManifests</code> parameter in your request.</p> </li> </ul> <p>If you don't specify a value, Amazon Comprehend uses <code>COMPREHEND_CSV</code> as the default.</p>
     #[serde(rename = "DataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_format: Option<String>,
+    pub data_format: Option<DocumentClassifierDataFormat>,
     /// <p>Indicates the delimiter used to separate each label for training a multi-label classifier. The default delimiter between labels is a pipe (|). You can use a different character as a delimiter (if it's an allowed character) by specifying it under Delimiter for labels. If the training documents use a delimiter other than the default or the delimiter you specify, the labels on that line will be combined to make a single unique label, such as LABELLABELLABEL.</p>
     #[serde(rename = "LabelDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -942,6 +1052,110 @@ pub struct DocumentClassifierInputDataConfig {
     #[serde(rename = "S3Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentClassifierMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentClassifierMode {
+    MultiClass,
+    MultiLabel,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentClassifierMode),
+}
+
+impl Default for DocumentClassifierMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentClassifierMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentClassifierMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentClassifierMode {
+    fn into(self) -> String {
+        match self {
+            DocumentClassifierMode::MultiClass => "MULTI_CLASS".to_string(),
+            DocumentClassifierMode::MultiLabel => "MULTI_LABEL".to_string(),
+            DocumentClassifierMode::UnknownVariant(UnknownDocumentClassifierMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentClassifierMode {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentClassifierMode::MultiClass => &"MULTI_CLASS",
+            DocumentClassifierMode::MultiLabel => &"MULTI_LABEL",
+            DocumentClassifierMode::UnknownVariant(UnknownDocumentClassifierMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentClassifierMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "MULTI_CLASS" => DocumentClassifierMode::MultiClass,
+            "MULTI_LABEL" => DocumentClassifierMode::MultiLabel,
+            _ => DocumentClassifierMode::UnknownVariant(UnknownDocumentClassifierMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentClassifierMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MULTI_CLASS" => DocumentClassifierMode::MultiClass,
+            "MULTI_LABEL" => DocumentClassifierMode::MultiLabel,
+            _ => DocumentClassifierMode::UnknownVariant(UnknownDocumentClassifierMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentClassifierMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentClassifierMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentClassifierMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides output results configuration parameters for custom classifier jobs. </p>
@@ -984,7 +1198,7 @@ pub struct DocumentClassifierProperties {
     /// <p>The language code for the language of the documents that the classifier was trained on.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>Additional information about the status of the classifier.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -992,7 +1206,7 @@ pub struct DocumentClassifierProperties {
     /// <p>Indicates the mode in which the specific classifier was trained. This also indicates the format of input documents and the format of the confusion matrix. Each classifier can only be trained in one mode and this cannot be changed once the classifier is trained.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<DocumentClassifierMode>,
     /// <p> Provides output results configuration parameters for custom classifier jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1000,7 +1214,7 @@ pub struct DocumentClassifierProperties {
     /// <p>The status of the document classifier. If the status is <code>TRAINED</code> the classifier is ready to use. If the status is <code>FAILED</code> you can see additional information about why the classifier wasn't trained in the <code>Message</code> field.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ModelStatus>,
     /// <p>The time that the document classifier was submitted for training.</p>
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1062,7 +1276,7 @@ pub struct DominantLanguageDetectionJobFilter {
     /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1100,7 +1314,7 @@ pub struct DominantLanguageDetectionJobProperties {
     /// <p>The current status of the dominant language detection job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>A description for the status of a job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1142,7 +1356,7 @@ pub struct EndpointFilter {
     /// <p>Specifies the status of the endpoint being returned. Possible values are: Creating, Ready, Updating, Deleting, Failed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EndpointStatus>,
 }
 
 /// <p>Specifies information about the specified endpoint.</p>
@@ -1180,7 +1394,122 @@ pub struct EndpointProperties {
     /// <p>Specifies the status of the endpoint. Because the endpoint updates and creation are asynchronous, so customers will need to wait for the endpoint to be <code>Ready</code> status before making inference requests.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EndpointStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointStatus {
+    Creating,
+    Deleting,
+    Failed,
+    InService,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointStatus),
+}
+
+impl Default for EndpointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointStatus {
+    fn into(self) -> String {
+        match self {
+            EndpointStatus::Creating => "CREATING".to_string(),
+            EndpointStatus::Deleting => "DELETING".to_string(),
+            EndpointStatus::Failed => "FAILED".to_string(),
+            EndpointStatus::InService => "IN_SERVICE".to_string(),
+            EndpointStatus::Updating => "UPDATING".to_string(),
+            EndpointStatus::UnknownVariant(UnknownEndpointStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointStatus::Creating => &"CREATING",
+            EndpointStatus::Deleting => &"DELETING",
+            EndpointStatus::Failed => &"FAILED",
+            EndpointStatus::InService => &"IN_SERVICE",
+            EndpointStatus::Updating => &"UPDATING",
+            EndpointStatus::UnknownVariant(UnknownEndpointStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => EndpointStatus::Creating,
+            "DELETING" => EndpointStatus::Deleting,
+            "FAILED" => EndpointStatus::Failed,
+            "IN_SERVICE" => EndpointStatus::InService,
+            "UPDATING" => EndpointStatus::Updating,
+            _ => EndpointStatus::UnknownVariant(UnknownEndpointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => EndpointStatus::Creating,
+            "DELETING" => EndpointStatus::Deleting,
+            "FAILED" => EndpointStatus::Failed,
+            "IN_SERVICE" => EndpointStatus::InService,
+            "UPDATING" => EndpointStatus::Updating,
+            _ => EndpointStatus::UnknownVariant(UnknownEndpointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EndpointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
@@ -1194,7 +1523,7 @@ pub struct EntitiesDetectionJobFilter {
     /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1236,11 +1565,11 @@ pub struct EntitiesDetectionJobProperties {
     /// <p>The current status of the entities detection job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The language code of the input documents.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>A description of the status of a job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1286,7 +1615,7 @@ pub struct Entity {
     /// <p>The entity's type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EntityType>,
 }
 
 /// <p>Describes the annotations associated with a entity recognizer.</p>
@@ -1295,6 +1624,112 @@ pub struct EntityRecognizerAnnotations {
     /// <p> Specifies the Amazon S3 location where the annotations for an entity recognizer are located. The URI must be in the same region as the API endpoint that you are calling.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityRecognizerDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityRecognizerDataFormat {
+    AugmentedManifest,
+    ComprehendCsv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityRecognizerDataFormat),
+}
+
+impl Default for EntityRecognizerDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityRecognizerDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityRecognizerDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityRecognizerDataFormat {
+    fn into(self) -> String {
+        match self {
+            EntityRecognizerDataFormat::AugmentedManifest => "AUGMENTED_MANIFEST".to_string(),
+            EntityRecognizerDataFormat::ComprehendCsv => "COMPREHEND_CSV".to_string(),
+            EntityRecognizerDataFormat::UnknownVariant(UnknownEntityRecognizerDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityRecognizerDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            EntityRecognizerDataFormat::AugmentedManifest => &"AUGMENTED_MANIFEST",
+            EntityRecognizerDataFormat::ComprehendCsv => &"COMPREHEND_CSV",
+            EntityRecognizerDataFormat::UnknownVariant(UnknownEntityRecognizerDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityRecognizerDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUGMENTED_MANIFEST" => EntityRecognizerDataFormat::AugmentedManifest,
+            "COMPREHEND_CSV" => EntityRecognizerDataFormat::ComprehendCsv,
+            _ => EntityRecognizerDataFormat::UnknownVariant(UnknownEntityRecognizerDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityRecognizerDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUGMENTED_MANIFEST" => EntityRecognizerDataFormat::AugmentedManifest,
+            "COMPREHEND_CSV" => EntityRecognizerDataFormat::ComprehendCsv,
+            _ => EntityRecognizerDataFormat::UnknownVariant(UnknownEntityRecognizerDataFormat {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityRecognizerDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntityRecognizerDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityRecognizerDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the training documents submitted with an entity recognizer.</p>
@@ -1338,7 +1773,7 @@ pub struct EntityRecognizerFilter {
     /// <p>The status of an entity recognizer.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ModelStatus>,
     /// <p>Filters the list of entities based on the time that the list was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in ascending order, oldest to newest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1363,7 +1798,7 @@ pub struct EntityRecognizerInputDataConfig {
     /// <p>The format of your training data:</p> <ul> <li> <p> <code>COMPREHEND_CSV</code>: A CSV file that supplements your training documents. The CSV file contains information about the custom entities that your trained model will detect. The required format of the file depends on whether you are providing annotations or an entity list.</p> <p>If you use this value, you must provide your CSV file by using either the <code>Annotations</code> or <code>EntityList</code> parameters. You must provide your training documents by using the <code>Documents</code> parameter.</p> </li> <li> <p> <code>AUGMENTED_MANIFEST</code>: A labeled dataset that is produced by Amazon SageMaker Ground Truth. This file is in JSON lines format. Each line is a complete JSON object that contains a training document and its labels. Each label annotates a named entity in the training document. </p> <p>If you use this value, you must provide the <code>AugmentedManifests</code> parameter in your request.</p> </li> </ul> <p>If you don't specify a value, Amazon Comprehend uses <code>COMPREHEND_CSV</code> as the default.</p>
     #[serde(rename = "DataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_format: Option<String>,
+    pub data_format: Option<EntityRecognizerDataFormat>,
     /// <p>The S3 location of the folder that contains the training documents for your custom entity recognizer.</p> <p>This parameter is required if you set <code>DataFormat</code> to <code>COMPREHEND_CSV</code>.</p>
     #[serde(rename = "Documents")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1440,7 +1875,7 @@ pub struct EntityRecognizerProperties {
     /// <p> The language of the input documents. All documents must be in the same language. Only English ("en") is currently supported.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p> A description of the status of the recognizer.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1452,7 +1887,7 @@ pub struct EntityRecognizerProperties {
     /// <p>Provides the status of the entity recognizer.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ModelStatus>,
     /// <p>The time that the recognizer was submitted for processing.</p>
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1473,6 +1908,142 @@ pub struct EntityRecognizerProperties {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityType {
+    CommercialItem,
+    Date,
+    Event,
+    Location,
+    Organization,
+    Other,
+    Person,
+    Quantity,
+    Title,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityType),
+}
+
+impl Default for EntityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityType {
+    fn into(self) -> String {
+        match self {
+            EntityType::CommercialItem => "COMMERCIAL_ITEM".to_string(),
+            EntityType::Date => "DATE".to_string(),
+            EntityType::Event => "EVENT".to_string(),
+            EntityType::Location => "LOCATION".to_string(),
+            EntityType::Organization => "ORGANIZATION".to_string(),
+            EntityType::Other => "OTHER".to_string(),
+            EntityType::Person => "PERSON".to_string(),
+            EntityType::Quantity => "QUANTITY".to_string(),
+            EntityType::Title => "TITLE".to_string(),
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityType {
+    fn into(self) -> &'a str {
+        match self {
+            EntityType::CommercialItem => &"COMMERCIAL_ITEM",
+            EntityType::Date => &"DATE",
+            EntityType::Event => &"EVENT",
+            EntityType::Location => &"LOCATION",
+            EntityType::Organization => &"ORGANIZATION",
+            EntityType::Other => &"OTHER",
+            EntityType::Person => &"PERSON",
+            EntityType::Quantity => &"QUANTITY",
+            EntityType::Title => &"TITLE",
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMMERCIAL_ITEM" => EntityType::CommercialItem,
+            "DATE" => EntityType::Date,
+            "EVENT" => EntityType::Event,
+            "LOCATION" => EntityType::Location,
+            "ORGANIZATION" => EntityType::Organization,
+            "OTHER" => EntityType::Other,
+            "PERSON" => EntityType::Person,
+            "QUANTITY" => EntityType::Quantity,
+            "TITLE" => EntityType::Title,
+            _ => EntityType::UnknownVariant(UnknownEntityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMMERCIAL_ITEM" => EntityType::CommercialItem,
+            "DATE" => EntityType::Date,
+            "EVENT" => EntityType::Event,
+            "LOCATION" => EntityType::Location,
+            "ORGANIZATION" => EntityType::Organization,
+            "OTHER" => EntityType::Other,
+            "PERSON" => EntityType::Person,
+            "QUANTITY" => EntityType::Quantity,
+            "TITLE" => EntityType::Title,
+            _ => EntityType::UnknownVariant(UnknownEntityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EntityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Detailed information about the accuracy of an entity recognizer for a specific entity type. </p>
@@ -1512,7 +2083,7 @@ pub struct EventsDetectionJobFilter {
     /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1550,11 +2121,11 @@ pub struct EventsDetectionJobProperties {
     /// <p>The current status of the events detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The language code of the input documents.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>A description of the status of the events detection job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1579,10 +2150,230 @@ pub struct InputDataConfig {
     /// <p><p>Specifies how the text in an input file should be processed:</p> <ul> <li> <p> <code>ONE<em>DOC</em>PER<em>FILE</code> - Each file is considered a separate document. Use this option when you are processing large documents, such as newspaper articles or scientific papers.</p> </li> <li> <p> <code>ONE</em>DOC<em>PER</em>LINE</code> - Each line in a file is considered a separate document. Use this option when you are processing many short documents, such as text messages.</p> </li> </ul></p>
     #[serde(rename = "InputFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_format: Option<String>,
+    pub input_format: Option<InputFormat>,
     /// <p>The Amazon S3 URI for the input data. The URI must be in same region as the API endpoint that you are calling. The URI can point to a single input file or it can provide the prefix for a collection of data files. </p> <p>For example, if you use the URI <code>S3://bucketName/prefix</code>, if the prefix is a single file, Amazon Comprehend uses that file as input. If more than one file begins with the prefix, Amazon Comprehend uses all of them as input.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputFormat {
+    OneDocPerFile,
+    OneDocPerLine,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputFormat),
+}
+
+impl Default for InputFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputFormat {
+    fn into(self) -> String {
+        match self {
+            InputFormat::OneDocPerFile => "ONE_DOC_PER_FILE".to_string(),
+            InputFormat::OneDocPerLine => "ONE_DOC_PER_LINE".to_string(),
+            InputFormat::UnknownVariant(UnknownInputFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputFormat {
+    fn into(self) -> &'a str {
+        match self {
+            InputFormat::OneDocPerFile => &"ONE_DOC_PER_FILE",
+            InputFormat::OneDocPerLine => &"ONE_DOC_PER_LINE",
+            InputFormat::UnknownVariant(UnknownInputFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "ONE_DOC_PER_FILE" => InputFormat::OneDocPerFile,
+            "ONE_DOC_PER_LINE" => InputFormat::OneDocPerLine,
+            _ => InputFormat::UnknownVariant(UnknownInputFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ONE_DOC_PER_FILE" => InputFormat::OneDocPerFile,
+            "ONE_DOC_PER_LINE" => InputFormat::OneDocPerLine,
+            _ => InputFormat::UnknownVariant(UnknownInputFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    StopRequested,
+    Submitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Completed => "COMPLETED".to_string(),
+            JobStatus::Failed => "FAILED".to_string(),
+            JobStatus::InProgress => "IN_PROGRESS".to_string(),
+            JobStatus::Stopped => "STOPPED".to_string(),
+            JobStatus::StopRequested => "STOP_REQUESTED".to_string(),
+            JobStatus::Submitted => "SUBMITTED".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Completed => &"COMPLETED",
+            JobStatus::Failed => &"FAILED",
+            JobStatus::InProgress => &"IN_PROGRESS",
+            JobStatus::Stopped => &"STOPPED",
+            JobStatus::StopRequested => &"STOP_REQUESTED",
+            JobStatus::Submitted => &"SUBMITTED",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => JobStatus::Completed,
+            "FAILED" => JobStatus::Failed,
+            "IN_PROGRESS" => JobStatus::InProgress,
+            "STOPPED" => JobStatus::Stopped,
+            "STOP_REQUESTED" => JobStatus::StopRequested,
+            "SUBMITTED" => JobStatus::Submitted,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => JobStatus::Completed,
+            "FAILED" => JobStatus::Failed,
+            "IN_PROGRESS" => JobStatus::InProgress,
+            "STOPPED" => JobStatus::Stopped,
+            "STOP_REQUESTED" => JobStatus::StopRequested,
+            "SUBMITTED" => JobStatus::Submitted,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a key noun phrase.</p>
@@ -1618,7 +2409,7 @@ pub struct KeyPhrasesDetectionJobFilter {
     /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1656,11 +2447,11 @@ pub struct KeyPhrasesDetectionJobProperties {
     /// <p>The current status of the key phrases detection job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The language code of the input documents.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>A description of the status of a job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1681,6 +2472,156 @@ pub struct KeyPhrasesDetectionJobProperties {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLanguageCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LanguageCode {
+    Ar,
+    De,
+    En,
+    Es,
+    Fr,
+    Hi,
+    It,
+    Ja,
+    Ko,
+    Pt,
+    Zh,
+    ZhTW,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLanguageCode),
+}
+
+impl Default for LanguageCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LanguageCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LanguageCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LanguageCode {
+    fn into(self) -> String {
+        match self {
+            LanguageCode::Ar => "ar".to_string(),
+            LanguageCode::De => "de".to_string(),
+            LanguageCode::En => "en".to_string(),
+            LanguageCode::Es => "es".to_string(),
+            LanguageCode::Fr => "fr".to_string(),
+            LanguageCode::Hi => "hi".to_string(),
+            LanguageCode::It => "it".to_string(),
+            LanguageCode::Ja => "ja".to_string(),
+            LanguageCode::Ko => "ko".to_string(),
+            LanguageCode::Pt => "pt".to_string(),
+            LanguageCode::Zh => "zh".to_string(),
+            LanguageCode::ZhTW => "zh-TW".to_string(),
+            LanguageCode::UnknownVariant(UnknownLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LanguageCode {
+    fn into(self) -> &'a str {
+        match self {
+            LanguageCode::Ar => &"ar",
+            LanguageCode::De => &"de",
+            LanguageCode::En => &"en",
+            LanguageCode::Es => &"es",
+            LanguageCode::Fr => &"fr",
+            LanguageCode::Hi => &"hi",
+            LanguageCode::It => &"it",
+            LanguageCode::Ja => &"ja",
+            LanguageCode::Ko => &"ko",
+            LanguageCode::Pt => &"pt",
+            LanguageCode::Zh => &"zh",
+            LanguageCode::ZhTW => &"zh-TW",
+            LanguageCode::UnknownVariant(UnknownLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LanguageCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ar" => LanguageCode::Ar,
+            "de" => LanguageCode::De,
+            "en" => LanguageCode::En,
+            "es" => LanguageCode::Es,
+            "fr" => LanguageCode::Fr,
+            "hi" => LanguageCode::Hi,
+            "it" => LanguageCode::It,
+            "ja" => LanguageCode::Ja,
+            "ko" => LanguageCode::Ko,
+            "pt" => LanguageCode::Pt,
+            "zh" => LanguageCode::Zh,
+            "zh-TW" => LanguageCode::ZhTW,
+            _ => LanguageCode::UnknownVariant(UnknownLanguageCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LanguageCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ar" => LanguageCode::Ar,
+            "de" => LanguageCode::De,
+            "en" => LanguageCode::En,
+            "es" => LanguageCode::Es,
+            "fr" => LanguageCode::Fr,
+            "hi" => LanguageCode::Hi,
+            "it" => LanguageCode::It,
+            "ja" => LanguageCode::Ja,
+            "ko" => LanguageCode::Ko,
+            "pt" => LanguageCode::Pt,
+            "zh" => LanguageCode::Zh,
+            "zh-TW" => LanguageCode::ZhTW,
+            _ => LanguageCode::UnknownVariant(UnknownLanguageCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LanguageCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LanguageCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LanguageCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2036,6 +2977,131 @@ pub struct ListTopicsDetectionJobsResponse {
     pub topics_detection_job_properties_list: Option<Vec<TopicsDetectionJobProperties>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelStatus {
+    Deleting,
+    InError,
+    Stopped,
+    StopRequested,
+    Submitted,
+    Trained,
+    Training,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelStatus),
+}
+
+impl Default for ModelStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelStatus {
+    fn into(self) -> String {
+        match self {
+            ModelStatus::Deleting => "DELETING".to_string(),
+            ModelStatus::InError => "IN_ERROR".to_string(),
+            ModelStatus::Stopped => "STOPPED".to_string(),
+            ModelStatus::StopRequested => "STOP_REQUESTED".to_string(),
+            ModelStatus::Submitted => "SUBMITTED".to_string(),
+            ModelStatus::Trained => "TRAINED".to_string(),
+            ModelStatus::Training => "TRAINING".to_string(),
+            ModelStatus::UnknownVariant(UnknownModelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelStatus::Deleting => &"DELETING",
+            ModelStatus::InError => &"IN_ERROR",
+            ModelStatus::Stopped => &"STOPPED",
+            ModelStatus::StopRequested => &"STOP_REQUESTED",
+            ModelStatus::Submitted => &"SUBMITTED",
+            ModelStatus::Trained => &"TRAINED",
+            ModelStatus::Training => &"TRAINING",
+            ModelStatus::UnknownVariant(UnknownModelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETING" => ModelStatus::Deleting,
+            "IN_ERROR" => ModelStatus::InError,
+            "STOPPED" => ModelStatus::Stopped,
+            "STOP_REQUESTED" => ModelStatus::StopRequested,
+            "SUBMITTED" => ModelStatus::Submitted,
+            "TRAINED" => ModelStatus::Trained,
+            "TRAINING" => ModelStatus::Training,
+            _ => ModelStatus::UnknownVariant(UnknownModelStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETING" => ModelStatus::Deleting,
+            "IN_ERROR" => ModelStatus::InError,
+            "STOPPED" => ModelStatus::Stopped,
+            "STOP_REQUESTED" => ModelStatus::StopRequested,
+            "SUBMITTED" => ModelStatus::Submitted,
+            "TRAINED" => ModelStatus::Trained,
+            "TRAINING" => ModelStatus::Training,
+            _ => ModelStatus::UnknownVariant(UnknownModelStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Provides configuration parameters for the output of topic detection jobs.</p> <p/></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputDataConfig {
@@ -2059,7 +3125,192 @@ pub struct PartOfSpeechTag {
     /// <p>Identifies the part of speech that the token represents.</p>
     #[serde(rename = "Tag")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag: Option<String>,
+    pub tag: Option<PartOfSpeechTagType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPartOfSpeechTagType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PartOfSpeechTagType {
+    Adj,
+    Adp,
+    Adv,
+    Aux,
+    Cconj,
+    Conj,
+    Det,
+    Intj,
+    Noun,
+    Num,
+    O,
+    Part,
+    Pron,
+    Propn,
+    Punct,
+    Sconj,
+    Sym,
+    Verb,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPartOfSpeechTagType),
+}
+
+impl Default for PartOfSpeechTagType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PartOfSpeechTagType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PartOfSpeechTagType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PartOfSpeechTagType {
+    fn into(self) -> String {
+        match self {
+            PartOfSpeechTagType::Adj => "ADJ".to_string(),
+            PartOfSpeechTagType::Adp => "ADP".to_string(),
+            PartOfSpeechTagType::Adv => "ADV".to_string(),
+            PartOfSpeechTagType::Aux => "AUX".to_string(),
+            PartOfSpeechTagType::Cconj => "CCONJ".to_string(),
+            PartOfSpeechTagType::Conj => "CONJ".to_string(),
+            PartOfSpeechTagType::Det => "DET".to_string(),
+            PartOfSpeechTagType::Intj => "INTJ".to_string(),
+            PartOfSpeechTagType::Noun => "NOUN".to_string(),
+            PartOfSpeechTagType::Num => "NUM".to_string(),
+            PartOfSpeechTagType::O => "O".to_string(),
+            PartOfSpeechTagType::Part => "PART".to_string(),
+            PartOfSpeechTagType::Pron => "PRON".to_string(),
+            PartOfSpeechTagType::Propn => "PROPN".to_string(),
+            PartOfSpeechTagType::Punct => "PUNCT".to_string(),
+            PartOfSpeechTagType::Sconj => "SCONJ".to_string(),
+            PartOfSpeechTagType::Sym => "SYM".to_string(),
+            PartOfSpeechTagType::Verb => "VERB".to_string(),
+            PartOfSpeechTagType::UnknownVariant(UnknownPartOfSpeechTagType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PartOfSpeechTagType {
+    fn into(self) -> &'a str {
+        match self {
+            PartOfSpeechTagType::Adj => &"ADJ",
+            PartOfSpeechTagType::Adp => &"ADP",
+            PartOfSpeechTagType::Adv => &"ADV",
+            PartOfSpeechTagType::Aux => &"AUX",
+            PartOfSpeechTagType::Cconj => &"CCONJ",
+            PartOfSpeechTagType::Conj => &"CONJ",
+            PartOfSpeechTagType::Det => &"DET",
+            PartOfSpeechTagType::Intj => &"INTJ",
+            PartOfSpeechTagType::Noun => &"NOUN",
+            PartOfSpeechTagType::Num => &"NUM",
+            PartOfSpeechTagType::O => &"O",
+            PartOfSpeechTagType::Part => &"PART",
+            PartOfSpeechTagType::Pron => &"PRON",
+            PartOfSpeechTagType::Propn => &"PROPN",
+            PartOfSpeechTagType::Punct => &"PUNCT",
+            PartOfSpeechTagType::Sconj => &"SCONJ",
+            PartOfSpeechTagType::Sym => &"SYM",
+            PartOfSpeechTagType::Verb => &"VERB",
+            PartOfSpeechTagType::UnknownVariant(UnknownPartOfSpeechTagType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PartOfSpeechTagType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADJ" => PartOfSpeechTagType::Adj,
+            "ADP" => PartOfSpeechTagType::Adp,
+            "ADV" => PartOfSpeechTagType::Adv,
+            "AUX" => PartOfSpeechTagType::Aux,
+            "CCONJ" => PartOfSpeechTagType::Cconj,
+            "CONJ" => PartOfSpeechTagType::Conj,
+            "DET" => PartOfSpeechTagType::Det,
+            "INTJ" => PartOfSpeechTagType::Intj,
+            "NOUN" => PartOfSpeechTagType::Noun,
+            "NUM" => PartOfSpeechTagType::Num,
+            "O" => PartOfSpeechTagType::O,
+            "PART" => PartOfSpeechTagType::Part,
+            "PRON" => PartOfSpeechTagType::Pron,
+            "PROPN" => PartOfSpeechTagType::Propn,
+            "PUNCT" => PartOfSpeechTagType::Punct,
+            "SCONJ" => PartOfSpeechTagType::Sconj,
+            "SYM" => PartOfSpeechTagType::Sym,
+            "VERB" => PartOfSpeechTagType::Verb,
+            _ => PartOfSpeechTagType::UnknownVariant(UnknownPartOfSpeechTagType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PartOfSpeechTagType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADJ" => PartOfSpeechTagType::Adj,
+            "ADP" => PartOfSpeechTagType::Adp,
+            "ADV" => PartOfSpeechTagType::Adv,
+            "AUX" => PartOfSpeechTagType::Aux,
+            "CCONJ" => PartOfSpeechTagType::Cconj,
+            "CONJ" => PartOfSpeechTagType::Conj,
+            "DET" => PartOfSpeechTagType::Det,
+            "INTJ" => PartOfSpeechTagType::Intj,
+            "NOUN" => PartOfSpeechTagType::Noun,
+            "NUM" => PartOfSpeechTagType::Num,
+            "O" => PartOfSpeechTagType::O,
+            "PART" => PartOfSpeechTagType::Part,
+            "PRON" => PartOfSpeechTagType::Pron,
+            "PROPN" => PartOfSpeechTagType::Propn,
+            "PUNCT" => PartOfSpeechTagType::Punct,
+            "SCONJ" => PartOfSpeechTagType::Sconj,
+            "SYM" => PartOfSpeechTagType::Sym,
+            "VERB" => PartOfSpeechTagType::Verb,
+            _ => PartOfSpeechTagType::UnknownVariant(UnknownPartOfSpeechTagType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PartOfSpeechTagType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PartOfSpeechTagType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PartOfSpeechTagType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information for filtering a list of PII entity detection jobs.</p>
@@ -2073,7 +3324,7 @@ pub struct PiiEntitiesDetectionJobFilter {
     /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2111,11 +3362,11 @@ pub struct PiiEntitiesDetectionJobProperties {
     /// <p>The current status of the PII entities detection job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The language code of the input documents</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>A description of the status of a job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2123,7 +3374,7 @@ pub struct PiiEntitiesDetectionJobProperties {
     /// <p>Specifies whether the output provides the locations (offsets) of PII entities or a file in which PII entities are redacted.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<PiiEntitiesDetectionMode>,
     /// <p>The output data configuration that you supplied when you created the PII entities detection job.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2136,6 +3387,228 @@ pub struct PiiEntitiesDetectionJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPiiEntitiesDetectionMaskMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PiiEntitiesDetectionMaskMode {
+    Mask,
+    ReplaceWithPiiEntityType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPiiEntitiesDetectionMaskMode),
+}
+
+impl Default for PiiEntitiesDetectionMaskMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PiiEntitiesDetectionMaskMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PiiEntitiesDetectionMaskMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PiiEntitiesDetectionMaskMode {
+    fn into(self) -> String {
+        match self {
+            PiiEntitiesDetectionMaskMode::Mask => "MASK".to_string(),
+            PiiEntitiesDetectionMaskMode::ReplaceWithPiiEntityType => {
+                "REPLACE_WITH_PII_ENTITY_TYPE".to_string()
+            }
+            PiiEntitiesDetectionMaskMode::UnknownVariant(UnknownPiiEntitiesDetectionMaskMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PiiEntitiesDetectionMaskMode {
+    fn into(self) -> &'a str {
+        match self {
+            PiiEntitiesDetectionMaskMode::Mask => &"MASK",
+            PiiEntitiesDetectionMaskMode::ReplaceWithPiiEntityType => {
+                &"REPLACE_WITH_PII_ENTITY_TYPE"
+            }
+            PiiEntitiesDetectionMaskMode::UnknownVariant(UnknownPiiEntitiesDetectionMaskMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PiiEntitiesDetectionMaskMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "MASK" => PiiEntitiesDetectionMaskMode::Mask,
+            "REPLACE_WITH_PII_ENTITY_TYPE" => {
+                PiiEntitiesDetectionMaskMode::ReplaceWithPiiEntityType
+            }
+            _ => {
+                PiiEntitiesDetectionMaskMode::UnknownVariant(UnknownPiiEntitiesDetectionMaskMode {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for PiiEntitiesDetectionMaskMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MASK" => PiiEntitiesDetectionMaskMode::Mask,
+            "REPLACE_WITH_PII_ENTITY_TYPE" => {
+                PiiEntitiesDetectionMaskMode::ReplaceWithPiiEntityType
+            }
+            _ => {
+                PiiEntitiesDetectionMaskMode::UnknownVariant(UnknownPiiEntitiesDetectionMaskMode {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for PiiEntitiesDetectionMaskMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PiiEntitiesDetectionMaskMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PiiEntitiesDetectionMaskMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPiiEntitiesDetectionMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PiiEntitiesDetectionMode {
+    OnlyOffsets,
+    OnlyRedaction,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPiiEntitiesDetectionMode),
+}
+
+impl Default for PiiEntitiesDetectionMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PiiEntitiesDetectionMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PiiEntitiesDetectionMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PiiEntitiesDetectionMode {
+    fn into(self) -> String {
+        match self {
+            PiiEntitiesDetectionMode::OnlyOffsets => "ONLY_OFFSETS".to_string(),
+            PiiEntitiesDetectionMode::OnlyRedaction => "ONLY_REDACTION".to_string(),
+            PiiEntitiesDetectionMode::UnknownVariant(UnknownPiiEntitiesDetectionMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PiiEntitiesDetectionMode {
+    fn into(self) -> &'a str {
+        match self {
+            PiiEntitiesDetectionMode::OnlyOffsets => &"ONLY_OFFSETS",
+            PiiEntitiesDetectionMode::OnlyRedaction => &"ONLY_REDACTION",
+            PiiEntitiesDetectionMode::UnknownVariant(UnknownPiiEntitiesDetectionMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PiiEntitiesDetectionMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ONLY_OFFSETS" => PiiEntitiesDetectionMode::OnlyOffsets,
+            "ONLY_REDACTION" => PiiEntitiesDetectionMode::OnlyRedaction,
+            _ => PiiEntitiesDetectionMode::UnknownVariant(UnknownPiiEntitiesDetectionMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PiiEntitiesDetectionMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ONLY_OFFSETS" => PiiEntitiesDetectionMode::OnlyOffsets,
+            "ONLY_REDACTION" => PiiEntitiesDetectionMode::OnlyRedaction,
+            _ => PiiEntitiesDetectionMode::UnknownVariant(UnknownPiiEntitiesDetectionMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PiiEntitiesDetectionMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PiiEntitiesDetectionMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PiiEntitiesDetectionMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information about a PII entity.</p>
@@ -2157,7 +3630,212 @@ pub struct PiiEntity {
     /// <p>The entity's type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PiiEntityType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPiiEntityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PiiEntityType {
+    Address,
+    Age,
+    All,
+    AwsAccessKey,
+    AwsSecretKey,
+    BankAccountNumber,
+    BankRouting,
+    CreditDebitCvv,
+    CreditDebitExpiry,
+    CreditDebitNumber,
+    DateTime,
+    DriverId,
+    Email,
+    IpAddress,
+    MacAddress,
+    Name,
+    PassportNumber,
+    Password,
+    Phone,
+    Pin,
+    Ssn,
+    Url,
+    Username,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPiiEntityType),
+}
+
+impl Default for PiiEntityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PiiEntityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PiiEntityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PiiEntityType {
+    fn into(self) -> String {
+        match self {
+            PiiEntityType::Address => "ADDRESS".to_string(),
+            PiiEntityType::Age => "AGE".to_string(),
+            PiiEntityType::All => "ALL".to_string(),
+            PiiEntityType::AwsAccessKey => "AWS_ACCESS_KEY".to_string(),
+            PiiEntityType::AwsSecretKey => "AWS_SECRET_KEY".to_string(),
+            PiiEntityType::BankAccountNumber => "BANK_ACCOUNT_NUMBER".to_string(),
+            PiiEntityType::BankRouting => "BANK_ROUTING".to_string(),
+            PiiEntityType::CreditDebitCvv => "CREDIT_DEBIT_CVV".to_string(),
+            PiiEntityType::CreditDebitExpiry => "CREDIT_DEBIT_EXPIRY".to_string(),
+            PiiEntityType::CreditDebitNumber => "CREDIT_DEBIT_NUMBER".to_string(),
+            PiiEntityType::DateTime => "DATE_TIME".to_string(),
+            PiiEntityType::DriverId => "DRIVER_ID".to_string(),
+            PiiEntityType::Email => "EMAIL".to_string(),
+            PiiEntityType::IpAddress => "IP_ADDRESS".to_string(),
+            PiiEntityType::MacAddress => "MAC_ADDRESS".to_string(),
+            PiiEntityType::Name => "NAME".to_string(),
+            PiiEntityType::PassportNumber => "PASSPORT_NUMBER".to_string(),
+            PiiEntityType::Password => "PASSWORD".to_string(),
+            PiiEntityType::Phone => "PHONE".to_string(),
+            PiiEntityType::Pin => "PIN".to_string(),
+            PiiEntityType::Ssn => "SSN".to_string(),
+            PiiEntityType::Url => "URL".to_string(),
+            PiiEntityType::Username => "USERNAME".to_string(),
+            PiiEntityType::UnknownVariant(UnknownPiiEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PiiEntityType {
+    fn into(self) -> &'a str {
+        match self {
+            PiiEntityType::Address => &"ADDRESS",
+            PiiEntityType::Age => &"AGE",
+            PiiEntityType::All => &"ALL",
+            PiiEntityType::AwsAccessKey => &"AWS_ACCESS_KEY",
+            PiiEntityType::AwsSecretKey => &"AWS_SECRET_KEY",
+            PiiEntityType::BankAccountNumber => &"BANK_ACCOUNT_NUMBER",
+            PiiEntityType::BankRouting => &"BANK_ROUTING",
+            PiiEntityType::CreditDebitCvv => &"CREDIT_DEBIT_CVV",
+            PiiEntityType::CreditDebitExpiry => &"CREDIT_DEBIT_EXPIRY",
+            PiiEntityType::CreditDebitNumber => &"CREDIT_DEBIT_NUMBER",
+            PiiEntityType::DateTime => &"DATE_TIME",
+            PiiEntityType::DriverId => &"DRIVER_ID",
+            PiiEntityType::Email => &"EMAIL",
+            PiiEntityType::IpAddress => &"IP_ADDRESS",
+            PiiEntityType::MacAddress => &"MAC_ADDRESS",
+            PiiEntityType::Name => &"NAME",
+            PiiEntityType::PassportNumber => &"PASSPORT_NUMBER",
+            PiiEntityType::Password => &"PASSWORD",
+            PiiEntityType::Phone => &"PHONE",
+            PiiEntityType::Pin => &"PIN",
+            PiiEntityType::Ssn => &"SSN",
+            PiiEntityType::Url => &"URL",
+            PiiEntityType::Username => &"USERNAME",
+            PiiEntityType::UnknownVariant(UnknownPiiEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PiiEntityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADDRESS" => PiiEntityType::Address,
+            "AGE" => PiiEntityType::Age,
+            "ALL" => PiiEntityType::All,
+            "AWS_ACCESS_KEY" => PiiEntityType::AwsAccessKey,
+            "AWS_SECRET_KEY" => PiiEntityType::AwsSecretKey,
+            "BANK_ACCOUNT_NUMBER" => PiiEntityType::BankAccountNumber,
+            "BANK_ROUTING" => PiiEntityType::BankRouting,
+            "CREDIT_DEBIT_CVV" => PiiEntityType::CreditDebitCvv,
+            "CREDIT_DEBIT_EXPIRY" => PiiEntityType::CreditDebitExpiry,
+            "CREDIT_DEBIT_NUMBER" => PiiEntityType::CreditDebitNumber,
+            "DATE_TIME" => PiiEntityType::DateTime,
+            "DRIVER_ID" => PiiEntityType::DriverId,
+            "EMAIL" => PiiEntityType::Email,
+            "IP_ADDRESS" => PiiEntityType::IpAddress,
+            "MAC_ADDRESS" => PiiEntityType::MacAddress,
+            "NAME" => PiiEntityType::Name,
+            "PASSPORT_NUMBER" => PiiEntityType::PassportNumber,
+            "PASSWORD" => PiiEntityType::Password,
+            "PHONE" => PiiEntityType::Phone,
+            "PIN" => PiiEntityType::Pin,
+            "SSN" => PiiEntityType::Ssn,
+            "URL" => PiiEntityType::Url,
+            "USERNAME" => PiiEntityType::Username,
+            _ => PiiEntityType::UnknownVariant(UnknownPiiEntityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PiiEntityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADDRESS" => PiiEntityType::Address,
+            "AGE" => PiiEntityType::Age,
+            "ALL" => PiiEntityType::All,
+            "AWS_ACCESS_KEY" => PiiEntityType::AwsAccessKey,
+            "AWS_SECRET_KEY" => PiiEntityType::AwsSecretKey,
+            "BANK_ACCOUNT_NUMBER" => PiiEntityType::BankAccountNumber,
+            "BANK_ROUTING" => PiiEntityType::BankRouting,
+            "CREDIT_DEBIT_CVV" => PiiEntityType::CreditDebitCvv,
+            "CREDIT_DEBIT_EXPIRY" => PiiEntityType::CreditDebitExpiry,
+            "CREDIT_DEBIT_NUMBER" => PiiEntityType::CreditDebitNumber,
+            "DATE_TIME" => PiiEntityType::DateTime,
+            "DRIVER_ID" => PiiEntityType::DriverId,
+            "EMAIL" => PiiEntityType::Email,
+            "IP_ADDRESS" => PiiEntityType::IpAddress,
+            "MAC_ADDRESS" => PiiEntityType::MacAddress,
+            "NAME" => PiiEntityType::Name,
+            "PASSPORT_NUMBER" => PiiEntityType::PassportNumber,
+            "PASSWORD" => PiiEntityType::Password,
+            "PHONE" => PiiEntityType::Phone,
+            "PIN" => PiiEntityType::Pin,
+            "SSN" => PiiEntityType::Ssn,
+            "URL" => PiiEntityType::Url,
+            "USERNAME" => PiiEntityType::Username,
+            _ => PiiEntityType::UnknownVariant(UnknownPiiEntityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PiiEntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PiiEntityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PiiEntityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides configuration parameters for the output of PII entity detection jobs.</p>
@@ -2183,11 +3861,11 @@ pub struct RedactionConfig {
     /// <p>Specifies whether the PII entity is redacted with the mask character or the entity type.</p>
     #[serde(rename = "MaskMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mask_mode: Option<String>,
+    pub mask_mode: Option<PiiEntitiesDetectionMaskMode>,
     /// <p>An array of the types of PII entities that Amazon Comprehend detects in the input text for your request.</p>
     #[serde(rename = "PiiEntityTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pii_entity_types: Option<Vec<String>>,
+    pub pii_entity_types: Option<Vec<PiiEntityType>>,
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
@@ -2201,7 +3879,7 @@ pub struct SentimentDetectionJobFilter {
     /// <p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2239,11 +3917,11 @@ pub struct SentimentDetectionJobProperties {
     /// <p>The current status of the sentiment detection job. If the status is <code>FAILED</code>, the <code>Messages</code> field shows the reason for the failure.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The language code of the input documents.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>A description of the status of a job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2286,6 +3964,117 @@ pub struct SentimentScore {
     #[serde(rename = "Positive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub positive: Option<f32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSentimentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SentimentType {
+    Mixed,
+    Negative,
+    Neutral,
+    Positive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSentimentType),
+}
+
+impl Default for SentimentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SentimentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SentimentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SentimentType {
+    fn into(self) -> String {
+        match self {
+            SentimentType::Mixed => "MIXED".to_string(),
+            SentimentType::Negative => "NEGATIVE".to_string(),
+            SentimentType::Neutral => "NEUTRAL".to_string(),
+            SentimentType::Positive => "POSITIVE".to_string(),
+            SentimentType::UnknownVariant(UnknownSentimentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SentimentType {
+    fn into(self) -> &'a str {
+        match self {
+            SentimentType::Mixed => &"MIXED",
+            SentimentType::Negative => &"NEGATIVE",
+            SentimentType::Neutral => &"NEUTRAL",
+            SentimentType::Positive => &"POSITIVE",
+            SentimentType::UnknownVariant(UnknownSentimentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SentimentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MIXED" => SentimentType::Mixed,
+            "NEGATIVE" => SentimentType::Negative,
+            "NEUTRAL" => SentimentType::Neutral,
+            "POSITIVE" => SentimentType::Positive,
+            _ => SentimentType::UnknownVariant(UnknownSentimentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SentimentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MIXED" => SentimentType::Mixed,
+            "NEGATIVE" => SentimentType::Negative,
+            "NEUTRAL" => SentimentType::Neutral,
+            "POSITIVE" => SentimentType::Positive,
+            _ => SentimentType::UnknownVariant(UnknownSentimentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SentimentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SentimentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SentimentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2331,7 +4120,7 @@ pub struct StartDocumentClassificationJobResponse {
     /// <p><p>The status of the job:</p> <ul> <li> <p>SUBMITTED - The job has been received and queued for processing.</p> </li> <li> <p>IN<em>PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. For details, use the operation.</p> </li> <li> <p>STOP</em>REQUESTED - Amazon Comprehend has received a stop request for the job and is processing the request.</p> </li> <li> <p>STOPPED - The job was successfully stopped without completing.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2374,7 +4163,7 @@ pub struct StartDominantLanguageDetectionJobResponse {
     /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN_PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2400,7 +4189,7 @@ pub struct StartEntitiesDetectionJobRequest {
     pub job_name: Option<String>,
     /// <p>The language of the input documents. All documents must be in the same language. You can specify any of the languages supported by Amazon Comprehend. If custom entities recognition is used, this parameter is ignored and the language used for training the model is used instead.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
@@ -2424,7 +4213,7 @@ pub struct StartEntitiesDetectionJobResponse {
     /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN<em>PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> <li> <p>STOP</em>REQUESTED - Amazon Comprehend has received a stop request for the job and is processing the request.</p> </li> <li> <p>STOPPED - The job was successfully stopped without completing.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2446,7 +4235,7 @@ pub struct StartEventsDetectionJobRequest {
     pub job_name: Option<String>,
     /// <p>The language code of the input documents.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
@@ -2465,7 +4254,7 @@ pub struct StartEventsDetectionJobResponse {
     /// <p>The status of the events detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2487,7 +4276,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     pub job_name: Option<String>,
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
@@ -2511,7 +4300,7 @@ pub struct StartKeyPhrasesDetectionJobResponse {
     /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN_PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2533,10 +4322,10 @@ pub struct StartPiiEntitiesDetectionJobRequest {
     pub job_name: Option<String>,
     /// <p>The language of the input documents.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>Specifies whether the output provides the locations (offsets) of PII entities or a file in which PII entities are redacted.</p>
     #[serde(rename = "Mode")]
-    pub mode: String,
+    pub mode: PiiEntitiesDetectionMode,
     /// <p>Provides conﬁguration parameters for the output of PII entity detection jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
@@ -2556,7 +4345,7 @@ pub struct StartPiiEntitiesDetectionJobResponse {
     /// <p>The status of the job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2578,7 +4367,7 @@ pub struct StartSentimentDetectionJobRequest {
     pub job_name: Option<String>,
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>Specifies where to send the output files. </p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
@@ -2602,7 +4391,7 @@ pub struct StartSentimentDetectionJobResponse {
     /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN_PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2649,7 +4438,7 @@ pub struct StartTopicsDetectionJobResponse {
     /// <p><p>The status of the job: </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN_PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the <code>DescribeTopicDetectionJob</code> operation.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2670,7 +4459,7 @@ pub struct StopDominantLanguageDetectionJobResponse {
     /// <p>Either <code>STOP_REQUESTED</code> if the job is currently running, or <code>STOPPED</code> if the job was previously stopped with the <code>StopDominantLanguageDetectionJob</code> operation.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2691,7 +4480,7 @@ pub struct StopEntitiesDetectionJobResponse {
     /// <p>Either <code>STOP_REQUESTED</code> if the job is currently running, or <code>STOPPED</code> if the job was previously stopped with the <code>StopEntitiesDetectionJob</code> operation.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2712,7 +4501,7 @@ pub struct StopEventsDetectionJobResponse {
     /// <p>The status of the events detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2733,7 +4522,7 @@ pub struct StopKeyPhrasesDetectionJobResponse {
     /// <p>Either <code>STOP_REQUESTED</code> if the job is currently running, or <code>STOPPED</code> if the job was previously stopped with the <code>StopKeyPhrasesDetectionJob</code> operation.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2754,7 +4543,7 @@ pub struct StopPiiEntitiesDetectionJobResponse {
     /// <p>The status of the PII entities detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2775,7 +4564,7 @@ pub struct StopSentimentDetectionJobResponse {
     /// <p>Either <code>STOP_REQUESTED</code> if the job is currently running, or <code>STOPPED</code> if the job was previously stopped with the <code>StopSentimentDetectionJob</code> operation.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2801,6 +4590,131 @@ pub struct StopTrainingEntityRecognizerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingEntityRecognizerResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSyntaxLanguageCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SyntaxLanguageCode {
+    De,
+    En,
+    Es,
+    Fr,
+    It,
+    Pt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSyntaxLanguageCode),
+}
+
+impl Default for SyntaxLanguageCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SyntaxLanguageCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SyntaxLanguageCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SyntaxLanguageCode {
+    fn into(self) -> String {
+        match self {
+            SyntaxLanguageCode::De => "de".to_string(),
+            SyntaxLanguageCode::En => "en".to_string(),
+            SyntaxLanguageCode::Es => "es".to_string(),
+            SyntaxLanguageCode::Fr => "fr".to_string(),
+            SyntaxLanguageCode::It => "it".to_string(),
+            SyntaxLanguageCode::Pt => "pt".to_string(),
+            SyntaxLanguageCode::UnknownVariant(UnknownSyntaxLanguageCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SyntaxLanguageCode {
+    fn into(self) -> &'a str {
+        match self {
+            SyntaxLanguageCode::De => &"de",
+            SyntaxLanguageCode::En => &"en",
+            SyntaxLanguageCode::Es => &"es",
+            SyntaxLanguageCode::Fr => &"fr",
+            SyntaxLanguageCode::It => &"it",
+            SyntaxLanguageCode::Pt => &"pt",
+            SyntaxLanguageCode::UnknownVariant(UnknownSyntaxLanguageCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SyntaxLanguageCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "de" => SyntaxLanguageCode::De,
+            "en" => SyntaxLanguageCode::En,
+            "es" => SyntaxLanguageCode::Es,
+            "fr" => SyntaxLanguageCode::Fr,
+            "it" => SyntaxLanguageCode::It,
+            "pt" => SyntaxLanguageCode::Pt,
+            _ => SyntaxLanguageCode::UnknownVariant(UnknownSyntaxLanguageCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SyntaxLanguageCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "de" => SyntaxLanguageCode::De,
+            "en" => SyntaxLanguageCode::En,
+            "es" => SyntaxLanguageCode::Es,
+            "fr" => SyntaxLanguageCode::Fr,
+            "it" => SyntaxLanguageCode::It,
+            "pt" => SyntaxLanguageCode::Pt,
+            _ => SyntaxLanguageCode::UnknownVariant(UnknownSyntaxLanguageCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SyntaxLanguageCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SyntaxLanguageCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SyntaxLanguageCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Represents a work in the input text that was recognized and assigned a part of speech. There is one syntax token record for each word in the source text.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2866,7 +4780,7 @@ pub struct TopicsDetectionJobFilter {
     /// <p>Filters the list of topic detection jobs based on job status. Returns only jobs with the specified status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Only returns jobs submitted after the specified time. Jobs are returned in ascending order, oldest to newest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2904,7 +4818,7 @@ pub struct TopicsDetectionJobProperties {
     /// <p>The current status of the topic detection job. If the status is <code>Failed</code>, the reason for the failure is shown in the <code>Message</code> field.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>A description for the status of a job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]

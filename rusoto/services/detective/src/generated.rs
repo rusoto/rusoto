@@ -251,7 +251,7 @@ pub struct MemberDetail {
     /// <p><p>For member accounts with a status of <code>ACCEPTED<em>BUT</em>DISABLED</code>, the reason that the member account is not enabled.</p> <p>The reason can have one of the following values:</p> <ul> <li> <p> <code>VOLUME<em>TOO</em>HIGH</code> - Indicates that adding the member account would cause the data volume for the behavior graph to be too high.</p> </li> <li> <p> <code>VOLUME_UNKNOWN</code> - Indicates that Detective is unable to verify the data volume for the member account. This is usually because the member account is not enrolled in Amazon GuardDuty. </p> </li> </ul></p>
     #[serde(rename = "DisabledReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub disabled_reason: Option<String>,
+    pub disabled_reason: Option<MemberDisabledReason>,
     /// <p>The AWS account root user email address for the member account.</p>
     #[serde(rename = "EmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -279,11 +279,232 @@ pub struct MemberDetail {
     /// <p>The current membership status of the member account. The status can have one of the following values:</p> <ul> <li> <p> <code>INVITED</code> - Indicates that the member was sent an invitation but has not yet responded.</p> </li> <li> <p> <code>VERIFICATION_IN_PROGRESS</code> - Indicates that Detective is verifying that the account identifier and email address provided for the member account match. If they do match, then Detective sends the invitation. If the email address and account identifier don't match, then the member cannot be added to the behavior graph.</p> </li> <li> <p> <code>VERIFICATION_FAILED</code> - Indicates that the account and email address provided for the member account do not match, and Detective did not send an invitation to the account.</p> </li> <li> <p> <code>ENABLED</code> - Indicates that the member account accepted the invitation to contribute to the behavior graph.</p> </li> <li> <p> <code>ACCEPTED_BUT_DISABLED</code> - Indicates that the member account accepted the invitation but is prevented from contributing data to the behavior graph. <code>DisabledReason</code> provides the reason why the member account is not enabled.</p> </li> </ul> <p>Member accounts that declined an invitation or that were removed from the behavior graph are not included.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MemberStatus>,
     /// <p>The date and time that the member account was last updated. The value is in milliseconds since the epoch.</p>
     #[serde(rename = "UpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberDisabledReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberDisabledReason {
+    VolumeTooHigh,
+    VolumeUnknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberDisabledReason),
+}
+
+impl Default for MemberDisabledReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberDisabledReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberDisabledReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberDisabledReason {
+    fn into(self) -> String {
+        match self {
+            MemberDisabledReason::VolumeTooHigh => "VOLUME_TOO_HIGH".to_string(),
+            MemberDisabledReason::VolumeUnknown => "VOLUME_UNKNOWN".to_string(),
+            MemberDisabledReason::UnknownVariant(UnknownMemberDisabledReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberDisabledReason {
+    fn into(self) -> &'a str {
+        match self {
+            MemberDisabledReason::VolumeTooHigh => &"VOLUME_TOO_HIGH",
+            MemberDisabledReason::VolumeUnknown => &"VOLUME_UNKNOWN",
+            MemberDisabledReason::UnknownVariant(UnknownMemberDisabledReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MemberDisabledReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "VOLUME_TOO_HIGH" => MemberDisabledReason::VolumeTooHigh,
+            "VOLUME_UNKNOWN" => MemberDisabledReason::VolumeUnknown,
+            _ => MemberDisabledReason::UnknownVariant(UnknownMemberDisabledReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberDisabledReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "VOLUME_TOO_HIGH" => MemberDisabledReason::VolumeTooHigh,
+            "VOLUME_UNKNOWN" => MemberDisabledReason::VolumeUnknown,
+            _ => MemberDisabledReason::UnknownVariant(UnknownMemberDisabledReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberDisabledReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MemberDisabledReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MemberDisabledReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberStatus {
+    AcceptedButDisabled,
+    Enabled,
+    Invited,
+    VerificationFailed,
+    VerificationInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberStatus),
+}
+
+impl Default for MemberStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberStatus {
+    fn into(self) -> String {
+        match self {
+            MemberStatus::AcceptedButDisabled => "ACCEPTED_BUT_DISABLED".to_string(),
+            MemberStatus::Enabled => "ENABLED".to_string(),
+            MemberStatus::Invited => "INVITED".to_string(),
+            MemberStatus::VerificationFailed => "VERIFICATION_FAILED".to_string(),
+            MemberStatus::VerificationInProgress => "VERIFICATION_IN_PROGRESS".to_string(),
+            MemberStatus::UnknownVariant(UnknownMemberStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MemberStatus::AcceptedButDisabled => &"ACCEPTED_BUT_DISABLED",
+            MemberStatus::Enabled => &"ENABLED",
+            MemberStatus::Invited => &"INVITED",
+            MemberStatus::VerificationFailed => &"VERIFICATION_FAILED",
+            MemberStatus::VerificationInProgress => &"VERIFICATION_IN_PROGRESS",
+            MemberStatus::UnknownVariant(UnknownMemberStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MemberStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPTED_BUT_DISABLED" => MemberStatus::AcceptedButDisabled,
+            "ENABLED" => MemberStatus::Enabled,
+            "INVITED" => MemberStatus::Invited,
+            "VERIFICATION_FAILED" => MemberStatus::VerificationFailed,
+            "VERIFICATION_IN_PROGRESS" => MemberStatus::VerificationInProgress,
+            _ => MemberStatus::UnknownVariant(UnknownMemberStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPTED_BUT_DISABLED" => MemberStatus::AcceptedButDisabled,
+            "ENABLED" => MemberStatus::Enabled,
+            "INVITED" => MemberStatus::Invited,
+            "VERIFICATION_FAILED" => MemberStatus::VerificationFailed,
+            "VERIFICATION_IN_PROGRESS" => MemberStatus::VerificationInProgress,
+            _ => MemberStatus::UnknownVariant(UnknownMemberStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MemberStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MemberStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

@@ -55,6 +55,103 @@ pub struct Applications {
     pub next_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBytesMeasure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BytesMeasure {
+    Kilobytes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBytesMeasure),
+}
+
+impl Default for BytesMeasure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BytesMeasure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BytesMeasure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BytesMeasure {
+    fn into(self) -> String {
+        match self {
+            BytesMeasure::Kilobytes => "KILOBYTES".to_string(),
+            BytesMeasure::UnknownVariant(UnknownBytesMeasure { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BytesMeasure {
+    fn into(self) -> &'a str {
+        match self {
+            BytesMeasure::Kilobytes => &"KILOBYTES",
+            BytesMeasure::UnknownVariant(UnknownBytesMeasure { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BytesMeasure {
+    fn from(name: &str) -> Self {
+        match name {
+            "KILOBYTES" => BytesMeasure::Kilobytes,
+            _ => BytesMeasure::UnknownVariant(UnknownBytesMeasure {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BytesMeasure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KILOBYTES" => BytesMeasure::Kilobytes,
+            _ => BytesMeasure::UnknownVariant(UnknownBytesMeasure { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BytesMeasure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BytesMeasure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BytesMeasure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Configuration {
     /// <p>The configuration version.</p>
@@ -121,7 +218,7 @@ pub struct ConfigurationProfileSummary {
     /// <p>The types of validators in the configuration profile.</p>
     #[serde(rename = "ValidatorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub validator_types: Option<Vec<String>>,
+    pub validator_types: Option<Vec<ValidatorType>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -203,13 +300,13 @@ pub struct CreateDeploymentStrategyRequest {
     /// <p>The algorithm used to define how percentage grows over time. AWS AppConfig supports the following growth types:</p> <p> <b>Linear</b>: For this type, AppConfig processes the deployment by dividing the total number of targets by the value specified for <code>Step percentage</code>. For example, a linear deployment that uses a <code>Step percentage</code> of 10 deploys the configuration to 10 percent of the hosts. After those deployments are complete, the system deploys the configuration to the next 10 percent. This continues until 100% of the targets have successfully received the configuration.</p> <p> <b>Exponential</b>: For this type, AppConfig processes the deployment exponentially using the following formula: <code>G*(2^N)</code>. In this formula, <code>G</code> is the growth factor specified by the user and <code>N</code> is the number of steps until the configuration is deployed to all targets. For example, if you specify a growth factor of 2, then the system rolls out the configuration as follows:</p> <p> <code>2*(2^0)</code> </p> <p> <code>2*(2^1)</code> </p> <p> <code>2*(2^2)</code> </p> <p>Expressed numerically, the deployment rolls out as follows: 2% of the targets, 4% of the targets, 8% of the targets, and continues until the configuration has been deployed to all targets.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub growth_type: Option<String>,
+    pub growth_type: Option<GrowthType>,
     /// <p>A name for the deployment strategy.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Save the deployment strategy to a Systems Manager (SSM) document.</p>
     #[serde(rename = "ReplicateTo")]
-    pub replicate_to: String,
+    pub replicate_to: ReplicateTo,
     /// <p>Metadata to assign to the deployment strategy. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,7 +480,7 @@ pub struct Deployment {
     /// <p>The algorithm used to define how percentage grew over time.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub growth_type: Option<String>,
+    pub growth_type: Option<GrowthType>,
     /// <p>The percentage of targets for which the deployment is available.</p>
     #[serde(rename = "PercentageComplete")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -395,7 +492,7 @@ pub struct Deployment {
     /// <p>The state of the deployment.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DeploymentState>,
 }
 
 /// <p>An object that describes a deployment event.</p>
@@ -409,7 +506,7 @@ pub struct DeploymentEvent {
     /// <p>The type of deployment event. Deployment event types include the start, stop, or completion of a deployment; a percentage update; the start or stop of a bake period; the start or completion of a rollback.</p>
     #[serde(rename = "EventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type: Option<String>,
+    pub event_type: Option<DeploymentEventType>,
     /// <p>The date and time the event occurred.</p>
     #[serde(rename = "OccurredAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -417,7 +514,253 @@ pub struct DeploymentEvent {
     /// <p>The entity that triggered the deployment event. Events can be triggered by a user, AWS AppConfig, an Amazon CloudWatch alarm, or an internal error.</p>
     #[serde(rename = "TriggeredBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub triggered_by: Option<String>,
+    pub triggered_by: Option<TriggeredBy>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentEventType {
+    BakeTimeStarted,
+    DeploymentCompleted,
+    DeploymentStarted,
+    PercentageUpdated,
+    RollbackCompleted,
+    RollbackStarted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentEventType),
+}
+
+impl Default for DeploymentEventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentEventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentEventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentEventType {
+    fn into(self) -> String {
+        match self {
+            DeploymentEventType::BakeTimeStarted => "BAKE_TIME_STARTED".to_string(),
+            DeploymentEventType::DeploymentCompleted => "DEPLOYMENT_COMPLETED".to_string(),
+            DeploymentEventType::DeploymentStarted => "DEPLOYMENT_STARTED".to_string(),
+            DeploymentEventType::PercentageUpdated => "PERCENTAGE_UPDATED".to_string(),
+            DeploymentEventType::RollbackCompleted => "ROLLBACK_COMPLETED".to_string(),
+            DeploymentEventType::RollbackStarted => "ROLLBACK_STARTED".to_string(),
+            DeploymentEventType::UnknownVariant(UnknownDeploymentEventType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentEventType {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentEventType::BakeTimeStarted => &"BAKE_TIME_STARTED",
+            DeploymentEventType::DeploymentCompleted => &"DEPLOYMENT_COMPLETED",
+            DeploymentEventType::DeploymentStarted => &"DEPLOYMENT_STARTED",
+            DeploymentEventType::PercentageUpdated => &"PERCENTAGE_UPDATED",
+            DeploymentEventType::RollbackCompleted => &"ROLLBACK_COMPLETED",
+            DeploymentEventType::RollbackStarted => &"ROLLBACK_STARTED",
+            DeploymentEventType::UnknownVariant(UnknownDeploymentEventType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentEventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BAKE_TIME_STARTED" => DeploymentEventType::BakeTimeStarted,
+            "DEPLOYMENT_COMPLETED" => DeploymentEventType::DeploymentCompleted,
+            "DEPLOYMENT_STARTED" => DeploymentEventType::DeploymentStarted,
+            "PERCENTAGE_UPDATED" => DeploymentEventType::PercentageUpdated,
+            "ROLLBACK_COMPLETED" => DeploymentEventType::RollbackCompleted,
+            "ROLLBACK_STARTED" => DeploymentEventType::RollbackStarted,
+            _ => DeploymentEventType::UnknownVariant(UnknownDeploymentEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentEventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BAKE_TIME_STARTED" => DeploymentEventType::BakeTimeStarted,
+            "DEPLOYMENT_COMPLETED" => DeploymentEventType::DeploymentCompleted,
+            "DEPLOYMENT_STARTED" => DeploymentEventType::DeploymentStarted,
+            "PERCENTAGE_UPDATED" => DeploymentEventType::PercentageUpdated,
+            "ROLLBACK_COMPLETED" => DeploymentEventType::RollbackCompleted,
+            "ROLLBACK_STARTED" => DeploymentEventType::RollbackStarted,
+            _ => DeploymentEventType::UnknownVariant(UnknownDeploymentEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentEventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentEventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentState {
+    Baking,
+    Complete,
+    Deploying,
+    RolledBack,
+    RollingBack,
+    Validating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentState),
+}
+
+impl Default for DeploymentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentState {
+    fn into(self) -> String {
+        match self {
+            DeploymentState::Baking => "BAKING".to_string(),
+            DeploymentState::Complete => "COMPLETE".to_string(),
+            DeploymentState::Deploying => "DEPLOYING".to_string(),
+            DeploymentState::RolledBack => "ROLLED_BACK".to_string(),
+            DeploymentState::RollingBack => "ROLLING_BACK".to_string(),
+            DeploymentState::Validating => "VALIDATING".to_string(),
+            DeploymentState::UnknownVariant(UnknownDeploymentState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentState {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentState::Baking => &"BAKING",
+            DeploymentState::Complete => &"COMPLETE",
+            DeploymentState::Deploying => &"DEPLOYING",
+            DeploymentState::RolledBack => &"ROLLED_BACK",
+            DeploymentState::RollingBack => &"ROLLING_BACK",
+            DeploymentState::Validating => &"VALIDATING",
+            DeploymentState::UnknownVariant(UnknownDeploymentState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "BAKING" => DeploymentState::Baking,
+            "COMPLETE" => DeploymentState::Complete,
+            "DEPLOYING" => DeploymentState::Deploying,
+            "ROLLED_BACK" => DeploymentState::RolledBack,
+            "ROLLING_BACK" => DeploymentState::RollingBack,
+            "VALIDATING" => DeploymentState::Validating,
+            _ => DeploymentState::UnknownVariant(UnknownDeploymentState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BAKING" => DeploymentState::Baking,
+            "COMPLETE" => DeploymentState::Complete,
+            "DEPLOYING" => DeploymentState::Deploying,
+            "ROLLED_BACK" => DeploymentState::RolledBack,
+            "ROLLING_BACK" => DeploymentState::RollingBack,
+            "VALIDATING" => DeploymentState::Validating,
+            _ => DeploymentState::UnknownVariant(UnknownDeploymentState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -455,7 +798,7 @@ pub struct DeploymentStrategy {
     /// <p>The algorithm used to define how percentage grew over time.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub growth_type: Option<String>,
+    pub growth_type: Option<GrowthType>,
     /// <p>The deployment strategy ID.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -467,7 +810,7 @@ pub struct DeploymentStrategy {
     /// <p>Save the deployment strategy to a Systems Manager (SSM) document.</p>
     #[serde(rename = "ReplicateTo")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replicate_to: Option<String>,
+    pub replicate_to: Option<ReplicateTo>,
 }
 
 /// <p>Information about the deployment.</p>
@@ -505,7 +848,7 @@ pub struct DeploymentSummary {
     /// <p>The algorithm used to define how percentage grows over time.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub growth_type: Option<String>,
+    pub growth_type: Option<GrowthType>,
     /// <p>The percentage of targets for which the deployment is available.</p>
     #[serde(rename = "PercentageComplete")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -517,7 +860,7 @@ pub struct DeploymentSummary {
     /// <p>The state of the deployment.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DeploymentState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -559,7 +902,122 @@ pub struct Environment {
     /// <p>The state of the environment. An environment can be in one of the following states: <code>READY_FOR_DEPLOYMENT</code>, <code>DEPLOYING</code>, <code>ROLLING_BACK</code>, or <code>ROLLED_BACK</code> </p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EnvironmentState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentState {
+    Deploying,
+    ReadyForDeployment,
+    RolledBack,
+    RollingBack,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentState),
+}
+
+impl Default for EnvironmentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentState {
+    fn into(self) -> String {
+        match self {
+            EnvironmentState::Deploying => "DEPLOYING".to_string(),
+            EnvironmentState::ReadyForDeployment => "READY_FOR_DEPLOYMENT".to_string(),
+            EnvironmentState::RolledBack => "ROLLED_BACK".to_string(),
+            EnvironmentState::RollingBack => "ROLLING_BACK".to_string(),
+            EnvironmentState::UnknownVariant(UnknownEnvironmentState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentState {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentState::Deploying => &"DEPLOYING",
+            EnvironmentState::ReadyForDeployment => &"READY_FOR_DEPLOYMENT",
+            EnvironmentState::RolledBack => &"ROLLED_BACK",
+            EnvironmentState::RollingBack => &"ROLLING_BACK",
+            EnvironmentState::UnknownVariant(UnknownEnvironmentState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnvironmentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPLOYING" => EnvironmentState::Deploying,
+            "READY_FOR_DEPLOYMENT" => EnvironmentState::ReadyForDeployment,
+            "ROLLED_BACK" => EnvironmentState::RolledBack,
+            "ROLLING_BACK" => EnvironmentState::RollingBack,
+            _ => EnvironmentState::UnknownVariant(UnknownEnvironmentState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPLOYING" => EnvironmentState::Deploying,
+            "READY_FOR_DEPLOYMENT" => EnvironmentState::ReadyForDeployment,
+            "ROLLED_BACK" => EnvironmentState::RolledBack,
+            "ROLLING_BACK" => EnvironmentState::RollingBack,
+            _ => EnvironmentState::UnknownVariant(UnknownEnvironmentState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EnvironmentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -660,6 +1118,106 @@ pub struct GetHostedConfigurationVersionRequest {
     /// <p>The version.</p>
     #[serde(rename = "VersionNumber")]
     pub version_number: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGrowthType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GrowthType {
+    Exponential,
+    Linear,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGrowthType),
+}
+
+impl Default for GrowthType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GrowthType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GrowthType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GrowthType {
+    fn into(self) -> String {
+        match self {
+            GrowthType::Exponential => "EXPONENTIAL".to_string(),
+            GrowthType::Linear => "LINEAR".to_string(),
+            GrowthType::UnknownVariant(UnknownGrowthType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GrowthType {
+    fn into(self) -> &'a str {
+        match self {
+            GrowthType::Exponential => &"EXPONENTIAL",
+            GrowthType::Linear => &"LINEAR",
+            GrowthType::UnknownVariant(UnknownGrowthType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GrowthType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPONENTIAL" => GrowthType::Exponential,
+            "LINEAR" => GrowthType::Linear,
+            _ => GrowthType::UnknownVariant(UnknownGrowthType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GrowthType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPONENTIAL" => GrowthType::Exponential,
+            "LINEAR" => GrowthType::Linear,
+            _ => GrowthType::UnknownVariant(UnknownGrowthType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GrowthType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GrowthType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GrowthType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -834,6 +1392,106 @@ pub struct Monitor {
     pub alarm_role_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicateTo {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicateTo {
+    None,
+    SsmDocument,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicateTo),
+}
+
+impl Default for ReplicateTo {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicateTo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicateTo {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicateTo {
+    fn into(self) -> String {
+        match self {
+            ReplicateTo::None => "NONE".to_string(),
+            ReplicateTo::SsmDocument => "SSM_DOCUMENT".to_string(),
+            ReplicateTo::UnknownVariant(UnknownReplicateTo { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicateTo {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicateTo::None => &"NONE",
+            ReplicateTo::SsmDocument => &"SSM_DOCUMENT",
+            ReplicateTo::UnknownVariant(UnknownReplicateTo { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplicateTo {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ReplicateTo::None,
+            "SSM_DOCUMENT" => ReplicateTo::SsmDocument,
+            _ => ReplicateTo::UnknownVariant(UnknownReplicateTo {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicateTo {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ReplicateTo::None,
+            "SSM_DOCUMENT" => ReplicateTo::SsmDocument,
+            _ => ReplicateTo::UnknownVariant(UnknownReplicateTo { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicateTo {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReplicateTo {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicateTo {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTags {
@@ -894,6 +1552,117 @@ pub struct TagResourceRequest {
     /// <p>The key-value string map. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTriggeredBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TriggeredBy {
+    Appconfig,
+    CloudwatchAlarm,
+    InternalError,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTriggeredBy),
+}
+
+impl Default for TriggeredBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TriggeredBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TriggeredBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TriggeredBy {
+    fn into(self) -> String {
+        match self {
+            TriggeredBy::Appconfig => "APPCONFIG".to_string(),
+            TriggeredBy::CloudwatchAlarm => "CLOUDWATCH_ALARM".to_string(),
+            TriggeredBy::InternalError => "INTERNAL_ERROR".to_string(),
+            TriggeredBy::User => "USER".to_string(),
+            TriggeredBy::UnknownVariant(UnknownTriggeredBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TriggeredBy {
+    fn into(self) -> &'a str {
+        match self {
+            TriggeredBy::Appconfig => &"APPCONFIG",
+            TriggeredBy::CloudwatchAlarm => &"CLOUDWATCH_ALARM",
+            TriggeredBy::InternalError => &"INTERNAL_ERROR",
+            TriggeredBy::User => &"USER",
+            TriggeredBy::UnknownVariant(UnknownTriggeredBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TriggeredBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPCONFIG" => TriggeredBy::Appconfig,
+            "CLOUDWATCH_ALARM" => TriggeredBy::CloudwatchAlarm,
+            "INTERNAL_ERROR" => TriggeredBy::InternalError,
+            "USER" => TriggeredBy::User,
+            _ => TriggeredBy::UnknownVariant(UnknownTriggeredBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TriggeredBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPCONFIG" => TriggeredBy::Appconfig,
+            "CLOUDWATCH_ALARM" => TriggeredBy::CloudwatchAlarm,
+            "INTERNAL_ERROR" => TriggeredBy::InternalError,
+            "USER" => TriggeredBy::User,
+            _ => TriggeredBy::UnknownVariant(UnknownTriggeredBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TriggeredBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TriggeredBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TriggeredBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -975,7 +1744,7 @@ pub struct UpdateDeploymentStrategyRequest {
     /// <p>The algorithm used to define how percentage grows over time. AWS AppConfig supports the following growth types:</p> <p> <b>Linear</b>: For this type, AppConfig processes the deployment by increments of the growth factor evenly distributed over the deployment time. For example, a linear deployment that uses a growth factor of 20 initially makes the configuration available to 20 percent of the targets. After 1/5th of the deployment time has passed, the system updates the percentage to 40 percent. This continues until 100% of the targets are set to receive the deployed configuration.</p> <p> <b>Exponential</b>: For this type, AppConfig processes the deployment exponentially using the following formula: <code>G*(2^N)</code>. In this formula, <code>G</code> is the growth factor specified by the user and <code>N</code> is the number of steps until the configuration is deployed to all targets. For example, if you specify a growth factor of 2, then the system rolls out the configuration as follows:</p> <p> <code>2*(2^0)</code> </p> <p> <code>2*(2^1)</code> </p> <p> <code>2*(2^2)</code> </p> <p>Expressed numerically, the deployment rolls out as follows: 2% of the targets, 4% of the targets, 8% of the targets, and continues until the configuration has been deployed to all targets.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub growth_type: Option<String>,
+    pub growth_type: Option<GrowthType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1023,7 +1792,107 @@ pub struct Validator {
     pub content: String,
     /// <p>AppConfig supports validators of type <code>JSON_SCHEMA</code> and <code>LAMBDA</code> </p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ValidatorType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidatorType {
+    JsonSchema,
+    Lambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidatorType),
+}
+
+impl Default for ValidatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidatorType {
+    fn into(self) -> String {
+        match self {
+            ValidatorType::JsonSchema => "JSON_SCHEMA".to_string(),
+            ValidatorType::Lambda => "LAMBDA".to_string(),
+            ValidatorType::UnknownVariant(UnknownValidatorType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidatorType {
+    fn into(self) -> &'a str {
+        match self {
+            ValidatorType::JsonSchema => &"JSON_SCHEMA",
+            ValidatorType::Lambda => &"LAMBDA",
+            ValidatorType::UnknownVariant(UnknownValidatorType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ValidatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON_SCHEMA" => ValidatorType::JsonSchema,
+            "LAMBDA" => ValidatorType::Lambda,
+            _ => ValidatorType::UnknownVariant(UnknownValidatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON_SCHEMA" => ValidatorType::JsonSchema,
+            "LAMBDA" => ValidatorType::Lambda,
+            _ => ValidatorType::UnknownVariant(UnknownValidatorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ValidatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ValidatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateApplication

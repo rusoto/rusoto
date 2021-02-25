@@ -50,6 +50,113 @@ impl KmsClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlgorithmSpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AlgorithmSpec {
+    RsaesOaepSha1,
+    RsaesOaepSha256,
+    RsaesPkcs1V15,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlgorithmSpec),
+}
+
+impl Default for AlgorithmSpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AlgorithmSpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AlgorithmSpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AlgorithmSpec {
+    fn into(self) -> String {
+        match self {
+            AlgorithmSpec::RsaesOaepSha1 => "RSAES_OAEP_SHA_1".to_string(),
+            AlgorithmSpec::RsaesOaepSha256 => "RSAES_OAEP_SHA_256".to_string(),
+            AlgorithmSpec::RsaesPkcs1V15 => "RSAES_PKCS1_V1_5".to_string(),
+            AlgorithmSpec::UnknownVariant(UnknownAlgorithmSpec { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AlgorithmSpec {
+    fn into(self) -> &'a str {
+        match self {
+            AlgorithmSpec::RsaesOaepSha1 => &"RSAES_OAEP_SHA_1",
+            AlgorithmSpec::RsaesOaepSha256 => &"RSAES_OAEP_SHA_256",
+            AlgorithmSpec::RsaesPkcs1V15 => &"RSAES_PKCS1_V1_5",
+            AlgorithmSpec::UnknownVariant(UnknownAlgorithmSpec { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AlgorithmSpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "RSAES_OAEP_SHA_1" => AlgorithmSpec::RsaesOaepSha1,
+            "RSAES_OAEP_SHA_256" => AlgorithmSpec::RsaesOaepSha256,
+            "RSAES_PKCS1_V1_5" => AlgorithmSpec::RsaesPkcs1V15,
+            _ => AlgorithmSpec::UnknownVariant(UnknownAlgorithmSpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AlgorithmSpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RSAES_OAEP_SHA_1" => AlgorithmSpec::RsaesOaepSha1,
+            "RSAES_OAEP_SHA_256" => AlgorithmSpec::RsaesOaepSha256,
+            "RSAES_PKCS1_V1_5" => AlgorithmSpec::RsaesPkcs1V15,
+            _ => AlgorithmSpec::UnknownVariant(UnknownAlgorithmSpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlgorithmSpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AlgorithmSpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AlgorithmSpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about an alias.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -104,6 +211,268 @@ pub struct ConnectCustomKeyStoreRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConnectCustomKeyStoreResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionErrorCodeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionErrorCodeType {
+    ClusterNotFound,
+    InsufficientCloudhsmHsms,
+    InternalError,
+    InvalidCredentials,
+    NetworkErrors,
+    SubnetNotFound,
+    UserLockedOut,
+    UserLoggedIn,
+    UserNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionErrorCodeType),
+}
+
+impl Default for ConnectionErrorCodeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionErrorCodeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionErrorCodeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionErrorCodeType {
+    fn into(self) -> String {
+        match self {
+            ConnectionErrorCodeType::ClusterNotFound => "CLUSTER_NOT_FOUND".to_string(),
+            ConnectionErrorCodeType::InsufficientCloudhsmHsms => {
+                "INSUFFICIENT_CLOUDHSM_HSMS".to_string()
+            }
+            ConnectionErrorCodeType::InternalError => "INTERNAL_ERROR".to_string(),
+            ConnectionErrorCodeType::InvalidCredentials => "INVALID_CREDENTIALS".to_string(),
+            ConnectionErrorCodeType::NetworkErrors => "NETWORK_ERRORS".to_string(),
+            ConnectionErrorCodeType::SubnetNotFound => "SUBNET_NOT_FOUND".to_string(),
+            ConnectionErrorCodeType::UserLockedOut => "USER_LOCKED_OUT".to_string(),
+            ConnectionErrorCodeType::UserLoggedIn => "USER_LOGGED_IN".to_string(),
+            ConnectionErrorCodeType::UserNotFound => "USER_NOT_FOUND".to_string(),
+            ConnectionErrorCodeType::UnknownVariant(UnknownConnectionErrorCodeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionErrorCodeType {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionErrorCodeType::ClusterNotFound => &"CLUSTER_NOT_FOUND",
+            ConnectionErrorCodeType::InsufficientCloudhsmHsms => &"INSUFFICIENT_CLOUDHSM_HSMS",
+            ConnectionErrorCodeType::InternalError => &"INTERNAL_ERROR",
+            ConnectionErrorCodeType::InvalidCredentials => &"INVALID_CREDENTIALS",
+            ConnectionErrorCodeType::NetworkErrors => &"NETWORK_ERRORS",
+            ConnectionErrorCodeType::SubnetNotFound => &"SUBNET_NOT_FOUND",
+            ConnectionErrorCodeType::UserLockedOut => &"USER_LOCKED_OUT",
+            ConnectionErrorCodeType::UserLoggedIn => &"USER_LOGGED_IN",
+            ConnectionErrorCodeType::UserNotFound => &"USER_NOT_FOUND",
+            ConnectionErrorCodeType::UnknownVariant(UnknownConnectionErrorCodeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionErrorCodeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLUSTER_NOT_FOUND" => ConnectionErrorCodeType::ClusterNotFound,
+            "INSUFFICIENT_CLOUDHSM_HSMS" => ConnectionErrorCodeType::InsufficientCloudhsmHsms,
+            "INTERNAL_ERROR" => ConnectionErrorCodeType::InternalError,
+            "INVALID_CREDENTIALS" => ConnectionErrorCodeType::InvalidCredentials,
+            "NETWORK_ERRORS" => ConnectionErrorCodeType::NetworkErrors,
+            "SUBNET_NOT_FOUND" => ConnectionErrorCodeType::SubnetNotFound,
+            "USER_LOCKED_OUT" => ConnectionErrorCodeType::UserLockedOut,
+            "USER_LOGGED_IN" => ConnectionErrorCodeType::UserLoggedIn,
+            "USER_NOT_FOUND" => ConnectionErrorCodeType::UserNotFound,
+            _ => ConnectionErrorCodeType::UnknownVariant(UnknownConnectionErrorCodeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionErrorCodeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLUSTER_NOT_FOUND" => ConnectionErrorCodeType::ClusterNotFound,
+            "INSUFFICIENT_CLOUDHSM_HSMS" => ConnectionErrorCodeType::InsufficientCloudhsmHsms,
+            "INTERNAL_ERROR" => ConnectionErrorCodeType::InternalError,
+            "INVALID_CREDENTIALS" => ConnectionErrorCodeType::InvalidCredentials,
+            "NETWORK_ERRORS" => ConnectionErrorCodeType::NetworkErrors,
+            "SUBNET_NOT_FOUND" => ConnectionErrorCodeType::SubnetNotFound,
+            "USER_LOCKED_OUT" => ConnectionErrorCodeType::UserLockedOut,
+            "USER_LOGGED_IN" => ConnectionErrorCodeType::UserLoggedIn,
+            "USER_NOT_FOUND" => ConnectionErrorCodeType::UserNotFound,
+            _ => ConnectionErrorCodeType::UnknownVariant(UnknownConnectionErrorCodeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionErrorCodeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionErrorCodeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionErrorCodeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionStateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionStateType {
+    Connected,
+    Connecting,
+    Disconnected,
+    Disconnecting,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionStateType),
+}
+
+impl Default for ConnectionStateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionStateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionStateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionStateType {
+    fn into(self) -> String {
+        match self {
+            ConnectionStateType::Connected => "CONNECTED".to_string(),
+            ConnectionStateType::Connecting => "CONNECTING".to_string(),
+            ConnectionStateType::Disconnected => "DISCONNECTED".to_string(),
+            ConnectionStateType::Disconnecting => "DISCONNECTING".to_string(),
+            ConnectionStateType::Failed => "FAILED".to_string(),
+            ConnectionStateType::UnknownVariant(UnknownConnectionStateType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionStateType {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionStateType::Connected => &"CONNECTED",
+            ConnectionStateType::Connecting => &"CONNECTING",
+            ConnectionStateType::Disconnected => &"DISCONNECTED",
+            ConnectionStateType::Disconnecting => &"DISCONNECTING",
+            ConnectionStateType::Failed => &"FAILED",
+            ConnectionStateType::UnknownVariant(UnknownConnectionStateType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConnectionStateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECTED" => ConnectionStateType::Connected,
+            "CONNECTING" => ConnectionStateType::Connecting,
+            "DISCONNECTED" => ConnectionStateType::Disconnected,
+            "DISCONNECTING" => ConnectionStateType::Disconnecting,
+            "FAILED" => ConnectionStateType::Failed,
+            _ => ConnectionStateType::UnknownVariant(UnknownConnectionStateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionStateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECTED" => ConnectionStateType::Connected,
+            "CONNECTING" => ConnectionStateType::Connecting,
+            "DISCONNECTED" => ConnectionStateType::Disconnected,
+            "DISCONNECTING" => ConnectionStateType::Disconnecting,
+            "FAILED" => ConnectionStateType::Failed,
+            _ => ConnectionStateType::UnknownVariant(UnknownConnectionStateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionStateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionStateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionStateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -165,7 +534,7 @@ pub struct CreateGrantRequest {
     pub name: Option<String>,
     /// <p>A list of operations that the grant permits.</p>
     #[serde(rename = "Operations")]
-    pub operations: Vec<String>,
+    pub operations: Vec<GrantOperation>,
     /// <p>The principal that is given permission to retire the grant by using <a>RetireGrant</a> operation.</p> <p>To specify the principal, use the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, federated users, and assumed role users. For examples of the ARN syntax to use for specifying a principal, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>
     #[serde(rename = "RetiringPrincipal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -199,7 +568,7 @@ pub struct CreateKeyRequest {
     /// <p><p>Specifies the type of CMK to create. The default value, <code>SYMMETRIC<em>DEFAULT</code>, creates a CMK with a 256-bit symmetric key for encryption and decryption. For help choosing a key spec for your CMK, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-choose.html">How to Choose Your CMK Configuration</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The <code>CustomerMasterKeySpec</code> determines whether the CMK contains a symmetric key or an asymmetric key pair. It also determines the encryption algorithms or signing algorithms that the CMK supports. You can&#39;t change the <code>CustomerMasterKeySpec</code> after the CMK is created. To further restrict the algorithms that can be used with the CMK, use a condition key in its key policy or IAM policy. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-encryption-algorithm">kms:EncryptionAlgorithm</a> or <a href="https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-signing-algorithm">kms:Signing Algorithm</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <important> <p> &lt;a href=&quot;http://aws.amazon.com/kms/features/#AWS</em>Service<em>Integration&quot;&gt;AWS services that are integrated with AWS KMS</a> use symmetric CMKs to protect your data. These services do not support asymmetric CMKs. For help determining whether a CMK is symmetric or asymmetric, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/find-symm-asymm.html">Identifying Symmetric and Asymmetric CMKs</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>AWS KMS supports the following key specs for CMKs:</p> <ul> <li> <p>Symmetric key (default)</p> <ul> <li> <p> <code>SYMMETRIC</em>DEFAULT</code> (AES-256-GCM)</p> </li> </ul> </li> <li> <p>Asymmetric RSA key pairs</p> <ul> <li> <p> <code>RSA<em>2048</code> </p> </li> <li> <p> <code>RSA</em>3072</code> </p> </li> <li> <p> <code>RSA<em>4096</code> </p> </li> </ul> </li> <li> <p>Asymmetric NIST-recommended elliptic curve key pairs</p> <ul> <li> <p> <code>ECC</em>NIST<em>P256</code> (secp256r1)</p> </li> <li> <p> <code>ECC</em>NIST<em>P384</code> (secp384r1)</p> </li> <li> <p> <code>ECC</em>NIST<em>P521</code> (secp521r1)</p> </li> </ul> </li> <li> <p>Other asymmetric elliptic curve key pairs</p> <ul> <li> <p> <code>ECC</em>SECG_P256K1</code> (secp256k1), commonly used for cryptocurrencies.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "CustomerMasterKeySpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub customer_master_key_spec: Option<String>,
+    pub customer_master_key_spec: Option<CustomerMasterKeySpec>,
     /// <p>A description of the CMK.</p> <p>Use a description that helps you decide whether the CMK is appropriate for a task.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -207,11 +576,11 @@ pub struct CreateKeyRequest {
     /// <p><p>Determines the <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations">cryptographic operations</a> for which you can use the CMK. The default value is <code>ENCRYPT<em>DECRYPT</code>. This parameter is required only for asymmetric CMKs. You can&#39;t change the <code>KeyUsage</code> value after the CMK is created.</p> <p>Select only one valid value.</p> <ul> <li> <p>For symmetric CMKs, omit the parameter or specify <code>ENCRYPT</em>DECRYPT</code>.</p> </li> <li> <p>For asymmetric CMKs with RSA key material, specify <code>ENCRYPT<em>DECRYPT</code> or <code>SIGN</em>VERIFY</code>.</p> </li> <li> <p>For asymmetric CMKs with ECC key material, specify <code>SIGN_VERIFY</code>.</p> </li> </ul></p>
     #[serde(rename = "KeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_usage: Option<String>,
+    pub key_usage: Option<KeyUsageType>,
     /// <p>The source of the key material for the CMK. You cannot change the origin after you create the CMK. The default is <code>AWS_KMS</code>, which means AWS KMS creates the key material.</p> <p>When the parameter value is <code>EXTERNAL</code>, AWS KMS creates a CMK without key material so that you can import key material from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>. This value is valid only for symmetric CMKs.</p> <p>When the parameter value is <code>AWS_CLOUDHSM</code>, AWS KMS creates the CMK in an AWS KMS <a href="https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">custom key store</a> and creates its key material in the associated AWS CloudHSM cluster. You must also use the <code>CustomKeyStoreId</code> parameter to identify the custom key store. This value is valid only for symmetric CMKs.</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin: Option<String>,
+    pub origin: Option<OriginType>,
     /// <p>The key policy to attach to the CMK.</p> <p>If you provide a key policy, it must meet the following criteria:</p> <ul> <li> <p>If you don't set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key policy must allow the principal that is making the <code>CreateKey</code> request to make a subsequent <a>PutKeyPolicy</a> request on the CMK. This reduces the risk that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section of the <i> <i>AWS Key Management Service Developer Guide</i> </i>.</p> </li> <li> <p>Each statement in the key policy must contain one or more principals. The principals in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before including the new principal in a key policy because the new principal might not be immediately visible to AWS KMS. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency">Changes that I make are not always immediately visible</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </li> </ul> <p>If you do not provide a key policy, AWS KMS attaches a default key policy to the CMK. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default">Default Key Policy</a> in the <i>AWS Key Management Service Developer Guide</i>. </p> <p>The key policy size quota is 32 kilobytes (32768 bytes).</p> <p>For help writing and formatting a JSON policy document, see the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html">IAM JSON Policy Reference</a> in the <i> <i>IAM User Guide</i> </i>.</p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -242,11 +611,11 @@ pub struct CustomKeyStoresListEntry {
     /// <p><p>Describes the connection error. This field appears in the response only when the <code>ConnectionState</code> is <code>FAILED</code>. For help resolving these errors, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-failed">How to Fix a Connection Failure</a> in <i>AWS Key Management Service Developer Guide</i>.</p> <p>Valid values are:</p> <ul> <li> <p> <code>CLUSTER<em>NOT</em>FOUND</code> - AWS KMS cannot find the AWS CloudHSM cluster with the specified cluster ID.</p> </li> <li> <p> <code>INSUFFICIENT<em>CLOUDHSM</em>HSMS</code> - The associated AWS CloudHSM cluster does not contain any active HSMs. To connect a custom key store to its AWS CloudHSM cluster, the cluster must contain at least one active HSM.</p> </li> <li> <p> <code>INTERNAL<em>ERROR</code> - AWS KMS could not complete the request due to an internal error. Retry the request. For <code>ConnectCustomKeyStore</code> requests, disconnect the custom key store before trying to connect again.</p> </li> <li> <p> <code>INVALID</em>CREDENTIALS</code> - AWS KMS does not have the correct password for the <code>kmsuser</code> crypto user in the AWS CloudHSM cluster. Before you can connect your custom key store to its AWS CloudHSM cluster, you must change the <code>kmsuser</code> account password and update the key store password value for the custom key store.</p> </li> <li> <p> <code>NETWORK<em>ERRORS</code> - Network errors are preventing AWS KMS from connecting to the custom key store.</p> </li> <li> <p> <code>SUBNET</em>NOT<em>FOUND</code> - A subnet in the AWS CloudHSM cluster configuration was deleted. If AWS KMS cannot find all of the subnets in the cluster configuration, attempts to connect the custom key store to the AWS CloudHSM cluster fail. To fix this error, create a cluster from a recent backup and associate it with your custom key store. (This process creates a new cluster configuration with a VPC and private subnets.) For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-failed">How to Fix a Connection Failure</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p> <code>USER</em>LOCKED<em>OUT</code> - The <code>kmsuser</code> CU account is locked out of the associated AWS CloudHSM cluster due to too many failed password attempts. Before you can connect your custom key store to its AWS CloudHSM cluster, you must change the <code>kmsuser</code> account password and update the key store password value for the custom key store.</p> </li> <li> <p> <code>USER</em>LOGGED<em>IN</code> - The <code>kmsuser</code> CU account is logged into the the associated AWS CloudHSM cluster. This prevents AWS KMS from rotating the <code>kmsuser</code> account password and logging into the cluster. Before you can connect your custom key store to its AWS CloudHSM cluster, you must log the <code>kmsuser</code> CU out of the cluster. If you changed the <code>kmsuser</code> password to log into the cluster, you must also and update the key store password value for the custom key store. For help, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#login-kmsuser-2">How to Log Out and Reconnect</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p> <code>USER</em>NOT_FOUND</code> - AWS KMS cannot find a <code>kmsuser</code> CU account in the associated AWS CloudHSM cluster. Before you can connect your custom key store to its AWS CloudHSM cluster, you must create a <code>kmsuser</code> CU account in the cluster, and then update the key store password value for the custom key store.</p> </li> </ul></p>
     #[serde(rename = "ConnectionErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_error_code: Option<String>,
+    pub connection_error_code: Option<ConnectionErrorCodeType>,
     /// <p>Indicates whether the custom key store is connected to its AWS CloudHSM cluster.</p> <p>You can create and use CMKs in your custom key stores only when its connection state is <code>CONNECTED</code>.</p> <p>The value is <code>DISCONNECTED</code> if the key store has never been connected or you use the <a>DisconnectCustomKeyStore</a> operation to disconnect it. If the value is <code>CONNECTED</code> but you are having trouble using the custom key store, make sure that its associated AWS CloudHSM cluster is active and contains at least one active HSM.</p> <p>A value of <code>FAILED</code> indicates that an attempt to connect was unsuccessful. The <code>ConnectionErrorCode</code> field in the response indicates the cause of the failure. For help resolving a connection failure, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshooting a Custom Key Store</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<ConnectionStateType>,
     /// <p>The date and time when the custom key store was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,6 +634,366 @@ pub struct CustomKeyStoresListEntry {
     pub trust_anchor_certificate: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomerMasterKeySpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomerMasterKeySpec {
+    EccNistP256,
+    EccNistP384,
+    EccNistP521,
+    EccSecgP256K1,
+    Rsa2048,
+    Rsa3072,
+    Rsa4096,
+    SymmetricDefault,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomerMasterKeySpec),
+}
+
+impl Default for CustomerMasterKeySpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomerMasterKeySpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomerMasterKeySpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomerMasterKeySpec {
+    fn into(self) -> String {
+        match self {
+            CustomerMasterKeySpec::EccNistP256 => "ECC_NIST_P256".to_string(),
+            CustomerMasterKeySpec::EccNistP384 => "ECC_NIST_P384".to_string(),
+            CustomerMasterKeySpec::EccNistP521 => "ECC_NIST_P521".to_string(),
+            CustomerMasterKeySpec::EccSecgP256K1 => "ECC_SECG_P256K1".to_string(),
+            CustomerMasterKeySpec::Rsa2048 => "RSA_2048".to_string(),
+            CustomerMasterKeySpec::Rsa3072 => "RSA_3072".to_string(),
+            CustomerMasterKeySpec::Rsa4096 => "RSA_4096".to_string(),
+            CustomerMasterKeySpec::SymmetricDefault => "SYMMETRIC_DEFAULT".to_string(),
+            CustomerMasterKeySpec::UnknownVariant(UnknownCustomerMasterKeySpec {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomerMasterKeySpec {
+    fn into(self) -> &'a str {
+        match self {
+            CustomerMasterKeySpec::EccNistP256 => &"ECC_NIST_P256",
+            CustomerMasterKeySpec::EccNistP384 => &"ECC_NIST_P384",
+            CustomerMasterKeySpec::EccNistP521 => &"ECC_NIST_P521",
+            CustomerMasterKeySpec::EccSecgP256K1 => &"ECC_SECG_P256K1",
+            CustomerMasterKeySpec::Rsa2048 => &"RSA_2048",
+            CustomerMasterKeySpec::Rsa3072 => &"RSA_3072",
+            CustomerMasterKeySpec::Rsa4096 => &"RSA_4096",
+            CustomerMasterKeySpec::SymmetricDefault => &"SYMMETRIC_DEFAULT",
+            CustomerMasterKeySpec::UnknownVariant(UnknownCustomerMasterKeySpec {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomerMasterKeySpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "ECC_NIST_P256" => CustomerMasterKeySpec::EccNistP256,
+            "ECC_NIST_P384" => CustomerMasterKeySpec::EccNistP384,
+            "ECC_NIST_P521" => CustomerMasterKeySpec::EccNistP521,
+            "ECC_SECG_P256K1" => CustomerMasterKeySpec::EccSecgP256K1,
+            "RSA_2048" => CustomerMasterKeySpec::Rsa2048,
+            "RSA_3072" => CustomerMasterKeySpec::Rsa3072,
+            "RSA_4096" => CustomerMasterKeySpec::Rsa4096,
+            "SYMMETRIC_DEFAULT" => CustomerMasterKeySpec::SymmetricDefault,
+            _ => CustomerMasterKeySpec::UnknownVariant(UnknownCustomerMasterKeySpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CustomerMasterKeySpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ECC_NIST_P256" => CustomerMasterKeySpec::EccNistP256,
+            "ECC_NIST_P384" => CustomerMasterKeySpec::EccNistP384,
+            "ECC_NIST_P521" => CustomerMasterKeySpec::EccNistP521,
+            "ECC_SECG_P256K1" => CustomerMasterKeySpec::EccSecgP256K1,
+            "RSA_2048" => CustomerMasterKeySpec::Rsa2048,
+            "RSA_3072" => CustomerMasterKeySpec::Rsa3072,
+            "RSA_4096" => CustomerMasterKeySpec::Rsa4096,
+            "SYMMETRIC_DEFAULT" => CustomerMasterKeySpec::SymmetricDefault,
+            _ => CustomerMasterKeySpec::UnknownVariant(UnknownCustomerMasterKeySpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomerMasterKeySpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CustomerMasterKeySpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomerMasterKeySpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataKeyPairSpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataKeyPairSpec {
+    EccNistP256,
+    EccNistP384,
+    EccNistP521,
+    EccSecgP256K1,
+    Rsa2048,
+    Rsa3072,
+    Rsa4096,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataKeyPairSpec),
+}
+
+impl Default for DataKeyPairSpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataKeyPairSpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataKeyPairSpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataKeyPairSpec {
+    fn into(self) -> String {
+        match self {
+            DataKeyPairSpec::EccNistP256 => "ECC_NIST_P256".to_string(),
+            DataKeyPairSpec::EccNistP384 => "ECC_NIST_P384".to_string(),
+            DataKeyPairSpec::EccNistP521 => "ECC_NIST_P521".to_string(),
+            DataKeyPairSpec::EccSecgP256K1 => "ECC_SECG_P256K1".to_string(),
+            DataKeyPairSpec::Rsa2048 => "RSA_2048".to_string(),
+            DataKeyPairSpec::Rsa3072 => "RSA_3072".to_string(),
+            DataKeyPairSpec::Rsa4096 => "RSA_4096".to_string(),
+            DataKeyPairSpec::UnknownVariant(UnknownDataKeyPairSpec { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataKeyPairSpec {
+    fn into(self) -> &'a str {
+        match self {
+            DataKeyPairSpec::EccNistP256 => &"ECC_NIST_P256",
+            DataKeyPairSpec::EccNistP384 => &"ECC_NIST_P384",
+            DataKeyPairSpec::EccNistP521 => &"ECC_NIST_P521",
+            DataKeyPairSpec::EccSecgP256K1 => &"ECC_SECG_P256K1",
+            DataKeyPairSpec::Rsa2048 => &"RSA_2048",
+            DataKeyPairSpec::Rsa3072 => &"RSA_3072",
+            DataKeyPairSpec::Rsa4096 => &"RSA_4096",
+            DataKeyPairSpec::UnknownVariant(UnknownDataKeyPairSpec { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataKeyPairSpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "ECC_NIST_P256" => DataKeyPairSpec::EccNistP256,
+            "ECC_NIST_P384" => DataKeyPairSpec::EccNistP384,
+            "ECC_NIST_P521" => DataKeyPairSpec::EccNistP521,
+            "ECC_SECG_P256K1" => DataKeyPairSpec::EccSecgP256K1,
+            "RSA_2048" => DataKeyPairSpec::Rsa2048,
+            "RSA_3072" => DataKeyPairSpec::Rsa3072,
+            "RSA_4096" => DataKeyPairSpec::Rsa4096,
+            _ => DataKeyPairSpec::UnknownVariant(UnknownDataKeyPairSpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataKeyPairSpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ECC_NIST_P256" => DataKeyPairSpec::EccNistP256,
+            "ECC_NIST_P384" => DataKeyPairSpec::EccNistP384,
+            "ECC_NIST_P521" => DataKeyPairSpec::EccNistP521,
+            "ECC_SECG_P256K1" => DataKeyPairSpec::EccSecgP256K1,
+            "RSA_2048" => DataKeyPairSpec::Rsa2048,
+            "RSA_3072" => DataKeyPairSpec::Rsa3072,
+            "RSA_4096" => DataKeyPairSpec::Rsa4096,
+            _ => DataKeyPairSpec::UnknownVariant(UnknownDataKeyPairSpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataKeyPairSpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataKeyPairSpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataKeyPairSpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataKeySpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataKeySpec {
+    Aes128,
+    Aes256,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataKeySpec),
+}
+
+impl Default for DataKeySpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataKeySpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataKeySpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataKeySpec {
+    fn into(self) -> String {
+        match self {
+            DataKeySpec::Aes128 => "AES_128".to_string(),
+            DataKeySpec::Aes256 => "AES_256".to_string(),
+            DataKeySpec::UnknownVariant(UnknownDataKeySpec { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataKeySpec {
+    fn into(self) -> &'a str {
+        match self {
+            DataKeySpec::Aes128 => &"AES_128",
+            DataKeySpec::Aes256 => &"AES_256",
+            DataKeySpec::UnknownVariant(UnknownDataKeySpec { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataKeySpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES_128" => DataKeySpec::Aes128,
+            "AES_256" => DataKeySpec::Aes256,
+            _ => DataKeySpec::UnknownVariant(UnknownDataKeySpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataKeySpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES_128" => DataKeySpec::Aes128,
+            "AES_256" => DataKeySpec::Aes256,
+            _ => DataKeySpec::UnknownVariant(UnknownDataKeySpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataKeySpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataKeySpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DataKeySpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecryptRequest {
@@ -279,7 +1008,7 @@ pub struct DecryptRequest {
     /// <p>Specifies the encryption algorithm that will be used to decrypt the ciphertext. Specify the same algorithm that was used to encrypt the data. If you specify a different algorithm, the <code>Decrypt</code> operation fails.</p> <p>This parameter is required only when the ciphertext was encrypted under an asymmetric CMK. The default value, <code>SYMMETRIC_DEFAULT</code>, represents the only supported algorithm that is valid for symmetric CMKs.</p>
     #[serde(rename = "EncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithm: Option<String>,
+    pub encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>Specifies the encryption context to use when decrypting the data. An encryption context is valid only for <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations">cryptographic operations</a> with a symmetric CMK. The standard asymmetric encryption algorithms that AWS KMS uses do not support an encryption context.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "EncryptionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -300,7 +1029,7 @@ pub struct DecryptResponse {
     /// <p>The encryption algorithm that was used to decrypt the ciphertext.</p>
     #[serde(rename = "EncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithm: Option<String>,
+    pub encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>The Amazon Resource Name (<a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN">key ARN</a>) of the CMK that was used to decrypt the ciphertext.</p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -453,7 +1182,7 @@ pub struct EncryptRequest {
     /// <p>Specifies the encryption algorithm that AWS KMS will use to encrypt the plaintext message. The algorithm must be compatible with the CMK that you specify.</p> <p>This parameter is required only for asymmetric CMKs. The default value, <code>SYMMETRIC_DEFAULT</code>, is the algorithm used for symmetric CMKs. If you are using an asymmetric CMK, we recommend RSAES_OAEP_SHA_256.</p>
     #[serde(rename = "EncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithm: Option<String>,
+    pub encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>Specifies the encryption context that will be used to encrypt the data. An encryption context is valid only for <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations">cryptographic operations</a> with a symmetric CMK. The standard asymmetric encryption algorithms that AWS KMS uses do not support an encryption context. </p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "EncryptionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -490,11 +1219,226 @@ pub struct EncryptResponse {
     /// <p>The encryption algorithm that was used to encrypt the plaintext.</p>
     #[serde(rename = "EncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithm: Option<String>,
+    pub encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>The Amazon Resource Name (<a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN">key ARN</a>) of the CMK that was used to encrypt the plaintext.</p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionAlgorithmSpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionAlgorithmSpec {
+    RsaesOaepSha1,
+    RsaesOaepSha256,
+    SymmetricDefault,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionAlgorithmSpec),
+}
+
+impl Default for EncryptionAlgorithmSpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionAlgorithmSpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionAlgorithmSpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionAlgorithmSpec {
+    fn into(self) -> String {
+        match self {
+            EncryptionAlgorithmSpec::RsaesOaepSha1 => "RSAES_OAEP_SHA_1".to_string(),
+            EncryptionAlgorithmSpec::RsaesOaepSha256 => "RSAES_OAEP_SHA_256".to_string(),
+            EncryptionAlgorithmSpec::SymmetricDefault => "SYMMETRIC_DEFAULT".to_string(),
+            EncryptionAlgorithmSpec::UnknownVariant(UnknownEncryptionAlgorithmSpec {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionAlgorithmSpec {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionAlgorithmSpec::RsaesOaepSha1 => &"RSAES_OAEP_SHA_1",
+            EncryptionAlgorithmSpec::RsaesOaepSha256 => &"RSAES_OAEP_SHA_256",
+            EncryptionAlgorithmSpec::SymmetricDefault => &"SYMMETRIC_DEFAULT",
+            EncryptionAlgorithmSpec::UnknownVariant(UnknownEncryptionAlgorithmSpec {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncryptionAlgorithmSpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "RSAES_OAEP_SHA_1" => EncryptionAlgorithmSpec::RsaesOaepSha1,
+            "RSAES_OAEP_SHA_256" => EncryptionAlgorithmSpec::RsaesOaepSha256,
+            "SYMMETRIC_DEFAULT" => EncryptionAlgorithmSpec::SymmetricDefault,
+            _ => EncryptionAlgorithmSpec::UnknownVariant(UnknownEncryptionAlgorithmSpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionAlgorithmSpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RSAES_OAEP_SHA_1" => EncryptionAlgorithmSpec::RsaesOaepSha1,
+            "RSAES_OAEP_SHA_256" => EncryptionAlgorithmSpec::RsaesOaepSha256,
+            "SYMMETRIC_DEFAULT" => EncryptionAlgorithmSpec::SymmetricDefault,
+            _ => EncryptionAlgorithmSpec::UnknownVariant(UnknownEncryptionAlgorithmSpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionAlgorithmSpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionAlgorithmSpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionAlgorithmSpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExpirationModelType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExpirationModelType {
+    KeyMaterialDoesNotExpire,
+    KeyMaterialExpires,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExpirationModelType),
+}
+
+impl Default for ExpirationModelType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExpirationModelType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExpirationModelType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExpirationModelType {
+    fn into(self) -> String {
+        match self {
+            ExpirationModelType::KeyMaterialDoesNotExpire => {
+                "KEY_MATERIAL_DOES_NOT_EXPIRE".to_string()
+            }
+            ExpirationModelType::KeyMaterialExpires => "KEY_MATERIAL_EXPIRES".to_string(),
+            ExpirationModelType::UnknownVariant(UnknownExpirationModelType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExpirationModelType {
+    fn into(self) -> &'a str {
+        match self {
+            ExpirationModelType::KeyMaterialDoesNotExpire => &"KEY_MATERIAL_DOES_NOT_EXPIRE",
+            ExpirationModelType::KeyMaterialExpires => &"KEY_MATERIAL_EXPIRES",
+            ExpirationModelType::UnknownVariant(UnknownExpirationModelType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ExpirationModelType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEY_MATERIAL_DOES_NOT_EXPIRE" => ExpirationModelType::KeyMaterialDoesNotExpire,
+            "KEY_MATERIAL_EXPIRES" => ExpirationModelType::KeyMaterialExpires,
+            _ => ExpirationModelType::UnknownVariant(UnknownExpirationModelType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExpirationModelType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEY_MATERIAL_DOES_NOT_EXPIRE" => ExpirationModelType::KeyMaterialDoesNotExpire,
+            "KEY_MATERIAL_EXPIRES" => ExpirationModelType::KeyMaterialExpires,
+            _ => ExpirationModelType::UnknownVariant(UnknownExpirationModelType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExpirationModelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExpirationModelType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExpirationModelType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -513,7 +1457,7 @@ pub struct GenerateDataKeyPairRequest {
     pub key_id: String,
     /// <p>Determines the type of data key pair that is generated. </p> <p>The AWS KMS rule that restricts the use of asymmetric RSA CMKs to encrypt and decrypt or to sign and verify (but not both), and the rule that permits you to use ECC CMKs only to sign and verify, are not effective outside of AWS KMS.</p>
     #[serde(rename = "KeyPairSpec")]
-    pub key_pair_spec: String,
+    pub key_pair_spec: DataKeyPairSpec,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -526,7 +1470,7 @@ pub struct GenerateDataKeyPairResponse {
     /// <p>The type of data key pair that was generated.</p>
     #[serde(rename = "KeyPairSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_pair_spec: Option<String>,
+    pub key_pair_spec: Option<DataKeyPairSpec>,
     /// <p>The encrypted copy of the private key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not Base64-encoded.</p>
     #[serde(rename = "PrivateKeyCiphertextBlob")]
     #[serde(
@@ -572,7 +1516,7 @@ pub struct GenerateDataKeyPairWithoutPlaintextRequest {
     pub key_id: String,
     /// <p>Determines the type of data key pair that is generated.</p> <p>The AWS KMS rule that restricts the use of asymmetric RSA CMKs to encrypt and decrypt or to sign and verify (but not both), and the rule that permits you to use ECC CMKs only to sign and verify, are not effective outside of AWS KMS.</p>
     #[serde(rename = "KeyPairSpec")]
-    pub key_pair_spec: String,
+    pub key_pair_spec: DataKeyPairSpec,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -585,7 +1529,7 @@ pub struct GenerateDataKeyPairWithoutPlaintextResponse {
     /// <p>The type of data key pair that was generated.</p>
     #[serde(rename = "KeyPairSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_pair_spec: Option<String>,
+    pub key_pair_spec: Option<DataKeyPairSpec>,
     /// <p>The encrypted copy of the private key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not Base64-encoded.</p>
     #[serde(rename = "PrivateKeyCiphertextBlob")]
     #[serde(
@@ -623,7 +1567,7 @@ pub struct GenerateDataKeyRequest {
     /// <p>Specifies the length of the data key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p> <p>You must specify either the <code>KeySpec</code> or the <code>NumberOfBytes</code> parameter (but not both) in every <code>GenerateDataKey</code> request.</p>
     #[serde(rename = "KeySpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_spec: Option<String>,
+    pub key_spec: Option<DataKeySpec>,
     /// <p>Specifies the length of the data key in bytes. For example, use the value 64 to generate a 512-bit data key (64 bytes is 512 bits). For 128-bit (16-byte) and 256-bit (32-byte) data keys, use the <code>KeySpec</code> parameter.</p> <p>You must specify either the <code>KeySpec</code> or the <code>NumberOfBytes</code> parameter (but not both) in every <code>GenerateDataKey</code> request.</p>
     #[serde(rename = "NumberOfBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -674,7 +1618,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
     /// <p>The length of the data key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>
     #[serde(rename = "KeySpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_spec: Option<String>,
+    pub key_spec: Option<DataKeySpec>,
     /// <p>The length of the data key in bytes. For example, use the value 64 to generate a 512-bit data key (64 bytes is 512 bits). For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use the <code>KeySpec</code> field instead of this one.</p>
     #[serde(rename = "NumberOfBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -771,10 +1715,10 @@ pub struct GetParametersForImportRequest {
     pub key_id: String,
     /// <p>The algorithm you will use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-encrypt-key-material.html">Encrypt the Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "WrappingAlgorithm")]
-    pub wrapping_algorithm: String,
+    pub wrapping_algorithm: AlgorithmSpec,
     /// <p>The type of wrapping key (public key) to return in the response. Only 2048-bit RSA public keys are supported.</p>
     #[serde(rename = "WrappingKeySpec")]
-    pub wrapping_key_spec: String,
+    pub wrapping_key_spec: WrappingKeySpec,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -826,11 +1770,11 @@ pub struct GetPublicKeyResponse {
     /// <p>The type of the of the public key that was downloaded.</p>
     #[serde(rename = "CustomerMasterKeySpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub customer_master_key_spec: Option<String>,
+    pub customer_master_key_spec: Option<CustomerMasterKeySpec>,
     /// <p>The encryption algorithms that AWS KMS supports for this key. </p> <p>This information is critical. If a public key encrypts data outside of AWS KMS by using an unsupported encryption algorithm, the ciphertext cannot be decrypted. </p> <p>This field appears in the response only when the <code>KeyUsage</code> of the public key is <code>ENCRYPT_DECRYPT</code>.</p>
     #[serde(rename = "EncryptionAlgorithms")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithms: Option<Vec<String>>,
+    pub encryption_algorithms: Option<Vec<EncryptionAlgorithmSpec>>,
     /// <p>The Amazon Resource Name (<a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN">key ARN</a>) of the asymmetric CMK from which the public key was downloaded.</p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -838,7 +1782,7 @@ pub struct GetPublicKeyResponse {
     /// <p>The permitted use of the public key. Valid values are <code>ENCRYPT_DECRYPT</code> or <code>SIGN_VERIFY</code>. </p> <p>This information is critical. If a public key with <code>SIGN_VERIFY</code> key usage encrypts data outside of AWS KMS, the ciphertext cannot be decrypted. </p>
     #[serde(rename = "KeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_usage: Option<String>,
+    pub key_usage: Option<KeyUsageType>,
     /// <p><p>The exported public key. </p> <p>The value is a DER-encoded X.509 public key, also known as <code>SubjectPublicKeyInfo</code> (SPKI), as defined in <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not Base64-encoded.</p> <p/></p>
     #[serde(rename = "PublicKey")]
     #[serde(
@@ -851,7 +1795,7 @@ pub struct GetPublicKeyResponse {
     /// <p>The signing algorithms that AWS KMS supports for this key.</p> <p>This field appears in the response only when the <code>KeyUsage</code> of the public key is <code>SIGN_VERIFY</code>.</p>
     #[serde(rename = "SigningAlgorithms")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_algorithms: Option<Vec<String>>,
+    pub signing_algorithms: Option<Vec<SigningAlgorithmSpec>>,
 }
 
 /// <p><p>Use this structure to allow <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations">cryptographic operations</a> in the grant only when the operation request includes the specified <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">encryption context</a>. </p> <p>AWS KMS applies the grant constraints only to cryptographic operations that support an encryption context, that is, all cryptographic operations with a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#symmetric-cmks">symmetric CMK</a>. Grant constraints are not applied to operations that do not support an encryption context, such as cryptographic operations with asymmetric CMKs and management operations, such as <a>DescribeKey</a> or <a>RetireGrant</a>.</p> <important> <p>In a cryptographic operation, the encryption context in the decryption operation must be an exact, case-sensitive match for the keys and values in the encryption context of the encryption operation. Only the order of the pairs can vary.</p> <p>However, in a grant constraint, the key in each key-value pair is not case sensitive, but the value is case sensitive.</p> <p>To avoid confusion, do not use multiple encryption context pairs that differ only by case. To require a fully case-sensitive encryption context, use the <code>kms:EncryptionContext:</code> and <code>kms:EncryptionContextKeys</code> conditions in an IAM or key policy. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-encryption-context">kms:EncryptionContext:</a> in the <i> <i>AWS Key Management Service Developer Guide</i> </i>.</p> </important></p>
@@ -902,11 +1846,181 @@ pub struct GrantListEntry {
     /// <p>The list of operations permitted by the grant.</p>
     #[serde(rename = "Operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operations: Option<Vec<String>>,
+    pub operations: Option<Vec<GrantOperation>>,
     /// <p>The principal that can retire the grant.</p>
     #[serde(rename = "RetiringPrincipal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retiring_principal: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGrantOperation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GrantOperation {
+    CreateGrant,
+    Decrypt,
+    DescribeKey,
+    Encrypt,
+    GenerateDataKey,
+    GenerateDataKeyPair,
+    GenerateDataKeyPairWithoutPlaintext,
+    GenerateDataKeyWithoutPlaintext,
+    GetPublicKey,
+    ReEncryptFrom,
+    ReEncryptTo,
+    RetireGrant,
+    Sign,
+    Verify,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGrantOperation),
+}
+
+impl Default for GrantOperation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GrantOperation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GrantOperation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GrantOperation {
+    fn into(self) -> String {
+        match self {
+            GrantOperation::CreateGrant => "CreateGrant".to_string(),
+            GrantOperation::Decrypt => "Decrypt".to_string(),
+            GrantOperation::DescribeKey => "DescribeKey".to_string(),
+            GrantOperation::Encrypt => "Encrypt".to_string(),
+            GrantOperation::GenerateDataKey => "GenerateDataKey".to_string(),
+            GrantOperation::GenerateDataKeyPair => "GenerateDataKeyPair".to_string(),
+            GrantOperation::GenerateDataKeyPairWithoutPlaintext => {
+                "GenerateDataKeyPairWithoutPlaintext".to_string()
+            }
+            GrantOperation::GenerateDataKeyWithoutPlaintext => {
+                "GenerateDataKeyWithoutPlaintext".to_string()
+            }
+            GrantOperation::GetPublicKey => "GetPublicKey".to_string(),
+            GrantOperation::ReEncryptFrom => "ReEncryptFrom".to_string(),
+            GrantOperation::ReEncryptTo => "ReEncryptTo".to_string(),
+            GrantOperation::RetireGrant => "RetireGrant".to_string(),
+            GrantOperation::Sign => "Sign".to_string(),
+            GrantOperation::Verify => "Verify".to_string(),
+            GrantOperation::UnknownVariant(UnknownGrantOperation { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GrantOperation {
+    fn into(self) -> &'a str {
+        match self {
+            GrantOperation::CreateGrant => &"CreateGrant",
+            GrantOperation::Decrypt => &"Decrypt",
+            GrantOperation::DescribeKey => &"DescribeKey",
+            GrantOperation::Encrypt => &"Encrypt",
+            GrantOperation::GenerateDataKey => &"GenerateDataKey",
+            GrantOperation::GenerateDataKeyPair => &"GenerateDataKeyPair",
+            GrantOperation::GenerateDataKeyPairWithoutPlaintext => {
+                &"GenerateDataKeyPairWithoutPlaintext"
+            }
+            GrantOperation::GenerateDataKeyWithoutPlaintext => &"GenerateDataKeyWithoutPlaintext",
+            GrantOperation::GetPublicKey => &"GetPublicKey",
+            GrantOperation::ReEncryptFrom => &"ReEncryptFrom",
+            GrantOperation::ReEncryptTo => &"ReEncryptTo",
+            GrantOperation::RetireGrant => &"RetireGrant",
+            GrantOperation::Sign => &"Sign",
+            GrantOperation::Verify => &"Verify",
+            GrantOperation::UnknownVariant(UnknownGrantOperation { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GrantOperation {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreateGrant" => GrantOperation::CreateGrant,
+            "Decrypt" => GrantOperation::Decrypt,
+            "DescribeKey" => GrantOperation::DescribeKey,
+            "Encrypt" => GrantOperation::Encrypt,
+            "GenerateDataKey" => GrantOperation::GenerateDataKey,
+            "GenerateDataKeyPair" => GrantOperation::GenerateDataKeyPair,
+            "GenerateDataKeyPairWithoutPlaintext" => {
+                GrantOperation::GenerateDataKeyPairWithoutPlaintext
+            }
+            "GenerateDataKeyWithoutPlaintext" => GrantOperation::GenerateDataKeyWithoutPlaintext,
+            "GetPublicKey" => GrantOperation::GetPublicKey,
+            "ReEncryptFrom" => GrantOperation::ReEncryptFrom,
+            "ReEncryptTo" => GrantOperation::ReEncryptTo,
+            "RetireGrant" => GrantOperation::RetireGrant,
+            "Sign" => GrantOperation::Sign,
+            "Verify" => GrantOperation::Verify,
+            _ => GrantOperation::UnknownVariant(UnknownGrantOperation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GrantOperation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreateGrant" => GrantOperation::CreateGrant,
+            "Decrypt" => GrantOperation::Decrypt,
+            "DescribeKey" => GrantOperation::DescribeKey,
+            "Encrypt" => GrantOperation::Encrypt,
+            "GenerateDataKey" => GrantOperation::GenerateDataKey,
+            "GenerateDataKeyPair" => GrantOperation::GenerateDataKeyPair,
+            "GenerateDataKeyPairWithoutPlaintext" => {
+                GrantOperation::GenerateDataKeyPairWithoutPlaintext
+            }
+            "GenerateDataKeyWithoutPlaintext" => GrantOperation::GenerateDataKeyWithoutPlaintext,
+            "GetPublicKey" => GrantOperation::GetPublicKey,
+            "ReEncryptFrom" => GrantOperation::ReEncryptFrom,
+            "ReEncryptTo" => GrantOperation::ReEncryptTo,
+            "RetireGrant" => GrantOperation::RetireGrant,
+            "Sign" => GrantOperation::Sign,
+            "Verify" => GrantOperation::Verify,
+            _ => GrantOperation::UnknownVariant(UnknownGrantOperation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GrantOperation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GrantOperation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GrantOperation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -923,7 +2037,7 @@ pub struct ImportKeyMaterialRequest {
     /// <p>Specifies whether the key material expires. The default is <code>KEY_MATERIAL_EXPIRES</code>, in which case you must include the <code>ValidTo</code> parameter. When this parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>, you must omit the <code>ValidTo</code> parameter.</p>
     #[serde(rename = "ExpirationModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub expiration_model: Option<String>,
+    pub expiration_model: Option<ExpirationModelType>,
     /// <p>The import token that you received in the response to a previous <a>GetParametersForImport</a> request. It must be from the same response that contained the public key that you used to encrypt the key material.</p>
     #[serde(rename = "ImportToken")]
     #[serde(
@@ -959,6 +2073,107 @@ pub struct KeyListEntry {
     pub key_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyManagerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyManagerType {
+    Aws,
+    Customer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyManagerType),
+}
+
+impl Default for KeyManagerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyManagerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyManagerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyManagerType {
+    fn into(self) -> String {
+        match self {
+            KeyManagerType::Aws => "AWS".to_string(),
+            KeyManagerType::Customer => "CUSTOMER".to_string(),
+            KeyManagerType::UnknownVariant(UnknownKeyManagerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyManagerType {
+    fn into(self) -> &'a str {
+        match self {
+            KeyManagerType::Aws => &"AWS",
+            KeyManagerType::Customer => &"CUSTOMER",
+            KeyManagerType::UnknownVariant(UnknownKeyManagerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyManagerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => KeyManagerType::Aws,
+            "CUSTOMER" => KeyManagerType::Customer,
+            _ => KeyManagerType::UnknownVariant(UnknownKeyManagerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyManagerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => KeyManagerType::Aws,
+            "CUSTOMER" => KeyManagerType::Customer,
+            _ => KeyManagerType::UnknownVariant(UnknownKeyManagerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyManagerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for KeyManagerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyManagerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains metadata about a customer master key (CMK).</p> <p>This data type is used as a response element for the <a>CreateKey</a> and <a>DescribeKey</a> operations.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -986,7 +2201,7 @@ pub struct KeyMetadata {
     /// <p>Describes the type of key material in the CMK.</p>
     #[serde(rename = "CustomerMasterKeySpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub customer_master_key_spec: Option<String>,
+    pub customer_master_key_spec: Option<CustomerMasterKeySpec>,
     /// <p>The date and time after which AWS KMS deletes the CMK. This value is present only when <code>KeyState</code> is <code>PendingDeletion</code>.</p>
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1002,38 +2217,254 @@ pub struct KeyMetadata {
     /// <p>The encryption algorithms that the CMK supports. You cannot use the CMK with other encryption algorithms within AWS KMS.</p> <p>This field appears only when the <code>KeyUsage</code> of the CMK is <code>ENCRYPT_DECRYPT</code>.</p>
     #[serde(rename = "EncryptionAlgorithms")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithms: Option<Vec<String>>,
+    pub encryption_algorithms: Option<Vec<EncryptionAlgorithmSpec>>,
     /// <p>Specifies whether the CMK's key material expires. This value is present only when <code>Origin</code> is <code>EXTERNAL</code>, otherwise this value is omitted.</p>
     #[serde(rename = "ExpirationModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub expiration_model: Option<String>,
+    pub expiration_model: Option<ExpirationModelType>,
     /// <p>The globally unique identifier for the CMK.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The manager of the CMK. CMKs in your AWS account are either customer managed or AWS managed. For more information about the difference, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KeyManager")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_manager: Option<String>,
+    pub key_manager: Option<KeyManagerType>,
     /// <p>The current status of the CMK.</p> <p>For more information about how key state affects the use of a CMK, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">Key state: Effect on your CMK</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KeyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_state: Option<String>,
+    pub key_state: Option<KeyState>,
     /// <p>The <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations">cryptographic operations</a> for which you can use the CMK.</p>
     #[serde(rename = "KeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_usage: Option<String>,
+    pub key_usage: Option<KeyUsageType>,
     /// <p>The source of the CMK's key material. When this value is <code>AWS_KMS</code>, AWS KMS created the key material. When this value is <code>EXTERNAL</code>, the key material was imported from your existing key management infrastructure or the CMK lacks key material. When this value is <code>AWS_CLOUDHSM</code>, the key material was created in the AWS CloudHSM cluster associated with a custom key store.</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin: Option<String>,
+    pub origin: Option<OriginType>,
     /// <p>The signing algorithms that the CMK supports. You cannot use the CMK with other signing algorithms within AWS KMS.</p> <p>This field appears only when the <code>KeyUsage</code> of the CMK is <code>SIGN_VERIFY</code>.</p>
     #[serde(rename = "SigningAlgorithms")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_algorithms: Option<Vec<String>>,
+    pub signing_algorithms: Option<Vec<SigningAlgorithmSpec>>,
     /// <p>The time at which the imported key material expires. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. This value is present only for CMKs whose <code>Origin</code> is <code>EXTERNAL</code> and whose <code>ExpirationModel</code> is <code>KEY_MATERIAL_EXPIRES</code>, otherwise this value is omitted.</p>
     #[serde(rename = "ValidTo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_to: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyState {
+    Disabled,
+    Enabled,
+    PendingDeletion,
+    PendingImport,
+    Unavailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyState),
+}
+
+impl Default for KeyState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyState {
+    fn into(self) -> String {
+        match self {
+            KeyState::Disabled => "Disabled".to_string(),
+            KeyState::Enabled => "Enabled".to_string(),
+            KeyState::PendingDeletion => "PendingDeletion".to_string(),
+            KeyState::PendingImport => "PendingImport".to_string(),
+            KeyState::Unavailable => "Unavailable".to_string(),
+            KeyState::UnknownVariant(UnknownKeyState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyState {
+    fn into(self) -> &'a str {
+        match self {
+            KeyState::Disabled => &"Disabled",
+            KeyState::Enabled => &"Enabled",
+            KeyState::PendingDeletion => &"PendingDeletion",
+            KeyState::PendingImport => &"PendingImport",
+            KeyState::Unavailable => &"Unavailable",
+            KeyState::UnknownVariant(UnknownKeyState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => KeyState::Disabled,
+            "Enabled" => KeyState::Enabled,
+            "PendingDeletion" => KeyState::PendingDeletion,
+            "PendingImport" => KeyState::PendingImport,
+            "Unavailable" => KeyState::Unavailable,
+            _ => KeyState::UnknownVariant(UnknownKeyState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => KeyState::Disabled,
+            "Enabled" => KeyState::Enabled,
+            "PendingDeletion" => KeyState::PendingDeletion,
+            "PendingImport" => KeyState::PendingImport,
+            "Unavailable" => KeyState::Unavailable,
+            _ => KeyState::UnknownVariant(UnknownKeyState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for KeyState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyUsageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyUsageType {
+    EncryptDecrypt,
+    SignVerify,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyUsageType),
+}
+
+impl Default for KeyUsageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyUsageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyUsageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyUsageType {
+    fn into(self) -> String {
+        match self {
+            KeyUsageType::EncryptDecrypt => "ENCRYPT_DECRYPT".to_string(),
+            KeyUsageType::SignVerify => "SIGN_VERIFY".to_string(),
+            KeyUsageType::UnknownVariant(UnknownKeyUsageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyUsageType {
+    fn into(self) -> &'a str {
+        match self {
+            KeyUsageType::EncryptDecrypt => &"ENCRYPT_DECRYPT",
+            KeyUsageType::SignVerify => &"SIGN_VERIFY",
+            KeyUsageType::UnknownVariant(UnknownKeyUsageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyUsageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENCRYPT_DECRYPT" => KeyUsageType::EncryptDecrypt,
+            "SIGN_VERIFY" => KeyUsageType::SignVerify,
+            _ => KeyUsageType::UnknownVariant(UnknownKeyUsageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyUsageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENCRYPT_DECRYPT" => KeyUsageType::EncryptDecrypt,
+            "SIGN_VERIFY" => KeyUsageType::SignVerify,
+            _ => KeyUsageType::UnknownVariant(UnknownKeyUsageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyUsageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for KeyUsageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyUsageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1215,6 +2646,212 @@ pub struct ListRetirableGrantsRequest {
     pub retiring_principal: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageType {
+    Digest,
+    Raw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageType),
+}
+
+impl Default for MessageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageType {
+    fn into(self) -> String {
+        match self {
+            MessageType::Digest => "DIGEST".to_string(),
+            MessageType::Raw => "RAW".to_string(),
+            MessageType::UnknownVariant(UnknownMessageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageType {
+    fn into(self) -> &'a str {
+        match self {
+            MessageType::Digest => &"DIGEST",
+            MessageType::Raw => &"RAW",
+            MessageType::UnknownVariant(UnknownMessageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MessageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DIGEST" => MessageType::Digest,
+            "RAW" => MessageType::Raw,
+            _ => MessageType::UnknownVariant(UnknownMessageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MessageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DIGEST" => MessageType::Digest,
+            "RAW" => MessageType::Raw,
+            _ => MessageType::UnknownVariant(UnknownMessageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MessageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MessageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginType {
+    AwsCloudhsm,
+    AwsKms,
+    External,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginType),
+}
+
+impl Default for OriginType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginType {
+    fn into(self) -> String {
+        match self {
+            OriginType::AwsCloudhsm => "AWS_CLOUDHSM".to_string(),
+            OriginType::AwsKms => "AWS_KMS".to_string(),
+            OriginType::External => "EXTERNAL".to_string(),
+            OriginType::UnknownVariant(UnknownOriginType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginType {
+    fn into(self) -> &'a str {
+        match self {
+            OriginType::AwsCloudhsm => &"AWS_CLOUDHSM",
+            OriginType::AwsKms => &"AWS_KMS",
+            OriginType::External => &"EXTERNAL",
+            OriginType::UnknownVariant(UnknownOriginType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_CLOUDHSM" => OriginType::AwsCloudhsm,
+            "AWS_KMS" => OriginType::AwsKms,
+            "EXTERNAL" => OriginType::External,
+            _ => OriginType::UnknownVariant(UnknownOriginType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OriginType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_CLOUDHSM" => OriginType::AwsCloudhsm,
+            "AWS_KMS" => OriginType::AwsKms,
+            "EXTERNAL" => OriginType::External,
+            _ => OriginType::UnknownVariant(UnknownOriginType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OriginType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OriginType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutKeyPolicyRequest {
@@ -1247,7 +2884,7 @@ pub struct ReEncryptRequest {
     /// <p>Specifies the encryption algorithm that AWS KMS will use to reecrypt the data after it has decrypted it. The default value, <code>SYMMETRIC_DEFAULT</code>, represents the encryption algorithm used for symmetric CMKs.</p> <p>This parameter is required only when the destination CMK is an asymmetric CMK.</p>
     #[serde(rename = "DestinationEncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_encryption_algorithm: Option<String>,
+    pub destination_encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>Specifies that encryption context to use when the reencrypting the data.</p> <p>A destination encryption context is valid only when the destination CMK is a symmetric CMK. The standard ciphertext format for asymmetric CMKs does not include fields for metadata.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "DestinationEncryptionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1262,7 +2899,7 @@ pub struct ReEncryptRequest {
     /// <p>Specifies the encryption algorithm that AWS KMS will use to decrypt the ciphertext before it is reencrypted. The default value, <code>SYMMETRIC_DEFAULT</code>, represents the algorithm used for symmetric CMKs.</p> <p>Specify the same algorithm that was used to encrypt the ciphertext. If you specify a different algorithm, the decrypt attempt fails.</p> <p>This parameter is required only when the ciphertext was encrypted under an asymmetric CMK.</p>
     #[serde(rename = "SourceEncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_encryption_algorithm: Option<String>,
+    pub source_encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>Specifies the encryption context to use to decrypt the ciphertext. Enter the same encryption context that was used to encrypt the ciphertext.</p> <p>An <i>encryption context</i> is a collection of non-secret key-value pairs that represents additional authenticated data. When you use an encryption context to encrypt data, you must specify the same (an exact case-sensitive match) encryption context to decrypt the data. An encryption context is optional when encrypting with a symmetric CMK, but it is highly recommended.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "SourceEncryptionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1288,7 +2925,7 @@ pub struct ReEncryptResponse {
     /// <p>The encryption algorithm that was used to reencrypt the data.</p>
     #[serde(rename = "DestinationEncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_encryption_algorithm: Option<String>,
+    pub destination_encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>The Amazon Resource Name (<a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN">key ARN</a>) of the CMK that was used to reencrypt the data.</p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1296,7 +2933,7 @@ pub struct ReEncryptResponse {
     /// <p>The encryption algorithm that was used to decrypt the ciphertext before it was reencrypted.</p>
     #[serde(rename = "SourceEncryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_encryption_algorithm: Option<String>,
+    pub source_encryption_algorithm: Option<EncryptionAlgorithmSpec>,
     /// <p>Unique identifier of the CMK used to originally encrypt the data.</p>
     #[serde(rename = "SourceKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1377,10 +3014,10 @@ pub struct SignRequest {
     /// <p>Tells AWS KMS whether the value of the <code>Message</code> parameter is a message or message digest. The default value, RAW, indicates a message. To indicate a message digest, enter <code>DIGEST</code>.</p>
     #[serde(rename = "MessageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_type: Option<String>,
+    pub message_type: Option<MessageType>,
     /// <p>Specifies the signing algorithm to use when signing the message. </p> <p>Choose an algorithm that is compatible with the type and size of the specified asymmetric CMK.</p>
     #[serde(rename = "SigningAlgorithm")]
-    pub signing_algorithm: String,
+    pub signing_algorithm: SigningAlgorithmSpec,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1402,7 +3039,146 @@ pub struct SignResponse {
     /// <p>The signing algorithm that was used to sign the message.</p>
     #[serde(rename = "SigningAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_algorithm: Option<String>,
+    pub signing_algorithm: Option<SigningAlgorithmSpec>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSigningAlgorithmSpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SigningAlgorithmSpec {
+    EcdsaSha256,
+    EcdsaSha384,
+    EcdsaSha512,
+    RsassaPkcs1V15Sha256,
+    RsassaPkcs1V15Sha384,
+    RsassaPkcs1V15Sha512,
+    RsassaPssSha256,
+    RsassaPssSha384,
+    RsassaPssSha512,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSigningAlgorithmSpec),
+}
+
+impl Default for SigningAlgorithmSpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SigningAlgorithmSpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SigningAlgorithmSpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SigningAlgorithmSpec {
+    fn into(self) -> String {
+        match self {
+            SigningAlgorithmSpec::EcdsaSha256 => "ECDSA_SHA_256".to_string(),
+            SigningAlgorithmSpec::EcdsaSha384 => "ECDSA_SHA_384".to_string(),
+            SigningAlgorithmSpec::EcdsaSha512 => "ECDSA_SHA_512".to_string(),
+            SigningAlgorithmSpec::RsassaPkcs1V15Sha256 => "RSASSA_PKCS1_V1_5_SHA_256".to_string(),
+            SigningAlgorithmSpec::RsassaPkcs1V15Sha384 => "RSASSA_PKCS1_V1_5_SHA_384".to_string(),
+            SigningAlgorithmSpec::RsassaPkcs1V15Sha512 => "RSASSA_PKCS1_V1_5_SHA_512".to_string(),
+            SigningAlgorithmSpec::RsassaPssSha256 => "RSASSA_PSS_SHA_256".to_string(),
+            SigningAlgorithmSpec::RsassaPssSha384 => "RSASSA_PSS_SHA_384".to_string(),
+            SigningAlgorithmSpec::RsassaPssSha512 => "RSASSA_PSS_SHA_512".to_string(),
+            SigningAlgorithmSpec::UnknownVariant(UnknownSigningAlgorithmSpec {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SigningAlgorithmSpec {
+    fn into(self) -> &'a str {
+        match self {
+            SigningAlgorithmSpec::EcdsaSha256 => &"ECDSA_SHA_256",
+            SigningAlgorithmSpec::EcdsaSha384 => &"ECDSA_SHA_384",
+            SigningAlgorithmSpec::EcdsaSha512 => &"ECDSA_SHA_512",
+            SigningAlgorithmSpec::RsassaPkcs1V15Sha256 => &"RSASSA_PKCS1_V1_5_SHA_256",
+            SigningAlgorithmSpec::RsassaPkcs1V15Sha384 => &"RSASSA_PKCS1_V1_5_SHA_384",
+            SigningAlgorithmSpec::RsassaPkcs1V15Sha512 => &"RSASSA_PKCS1_V1_5_SHA_512",
+            SigningAlgorithmSpec::RsassaPssSha256 => &"RSASSA_PSS_SHA_256",
+            SigningAlgorithmSpec::RsassaPssSha384 => &"RSASSA_PSS_SHA_384",
+            SigningAlgorithmSpec::RsassaPssSha512 => &"RSASSA_PSS_SHA_512",
+            SigningAlgorithmSpec::UnknownVariant(UnknownSigningAlgorithmSpec {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SigningAlgorithmSpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "ECDSA_SHA_256" => SigningAlgorithmSpec::EcdsaSha256,
+            "ECDSA_SHA_384" => SigningAlgorithmSpec::EcdsaSha384,
+            "ECDSA_SHA_512" => SigningAlgorithmSpec::EcdsaSha512,
+            "RSASSA_PKCS1_V1_5_SHA_256" => SigningAlgorithmSpec::RsassaPkcs1V15Sha256,
+            "RSASSA_PKCS1_V1_5_SHA_384" => SigningAlgorithmSpec::RsassaPkcs1V15Sha384,
+            "RSASSA_PKCS1_V1_5_SHA_512" => SigningAlgorithmSpec::RsassaPkcs1V15Sha512,
+            "RSASSA_PSS_SHA_256" => SigningAlgorithmSpec::RsassaPssSha256,
+            "RSASSA_PSS_SHA_384" => SigningAlgorithmSpec::RsassaPssSha384,
+            "RSASSA_PSS_SHA_512" => SigningAlgorithmSpec::RsassaPssSha512,
+            _ => SigningAlgorithmSpec::UnknownVariant(UnknownSigningAlgorithmSpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SigningAlgorithmSpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ECDSA_SHA_256" => SigningAlgorithmSpec::EcdsaSha256,
+            "ECDSA_SHA_384" => SigningAlgorithmSpec::EcdsaSha384,
+            "ECDSA_SHA_512" => SigningAlgorithmSpec::EcdsaSha512,
+            "RSASSA_PKCS1_V1_5_SHA_256" => SigningAlgorithmSpec::RsassaPkcs1V15Sha256,
+            "RSASSA_PKCS1_V1_5_SHA_384" => SigningAlgorithmSpec::RsassaPkcs1V15Sha384,
+            "RSASSA_PKCS1_V1_5_SHA_512" => SigningAlgorithmSpec::RsassaPkcs1V15Sha512,
+            "RSASSA_PSS_SHA_256" => SigningAlgorithmSpec::RsassaPssSha256,
+            "RSASSA_PSS_SHA_384" => SigningAlgorithmSpec::RsassaPssSha384,
+            "RSASSA_PSS_SHA_512" => SigningAlgorithmSpec::RsassaPssSha512,
+            _ => SigningAlgorithmSpec::UnknownVariant(UnknownSigningAlgorithmSpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SigningAlgorithmSpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SigningAlgorithmSpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SigningAlgorithmSpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A key-value pair. A tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>For information about the rules that apply to tag keys and tag values, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
@@ -1505,7 +3281,7 @@ pub struct VerifyRequest {
     /// <p><p>Tells AWS KMS whether the value of the <code>Message</code> parameter is a message or message digest. The default value, RAW, indicates a message. To indicate a message digest, enter <code>DIGEST</code>.</p> <important> <p>Use the <code>DIGEST</code> value only when the value of the <code>Message</code> parameter is a message digest. If you use the <code>DIGEST</code> value with a raw message, the security of the verification operation can be compromised.</p> </important></p>
     #[serde(rename = "MessageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_type: Option<String>,
+    pub message_type: Option<MessageType>,
     /// <p>The signature that the <code>Sign</code> operation generated.</p>
     #[serde(rename = "Signature")]
     #[serde(
@@ -1516,7 +3292,7 @@ pub struct VerifyRequest {
     pub signature: bytes::Bytes,
     /// <p>The signing algorithm that was used to sign the message. If you submit a different algorithm, the signature verification fails.</p>
     #[serde(rename = "SigningAlgorithm")]
-    pub signing_algorithm: String,
+    pub signing_algorithm: SigningAlgorithmSpec,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1533,7 +3309,103 @@ pub struct VerifyResponse {
     /// <p>The signing algorithm that was used to verify the signature.</p>
     #[serde(rename = "SigningAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_algorithm: Option<String>,
+    pub signing_algorithm: Option<SigningAlgorithmSpec>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWrappingKeySpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WrappingKeySpec {
+    Rsa2048,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWrappingKeySpec),
+}
+
+impl Default for WrappingKeySpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WrappingKeySpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WrappingKeySpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WrappingKeySpec {
+    fn into(self) -> String {
+        match self {
+            WrappingKeySpec::Rsa2048 => "RSA_2048".to_string(),
+            WrappingKeySpec::UnknownVariant(UnknownWrappingKeySpec { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WrappingKeySpec {
+    fn into(self) -> &'a str {
+        match self {
+            WrappingKeySpec::Rsa2048 => &"RSA_2048",
+            WrappingKeySpec::UnknownVariant(UnknownWrappingKeySpec { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WrappingKeySpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "RSA_2048" => WrappingKeySpec::Rsa2048,
+            _ => WrappingKeySpec::UnknownVariant(UnknownWrappingKeySpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WrappingKeySpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RSA_2048" => WrappingKeySpec::Rsa2048,
+            _ => WrappingKeySpec::UnknownVariant(UnknownWrappingKeySpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WrappingKeySpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WrappingKeySpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for WrappingKeySpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CancelKeyDeletion

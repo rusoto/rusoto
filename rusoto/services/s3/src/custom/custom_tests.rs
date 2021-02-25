@@ -172,7 +172,7 @@ async fn list_multipart_upload_happy_path() {
                 test_owner.display_name
             );
 
-            assert_eq!(an_upload.storage_class, sstr("STANDARD"));
+            assert_eq!(an_upload.storage_class, Some(StorageClass::Standard));
         }
     }
 }
@@ -251,7 +251,7 @@ async fn list_multipart_upload_parts_happy_path() {
         test_owner.display_name
     );
 
-    assert_eq!(result.storage_class, sstr("STANDARD"));
+    assert_eq!(result.storage_class, Some(StorageClass::Standard));
 
     assert!(result.parts.is_some());
 
@@ -406,7 +406,7 @@ async fn should_serialize_complicated_request() {
         key: "key".to_string(),
         part_number: Some(1),
         range: sstr("range"),
-        request_payer: sstr("request_payer"),
+        request_payer: Some(RequestPayer::Requester),
         response_cache_control: sstr("response_cache_control"),
         response_content_disposition: sstr("response_content_disposition"),
         response_content_encoding: sstr("response_content_encoding"),
@@ -459,7 +459,7 @@ async fn should_parse_location_constraint() {
     match result {
         Err(_) => panic!("Couldn't parse get_bucket_location"),
         Ok(result) => {
-            assert_eq!(sstr("EU"), result.location_constraint);
+            assert_eq!(Some(BucketLocationConstraint::Eu), result.location_constraint);
         }
     }
 }

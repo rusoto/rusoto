@@ -230,7 +230,111 @@ pub struct CodeSigningPolicies {
     /// <p>Code signing configuration policy for deployment validation failure. If you set the policy to <code>Enforce</code>, Lambda blocks the deployment request if signature validation checks fail. If you set the policy to <code>Warn</code>, Lambda allows the deployment and creates a CloudWatch log. </p> <p>Default value: <code>Warn</code> </p>
     #[serde(rename = "UntrustedArtifactOnDeployment")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub untrusted_artifact_on_deployment: Option<String>,
+    pub untrusted_artifact_on_deployment: Option<CodeSigningPolicy>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCodeSigningPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CodeSigningPolicy {
+    Enforce,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCodeSigningPolicy),
+}
+
+impl Default for CodeSigningPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CodeSigningPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CodeSigningPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CodeSigningPolicy {
+    fn into(self) -> String {
+        match self {
+            CodeSigningPolicy::Enforce => "Enforce".to_string(),
+            CodeSigningPolicy::Warn => "Warn".to_string(),
+            CodeSigningPolicy::UnknownVariant(UnknownCodeSigningPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CodeSigningPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            CodeSigningPolicy::Enforce => &"Enforce",
+            CodeSigningPolicy::Warn => &"Warn",
+            CodeSigningPolicy::UnknownVariant(UnknownCodeSigningPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CodeSigningPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "Enforce" => CodeSigningPolicy::Enforce,
+            "Warn" => CodeSigningPolicy::Warn,
+            _ => CodeSigningPolicy::UnknownVariant(UnknownCodeSigningPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CodeSigningPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Enforce" => CodeSigningPolicy::Enforce,
+            "Warn" => CodeSigningPolicy::Warn,
+            _ => CodeSigningPolicy::UnknownVariant(UnknownCodeSigningPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CodeSigningPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CodeSigningPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CodeSigningPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -317,7 +421,7 @@ pub struct CreateEventSourceMappingRequest {
     /// <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
     #[serde(rename = "FunctionResponseTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub function_response_types: Option<Vec<String>>,
+    pub function_response_types: Option<Vec<FunctionResponseType>>,
     /// <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,7 +453,7 @@ pub struct CreateEventSourceMappingRequest {
     /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis, Amazon DynamoDB, and Amazon MSK Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub starting_position: Option<String>,
+    pub starting_position: Option<EventSourcePosition>,
     /// <p>With <code>StartingPosition</code> set to <code>AT_TIMESTAMP</code>, the time from which to start reading.</p>
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -416,7 +520,7 @@ pub struct CreateFunctionRequest {
     /// <p>The type of deployment package. Set to <code>Image</code> for container image and set <code>Zip</code> for ZIP archive.</p>
     #[serde(rename = "PackageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_type: Option<String>,
+    pub package_type: Option<PackageType>,
     /// <p>Set to true to publish the first version of the function during creation.</p>
     #[serde(rename = "Publish")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -427,7 +531,7 @@ pub struct CreateFunctionRequest {
     /// <p>The identifier of the function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime</a>.</p>
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub runtime: Option<String>,
+    pub runtime: Option<Runtime>,
     /// <p>A list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a> to apply to the function.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -561,6 +665,101 @@ pub struct DestinationConfig {
     pub on_success: Option<OnSuccess>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndPointType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndPointType {
+    KafkaBootstrapServers,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndPointType),
+}
+
+impl Default for EndPointType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndPointType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndPointType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndPointType {
+    fn into(self) -> String {
+        match self {
+            EndPointType::KafkaBootstrapServers => "KAFKA_BOOTSTRAP_SERVERS".to_string(),
+            EndPointType::UnknownVariant(UnknownEndPointType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndPointType {
+    fn into(self) -> &'a str {
+        match self {
+            EndPointType::KafkaBootstrapServers => &"KAFKA_BOOTSTRAP_SERVERS",
+            EndPointType::UnknownVariant(UnknownEndPointType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndPointType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KAFKA_BOOTSTRAP_SERVERS" => EndPointType::KafkaBootstrapServers,
+            _ => EndPointType::UnknownVariant(UnknownEndPointType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndPointType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KAFKA_BOOTSTRAP_SERVERS" => EndPointType::KafkaBootstrapServers,
+            _ => EndPointType::UnknownVariant(UnknownEndPointType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndPointType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndPointType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EndPointType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A function's environment variable settings.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -626,7 +825,7 @@ pub struct EventSourceMappingConfiguration {
     /// <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
     #[serde(rename = "FunctionResponseTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub function_response_types: Option<Vec<String>>,
+    pub function_response_types: Option<Vec<FunctionResponseType>>,
     /// <p>The date that the event source mapping was last updated, or its state changed.</p>
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -666,7 +865,7 @@ pub struct EventSourceMappingConfiguration {
     /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis, Amazon DynamoDB, and Amazon MSK Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub starting_position: Option<String>,
+    pub starting_position: Option<EventSourcePosition>,
     /// <p>With <code>StartingPosition</code> set to <code>AT_TIMESTAMP</code>, the time from which to start reading.</p>
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -691,6 +890,115 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "UUID")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uuid: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventSourcePosition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventSourcePosition {
+    AtTimestamp,
+    Latest,
+    TrimHorizon,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventSourcePosition),
+}
+
+impl Default for EventSourcePosition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventSourcePosition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventSourcePosition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventSourcePosition {
+    fn into(self) -> String {
+        match self {
+            EventSourcePosition::AtTimestamp => "AT_TIMESTAMP".to_string(),
+            EventSourcePosition::Latest => "LATEST".to_string(),
+            EventSourcePosition::TrimHorizon => "TRIM_HORIZON".to_string(),
+            EventSourcePosition::UnknownVariant(UnknownEventSourcePosition { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventSourcePosition {
+    fn into(self) -> &'a str {
+        match self {
+            EventSourcePosition::AtTimestamp => &"AT_TIMESTAMP",
+            EventSourcePosition::Latest => &"LATEST",
+            EventSourcePosition::TrimHorizon => &"TRIM_HORIZON",
+            EventSourcePosition::UnknownVariant(UnknownEventSourcePosition { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EventSourcePosition {
+    fn from(name: &str) -> Self {
+        match name {
+            "AT_TIMESTAMP" => EventSourcePosition::AtTimestamp,
+            "LATEST" => EventSourcePosition::Latest,
+            "TRIM_HORIZON" => EventSourcePosition::TrimHorizon,
+            _ => EventSourcePosition::UnknownVariant(UnknownEventSourcePosition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventSourcePosition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AT_TIMESTAMP" => EventSourcePosition::AtTimestamp,
+            "LATEST" => EventSourcePosition::Latest,
+            "TRIM_HORIZON" => EventSourcePosition::TrimHorizon,
+            _ => EventSourcePosition::UnknownVariant(UnknownEventSourcePosition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSourcePosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventSourcePosition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventSourcePosition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about the connection between a Lambda function and an Amazon EFS file system.</p>
@@ -812,7 +1120,7 @@ pub struct FunctionConfiguration {
     /// <p>The status of the last update that was performed on the function. This is first set to <code>Successful</code> after function creation completes.</p>
     #[serde(rename = "LastUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_update_status: Option<String>,
+    pub last_update_status: Option<LastUpdateStatus>,
     /// <p>The reason for the last update that was performed on the function.</p>
     #[serde(rename = "LastUpdateStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -820,7 +1128,7 @@ pub struct FunctionConfiguration {
     /// <p>The reason code for the last update that was performed on the function.</p>
     #[serde(rename = "LastUpdateStatusReasonCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_update_status_reason_code: Option<String>,
+    pub last_update_status_reason_code: Option<LastUpdateStatusReasonCode>,
     /// <p>The function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html"> layers</a>.</p>
     #[serde(rename = "Layers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -836,7 +1144,7 @@ pub struct FunctionConfiguration {
     /// <p>The type of deployment package. Set to <code>Image</code> for container image and set <code>Zip</code> for .zip file archive.</p>
     #[serde(rename = "PackageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_type: Option<String>,
+    pub package_type: Option<PackageType>,
     /// <p>The latest updated revision of the function or alias.</p>
     #[serde(rename = "RevisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -848,7 +1156,7 @@ pub struct FunctionConfiguration {
     /// <p>The runtime environment for the Lambda function.</p>
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub runtime: Option<String>,
+    pub runtime: Option<Runtime>,
     /// <p>The ARN of the signing job.</p>
     #[serde(rename = "SigningJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -860,7 +1168,7 @@ pub struct FunctionConfiguration {
     /// <p>The current state of the function. When the state is <code>Inactive</code>, you can reactivate the function by invoking it.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<State>,
     /// <p>The reason for the function's current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -868,7 +1176,7 @@ pub struct FunctionConfiguration {
     /// <p>The reason code for the function's current state. When the code is <code>Creating</code>, you can't invoke or modify the function.</p>
     #[serde(rename = "StateReasonCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state_reason_code: Option<String>,
+    pub state_reason_code: Option<StateReasonCode>,
     /// <p>The amount of time in seconds that Lambda allows a function to run before stopping it.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -910,6 +1218,201 @@ pub struct FunctionEventInvokeConfig {
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFunctionResponseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FunctionResponseType {
+    ReportBatchItemFailures,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFunctionResponseType),
+}
+
+impl Default for FunctionResponseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FunctionResponseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FunctionResponseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FunctionResponseType {
+    fn into(self) -> String {
+        match self {
+            FunctionResponseType::ReportBatchItemFailures => "ReportBatchItemFailures".to_string(),
+            FunctionResponseType::UnknownVariant(UnknownFunctionResponseType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FunctionResponseType {
+    fn into(self) -> &'a str {
+        match self {
+            FunctionResponseType::ReportBatchItemFailures => &"ReportBatchItemFailures",
+            FunctionResponseType::UnknownVariant(UnknownFunctionResponseType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FunctionResponseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ReportBatchItemFailures" => FunctionResponseType::ReportBatchItemFailures,
+            _ => FunctionResponseType::UnknownVariant(UnknownFunctionResponseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FunctionResponseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ReportBatchItemFailures" => FunctionResponseType::ReportBatchItemFailures,
+            _ => FunctionResponseType::UnknownVariant(UnknownFunctionResponseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FunctionResponseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FunctionResponseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FunctionResponseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFunctionVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FunctionVersion {
+    All,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFunctionVersion),
+}
+
+impl Default for FunctionVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FunctionVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FunctionVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FunctionVersion {
+    fn into(self) -> String {
+        match self {
+            FunctionVersion::All => "ALL".to_string(),
+            FunctionVersion::UnknownVariant(UnknownFunctionVersion { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FunctionVersion {
+    fn into(self) -> &'a str {
+        match self {
+            FunctionVersion::All => &"ALL",
+            FunctionVersion::UnknownVariant(UnknownFunctionVersion { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FunctionVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => FunctionVersion::All,
+            _ => FunctionVersion::UnknownVariant(UnknownFunctionVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FunctionVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => FunctionVersion::All,
+            _ => FunctionVersion::UnknownVariant(UnknownFunctionVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FunctionVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FunctionVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FunctionVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1106,7 +1609,7 @@ pub struct GetLayerVersionResponse {
     /// <p>The layer's compatible runtimes.</p>
     #[serde(rename = "CompatibleRuntimes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatible_runtimes: Option<Vec<String>>,
+    pub compatible_runtimes: Option<Vec<Runtime>>,
     /// <p>Details about the layer version.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1195,7 +1698,7 @@ pub struct GetProvisionedConcurrencyConfigResponse {
     /// <p>The status of the allocation process.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProvisionedConcurrencyStatusEnum>,
     /// <p>For failed allocations, the reason that provisioned concurrency could not be allocated.</p>
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1260,11 +1763,11 @@ pub struct InvocationRequest {
     /// <p><p>Choose from the following options.</p> <ul> <li> <p> <code>RequestResponse</code> (default) - Invoke the function synchronously. Keep the connection open until the function returns a response or times out. The API response includes the function response and additional data.</p> </li> <li> <p> <code>Event</code> - Invoke the function asynchronously. Send events that fail multiple times to the function&#39;s dead-letter queue (if it&#39;s configured). The API response only includes a status code.</p> </li> <li> <p> <code>DryRun</code> - Validate parameter values and verify that the user or role has permission to invoke the function.</p> </li> </ul></p>
     #[serde(rename = "InvocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub invocation_type: Option<String>,
+    pub invocation_type: Option<InvocationType>,
     /// <p>Set to <code>Tail</code> to include the execution log in the response.</p>
     #[serde(rename = "LogType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_type: Option<String>,
+    pub log_type: Option<LogType>,
     /// <p>The JSON that you want to provide to your Lambda function as input.</p>
     #[serde(rename = "Payload")]
     #[serde(
@@ -1294,6 +1797,112 @@ pub struct InvocationResponse {
     pub status_code: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInvocationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InvocationType {
+    DryRun,
+    Event,
+    RequestResponse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInvocationType),
+}
+
+impl Default for InvocationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InvocationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InvocationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InvocationType {
+    fn into(self) -> String {
+        match self {
+            InvocationType::DryRun => "DryRun".to_string(),
+            InvocationType::Event => "Event".to_string(),
+            InvocationType::RequestResponse => "RequestResponse".to_string(),
+            InvocationType::UnknownVariant(UnknownInvocationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InvocationType {
+    fn into(self) -> &'a str {
+        match self {
+            InvocationType::DryRun => &"DryRun",
+            InvocationType::Event => &"Event",
+            InvocationType::RequestResponse => &"RequestResponse",
+            InvocationType::UnknownVariant(UnknownInvocationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InvocationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DryRun" => InvocationType::DryRun,
+            "Event" => InvocationType::Event,
+            "RequestResponse" => InvocationType::RequestResponse,
+            _ => InvocationType::UnknownVariant(UnknownInvocationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InvocationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DryRun" => InvocationType::DryRun,
+            "Event" => InvocationType::Event,
+            "RequestResponse" => InvocationType::RequestResponse,
+            _ => InvocationType::UnknownVariant(UnknownInvocationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InvocationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InvocationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeAsyncRequest {
@@ -1318,6 +1927,273 @@ pub struct InvokeAsyncResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLastUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LastUpdateStatus {
+    Failed,
+    InProgress,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLastUpdateStatus),
+}
+
+impl Default for LastUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LastUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LastUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LastUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            LastUpdateStatus::Failed => "Failed".to_string(),
+            LastUpdateStatus::InProgress => "InProgress".to_string(),
+            LastUpdateStatus::Successful => "Successful".to_string(),
+            LastUpdateStatus::UnknownVariant(UnknownLastUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LastUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LastUpdateStatus::Failed => &"Failed",
+            LastUpdateStatus::InProgress => &"InProgress",
+            LastUpdateStatus::Successful => &"Successful",
+            LastUpdateStatus::UnknownVariant(UnknownLastUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LastUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => LastUpdateStatus::Failed,
+            "InProgress" => LastUpdateStatus::InProgress,
+            "Successful" => LastUpdateStatus::Successful,
+            _ => LastUpdateStatus::UnknownVariant(UnknownLastUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LastUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => LastUpdateStatus::Failed,
+            "InProgress" => LastUpdateStatus::InProgress,
+            "Successful" => LastUpdateStatus::Successful,
+            _ => LastUpdateStatus::UnknownVariant(UnknownLastUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LastUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LastUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LastUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLastUpdateStatusReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LastUpdateStatusReasonCode {
+    EniLimitExceeded,
+    ImageAccessDenied,
+    ImageDeleted,
+    InsufficientRolePermissions,
+    InternalError,
+    InvalidConfiguration,
+    InvalidImage,
+    InvalidSecurityGroup,
+    InvalidSubnet,
+    SubnetOutOfIPAddresses,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLastUpdateStatusReasonCode),
+}
+
+impl Default for LastUpdateStatusReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LastUpdateStatusReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LastUpdateStatusReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LastUpdateStatusReasonCode {
+    fn into(self) -> String {
+        match self {
+            LastUpdateStatusReasonCode::EniLimitExceeded => "EniLimitExceeded".to_string(),
+            LastUpdateStatusReasonCode::ImageAccessDenied => "ImageAccessDenied".to_string(),
+            LastUpdateStatusReasonCode::ImageDeleted => "ImageDeleted".to_string(),
+            LastUpdateStatusReasonCode::InsufficientRolePermissions => {
+                "InsufficientRolePermissions".to_string()
+            }
+            LastUpdateStatusReasonCode::InternalError => "InternalError".to_string(),
+            LastUpdateStatusReasonCode::InvalidConfiguration => "InvalidConfiguration".to_string(),
+            LastUpdateStatusReasonCode::InvalidImage => "InvalidImage".to_string(),
+            LastUpdateStatusReasonCode::InvalidSecurityGroup => "InvalidSecurityGroup".to_string(),
+            LastUpdateStatusReasonCode::InvalidSubnet => "InvalidSubnet".to_string(),
+            LastUpdateStatusReasonCode::SubnetOutOfIPAddresses => {
+                "SubnetOutOfIPAddresses".to_string()
+            }
+            LastUpdateStatusReasonCode::UnknownVariant(UnknownLastUpdateStatusReasonCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LastUpdateStatusReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            LastUpdateStatusReasonCode::EniLimitExceeded => &"EniLimitExceeded",
+            LastUpdateStatusReasonCode::ImageAccessDenied => &"ImageAccessDenied",
+            LastUpdateStatusReasonCode::ImageDeleted => &"ImageDeleted",
+            LastUpdateStatusReasonCode::InsufficientRolePermissions => {
+                &"InsufficientRolePermissions"
+            }
+            LastUpdateStatusReasonCode::InternalError => &"InternalError",
+            LastUpdateStatusReasonCode::InvalidConfiguration => &"InvalidConfiguration",
+            LastUpdateStatusReasonCode::InvalidImage => &"InvalidImage",
+            LastUpdateStatusReasonCode::InvalidSecurityGroup => &"InvalidSecurityGroup",
+            LastUpdateStatusReasonCode::InvalidSubnet => &"InvalidSubnet",
+            LastUpdateStatusReasonCode::SubnetOutOfIPAddresses => &"SubnetOutOfIPAddresses",
+            LastUpdateStatusReasonCode::UnknownVariant(UnknownLastUpdateStatusReasonCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LastUpdateStatusReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "EniLimitExceeded" => LastUpdateStatusReasonCode::EniLimitExceeded,
+            "ImageAccessDenied" => LastUpdateStatusReasonCode::ImageAccessDenied,
+            "ImageDeleted" => LastUpdateStatusReasonCode::ImageDeleted,
+            "InsufficientRolePermissions" => {
+                LastUpdateStatusReasonCode::InsufficientRolePermissions
+            }
+            "InternalError" => LastUpdateStatusReasonCode::InternalError,
+            "InvalidConfiguration" => LastUpdateStatusReasonCode::InvalidConfiguration,
+            "InvalidImage" => LastUpdateStatusReasonCode::InvalidImage,
+            "InvalidSecurityGroup" => LastUpdateStatusReasonCode::InvalidSecurityGroup,
+            "InvalidSubnet" => LastUpdateStatusReasonCode::InvalidSubnet,
+            "SubnetOutOfIPAddresses" => LastUpdateStatusReasonCode::SubnetOutOfIPAddresses,
+            _ => LastUpdateStatusReasonCode::UnknownVariant(UnknownLastUpdateStatusReasonCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LastUpdateStatusReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EniLimitExceeded" => LastUpdateStatusReasonCode::EniLimitExceeded,
+            "ImageAccessDenied" => LastUpdateStatusReasonCode::ImageAccessDenied,
+            "ImageDeleted" => LastUpdateStatusReasonCode::ImageDeleted,
+            "InsufficientRolePermissions" => {
+                LastUpdateStatusReasonCode::InsufficientRolePermissions
+            }
+            "InternalError" => LastUpdateStatusReasonCode::InternalError,
+            "InvalidConfiguration" => LastUpdateStatusReasonCode::InvalidConfiguration,
+            "InvalidImage" => LastUpdateStatusReasonCode::InvalidImage,
+            "InvalidSecurityGroup" => LastUpdateStatusReasonCode::InvalidSecurityGroup,
+            "InvalidSubnet" => LastUpdateStatusReasonCode::InvalidSubnet,
+            "SubnetOutOfIPAddresses" => LastUpdateStatusReasonCode::SubnetOutOfIPAddresses,
+            _ => LastUpdateStatusReasonCode::UnknownVariant(UnknownLastUpdateStatusReasonCode {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LastUpdateStatusReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LastUpdateStatusReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LastUpdateStatusReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
@@ -1402,7 +2278,7 @@ pub struct LayerVersionsListItem {
     /// <p>The layer's compatible runtimes.</p>
     #[serde(rename = "CompatibleRuntimes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatible_runtimes: Option<Vec<String>>,
+    pub compatible_runtimes: Option<Vec<Runtime>>,
     /// <p>The date that the version was created, in ISO 8601 format. For example, <code>2018-11-27T15:10:45.123+0000</code>.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1600,7 +2476,7 @@ pub struct ListFunctionsRequest {
     /// <p>Set to <code>ALL</code> to include entries for all published versions of each function.</p>
     #[serde(rename = "FunctionVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub function_version: Option<String>,
+    pub function_version: Option<FunctionVersion>,
     /// <p>Specify the pagination token that's returned by a previous request to retrieve the next page of results.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1635,7 +2511,7 @@ pub struct ListLayerVersionsRequest {
     /// <p>A runtime identifier. For example, <code>go1.x</code>.</p>
     #[serde(rename = "CompatibleRuntime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatible_runtime: Option<String>,
+    pub compatible_runtime: Option<Runtime>,
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
     #[serde(rename = "LayerName")]
     pub layer_name: String,
@@ -1668,7 +2544,7 @@ pub struct ListLayersRequest {
     /// <p>A runtime identifier. For example, <code>go1.x</code>.</p>
     #[serde(rename = "CompatibleRuntime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatible_runtime: Option<String>,
+    pub compatible_runtime: Option<Runtime>,
     /// <p>A pagination token returned by a previous call.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1767,6 +2643,107 @@ pub struct ListVersionsByFunctionResponse {
     pub versions: Option<Vec<FunctionConfiguration>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogType {
+    None,
+    Tail,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogType),
+}
+
+impl Default for LogType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogType {
+    fn into(self) -> String {
+        match self {
+            LogType::None => "None".to_string(),
+            LogType::Tail => "Tail".to_string(),
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogType {
+    fn into(self) -> &'a str {
+        match self {
+            LogType::None => &"None",
+            LogType::Tail => &"Tail",
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogType {
+    fn from(name: &str) -> Self {
+        match name {
+            "None" => LogType::None,
+            "Tail" => LogType::Tail,
+            _ => LogType::UnknownVariant(UnknownLogType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "None" => LogType::None,
+            "Tail" => LogType::Tail,
+            _ => LogType::UnknownVariant(UnknownLogType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LogType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A destination for events that failed processing.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnFailure {
@@ -1783,6 +2760,106 @@ pub struct OnSuccess {
     #[serde(rename = "Destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPackageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PackageType {
+    Image,
+    Zip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPackageType),
+}
+
+impl Default for PackageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PackageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PackageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PackageType {
+    fn into(self) -> String {
+        match self {
+            PackageType::Image => "Image".to_string(),
+            PackageType::Zip => "Zip".to_string(),
+            PackageType::UnknownVariant(UnknownPackageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PackageType {
+    fn into(self) -> &'a str {
+        match self {
+            PackageType::Image => &"Image",
+            PackageType::Zip => &"Zip",
+            PackageType::UnknownVariant(UnknownPackageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PackageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Image" => PackageType::Image,
+            "Zip" => PackageType::Zip,
+            _ => PackageType::UnknownVariant(UnknownPackageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PackageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Image" => PackageType::Image,
+            "Zip" => PackageType::Zip,
+            _ => PackageType::UnknownVariant(UnknownPackageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PackageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PackageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PackageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about the provisioned concurrency configuration for a function alias or version.</p>
@@ -1812,11 +2889,125 @@ pub struct ProvisionedConcurrencyConfigListItem {
     /// <p>The status of the allocation process.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProvisionedConcurrencyStatusEnum>,
     /// <p>For failed allocations, the reason that provisioned concurrency could not be allocated.</p>
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProvisionedConcurrencyStatusEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProvisionedConcurrencyStatusEnum {
+    Failed,
+    InProgress,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProvisionedConcurrencyStatusEnum),
+}
+
+impl Default for ProvisionedConcurrencyStatusEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProvisionedConcurrencyStatusEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProvisionedConcurrencyStatusEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProvisionedConcurrencyStatusEnum {
+    fn into(self) -> String {
+        match self {
+            ProvisionedConcurrencyStatusEnum::Failed => "FAILED".to_string(),
+            ProvisionedConcurrencyStatusEnum::InProgress => "IN_PROGRESS".to_string(),
+            ProvisionedConcurrencyStatusEnum::Ready => "READY".to_string(),
+            ProvisionedConcurrencyStatusEnum::UnknownVariant(
+                UnknownProvisionedConcurrencyStatusEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProvisionedConcurrencyStatusEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ProvisionedConcurrencyStatusEnum::Failed => &"FAILED",
+            ProvisionedConcurrencyStatusEnum::InProgress => &"IN_PROGRESS",
+            ProvisionedConcurrencyStatusEnum::Ready => &"READY",
+            ProvisionedConcurrencyStatusEnum::UnknownVariant(
+                UnknownProvisionedConcurrencyStatusEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ProvisionedConcurrencyStatusEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => ProvisionedConcurrencyStatusEnum::Failed,
+            "IN_PROGRESS" => ProvisionedConcurrencyStatusEnum::InProgress,
+            "READY" => ProvisionedConcurrencyStatusEnum::Ready,
+            _ => ProvisionedConcurrencyStatusEnum::UnknownVariant(
+                UnknownProvisionedConcurrencyStatusEnum {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ProvisionedConcurrencyStatusEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => ProvisionedConcurrencyStatusEnum::Failed,
+            "IN_PROGRESS" => ProvisionedConcurrencyStatusEnum::InProgress,
+            "READY" => ProvisionedConcurrencyStatusEnum::Ready,
+            _ => ProvisionedConcurrencyStatusEnum::UnknownVariant(
+                UnknownProvisionedConcurrencyStatusEnum { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProvisionedConcurrencyStatusEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProvisionedConcurrencyStatusEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProvisionedConcurrencyStatusEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1825,7 +3016,7 @@ pub struct PublishLayerVersionRequest {
     /// <p>A list of compatible <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">function runtimes</a>. Used for filtering with <a>ListLayers</a> and <a>ListLayerVersions</a>.</p>
     #[serde(rename = "CompatibleRuntimes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatible_runtimes: Option<Vec<String>>,
+    pub compatible_runtimes: Option<Vec<Runtime>>,
     /// <p>The function layer archive.</p>
     #[serde(rename = "Content")]
     pub content: LayerVersionContentInput,
@@ -1848,7 +3039,7 @@ pub struct PublishLayerVersionResponse {
     /// <p>The layer's compatible runtimes.</p>
     #[serde(rename = "CompatibleRuntimes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatible_runtimes: Option<Vec<String>>,
+    pub compatible_runtimes: Option<Vec<Runtime>>,
     /// <p>Details about the layer version.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1992,7 +3183,7 @@ pub struct PutProvisionedConcurrencyConfigResponse {
     /// <p>The status of the allocation process.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProvisionedConcurrencyStatusEnum>,
     /// <p>For failed allocations, the reason that provisioned concurrency could not be allocated.</p>
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2036,13 +3227,218 @@ pub struct RemovePermissionRequest {
     pub statement_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuntime {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Runtime {
+    Dotnetcore10,
+    Dotnetcore20,
+    Dotnetcore21,
+    Dotnetcore31,
+    Go1X,
+    Java11,
+    Java8,
+    Java8Al2,
+    Nodejs,
+    Nodejs10X,
+    Nodejs12X,
+    Nodejs43,
+    Nodejs43Edge,
+    Nodejs610,
+    Nodejs810,
+    Provided,
+    ProvidedAl2,
+    Python27,
+    Python36,
+    Python37,
+    Python38,
+    Ruby25,
+    Ruby27,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuntime),
+}
+
+impl Default for Runtime {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Runtime {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Runtime {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Runtime {
+    fn into(self) -> String {
+        match self {
+            Runtime::Dotnetcore10 => "dotnetcore1.0".to_string(),
+            Runtime::Dotnetcore20 => "dotnetcore2.0".to_string(),
+            Runtime::Dotnetcore21 => "dotnetcore2.1".to_string(),
+            Runtime::Dotnetcore31 => "dotnetcore3.1".to_string(),
+            Runtime::Go1X => "go1.x".to_string(),
+            Runtime::Java11 => "java11".to_string(),
+            Runtime::Java8 => "java8".to_string(),
+            Runtime::Java8Al2 => "java8.al2".to_string(),
+            Runtime::Nodejs => "nodejs".to_string(),
+            Runtime::Nodejs10X => "nodejs10.x".to_string(),
+            Runtime::Nodejs12X => "nodejs12.x".to_string(),
+            Runtime::Nodejs43 => "nodejs4.3".to_string(),
+            Runtime::Nodejs43Edge => "nodejs4.3-edge".to_string(),
+            Runtime::Nodejs610 => "nodejs6.10".to_string(),
+            Runtime::Nodejs810 => "nodejs8.10".to_string(),
+            Runtime::Provided => "provided".to_string(),
+            Runtime::ProvidedAl2 => "provided.al2".to_string(),
+            Runtime::Python27 => "python2.7".to_string(),
+            Runtime::Python36 => "python3.6".to_string(),
+            Runtime::Python37 => "python3.7".to_string(),
+            Runtime::Python38 => "python3.8".to_string(),
+            Runtime::Ruby25 => "ruby2.5".to_string(),
+            Runtime::Ruby27 => "ruby2.7".to_string(),
+            Runtime::UnknownVariant(UnknownRuntime { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Runtime {
+    fn into(self) -> &'a str {
+        match self {
+            Runtime::Dotnetcore10 => &"dotnetcore1.0",
+            Runtime::Dotnetcore20 => &"dotnetcore2.0",
+            Runtime::Dotnetcore21 => &"dotnetcore2.1",
+            Runtime::Dotnetcore31 => &"dotnetcore3.1",
+            Runtime::Go1X => &"go1.x",
+            Runtime::Java11 => &"java11",
+            Runtime::Java8 => &"java8",
+            Runtime::Java8Al2 => &"java8.al2",
+            Runtime::Nodejs => &"nodejs",
+            Runtime::Nodejs10X => &"nodejs10.x",
+            Runtime::Nodejs12X => &"nodejs12.x",
+            Runtime::Nodejs43 => &"nodejs4.3",
+            Runtime::Nodejs43Edge => &"nodejs4.3-edge",
+            Runtime::Nodejs610 => &"nodejs6.10",
+            Runtime::Nodejs810 => &"nodejs8.10",
+            Runtime::Provided => &"provided",
+            Runtime::ProvidedAl2 => &"provided.al2",
+            Runtime::Python27 => &"python2.7",
+            Runtime::Python36 => &"python3.6",
+            Runtime::Python37 => &"python3.7",
+            Runtime::Python38 => &"python3.8",
+            Runtime::Ruby25 => &"ruby2.5",
+            Runtime::Ruby27 => &"ruby2.7",
+            Runtime::UnknownVariant(UnknownRuntime { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Runtime {
+    fn from(name: &str) -> Self {
+        match name {
+            "dotnetcore1.0" => Runtime::Dotnetcore10,
+            "dotnetcore2.0" => Runtime::Dotnetcore20,
+            "dotnetcore2.1" => Runtime::Dotnetcore21,
+            "dotnetcore3.1" => Runtime::Dotnetcore31,
+            "go1.x" => Runtime::Go1X,
+            "java11" => Runtime::Java11,
+            "java8" => Runtime::Java8,
+            "java8.al2" => Runtime::Java8Al2,
+            "nodejs" => Runtime::Nodejs,
+            "nodejs10.x" => Runtime::Nodejs10X,
+            "nodejs12.x" => Runtime::Nodejs12X,
+            "nodejs4.3" => Runtime::Nodejs43,
+            "nodejs4.3-edge" => Runtime::Nodejs43Edge,
+            "nodejs6.10" => Runtime::Nodejs610,
+            "nodejs8.10" => Runtime::Nodejs810,
+            "provided" => Runtime::Provided,
+            "provided.al2" => Runtime::ProvidedAl2,
+            "python2.7" => Runtime::Python27,
+            "python3.6" => Runtime::Python36,
+            "python3.7" => Runtime::Python37,
+            "python3.8" => Runtime::Python38,
+            "ruby2.5" => Runtime::Ruby25,
+            "ruby2.7" => Runtime::Ruby27,
+            _ => Runtime::UnknownVariant(UnknownRuntime {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Runtime {
+    fn from(name: String) -> Self {
+        match &*name {
+            "dotnetcore1.0" => Runtime::Dotnetcore10,
+            "dotnetcore2.0" => Runtime::Dotnetcore20,
+            "dotnetcore2.1" => Runtime::Dotnetcore21,
+            "dotnetcore3.1" => Runtime::Dotnetcore31,
+            "go1.x" => Runtime::Go1X,
+            "java11" => Runtime::Java11,
+            "java8" => Runtime::Java8,
+            "java8.al2" => Runtime::Java8Al2,
+            "nodejs" => Runtime::Nodejs,
+            "nodejs10.x" => Runtime::Nodejs10X,
+            "nodejs12.x" => Runtime::Nodejs12X,
+            "nodejs4.3" => Runtime::Nodejs43,
+            "nodejs4.3-edge" => Runtime::Nodejs43Edge,
+            "nodejs6.10" => Runtime::Nodejs610,
+            "nodejs8.10" => Runtime::Nodejs810,
+            "provided" => Runtime::Provided,
+            "provided.al2" => Runtime::ProvidedAl2,
+            "python2.7" => Runtime::Python27,
+            "python3.6" => Runtime::Python36,
+            "python3.7" => Runtime::Python37,
+            "python3.8" => Runtime::Python38,
+            "ruby2.5" => Runtime::Ruby25,
+            "ruby2.7" => Runtime::Ruby27,
+            _ => Runtime::UnknownVariant(UnknownRuntime { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Runtime {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Runtime {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Runtime {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The Self-Managed Apache Kafka cluster for your event source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SelfManagedEventSource {
     /// <p>The list of bootstrap servers for your Kafka brokers in the following format: <code>"KAFKA_BOOTSTRAP_SERVERS": ["abc.xyz.com:xxxx","abc2.xyz.com:xxxx"]</code>.</p>
     #[serde(rename = "Endpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub endpoints: Option<::std::collections::HashMap<String, Vec<String>>>,
+    pub endpoints: Option<::std::collections::HashMap<EndPointType, Vec<String>>>,
 }
 
 /// <p>You can specify the authentication protocol, or the VPC components to secure access to your event source.</p>
@@ -2051,11 +3447,399 @@ pub struct SourceAccessConfiguration {
     /// <p><p>The type of authentication protocol or the VPC components for your event source. For example: <code>&quot;Type&quot;:&quot;SASL<em>SCRAM</em>512<em>AUTH&quot;</code>.</p> <ul> <li> <p> <code>BASIC</em>AUTH</code> - (MQ) The Secrets Manager secret that stores your broker credentials.</p> </li> <li> <p> <code>VPC<em>SUBNET</code> - The subnets associated with your VPC. Lambda connects to these subnets to fetch data from your Kafka cluster.</p> </li> <li> <p> <code>VPC</em>SECURITY<em>GROUP</code> - The VPC security group used to manage access to your Kafka brokers.</p> </li> <li> <p> <code>SASL</em>SCRAM<em>256</em>AUTH</code> - The ARN of your secret key used for SASL SCRAM-256 authentication of your Kafka brokers.</p> </li> <li> <p> <code>SASL<em>SCRAM</em>512_AUTH</code> - The ARN of your secret key used for SASL SCRAM-512 authentication of your Kafka brokers.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SourceAccessType>,
     /// <p>The value for your chosen configuration in <code>Type</code>. For example: <code>"URI": "arn:aws:secretsmanager:us-east-1:01234567890:secret:MyBrokerSecretName"</code>.</p>
     #[serde(rename = "URI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceAccessType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceAccessType {
+    BasicAuth,
+    SaslScram256Auth,
+    SaslScram512Auth,
+    VpcSecurityGroup,
+    VpcSubnet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceAccessType),
+}
+
+impl Default for SourceAccessType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceAccessType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceAccessType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceAccessType {
+    fn into(self) -> String {
+        match self {
+            SourceAccessType::BasicAuth => "BASIC_AUTH".to_string(),
+            SourceAccessType::SaslScram256Auth => "SASL_SCRAM_256_AUTH".to_string(),
+            SourceAccessType::SaslScram512Auth => "SASL_SCRAM_512_AUTH".to_string(),
+            SourceAccessType::VpcSecurityGroup => "VPC_SECURITY_GROUP".to_string(),
+            SourceAccessType::VpcSubnet => "VPC_SUBNET".to_string(),
+            SourceAccessType::UnknownVariant(UnknownSourceAccessType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceAccessType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceAccessType::BasicAuth => &"BASIC_AUTH",
+            SourceAccessType::SaslScram256Auth => &"SASL_SCRAM_256_AUTH",
+            SourceAccessType::SaslScram512Auth => &"SASL_SCRAM_512_AUTH",
+            SourceAccessType::VpcSecurityGroup => &"VPC_SECURITY_GROUP",
+            SourceAccessType::VpcSubnet => &"VPC_SUBNET",
+            SourceAccessType::UnknownVariant(UnknownSourceAccessType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SourceAccessType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BASIC_AUTH" => SourceAccessType::BasicAuth,
+            "SASL_SCRAM_256_AUTH" => SourceAccessType::SaslScram256Auth,
+            "SASL_SCRAM_512_AUTH" => SourceAccessType::SaslScram512Auth,
+            "VPC_SECURITY_GROUP" => SourceAccessType::VpcSecurityGroup,
+            "VPC_SUBNET" => SourceAccessType::VpcSubnet,
+            _ => SourceAccessType::UnknownVariant(UnknownSourceAccessType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceAccessType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BASIC_AUTH" => SourceAccessType::BasicAuth,
+            "SASL_SCRAM_256_AUTH" => SourceAccessType::SaslScram256Auth,
+            "SASL_SCRAM_512_AUTH" => SourceAccessType::SaslScram512Auth,
+            "VPC_SECURITY_GROUP" => SourceAccessType::VpcSecurityGroup,
+            "VPC_SUBNET" => SourceAccessType::VpcSubnet,
+            _ => SourceAccessType::UnknownVariant(UnknownSourceAccessType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceAccessType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceAccessType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceAccessType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum State {
+    Active,
+    Failed,
+    Inactive,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownState),
+}
+
+impl Default for State {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for State {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for State {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for State {
+    fn into(self) -> String {
+        match self {
+            State::Active => "Active".to_string(),
+            State::Failed => "Failed".to_string(),
+            State::Inactive => "Inactive".to_string(),
+            State::Pending => "Pending".to_string(),
+            State::UnknownVariant(UnknownState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a State {
+    fn into(self) -> &'a str {
+        match self {
+            State::Active => &"Active",
+            State::Failed => &"Failed",
+            State::Inactive => &"Inactive",
+            State::Pending => &"Pending",
+            State::UnknownVariant(UnknownState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for State {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => State::Active,
+            "Failed" => State::Failed,
+            "Inactive" => State::Inactive,
+            "Pending" => State::Pending,
+            _ => State::UnknownVariant(UnknownState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for State {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => State::Active,
+            "Failed" => State::Failed,
+            "Inactive" => State::Inactive,
+            "Pending" => State::Pending,
+            _ => State::UnknownVariant(UnknownState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for State {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for State {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for State {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStateReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StateReasonCode {
+    Creating,
+    EniLimitExceeded,
+    Idle,
+    ImageAccessDenied,
+    ImageDeleted,
+    InsufficientRolePermissions,
+    InternalError,
+    InvalidConfiguration,
+    InvalidImage,
+    InvalidSecurityGroup,
+    InvalidSubnet,
+    Restoring,
+    SubnetOutOfIPAddresses,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStateReasonCode),
+}
+
+impl Default for StateReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StateReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StateReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StateReasonCode {
+    fn into(self) -> String {
+        match self {
+            StateReasonCode::Creating => "Creating".to_string(),
+            StateReasonCode::EniLimitExceeded => "EniLimitExceeded".to_string(),
+            StateReasonCode::Idle => "Idle".to_string(),
+            StateReasonCode::ImageAccessDenied => "ImageAccessDenied".to_string(),
+            StateReasonCode::ImageDeleted => "ImageDeleted".to_string(),
+            StateReasonCode::InsufficientRolePermissions => {
+                "InsufficientRolePermissions".to_string()
+            }
+            StateReasonCode::InternalError => "InternalError".to_string(),
+            StateReasonCode::InvalidConfiguration => "InvalidConfiguration".to_string(),
+            StateReasonCode::InvalidImage => "InvalidImage".to_string(),
+            StateReasonCode::InvalidSecurityGroup => "InvalidSecurityGroup".to_string(),
+            StateReasonCode::InvalidSubnet => "InvalidSubnet".to_string(),
+            StateReasonCode::Restoring => "Restoring".to_string(),
+            StateReasonCode::SubnetOutOfIPAddresses => "SubnetOutOfIPAddresses".to_string(),
+            StateReasonCode::UnknownVariant(UnknownStateReasonCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StateReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            StateReasonCode::Creating => &"Creating",
+            StateReasonCode::EniLimitExceeded => &"EniLimitExceeded",
+            StateReasonCode::Idle => &"Idle",
+            StateReasonCode::ImageAccessDenied => &"ImageAccessDenied",
+            StateReasonCode::ImageDeleted => &"ImageDeleted",
+            StateReasonCode::InsufficientRolePermissions => &"InsufficientRolePermissions",
+            StateReasonCode::InternalError => &"InternalError",
+            StateReasonCode::InvalidConfiguration => &"InvalidConfiguration",
+            StateReasonCode::InvalidImage => &"InvalidImage",
+            StateReasonCode::InvalidSecurityGroup => &"InvalidSecurityGroup",
+            StateReasonCode::InvalidSubnet => &"InvalidSubnet",
+            StateReasonCode::Restoring => &"Restoring",
+            StateReasonCode::SubnetOutOfIPAddresses => &"SubnetOutOfIPAddresses",
+            StateReasonCode::UnknownVariant(UnknownStateReasonCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StateReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Creating" => StateReasonCode::Creating,
+            "EniLimitExceeded" => StateReasonCode::EniLimitExceeded,
+            "Idle" => StateReasonCode::Idle,
+            "ImageAccessDenied" => StateReasonCode::ImageAccessDenied,
+            "ImageDeleted" => StateReasonCode::ImageDeleted,
+            "InsufficientRolePermissions" => StateReasonCode::InsufficientRolePermissions,
+            "InternalError" => StateReasonCode::InternalError,
+            "InvalidConfiguration" => StateReasonCode::InvalidConfiguration,
+            "InvalidImage" => StateReasonCode::InvalidImage,
+            "InvalidSecurityGroup" => StateReasonCode::InvalidSecurityGroup,
+            "InvalidSubnet" => StateReasonCode::InvalidSubnet,
+            "Restoring" => StateReasonCode::Restoring,
+            "SubnetOutOfIPAddresses" => StateReasonCode::SubnetOutOfIPAddresses,
+            _ => StateReasonCode::UnknownVariant(UnknownStateReasonCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StateReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Creating" => StateReasonCode::Creating,
+            "EniLimitExceeded" => StateReasonCode::EniLimitExceeded,
+            "Idle" => StateReasonCode::Idle,
+            "ImageAccessDenied" => StateReasonCode::ImageAccessDenied,
+            "ImageDeleted" => StateReasonCode::ImageDeleted,
+            "InsufficientRolePermissions" => StateReasonCode::InsufficientRolePermissions,
+            "InternalError" => StateReasonCode::InternalError,
+            "InvalidConfiguration" => StateReasonCode::InvalidConfiguration,
+            "InvalidImage" => StateReasonCode::InvalidImage,
+            "InvalidSecurityGroup" => StateReasonCode::InvalidSecurityGroup,
+            "InvalidSubnet" => StateReasonCode::InvalidSubnet,
+            "Restoring" => StateReasonCode::Restoring,
+            "SubnetOutOfIPAddresses" => StateReasonCode::SubnetOutOfIPAddresses,
+            _ => StateReasonCode::UnknownVariant(UnknownStateReasonCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StateReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StateReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2069,6 +3853,155 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThrottleReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThrottleReason {
+    CallerRateLimitExceeded,
+    ConcurrentInvocationLimitExceeded,
+    FunctionInvocationRateLimitExceeded,
+    ReservedFunctionConcurrentInvocationLimitExceeded,
+    ReservedFunctionInvocationRateLimitExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThrottleReason),
+}
+
+impl Default for ThrottleReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThrottleReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThrottleReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThrottleReason {
+    fn into(self) -> String {
+        match self {
+            ThrottleReason::CallerRateLimitExceeded => "CallerRateLimitExceeded".to_string(),
+            ThrottleReason::ConcurrentInvocationLimitExceeded => {
+                "ConcurrentInvocationLimitExceeded".to_string()
+            }
+            ThrottleReason::FunctionInvocationRateLimitExceeded => {
+                "FunctionInvocationRateLimitExceeded".to_string()
+            }
+            ThrottleReason::ReservedFunctionConcurrentInvocationLimitExceeded => {
+                "ReservedFunctionConcurrentInvocationLimitExceeded".to_string()
+            }
+            ThrottleReason::ReservedFunctionInvocationRateLimitExceeded => {
+                "ReservedFunctionInvocationRateLimitExceeded".to_string()
+            }
+            ThrottleReason::UnknownVariant(UnknownThrottleReason { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThrottleReason {
+    fn into(self) -> &'a str {
+        match self {
+            ThrottleReason::CallerRateLimitExceeded => &"CallerRateLimitExceeded",
+            ThrottleReason::ConcurrentInvocationLimitExceeded => {
+                &"ConcurrentInvocationLimitExceeded"
+            }
+            ThrottleReason::FunctionInvocationRateLimitExceeded => {
+                &"FunctionInvocationRateLimitExceeded"
+            }
+            ThrottleReason::ReservedFunctionConcurrentInvocationLimitExceeded => {
+                &"ReservedFunctionConcurrentInvocationLimitExceeded"
+            }
+            ThrottleReason::ReservedFunctionInvocationRateLimitExceeded => {
+                &"ReservedFunctionInvocationRateLimitExceeded"
+            }
+            ThrottleReason::UnknownVariant(UnknownThrottleReason { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThrottleReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "CallerRateLimitExceeded" => ThrottleReason::CallerRateLimitExceeded,
+            "ConcurrentInvocationLimitExceeded" => {
+                ThrottleReason::ConcurrentInvocationLimitExceeded
+            }
+            "FunctionInvocationRateLimitExceeded" => {
+                ThrottleReason::FunctionInvocationRateLimitExceeded
+            }
+            "ReservedFunctionConcurrentInvocationLimitExceeded" => {
+                ThrottleReason::ReservedFunctionConcurrentInvocationLimitExceeded
+            }
+            "ReservedFunctionInvocationRateLimitExceeded" => {
+                ThrottleReason::ReservedFunctionInvocationRateLimitExceeded
+            }
+            _ => ThrottleReason::UnknownVariant(UnknownThrottleReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThrottleReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CallerRateLimitExceeded" => ThrottleReason::CallerRateLimitExceeded,
+            "ConcurrentInvocationLimitExceeded" => {
+                ThrottleReason::ConcurrentInvocationLimitExceeded
+            }
+            "FunctionInvocationRateLimitExceeded" => {
+                ThrottleReason::FunctionInvocationRateLimitExceeded
+            }
+            "ReservedFunctionConcurrentInvocationLimitExceeded" => {
+                ThrottleReason::ReservedFunctionConcurrentInvocationLimitExceeded
+            }
+            "ReservedFunctionInvocationRateLimitExceeded" => {
+                ThrottleReason::ReservedFunctionInvocationRateLimitExceeded
+            }
+            _ => ThrottleReason::UnknownVariant(UnknownThrottleReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThrottleReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ThrottleReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ThrottleReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The function's AWS X-Ray tracing configuration. To sample and record incoming requests, set <code>Mode</code> to <code>Active</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2076,7 +4009,7 @@ pub struct TracingConfig {
     /// <p>The tracing mode.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<TracingMode>,
 }
 
 /// <p>The function's AWS X-Ray tracing configuration.</p>
@@ -2086,7 +4019,107 @@ pub struct TracingConfigResponse {
     /// <p>The tracing mode.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<TracingMode>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTracingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TracingMode {
+    Active,
+    PassThrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTracingMode),
+}
+
+impl Default for TracingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TracingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TracingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TracingMode {
+    fn into(self) -> String {
+        match self {
+            TracingMode::Active => "Active".to_string(),
+            TracingMode::PassThrough => "PassThrough".to_string(),
+            TracingMode::UnknownVariant(UnknownTracingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TracingMode {
+    fn into(self) -> &'a str {
+        match self {
+            TracingMode::Active => &"Active",
+            TracingMode::PassThrough => &"PassThrough",
+            TracingMode::UnknownVariant(UnknownTracingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TracingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => TracingMode::Active,
+            "PassThrough" => TracingMode::PassThrough,
+            _ => TracingMode::UnknownVariant(UnknownTracingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TracingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => TracingMode::Active,
+            "PassThrough" => TracingMode::PassThrough,
+            _ => TracingMode::UnknownVariant(UnknownTracingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TracingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TracingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TracingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2181,7 +4214,7 @@ pub struct UpdateEventSourceMappingRequest {
     /// <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
     #[serde(rename = "FunctionResponseTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub function_response_types: Option<Vec<String>>,
+    pub function_response_types: Option<Vec<FunctionResponseType>>,
     /// <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2309,7 +4342,7 @@ pub struct UpdateFunctionConfigurationRequest {
     /// <p>The identifier of the function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime</a>.</p>
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub runtime: Option<String>,
+    pub runtime: Option<Runtime>,
     /// <p>The amount of time that Lambda allows a function to run before stopping it. The default is 3 seconds. The maximum allowed value is 900 seconds.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]

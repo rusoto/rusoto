@@ -51,6 +51,113 @@ impl CognitoIdentityClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAmbiguousRoleResolutionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AmbiguousRoleResolutionType {
+    AuthenticatedRole,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAmbiguousRoleResolutionType),
+}
+
+impl Default for AmbiguousRoleResolutionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AmbiguousRoleResolutionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AmbiguousRoleResolutionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AmbiguousRoleResolutionType {
+    fn into(self) -> String {
+        match self {
+            AmbiguousRoleResolutionType::AuthenticatedRole => "AuthenticatedRole".to_string(),
+            AmbiguousRoleResolutionType::Deny => "Deny".to_string(),
+            AmbiguousRoleResolutionType::UnknownVariant(UnknownAmbiguousRoleResolutionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AmbiguousRoleResolutionType {
+    fn into(self) -> &'a str {
+        match self {
+            AmbiguousRoleResolutionType::AuthenticatedRole => &"AuthenticatedRole",
+            AmbiguousRoleResolutionType::Deny => &"Deny",
+            AmbiguousRoleResolutionType::UnknownVariant(UnknownAmbiguousRoleResolutionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AmbiguousRoleResolutionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AuthenticatedRole" => AmbiguousRoleResolutionType::AuthenticatedRole,
+            "Deny" => AmbiguousRoleResolutionType::Deny,
+            _ => AmbiguousRoleResolutionType::UnknownVariant(UnknownAmbiguousRoleResolutionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AmbiguousRoleResolutionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AuthenticatedRole" => AmbiguousRoleResolutionType::AuthenticatedRole,
+            "Deny" => AmbiguousRoleResolutionType::Deny,
+            _ => AmbiguousRoleResolutionType::UnknownVariant(UnknownAmbiguousRoleResolutionType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AmbiguousRoleResolutionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AmbiguousRoleResolutionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AmbiguousRoleResolutionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A provider representing an Amazon Cognito user pool and its client ID.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoIdentityProvider {
@@ -174,6 +281,107 @@ pub struct DescribeIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    AccessDenied,
+    InternalServerError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::AccessDenied => "AccessDenied".to_string(),
+            ErrorCode::InternalServerError => "InternalServerError".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::AccessDenied => &"AccessDenied",
+            ErrorCode::InternalServerError => &"InternalServerError",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => ErrorCode::AccessDenied,
+            "InternalServerError" => ErrorCode::InternalServerError,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => ErrorCode::AccessDenied,
+            "InternalServerError" => ErrorCode::InternalServerError,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
@@ -533,13 +741,127 @@ pub struct MappingRule {
     pub claim: String,
     /// <p>The match condition that specifies how closely the claim value in the IdP token must match <code>Value</code>.</p>
     #[serde(rename = "MatchType")]
-    pub match_type: String,
+    pub match_type: MappingRuleMatchType,
     /// <p>The role ARN.</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
     /// <p>A brief string that the claim must match, for example, "paid" or "yes".</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMappingRuleMatchType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MappingRuleMatchType {
+    Contains,
+    Equals,
+    NotEqual,
+    StartsWith,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMappingRuleMatchType),
+}
+
+impl Default for MappingRuleMatchType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MappingRuleMatchType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MappingRuleMatchType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MappingRuleMatchType {
+    fn into(self) -> String {
+        match self {
+            MappingRuleMatchType::Contains => "Contains".to_string(),
+            MappingRuleMatchType::Equals => "Equals".to_string(),
+            MappingRuleMatchType::NotEqual => "NotEqual".to_string(),
+            MappingRuleMatchType::StartsWith => "StartsWith".to_string(),
+            MappingRuleMatchType::UnknownVariant(UnknownMappingRuleMatchType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MappingRuleMatchType {
+    fn into(self) -> &'a str {
+        match self {
+            MappingRuleMatchType::Contains => &"Contains",
+            MappingRuleMatchType::Equals => &"Equals",
+            MappingRuleMatchType::NotEqual => &"NotEqual",
+            MappingRuleMatchType::StartsWith => &"StartsWith",
+            MappingRuleMatchType::UnknownVariant(UnknownMappingRuleMatchType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MappingRuleMatchType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Contains" => MappingRuleMatchType::Contains,
+            "Equals" => MappingRuleMatchType::Equals,
+            "NotEqual" => MappingRuleMatchType::NotEqual,
+            "StartsWith" => MappingRuleMatchType::StartsWith,
+            _ => MappingRuleMatchType::UnknownVariant(UnknownMappingRuleMatchType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MappingRuleMatchType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Contains" => MappingRuleMatchType::Contains,
+            "Equals" => MappingRuleMatchType::Equals,
+            "NotEqual" => MappingRuleMatchType::NotEqual,
+            "StartsWith" => MappingRuleMatchType::StartsWith,
+            _ => MappingRuleMatchType::UnknownVariant(UnknownMappingRuleMatchType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MappingRuleMatchType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MappingRuleMatchType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MappingRuleMatchType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Input to the <code>MergeDeveloperIdentities</code> action.</p>
@@ -576,14 +898,114 @@ pub struct RoleMapping {
     /// <p>If you specify Token or Rules as the <code>Type</code>, <code>AmbiguousRoleResolution</code> is required.</p> <p>Specifies the action to be taken if either no rules match the claim value for the <code>Rules</code> type, or there is no <code>cognito:preferred_role</code> claim and there are multiple <code>cognito:roles</code> matches for the <code>Token</code> type.</p>
     #[serde(rename = "AmbiguousRoleResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ambiguous_role_resolution: Option<String>,
+    pub ambiguous_role_resolution: Option<AmbiguousRoleResolutionType>,
     /// <p>The rules to be used for mapping users to roles.</p> <p>If you specify Rules as the role mapping type, <code>RulesConfiguration</code> is required.</p>
     #[serde(rename = "RulesConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rules_configuration: Option<RulesConfigurationType>,
     /// <p>The role mapping type. Token will use <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims from the Cognito identity provider token to map groups to roles. Rules will attempt to match claims from the token to map to a role.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: RoleMappingType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRoleMappingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RoleMappingType {
+    Rules,
+    Token,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRoleMappingType),
+}
+
+impl Default for RoleMappingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RoleMappingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RoleMappingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RoleMappingType {
+    fn into(self) -> String {
+        match self {
+            RoleMappingType::Rules => "Rules".to_string(),
+            RoleMappingType::Token => "Token".to_string(),
+            RoleMappingType::UnknownVariant(UnknownRoleMappingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RoleMappingType {
+    fn into(self) -> &'a str {
+        match self {
+            RoleMappingType::Rules => &"Rules",
+            RoleMappingType::Token => &"Token",
+            RoleMappingType::UnknownVariant(UnknownRoleMappingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RoleMappingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Rules" => RoleMappingType::Rules,
+            "Token" => RoleMappingType::Token,
+            _ => RoleMappingType::UnknownVariant(UnknownRoleMappingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RoleMappingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Rules" => RoleMappingType::Rules,
+            "Token" => RoleMappingType::Token,
+            _ => RoleMappingType::UnknownVariant(UnknownRoleMappingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoleMappingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RoleMappingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RoleMappingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A container for rules.</p>
@@ -665,7 +1087,7 @@ pub struct UnprocessedIdentityId {
     /// <p>The error code indicating the type of error that occurred.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     #[serde(skip_serializing_if = "Option::is_none")]

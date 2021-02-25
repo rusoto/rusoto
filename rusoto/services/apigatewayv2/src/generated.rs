@@ -87,7 +87,7 @@ pub struct Api {
     pub name: String,
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
-    pub protocol_type: String,
+    pub protocol_type: ProtocolType,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     pub route_selection_expression: String,
@@ -125,6 +125,122 @@ pub struct ApiMapping {
     pub stage: String,
 }
 
+/// <p>The authorization type. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer. For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthorizationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthorizationType {
+    AwsIam,
+    Custom,
+    Jwt,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthorizationType),
+}
+
+impl Default for AuthorizationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthorizationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthorizationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthorizationType {
+    fn into(self) -> String {
+        match self {
+            AuthorizationType::AwsIam => "AWS_IAM".to_string(),
+            AuthorizationType::Custom => "CUSTOM".to_string(),
+            AuthorizationType::Jwt => "JWT".to_string(),
+            AuthorizationType::None => "NONE".to_string(),
+            AuthorizationType::UnknownVariant(UnknownAuthorizationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthorizationType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthorizationType::AwsIam => &"AWS_IAM",
+            AuthorizationType::Custom => &"CUSTOM",
+            AuthorizationType::Jwt => &"JWT",
+            AuthorizationType::None => &"NONE",
+            AuthorizationType::UnknownVariant(UnknownAuthorizationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AuthorizationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_IAM" => AuthorizationType::AwsIam,
+            "CUSTOM" => AuthorizationType::Custom,
+            "JWT" => AuthorizationType::Jwt,
+            "NONE" => AuthorizationType::None,
+            _ => AuthorizationType::UnknownVariant(UnknownAuthorizationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthorizationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_IAM" => AuthorizationType::AwsIam,
+            "CUSTOM" => AuthorizationType::Custom,
+            "JWT" => AuthorizationType::Jwt,
+            "NONE" => AuthorizationType::None,
+            _ => AuthorizationType::UnknownVariant(UnknownAuthorizationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthorizationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthorizationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthorizationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents an authorizer.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -148,7 +264,7 @@ pub struct Authorizer {
     /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_type: Option<String>,
+    pub authorizer_type: Option<AuthorizerType>,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
@@ -173,6 +289,316 @@ pub struct Authorizer {
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     pub name: String,
+}
+
+/// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthorizerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthorizerType {
+    Jwt,
+    Request,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthorizerType),
+}
+
+impl Default for AuthorizerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthorizerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthorizerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthorizerType {
+    fn into(self) -> String {
+        match self {
+            AuthorizerType::Jwt => "JWT".to_string(),
+            AuthorizerType::Request => "REQUEST".to_string(),
+            AuthorizerType::UnknownVariant(UnknownAuthorizerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthorizerType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthorizerType::Jwt => &"JWT",
+            AuthorizerType::Request => &"REQUEST",
+            AuthorizerType::UnknownVariant(UnknownAuthorizerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthorizerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JWT" => AuthorizerType::Jwt,
+            "REQUEST" => AuthorizerType::Request,
+            _ => AuthorizerType::UnknownVariant(UnknownAuthorizerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthorizerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JWT" => AuthorizerType::Jwt,
+            "REQUEST" => AuthorizerType::Request,
+            _ => AuthorizerType::UnknownVariant(UnknownAuthorizerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthorizerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthorizerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthorizerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Represents a connection type.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionType {
+    Internet,
+    VpcLink,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionType),
+}
+
+impl Default for ConnectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionType {
+    fn into(self) -> String {
+        match self {
+            ConnectionType::Internet => "INTERNET".to_string(),
+            ConnectionType::VpcLink => "VPC_LINK".to_string(),
+            ConnectionType::UnknownVariant(UnknownConnectionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionType {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionType::Internet => &"INTERNET",
+            ConnectionType::VpcLink => &"VPC_LINK",
+            ConnectionType::UnknownVariant(UnknownConnectionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERNET" => ConnectionType::Internet,
+            "VPC_LINK" => ConnectionType::VpcLink,
+            _ => ConnectionType::UnknownVariant(UnknownConnectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERNET" => ConnectionType::Internet,
+            "VPC_LINK" => ConnectionType::VpcLink,
+            _ => ConnectionType::UnknownVariant(UnknownConnectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConnectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Specifies how to handle response payload content type conversions. Supported only for WebSocket APIs.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentHandlingStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentHandlingStrategy {
+    ConvertToBinary,
+    ConvertToText,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentHandlingStrategy),
+}
+
+impl Default for ContentHandlingStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentHandlingStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentHandlingStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentHandlingStrategy {
+    fn into(self) -> String {
+        match self {
+            ContentHandlingStrategy::ConvertToBinary => "CONVERT_TO_BINARY".to_string(),
+            ContentHandlingStrategy::ConvertToText => "CONVERT_TO_TEXT".to_string(),
+            ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentHandlingStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            ContentHandlingStrategy::ConvertToBinary => &"CONVERT_TO_BINARY",
+            ContentHandlingStrategy::ConvertToText => &"CONVERT_TO_TEXT",
+            ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentHandlingStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONVERT_TO_BINARY" => ContentHandlingStrategy::ConvertToBinary,
+            "CONVERT_TO_TEXT" => ContentHandlingStrategy::ConvertToText,
+            _ => ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentHandlingStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONVERT_TO_BINARY" => ContentHandlingStrategy::ConvertToBinary,
+            "CONVERT_TO_TEXT" => ContentHandlingStrategy::ConvertToText,
+            _ => ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentHandlingStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentHandlingStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentHandlingStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a CORS configuration. Supported only for HTTP APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html">Configuring CORS</a> for more information.</p>
@@ -277,7 +703,7 @@ pub struct CreateApiRequest {
     pub name: String,
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
-    pub protocol_type: String,
+    pub protocol_type: ProtocolType,
     /// <p>This property is part of quick create. If you don't specify a routeKey, a default route of $default is created. The $default route acts as a catch-all for any request made to your API, for a particular stage. The $default route key can't be modified. You can add routes after creating the API, and you can update the route keys of additional routes. Supported only for HTTP APIs.</p>
     #[serde(rename = "RouteKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -350,7 +776,7 @@ pub struct CreateApiResponse {
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_type: Option<String>,
+    pub protocol_type: Option<ProtocolType>,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -390,7 +816,7 @@ pub struct CreateAuthorizerRequest {
     pub authorizer_result_ttl_in_seconds: Option<i64>,
     /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
-    pub authorizer_type: String,
+    pub authorizer_type: AuthorizerType,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
@@ -438,7 +864,7 @@ pub struct CreateAuthorizerResponse {
     /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_type: Option<String>,
+    pub authorizer_type: Option<AuthorizerType>,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
@@ -501,7 +927,7 @@ pub struct CreateDeploymentResponse {
     /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_status: Option<String>,
+    pub deployment_status: Option<DeploymentStatus>,
     /// <p>May contain additional feedback on the status of an API deployment.</p>
     #[serde(rename = "DeploymentStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -572,11 +998,11 @@ pub struct CreateIntegrationRequest {
     /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -595,7 +1021,7 @@ pub struct CreateIntegrationRequest {
     pub integration_subtype: Option<String>,
     /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
-    pub integration_type: String,
+    pub integration_type: IntegrationType,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -603,7 +1029,7 @@ pub struct CreateIntegrationRequest {
     /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
+    pub passthrough_behavior: Option<PassthroughBehavior>,
     /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -641,7 +1067,7 @@ pub struct CreateIntegrationResponseRequest {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>The integration ID.</p>
     #[serde(rename = "IntegrationId")]
     pub integration_id: String,
@@ -668,7 +1094,7 @@ pub struct CreateIntegrationResponseResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>The integration response ID.</p>
     #[serde(rename = "IntegrationResponseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -705,11 +1131,11 @@ pub struct CreateIntegrationResult {
     /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -737,7 +1163,7 @@ pub struct CreateIntegrationResult {
     /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
+    pub integration_type: Option<IntegrationType>,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -745,7 +1171,7 @@ pub struct CreateIntegrationResult {
     /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
+    pub passthrough_behavior: Option<PassthroughBehavior>,
     /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -839,7 +1265,7 @@ pub struct CreateRouteRequest {
     /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
+    pub authorization_type: Option<AuthorizationType>,
     /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -943,7 +1369,7 @@ pub struct CreateRouteResult {
     /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
+    pub authorization_type: Option<AuthorizationType>,
     /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1141,7 +1567,7 @@ pub struct CreateVpcLinkResponse {
     /// <p>The status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_status: Option<String>,
+    pub vpc_link_status: Option<VpcLinkStatus>,
     /// <p>A message summarizing the cause of the status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1149,7 +1575,7 @@ pub struct CreateVpcLinkResponse {
     /// <p>The version of the VPC link.</p>
     #[serde(rename = "VpcLinkVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_version: Option<String>,
+    pub vpc_link_version: Option<VpcLinkVersion>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1351,7 +1777,7 @@ pub struct Deployment {
     /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_status: Option<String>,
+    pub deployment_status: Option<DeploymentStatus>,
     /// <p>May contain additional feedback on the status of an API deployment.</p>
     #[serde(rename = "DeploymentStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1360,6 +1786,118 @@ pub struct Deployment {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+}
+
+/// <p>Represents a deployment status.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentStatus {
+    Deployed,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentStatus),
+}
+
+impl Default for DeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            DeploymentStatus::Deployed => "DEPLOYED".to_string(),
+            DeploymentStatus::Failed => "FAILED".to_string(),
+            DeploymentStatus::Pending => "PENDING".to_string(),
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentStatus::Deployed => &"DEPLOYED",
+            DeploymentStatus::Failed => &"FAILED",
+            DeploymentStatus::Pending => &"PENDING",
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPLOYED" => DeploymentStatus::Deployed,
+            "FAILED" => DeploymentStatus::Failed,
+            "PENDING" => DeploymentStatus::Pending,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPLOYED" => DeploymentStatus::Deployed,
+            "FAILED" => DeploymentStatus::Failed,
+            "PENDING" => DeploymentStatus::Pending,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a domain name.</p>
@@ -1409,7 +1947,7 @@ pub struct DomainNameConfiguration {
     /// <p>The status of the domain name migration. The valid values are AVAILABLE and UPDATING. If the status is UPDATING, the domain cannot be modified further until the existing operation is complete. If it is AVAILABLE, the domain can be updated.</p>
     #[serde(rename = "DomainNameStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_name_status: Option<String>,
+    pub domain_name_status: Option<DomainNameStatus>,
     /// <p>An optional text message containing detailed information about status of the domain name migration.</p>
     #[serde(rename = "DomainNameStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1417,7 +1955,7 @@ pub struct DomainNameConfiguration {
     /// <p>The endpoint type.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub endpoint_type: Option<String>,
+    pub endpoint_type: Option<EndpointType>,
     /// <p>The Amazon Route 53 Hosted Zone ID of the endpoint.</p>
     #[serde(rename = "HostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1425,7 +1963,215 @@ pub struct DomainNameConfiguration {
     /// <p>The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are TLS_1_0 and TLS_1_2.</p>
     #[serde(rename = "SecurityPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub security_policy: Option<String>,
+    pub security_policy: Option<SecurityPolicy>,
+}
+
+/// <p>The status of the domain name migration. The valid values are AVAILABLE and UPDATING. If the status is UPDATING, the domain cannot be modified further until the existing operation is complete. If it is AVAILABLE, the domain can be updated.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainNameStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainNameStatus {
+    Available,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainNameStatus),
+}
+
+impl Default for DomainNameStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainNameStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainNameStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainNameStatus {
+    fn into(self) -> String {
+        match self {
+            DomainNameStatus::Available => "AVAILABLE".to_string(),
+            DomainNameStatus::Updating => "UPDATING".to_string(),
+            DomainNameStatus::UnknownVariant(UnknownDomainNameStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainNameStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainNameStatus::Available => &"AVAILABLE",
+            DomainNameStatus::Updating => &"UPDATING",
+            DomainNameStatus::UnknownVariant(UnknownDomainNameStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DomainNameStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => DomainNameStatus::Available,
+            "UPDATING" => DomainNameStatus::Updating,
+            _ => DomainNameStatus::UnknownVariant(UnknownDomainNameStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainNameStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => DomainNameStatus::Available,
+            "UPDATING" => DomainNameStatus::Updating,
+            _ => DomainNameStatus::UnknownVariant(UnknownDomainNameStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainNameStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DomainNameStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainNameStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Represents an endpoint type.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointType {
+    Edge,
+    Regional,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointType),
+}
+
+impl Default for EndpointType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointType {
+    fn into(self) -> String {
+        match self {
+            EndpointType::Edge => "EDGE".to_string(),
+            EndpointType::Regional => "REGIONAL".to_string(),
+            EndpointType::UnknownVariant(UnknownEndpointType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointType {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointType::Edge => &"EDGE",
+            EndpointType::Regional => &"REGIONAL",
+            EndpointType::UnknownVariant(UnknownEndpointType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EDGE" => EndpointType::Edge,
+            "REGIONAL" => EndpointType::Regional,
+            _ => EndpointType::UnknownVariant(UnknownEndpointType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EDGE" => EndpointType::Edge,
+            "REGIONAL" => EndpointType::Regional,
+            _ => EndpointType::UnknownVariant(UnknownEndpointType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EndpointType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1578,7 +2324,7 @@ pub struct GetApiResponse {
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_type: Option<String>,
+    pub protocol_type: Option<ProtocolType>,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1656,7 +2402,7 @@ pub struct GetAuthorizerResponse {
     /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_type: Option<String>,
+    pub authorizer_type: Option<AuthorizerType>,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
@@ -1742,7 +2488,7 @@ pub struct GetDeploymentResponse {
     /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_status: Option<String>,
+    pub deployment_status: Option<DeploymentStatus>,
     /// <p>May contain additional feedback on the status of an API deployment.</p>
     #[serde(rename = "DeploymentStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1872,7 +2618,7 @@ pub struct GetIntegrationResponseResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>The integration response ID.</p>
     #[serde(rename = "IntegrationResponseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1941,11 +2687,11 @@ pub struct GetIntegrationResult {
     /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1973,7 +2719,7 @@ pub struct GetIntegrationResult {
     /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
+    pub integration_type: Option<IntegrationType>,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1981,7 +2727,7 @@ pub struct GetIntegrationResult {
     /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
+    pub passthrough_behavior: Option<PassthroughBehavior>,
     /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2223,7 +2969,7 @@ pub struct GetRouteResult {
     /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
+    pub authorization_type: Option<AuthorizationType>,
     /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2446,7 +3192,7 @@ pub struct GetVpcLinkResponse {
     /// <p>The status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_status: Option<String>,
+    pub vpc_link_status: Option<VpcLinkStatus>,
     /// <p>A message summarizing the cause of the status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2454,7 +3200,7 @@ pub struct GetVpcLinkResponse {
     /// <p>The version of the VPC link.</p>
     #[serde(rename = "VpcLinkVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_version: Option<String>,
+    pub vpc_link_version: Option<VpcLinkVersion>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2550,7 +3296,7 @@ pub struct ImportApiResponse {
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_type: Option<String>,
+    pub protocol_type: Option<ProtocolType>,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2584,11 +3330,11 @@ pub struct Integration {
     /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2616,7 +3362,7 @@ pub struct Integration {
     /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
+    pub integration_type: Option<IntegrationType>,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2624,7 +3370,7 @@ pub struct Integration {
     /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
+    pub passthrough_behavior: Option<PassthroughBehavior>,
     /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2659,7 +3405,7 @@ pub struct IntegrationResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>The integration response ID.</p>
     #[serde(rename = "IntegrationResponseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2681,6 +3427,123 @@ pub struct IntegrationResponse {
     pub template_selection_expression: Option<String>,
 }
 
+/// <p>Represents an API method integration type.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIntegrationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IntegrationType {
+    Aws,
+    AwsProxy,
+    Http,
+    HttpProxy,
+    Mock,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIntegrationType),
+}
+
+impl Default for IntegrationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IntegrationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IntegrationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IntegrationType {
+    fn into(self) -> String {
+        match self {
+            IntegrationType::Aws => "AWS".to_string(),
+            IntegrationType::AwsProxy => "AWS_PROXY".to_string(),
+            IntegrationType::Http => "HTTP".to_string(),
+            IntegrationType::HttpProxy => "HTTP_PROXY".to_string(),
+            IntegrationType::Mock => "MOCK".to_string(),
+            IntegrationType::UnknownVariant(UnknownIntegrationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IntegrationType {
+    fn into(self) -> &'a str {
+        match self {
+            IntegrationType::Aws => &"AWS",
+            IntegrationType::AwsProxy => &"AWS_PROXY",
+            IntegrationType::Http => &"HTTP",
+            IntegrationType::HttpProxy => &"HTTP_PROXY",
+            IntegrationType::Mock => &"MOCK",
+            IntegrationType::UnknownVariant(UnknownIntegrationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IntegrationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => IntegrationType::Aws,
+            "AWS_PROXY" => IntegrationType::AwsProxy,
+            "HTTP" => IntegrationType::Http,
+            "HTTP_PROXY" => IntegrationType::HttpProxy,
+            "MOCK" => IntegrationType::Mock,
+            _ => IntegrationType::UnknownVariant(UnknownIntegrationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IntegrationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => IntegrationType::Aws,
+            "AWS_PROXY" => IntegrationType::AwsProxy,
+            "HTTP" => IntegrationType::Http,
+            "HTTP_PROXY" => IntegrationType::HttpProxy,
+            "MOCK" => IntegrationType::Mock,
+            _ => IntegrationType::UnknownVariant(UnknownIntegrationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IntegrationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IntegrationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JWTConfiguration {
@@ -2693,6 +3556,113 @@ pub struct JWTConfiguration {
     #[serde(rename = "Issuer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issuer: Option<String>,
+}
+
+/// <p>The logging level.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoggingLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoggingLevel {
+    Error,
+    Info,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoggingLevel),
+}
+
+impl Default for LoggingLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoggingLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoggingLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoggingLevel {
+    fn into(self) -> String {
+        match self {
+            LoggingLevel::Error => "ERROR".to_string(),
+            LoggingLevel::Info => "INFO".to_string(),
+            LoggingLevel::Off => "OFF".to_string(),
+            LoggingLevel::UnknownVariant(UnknownLoggingLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoggingLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LoggingLevel::Error => &"ERROR",
+            LoggingLevel::Info => &"INFO",
+            LoggingLevel::Off => &"OFF",
+            LoggingLevel::UnknownVariant(UnknownLoggingLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoggingLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "ERROR" => LoggingLevel::Error,
+            "INFO" => LoggingLevel::Info,
+            "OFF" => LoggingLevel::Off,
+            _ => LoggingLevel::UnknownVariant(UnknownLoggingLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoggingLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ERROR" => LoggingLevel::Error,
+            "INFO" => LoggingLevel::Info,
+            "OFF" => LoggingLevel::Off,
+            _ => LoggingLevel::UnknownVariant(UnknownLoggingLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggingLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoggingLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoggingLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a data model for an API. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response Mappings</a>.</p>
@@ -2757,6 +3727,219 @@ pub struct ParameterConstraints {
     #[serde(rename = "Required")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
+}
+
+/// <p>Represents passthrough behavior for an integration response. Supported only for WebSocket APIs.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPassthroughBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PassthroughBehavior {
+    Never,
+    WhenNoMatch,
+    WhenNoTemplates,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPassthroughBehavior),
+}
+
+impl Default for PassthroughBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PassthroughBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PassthroughBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PassthroughBehavior {
+    fn into(self) -> String {
+        match self {
+            PassthroughBehavior::Never => "NEVER".to_string(),
+            PassthroughBehavior::WhenNoMatch => "WHEN_NO_MATCH".to_string(),
+            PassthroughBehavior::WhenNoTemplates => "WHEN_NO_TEMPLATES".to_string(),
+            PassthroughBehavior::UnknownVariant(UnknownPassthroughBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PassthroughBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            PassthroughBehavior::Never => &"NEVER",
+            PassthroughBehavior::WhenNoMatch => &"WHEN_NO_MATCH",
+            PassthroughBehavior::WhenNoTemplates => &"WHEN_NO_TEMPLATES",
+            PassthroughBehavior::UnknownVariant(UnknownPassthroughBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PassthroughBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NEVER" => PassthroughBehavior::Never,
+            "WHEN_NO_MATCH" => PassthroughBehavior::WhenNoMatch,
+            "WHEN_NO_TEMPLATES" => PassthroughBehavior::WhenNoTemplates,
+            _ => PassthroughBehavior::UnknownVariant(UnknownPassthroughBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PassthroughBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NEVER" => PassthroughBehavior::Never,
+            "WHEN_NO_MATCH" => PassthroughBehavior::WhenNoMatch,
+            "WHEN_NO_TEMPLATES" => PassthroughBehavior::WhenNoTemplates,
+            _ => PassthroughBehavior::UnknownVariant(UnknownPassthroughBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PassthroughBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PassthroughBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PassthroughBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Represents a protocol type.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtocolType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtocolType {
+    Http,
+    Websocket,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtocolType),
+}
+
+impl Default for ProtocolType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtocolType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtocolType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtocolType {
+    fn into(self) -> String {
+        match self {
+            ProtocolType::Http => "HTTP".to_string(),
+            ProtocolType::Websocket => "WEBSOCKET".to_string(),
+            ProtocolType::UnknownVariant(UnknownProtocolType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtocolType {
+    fn into(self) -> &'a str {
+        match self {
+            ProtocolType::Http => &"HTTP",
+            ProtocolType::Websocket => &"WEBSOCKET",
+            ProtocolType::UnknownVariant(UnknownProtocolType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProtocolType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP" => ProtocolType::Http,
+            "WEBSOCKET" => ProtocolType::Websocket,
+            _ => ProtocolType::UnknownVariant(UnknownProtocolType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtocolType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP" => ProtocolType::Http,
+            "WEBSOCKET" => ProtocolType::Websocket,
+            _ => ProtocolType::UnknownVariant(UnknownProtocolType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtocolType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProtocolType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProtocolType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p></p>
@@ -2829,7 +4012,7 @@ pub struct ReimportApiResponse {
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_type: Option<String>,
+    pub protocol_type: Option<ProtocolType>,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2878,7 +4061,7 @@ pub struct Route {
     /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
+    pub authorization_type: Option<AuthorizationType>,
     /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2955,7 +4138,7 @@ pub struct RouteSettings {
     /// <p>Specifies the logging level for this route: INFO, ERROR, or OFF. This property affects the log entries pushed to Amazon CloudWatch Logs. Supported only for WebSocket APIs.</p>
     #[serde(rename = "LoggingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub logging_level: Option<String>,
+    pub logging_level: Option<LoggingLevel>,
     /// <p>Specifies the throttling burst limit.</p>
     #[serde(rename = "ThrottlingBurstLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2964,6 +4147,108 @@ pub struct RouteSettings {
     #[serde(rename = "ThrottlingRateLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub throttling_rate_limit: Option<f64>,
+}
+
+/// <p>The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are TLS_1_0 and TLS_1_2.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSecurityPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SecurityPolicy {
+    Tls10,
+    Tls12,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSecurityPolicy),
+}
+
+impl Default for SecurityPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SecurityPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SecurityPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SecurityPolicy {
+    fn into(self) -> String {
+        match self {
+            SecurityPolicy::Tls10 => "TLS_1_0".to_string(),
+            SecurityPolicy::Tls12 => "TLS_1_2".to_string(),
+            SecurityPolicy::UnknownVariant(UnknownSecurityPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SecurityPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            SecurityPolicy::Tls10 => &"TLS_1_0",
+            SecurityPolicy::Tls12 => &"TLS_1_2",
+            SecurityPolicy::UnknownVariant(UnknownSecurityPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SecurityPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "TLS_1_0" => SecurityPolicy::Tls10,
+            "TLS_1_2" => SecurityPolicy::Tls12,
+            _ => SecurityPolicy::UnknownVariant(UnknownSecurityPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SecurityPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TLS_1_0" => SecurityPolicy::Tls10,
+            "TLS_1_2" => SecurityPolicy::Tls12,
+            _ => SecurityPolicy::UnknownVariant(UnknownSecurityPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SecurityPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SecurityPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SecurityPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents an API stage.</p>
@@ -3222,7 +4507,7 @@ pub struct UpdateApiResponse {
     /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_type: Option<String>,
+    pub protocol_type: Option<ProtocolType>,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3266,7 +4551,7 @@ pub struct UpdateAuthorizerRequest {
     /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_type: Option<String>,
+    pub authorizer_type: Option<AuthorizerType>,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
@@ -3316,7 +4601,7 @@ pub struct UpdateAuthorizerResponse {
     /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_type: Option<String>,
+    pub authorizer_type: Option<AuthorizerType>,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
@@ -3378,7 +4663,7 @@ pub struct UpdateDeploymentResponse {
     /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_status: Option<String>,
+    pub deployment_status: Option<DeploymentStatus>,
     /// <p>May contain additional feedback on the status of an API deployment.</p>
     #[serde(rename = "DeploymentStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3445,11 +4730,11 @@ pub struct UpdateIntegrationRequest {
     /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3472,7 +4757,7 @@ pub struct UpdateIntegrationRequest {
     /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
+    pub integration_type: Option<IntegrationType>,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3480,7 +4765,7 @@ pub struct UpdateIntegrationRequest {
     /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
+    pub passthrough_behavior: Option<PassthroughBehavior>,
     /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3518,7 +4803,7 @@ pub struct UpdateIntegrationResponseRequest {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>The integration ID.</p>
     #[serde(rename = "IntegrationId")]
     pub integration_id: String,
@@ -3556,7 +4841,7 @@ pub struct UpdateIntegrationResponseResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>The integration response ID.</p>
     #[serde(rename = "IntegrationResponseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3593,11 +4878,11 @@ pub struct UpdateIntegrationResult {
     /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
+    pub content_handling_strategy: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3625,7 +4910,7 @@ pub struct UpdateIntegrationResult {
     /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
+    pub integration_type: Option<IntegrationType>,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3633,7 +4918,7 @@ pub struct UpdateIntegrationResult {
     /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
+    pub passthrough_behavior: Option<PassthroughBehavior>,
     /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3732,7 +5017,7 @@ pub struct UpdateRouteRequest {
     /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
+    pub authorization_type: Option<AuthorizationType>,
     /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3844,7 +5129,7 @@ pub struct UpdateRouteResult {
     /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
+    pub authorization_type: Option<AuthorizationType>,
     /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4031,7 +5316,7 @@ pub struct UpdateVpcLinkResponse {
     /// <p>The status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_status: Option<String>,
+    pub vpc_link_status: Option<VpcLinkStatus>,
     /// <p>A message summarizing the cause of the status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4039,7 +5324,7 @@ pub struct UpdateVpcLinkResponse {
     /// <p>The version of the VPC link.</p>
     #[serde(rename = "VpcLinkVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_version: Option<String>,
+    pub vpc_link_version: Option<VpcLinkVersion>,
 }
 
 /// <p>Represents a VPC link.</p>
@@ -4069,7 +5354,7 @@ pub struct VpcLink {
     /// <p>The status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_status: Option<String>,
+    pub vpc_link_status: Option<VpcLinkStatus>,
     /// <p>A message summarizing the cause of the status of the VPC link.</p>
     #[serde(rename = "VpcLinkStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4077,7 +5362,223 @@ pub struct VpcLink {
     /// <p>The version of the VPC link.</p>
     #[serde(rename = "VpcLinkVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_link_version: Option<String>,
+    pub vpc_link_version: Option<VpcLinkVersion>,
+}
+
+/// <p>The status of the VPC link.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVpcLinkStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VpcLinkStatus {
+    Available,
+    Deleting,
+    Failed,
+    Inactive,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVpcLinkStatus),
+}
+
+impl Default for VpcLinkStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VpcLinkStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VpcLinkStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VpcLinkStatus {
+    fn into(self) -> String {
+        match self {
+            VpcLinkStatus::Available => "AVAILABLE".to_string(),
+            VpcLinkStatus::Deleting => "DELETING".to_string(),
+            VpcLinkStatus::Failed => "FAILED".to_string(),
+            VpcLinkStatus::Inactive => "INACTIVE".to_string(),
+            VpcLinkStatus::Pending => "PENDING".to_string(),
+            VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VpcLinkStatus {
+    fn into(self) -> &'a str {
+        match self {
+            VpcLinkStatus::Available => &"AVAILABLE",
+            VpcLinkStatus::Deleting => &"DELETING",
+            VpcLinkStatus::Failed => &"FAILED",
+            VpcLinkStatus::Inactive => &"INACTIVE",
+            VpcLinkStatus::Pending => &"PENDING",
+            VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VpcLinkStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => VpcLinkStatus::Available,
+            "DELETING" => VpcLinkStatus::Deleting,
+            "FAILED" => VpcLinkStatus::Failed,
+            "INACTIVE" => VpcLinkStatus::Inactive,
+            "PENDING" => VpcLinkStatus::Pending,
+            _ => VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VpcLinkStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => VpcLinkStatus::Available,
+            "DELETING" => VpcLinkStatus::Deleting,
+            "FAILED" => VpcLinkStatus::Failed,
+            "INACTIVE" => VpcLinkStatus::Inactive,
+            "PENDING" => VpcLinkStatus::Pending,
+            _ => VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcLinkStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VpcLinkStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VpcLinkStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The version of the VPC link.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVpcLinkVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VpcLinkVersion {
+    V2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVpcLinkVersion),
+}
+
+impl Default for VpcLinkVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VpcLinkVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VpcLinkVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VpcLinkVersion {
+    fn into(self) -> String {
+        match self {
+            VpcLinkVersion::V2 => "V2".to_string(),
+            VpcLinkVersion::UnknownVariant(UnknownVpcLinkVersion { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VpcLinkVersion {
+    fn into(self) -> &'a str {
+        match self {
+            VpcLinkVersion::V2 => &"V2",
+            VpcLinkVersion::UnknownVariant(UnknownVpcLinkVersion { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VpcLinkVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "V2" => VpcLinkVersion::V2,
+            _ => VpcLinkVersion::UnknownVariant(UnknownVpcLinkVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VpcLinkVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "V2" => VpcLinkVersion::V2,
+            _ => VpcLinkVersion::UnknownVariant(UnknownVpcLinkVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcLinkVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VpcLinkVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VpcLinkVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateApi

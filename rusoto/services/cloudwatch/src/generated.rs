@@ -91,11 +91,11 @@ pub struct AlarmHistoryItem {
     /// <p>The descriptive name for the alarm.</p>
     pub alarm_name: Option<String>,
     /// <p>The type of alarm, either metric alarm or composite alarm.</p>
-    pub alarm_type: Option<String>,
+    pub alarm_type: Option<AlarmType>,
     /// <p>Data about the alarm, in JSON format.</p>
     pub history_data: Option<String>,
     /// <p>The type of alarm history item.</p>
-    pub history_item_type: Option<String>,
+    pub history_item_type: Option<HistoryItemType>,
     /// <p>A summary of the alarm history, in text format.</p>
     pub history_summary: Option<String>,
     /// <p>The time stamp for the alarm history item.</p>
@@ -176,7 +176,7 @@ impl AlarmNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -189,22 +189,128 @@ impl AlarmRuleDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlarmType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AlarmType {
+    CompositeAlarm,
+    MetricAlarm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlarmType),
+}
+
+impl Default for AlarmType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AlarmType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AlarmType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AlarmType {
+    fn into(self) -> String {
+        match self {
+            AlarmType::CompositeAlarm => "CompositeAlarm".to_string(),
+            AlarmType::MetricAlarm => "MetricAlarm".to_string(),
+            AlarmType::UnknownVariant(UnknownAlarmType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AlarmType {
+    fn into(self) -> &'a str {
+        match self {
+            AlarmType::CompositeAlarm => &"CompositeAlarm",
+            AlarmType::MetricAlarm => &"MetricAlarm",
+            AlarmType::UnknownVariant(UnknownAlarmType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AlarmType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CompositeAlarm" => AlarmType::CompositeAlarm,
+            "MetricAlarm" => AlarmType::MetricAlarm,
+            _ => AlarmType::UnknownVariant(UnknownAlarmType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AlarmType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CompositeAlarm" => AlarmType::CompositeAlarm,
+            "MetricAlarm" => AlarmType::MetricAlarm,
+            _ => AlarmType::UnknownVariant(UnknownAlarmType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlarmType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AlarmType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AlarmType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AlarmTypeDeserializer;
 impl AlarmTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AlarmType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
 /// Serialize `AlarmTypes` contents to a `SignedRequest`.
 struct AlarmTypesSerializer;
 impl AlarmTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<AlarmType>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -224,7 +330,7 @@ pub struct AnomalyDetector {
     /// <p>The statistic associated with the anomaly detection model.</p>
     pub stat: Option<String>,
     /// <p>The current status of the anomaly detector's training. The possible values are <code>TRAINED | PENDING_TRAINING | TRAINED_INSUFFICIENT_DATA</code> </p>
-    pub state_value: Option<String>,
+    pub state_value: Option<AnomalyDetectorStateValue>,
 }
 
 #[allow(dead_code)]
@@ -337,7 +443,10 @@ impl AnomalyDetectorConfigurationSerializer {
             );
         }
         if let Some(ref field_value) = obj.metric_timezone {
-            params.put(&format!("{}{}", prefix, "MetricTimezone"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MetricTimezone"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -388,12 +497,131 @@ impl AnomalyDetectorMetricTimezoneDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnomalyDetectorStateValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnomalyDetectorStateValue {
+    PendingTraining,
+    Trained,
+    TrainedInsufficientData,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnomalyDetectorStateValue),
+}
+
+impl Default for AnomalyDetectorStateValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnomalyDetectorStateValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnomalyDetectorStateValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnomalyDetectorStateValue {
+    fn into(self) -> String {
+        match self {
+            AnomalyDetectorStateValue::PendingTraining => "PENDING_TRAINING".to_string(),
+            AnomalyDetectorStateValue::Trained => "TRAINED".to_string(),
+            AnomalyDetectorStateValue::TrainedInsufficientData => {
+                "TRAINED_INSUFFICIENT_DATA".to_string()
+            }
+            AnomalyDetectorStateValue::UnknownVariant(UnknownAnomalyDetectorStateValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnomalyDetectorStateValue {
+    fn into(self) -> &'a str {
+        match self {
+            AnomalyDetectorStateValue::PendingTraining => &"PENDING_TRAINING",
+            AnomalyDetectorStateValue::Trained => &"TRAINED",
+            AnomalyDetectorStateValue::TrainedInsufficientData => &"TRAINED_INSUFFICIENT_DATA",
+            AnomalyDetectorStateValue::UnknownVariant(UnknownAnomalyDetectorStateValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AnomalyDetectorStateValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "PENDING_TRAINING" => AnomalyDetectorStateValue::PendingTraining,
+            "TRAINED" => AnomalyDetectorStateValue::Trained,
+            "TRAINED_INSUFFICIENT_DATA" => AnomalyDetectorStateValue::TrainedInsufficientData,
+            _ => AnomalyDetectorStateValue::UnknownVariant(UnknownAnomalyDetectorStateValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnomalyDetectorStateValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PENDING_TRAINING" => AnomalyDetectorStateValue::PendingTraining,
+            "TRAINED" => AnomalyDetectorStateValue::Trained,
+            "TRAINED_INSUFFICIENT_DATA" => AnomalyDetectorStateValue::TrainedInsufficientData,
+            _ => {
+                AnomalyDetectorStateValue::UnknownVariant(UnknownAnomalyDetectorStateValue { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnomalyDetectorStateValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AnomalyDetectorStateValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AnomalyDetectorStateValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AnomalyDetectorStateValueDeserializer;
 impl AnomalyDetectorStateValueDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnomalyDetectorStateValue, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -432,12 +660,161 @@ impl BatchFailuresDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    GreaterThanUpperThreshold,
+    LessThanLowerOrGreaterThanUpperThreshold,
+    LessThanLowerThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => {
+                "GreaterThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperator::GreaterThanThreshold => "GreaterThanThreshold".to_string(),
+            ComparisonOperator::GreaterThanUpperThreshold => {
+                "GreaterThanUpperThreshold".to_string()
+            }
+            ComparisonOperator::LessThanLowerOrGreaterThanUpperThreshold => {
+                "LessThanLowerOrGreaterThanUpperThreshold".to_string()
+            }
+            ComparisonOperator::LessThanLowerThreshold => "LessThanLowerThreshold".to_string(),
+            ComparisonOperator::LessThanOrEqualToThreshold => {
+                "LessThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperator::LessThanThreshold => "LessThanThreshold".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => &"GreaterThanOrEqualToThreshold",
+            ComparisonOperator::GreaterThanThreshold => &"GreaterThanThreshold",
+            ComparisonOperator::GreaterThanUpperThreshold => &"GreaterThanUpperThreshold",
+            ComparisonOperator::LessThanLowerOrGreaterThanUpperThreshold => {
+                &"LessThanLowerOrGreaterThanUpperThreshold"
+            }
+            ComparisonOperator::LessThanLowerThreshold => &"LessThanLowerThreshold",
+            ComparisonOperator::LessThanOrEqualToThreshold => &"LessThanOrEqualToThreshold",
+            ComparisonOperator::LessThanThreshold => &"LessThanThreshold",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "GreaterThanOrEqualToThreshold" => ComparisonOperator::GreaterThanOrEqualToThreshold,
+            "GreaterThanThreshold" => ComparisonOperator::GreaterThanThreshold,
+            "GreaterThanUpperThreshold" => ComparisonOperator::GreaterThanUpperThreshold,
+            "LessThanLowerOrGreaterThanUpperThreshold" => {
+                ComparisonOperator::LessThanLowerOrGreaterThanUpperThreshold
+            }
+            "LessThanLowerThreshold" => ComparisonOperator::LessThanLowerThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperator::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperator::LessThanThreshold,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GreaterThanOrEqualToThreshold" => ComparisonOperator::GreaterThanOrEqualToThreshold,
+            "GreaterThanThreshold" => ComparisonOperator::GreaterThanThreshold,
+            "GreaterThanUpperThreshold" => ComparisonOperator::GreaterThanUpperThreshold,
+            "LessThanLowerOrGreaterThanUpperThreshold" => {
+                ComparisonOperator::LessThanLowerOrGreaterThanUpperThreshold
+            }
+            "LessThanLowerThreshold" => ComparisonOperator::LessThanLowerThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperator::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperator::LessThanThreshold,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ComparisonOperator, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The details about a composite alarm.</p>
@@ -469,7 +846,7 @@ pub struct CompositeAlarm {
     /// <p>The time stamp of the last update to the alarm state.</p>
     pub state_updated_timestamp: Option<String>,
     /// <p>The state value for the alarm.</p>
-    pub state_value: Option<String>,
+    pub state_value: Option<StateValue>,
 }
 
 #[allow(dead_code)]
@@ -681,7 +1058,7 @@ impl DashboardNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -769,7 +1146,7 @@ pub struct Datapoint {
     /// <p>The time stamp used for the data point.</p>
     pub timestamp: Option<String>,
     /// <p>The standard unit for the data point.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
 }
 
 #[allow(dead_code)]
@@ -947,9 +1324,15 @@ impl DeleteAnomalyDetectorInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
-        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat);
+        params.put(
+            &format!("{}{}", prefix, "MetricName"),
+            &obj.metric_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Namespace"),
+            &obj.namespace.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat.to_string());
     }
 }
 
@@ -1081,17 +1464,17 @@ pub struct DescribeAlarmHistoryInput {
     /// <p>The name of the alarm.</p>
     pub alarm_name: Option<String>,
     /// <p>Use this parameter to specify whether you want the operation to return metric alarms or composite alarms. If you omit this parameter, only metric alarms are returned.</p>
-    pub alarm_types: Option<Vec<String>>,
+    pub alarm_types: Option<Vec<AlarmType>>,
     /// <p>The ending date to retrieve alarm history.</p>
     pub end_date: Option<String>,
     /// <p>The type of alarm histories to retrieve.</p>
-    pub history_item_type: Option<String>,
+    pub history_item_type: Option<HistoryItemType>,
     /// <p>The maximum number of alarm history records to retrieve.</p>
     pub max_records: Option<i64>,
     /// <p>The token returned by a previous call to indicate that there is more data available.</p>
     pub next_token: Option<String>,
     /// <p>Specified whether to return the newest or oldest alarm history first. Specify <code>TimestampDescending</code> to have the newest event history returned first, and specify <code>TimestampAscending</code> to have the oldest history returned first.</p>
-    pub scan_by: Option<String>,
+    pub scan_by: Option<ScanBy>,
     /// <p>The starting date to retrieve alarm history.</p>
     pub start_date: Option<String>,
 }
@@ -1106,7 +1489,10 @@ impl DescribeAlarmHistoryInputSerializer {
         }
 
         if let Some(ref field_value) = obj.alarm_name {
-            params.put(&format!("{}{}", prefix, "AlarmName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AlarmName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.alarm_types {
             AlarmTypesSerializer::serialize(
@@ -1119,16 +1505,22 @@ impl DescribeAlarmHistoryInputSerializer {
             params.put(&format!("{}{}", prefix, "EndDate"), &field_value);
         }
         if let Some(ref field_value) = obj.history_item_type {
-            params.put(&format!("{}{}", prefix, "HistoryItemType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HistoryItemType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.scan_by {
-            params.put(&format!("{}{}", prefix, "ScanBy"), &field_value);
+            params.put(&format!("{}{}", prefix, "ScanBy"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.start_date {
             params.put(&format!("{}{}", prefix, "StartDate"), &field_value);
@@ -1188,9 +1580,9 @@ pub struct DescribeAlarmsForMetricInput {
     /// <p>The period, in seconds, over which the statistic is applied.</p>
     pub period: Option<i64>,
     /// <p>The statistic for the metric, other than percentiles. For percentile statistics, use <code>ExtendedStatistics</code>.</p>
-    pub statistic: Option<String>,
+    pub statistic: Option<Statistic>,
     /// <p>The unit for the metric.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
 }
 
 /// Serialize `DescribeAlarmsForMetricInput` contents to a `SignedRequest`.
@@ -1210,18 +1602,30 @@ impl DescribeAlarmsForMetricInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.extended_statistic {
-            params.put(&format!("{}{}", prefix, "ExtendedStatistic"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ExtendedStatistic"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(
+            &format!("{}{}", prefix, "MetricName"),
+            &obj.metric_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Namespace"),
+            &obj.namespace.to_string(),
+        );
         if let Some(ref field_value) = obj.period {
             params.put(&format!("{}{}", prefix, "Period"), &field_value);
         }
         if let Some(ref field_value) = obj.statistic {
-            params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Statistic"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"), &field_value.to_string());
         }
     }
 }
@@ -1268,7 +1672,7 @@ pub struct DescribeAlarmsInput {
     /// <p>The names of the alarms to retrieve information about.</p>
     pub alarm_names: Option<Vec<String>>,
     /// <p>Use this parameter to specify whether you want the operation to return metric alarms or composite alarms. If you omit this parameter, only metric alarms are returned.</p>
-    pub alarm_types: Option<Vec<String>>,
+    pub alarm_types: Option<Vec<AlarmType>>,
     /// <p><p>If you use this parameter and specify the name of a composite alarm, the operation returns information about the &quot;children&quot; alarms of the alarm you specify. These are the metric alarms and composite alarms referenced in the <code>AlarmRule</code> field of the composite alarm that you specify in <code>ChildrenOfAlarmName</code>. Information about the composite alarm that you name in <code>ChildrenOfAlarmName</code> is not returned.</p> <p>If you specify <code>ChildrenOfAlarmName</code>, you cannot specify any other parameters in the request except for <code>MaxRecords</code> and <code>NextToken</code>. If you do so, you receive a validation error.</p> <note> <p>Only the <code>Alarm Name</code>, <code>ARN</code>, <code>StateValue</code> (OK/ALARM/INSUFFICIENT_DATA), and <code>StateUpdatedTimestamp</code> information are returned by this operation when you use this parameter. To get complete information about these alarms, perform another <code>DescribeAlarms</code> operation and specify the parent alarm names in the <code>AlarmNames</code> parameter.</p> </note></p>
     pub children_of_alarm_name: Option<String>,
     /// <p>The maximum number of alarm descriptions to retrieve.</p>
@@ -1278,7 +1682,7 @@ pub struct DescribeAlarmsInput {
     /// <p><p>If you use this parameter and specify the name of a metric or composite alarm, the operation returns information about the &quot;parent&quot; alarms of the alarm you specify. These are the composite alarms that have <code>AlarmRule</code> parameters that reference the alarm named in <code>ParentsOfAlarmName</code>. Information about the alarm that you specify in <code>ParentsOfAlarmName</code> is not returned.</p> <p>If you specify <code>ParentsOfAlarmName</code>, you cannot specify any other parameters in the request except for <code>MaxRecords</code> and <code>NextToken</code>. If you do so, you receive a validation error.</p> <note> <p>Only the Alarm Name and ARN are returned by this operation when you use this parameter. To get complete information about these alarms, perform another <code>DescribeAlarms</code> operation and specify the parent alarm names in the <code>AlarmNames</code> parameter.</p> </note></p>
     pub parents_of_alarm_name: Option<String>,
     /// <p>Specify this parameter to receive information only about alarms that are currently in the state that you specify.</p>
-    pub state_value: Option<String>,
+    pub state_value: Option<StateValue>,
 }
 
 /// Serialize `DescribeAlarmsInput` contents to a `SignedRequest`.
@@ -1291,10 +1695,16 @@ impl DescribeAlarmsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.action_prefix {
-            params.put(&format!("{}{}", prefix, "ActionPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ActionPrefix"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.alarm_name_prefix {
-            params.put(&format!("{}{}", prefix, "AlarmNamePrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AlarmNamePrefix"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.alarm_names {
             AlarmNamesSerializer::serialize(
@@ -1313,20 +1723,29 @@ impl DescribeAlarmsInputSerializer {
         if let Some(ref field_value) = obj.children_of_alarm_name {
             params.put(
                 &format!("{}{}", prefix, "ChildrenOfAlarmName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.parents_of_alarm_name {
-            params.put(&format!("{}{}", prefix, "ParentsOfAlarmName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParentsOfAlarmName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.state_value {
-            params.put(&format!("{}{}", prefix, "StateValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StateValue"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1406,13 +1825,22 @@ impl DescribeAnomalyDetectorsInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.metric_name {
-            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MetricName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1477,7 +1905,10 @@ impl DescribeInsightRulesInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1563,8 +1994,8 @@ impl DimensionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -1587,9 +2018,9 @@ impl DimensionFilterSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -1850,7 +2281,7 @@ impl ExtendedStatisticsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1897,7 +2328,7 @@ impl GetDashboardInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DashboardName"),
-            &obj.dashboard_name,
+            &obj.dashboard_name.to_string(),
         );
     }
 }
@@ -1990,10 +2421,16 @@ impl GetInsightRuleReportInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.order_by {
-            params.put(&format!("{}{}", prefix, "OrderBy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OrderBy"),
+                &field_value.to_string(),
+            );
         }
         params.put(&format!("{}{}", prefix, "Period"), &obj.period);
-        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleName"),
+            &obj.rule_name.to_string(),
+        );
         params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
     }
 }
@@ -2092,7 +2529,7 @@ pub struct GetMetricDataInput {
     /// <p>Include this value, if it was returned by the previous <code>GetMetricData</code> operation, to get the next set of data points.</p>
     pub next_token: Option<String>,
     /// <p>The order in which data points should be returned. <code>TimestampDescending</code> returns the newest data first and paginates when the <code>MaxDatapoints</code> limit is reached. <code>TimestampAscending</code> returns the oldest data first and paginates when the <code>MaxDatapoints</code> limit is reached.</p>
-    pub scan_by: Option<String>,
+    pub scan_by: Option<ScanBy>,
     /// <p>The time stamp indicating the earliest data to be returned.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. </p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p>
     pub start_time: String,
 }
@@ -2116,10 +2553,13 @@ impl GetMetricDataInputSerializer {
             &obj.metric_data_queries,
         );
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.scan_by {
-            params.put(&format!("{}{}", prefix, "ScanBy"), &field_value);
+            params.put(&format!("{}{}", prefix, "ScanBy"), &field_value.to_string());
         }
         params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
     }
@@ -2183,9 +2623,9 @@ pub struct GetMetricStatisticsInput {
     /// <p>The time stamp that determines the first data point to return. Start times are evaluated relative to the time that CloudWatch receives the request.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. In a raw HTTP query, the time stamp must be in ISO 8601 UTC format (for example, 2016-10-03T23:00:00Z).</p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul> <p>If you set <code>Period</code> to 5, 10, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15. </p>
     pub start_time: String,
     /// <p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistics</code>. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>
-    pub statistics: Option<Vec<String>>,
+    pub statistics: Option<Vec<Statistic>>,
     /// <p>The unit for a given metric. If you omit <code>Unit</code>, all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
 }
 
 /// Serialize `GetMetricStatisticsInput` contents to a `SignedRequest`.
@@ -2212,8 +2652,14 @@ impl GetMetricStatisticsInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(
+            &format!("{}{}", prefix, "MetricName"),
+            &obj.metric_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Namespace"),
+            &obj.namespace.to_string(),
+        );
         params.put(&format!("{}{}", prefix, "Period"), &obj.period);
         params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
         if let Some(ref field_value) = obj.statistics {
@@ -2224,7 +2670,7 @@ impl GetMetricStatisticsInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"), &field_value.to_string());
         }
     }
 }
@@ -2284,9 +2730,15 @@ impl GetMetricWidgetImageInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "MetricWidget"), &obj.metric_widget);
+        params.put(
+            &format!("{}{}", prefix, "MetricWidget"),
+            &obj.metric_widget.to_string(),
+        );
         if let Some(ref field_value) = obj.output_format {
-            params.put(&format!("{}{}", prefix, "OutputFormat"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OutputFormat"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2332,12 +2784,123 @@ impl HistoryDataDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHistoryItemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HistoryItemType {
+    Action,
+    ConfigurationUpdate,
+    StateUpdate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHistoryItemType),
+}
+
+impl Default for HistoryItemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HistoryItemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HistoryItemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HistoryItemType {
+    fn into(self) -> String {
+        match self {
+            HistoryItemType::Action => "Action".to_string(),
+            HistoryItemType::ConfigurationUpdate => "ConfigurationUpdate".to_string(),
+            HistoryItemType::StateUpdate => "StateUpdate".to_string(),
+            HistoryItemType::UnknownVariant(UnknownHistoryItemType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HistoryItemType {
+    fn into(self) -> &'a str {
+        match self {
+            HistoryItemType::Action => &"Action",
+            HistoryItemType::ConfigurationUpdate => &"ConfigurationUpdate",
+            HistoryItemType::StateUpdate => &"StateUpdate",
+            HistoryItemType::UnknownVariant(UnknownHistoryItemType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HistoryItemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Action" => HistoryItemType::Action,
+            "ConfigurationUpdate" => HistoryItemType::ConfigurationUpdate,
+            "StateUpdate" => HistoryItemType::StateUpdate,
+            _ => HistoryItemType::UnknownVariant(UnknownHistoryItemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HistoryItemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Action" => HistoryItemType::Action,
+            "ConfigurationUpdate" => HistoryItemType::ConfigurationUpdate,
+            "StateUpdate" => HistoryItemType::StateUpdate,
+            _ => HistoryItemType::UnknownVariant(UnknownHistoryItemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HistoryItemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HistoryItemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HistoryItemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct HistoryItemTypeDeserializer;
 impl HistoryItemTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HistoryItemType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -2703,7 +3266,7 @@ impl InsightRuleMetricListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2723,7 +3286,7 @@ impl InsightRuleNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2807,11 +3370,14 @@ impl ListDashboardsInputSerializer {
         if let Some(ref field_value) = obj.dashboard_name_prefix {
             params.put(
                 &format!("{}{}", prefix, "DashboardNamePrefix"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2861,7 +3427,7 @@ pub struct ListMetricsInput {
     /// <p>The token returned by a previous call to indicate that there is more data available.</p>
     pub next_token: Option<String>,
     /// <p>To filter the results to show only metrics that have had data points published in the past three hours, specify this parameter with a value of <code>PT3H</code>. This is the only valid value for this parameter.</p> <p>The results that are returned are an approximation of the value you specify. There is a low probability that the returned results include metrics with last published data as much as 40 minutes more than the specified time interval.</p>
-    pub recently_active: Option<String>,
+    pub recently_active: Option<RecentlyActive>,
 }
 
 /// Serialize `ListMetricsInput` contents to a `SignedRequest`.
@@ -2881,16 +3447,28 @@ impl ListMetricsInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.metric_name {
-            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MetricName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.recently_active {
-            params.put(&format!("{}{}", prefix, "RecentlyActive"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RecentlyActive"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2944,7 +3522,10 @@ impl ListTagsForResourceInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceARN"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceARN"),
+            &obj.resource_arn.to_string(),
+        );
     }
 }
 
@@ -3092,10 +3673,16 @@ impl MetricSerializer {
             );
         }
         if let Some(ref field_value) = obj.metric_name {
-            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MetricName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3117,7 +3704,7 @@ pub struct MetricAlarm {
     /// <p>The name of the alarm.</p>
     pub alarm_name: Option<String>,
     /// <p>The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperator>,
     /// <p>The number of data points that must be breaching to trigger the alarm.</p>
     pub datapoints_to_alarm: Option<i64>,
     /// <p>The dimensions for the metric associated with the alarm.</p>
@@ -3147,9 +3734,9 @@ pub struct MetricAlarm {
     /// <p>The time stamp of the last update to the alarm state.</p>
     pub state_updated_timestamp: Option<String>,
     /// <p>The state value for the alarm.</p>
-    pub state_value: Option<String>,
+    pub state_value: Option<StateValue>,
     /// <p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>
-    pub statistic: Option<String>,
+    pub statistic: Option<Statistic>,
     /// <p>The value to compare with the specified statistic.</p>
     pub threshold: Option<f64>,
     /// <p>In an alarm based on an anomaly detection model, this is the ID of the <code>ANOMALY_DETECTION_BAND</code> function used as the threshold for the alarm.</p>
@@ -3157,7 +3744,7 @@ pub struct MetricAlarm {
     /// <p>Sets how this alarm is to handle missing data points. If this parameter is omitted, the default behavior of <code>missing</code> is used.</p>
     pub treat_missing_data: Option<String>,
     /// <p>The unit of the metric associated with the alarm.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
 }
 
 #[allow(dead_code)]
@@ -3437,11 +4024,14 @@ impl MetricDataQuerySerializer {
         }
 
         if let Some(ref field_value) = obj.expression {
-            params.put(&format!("{}{}", prefix, "Expression"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Expression"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.to_string());
         if let Some(ref field_value) = obj.label {
-            params.put(&format!("{}{}", prefix, "Label"), &field_value);
+            params.put(&format!("{}{}", prefix, "Label"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.metric_stat {
             MetricStatSerializer::serialize(
@@ -3470,7 +4060,7 @@ pub struct MetricDataResult {
     /// <p>A list of messages with additional information about the data returned.</p>
     pub messages: Option<Vec<MessageData>>,
     /// <p>The status of the returned data. <code>Complete</code> indicates that all data points in the requested time range were returned. <code>PartialData</code> means that an incomplete set of data points were returned. You can use the <code>NextToken</code> value that was returned and repeat your request to get more data points. <code>NextToken</code> is not returned if you are performing a math expression. <code>InternalError</code> indicates that an error occurred. Retry your request using <code>NextToken</code>, if present.</p>
-    pub status_code: Option<String>,
+    pub status_code: Option<StatusCode>,
     /// <p>The timestamps for the data points, formatted in Unix timestamp format. The number of timestamps always matches the number of values and the value for Timestamps[x] is Values[x].</p>
     pub timestamps: Option<Vec<String>>,
     /// <p>The data points for the metric corresponding to <code>Timestamps</code>. The number of values always matches the number of timestamps and the timestamp for Values[x] is Timestamps[x].</p>
@@ -3571,7 +4161,7 @@ pub struct MetricDatum {
     /// <p>The time the metric data was received, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
     pub timestamp: Option<String>,
     /// <p>When you are using a <code>Put</code> operation, this defines what unit you want to use when storing the metric.</p> <p>In a <code>Get</code> operation, this displays the unit that is used for the metric.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
     /// <p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, CloudWatch rejects values that are either too small or too large. Values must be in the range of -2^360 to 2^360. In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
     pub value: Option<f64>,
     /// <p>Array of numbers representing the values for the metric during the period. Each unique value is listed just once in this array, and the corresponding number in the <code>Counts</code> array specifies the number of times that value occurred during the period. You can include up to 150 unique values in each <code>PutMetricData</code> action that specifies a <code>Values</code> array.</p> <p>Although the <code>Values</code> array accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of -2^360 to 2^360. In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
@@ -3597,7 +4187,10 @@ impl MetricDatumSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
+        params.put(
+            &format!("{}{}", prefix, "MetricName"),
+            &obj.metric_name.to_string(),
+        );
         if let Some(ref field_value) = obj.statistic_values {
             StatisticSetSerializer::serialize(
                 params,
@@ -3612,7 +4205,7 @@ impl MetricDatumSerializer {
             params.put(&format!("{}{}", prefix, "Timestamp"), &field_value);
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
             params.put(&format!("{}{}", prefix, "Value"), &field_value);
@@ -3667,7 +4260,7 @@ pub struct MetricStat {
     /// <p>The statistic to return. It can include any CloudWatch statistic or extended statistic.</p>
     pub stat: String,
     /// <p>When you are using a <code>Put</code> operation, this defines what unit you want to use when storing the metric.</p> <p>In a <code>Get</code> operation, if you omit <code>Unit</code> then all data that was collected with any unit is returned, along with the corresponding units that were specified when the data was reported to CloudWatch. If you specify a unit, the operation returns only data that was collected with that unit specified. If you specify a unit that does not match the data collected, the results of the operation are null. CloudWatch does not perform unit conversions.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
 }
 
 #[allow(dead_code)]
@@ -3710,9 +4303,9 @@ impl MetricStatSerializer {
 
         MetricSerializer::serialize(params, &format!("{}{}", prefix, "Metric"), &obj.metric);
         params.put(&format!("{}{}", prefix, "Period"), &obj.period);
-        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat);
+        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat.to_string());
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"), &field_value.to_string());
         }
     }
 }
@@ -3860,9 +4453,15 @@ impl PutAnomalyDetectorInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
-        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat);
+        params.put(
+            &format!("{}{}", prefix, "MetricName"),
+            &obj.metric_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Namespace"),
+            &obj.namespace.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Stat"), &obj.stat.to_string());
     }
 }
 
@@ -3928,10 +4527,19 @@ impl PutCompositeAlarmInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.alarm_description {
-            params.put(&format!("{}{}", prefix, "AlarmDescription"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AlarmDescription"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "AlarmName"), &obj.alarm_name);
-        params.put(&format!("{}{}", prefix, "AlarmRule"), &obj.alarm_rule);
+        params.put(
+            &format!("{}{}", prefix, "AlarmName"),
+            &obj.alarm_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "AlarmRule"),
+            &obj.alarm_rule.to_string(),
+        );
         if let Some(ref field_value) = obj.insufficient_data_actions {
             ResourceListSerializer::serialize(
                 params,
@@ -3972,11 +4580,11 @@ impl PutDashboardInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DashboardBody"),
-            &obj.dashboard_body,
+            &obj.dashboard_body.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "DashboardName"),
-            &obj.dashboard_name,
+            &obj.dashboard_name.to_string(),
         );
     }
 }
@@ -4036,11 +4644,17 @@ impl PutInsightRuleInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "RuleDefinition"),
-            &obj.rule_definition,
+            &obj.rule_definition.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleName"),
+            &obj.rule_name.to_string(),
+        );
         if let Some(ref field_value) = obj.rule_state {
-            params.put(&format!("{}{}", prefix, "RuleState"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RuleState"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -4081,7 +4695,7 @@ pub struct PutMetricAlarmInput {
     /// <p>The name for the alarm. This name must be unique within the Region.</p>
     pub alarm_name: String,
     /// <p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p> <p>The values <code>LessThanLowerOrGreaterThanUpperThreshold</code>, <code>LessThanLowerThreshold</code>, and <code>GreaterThanUpperThreshold</code> are used only for alarms based on anomaly detection models.</p>
-    pub comparison_operator: String,
+    pub comparison_operator: ComparisonOperator,
     /// <p>The number of data points that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub datapoints_to_alarm: Option<i64>,
     /// <p>The dimensions for the metric specified in <code>MetricName</code>.</p>
@@ -4105,7 +4719,7 @@ pub struct PutMetricAlarmInput {
     /// <p>The length, in seconds, used each time the metric specified in <code>MetricName</code> is evaluated. Valid values are 10, 30, and any multiple of 60.</p> <p> <code>Period</code> is required for alarms based on static thresholds. If you are creating an alarm based on a metric math expression, you specify the period for each metric within the objects in the <code>Metrics</code> array.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm might often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
     pub period: Option<i64>,
     /// <p>The statistic for the metric specified in <code>MetricName</code>, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>. When you call <code>PutMetricAlarm</code> and specify a <code>MetricName</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
-    pub statistic: Option<String>,
+    pub statistic: Option<Statistic>,
     /// <p>A list of key-value pairs to associate with the alarm. You can associate as many as 50 tags with an alarm.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.</p> <p>If you are using this operation to update an existing alarm, any tags you specify in this parameter are ignored. To change the tags of an existing alarm, use <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_TagResource.html">TagResource</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_UntagResource.html">UntagResource</a>.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The value against which the specified statistic is compared.</p> <p>This parameter is required for alarms based on static thresholds, but should not be used for alarms based on anomaly detection models.</p>
@@ -4115,7 +4729,7 @@ pub struct PutMetricAlarmInput {
     /// <p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>
     pub treat_missing_data: Option<String>,
     /// <p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you don't specify <code>Unit</code>, CloudWatch retrieves all unit types that have been published for the metric and attempts to evaluate the alarm. Usually, metrics are published with only one unit, so the alarm works as intended.</p> <p>However, if the metric is published with multiple types of units and you don't specify a unit, the alarm's behavior is not defined and it behaves predictably.</p> <p>We recommend omitting <code>Unit</code> so that you don't inadvertently specify an incorrect unit that is not published for this metric. Doing so causes the alarm to be stuck in the <code>INSUFFICIENT DATA</code> state.</p>
-    pub unit: Option<String>,
+    pub unit: Option<StandardUnit>,
 }
 
 /// Serialize `PutMetricAlarmInput` contents to a `SignedRequest`.
@@ -4138,12 +4752,18 @@ impl PutMetricAlarmInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.alarm_description {
-            params.put(&format!("{}{}", prefix, "AlarmDescription"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AlarmDescription"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "AlarmName"), &obj.alarm_name);
+        params.put(
+            &format!("{}{}", prefix, "AlarmName"),
+            &obj.alarm_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ComparisonOperator"),
-            &obj.comparison_operator,
+            &obj.comparison_operator.to_string(),
         );
         if let Some(ref field_value) = obj.datapoints_to_alarm {
             params.put(&format!("{}{}", prefix, "DatapointsToAlarm"), &field_value);
@@ -4158,7 +4778,7 @@ impl PutMetricAlarmInputSerializer {
         if let Some(ref field_value) = obj.evaluate_low_sample_count_percentile {
             params.put(
                 &format!("{}{}", prefix, "EvaluateLowSampleCountPercentile"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
@@ -4166,7 +4786,10 @@ impl PutMetricAlarmInputSerializer {
             &obj.evaluation_periods,
         );
         if let Some(ref field_value) = obj.extended_statistic {
-            params.put(&format!("{}{}", prefix, "ExtendedStatistic"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ExtendedStatistic"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.insufficient_data_actions {
             ResourceListSerializer::serialize(
@@ -4176,7 +4799,10 @@ impl PutMetricAlarmInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.metric_name {
-            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MetricName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.metrics {
             MetricDataQueriesSerializer::serialize(
@@ -4186,7 +4812,10 @@ impl PutMetricAlarmInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.ok_actions {
             ResourceListSerializer::serialize(
@@ -4199,7 +4828,10 @@ impl PutMetricAlarmInputSerializer {
             params.put(&format!("{}{}", prefix, "Period"), &field_value);
         }
         if let Some(ref field_value) = obj.statistic {
-            params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Statistic"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -4208,13 +4840,19 @@ impl PutMetricAlarmInputSerializer {
             params.put(&format!("{}{}", prefix, "Threshold"), &field_value);
         }
         if let Some(ref field_value) = obj.threshold_metric_id {
-            params.put(&format!("{}{}", prefix, "ThresholdMetricId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ThresholdMetricId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.treat_missing_data {
-            params.put(&format!("{}{}", prefix, "TreatMissingData"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TreatMissingData"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"), &field_value.to_string());
         }
     }
 }
@@ -4242,7 +4880,10 @@ impl PutMetricDataInputSerializer {
             &format!("{}{}", prefix, "MetricData"),
             &obj.metric_data,
         );
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        params.put(
+            &format!("{}{}", prefix, "Namespace"),
+            &obj.namespace.to_string(),
+        );
     }
 }
 
@@ -4291,6 +4932,103 @@ impl RangeSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecentlyActive {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecentlyActive {
+    Pt3H,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecentlyActive),
+}
+
+impl Default for RecentlyActive {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecentlyActive {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecentlyActive {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecentlyActive {
+    fn into(self) -> String {
+        match self {
+            RecentlyActive::Pt3H => "PT3H".to_string(),
+            RecentlyActive::UnknownVariant(UnknownRecentlyActive { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecentlyActive {
+    fn into(self) -> &'a str {
+        match self {
+            RecentlyActive::Pt3H => &"PT3H",
+            RecentlyActive::UnknownVariant(UnknownRecentlyActive { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecentlyActive {
+    fn from(name: &str) -> Self {
+        match name {
+            "PT3H" => RecentlyActive::Pt3H,
+            _ => RecentlyActive::UnknownVariant(UnknownRecentlyActive {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecentlyActive {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PT3H" => RecentlyActive::Pt3H,
+            _ => RecentlyActive::UnknownVariant(UnknownRecentlyActive { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecentlyActive {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RecentlyActive {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RecentlyActive {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ResourceListDeserializer;
 impl ResourceListDeserializer {
@@ -4316,7 +5054,7 @@ impl ResourceListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4337,6 +5075,109 @@ impl ReturnDataDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScanBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScanBy {
+    TimestampAscending,
+    TimestampDescending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScanBy),
+}
+
+impl Default for ScanBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScanBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScanBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScanBy {
+    fn into(self) -> String {
+        match self {
+            ScanBy::TimestampAscending => "TimestampAscending".to_string(),
+            ScanBy::TimestampDescending => "TimestampDescending".to_string(),
+            ScanBy::UnknownVariant(UnknownScanBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScanBy {
+    fn into(self) -> &'a str {
+        match self {
+            ScanBy::TimestampAscending => &"TimestampAscending",
+            ScanBy::TimestampDescending => &"TimestampDescending",
+            ScanBy::UnknownVariant(UnknownScanBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScanBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "TimestampAscending" => ScanBy::TimestampAscending,
+            "TimestampDescending" => ScanBy::TimestampDescending,
+            _ => ScanBy::UnknownVariant(UnknownScanBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScanBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TimestampAscending" => ScanBy::TimestampAscending,
+            "TimestampDescending" => ScanBy::TimestampDescending,
+            _ => ScanBy::UnknownVariant(UnknownScanBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScanBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ScanBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScanBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetAlarmStateInput {
@@ -4347,7 +5188,7 @@ pub struct SetAlarmStateInput {
     /// <p>The reason that this alarm is set to this specific state, in JSON format.</p> <p>For SNS or EC2 alarm actions, this is just informational. But for EC2 Auto Scaling or application Auto Scaling alarm actions, the Auto Scaling policy uses the information in this field to take the correct action.</p>
     pub state_reason_data: Option<String>,
     /// <p>The value of the state.</p>
-    pub state_value: String,
+    pub state_value: StateValue,
 }
 
 /// Serialize `SetAlarmStateInput` contents to a `SignedRequest`.
@@ -4359,12 +5200,24 @@ impl SetAlarmStateInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AlarmName"), &obj.alarm_name);
-        params.put(&format!("{}{}", prefix, "StateReason"), &obj.state_reason);
+        params.put(
+            &format!("{}{}", prefix, "AlarmName"),
+            &obj.alarm_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "StateReason"),
+            &obj.state_reason.to_string(),
+        );
         if let Some(ref field_value) = obj.state_reason_data {
-            params.put(&format!("{}{}", prefix, "StateReasonData"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StateReasonData"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StateValue"), &obj.state_value);
+        params.put(
+            &format!("{}{}", prefix, "StateValue"),
+            &obj.state_value.to_string(),
+        );
     }
 }
 
@@ -4376,12 +5229,243 @@ impl SizeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStandardUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StandardUnit {
+    Bits,
+    BitsSecond,
+    Bytes,
+    BytesSecond,
+    Count,
+    CountSecond,
+    Gigabits,
+    GigabitsSecond,
+    Gigabytes,
+    GigabytesSecond,
+    Kilobits,
+    KilobitsSecond,
+    Kilobytes,
+    KilobytesSecond,
+    Megabits,
+    MegabitsSecond,
+    Megabytes,
+    MegabytesSecond,
+    Microseconds,
+    Milliseconds,
+    None,
+    Percent,
+    Seconds,
+    Terabits,
+    TerabitsSecond,
+    Terabytes,
+    TerabytesSecond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStandardUnit),
+}
+
+impl Default for StandardUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StandardUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StandardUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StandardUnit {
+    fn into(self) -> String {
+        match self {
+            StandardUnit::Bits => "Bits".to_string(),
+            StandardUnit::BitsSecond => "Bits/Second".to_string(),
+            StandardUnit::Bytes => "Bytes".to_string(),
+            StandardUnit::BytesSecond => "Bytes/Second".to_string(),
+            StandardUnit::Count => "Count".to_string(),
+            StandardUnit::CountSecond => "Count/Second".to_string(),
+            StandardUnit::Gigabits => "Gigabits".to_string(),
+            StandardUnit::GigabitsSecond => "Gigabits/Second".to_string(),
+            StandardUnit::Gigabytes => "Gigabytes".to_string(),
+            StandardUnit::GigabytesSecond => "Gigabytes/Second".to_string(),
+            StandardUnit::Kilobits => "Kilobits".to_string(),
+            StandardUnit::KilobitsSecond => "Kilobits/Second".to_string(),
+            StandardUnit::Kilobytes => "Kilobytes".to_string(),
+            StandardUnit::KilobytesSecond => "Kilobytes/Second".to_string(),
+            StandardUnit::Megabits => "Megabits".to_string(),
+            StandardUnit::MegabitsSecond => "Megabits/Second".to_string(),
+            StandardUnit::Megabytes => "Megabytes".to_string(),
+            StandardUnit::MegabytesSecond => "Megabytes/Second".to_string(),
+            StandardUnit::Microseconds => "Microseconds".to_string(),
+            StandardUnit::Milliseconds => "Milliseconds".to_string(),
+            StandardUnit::None => "None".to_string(),
+            StandardUnit::Percent => "Percent".to_string(),
+            StandardUnit::Seconds => "Seconds".to_string(),
+            StandardUnit::Terabits => "Terabits".to_string(),
+            StandardUnit::TerabitsSecond => "Terabits/Second".to_string(),
+            StandardUnit::Terabytes => "Terabytes".to_string(),
+            StandardUnit::TerabytesSecond => "Terabytes/Second".to_string(),
+            StandardUnit::UnknownVariant(UnknownStandardUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StandardUnit {
+    fn into(self) -> &'a str {
+        match self {
+            StandardUnit::Bits => &"Bits",
+            StandardUnit::BitsSecond => &"Bits/Second",
+            StandardUnit::Bytes => &"Bytes",
+            StandardUnit::BytesSecond => &"Bytes/Second",
+            StandardUnit::Count => &"Count",
+            StandardUnit::CountSecond => &"Count/Second",
+            StandardUnit::Gigabits => &"Gigabits",
+            StandardUnit::GigabitsSecond => &"Gigabits/Second",
+            StandardUnit::Gigabytes => &"Gigabytes",
+            StandardUnit::GigabytesSecond => &"Gigabytes/Second",
+            StandardUnit::Kilobits => &"Kilobits",
+            StandardUnit::KilobitsSecond => &"Kilobits/Second",
+            StandardUnit::Kilobytes => &"Kilobytes",
+            StandardUnit::KilobytesSecond => &"Kilobytes/Second",
+            StandardUnit::Megabits => &"Megabits",
+            StandardUnit::MegabitsSecond => &"Megabits/Second",
+            StandardUnit::Megabytes => &"Megabytes",
+            StandardUnit::MegabytesSecond => &"Megabytes/Second",
+            StandardUnit::Microseconds => &"Microseconds",
+            StandardUnit::Milliseconds => &"Milliseconds",
+            StandardUnit::None => &"None",
+            StandardUnit::Percent => &"Percent",
+            StandardUnit::Seconds => &"Seconds",
+            StandardUnit::Terabits => &"Terabits",
+            StandardUnit::TerabitsSecond => &"Terabits/Second",
+            StandardUnit::Terabytes => &"Terabytes",
+            StandardUnit::TerabytesSecond => &"Terabytes/Second",
+            StandardUnit::UnknownVariant(UnknownStandardUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StandardUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bits" => StandardUnit::Bits,
+            "Bits/Second" => StandardUnit::BitsSecond,
+            "Bytes" => StandardUnit::Bytes,
+            "Bytes/Second" => StandardUnit::BytesSecond,
+            "Count" => StandardUnit::Count,
+            "Count/Second" => StandardUnit::CountSecond,
+            "Gigabits" => StandardUnit::Gigabits,
+            "Gigabits/Second" => StandardUnit::GigabitsSecond,
+            "Gigabytes" => StandardUnit::Gigabytes,
+            "Gigabytes/Second" => StandardUnit::GigabytesSecond,
+            "Kilobits" => StandardUnit::Kilobits,
+            "Kilobits/Second" => StandardUnit::KilobitsSecond,
+            "Kilobytes" => StandardUnit::Kilobytes,
+            "Kilobytes/Second" => StandardUnit::KilobytesSecond,
+            "Megabits" => StandardUnit::Megabits,
+            "Megabits/Second" => StandardUnit::MegabitsSecond,
+            "Megabytes" => StandardUnit::Megabytes,
+            "Megabytes/Second" => StandardUnit::MegabytesSecond,
+            "Microseconds" => StandardUnit::Microseconds,
+            "Milliseconds" => StandardUnit::Milliseconds,
+            "None" => StandardUnit::None,
+            "Percent" => StandardUnit::Percent,
+            "Seconds" => StandardUnit::Seconds,
+            "Terabits" => StandardUnit::Terabits,
+            "Terabits/Second" => StandardUnit::TerabitsSecond,
+            "Terabytes" => StandardUnit::Terabytes,
+            "Terabytes/Second" => StandardUnit::TerabytesSecond,
+            _ => StandardUnit::UnknownVariant(UnknownStandardUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StandardUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bits" => StandardUnit::Bits,
+            "Bits/Second" => StandardUnit::BitsSecond,
+            "Bytes" => StandardUnit::Bytes,
+            "Bytes/Second" => StandardUnit::BytesSecond,
+            "Count" => StandardUnit::Count,
+            "Count/Second" => StandardUnit::CountSecond,
+            "Gigabits" => StandardUnit::Gigabits,
+            "Gigabits/Second" => StandardUnit::GigabitsSecond,
+            "Gigabytes" => StandardUnit::Gigabytes,
+            "Gigabytes/Second" => StandardUnit::GigabytesSecond,
+            "Kilobits" => StandardUnit::Kilobits,
+            "Kilobits/Second" => StandardUnit::KilobitsSecond,
+            "Kilobytes" => StandardUnit::Kilobytes,
+            "Kilobytes/Second" => StandardUnit::KilobytesSecond,
+            "Megabits" => StandardUnit::Megabits,
+            "Megabits/Second" => StandardUnit::MegabitsSecond,
+            "Megabytes" => StandardUnit::Megabytes,
+            "Megabytes/Second" => StandardUnit::MegabytesSecond,
+            "Microseconds" => StandardUnit::Microseconds,
+            "Milliseconds" => StandardUnit::Milliseconds,
+            "None" => StandardUnit::None,
+            "Percent" => StandardUnit::Percent,
+            "Seconds" => StandardUnit::Seconds,
+            "Terabits" => StandardUnit::Terabits,
+            "Terabits/Second" => StandardUnit::TerabitsSecond,
+            "Terabytes" => StandardUnit::Terabytes,
+            "Terabytes/Second" => StandardUnit::TerabytesSecond,
+            _ => StandardUnit::UnknownVariant(UnknownStandardUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StandardUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StandardUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StandardUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StandardUnitDeserializer;
 impl StandardUnitDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StandardUnit, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -4408,20 +5492,252 @@ impl StateReasonDataDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStateValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StateValue {
+    Alarm,
+    InsufficientData,
+    Ok,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStateValue),
+}
+
+impl Default for StateValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StateValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StateValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StateValue {
+    fn into(self) -> String {
+        match self {
+            StateValue::Alarm => "ALARM".to_string(),
+            StateValue::InsufficientData => "INSUFFICIENT_DATA".to_string(),
+            StateValue::Ok => "OK".to_string(),
+            StateValue::UnknownVariant(UnknownStateValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StateValue {
+    fn into(self) -> &'a str {
+        match self {
+            StateValue::Alarm => &"ALARM",
+            StateValue::InsufficientData => &"INSUFFICIENT_DATA",
+            StateValue::Ok => &"OK",
+            StateValue::UnknownVariant(UnknownStateValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StateValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALARM" => StateValue::Alarm,
+            "INSUFFICIENT_DATA" => StateValue::InsufficientData,
+            "OK" => StateValue::Ok,
+            _ => StateValue::UnknownVariant(UnknownStateValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StateValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALARM" => StateValue::Alarm,
+            "INSUFFICIENT_DATA" => StateValue::InsufficientData,
+            "OK" => StateValue::Ok,
+            _ => StateValue::UnknownVariant(UnknownStateValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StateValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StateValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StateValueDeserializer;
 impl StateValueDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StateValue, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Statistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatistic),
+}
+
+impl Default for Statistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Statistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Statistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        match self {
+            Statistic::Average => "Average".to_string(),
+            Statistic::Maximum => "Maximum".to_string(),
+            Statistic::Minimum => "Minimum".to_string(),
+            Statistic::SampleCount => "SampleCount".to_string(),
+            Statistic::Sum => "Sum".to_string(),
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Statistic {
+    fn into(self) -> &'a str {
+        match self {
+            Statistic::Average => &"Average",
+            Statistic::Maximum => &"Maximum",
+            Statistic::Minimum => &"Minimum",
+            Statistic::SampleCount => &"SampleCount",
+            Statistic::Sum => &"Sum",
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Statistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "Average" => Statistic::Average,
+            "Maximum" => Statistic::Maximum,
+            "Minimum" => Statistic::Minimum,
+            "SampleCount" => Statistic::SampleCount,
+            "Sum" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Statistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Average" => Statistic::Average,
+            "Maximum" => Statistic::Maximum,
+            "Minimum" => Statistic::Minimum,
+            "SampleCount" => Statistic::SampleCount,
+            "Sum" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Statistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Statistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Statistic, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Represents a set of statistics that describes a specific metric. </p>
@@ -4457,11 +5773,118 @@ impl StatisticSetSerializer {
 /// Serialize `Statistics` contents to a `SignedRequest`.
 struct StatisticsSerializer;
 impl StatisticsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Statistic>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatusCode {
+    Complete,
+    InternalError,
+    PartialData,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatusCode),
+}
+
+impl Default for StatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatusCode {
+    fn into(self) -> String {
+        match self {
+            StatusCode::Complete => "Complete".to_string(),
+            StatusCode::InternalError => "InternalError".to_string(),
+            StatusCode::PartialData => "PartialData".to_string(),
+            StatusCode::UnknownVariant(UnknownStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            StatusCode::Complete => &"Complete",
+            StatusCode::InternalError => &"InternalError",
+            StatusCode::PartialData => &"PartialData",
+            StatusCode::UnknownVariant(UnknownStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Complete" => StatusCode::Complete,
+            "InternalError" => StatusCode::InternalError,
+            "PartialData" => StatusCode::PartialData,
+            _ => StatusCode::UnknownVariant(UnknownStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Complete" => StatusCode::Complete,
+            "InternalError" => StatusCode::InternalError,
+            "PartialData" => StatusCode::PartialData,
+            _ => StatusCode::UnknownVariant(UnknownStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -4469,8 +5892,11 @@ impl StatisticsSerializer {
 struct StatusCodeDeserializer;
 impl StatusCodeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StatusCode, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A key-value pair associated with a CloudWatch resource.</p>
@@ -4513,8 +5939,8 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -4533,7 +5959,7 @@ impl TagKeyListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4586,7 +6012,10 @@ impl TagResourceInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceARN"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceARN"),
+            &obj.resource_arn.to_string(),
+        );
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
     }
 }
@@ -4680,7 +6109,10 @@ impl UntagResourceInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceARN"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceARN"),
+            &obj.resource_arn.to_string(),
+        );
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
     }
 }

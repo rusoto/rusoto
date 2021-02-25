@@ -98,7 +98,7 @@ pub struct CodeReview {
     /// <p> The type of repository that contains the reviewed code (for example, GitHub or Bitbucket). </p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p> The pull request ID for the code review. </p>
     #[serde(rename = "PullRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -114,7 +114,7 @@ pub struct CodeReview {
     /// <p><p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<JobState>,
     /// <p> The reason for the state of the code review. </p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -122,7 +122,7 @@ pub struct CodeReview {
     /// <p> The type of code review. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 /// <p> Information about the summary of the code review. </p>
@@ -156,7 +156,7 @@ pub struct CodeReviewSummary {
     /// <p> The provider type of the repository association. </p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p> The pull request ID for the code review. </p>
     #[serde(rename = "PullRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,11 +168,11 @@ pub struct CodeReviewSummary {
     /// <p><p> The state of the code review. </p> <p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<JobState>,
     /// <p> The type of the code review. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 /// <p><p> The type of a code review. There are two code review types: </p> <ul> <li> <p> <code>PullRequest</code> - A code review that is automatically triggered by a pull request on an assocaited repository. Because this type of code review is automatically generated, you cannot specify this code review type using <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p> </li> <li> <p> <code>RepositoryAnalysis</code> - A code review that analyzes all code under a specified branch in an associated respository. The assocated repository is specified using its ARN in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p> </li> </ul></p>
@@ -307,6 +307,116 @@ pub struct DisassociateRepositoryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobState {
+    Completed,
+    Deleting,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobState),
+}
+
+impl Default for JobState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobState {
+    fn into(self) -> String {
+        match self {
+            JobState::Completed => "Completed".to_string(),
+            JobState::Deleting => "Deleting".to_string(),
+            JobState::Failed => "Failed".to_string(),
+            JobState::Pending => "Pending".to_string(),
+            JobState::UnknownVariant(UnknownJobState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobState {
+    fn into(self) -> &'a str {
+        match self {
+            JobState::Completed => &"Completed",
+            JobState::Deleting => &"Deleting",
+            JobState::Failed => &"Failed",
+            JobState::Pending => &"Pending",
+            JobState::UnknownVariant(UnknownJobState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => JobState::Completed,
+            "Deleting" => JobState::Deleting,
+            "Failed" => JobState::Failed,
+            "Pending" => JobState::Pending,
+            _ => JobState::UnknownVariant(UnknownJobState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => JobState::Completed,
+            "Deleting" => JobState::Deleting,
+            "Failed" => JobState::Failed,
+            "Pending" => JobState::Pending,
+            _ => JobState::UnknownVariant(UnknownJobState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCodeReviewsRequest {
@@ -321,7 +431,7 @@ pub struct ListCodeReviewsRequest {
     /// <p> List of provider types for filtering that needs to be applied before displaying the result. For example, <code>providerTypes=[GitHub]</code> lists code reviews from GitHub. </p>
     #[serde(rename = "ProviderTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_types: Option<Vec<String>>,
+    pub provider_types: Option<Vec<ProviderType>>,
     /// <p> List of repository names for filtering that needs to be applied before displaying the result. </p>
     #[serde(rename = "RepositoryNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -329,10 +439,10 @@ pub struct ListCodeReviewsRequest {
     /// <p><p> List of states for filtering that needs to be applied before displaying the result. For example, <code>states=[Pending]</code> lists code reviews in the Pending state. </p> <p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "States")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub states: Option<Vec<String>>,
+    pub states: Option<Vec<JobState>>,
     /// <p> The type of code reviews to list in the response. </p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -436,11 +546,11 @@ pub struct ListRepositoryAssociationsRequest {
     /// <p>List of provider types to use as a filter.</p>
     #[serde(rename = "ProviderTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_types: Option<Vec<String>>,
+    pub provider_types: Option<Vec<ProviderType>>,
     /// <p><p>List of repository association states to use as a filter.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code>, <code>GitHub Enterprise Server</code>, or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> <li> <p> <b>Disassociated</b>: CodeGuru Reviewer successfully disassociated the repository. You can create a new association with this repository if you want to review source code in it later. You can control access to code reviews created in an associated repository with tags after it has been disassociated. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/auth-and-access-control-using-tags.html">Using tags to control access to associated repositories</a> in the <i>Amazon CodeGuru Reviewer User Guide</i>. </p> </li> </ul></p>
     #[serde(rename = "States")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub states: Option<Vec<String>>,
+    pub states: Option<Vec<RepositoryAssociationState>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -501,6 +611,116 @@ pub struct MetricsSummary {
     pub metered_lines_of_code_count: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProviderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProviderType {
+    Bitbucket,
+    CodeCommit,
+    GitHub,
+    GitHubEnterpriseServer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProviderType),
+}
+
+impl Default for ProviderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProviderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProviderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProviderType {
+    fn into(self) -> String {
+        match self {
+            ProviderType::Bitbucket => "Bitbucket".to_string(),
+            ProviderType::CodeCommit => "CodeCommit".to_string(),
+            ProviderType::GitHub => "GitHub".to_string(),
+            ProviderType::GitHubEnterpriseServer => "GitHubEnterpriseServer".to_string(),
+            ProviderType::UnknownVariant(UnknownProviderType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProviderType {
+    fn into(self) -> &'a str {
+        match self {
+            ProviderType::Bitbucket => &"Bitbucket",
+            ProviderType::CodeCommit => &"CodeCommit",
+            ProviderType::GitHub => &"GitHub",
+            ProviderType::GitHubEnterpriseServer => &"GitHubEnterpriseServer",
+            ProviderType::UnknownVariant(UnknownProviderType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProviderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bitbucket" => ProviderType::Bitbucket,
+            "CodeCommit" => ProviderType::CodeCommit,
+            "GitHub" => ProviderType::GitHub,
+            "GitHubEnterpriseServer" => ProviderType::GitHubEnterpriseServer,
+            _ => ProviderType::UnknownVariant(UnknownProviderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProviderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bitbucket" => ProviderType::Bitbucket,
+            "CodeCommit" => ProviderType::CodeCommit,
+            "GitHub" => ProviderType::GitHub,
+            "GitHubEnterpriseServer" => ProviderType::GitHubEnterpriseServer,
+            _ => ProviderType::UnknownVariant(UnknownProviderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProviderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProviderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProviderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecommendationFeedbackRequest {
@@ -509,7 +729,7 @@ pub struct PutRecommendationFeedbackRequest {
     pub code_review_arn: String,
     /// <p> List for storing reactions. Reactions are utf-8 text code for emojis. If you send an empty list it clears all your feedback. </p>
     #[serde(rename = "Reactions")]
-    pub reactions: Vec<String>,
+    pub reactions: Vec<Reaction>,
     /// <p> The recommendation ID that can be used to track the provided recommendations and then to collect the feedback. </p>
     #[serde(rename = "RecommendationId")]
     pub recommendation_id: String,
@@ -518,6 +738,106 @@ pub struct PutRecommendationFeedbackRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecommendationFeedbackResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReaction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Reaction {
+    ThumbsDown,
+    ThumbsUp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReaction),
+}
+
+impl Default for Reaction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Reaction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Reaction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Reaction {
+    fn into(self) -> String {
+        match self {
+            Reaction::ThumbsDown => "ThumbsDown".to_string(),
+            Reaction::ThumbsUp => "ThumbsUp".to_string(),
+            Reaction::UnknownVariant(UnknownReaction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Reaction {
+    fn into(self) -> &'a str {
+        match self {
+            Reaction::ThumbsDown => &"ThumbsDown",
+            Reaction::ThumbsUp => &"ThumbsUp",
+            Reaction::UnknownVariant(UnknownReaction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Reaction {
+    fn from(name: &str) -> Self {
+        match name {
+            "ThumbsDown" => Reaction::ThumbsDown,
+            "ThumbsUp" => Reaction::ThumbsUp,
+            _ => Reaction::UnknownVariant(UnknownReaction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Reaction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ThumbsDown" => Reaction::ThumbsDown,
+            "ThumbsUp" => Reaction::ThumbsUp,
+            _ => Reaction::UnknownVariant(UnknownReaction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Reaction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Reaction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Reaction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p> Information about the recommendation feedback. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -538,7 +858,7 @@ pub struct RecommendationFeedback {
     /// <p> List for storing reactions. Reactions are utf-8 text code for emojis. You can send an empty list to clear off all your feedback. </p>
     #[serde(rename = "Reactions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reactions: Option<Vec<String>>,
+    pub reactions: Option<Vec<Reaction>>,
     /// <p> The recommendation ID that can be used to track the provided recommendations. Later on it can be used to collect the feedback. </p>
     #[serde(rename = "RecommendationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -556,7 +876,7 @@ pub struct RecommendationFeedbackSummary {
     /// <p> List for storing reactions. Reactions are utf-8 text code for emojis. </p>
     #[serde(rename = "Reactions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reactions: Option<Vec<String>>,
+    pub reactions: Option<Vec<Reaction>>,
     /// <p> The recommendation ID that can be used to track the provided recommendations. Later on it can be used to collect the feedback. </p>
     #[serde(rename = "RecommendationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -655,15 +975,136 @@ pub struct RepositoryAssociation {
     /// <p>The provider type of the repository association.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p><p>The state of the repository association.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code>, <code>GitHub Enterprise Server</code>, or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> <li> <p> <b>Disassociated</b>: CodeGuru Reviewer successfully disassociated the repository. You can create a new association with this repository if you want to review source code in it later. You can control access to code reviews created in an associated repository with tags after it has been disassociated. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/auth-and-access-control-using-tags.html">Using tags to control access to associated repositories</a> in the <i>Amazon CodeGuru Reviewer User Guide</i>. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RepositoryAssociationState>,
     /// <p>A description of why the repository association is in the current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRepositoryAssociationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RepositoryAssociationState {
+    Associated,
+    Associating,
+    Disassociated,
+    Disassociating,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRepositoryAssociationState),
+}
+
+impl Default for RepositoryAssociationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RepositoryAssociationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RepositoryAssociationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RepositoryAssociationState {
+    fn into(self) -> String {
+        match self {
+            RepositoryAssociationState::Associated => "Associated".to_string(),
+            RepositoryAssociationState::Associating => "Associating".to_string(),
+            RepositoryAssociationState::Disassociated => "Disassociated".to_string(),
+            RepositoryAssociationState::Disassociating => "Disassociating".to_string(),
+            RepositoryAssociationState::Failed => "Failed".to_string(),
+            RepositoryAssociationState::UnknownVariant(UnknownRepositoryAssociationState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RepositoryAssociationState {
+    fn into(self) -> &'a str {
+        match self {
+            RepositoryAssociationState::Associated => &"Associated",
+            RepositoryAssociationState::Associating => &"Associating",
+            RepositoryAssociationState::Disassociated => &"Disassociated",
+            RepositoryAssociationState::Disassociating => &"Disassociating",
+            RepositoryAssociationState::Failed => &"Failed",
+            RepositoryAssociationState::UnknownVariant(UnknownRepositoryAssociationState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RepositoryAssociationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Associated" => RepositoryAssociationState::Associated,
+            "Associating" => RepositoryAssociationState::Associating,
+            "Disassociated" => RepositoryAssociationState::Disassociated,
+            "Disassociating" => RepositoryAssociationState::Disassociating,
+            "Failed" => RepositoryAssociationState::Failed,
+            _ => RepositoryAssociationState::UnknownVariant(UnknownRepositoryAssociationState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RepositoryAssociationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Associated" => RepositoryAssociationState::Associated,
+            "Associating" => RepositoryAssociationState::Associating,
+            "Disassociated" => RepositoryAssociationState::Disassociated,
+            "Disassociating" => RepositoryAssociationState::Disassociating,
+            "Failed" => RepositoryAssociationState::Failed,
+            _ => RepositoryAssociationState::UnknownVariant(UnknownRepositoryAssociationState {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RepositoryAssociationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RepositoryAssociationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RepositoryAssociationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about a repository association. The <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_ListRepositoryAssociations.html"> <code>ListRepositoryAssociations</code> </a> operation returns a list of <code>RepositoryAssociationSummary</code> objects.</p>
@@ -697,11 +1138,11 @@ pub struct RepositoryAssociationSummary {
     /// <p>The provider type of the repository association.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p><p>The state of the repository association.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code>, <code>GitHub Enterprise Server</code>, or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> <li> <p> <b>Disassociated</b>: CodeGuru Reviewer successfully disassociated the repository. You can create a new association with this repository if you want to review source code in it later. You can control access to code reviews created in an associated repository with tags after it has been disassociated. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/auth-and-access-control-using-tags.html">Using tags to control access to associated repositories</a> in the <i>Amazon CodeGuru Reviewer User Guide</i>. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RepositoryAssociationState>,
 }
 
 /// <p> A <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies the tip of a branch in an associated repository. </p>
@@ -753,6 +1194,106 @@ pub struct ThirdPartySourceRepository {
     /// <p> The owner of the repository. For a GitHub, GitHub Enterprise, or Bitbucket repository, this is the username for the account that owns the repository. </p>
     #[serde(rename = "Owner")]
     pub owner: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    PullRequest,
+    RepositoryAnalysis,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::PullRequest => "PullRequest".to_string(),
+            Type::RepositoryAnalysis => "RepositoryAnalysis".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::PullRequest => &"PullRequest",
+            Type::RepositoryAnalysis => &"RepositoryAnalysis",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "PullRequest" => Type::PullRequest,
+            "RepositoryAnalysis" => Type::RepositoryAnalysis,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PullRequest" => Type::PullRequest,
+            "RepositoryAnalysis" => Type::RepositoryAnalysis,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

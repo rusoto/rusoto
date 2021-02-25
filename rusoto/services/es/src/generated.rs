@@ -278,7 +278,7 @@ pub struct CreateElasticsearchDomainRequest {
     /// <p>Map of <code>LogType</code> and <code>LogPublishingOption</code>, each containing options to publish a given type of Elasticsearch log.</p>
     #[serde(rename = "LogPublishingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_publishing_options: Option<::std::collections::HashMap<String, LogPublishingOption>>,
+    pub log_publishing_options: Option<::std::collections::HashMap<LogType, LogPublishingOption>>,
     /// <p>Specifies the NodeToNodeEncryptionOptions.</p>
     #[serde(rename = "NodeToNodeEncryptionOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -360,7 +360,7 @@ pub struct CreatePackageRequest {
     pub package_source: PackageSource,
     /// <p>Type of package. Currently supports only TXT-DICTIONARY.</p>
     #[serde(rename = "PackageType")]
-    pub package_type: String,
+    pub package_type: PackageType,
 }
 
 /// <p> Container for response returned by <code> <a>CreatePackage</a> </code> operation. </p>
@@ -449,6 +449,126 @@ pub struct DeletePackageResponse {
     pub package_details: Option<PackageDetails>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentStatus {
+    Completed,
+    Eligible,
+    InProgress,
+    NotEligible,
+    PendingUpdate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentStatus),
+}
+
+impl Default for DeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            DeploymentStatus::Completed => "COMPLETED".to_string(),
+            DeploymentStatus::Eligible => "ELIGIBLE".to_string(),
+            DeploymentStatus::InProgress => "IN_PROGRESS".to_string(),
+            DeploymentStatus::NotEligible => "NOT_ELIGIBLE".to_string(),
+            DeploymentStatus::PendingUpdate => "PENDING_UPDATE".to_string(),
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentStatus::Completed => &"COMPLETED",
+            DeploymentStatus::Eligible => &"ELIGIBLE",
+            DeploymentStatus::InProgress => &"IN_PROGRESS",
+            DeploymentStatus::NotEligible => &"NOT_ELIGIBLE",
+            DeploymentStatus::PendingUpdate => &"PENDING_UPDATE",
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => DeploymentStatus::Completed,
+            "ELIGIBLE" => DeploymentStatus::Eligible,
+            "IN_PROGRESS" => DeploymentStatus::InProgress,
+            "NOT_ELIGIBLE" => DeploymentStatus::NotEligible,
+            "PENDING_UPDATE" => DeploymentStatus::PendingUpdate,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => DeploymentStatus::Completed,
+            "ELIGIBLE" => DeploymentStatus::Eligible,
+            "IN_PROGRESS" => DeploymentStatus::InProgress,
+            "NOT_ELIGIBLE" => DeploymentStatus::NotEligible,
+            "PENDING_UPDATE" => DeploymentStatus::PendingUpdate,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Container for the parameters to the <code>DescribeElasticsearchDomainConfig</code> operation. Specifies the domain name for which you want configuration information.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -516,7 +636,7 @@ pub struct DescribeElasticsearchInstanceTypeLimitsRequest {
     pub elasticsearch_version: String,
     /// <p> The instance type for an Elasticsearch cluster for which Elasticsearch <code> <a>Limits</a> </code> are needed. </p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: ESPartitionInstanceType,
 }
 
 /// <p> Container for the parameters received from <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>
@@ -599,11 +719,123 @@ pub struct DescribePackagesFilter {
     /// <p>Any field from <code>PackageDetails</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<DescribePackagesFilterName>,
     /// <p>A list of values for the specified field.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDescribePackagesFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DescribePackagesFilterName {
+    PackageID,
+    PackageName,
+    PackageStatus,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDescribePackagesFilterName),
+}
+
+impl Default for DescribePackagesFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DescribePackagesFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DescribePackagesFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DescribePackagesFilterName {
+    fn into(self) -> String {
+        match self {
+            DescribePackagesFilterName::PackageID => "PackageID".to_string(),
+            DescribePackagesFilterName::PackageName => "PackageName".to_string(),
+            DescribePackagesFilterName::PackageStatus => "PackageStatus".to_string(),
+            DescribePackagesFilterName::UnknownVariant(UnknownDescribePackagesFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DescribePackagesFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            DescribePackagesFilterName::PackageID => &"PackageID",
+            DescribePackagesFilterName::PackageName => &"PackageName",
+            DescribePackagesFilterName::PackageStatus => &"PackageStatus",
+            DescribePackagesFilterName::UnknownVariant(UnknownDescribePackagesFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DescribePackagesFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "PackageID" => DescribePackagesFilterName::PackageID,
+            "PackageName" => DescribePackagesFilterName::PackageName,
+            "PackageStatus" => DescribePackagesFilterName::PackageStatus,
+            _ => DescribePackagesFilterName::UnknownVariant(UnknownDescribePackagesFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DescribePackagesFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PackageID" => DescribePackagesFilterName::PackageID,
+            "PackageName" => DescribePackagesFilterName::PackageName,
+            "PackageStatus" => DescribePackagesFilterName::PackageStatus,
+            _ => DescribePackagesFilterName::UnknownVariant(UnknownDescribePackagesFilterName {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DescribePackagesFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DescribePackagesFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DescribePackagesFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Container for request parameters to <code> <a>DescribePackage</a> </code> operation. </p>
@@ -746,7 +978,7 @@ pub struct DomainEndpointOptions {
     /// <p>Specify the TLS security policy that needs to be applied to the HTTPS endpoint of Elasticsearch domain. <br/> It can be one of the following values: <ul> <li><b>Policy-Min-TLS-1-0-2019-07: </b> TLS security policy which supports TLSv1.0 and higher.</li> <li><b>Policy-Min-TLS-1-2-2019-07: </b> TLS security policy which supports only TLSv1.2</li> </ul> </p>
     #[serde(rename = "TLSSecurityPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tls_security_policy: Option<String>,
+    pub tls_security_policy: Option<TLSSecurityPolicy>,
 }
 
 /// <p>The configured endpoint options for the domain and their current status.</p>
@@ -793,7 +1025,7 @@ pub struct DomainPackageDetails {
     /// <p>State of the association. Values are ASSOCIATING/ASSOCIATION_FAILED/ACTIVE/DISSOCIATING/DISSOCIATION_FAILED.</p>
     #[serde(rename = "DomainPackageStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_package_status: Option<String>,
+    pub domain_package_status: Option<DomainPackageStatus>,
     /// <p>Additional information if the package is in an error state. Null otherwise.</p>
     #[serde(rename = "ErrorDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -813,7 +1045,7 @@ pub struct DomainPackageDetails {
     /// <p>Currently supports only TXT-DICTIONARY.</p>
     #[serde(rename = "PackageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_type: Option<String>,
+    pub package_type: Option<PackageType>,
     #[serde(rename = "PackageVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub package_version: Option<String>,
@@ -821,6 +1053,126 @@ pub struct DomainPackageDetails {
     #[serde(rename = "ReferencePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference_path: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainPackageStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainPackageStatus {
+    Active,
+    Associating,
+    AssociationFailed,
+    Dissociating,
+    DissociationFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainPackageStatus),
+}
+
+impl Default for DomainPackageStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainPackageStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainPackageStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainPackageStatus {
+    fn into(self) -> String {
+        match self {
+            DomainPackageStatus::Active => "ACTIVE".to_string(),
+            DomainPackageStatus::Associating => "ASSOCIATING".to_string(),
+            DomainPackageStatus::AssociationFailed => "ASSOCIATION_FAILED".to_string(),
+            DomainPackageStatus::Dissociating => "DISSOCIATING".to_string(),
+            DomainPackageStatus::DissociationFailed => "DISSOCIATION_FAILED".to_string(),
+            DomainPackageStatus::UnknownVariant(UnknownDomainPackageStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainPackageStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainPackageStatus::Active => &"ACTIVE",
+            DomainPackageStatus::Associating => &"ASSOCIATING",
+            DomainPackageStatus::AssociationFailed => &"ASSOCIATION_FAILED",
+            DomainPackageStatus::Dissociating => &"DISSOCIATING",
+            DomainPackageStatus::DissociationFailed => &"DISSOCIATION_FAILED",
+            DomainPackageStatus::UnknownVariant(UnknownDomainPackageStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DomainPackageStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DomainPackageStatus::Active,
+            "ASSOCIATING" => DomainPackageStatus::Associating,
+            "ASSOCIATION_FAILED" => DomainPackageStatus::AssociationFailed,
+            "DISSOCIATING" => DomainPackageStatus::Dissociating,
+            "DISSOCIATION_FAILED" => DomainPackageStatus::DissociationFailed,
+            _ => DomainPackageStatus::UnknownVariant(UnknownDomainPackageStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainPackageStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DomainPackageStatus::Active,
+            "ASSOCIATING" => DomainPackageStatus::Associating,
+            "ASSOCIATION_FAILED" => DomainPackageStatus::AssociationFailed,
+            "DISSOCIATING" => DomainPackageStatus::Dissociating,
+            "DISSOCIATION_FAILED" => DomainPackageStatus::DissociationFailed,
+            _ => DomainPackageStatus::UnknownVariant(UnknownDomainPackageStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainPackageStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainPackageStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainPackageStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Options to enable, disable, and specify the properties of EBS storage volumes. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs" target="_blank"> Configuring EBS-based Storage</a>.</p>
@@ -841,7 +1193,7 @@ pub struct EBSOptions {
     /// <p> Specifies the volume type for EBS-based storage.</p>
     #[serde(rename = "VolumeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub volume_type: Option<String>,
+    pub volume_type: Option<VolumeType>,
 }
 
 /// <p> Status of the EBS options for the specified Elasticsearch domain.</p>
@@ -854,6 +1206,592 @@ pub struct EBSOptionsStatus {
     /// <p> Specifies the status of the EBS options for the specified Elasticsearch domain.</p>
     #[serde(rename = "Status")]
     pub status: OptionStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownESPartitionInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ESPartitionInstanceType {
+    C42XlargeElasticsearch,
+    C44XlargeElasticsearch,
+    C48XlargeElasticsearch,
+    C4LargeElasticsearch,
+    C4XlargeElasticsearch,
+    C518XlargeElasticsearch,
+    C52XlargeElasticsearch,
+    C54XlargeElasticsearch,
+    C59XlargeElasticsearch,
+    C5LargeElasticsearch,
+    C5XlargeElasticsearch,
+    D22XlargeElasticsearch,
+    D24XlargeElasticsearch,
+    D28XlargeElasticsearch,
+    D2XlargeElasticsearch,
+    I22XlargeElasticsearch,
+    I2XlargeElasticsearch,
+    I316XlargeElasticsearch,
+    I32XlargeElasticsearch,
+    I34XlargeElasticsearch,
+    I38XlargeElasticsearch,
+    I3LargeElasticsearch,
+    I3XlargeElasticsearch,
+    M32XlargeElasticsearch,
+    M3LargeElasticsearch,
+    M3MediumElasticsearch,
+    M3XlargeElasticsearch,
+    M410XlargeElasticsearch,
+    M42XlargeElasticsearch,
+    M44XlargeElasticsearch,
+    M4LargeElasticsearch,
+    M4XlargeElasticsearch,
+    M512XlargeElasticsearch,
+    M52XlargeElasticsearch,
+    M54XlargeElasticsearch,
+    M5LargeElasticsearch,
+    M5XlargeElasticsearch,
+    R32XlargeElasticsearch,
+    R34XlargeElasticsearch,
+    R38XlargeElasticsearch,
+    R3LargeElasticsearch,
+    R3XlargeElasticsearch,
+    R416XlargeElasticsearch,
+    R42XlargeElasticsearch,
+    R44XlargeElasticsearch,
+    R48XlargeElasticsearch,
+    R4LargeElasticsearch,
+    R4XlargeElasticsearch,
+    R512XlargeElasticsearch,
+    R52XlargeElasticsearch,
+    R54XlargeElasticsearch,
+    R5LargeElasticsearch,
+    R5XlargeElasticsearch,
+    T2MediumElasticsearch,
+    T2MicroElasticsearch,
+    T2SmallElasticsearch,
+    Ultrawarm1LargeElasticsearch,
+    Ultrawarm1MediumElasticsearch,
+    #[doc(hidden)]
+    UnknownVariant(UnknownESPartitionInstanceType),
+}
+
+impl Default for ESPartitionInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ESPartitionInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ESPartitionInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ESPartitionInstanceType {
+    fn into(self) -> String {
+        match self {
+            ESPartitionInstanceType::C42XlargeElasticsearch => {
+                "c4.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C44XlargeElasticsearch => {
+                "c4.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C48XlargeElasticsearch => {
+                "c4.8xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C4LargeElasticsearch => "c4.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::C4XlargeElasticsearch => "c4.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::C518XlargeElasticsearch => {
+                "c5.18xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C52XlargeElasticsearch => {
+                "c5.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C54XlargeElasticsearch => {
+                "c5.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C59XlargeElasticsearch => {
+                "c5.9xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::C5LargeElasticsearch => "c5.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::C5XlargeElasticsearch => "c5.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::D22XlargeElasticsearch => {
+                "d2.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::D24XlargeElasticsearch => {
+                "d2.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::D28XlargeElasticsearch => {
+                "d2.8xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::D2XlargeElasticsearch => "d2.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::I22XlargeElasticsearch => {
+                "i2.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::I2XlargeElasticsearch => "i2.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::I316XlargeElasticsearch => {
+                "i3.16xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::I32XlargeElasticsearch => {
+                "i3.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::I34XlargeElasticsearch => {
+                "i3.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::I38XlargeElasticsearch => {
+                "i3.8xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::I3LargeElasticsearch => "i3.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::I3XlargeElasticsearch => "i3.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::M32XlargeElasticsearch => {
+                "m3.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M3LargeElasticsearch => "m3.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::M3MediumElasticsearch => "m3.medium.elasticsearch".to_string(),
+            ESPartitionInstanceType::M3XlargeElasticsearch => "m3.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::M410XlargeElasticsearch => {
+                "m4.10xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M42XlargeElasticsearch => {
+                "m4.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M44XlargeElasticsearch => {
+                "m4.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M4LargeElasticsearch => "m4.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::M4XlargeElasticsearch => "m4.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::M512XlargeElasticsearch => {
+                "m5.12xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M52XlargeElasticsearch => {
+                "m5.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M54XlargeElasticsearch => {
+                "m5.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::M5LargeElasticsearch => "m5.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::M5XlargeElasticsearch => "m5.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::R32XlargeElasticsearch => {
+                "r3.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R34XlargeElasticsearch => {
+                "r3.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R38XlargeElasticsearch => {
+                "r3.8xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R3LargeElasticsearch => "r3.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::R3XlargeElasticsearch => "r3.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::R416XlargeElasticsearch => {
+                "r4.16xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R42XlargeElasticsearch => {
+                "r4.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R44XlargeElasticsearch => {
+                "r4.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R48XlargeElasticsearch => {
+                "r4.8xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R4LargeElasticsearch => "r4.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::R4XlargeElasticsearch => "r4.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::R512XlargeElasticsearch => {
+                "r5.12xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R52XlargeElasticsearch => {
+                "r5.2xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R54XlargeElasticsearch => {
+                "r5.4xlarge.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::R5LargeElasticsearch => "r5.large.elasticsearch".to_string(),
+            ESPartitionInstanceType::R5XlargeElasticsearch => "r5.xlarge.elasticsearch".to_string(),
+            ESPartitionInstanceType::T2MediumElasticsearch => "t2.medium.elasticsearch".to_string(),
+            ESPartitionInstanceType::T2MicroElasticsearch => "t2.micro.elasticsearch".to_string(),
+            ESPartitionInstanceType::T2SmallElasticsearch => "t2.small.elasticsearch".to_string(),
+            ESPartitionInstanceType::Ultrawarm1LargeElasticsearch => {
+                "ultrawarm1.large.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::Ultrawarm1MediumElasticsearch => {
+                "ultrawarm1.medium.elasticsearch".to_string()
+            }
+            ESPartitionInstanceType::UnknownVariant(UnknownESPartitionInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ESPartitionInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            ESPartitionInstanceType::C42XlargeElasticsearch => &"c4.2xlarge.elasticsearch",
+            ESPartitionInstanceType::C44XlargeElasticsearch => &"c4.4xlarge.elasticsearch",
+            ESPartitionInstanceType::C48XlargeElasticsearch => &"c4.8xlarge.elasticsearch",
+            ESPartitionInstanceType::C4LargeElasticsearch => &"c4.large.elasticsearch",
+            ESPartitionInstanceType::C4XlargeElasticsearch => &"c4.xlarge.elasticsearch",
+            ESPartitionInstanceType::C518XlargeElasticsearch => &"c5.18xlarge.elasticsearch",
+            ESPartitionInstanceType::C52XlargeElasticsearch => &"c5.2xlarge.elasticsearch",
+            ESPartitionInstanceType::C54XlargeElasticsearch => &"c5.4xlarge.elasticsearch",
+            ESPartitionInstanceType::C59XlargeElasticsearch => &"c5.9xlarge.elasticsearch",
+            ESPartitionInstanceType::C5LargeElasticsearch => &"c5.large.elasticsearch",
+            ESPartitionInstanceType::C5XlargeElasticsearch => &"c5.xlarge.elasticsearch",
+            ESPartitionInstanceType::D22XlargeElasticsearch => &"d2.2xlarge.elasticsearch",
+            ESPartitionInstanceType::D24XlargeElasticsearch => &"d2.4xlarge.elasticsearch",
+            ESPartitionInstanceType::D28XlargeElasticsearch => &"d2.8xlarge.elasticsearch",
+            ESPartitionInstanceType::D2XlargeElasticsearch => &"d2.xlarge.elasticsearch",
+            ESPartitionInstanceType::I22XlargeElasticsearch => &"i2.2xlarge.elasticsearch",
+            ESPartitionInstanceType::I2XlargeElasticsearch => &"i2.xlarge.elasticsearch",
+            ESPartitionInstanceType::I316XlargeElasticsearch => &"i3.16xlarge.elasticsearch",
+            ESPartitionInstanceType::I32XlargeElasticsearch => &"i3.2xlarge.elasticsearch",
+            ESPartitionInstanceType::I34XlargeElasticsearch => &"i3.4xlarge.elasticsearch",
+            ESPartitionInstanceType::I38XlargeElasticsearch => &"i3.8xlarge.elasticsearch",
+            ESPartitionInstanceType::I3LargeElasticsearch => &"i3.large.elasticsearch",
+            ESPartitionInstanceType::I3XlargeElasticsearch => &"i3.xlarge.elasticsearch",
+            ESPartitionInstanceType::M32XlargeElasticsearch => &"m3.2xlarge.elasticsearch",
+            ESPartitionInstanceType::M3LargeElasticsearch => &"m3.large.elasticsearch",
+            ESPartitionInstanceType::M3MediumElasticsearch => &"m3.medium.elasticsearch",
+            ESPartitionInstanceType::M3XlargeElasticsearch => &"m3.xlarge.elasticsearch",
+            ESPartitionInstanceType::M410XlargeElasticsearch => &"m4.10xlarge.elasticsearch",
+            ESPartitionInstanceType::M42XlargeElasticsearch => &"m4.2xlarge.elasticsearch",
+            ESPartitionInstanceType::M44XlargeElasticsearch => &"m4.4xlarge.elasticsearch",
+            ESPartitionInstanceType::M4LargeElasticsearch => &"m4.large.elasticsearch",
+            ESPartitionInstanceType::M4XlargeElasticsearch => &"m4.xlarge.elasticsearch",
+            ESPartitionInstanceType::M512XlargeElasticsearch => &"m5.12xlarge.elasticsearch",
+            ESPartitionInstanceType::M52XlargeElasticsearch => &"m5.2xlarge.elasticsearch",
+            ESPartitionInstanceType::M54XlargeElasticsearch => &"m5.4xlarge.elasticsearch",
+            ESPartitionInstanceType::M5LargeElasticsearch => &"m5.large.elasticsearch",
+            ESPartitionInstanceType::M5XlargeElasticsearch => &"m5.xlarge.elasticsearch",
+            ESPartitionInstanceType::R32XlargeElasticsearch => &"r3.2xlarge.elasticsearch",
+            ESPartitionInstanceType::R34XlargeElasticsearch => &"r3.4xlarge.elasticsearch",
+            ESPartitionInstanceType::R38XlargeElasticsearch => &"r3.8xlarge.elasticsearch",
+            ESPartitionInstanceType::R3LargeElasticsearch => &"r3.large.elasticsearch",
+            ESPartitionInstanceType::R3XlargeElasticsearch => &"r3.xlarge.elasticsearch",
+            ESPartitionInstanceType::R416XlargeElasticsearch => &"r4.16xlarge.elasticsearch",
+            ESPartitionInstanceType::R42XlargeElasticsearch => &"r4.2xlarge.elasticsearch",
+            ESPartitionInstanceType::R44XlargeElasticsearch => &"r4.4xlarge.elasticsearch",
+            ESPartitionInstanceType::R48XlargeElasticsearch => &"r4.8xlarge.elasticsearch",
+            ESPartitionInstanceType::R4LargeElasticsearch => &"r4.large.elasticsearch",
+            ESPartitionInstanceType::R4XlargeElasticsearch => &"r4.xlarge.elasticsearch",
+            ESPartitionInstanceType::R512XlargeElasticsearch => &"r5.12xlarge.elasticsearch",
+            ESPartitionInstanceType::R52XlargeElasticsearch => &"r5.2xlarge.elasticsearch",
+            ESPartitionInstanceType::R54XlargeElasticsearch => &"r5.4xlarge.elasticsearch",
+            ESPartitionInstanceType::R5LargeElasticsearch => &"r5.large.elasticsearch",
+            ESPartitionInstanceType::R5XlargeElasticsearch => &"r5.xlarge.elasticsearch",
+            ESPartitionInstanceType::T2MediumElasticsearch => &"t2.medium.elasticsearch",
+            ESPartitionInstanceType::T2MicroElasticsearch => &"t2.micro.elasticsearch",
+            ESPartitionInstanceType::T2SmallElasticsearch => &"t2.small.elasticsearch",
+            ESPartitionInstanceType::Ultrawarm1LargeElasticsearch => {
+                &"ultrawarm1.large.elasticsearch"
+            }
+            ESPartitionInstanceType::Ultrawarm1MediumElasticsearch => {
+                &"ultrawarm1.medium.elasticsearch"
+            }
+            ESPartitionInstanceType::UnknownVariant(UnknownESPartitionInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ESPartitionInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "c4.2xlarge.elasticsearch" => ESPartitionInstanceType::C42XlargeElasticsearch,
+            "c4.4xlarge.elasticsearch" => ESPartitionInstanceType::C44XlargeElasticsearch,
+            "c4.8xlarge.elasticsearch" => ESPartitionInstanceType::C48XlargeElasticsearch,
+            "c4.large.elasticsearch" => ESPartitionInstanceType::C4LargeElasticsearch,
+            "c4.xlarge.elasticsearch" => ESPartitionInstanceType::C4XlargeElasticsearch,
+            "c5.18xlarge.elasticsearch" => ESPartitionInstanceType::C518XlargeElasticsearch,
+            "c5.2xlarge.elasticsearch" => ESPartitionInstanceType::C52XlargeElasticsearch,
+            "c5.4xlarge.elasticsearch" => ESPartitionInstanceType::C54XlargeElasticsearch,
+            "c5.9xlarge.elasticsearch" => ESPartitionInstanceType::C59XlargeElasticsearch,
+            "c5.large.elasticsearch" => ESPartitionInstanceType::C5LargeElasticsearch,
+            "c5.xlarge.elasticsearch" => ESPartitionInstanceType::C5XlargeElasticsearch,
+            "d2.2xlarge.elasticsearch" => ESPartitionInstanceType::D22XlargeElasticsearch,
+            "d2.4xlarge.elasticsearch" => ESPartitionInstanceType::D24XlargeElasticsearch,
+            "d2.8xlarge.elasticsearch" => ESPartitionInstanceType::D28XlargeElasticsearch,
+            "d2.xlarge.elasticsearch" => ESPartitionInstanceType::D2XlargeElasticsearch,
+            "i2.2xlarge.elasticsearch" => ESPartitionInstanceType::I22XlargeElasticsearch,
+            "i2.xlarge.elasticsearch" => ESPartitionInstanceType::I2XlargeElasticsearch,
+            "i3.16xlarge.elasticsearch" => ESPartitionInstanceType::I316XlargeElasticsearch,
+            "i3.2xlarge.elasticsearch" => ESPartitionInstanceType::I32XlargeElasticsearch,
+            "i3.4xlarge.elasticsearch" => ESPartitionInstanceType::I34XlargeElasticsearch,
+            "i3.8xlarge.elasticsearch" => ESPartitionInstanceType::I38XlargeElasticsearch,
+            "i3.large.elasticsearch" => ESPartitionInstanceType::I3LargeElasticsearch,
+            "i3.xlarge.elasticsearch" => ESPartitionInstanceType::I3XlargeElasticsearch,
+            "m3.2xlarge.elasticsearch" => ESPartitionInstanceType::M32XlargeElasticsearch,
+            "m3.large.elasticsearch" => ESPartitionInstanceType::M3LargeElasticsearch,
+            "m3.medium.elasticsearch" => ESPartitionInstanceType::M3MediumElasticsearch,
+            "m3.xlarge.elasticsearch" => ESPartitionInstanceType::M3XlargeElasticsearch,
+            "m4.10xlarge.elasticsearch" => ESPartitionInstanceType::M410XlargeElasticsearch,
+            "m4.2xlarge.elasticsearch" => ESPartitionInstanceType::M42XlargeElasticsearch,
+            "m4.4xlarge.elasticsearch" => ESPartitionInstanceType::M44XlargeElasticsearch,
+            "m4.large.elasticsearch" => ESPartitionInstanceType::M4LargeElasticsearch,
+            "m4.xlarge.elasticsearch" => ESPartitionInstanceType::M4XlargeElasticsearch,
+            "m5.12xlarge.elasticsearch" => ESPartitionInstanceType::M512XlargeElasticsearch,
+            "m5.2xlarge.elasticsearch" => ESPartitionInstanceType::M52XlargeElasticsearch,
+            "m5.4xlarge.elasticsearch" => ESPartitionInstanceType::M54XlargeElasticsearch,
+            "m5.large.elasticsearch" => ESPartitionInstanceType::M5LargeElasticsearch,
+            "m5.xlarge.elasticsearch" => ESPartitionInstanceType::M5XlargeElasticsearch,
+            "r3.2xlarge.elasticsearch" => ESPartitionInstanceType::R32XlargeElasticsearch,
+            "r3.4xlarge.elasticsearch" => ESPartitionInstanceType::R34XlargeElasticsearch,
+            "r3.8xlarge.elasticsearch" => ESPartitionInstanceType::R38XlargeElasticsearch,
+            "r3.large.elasticsearch" => ESPartitionInstanceType::R3LargeElasticsearch,
+            "r3.xlarge.elasticsearch" => ESPartitionInstanceType::R3XlargeElasticsearch,
+            "r4.16xlarge.elasticsearch" => ESPartitionInstanceType::R416XlargeElasticsearch,
+            "r4.2xlarge.elasticsearch" => ESPartitionInstanceType::R42XlargeElasticsearch,
+            "r4.4xlarge.elasticsearch" => ESPartitionInstanceType::R44XlargeElasticsearch,
+            "r4.8xlarge.elasticsearch" => ESPartitionInstanceType::R48XlargeElasticsearch,
+            "r4.large.elasticsearch" => ESPartitionInstanceType::R4LargeElasticsearch,
+            "r4.xlarge.elasticsearch" => ESPartitionInstanceType::R4XlargeElasticsearch,
+            "r5.12xlarge.elasticsearch" => ESPartitionInstanceType::R512XlargeElasticsearch,
+            "r5.2xlarge.elasticsearch" => ESPartitionInstanceType::R52XlargeElasticsearch,
+            "r5.4xlarge.elasticsearch" => ESPartitionInstanceType::R54XlargeElasticsearch,
+            "r5.large.elasticsearch" => ESPartitionInstanceType::R5LargeElasticsearch,
+            "r5.xlarge.elasticsearch" => ESPartitionInstanceType::R5XlargeElasticsearch,
+            "t2.medium.elasticsearch" => ESPartitionInstanceType::T2MediumElasticsearch,
+            "t2.micro.elasticsearch" => ESPartitionInstanceType::T2MicroElasticsearch,
+            "t2.small.elasticsearch" => ESPartitionInstanceType::T2SmallElasticsearch,
+            "ultrawarm1.large.elasticsearch" => {
+                ESPartitionInstanceType::Ultrawarm1LargeElasticsearch
+            }
+            "ultrawarm1.medium.elasticsearch" => {
+                ESPartitionInstanceType::Ultrawarm1MediumElasticsearch
+            }
+            _ => ESPartitionInstanceType::UnknownVariant(UnknownESPartitionInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ESPartitionInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "c4.2xlarge.elasticsearch" => ESPartitionInstanceType::C42XlargeElasticsearch,
+            "c4.4xlarge.elasticsearch" => ESPartitionInstanceType::C44XlargeElasticsearch,
+            "c4.8xlarge.elasticsearch" => ESPartitionInstanceType::C48XlargeElasticsearch,
+            "c4.large.elasticsearch" => ESPartitionInstanceType::C4LargeElasticsearch,
+            "c4.xlarge.elasticsearch" => ESPartitionInstanceType::C4XlargeElasticsearch,
+            "c5.18xlarge.elasticsearch" => ESPartitionInstanceType::C518XlargeElasticsearch,
+            "c5.2xlarge.elasticsearch" => ESPartitionInstanceType::C52XlargeElasticsearch,
+            "c5.4xlarge.elasticsearch" => ESPartitionInstanceType::C54XlargeElasticsearch,
+            "c5.9xlarge.elasticsearch" => ESPartitionInstanceType::C59XlargeElasticsearch,
+            "c5.large.elasticsearch" => ESPartitionInstanceType::C5LargeElasticsearch,
+            "c5.xlarge.elasticsearch" => ESPartitionInstanceType::C5XlargeElasticsearch,
+            "d2.2xlarge.elasticsearch" => ESPartitionInstanceType::D22XlargeElasticsearch,
+            "d2.4xlarge.elasticsearch" => ESPartitionInstanceType::D24XlargeElasticsearch,
+            "d2.8xlarge.elasticsearch" => ESPartitionInstanceType::D28XlargeElasticsearch,
+            "d2.xlarge.elasticsearch" => ESPartitionInstanceType::D2XlargeElasticsearch,
+            "i2.2xlarge.elasticsearch" => ESPartitionInstanceType::I22XlargeElasticsearch,
+            "i2.xlarge.elasticsearch" => ESPartitionInstanceType::I2XlargeElasticsearch,
+            "i3.16xlarge.elasticsearch" => ESPartitionInstanceType::I316XlargeElasticsearch,
+            "i3.2xlarge.elasticsearch" => ESPartitionInstanceType::I32XlargeElasticsearch,
+            "i3.4xlarge.elasticsearch" => ESPartitionInstanceType::I34XlargeElasticsearch,
+            "i3.8xlarge.elasticsearch" => ESPartitionInstanceType::I38XlargeElasticsearch,
+            "i3.large.elasticsearch" => ESPartitionInstanceType::I3LargeElasticsearch,
+            "i3.xlarge.elasticsearch" => ESPartitionInstanceType::I3XlargeElasticsearch,
+            "m3.2xlarge.elasticsearch" => ESPartitionInstanceType::M32XlargeElasticsearch,
+            "m3.large.elasticsearch" => ESPartitionInstanceType::M3LargeElasticsearch,
+            "m3.medium.elasticsearch" => ESPartitionInstanceType::M3MediumElasticsearch,
+            "m3.xlarge.elasticsearch" => ESPartitionInstanceType::M3XlargeElasticsearch,
+            "m4.10xlarge.elasticsearch" => ESPartitionInstanceType::M410XlargeElasticsearch,
+            "m4.2xlarge.elasticsearch" => ESPartitionInstanceType::M42XlargeElasticsearch,
+            "m4.4xlarge.elasticsearch" => ESPartitionInstanceType::M44XlargeElasticsearch,
+            "m4.large.elasticsearch" => ESPartitionInstanceType::M4LargeElasticsearch,
+            "m4.xlarge.elasticsearch" => ESPartitionInstanceType::M4XlargeElasticsearch,
+            "m5.12xlarge.elasticsearch" => ESPartitionInstanceType::M512XlargeElasticsearch,
+            "m5.2xlarge.elasticsearch" => ESPartitionInstanceType::M52XlargeElasticsearch,
+            "m5.4xlarge.elasticsearch" => ESPartitionInstanceType::M54XlargeElasticsearch,
+            "m5.large.elasticsearch" => ESPartitionInstanceType::M5LargeElasticsearch,
+            "m5.xlarge.elasticsearch" => ESPartitionInstanceType::M5XlargeElasticsearch,
+            "r3.2xlarge.elasticsearch" => ESPartitionInstanceType::R32XlargeElasticsearch,
+            "r3.4xlarge.elasticsearch" => ESPartitionInstanceType::R34XlargeElasticsearch,
+            "r3.8xlarge.elasticsearch" => ESPartitionInstanceType::R38XlargeElasticsearch,
+            "r3.large.elasticsearch" => ESPartitionInstanceType::R3LargeElasticsearch,
+            "r3.xlarge.elasticsearch" => ESPartitionInstanceType::R3XlargeElasticsearch,
+            "r4.16xlarge.elasticsearch" => ESPartitionInstanceType::R416XlargeElasticsearch,
+            "r4.2xlarge.elasticsearch" => ESPartitionInstanceType::R42XlargeElasticsearch,
+            "r4.4xlarge.elasticsearch" => ESPartitionInstanceType::R44XlargeElasticsearch,
+            "r4.8xlarge.elasticsearch" => ESPartitionInstanceType::R48XlargeElasticsearch,
+            "r4.large.elasticsearch" => ESPartitionInstanceType::R4LargeElasticsearch,
+            "r4.xlarge.elasticsearch" => ESPartitionInstanceType::R4XlargeElasticsearch,
+            "r5.12xlarge.elasticsearch" => ESPartitionInstanceType::R512XlargeElasticsearch,
+            "r5.2xlarge.elasticsearch" => ESPartitionInstanceType::R52XlargeElasticsearch,
+            "r5.4xlarge.elasticsearch" => ESPartitionInstanceType::R54XlargeElasticsearch,
+            "r5.large.elasticsearch" => ESPartitionInstanceType::R5LargeElasticsearch,
+            "r5.xlarge.elasticsearch" => ESPartitionInstanceType::R5XlargeElasticsearch,
+            "t2.medium.elasticsearch" => ESPartitionInstanceType::T2MediumElasticsearch,
+            "t2.micro.elasticsearch" => ESPartitionInstanceType::T2MicroElasticsearch,
+            "t2.small.elasticsearch" => ESPartitionInstanceType::T2SmallElasticsearch,
+            "ultrawarm1.large.elasticsearch" => {
+                ESPartitionInstanceType::Ultrawarm1LargeElasticsearch
+            }
+            "ultrawarm1.medium.elasticsearch" => {
+                ESPartitionInstanceType::Ultrawarm1MediumElasticsearch
+            }
+            _ => ESPartitionInstanceType::UnknownVariant(UnknownESPartitionInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ESPartitionInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ESPartitionInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ESPartitionInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownESWarmPartitionInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ESWarmPartitionInstanceType {
+    Ultrawarm1LargeElasticsearch,
+    Ultrawarm1MediumElasticsearch,
+    #[doc(hidden)]
+    UnknownVariant(UnknownESWarmPartitionInstanceType),
+}
+
+impl Default for ESWarmPartitionInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ESWarmPartitionInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ESWarmPartitionInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ESWarmPartitionInstanceType {
+    fn into(self) -> String {
+        match self {
+            ESWarmPartitionInstanceType::Ultrawarm1LargeElasticsearch => {
+                "ultrawarm1.large.elasticsearch".to_string()
+            }
+            ESWarmPartitionInstanceType::Ultrawarm1MediumElasticsearch => {
+                "ultrawarm1.medium.elasticsearch".to_string()
+            }
+            ESWarmPartitionInstanceType::UnknownVariant(UnknownESWarmPartitionInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ESWarmPartitionInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            ESWarmPartitionInstanceType::Ultrawarm1LargeElasticsearch => {
+                &"ultrawarm1.large.elasticsearch"
+            }
+            ESWarmPartitionInstanceType::Ultrawarm1MediumElasticsearch => {
+                &"ultrawarm1.medium.elasticsearch"
+            }
+            ESWarmPartitionInstanceType::UnknownVariant(UnknownESWarmPartitionInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ESWarmPartitionInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ultrawarm1.large.elasticsearch" => {
+                ESWarmPartitionInstanceType::Ultrawarm1LargeElasticsearch
+            }
+            "ultrawarm1.medium.elasticsearch" => {
+                ESWarmPartitionInstanceType::Ultrawarm1MediumElasticsearch
+            }
+            _ => ESWarmPartitionInstanceType::UnknownVariant(UnknownESWarmPartitionInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ESWarmPartitionInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ultrawarm1.large.elasticsearch" => {
+                ESWarmPartitionInstanceType::Ultrawarm1LargeElasticsearch
+            }
+            "ultrawarm1.medium.elasticsearch" => {
+                ESWarmPartitionInstanceType::Ultrawarm1MediumElasticsearch
+            }
+            _ => ESWarmPartitionInstanceType::UnknownVariant(UnknownESWarmPartitionInstanceType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ESWarmPartitionInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ESWarmPartitionInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ESWarmPartitionInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the configuration for the domain cluster, such as the type and number of instances.</p>
@@ -870,7 +1808,7 @@ pub struct ElasticsearchClusterConfig {
     /// <p>The instance type for a dedicated master node.</p>
     #[serde(rename = "DedicatedMasterType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dedicated_master_type: Option<String>,
+    pub dedicated_master_type: Option<ESPartitionInstanceType>,
     /// <p>The number of instances in the specified domain cluster.</p>
     #[serde(rename = "InstanceCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -878,7 +1816,7 @@ pub struct ElasticsearchClusterConfig {
     /// <p>The instance type for an Elasticsearch cluster. UltraWarm instance types are not supported for data instances.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<ESPartitionInstanceType>,
     /// <p>The number of warm nodes in the cluster.</p>
     #[serde(rename = "WarmCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -890,7 +1828,7 @@ pub struct ElasticsearchClusterConfig {
     /// <p>The instance type for the Elasticsearch cluster's warm nodes.</p>
     #[serde(rename = "WarmType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub warm_type: Option<String>,
+    pub warm_type: Option<ESWarmPartitionInstanceType>,
     /// <p>Specifies the zone awareness configuration for a domain when zone awareness is enabled.</p>
     #[serde(rename = "ZoneAwarenessConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1037,7 +1975,7 @@ pub struct ElasticsearchDomainStatus {
     /// <p>Log publishing options for the given domain.</p>
     #[serde(rename = "LogPublishingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_publishing_options: Option<::std::collections::HashMap<String, LogPublishingOption>>,
+    pub log_publishing_options: Option<::std::collections::HashMap<LogType, LogPublishingOption>>,
     /// <p>Specifies the status of the <code>NodeToNodeEncryptionOptions</code>.</p>
     #[serde(rename = "NodeToNodeEncryptionOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1221,7 +2159,7 @@ pub struct GetUpgradeStatusResponse {
     /// <p> One of 4 statuses that a step can go through returned as part of the <code> <a>GetUpgradeStatusResponse</a> </code> object. The status can take one of the following values: <ul> <li>In Progress</li> <li>Succeeded</li> <li>Succeeded with Issues</li> <li>Failed</li> </ul> </p>
     #[serde(rename = "StepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_status: Option<String>,
+    pub step_status: Option<UpgradeStatus>,
     /// <p>A string that describes the update briefly</p>
     #[serde(rename = "UpgradeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1229,7 +2167,7 @@ pub struct GetUpgradeStatusResponse {
     /// <p> Represents one of 3 steps that an Upgrade or Upgrade Eligibility Check does through: <ul> <li>PreUpgradeCheck</li> <li>Snapshot</li> <li>Upgrade</li> </ul> </p>
     #[serde(rename = "UpgradeStep")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub upgrade_step: Option<String>,
+    pub upgrade_step: Option<UpgradeStep>,
 }
 
 /// <p>Specifies details of an inbound connection.</p>
@@ -1265,7 +2203,144 @@ pub struct InboundCrossClusterSearchConnectionStatus {
     /// <p><p>The state code for inbound connection. This can be one of the following:</p> <ul> <li>PENDING_ACCEPTANCE: Inbound connection is not yet accepted by destination domain owner.</li> <li>APPROVED: Inbound connection is pending acceptance by destination domain owner.</li> <li>REJECTING: Inbound connection rejection is in process.</li> <li>REJECTED: Inbound connection is rejected.</li> <li>DELETING: Inbound connection deletion is in progress.</li> <li>DELETED: Inbound connection is deleted and cannot be used further.</li> </ul></p>
     #[serde(rename = "StatusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<InboundCrossClusterSearchConnectionStatusCode>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInboundCrossClusterSearchConnectionStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InboundCrossClusterSearchConnectionStatusCode {
+    Approved,
+    Deleted,
+    Deleting,
+    PendingAcceptance,
+    Rejected,
+    Rejecting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInboundCrossClusterSearchConnectionStatusCode),
+}
+
+impl Default for InboundCrossClusterSearchConnectionStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InboundCrossClusterSearchConnectionStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InboundCrossClusterSearchConnectionStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InboundCrossClusterSearchConnectionStatusCode {
+    fn into(self) -> String {
+        match self {
+            InboundCrossClusterSearchConnectionStatusCode::Approved => "APPROVED".to_string(),
+            InboundCrossClusterSearchConnectionStatusCode::Deleted => "DELETED".to_string(),
+            InboundCrossClusterSearchConnectionStatusCode::Deleting => "DELETING".to_string(),
+            InboundCrossClusterSearchConnectionStatusCode::PendingAcceptance => {
+                "PENDING_ACCEPTANCE".to_string()
+            }
+            InboundCrossClusterSearchConnectionStatusCode::Rejected => "REJECTED".to_string(),
+            InboundCrossClusterSearchConnectionStatusCode::Rejecting => "REJECTING".to_string(),
+            InboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownInboundCrossClusterSearchConnectionStatusCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InboundCrossClusterSearchConnectionStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            InboundCrossClusterSearchConnectionStatusCode::Approved => &"APPROVED",
+            InboundCrossClusterSearchConnectionStatusCode::Deleted => &"DELETED",
+            InboundCrossClusterSearchConnectionStatusCode::Deleting => &"DELETING",
+            InboundCrossClusterSearchConnectionStatusCode::PendingAcceptance => {
+                &"PENDING_ACCEPTANCE"
+            }
+            InboundCrossClusterSearchConnectionStatusCode::Rejected => &"REJECTED",
+            InboundCrossClusterSearchConnectionStatusCode::Rejecting => &"REJECTING",
+            InboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownInboundCrossClusterSearchConnectionStatusCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InboundCrossClusterSearchConnectionStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPROVED" => InboundCrossClusterSearchConnectionStatusCode::Approved,
+            "DELETED" => InboundCrossClusterSearchConnectionStatusCode::Deleted,
+            "DELETING" => InboundCrossClusterSearchConnectionStatusCode::Deleting,
+            "PENDING_ACCEPTANCE" => {
+                InboundCrossClusterSearchConnectionStatusCode::PendingAcceptance
+            }
+            "REJECTED" => InboundCrossClusterSearchConnectionStatusCode::Rejected,
+            "REJECTING" => InboundCrossClusterSearchConnectionStatusCode::Rejecting,
+            _ => InboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownInboundCrossClusterSearchConnectionStatusCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InboundCrossClusterSearchConnectionStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPROVED" => InboundCrossClusterSearchConnectionStatusCode::Approved,
+            "DELETED" => InboundCrossClusterSearchConnectionStatusCode::Deleted,
+            "DELETING" => InboundCrossClusterSearchConnectionStatusCode::Deleting,
+            "PENDING_ACCEPTANCE" => {
+                InboundCrossClusterSearchConnectionStatusCode::PendingAcceptance
+            }
+            "REJECTED" => InboundCrossClusterSearchConnectionStatusCode::Rejected,
+            "REJECTING" => InboundCrossClusterSearchConnectionStatusCode::Rejecting,
+            _ => InboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownInboundCrossClusterSearchConnectionStatusCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InboundCrossClusterSearchConnectionStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InboundCrossClusterSearchConnectionStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InboundCrossClusterSearchConnectionStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> InstanceCountLimits represents the limits on number of instances that be created in Amazon Elasticsearch for given InstanceType. </p>
@@ -1374,7 +2449,7 @@ pub struct ListElasticsearchInstanceTypesResponse {
     /// <p> List of instance types supported by Amazon Elasticsearch service for given <code> <a>ElasticsearchVersion</a> </code> </p>
     #[serde(rename = "ElasticsearchInstanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub elasticsearch_instance_types: Option<Vec<String>>,
+    pub elasticsearch_instance_types: Option<Vec<ESPartitionInstanceType>>,
     /// <p>In case if there are more results available NextToken would be present, make further request to the same API with received NextToken to paginate remaining results. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1475,11 +2550,123 @@ pub struct LogPublishingOptionsStatus {
     /// <p>The log publishing options configured for the Elasticsearch domain.</p>
     #[serde(rename = "Options")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub options: Option<::std::collections::HashMap<String, LogPublishingOption>>,
+    pub options: Option<::std::collections::HashMap<LogType, LogPublishingOption>>,
     /// <p>The status of the log publishing options for the Elasticsearch domain. See <code>OptionStatus</code> for the status information that's included. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<OptionStatus>,
+}
+
+/// <p>Type of Log File, it can be one of the following: <ul> <li>INDEX_SLOW_LOGS: Index slow logs contain insert requests that took more time than configured index query log threshold to execute.</li> <li>SEARCH_SLOW_LOGS: Search slow logs contain search queries that took more time than configured search query log threshold to execute.</li> <li>ES_APPLICATION_LOGS: Elasticsearch application logs contain information about errors and warnings raised during the operation of the service and can be useful for troubleshooting.</li> <li>AUDIT_LOGS: Audit logs contain records of user requests for access from the domain.</li> </ul> </p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogType {
+    AuditLogs,
+    EsApplicationLogs,
+    IndexSlowLogs,
+    SearchSlowLogs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogType),
+}
+
+impl Default for LogType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogType {
+    fn into(self) -> String {
+        match self {
+            LogType::AuditLogs => "AUDIT_LOGS".to_string(),
+            LogType::EsApplicationLogs => "ES_APPLICATION_LOGS".to_string(),
+            LogType::IndexSlowLogs => "INDEX_SLOW_LOGS".to_string(),
+            LogType::SearchSlowLogs => "SEARCH_SLOW_LOGS".to_string(),
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogType {
+    fn into(self) -> &'a str {
+        match self {
+            LogType::AuditLogs => &"AUDIT_LOGS",
+            LogType::EsApplicationLogs => &"ES_APPLICATION_LOGS",
+            LogType::IndexSlowLogs => &"INDEX_SLOW_LOGS",
+            LogType::SearchSlowLogs => &"SEARCH_SLOW_LOGS",
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUDIT_LOGS" => LogType::AuditLogs,
+            "ES_APPLICATION_LOGS" => LogType::EsApplicationLogs,
+            "INDEX_SLOW_LOGS" => LogType::IndexSlowLogs,
+            "SEARCH_SLOW_LOGS" => LogType::SearchSlowLogs,
+            _ => LogType::UnknownVariant(UnknownLogType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUDIT_LOGS" => LogType::AuditLogs,
+            "ES_APPLICATION_LOGS" => LogType::EsApplicationLogs,
+            "INDEX_SLOW_LOGS" => LogType::IndexSlowLogs,
+            "SEARCH_SLOW_LOGS" => LogType::SearchSlowLogs,
+            _ => LogType::UnknownVariant(UnknownLogType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Credentials for the master user: username and password, ARN, or both.</p>
@@ -1521,6 +2708,114 @@ pub struct NodeToNodeEncryptionOptionsStatus {
     pub status: OptionStatus,
 }
 
+/// <p><p>The state of a requested change. One of the following:</p> <ul> <li>Processing: The request change is still in-process.</li> <li>Active: The request change is processed and deployed to the Elasticsearch domain.</li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOptionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OptionState {
+    Active,
+    Processing,
+    RequiresIndexDocuments,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOptionState),
+}
+
+impl Default for OptionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OptionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OptionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OptionState {
+    fn into(self) -> String {
+        match self {
+            OptionState::Active => "Active".to_string(),
+            OptionState::Processing => "Processing".to_string(),
+            OptionState::RequiresIndexDocuments => "RequiresIndexDocuments".to_string(),
+            OptionState::UnknownVariant(UnknownOptionState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OptionState {
+    fn into(self) -> &'a str {
+        match self {
+            OptionState::Active => &"Active",
+            OptionState::Processing => &"Processing",
+            OptionState::RequiresIndexDocuments => &"RequiresIndexDocuments",
+            OptionState::UnknownVariant(UnknownOptionState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OptionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => OptionState::Active,
+            "Processing" => OptionState::Processing,
+            "RequiresIndexDocuments" => OptionState::RequiresIndexDocuments,
+            _ => OptionState::UnknownVariant(UnknownOptionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OptionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => OptionState::Active,
+            "Processing" => OptionState::Processing,
+            "RequiresIndexDocuments" => OptionState::RequiresIndexDocuments,
+            _ => OptionState::UnknownVariant(UnknownOptionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OptionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OptionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OptionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the current status of the entity.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1534,7 +2829,7 @@ pub struct OptionStatus {
     pub pending_deletion: Option<bool>,
     /// <p>Provides the <code>OptionState</code> for the Elasticsearch domain.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: OptionState,
     /// <p>Timestamp which tells the last updated time for the entity.</p>
     #[serde(rename = "UpdateDate")]
     pub update_date: f64,
@@ -1581,7 +2876,160 @@ pub struct OutboundCrossClusterSearchConnectionStatus {
     /// <p><p>The state code for outbound connection. This can be one of the following:</p> <ul> <li>VALIDATING: The outbound connection request is being validated.</li> <li>VALIDATION<em>FAILED: Validation failed for the connection request.</li> <li>PENDING</em>ACCEPTANCE: Outbound connection request is validated and is not yet accepted by destination domain owner.</li> <li>PROVISIONING: Outbound connection request is in process.</li> <li>ACTIVE: Outbound connection is active and ready to use.</li> <li>REJECTED: Outbound connection request is rejected by destination domain owner.</li> <li>DELETING: Outbound connection deletion is in progress.</li> <li>DELETED: Outbound connection is deleted and cannot be used further.</li> </ul></p>
     #[serde(rename = "StatusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<OutboundCrossClusterSearchConnectionStatusCode>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOutboundCrossClusterSearchConnectionStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OutboundCrossClusterSearchConnectionStatusCode {
+    Active,
+    Deleted,
+    Deleting,
+    PendingAcceptance,
+    Provisioning,
+    Rejected,
+    Validating,
+    ValidationFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOutboundCrossClusterSearchConnectionStatusCode),
+}
+
+impl Default for OutboundCrossClusterSearchConnectionStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OutboundCrossClusterSearchConnectionStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OutboundCrossClusterSearchConnectionStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OutboundCrossClusterSearchConnectionStatusCode {
+    fn into(self) -> String {
+        match self {
+            OutboundCrossClusterSearchConnectionStatusCode::Active => "ACTIVE".to_string(),
+            OutboundCrossClusterSearchConnectionStatusCode::Deleted => "DELETED".to_string(),
+            OutboundCrossClusterSearchConnectionStatusCode::Deleting => "DELETING".to_string(),
+            OutboundCrossClusterSearchConnectionStatusCode::PendingAcceptance => {
+                "PENDING_ACCEPTANCE".to_string()
+            }
+            OutboundCrossClusterSearchConnectionStatusCode::Provisioning => {
+                "PROVISIONING".to_string()
+            }
+            OutboundCrossClusterSearchConnectionStatusCode::Rejected => "REJECTED".to_string(),
+            OutboundCrossClusterSearchConnectionStatusCode::Validating => "VALIDATING".to_string(),
+            OutboundCrossClusterSearchConnectionStatusCode::ValidationFailed => {
+                "VALIDATION_FAILED".to_string()
+            }
+            OutboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownOutboundCrossClusterSearchConnectionStatusCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OutboundCrossClusterSearchConnectionStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            OutboundCrossClusterSearchConnectionStatusCode::Active => &"ACTIVE",
+            OutboundCrossClusterSearchConnectionStatusCode::Deleted => &"DELETED",
+            OutboundCrossClusterSearchConnectionStatusCode::Deleting => &"DELETING",
+            OutboundCrossClusterSearchConnectionStatusCode::PendingAcceptance => {
+                &"PENDING_ACCEPTANCE"
+            }
+            OutboundCrossClusterSearchConnectionStatusCode::Provisioning => &"PROVISIONING",
+            OutboundCrossClusterSearchConnectionStatusCode::Rejected => &"REJECTED",
+            OutboundCrossClusterSearchConnectionStatusCode::Validating => &"VALIDATING",
+            OutboundCrossClusterSearchConnectionStatusCode::ValidationFailed => {
+                &"VALIDATION_FAILED"
+            }
+            OutboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownOutboundCrossClusterSearchConnectionStatusCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OutboundCrossClusterSearchConnectionStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => OutboundCrossClusterSearchConnectionStatusCode::Active,
+            "DELETED" => OutboundCrossClusterSearchConnectionStatusCode::Deleted,
+            "DELETING" => OutboundCrossClusterSearchConnectionStatusCode::Deleting,
+            "PENDING_ACCEPTANCE" => {
+                OutboundCrossClusterSearchConnectionStatusCode::PendingAcceptance
+            }
+            "PROVISIONING" => OutboundCrossClusterSearchConnectionStatusCode::Provisioning,
+            "REJECTED" => OutboundCrossClusterSearchConnectionStatusCode::Rejected,
+            "VALIDATING" => OutboundCrossClusterSearchConnectionStatusCode::Validating,
+            "VALIDATION_FAILED" => OutboundCrossClusterSearchConnectionStatusCode::ValidationFailed,
+            _ => OutboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownOutboundCrossClusterSearchConnectionStatusCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OutboundCrossClusterSearchConnectionStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => OutboundCrossClusterSearchConnectionStatusCode::Active,
+            "DELETED" => OutboundCrossClusterSearchConnectionStatusCode::Deleted,
+            "DELETING" => OutboundCrossClusterSearchConnectionStatusCode::Deleting,
+            "PENDING_ACCEPTANCE" => {
+                OutboundCrossClusterSearchConnectionStatusCode::PendingAcceptance
+            }
+            "PROVISIONING" => OutboundCrossClusterSearchConnectionStatusCode::Provisioning,
+            "REJECTED" => OutboundCrossClusterSearchConnectionStatusCode::Rejected,
+            "VALIDATING" => OutboundCrossClusterSearchConnectionStatusCode::Validating,
+            "VALIDATION_FAILED" => OutboundCrossClusterSearchConnectionStatusCode::ValidationFailed,
+            _ => OutboundCrossClusterSearchConnectionStatusCode::UnknownVariant(
+                UnknownOutboundCrossClusterSearchConnectionStatusCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutboundCrossClusterSearchConnectionStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OutboundCrossClusterSearchConnectionStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OutboundCrossClusterSearchConnectionStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Basic information about a package.</p>
@@ -1617,11 +3065,11 @@ pub struct PackageDetails {
     /// <p>Current state of the package. Values are COPYING/COPY_FAILED/AVAILABLE/DELETING/DELETE_FAILED</p>
     #[serde(rename = "PackageStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_status: Option<String>,
+    pub package_status: Option<PackageStatus>,
     /// <p>Currently supports only TXT-DICTIONARY.</p>
     #[serde(rename = "PackageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_type: Option<String>,
+    pub package_type: Option<PackageType>,
 }
 
 /// <p>The S3 location for importing the package specified as <code>S3BucketName</code> and <code>S3Key</code></p>
@@ -1636,6 +3084,232 @@ pub struct PackageSource {
     #[serde(rename = "S3Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPackageStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PackageStatus {
+    Available,
+    Copying,
+    CopyFailed,
+    Deleted,
+    DeleteFailed,
+    Deleting,
+    Validating,
+    ValidationFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPackageStatus),
+}
+
+impl Default for PackageStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PackageStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PackageStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PackageStatus {
+    fn into(self) -> String {
+        match self {
+            PackageStatus::Available => "AVAILABLE".to_string(),
+            PackageStatus::Copying => "COPYING".to_string(),
+            PackageStatus::CopyFailed => "COPY_FAILED".to_string(),
+            PackageStatus::Deleted => "DELETED".to_string(),
+            PackageStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            PackageStatus::Deleting => "DELETING".to_string(),
+            PackageStatus::Validating => "VALIDATING".to_string(),
+            PackageStatus::ValidationFailed => "VALIDATION_FAILED".to_string(),
+            PackageStatus::UnknownVariant(UnknownPackageStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PackageStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PackageStatus::Available => &"AVAILABLE",
+            PackageStatus::Copying => &"COPYING",
+            PackageStatus::CopyFailed => &"COPY_FAILED",
+            PackageStatus::Deleted => &"DELETED",
+            PackageStatus::DeleteFailed => &"DELETE_FAILED",
+            PackageStatus::Deleting => &"DELETING",
+            PackageStatus::Validating => &"VALIDATING",
+            PackageStatus::ValidationFailed => &"VALIDATION_FAILED",
+            PackageStatus::UnknownVariant(UnknownPackageStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PackageStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => PackageStatus::Available,
+            "COPYING" => PackageStatus::Copying,
+            "COPY_FAILED" => PackageStatus::CopyFailed,
+            "DELETED" => PackageStatus::Deleted,
+            "DELETE_FAILED" => PackageStatus::DeleteFailed,
+            "DELETING" => PackageStatus::Deleting,
+            "VALIDATING" => PackageStatus::Validating,
+            "VALIDATION_FAILED" => PackageStatus::ValidationFailed,
+            _ => PackageStatus::UnknownVariant(UnknownPackageStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PackageStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => PackageStatus::Available,
+            "COPYING" => PackageStatus::Copying,
+            "COPY_FAILED" => PackageStatus::CopyFailed,
+            "DELETED" => PackageStatus::Deleted,
+            "DELETE_FAILED" => PackageStatus::DeleteFailed,
+            "DELETING" => PackageStatus::Deleting,
+            "VALIDATING" => PackageStatus::Validating,
+            "VALIDATION_FAILED" => PackageStatus::ValidationFailed,
+            _ => PackageStatus::UnknownVariant(UnknownPackageStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PackageStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PackageStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PackageStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPackageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PackageType {
+    TxtDictionary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPackageType),
+}
+
+impl Default for PackageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PackageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PackageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PackageType {
+    fn into(self) -> String {
+        match self {
+            PackageType::TxtDictionary => "TXT-DICTIONARY".to_string(),
+            PackageType::UnknownVariant(UnknownPackageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PackageType {
+    fn into(self) -> &'a str {
+        match self {
+            PackageType::TxtDictionary => &"TXT-DICTIONARY",
+            PackageType::UnknownVariant(UnknownPackageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PackageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "TXT-DICTIONARY" => PackageType::TxtDictionary,
+            _ => PackageType::UnknownVariant(UnknownPackageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PackageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TXT-DICTIONARY" => PackageType::TxtDictionary,
+            _ => PackageType::UnknownVariant(UnknownPackageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PackageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PackageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PackageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details of a package version.</p>
@@ -1750,7 +3424,7 @@ pub struct ReservedElasticsearchInstance {
     /// <p>The Elasticsearch instance type offered by the reserved instance offering.</p>
     #[serde(rename = "ElasticsearchInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub elasticsearch_instance_type: Option<String>,
+    pub elasticsearch_instance_type: Option<ESPartitionInstanceType>,
     /// <p>The upfront fixed charge you will paid to purchase the specific reserved Elasticsearch instance offering. </p>
     #[serde(rename = "FixedPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1758,7 +3432,7 @@ pub struct ReservedElasticsearchInstance {
     /// <p>The payment option as defined in the reserved Elasticsearch instance offering.</p>
     #[serde(rename = "PaymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<ReservedElasticsearchInstancePaymentOption>,
     /// <p>The charge to your account regardless of whether you are creating any domains using the instance offering.</p>
     #[serde(rename = "RecurringCharges")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1804,7 +3478,7 @@ pub struct ReservedElasticsearchInstanceOffering {
     /// <p>The Elasticsearch instance type offered by the reserved instance offering.</p>
     #[serde(rename = "ElasticsearchInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub elasticsearch_instance_type: Option<String>,
+    pub elasticsearch_instance_type: Option<ESPartitionInstanceType>,
     /// <p>The upfront fixed charge you will pay to purchase the specific reserved Elasticsearch instance offering. </p>
     #[serde(rename = "FixedPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1812,7 +3486,7 @@ pub struct ReservedElasticsearchInstanceOffering {
     /// <p>Payment option for the reserved Elasticsearch instance offering</p>
     #[serde(rename = "PaymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<ReservedElasticsearchInstancePaymentOption>,
     /// <p>The charge to your account regardless of whether you are creating any domains using the instance offering.</p>
     #[serde(rename = "RecurringCharges")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1825,6 +3499,122 @@ pub struct ReservedElasticsearchInstanceOffering {
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_price: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservedElasticsearchInstancePaymentOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservedElasticsearchInstancePaymentOption {
+    AllUpfront,
+    NoUpfront,
+    PartialUpfront,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservedElasticsearchInstancePaymentOption),
+}
+
+impl Default for ReservedElasticsearchInstancePaymentOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservedElasticsearchInstancePaymentOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservedElasticsearchInstancePaymentOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservedElasticsearchInstancePaymentOption {
+    fn into(self) -> String {
+        match self {
+            ReservedElasticsearchInstancePaymentOption::AllUpfront => "ALL_UPFRONT".to_string(),
+            ReservedElasticsearchInstancePaymentOption::NoUpfront => "NO_UPFRONT".to_string(),
+            ReservedElasticsearchInstancePaymentOption::PartialUpfront => {
+                "PARTIAL_UPFRONT".to_string()
+            }
+            ReservedElasticsearchInstancePaymentOption::UnknownVariant(
+                UnknownReservedElasticsearchInstancePaymentOption { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservedElasticsearchInstancePaymentOption {
+    fn into(self) -> &'a str {
+        match self {
+            ReservedElasticsearchInstancePaymentOption::AllUpfront => &"ALL_UPFRONT",
+            ReservedElasticsearchInstancePaymentOption::NoUpfront => &"NO_UPFRONT",
+            ReservedElasticsearchInstancePaymentOption::PartialUpfront => &"PARTIAL_UPFRONT",
+            ReservedElasticsearchInstancePaymentOption::UnknownVariant(
+                UnknownReservedElasticsearchInstancePaymentOption { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservedElasticsearchInstancePaymentOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_UPFRONT" => ReservedElasticsearchInstancePaymentOption::AllUpfront,
+            "NO_UPFRONT" => ReservedElasticsearchInstancePaymentOption::NoUpfront,
+            "PARTIAL_UPFRONT" => ReservedElasticsearchInstancePaymentOption::PartialUpfront,
+            _ => ReservedElasticsearchInstancePaymentOption::UnknownVariant(
+                UnknownReservedElasticsearchInstancePaymentOption {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ReservedElasticsearchInstancePaymentOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_UPFRONT" => ReservedElasticsearchInstancePaymentOption::AllUpfront,
+            "NO_UPFRONT" => ReservedElasticsearchInstancePaymentOption::NoUpfront,
+            "PARTIAL_UPFRONT" => ReservedElasticsearchInstancePaymentOption::PartialUpfront,
+            _ => ReservedElasticsearchInstancePaymentOption::UnknownVariant(
+                UnknownReservedElasticsearchInstancePaymentOption { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservedElasticsearchInstancePaymentOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservedElasticsearchInstancePaymentOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservedElasticsearchInstancePaymentOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the SAML Identity Provider's information.</p>
@@ -1933,7 +3723,7 @@ pub struct ServiceSoftwareOptions {
     /// <p>The status of your service software update. This field can take the following values: <code>ELIGIBLE</code>, <code>PENDING_UPDATE</code>, <code>IN_PROGRESS</code>, <code>COMPLETED</code>, and <code>NOT_ELIGIBLE</code>.</p>
     #[serde(rename = "UpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_status: Option<String>,
+    pub update_status: Option<DeploymentStatus>,
 }
 
 /// <p>Specifies the time, in UTC format, when the service takes a daily automated snapshot of the specified Elasticsearch domain. Default value is <code>0</code> hours.</p>
@@ -2006,6 +3796,110 @@ pub struct StorageTypeLimit {
     pub limit_values: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTLSSecurityPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TLSSecurityPolicy {
+    PolicyMinTLS10201907,
+    PolicyMinTLS12201907,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTLSSecurityPolicy),
+}
+
+impl Default for TLSSecurityPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TLSSecurityPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TLSSecurityPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TLSSecurityPolicy {
+    fn into(self) -> String {
+        match self {
+            TLSSecurityPolicy::PolicyMinTLS10201907 => "Policy-Min-TLS-1-0-2019-07".to_string(),
+            TLSSecurityPolicy::PolicyMinTLS12201907 => "Policy-Min-TLS-1-2-2019-07".to_string(),
+            TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TLSSecurityPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            TLSSecurityPolicy::PolicyMinTLS10201907 => &"Policy-Min-TLS-1-0-2019-07",
+            TLSSecurityPolicy::PolicyMinTLS12201907 => &"Policy-Min-TLS-1-2-2019-07",
+            TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TLSSecurityPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "Policy-Min-TLS-1-0-2019-07" => TLSSecurityPolicy::PolicyMinTLS10201907,
+            "Policy-Min-TLS-1-2-2019-07" => TLSSecurityPolicy::PolicyMinTLS12201907,
+            _ => TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TLSSecurityPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Policy-Min-TLS-1-0-2019-07" => TLSSecurityPolicy::PolicyMinTLS10201907,
+            "Policy-Min-TLS-1-2-2019-07" => TLSSecurityPolicy::PolicyMinTLS12201907,
+            _ => TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TLSSecurityPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TLSSecurityPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TLSSecurityPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies a key value pair for a resource tag.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
@@ -2055,7 +3949,7 @@ pub struct UpdateElasticsearchDomainConfigRequest {
     /// <p>Map of <code>LogType</code> and <code>LogPublishingOption</code>, each containing options to publish a given type of Elasticsearch log.</p>
     #[serde(rename = "LogPublishingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_publishing_options: Option<::std::collections::HashMap<String, LogPublishingOption>>,
+    pub log_publishing_options: Option<::std::collections::HashMap<LogType, LogPublishingOption>>,
     /// <p>Option to set the time, in UTC format, for the daily automated snapshot. Default value is <code>0</code> hours. </p>
     #[serde(rename = "SnapshotOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2155,7 +4049,224 @@ pub struct UpgradeHistory {
     /// <p> The overall status of the update. The status can take one of the following values: <ul> <li>In Progress</li> <li>Succeeded</li> <li>Succeeded with Issues</li> <li>Failed</li> </ul> </p>
     #[serde(rename = "UpgradeStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub upgrade_status: Option<String>,
+    pub upgrade_status: Option<UpgradeStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpgradeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpgradeStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    SucceededWithIssues,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpgradeStatus),
+}
+
+impl Default for UpgradeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpgradeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpgradeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpgradeStatus {
+    fn into(self) -> String {
+        match self {
+            UpgradeStatus::Failed => "FAILED".to_string(),
+            UpgradeStatus::InProgress => "IN_PROGRESS".to_string(),
+            UpgradeStatus::Succeeded => "SUCCEEDED".to_string(),
+            UpgradeStatus::SucceededWithIssues => "SUCCEEDED_WITH_ISSUES".to_string(),
+            UpgradeStatus::UnknownVariant(UnknownUpgradeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpgradeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            UpgradeStatus::Failed => &"FAILED",
+            UpgradeStatus::InProgress => &"IN_PROGRESS",
+            UpgradeStatus::Succeeded => &"SUCCEEDED",
+            UpgradeStatus::SucceededWithIssues => &"SUCCEEDED_WITH_ISSUES",
+            UpgradeStatus::UnknownVariant(UnknownUpgradeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpgradeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => UpgradeStatus::Failed,
+            "IN_PROGRESS" => UpgradeStatus::InProgress,
+            "SUCCEEDED" => UpgradeStatus::Succeeded,
+            "SUCCEEDED_WITH_ISSUES" => UpgradeStatus::SucceededWithIssues,
+            _ => UpgradeStatus::UnknownVariant(UnknownUpgradeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpgradeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => UpgradeStatus::Failed,
+            "IN_PROGRESS" => UpgradeStatus::InProgress,
+            "SUCCEEDED" => UpgradeStatus::Succeeded,
+            "SUCCEEDED_WITH_ISSUES" => UpgradeStatus::SucceededWithIssues,
+            _ => UpgradeStatus::UnknownVariant(UnknownUpgradeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpgradeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UpgradeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UpgradeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpgradeStep {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpgradeStep {
+    PreUpgradeCheck,
+    Snapshot,
+    Upgrade,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpgradeStep),
+}
+
+impl Default for UpgradeStep {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpgradeStep {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpgradeStep {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpgradeStep {
+    fn into(self) -> String {
+        match self {
+            UpgradeStep::PreUpgradeCheck => "PRE_UPGRADE_CHECK".to_string(),
+            UpgradeStep::Snapshot => "SNAPSHOT".to_string(),
+            UpgradeStep::Upgrade => "UPGRADE".to_string(),
+            UpgradeStep::UnknownVariant(UnknownUpgradeStep { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpgradeStep {
+    fn into(self) -> &'a str {
+        match self {
+            UpgradeStep::PreUpgradeCheck => &"PRE_UPGRADE_CHECK",
+            UpgradeStep::Snapshot => &"SNAPSHOT",
+            UpgradeStep::Upgrade => &"UPGRADE",
+            UpgradeStep::UnknownVariant(UnknownUpgradeStep { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpgradeStep {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRE_UPGRADE_CHECK" => UpgradeStep::PreUpgradeCheck,
+            "SNAPSHOT" => UpgradeStep::Snapshot,
+            "UPGRADE" => UpgradeStep::Upgrade,
+            _ => UpgradeStep::UnknownVariant(UnknownUpgradeStep {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpgradeStep {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRE_UPGRADE_CHECK" => UpgradeStep::PreUpgradeCheck,
+            "SNAPSHOT" => UpgradeStep::Snapshot,
+            "UPGRADE" => UpgradeStep::Upgrade,
+            _ => UpgradeStep::UnknownVariant(UnknownUpgradeStep { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpgradeStep {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UpgradeStep {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UpgradeStep {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a single step of the Upgrade or Upgrade Eligibility Check workflow.</p>
@@ -2173,11 +4284,11 @@ pub struct UpgradeStepItem {
     /// <p> Represents one of 3 steps that an Upgrade or Upgrade Eligibility Check does through: <ul> <li>PreUpgradeCheck</li> <li>Snapshot</li> <li>Upgrade</li> </ul> </p>
     #[serde(rename = "UpgradeStep")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub upgrade_step: Option<String>,
+    pub upgrade_step: Option<UpgradeStep>,
     /// <p> The status of a particular step during an upgrade. The status can take one of the following values: <ul> <li>In Progress</li> <li>Succeeded</li> <li>Succeeded with Issues</li> <li>Failed</li> </ul> </p>
     #[serde(rename = "UpgradeStepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub upgrade_step_status: Option<String>,
+    pub upgrade_step_status: Option<UpgradeStatus>,
 }
 
 /// <p>Options to specify the subnets and security groups for VPC endpoint. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html" target="_blank"> VPC Endpoints for Amazon Elasticsearch Service Domains</a>.</p>
@@ -2226,6 +4337,113 @@ pub struct VPCOptions {
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
+}
+
+/// <p> The type of EBS volume, standard, gp2, or io1. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs" target="_blank">Configuring EBS-based Storage</a>for more information.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVolumeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VolumeType {
+    Gp2,
+    Io1,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVolumeType),
+}
+
+impl Default for VolumeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VolumeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VolumeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VolumeType {
+    fn into(self) -> String {
+        match self {
+            VolumeType::Gp2 => "gp2".to_string(),
+            VolumeType::Io1 => "io1".to_string(),
+            VolumeType::Standard => "standard".to_string(),
+            VolumeType::UnknownVariant(UnknownVolumeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VolumeType {
+    fn into(self) -> &'a str {
+        match self {
+            VolumeType::Gp2 => &"gp2",
+            VolumeType::Io1 => &"io1",
+            VolumeType::Standard => &"standard",
+            VolumeType::UnknownVariant(UnknownVolumeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VolumeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "gp2" => VolumeType::Gp2,
+            "io1" => VolumeType::Io1,
+            "standard" => VolumeType::Standard,
+            _ => VolumeType::UnknownVariant(UnknownVolumeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VolumeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "gp2" => VolumeType::Gp2,
+            "io1" => VolumeType::Io1,
+            "standard" => VolumeType::Standard,
+            _ => VolumeType::UnknownVariant(UnknownVolumeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VolumeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VolumeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the zone awareness configuration for the domain cluster, such as the number of availability zones.</p>

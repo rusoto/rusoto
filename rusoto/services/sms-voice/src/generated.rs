@@ -129,7 +129,7 @@ pub struct EventDestination {
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     #[serde(rename = "MatchingEventTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub matching_event_types: Option<Vec<String>>,
+    pub matching_event_types: Option<Vec<EventType>>,
     /// <p>A name that identifies the event destination configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -155,10 +155,137 @@ pub struct EventDestinationDefinition {
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     #[serde(rename = "MatchingEventTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub matching_event_types: Option<Vec<String>>,
+    pub matching_event_types: Option<Vec<EventType>>,
     #[serde(rename = "SnsDestination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_destination: Option<SnsDestination>,
+}
+
+/// <p>The types of events that are sent to the event destination.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    Answered,
+    Busy,
+    CompletedCall,
+    Failed,
+    InitiatedCall,
+    NoAnswer,
+    Ringing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::Answered => "ANSWERED".to_string(),
+            EventType::Busy => "BUSY".to_string(),
+            EventType::CompletedCall => "COMPLETED_CALL".to_string(),
+            EventType::Failed => "FAILED".to_string(),
+            EventType::InitiatedCall => "INITIATED_CALL".to_string(),
+            EventType::NoAnswer => "NO_ANSWER".to_string(),
+            EventType::Ringing => "RINGING".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::Answered => &"ANSWERED",
+            EventType::Busy => &"BUSY",
+            EventType::CompletedCall => &"COMPLETED_CALL",
+            EventType::Failed => &"FAILED",
+            EventType::InitiatedCall => &"INITIATED_CALL",
+            EventType::NoAnswer => &"NO_ANSWER",
+            EventType::Ringing => &"RINGING",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANSWERED" => EventType::Answered,
+            "BUSY" => EventType::Busy,
+            "COMPLETED_CALL" => EventType::CompletedCall,
+            "FAILED" => EventType::Failed,
+            "INITIATED_CALL" => EventType::InitiatedCall,
+            "NO_ANSWER" => EventType::NoAnswer,
+            "RINGING" => EventType::Ringing,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANSWERED" => EventType::Answered,
+            "BUSY" => EventType::Busy,
+            "COMPLETED_CALL" => EventType::CompletedCall,
+            "FAILED" => EventType::Failed,
+            "INITIATED_CALL" => EventType::InitiatedCall,
+            "NO_ANSWER" => EventType::NoAnswer,
+            "RINGING" => EventType::Ringing,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

@@ -319,10 +319,10 @@ pub struct GetResourceShareAssociationsRequest {
     /// <p>The association status.</p>
     #[serde(rename = "associationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_status: Option<String>,
+    pub association_status: Option<ResourceShareAssociationStatus>,
     /// <p>The association type. Specify <code>PRINCIPAL</code> to list the principals that are associated with the specified resource share. Specify <code>RESOURCE</code> to list the resources that are associated with the specified resource share.</p>
     #[serde(rename = "associationType")]
-    pub association_type: String,
+    pub association_type: ResourceShareAssociationType,
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -409,7 +409,7 @@ pub struct GetResourceSharesRequest {
     pub next_token: Option<String>,
     /// <p>The type of owner.</p>
     #[serde(rename = "resourceOwner")]
-    pub resource_owner: String,
+    pub resource_owner: ResourceOwner,
     /// <p>The Amazon Resource Names (ARN) of the resource shares.</p>
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -417,7 +417,7 @@ pub struct GetResourceSharesRequest {
     /// <p>The status of the resource share.</p>
     #[serde(rename = "resourceShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_share_status: Option<String>,
+    pub resource_share_status: Option<ResourceShareStatus>,
     /// <p>One or more tag filters.</p>
     #[serde(rename = "tagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -517,7 +517,7 @@ pub struct ListPrincipalsRequest {
     pub resource_arn: Option<String>,
     /// <p>The type of owner.</p>
     #[serde(rename = "resourceOwner")]
-    pub resource_owner: String,
+    pub resource_owner: ResourceOwner,
     /// <p>The Amazon Resource Names (ARN) of the resource shares.</p>
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -617,7 +617,7 @@ pub struct ListResourcesRequest {
     pub resource_arns: Option<Vec<String>>,
     /// <p>The type of owner.</p>
     #[serde(rename = "resourceOwner")]
-    pub resource_owner: String,
+    pub resource_owner: ResourceOwner,
     /// <p>The Amazon Resource Names (ARN) of the resource shares.</p>
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -736,7 +736,7 @@ pub struct Resource {
     /// <p>The status of the resource.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>A message about the status of the resource.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -745,6 +745,107 @@ pub struct Resource {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceOwner {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceOwner {
+    OtherAccounts,
+    AwsSelf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceOwner),
+}
+
+impl Default for ResourceOwner {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceOwner {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceOwner {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceOwner {
+    fn into(self) -> String {
+        match self {
+            ResourceOwner::OtherAccounts => "OTHER-ACCOUNTS".to_string(),
+            ResourceOwner::AwsSelf => "SELF".to_string(),
+            ResourceOwner::UnknownVariant(UnknownResourceOwner { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceOwner {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceOwner::OtherAccounts => &"OTHER-ACCOUNTS",
+            ResourceOwner::AwsSelf => &"SELF",
+            ResourceOwner::UnknownVariant(UnknownResourceOwner { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceOwner {
+    fn from(name: &str) -> Self {
+        match name {
+            "OTHER-ACCOUNTS" => ResourceOwner::OtherAccounts,
+            "SELF" => ResourceOwner::AwsSelf,
+            _ => ResourceOwner::UnknownVariant(UnknownResourceOwner {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceOwner {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OTHER-ACCOUNTS" => ResourceOwner::OtherAccounts,
+            "SELF" => ResourceOwner::AwsSelf,
+            _ => ResourceOwner::UnknownVariant(UnknownResourceOwner { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceOwner {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceOwner {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceOwner {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a resource share.</p>
@@ -762,7 +863,7 @@ pub struct ResourceShare {
     /// <p><p>Indicates how the resource share was created. Possible values include:</p> <ul> <li> <p> <code>CREATED<em>FROM</em>POLICY</code> - Indicates that the resource share was created from an AWS Identity and Access Management (AWS IAM) policy attached to a resource. These resource shares are visible only to the AWS account that created it. They cannot be modified in AWS RAM.</p> </li> <li> <p> <code>PROMOTING<em>TO</em>STANDARD</code> - The resource share is in the process of being promoted. For more information, see <a>PromoteResourceShareCreatedFromPolicy</a>.</p> </li> <li> <p> <code>STANDARD</code> - Indicates that the resource share was created in AWS RAM using the console or APIs. These resource shares are visible to all principals. They can be modified in AWS RAM.</p> </li> </ul></p>
     #[serde(rename = "featureSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_set: Option<String>,
+    pub feature_set: Option<ResourceShareFeatureSet>,
     /// <p>The time when the resource share was last updated.</p>
     #[serde(rename = "lastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -782,7 +883,7 @@ pub struct ResourceShare {
     /// <p>The status of the resource share.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceShareStatus>,
     /// <p>A message about the status of the resource share.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -804,7 +905,7 @@ pub struct ResourceShareAssociation {
     /// <p>The association type.</p>
     #[serde(rename = "associationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_type: Option<String>,
+    pub association_type: Option<ResourceShareAssociationType>,
     /// <p>The time when the association was created.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -828,11 +929,354 @@ pub struct ResourceShareAssociation {
     /// <p>The status of the association.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceShareAssociationStatus>,
     /// <p>A message about the status of the association.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceShareAssociationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceShareAssociationStatus {
+    Associated,
+    Associating,
+    Disassociated,
+    Disassociating,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceShareAssociationStatus),
+}
+
+impl Default for ResourceShareAssociationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceShareAssociationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceShareAssociationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceShareAssociationStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceShareAssociationStatus::Associated => "ASSOCIATED".to_string(),
+            ResourceShareAssociationStatus::Associating => "ASSOCIATING".to_string(),
+            ResourceShareAssociationStatus::Disassociated => "DISASSOCIATED".to_string(),
+            ResourceShareAssociationStatus::Disassociating => "DISASSOCIATING".to_string(),
+            ResourceShareAssociationStatus::Failed => "FAILED".to_string(),
+            ResourceShareAssociationStatus::UnknownVariant(
+                UnknownResourceShareAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceShareAssociationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceShareAssociationStatus::Associated => &"ASSOCIATED",
+            ResourceShareAssociationStatus::Associating => &"ASSOCIATING",
+            ResourceShareAssociationStatus::Disassociated => &"DISASSOCIATED",
+            ResourceShareAssociationStatus::Disassociating => &"DISASSOCIATING",
+            ResourceShareAssociationStatus::Failed => &"FAILED",
+            ResourceShareAssociationStatus::UnknownVariant(
+                UnknownResourceShareAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceShareAssociationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSOCIATED" => ResourceShareAssociationStatus::Associated,
+            "ASSOCIATING" => ResourceShareAssociationStatus::Associating,
+            "DISASSOCIATED" => ResourceShareAssociationStatus::Disassociated,
+            "DISASSOCIATING" => ResourceShareAssociationStatus::Disassociating,
+            "FAILED" => ResourceShareAssociationStatus::Failed,
+            _ => ResourceShareAssociationStatus::UnknownVariant(
+                UnknownResourceShareAssociationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResourceShareAssociationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSOCIATED" => ResourceShareAssociationStatus::Associated,
+            "ASSOCIATING" => ResourceShareAssociationStatus::Associating,
+            "DISASSOCIATED" => ResourceShareAssociationStatus::Disassociated,
+            "DISASSOCIATING" => ResourceShareAssociationStatus::Disassociating,
+            "FAILED" => ResourceShareAssociationStatus::Failed,
+            _ => ResourceShareAssociationStatus::UnknownVariant(
+                UnknownResourceShareAssociationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceShareAssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceShareAssociationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceShareAssociationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceShareAssociationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceShareAssociationType {
+    Principal,
+    Resource,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceShareAssociationType),
+}
+
+impl Default for ResourceShareAssociationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceShareAssociationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceShareAssociationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceShareAssociationType {
+    fn into(self) -> String {
+        match self {
+            ResourceShareAssociationType::Principal => "PRINCIPAL".to_string(),
+            ResourceShareAssociationType::Resource => "RESOURCE".to_string(),
+            ResourceShareAssociationType::UnknownVariant(UnknownResourceShareAssociationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceShareAssociationType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceShareAssociationType::Principal => &"PRINCIPAL",
+            ResourceShareAssociationType::Resource => &"RESOURCE",
+            ResourceShareAssociationType::UnknownVariant(UnknownResourceShareAssociationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceShareAssociationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRINCIPAL" => ResourceShareAssociationType::Principal,
+            "RESOURCE" => ResourceShareAssociationType::Resource,
+            _ => {
+                ResourceShareAssociationType::UnknownVariant(UnknownResourceShareAssociationType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ResourceShareAssociationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRINCIPAL" => ResourceShareAssociationType::Principal,
+            "RESOURCE" => ResourceShareAssociationType::Resource,
+            _ => {
+                ResourceShareAssociationType::UnknownVariant(UnknownResourceShareAssociationType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceShareAssociationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceShareAssociationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceShareAssociationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceShareFeatureSet {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceShareFeatureSet {
+    CreatedFromPolicy,
+    PromotingToStandard,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceShareFeatureSet),
+}
+
+impl Default for ResourceShareFeatureSet {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceShareFeatureSet {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceShareFeatureSet {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceShareFeatureSet {
+    fn into(self) -> String {
+        match self {
+            ResourceShareFeatureSet::CreatedFromPolicy => "CREATED_FROM_POLICY".to_string(),
+            ResourceShareFeatureSet::PromotingToStandard => "PROMOTING_TO_STANDARD".to_string(),
+            ResourceShareFeatureSet::Standard => "STANDARD".to_string(),
+            ResourceShareFeatureSet::UnknownVariant(UnknownResourceShareFeatureSet {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceShareFeatureSet {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceShareFeatureSet::CreatedFromPolicy => &"CREATED_FROM_POLICY",
+            ResourceShareFeatureSet::PromotingToStandard => &"PROMOTING_TO_STANDARD",
+            ResourceShareFeatureSet::Standard => &"STANDARD",
+            ResourceShareFeatureSet::UnknownVariant(UnknownResourceShareFeatureSet {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceShareFeatureSet {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED_FROM_POLICY" => ResourceShareFeatureSet::CreatedFromPolicy,
+            "PROMOTING_TO_STANDARD" => ResourceShareFeatureSet::PromotingToStandard,
+            "STANDARD" => ResourceShareFeatureSet::Standard,
+            _ => ResourceShareFeatureSet::UnknownVariant(UnknownResourceShareFeatureSet {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceShareFeatureSet {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED_FROM_POLICY" => ResourceShareFeatureSet::CreatedFromPolicy,
+            "PROMOTING_TO_STANDARD" => ResourceShareFeatureSet::PromotingToStandard,
+            "STANDARD" => ResourceShareFeatureSet::Standard,
+            _ => ResourceShareFeatureSet::UnknownVariant(UnknownResourceShareFeatureSet { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceShareFeatureSet {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceShareFeatureSet {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceShareFeatureSet {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes an invitation to join a resource share.</p>
@@ -866,7 +1310,126 @@ pub struct ResourceShareInvitation {
     /// <p>The status of the invitation.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceShareInvitationStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceShareInvitationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceShareInvitationStatus {
+    Accepted,
+    Expired,
+    Pending,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceShareInvitationStatus),
+}
+
+impl Default for ResourceShareInvitationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceShareInvitationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceShareInvitationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceShareInvitationStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceShareInvitationStatus::Accepted => "ACCEPTED".to_string(),
+            ResourceShareInvitationStatus::Expired => "EXPIRED".to_string(),
+            ResourceShareInvitationStatus::Pending => "PENDING".to_string(),
+            ResourceShareInvitationStatus::Rejected => "REJECTED".to_string(),
+            ResourceShareInvitationStatus::UnknownVariant(
+                UnknownResourceShareInvitationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceShareInvitationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceShareInvitationStatus::Accepted => &"ACCEPTED",
+            ResourceShareInvitationStatus::Expired => &"EXPIRED",
+            ResourceShareInvitationStatus::Pending => &"PENDING",
+            ResourceShareInvitationStatus::Rejected => &"REJECTED",
+            ResourceShareInvitationStatus::UnknownVariant(
+                UnknownResourceShareInvitationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceShareInvitationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPTED" => ResourceShareInvitationStatus::Accepted,
+            "EXPIRED" => ResourceShareInvitationStatus::Expired,
+            "PENDING" => ResourceShareInvitationStatus::Pending,
+            "REJECTED" => ResourceShareInvitationStatus::Rejected,
+            _ => ResourceShareInvitationStatus::UnknownVariant(
+                UnknownResourceShareInvitationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResourceShareInvitationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPTED" => ResourceShareInvitationStatus::Accepted,
+            "EXPIRED" => ResourceShareInvitationStatus::Expired,
+            "PENDING" => ResourceShareInvitationStatus::Pending,
+            "REJECTED" => ResourceShareInvitationStatus::Rejected,
+            _ => ResourceShareInvitationStatus::UnknownVariant(
+                UnknownResourceShareInvitationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceShareInvitationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceShareInvitationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceShareInvitationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an AWS RAM permission.</p>
@@ -943,6 +1506,241 @@ pub struct ResourceSharePermissionSummary {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceShareStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceShareStatus {
+    Active,
+    Deleted,
+    Deleting,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceShareStatus),
+}
+
+impl Default for ResourceShareStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceShareStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceShareStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceShareStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceShareStatus::Active => "ACTIVE".to_string(),
+            ResourceShareStatus::Deleted => "DELETED".to_string(),
+            ResourceShareStatus::Deleting => "DELETING".to_string(),
+            ResourceShareStatus::Failed => "FAILED".to_string(),
+            ResourceShareStatus::Pending => "PENDING".to_string(),
+            ResourceShareStatus::UnknownVariant(UnknownResourceShareStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceShareStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceShareStatus::Active => &"ACTIVE",
+            ResourceShareStatus::Deleted => &"DELETED",
+            ResourceShareStatus::Deleting => &"DELETING",
+            ResourceShareStatus::Failed => &"FAILED",
+            ResourceShareStatus::Pending => &"PENDING",
+            ResourceShareStatus::UnknownVariant(UnknownResourceShareStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceShareStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ResourceShareStatus::Active,
+            "DELETED" => ResourceShareStatus::Deleted,
+            "DELETING" => ResourceShareStatus::Deleting,
+            "FAILED" => ResourceShareStatus::Failed,
+            "PENDING" => ResourceShareStatus::Pending,
+            _ => ResourceShareStatus::UnknownVariant(UnknownResourceShareStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceShareStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ResourceShareStatus::Active,
+            "DELETED" => ResourceShareStatus::Deleted,
+            "DELETING" => ResourceShareStatus::Deleting,
+            "FAILED" => ResourceShareStatus::Failed,
+            "PENDING" => ResourceShareStatus::Pending,
+            _ => ResourceShareStatus::UnknownVariant(UnknownResourceShareStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceShareStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceShareStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceShareStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceStatus {
+    Available,
+    LimitExceeded,
+    Pending,
+    Unavailable,
+    ZonalResourceInaccessible,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceStatus),
+}
+
+impl Default for ResourceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceStatus::Available => "AVAILABLE".to_string(),
+            ResourceStatus::LimitExceeded => "LIMIT_EXCEEDED".to_string(),
+            ResourceStatus::Pending => "PENDING".to_string(),
+            ResourceStatus::Unavailable => "UNAVAILABLE".to_string(),
+            ResourceStatus::ZonalResourceInaccessible => "ZONAL_RESOURCE_INACCESSIBLE".to_string(),
+            ResourceStatus::UnknownVariant(UnknownResourceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceStatus::Available => &"AVAILABLE",
+            ResourceStatus::LimitExceeded => &"LIMIT_EXCEEDED",
+            ResourceStatus::Pending => &"PENDING",
+            ResourceStatus::Unavailable => &"UNAVAILABLE",
+            ResourceStatus::ZonalResourceInaccessible => &"ZONAL_RESOURCE_INACCESSIBLE",
+            ResourceStatus::UnknownVariant(UnknownResourceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ResourceStatus::Available,
+            "LIMIT_EXCEEDED" => ResourceStatus::LimitExceeded,
+            "PENDING" => ResourceStatus::Pending,
+            "UNAVAILABLE" => ResourceStatus::Unavailable,
+            "ZONAL_RESOURCE_INACCESSIBLE" => ResourceStatus::ZonalResourceInaccessible,
+            _ => ResourceStatus::UnknownVariant(UnknownResourceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ResourceStatus::Available,
+            "LIMIT_EXCEEDED" => ResourceStatus::LimitExceeded,
+            "PENDING" => ResourceStatus::Pending,
+            "UNAVAILABLE" => ResourceStatus::Unavailable,
+            "ZONAL_RESOURCE_INACCESSIBLE" => ResourceStatus::ZonalResourceInaccessible,
+            _ => ResourceStatus::UnknownVariant(UnknownResourceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the shareable resource types and the AWS services to which they belong.</p>

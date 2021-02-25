@@ -50,7 +50,7 @@ pub struct CreateLifecyclePolicyRequest {
     pub policy_details: PolicyDetails,
     /// <p>The desired activation state of the lifecycle policy after creation.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: SettablePolicyStateValues,
     /// <p>The tags to apply to the lifecycle policy during creation.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -80,7 +80,7 @@ pub struct CreateRule {
     /// <p>The interval unit.</p>
     #[serde(rename = "IntervalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub interval_unit: Option<String>,
+    pub interval_unit: Option<IntervalUnitValues>,
     /// <p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time. If you do not specify a time, Amazon DLM selects a time within the next 24 hours.</p>
     #[serde(rename = "Times")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -111,7 +111,7 @@ pub struct CrossRegionCopyRetainRule {
     /// <p>The unit of time for time-based retention.</p>
     #[serde(rename = "IntervalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub interval_unit: Option<String>,
+    pub interval_unit: Option<RetentionIntervalUnitValues>,
 }
 
 /// <p>Specifies a rule for cross-Region snapshot copies.</p>
@@ -169,7 +169,7 @@ pub struct EventParameters {
     pub description_regex: String,
     /// <p>The type of event. Currently, only snapshot sharing events are supported.</p>
     #[serde(rename = "EventType")]
-    pub event_type: String,
+    pub event_type: EventTypeValues,
     /// <p>The IDs of the AWS accounts that can trigger policy by sharing snapshots with your account. The policy only runs if one of the specified AWS accounts shares a snapshot with your account.</p>
     #[serde(rename = "SnapshotOwner")]
     pub snapshot_owner: Vec<String>,
@@ -184,7 +184,201 @@ pub struct EventSource {
     pub parameters: Option<EventParameters>,
     /// <p>The source of the event. Currently only managed AWS CloudWatch Events rules are supported.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: EventSourceValues,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventSourceValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventSourceValues {
+    ManagedCwe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventSourceValues),
+}
+
+impl Default for EventSourceValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventSourceValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventSourceValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventSourceValues {
+    fn into(self) -> String {
+        match self {
+            EventSourceValues::ManagedCwe => "MANAGED_CWE".to_string(),
+            EventSourceValues::UnknownVariant(UnknownEventSourceValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventSourceValues {
+    fn into(self) -> &'a str {
+        match self {
+            EventSourceValues::ManagedCwe => &"MANAGED_CWE",
+            EventSourceValues::UnknownVariant(UnknownEventSourceValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EventSourceValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "MANAGED_CWE" => EventSourceValues::ManagedCwe,
+            _ => EventSourceValues::UnknownVariant(UnknownEventSourceValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventSourceValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MANAGED_CWE" => EventSourceValues::ManagedCwe,
+            _ => EventSourceValues::UnknownVariant(UnknownEventSourceValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSourceValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventSourceValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventSourceValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventTypeValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventTypeValues {
+    ShareSnapshot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventTypeValues),
+}
+
+impl Default for EventTypeValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventTypeValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventTypeValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventTypeValues {
+    fn into(self) -> String {
+        match self {
+            EventTypeValues::ShareSnapshot => "shareSnapshot".to_string(),
+            EventTypeValues::UnknownVariant(UnknownEventTypeValues { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventTypeValues {
+    fn into(self) -> &'a str {
+        match self {
+            EventTypeValues::ShareSnapshot => &"shareSnapshot",
+            EventTypeValues::UnknownVariant(UnknownEventTypeValues { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventTypeValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "shareSnapshot" => EventTypeValues::ShareSnapshot,
+            _ => EventTypeValues::UnknownVariant(UnknownEventTypeValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventTypeValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "shareSnapshot" => EventTypeValues::ShareSnapshot,
+            _ => EventTypeValues::UnknownVariant(UnknownEventTypeValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventTypeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventTypeValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventTypeValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies a rule for enabling fast snapshot restore. You can enable fast snapshot restore based on either a count or a time interval.</p>
@@ -204,7 +398,7 @@ pub struct FastRestoreRule {
     /// <p>The unit of time for enabling fast snapshot restore.</p>
     #[serde(rename = "IntervalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub interval_unit: Option<String>,
+    pub interval_unit: Option<RetentionIntervalUnitValues>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -217,11 +411,11 @@ pub struct GetLifecyclePoliciesRequest {
     /// <p>The resource type.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_types: Option<Vec<String>>,
+    pub resource_types: Option<Vec<ResourceTypeValues>>,
     /// <p>The activation state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<GettablePolicyStateValues>,
     /// <p>The tags to add to objects created by the policy.</p> <p>Tags are strings in the format <code>key=value</code>.</p> <p>These user-defined tags are added in addition to the AWS-added lifecycle tags.</p>
     #[serde(rename = "TagsToAdd")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -256,6 +450,216 @@ pub struct GetLifecyclePolicyResponse {
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<LifecyclePolicy>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGettablePolicyStateValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GettablePolicyStateValues {
+    Disabled,
+    Enabled,
+    Error,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGettablePolicyStateValues),
+}
+
+impl Default for GettablePolicyStateValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GettablePolicyStateValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GettablePolicyStateValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GettablePolicyStateValues {
+    fn into(self) -> String {
+        match self {
+            GettablePolicyStateValues::Disabled => "DISABLED".to_string(),
+            GettablePolicyStateValues::Enabled => "ENABLED".to_string(),
+            GettablePolicyStateValues::Error => "ERROR".to_string(),
+            GettablePolicyStateValues::UnknownVariant(UnknownGettablePolicyStateValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GettablePolicyStateValues {
+    fn into(self) -> &'a str {
+        match self {
+            GettablePolicyStateValues::Disabled => &"DISABLED",
+            GettablePolicyStateValues::Enabled => &"ENABLED",
+            GettablePolicyStateValues::Error => &"ERROR",
+            GettablePolicyStateValues::UnknownVariant(UnknownGettablePolicyStateValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GettablePolicyStateValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => GettablePolicyStateValues::Disabled,
+            "ENABLED" => GettablePolicyStateValues::Enabled,
+            "ERROR" => GettablePolicyStateValues::Error,
+            _ => GettablePolicyStateValues::UnknownVariant(UnknownGettablePolicyStateValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GettablePolicyStateValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => GettablePolicyStateValues::Disabled,
+            "ENABLED" => GettablePolicyStateValues::Enabled,
+            "ERROR" => GettablePolicyStateValues::Error,
+            _ => {
+                GettablePolicyStateValues::UnknownVariant(UnknownGettablePolicyStateValues { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for GettablePolicyStateValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GettablePolicyStateValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GettablePolicyStateValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIntervalUnitValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IntervalUnitValues {
+    Hours,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIntervalUnitValues),
+}
+
+impl Default for IntervalUnitValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IntervalUnitValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IntervalUnitValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IntervalUnitValues {
+    fn into(self) -> String {
+        match self {
+            IntervalUnitValues::Hours => "HOURS".to_string(),
+            IntervalUnitValues::UnknownVariant(UnknownIntervalUnitValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IntervalUnitValues {
+    fn into(self) -> &'a str {
+        match self {
+            IntervalUnitValues::Hours => &"HOURS",
+            IntervalUnitValues::UnknownVariant(UnknownIntervalUnitValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for IntervalUnitValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "HOURS" => IntervalUnitValues::Hours,
+            _ => IntervalUnitValues::UnknownVariant(UnknownIntervalUnitValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IntervalUnitValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HOURS" => IntervalUnitValues::Hours,
+            _ => IntervalUnitValues::UnknownVariant(UnknownIntervalUnitValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntervalUnitValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IntervalUnitValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IntervalUnitValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Detailed information about a lifecycle policy.</p>
@@ -293,7 +697,7 @@ pub struct LifecyclePolicy {
     /// <p>The activation state of the lifecycle policy.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<GettablePolicyStateValues>,
     /// <p>The description of the status.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -319,11 +723,11 @@ pub struct LifecyclePolicySummary {
     /// <p>The type of policy. <code>EBS_SNAPSHOT_MANAGEMENT</code> indicates that the policy manages the lifecycle of Amazon EBS snapshots. <code>IMAGE_MANAGEMENT</code> indicates that the policy manages the lifecycle of EBS-backed AMIs.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_type: Option<String>,
+    pub policy_type: Option<PolicyTypeValues>,
     /// <p>The activation state of the lifecycle policy.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<GettablePolicyStateValues>,
     /// <p>The tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -378,11 +782,11 @@ pub struct PolicyDetails {
     /// <p>The valid target resource types and actions a policy can manage. Specify <code>EBS_SNAPSHOT_MANAGEMENT</code> to create a lifecycle policy that manages the lifecycle of Amazon EBS snapshots. Specify <code>IMAGE_MANAGEMENT</code> to create a lifecycle policy that manages the lifecycle of EBS-backed AMIs. Specify <code>EVENT_BASED_POLICY </code> to create an event-based policy that performs specific actions when a defined event occurs in your AWS account.</p> <p>The default is <code>EBS_SNAPSHOT_MANAGEMENT</code>.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_type: Option<String>,
+    pub policy_type: Option<PolicyTypeValues>,
     /// <p>The target resource type for snapshot and AMI lifecycle policies. Use <code>VOLUME </code>to create snapshots of individual volumes or use <code>INSTANCE</code> to create multi-volume snapshots from the volumes for an instance.</p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_types: Option<Vec<String>>,
+    pub resource_types: Option<Vec<ResourceTypeValues>>,
     /// <p>The schedules of policy-defined actions for snapshot and AMI lifecycle policies. A policy can have up to four schedules—one mandatory schedule and up to three optional schedules.</p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "Schedules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -391,6 +795,219 @@ pub struct PolicyDetails {
     #[serde(rename = "TargetTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyTypeValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyTypeValues {
+    EbsSnapshotManagement,
+    EventBasedPolicy,
+    ImageManagement,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyTypeValues),
+}
+
+impl Default for PolicyTypeValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyTypeValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyTypeValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyTypeValues {
+    fn into(self) -> String {
+        match self {
+            PolicyTypeValues::EbsSnapshotManagement => "EBS_SNAPSHOT_MANAGEMENT".to_string(),
+            PolicyTypeValues::EventBasedPolicy => "EVENT_BASED_POLICY".to_string(),
+            PolicyTypeValues::ImageManagement => "IMAGE_MANAGEMENT".to_string(),
+            PolicyTypeValues::UnknownVariant(UnknownPolicyTypeValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyTypeValues {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyTypeValues::EbsSnapshotManagement => &"EBS_SNAPSHOT_MANAGEMENT",
+            PolicyTypeValues::EventBasedPolicy => &"EVENT_BASED_POLICY",
+            PolicyTypeValues::ImageManagement => &"IMAGE_MANAGEMENT",
+            PolicyTypeValues::UnknownVariant(UnknownPolicyTypeValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PolicyTypeValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "EBS_SNAPSHOT_MANAGEMENT" => PolicyTypeValues::EbsSnapshotManagement,
+            "EVENT_BASED_POLICY" => PolicyTypeValues::EventBasedPolicy,
+            "IMAGE_MANAGEMENT" => PolicyTypeValues::ImageManagement,
+            _ => PolicyTypeValues::UnknownVariant(UnknownPolicyTypeValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyTypeValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EBS_SNAPSHOT_MANAGEMENT" => PolicyTypeValues::EbsSnapshotManagement,
+            "EVENT_BASED_POLICY" => PolicyTypeValues::EventBasedPolicy,
+            "IMAGE_MANAGEMENT" => PolicyTypeValues::ImageManagement,
+            _ => PolicyTypeValues::UnknownVariant(UnknownPolicyTypeValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyTypeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PolicyTypeValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PolicyTypeValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceTypeValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceTypeValues {
+    Instance,
+    Volume,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceTypeValues),
+}
+
+impl Default for ResourceTypeValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceTypeValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceTypeValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceTypeValues {
+    fn into(self) -> String {
+        match self {
+            ResourceTypeValues::Instance => "INSTANCE".to_string(),
+            ResourceTypeValues::Volume => "VOLUME".to_string(),
+            ResourceTypeValues::UnknownVariant(UnknownResourceTypeValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceTypeValues {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceTypeValues::Instance => &"INSTANCE",
+            ResourceTypeValues::Volume => &"VOLUME",
+            ResourceTypeValues::UnknownVariant(UnknownResourceTypeValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceTypeValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSTANCE" => ResourceTypeValues::Instance,
+            "VOLUME" => ResourceTypeValues::Volume,
+            _ => ResourceTypeValues::UnknownVariant(UnknownResourceTypeValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceTypeValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSTANCE" => ResourceTypeValues::Instance,
+            "VOLUME" => ResourceTypeValues::Volume,
+            _ => ResourceTypeValues::UnknownVariant(UnknownResourceTypeValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceTypeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceTypeValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceTypeValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the retention rule for a lifecycle policy. You can retain snapshots based on either a count or a time interval.</p>
@@ -407,7 +1024,123 @@ pub struct RetainRule {
     /// <p>The unit of time for time-based retention.</p>
     #[serde(rename = "IntervalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub interval_unit: Option<String>,
+    pub interval_unit: Option<RetentionIntervalUnitValues>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRetentionIntervalUnitValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RetentionIntervalUnitValues {
+    Days,
+    Months,
+    Weeks,
+    Years,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRetentionIntervalUnitValues),
+}
+
+impl Default for RetentionIntervalUnitValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RetentionIntervalUnitValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RetentionIntervalUnitValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RetentionIntervalUnitValues {
+    fn into(self) -> String {
+        match self {
+            RetentionIntervalUnitValues::Days => "DAYS".to_string(),
+            RetentionIntervalUnitValues::Months => "MONTHS".to_string(),
+            RetentionIntervalUnitValues::Weeks => "WEEKS".to_string(),
+            RetentionIntervalUnitValues::Years => "YEARS".to_string(),
+            RetentionIntervalUnitValues::UnknownVariant(UnknownRetentionIntervalUnitValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RetentionIntervalUnitValues {
+    fn into(self) -> &'a str {
+        match self {
+            RetentionIntervalUnitValues::Days => &"DAYS",
+            RetentionIntervalUnitValues::Months => &"MONTHS",
+            RetentionIntervalUnitValues::Weeks => &"WEEKS",
+            RetentionIntervalUnitValues::Years => &"YEARS",
+            RetentionIntervalUnitValues::UnknownVariant(UnknownRetentionIntervalUnitValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RetentionIntervalUnitValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAYS" => RetentionIntervalUnitValues::Days,
+            "MONTHS" => RetentionIntervalUnitValues::Months,
+            "WEEKS" => RetentionIntervalUnitValues::Weeks,
+            "YEARS" => RetentionIntervalUnitValues::Years,
+            _ => RetentionIntervalUnitValues::UnknownVariant(UnknownRetentionIntervalUnitValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RetentionIntervalUnitValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAYS" => RetentionIntervalUnitValues::Days,
+            "MONTHS" => RetentionIntervalUnitValues::Months,
+            "WEEKS" => RetentionIntervalUnitValues::Weeks,
+            "YEARS" => RetentionIntervalUnitValues::Years,
+            _ => RetentionIntervalUnitValues::UnknownVariant(UnknownRetentionIntervalUnitValues {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RetentionIntervalUnitValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RetentionIntervalUnitValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RetentionIntervalUnitValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies a backup schedule for a snapshot or AMI lifecycle policy.</p>
@@ -451,6 +1184,113 @@ pub struct Schedule {
     pub variable_tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSettablePolicyStateValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SettablePolicyStateValues {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSettablePolicyStateValues),
+}
+
+impl Default for SettablePolicyStateValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SettablePolicyStateValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SettablePolicyStateValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SettablePolicyStateValues {
+    fn into(self) -> String {
+        match self {
+            SettablePolicyStateValues::Disabled => "DISABLED".to_string(),
+            SettablePolicyStateValues::Enabled => "ENABLED".to_string(),
+            SettablePolicyStateValues::UnknownVariant(UnknownSettablePolicyStateValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SettablePolicyStateValues {
+    fn into(self) -> &'a str {
+        match self {
+            SettablePolicyStateValues::Disabled => &"DISABLED",
+            SettablePolicyStateValues::Enabled => &"ENABLED",
+            SettablePolicyStateValues::UnknownVariant(UnknownSettablePolicyStateValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SettablePolicyStateValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => SettablePolicyStateValues::Disabled,
+            "ENABLED" => SettablePolicyStateValues::Enabled,
+            _ => SettablePolicyStateValues::UnknownVariant(UnknownSettablePolicyStateValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SettablePolicyStateValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => SettablePolicyStateValues::Disabled,
+            "ENABLED" => SettablePolicyStateValues::Enabled,
+            _ => {
+                SettablePolicyStateValues::UnknownVariant(UnknownSettablePolicyStateValues { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SettablePolicyStateValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SettablePolicyStateValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SettablePolicyStateValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies a rule for sharing snapshots across AWS accounts.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ShareRule {
@@ -464,7 +1304,7 @@ pub struct ShareRule {
     /// <p>The unit of time for the automatic unsharing interval.</p>
     #[serde(rename = "UnshareIntervalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unshare_interval_unit: Option<String>,
+    pub unshare_interval_unit: Option<RetentionIntervalUnitValues>,
 }
 
 /// <p>Specifies a tag for a resource.</p>
@@ -529,7 +1369,7 @@ pub struct UpdateLifecyclePolicyRequest {
     /// <p>The desired activation state of the lifecycle policy after creation.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<SettablePolicyStateValues>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

@@ -62,11 +62,136 @@ pub struct StartSelector {
     pub continuation_token: Option<String>,
     /// <p><p>Identifies the fragment on the Kinesis video stream where you want to start getting the data from.</p> <ul> <li> <p>NOW - Start with the latest chunk on the stream.</p> </li> <li> <p>EARLIEST - Start with earliest available chunk on the stream.</p> </li> <li> <p>FRAGMENT<em>NUMBER - Start with the chunk after a specific fragment. You must also specify the <code>AfterFragmentNumber</code> parameter.</p> </li> <li> <p>PRODUCER</em>TIMESTAMP or SERVER<em>TIMESTAMP - Start with the chunk containing a fragment with the specified producer or server timestamp. You specify the timestamp by adding <code>StartTimestamp</code>.</p> </li> <li> <p> CONTINUATION</em>TOKEN - Read using the specified continuation token. </p> </li> </ul> <note> <p>If you choose the NOW, EARLIEST, or CONTINUATION_TOKEN as the <code>startSelectorType</code>, you don&#39;t provide any additional information in the <code>startSelector</code>.</p> </note></p>
     #[serde(rename = "StartSelectorType")]
-    pub start_selector_type: String,
+    pub start_selector_type: StartSelectorType,
     /// <p>A timestamp value. This value is required if you choose the PRODUCER_TIMESTAMP or the SERVER_TIMESTAMP as the <code>startSelectorType</code>. The <code>GetMedia</code> API then starts with the chunk containing the fragment that has the specified timestamp.</p>
     #[serde(rename = "StartTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_timestamp: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStartSelectorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StartSelectorType {
+    ContinuationToken,
+    Earliest,
+    FragmentNumber,
+    Now,
+    ProducerTimestamp,
+    ServerTimestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStartSelectorType),
+}
+
+impl Default for StartSelectorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StartSelectorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StartSelectorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StartSelectorType {
+    fn into(self) -> String {
+        match self {
+            StartSelectorType::ContinuationToken => "CONTINUATION_TOKEN".to_string(),
+            StartSelectorType::Earliest => "EARLIEST".to_string(),
+            StartSelectorType::FragmentNumber => "FRAGMENT_NUMBER".to_string(),
+            StartSelectorType::Now => "NOW".to_string(),
+            StartSelectorType::ProducerTimestamp => "PRODUCER_TIMESTAMP".to_string(),
+            StartSelectorType::ServerTimestamp => "SERVER_TIMESTAMP".to_string(),
+            StartSelectorType::UnknownVariant(UnknownStartSelectorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StartSelectorType {
+    fn into(self) -> &'a str {
+        match self {
+            StartSelectorType::ContinuationToken => &"CONTINUATION_TOKEN",
+            StartSelectorType::Earliest => &"EARLIEST",
+            StartSelectorType::FragmentNumber => &"FRAGMENT_NUMBER",
+            StartSelectorType::Now => &"NOW",
+            StartSelectorType::ProducerTimestamp => &"PRODUCER_TIMESTAMP",
+            StartSelectorType::ServerTimestamp => &"SERVER_TIMESTAMP",
+            StartSelectorType::UnknownVariant(UnknownStartSelectorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StartSelectorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTINUATION_TOKEN" => StartSelectorType::ContinuationToken,
+            "EARLIEST" => StartSelectorType::Earliest,
+            "FRAGMENT_NUMBER" => StartSelectorType::FragmentNumber,
+            "NOW" => StartSelectorType::Now,
+            "PRODUCER_TIMESTAMP" => StartSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => StartSelectorType::ServerTimestamp,
+            _ => StartSelectorType::UnknownVariant(UnknownStartSelectorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StartSelectorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTINUATION_TOKEN" => StartSelectorType::ContinuationToken,
+            "EARLIEST" => StartSelectorType::Earliest,
+            "FRAGMENT_NUMBER" => StartSelectorType::FragmentNumber,
+            "NOW" => StartSelectorType::Now,
+            "PRODUCER_TIMESTAMP" => StartSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => StartSelectorType::ServerTimestamp,
+            _ => StartSelectorType::UnknownVariant(UnknownStartSelectorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartSelectorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StartSelectorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StartSelectorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by GetMedia

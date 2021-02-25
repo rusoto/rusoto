@@ -58,7 +58,7 @@ pub struct AnalyzeDocumentRequest {
     pub document: Document,
     /// <p>A list of the types of analysis to perform. Add TABLES to the list to return information about the tables that are detected in the input document. Add FORMS to return detected form data. To perform both types of analysis, add TABLES and FORMS to <code>FeatureTypes</code>. All lines and words detected in the document are included in the response (including text that isn't related to the value of <code>FeatureTypes</code>). </p>
     #[serde(rename = "FeatureTypes")]
-    pub feature_types: Vec<String>,
+    pub feature_types: Vec<FeatureType>,
     /// <p>Sets the configuration for the human in the loop workflow for analyzing documents.</p>
     #[serde(rename = "HumanLoopConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,7 +93,7 @@ pub struct Block {
     /// <p><p>The type of text item that&#39;s recognized. In operations for text detection, the following types are returned:</p> <ul> <li> <p> <i>PAGE</i> - Contains a list of the LINE <code>Block</code> objects that are detected on a document page.</p> </li> <li> <p> <i>WORD</i> - A word detected on a document page. A word is one or more ISO basic Latin script characters that aren&#39;t separated by spaces.</p> </li> <li> <p> <i>LINE</i> - A string of tab-delimited, contiguous words that are detected on a document page.</p> </li> </ul> <p>In text analysis operations, the following types are returned:</p> <ul> <li> <p> <i>PAGE</i> - Contains a list of child <code>Block</code> objects that are detected on a document page.</p> </li> <li> <p> <i>KEY<em>VALUE</em>SET</i> - Stores the KEY and VALUE <code>Block</code> objects for linked text that&#39;s detected on a document page. Use the <code>EntityType</code> field to determine if a KEY<em>VALUE</em>SET object is a KEY <code>Block</code> object or a VALUE <code>Block</code> object. </p> </li> <li> <p> <i>WORD</i> - A word that&#39;s detected on a document page. A word is one or more ISO basic Latin script characters that aren&#39;t separated by spaces.</p> </li> <li> <p> <i>LINE</i> - A string of tab-delimited, contiguous words that are detected on a document page.</p> </li> <li> <p> <i>TABLE</i> - A table that&#39;s detected on a document page. A table is grid-based information with two or more rows or columns, with a cell span of one row and one column each. </p> </li> <li> <p> <i>CELL</i> - A cell within a detected table. The cell is the parent of the block that contains the text in the cell.</p> </li> <li> <p> <i>SELECTION_ELEMENT</i> - A selection element such as an option button (radio button) or a check box that&#39;s detected on a document page. Use the value of <code>SelectionStatus</code> to determine the status of the selection element.</p> </li> </ul></p>
     #[serde(rename = "BlockType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_type: Option<String>,
+    pub block_type: Option<BlockType>,
     /// <p>The column in which a table cell appears. The first column position is 1. <code>ColumnIndex</code> isn't returned by <code>DetectDocumentText</code> and <code>GetDocumentTextDetection</code>.</p>
     #[serde(rename = "ColumnIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -109,7 +109,7 @@ pub struct Block {
     /// <p>The type of entity. The following can be returned:</p> <ul> <li> <p> <i>KEY</i> - An identifier for a field on the document.</p> </li> <li> <p> <i>VALUE</i> - The field text.</p> </li> </ul> <p> <code>EntityTypes</code> isn't returned by <code>DetectDocumentText</code> and <code>GetDocumentTextDetection</code>.</p>
     #[serde(rename = "EntityTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub entity_types: Option<Vec<String>>,
+    pub entity_types: Option<Vec<EntityType>>,
     /// <p>The location of the recognized text on the image. It includes an axis-aligned, coarse bounding box that surrounds the text, and a finer-grain polygon for more accurate spatial information. </p>
     #[serde(rename = "Geometry")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -137,7 +137,7 @@ pub struct Block {
     /// <p>The selection status of a selection element, such as an option button or check box. </p>
     #[serde(rename = "SelectionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub selection_status: Option<String>,
+    pub selection_status: Option<SelectionStatus>,
     /// <p>The word or line of text that's recognized by Amazon Textract. </p>
     #[serde(rename = "Text")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,7 +145,133 @@ pub struct Block {
     /// <p>The kind of text that Amazon Textract has detected. Can check for handwritten text and printed text.</p>
     #[serde(rename = "TextType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_type: Option<String>,
+    pub text_type: Option<TextType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBlockType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BlockType {
+    Cell,
+    KeyValueSet,
+    Line,
+    Page,
+    SelectionElement,
+    Table,
+    Word,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBlockType),
+}
+
+impl Default for BlockType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BlockType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BlockType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BlockType {
+    fn into(self) -> String {
+        match self {
+            BlockType::Cell => "CELL".to_string(),
+            BlockType::KeyValueSet => "KEY_VALUE_SET".to_string(),
+            BlockType::Line => "LINE".to_string(),
+            BlockType::Page => "PAGE".to_string(),
+            BlockType::SelectionElement => "SELECTION_ELEMENT".to_string(),
+            BlockType::Table => "TABLE".to_string(),
+            BlockType::Word => "WORD".to_string(),
+            BlockType::UnknownVariant(UnknownBlockType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BlockType {
+    fn into(self) -> &'a str {
+        match self {
+            BlockType::Cell => &"CELL",
+            BlockType::KeyValueSet => &"KEY_VALUE_SET",
+            BlockType::Line => &"LINE",
+            BlockType::Page => &"PAGE",
+            BlockType::SelectionElement => &"SELECTION_ELEMENT",
+            BlockType::Table => &"TABLE",
+            BlockType::Word => &"WORD",
+            BlockType::UnknownVariant(UnknownBlockType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BlockType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CELL" => BlockType::Cell,
+            "KEY_VALUE_SET" => BlockType::KeyValueSet,
+            "LINE" => BlockType::Line,
+            "PAGE" => BlockType::Page,
+            "SELECTION_ELEMENT" => BlockType::SelectionElement,
+            "TABLE" => BlockType::Table,
+            "WORD" => BlockType::Word,
+            _ => BlockType::UnknownVariant(UnknownBlockType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BlockType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CELL" => BlockType::Cell,
+            "KEY_VALUE_SET" => BlockType::KeyValueSet,
+            "LINE" => BlockType::Line,
+            "PAGE" => BlockType::Page,
+            "SELECTION_ELEMENT" => BlockType::SelectionElement,
+            "TABLE" => BlockType::Table,
+            "WORD" => BlockType::Word,
+            _ => BlockType::UnknownVariant(UnknownBlockType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlockType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BlockType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BlockType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The bounding box around the detected page, text, key-value pair, table, table cell, or selection element on a document page. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates that represent the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall document page size. For example, if the input image is 700 x 200 pixels, and the top-left coordinate of the bounding box is 350 x 50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall document page dimension. For example, if the document page size is 700 x 200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p>
@@ -168,6 +294,119 @@ pub struct BoundingBox {
     #[serde(rename = "Width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<f32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentClassifier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentClassifier {
+    FreeOfAdultContent,
+    FreeOfPersonallyIdentifiableInformation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentClassifier),
+}
+
+impl Default for ContentClassifier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentClassifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentClassifier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentClassifier {
+    fn into(self) -> String {
+        match self {
+            ContentClassifier::FreeOfAdultContent => "FreeOfAdultContent".to_string(),
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                "FreeOfPersonallyIdentifiableInformation".to_string()
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentClassifier {
+    fn into(self) -> &'a str {
+        match self {
+            ContentClassifier::FreeOfAdultContent => &"FreeOfAdultContent",
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                &"FreeOfPersonallyIdentifiableInformation"
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContentClassifier {
+    fn from(name: &str) -> Self {
+        match name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentClassifier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentClassifier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentClassifier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentClassifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -234,6 +473,208 @@ pub struct DocumentMetadata {
     pub pages: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityType {
+    Key,
+    Value,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityType),
+}
+
+impl Default for EntityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityType {
+    fn into(self) -> String {
+        match self {
+            EntityType::Key => "KEY".to_string(),
+            EntityType::Value => "VALUE".to_string(),
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityType {
+    fn into(self) -> &'a str {
+        match self {
+            EntityType::Key => &"KEY",
+            EntityType::Value => &"VALUE",
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEY" => EntityType::Key,
+            "VALUE" => EntityType::Value,
+            _ => EntityType::UnknownVariant(UnknownEntityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEY" => EntityType::Key,
+            "VALUE" => EntityType::Value,
+            _ => EntityType::UnknownVariant(UnknownEntityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EntityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeatureType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeatureType {
+    Forms,
+    Tables,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeatureType),
+}
+
+impl Default for FeatureType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeatureType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeatureType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeatureType {
+    fn into(self) -> String {
+        match self {
+            FeatureType::Forms => "FORMS".to_string(),
+            FeatureType::Tables => "TABLES".to_string(),
+            FeatureType::UnknownVariant(UnknownFeatureType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeatureType {
+    fn into(self) -> &'a str {
+        match self {
+            FeatureType::Forms => &"FORMS",
+            FeatureType::Tables => &"TABLES",
+            FeatureType::UnknownVariant(UnknownFeatureType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeatureType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FORMS" => FeatureType::Forms,
+            "TABLES" => FeatureType::Tables,
+            _ => FeatureType::UnknownVariant(UnknownFeatureType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeatureType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FORMS" => FeatureType::Forms,
+            "TABLES" => FeatureType::Tables,
+            _ => FeatureType::UnknownVariant(UnknownFeatureType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeatureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeatureType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FeatureType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about where the following items are located on a document page: detected page, text, key-value pairs, tables, table cells, and selection elements.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -282,7 +723,7 @@ pub struct GetDocumentAnalysisResponse {
     /// <p>The current status of the text detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>If the response is truncated, Amazon Textract returns this token. You can use this token in the subsequent request to retrieve the next set of text detection results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -331,7 +772,7 @@ pub struct GetDocumentTextDetectionResponse {
     /// <p>The current status of the text detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>If the response is truncated, Amazon Textract returns this token. You can use this token in the subsequent request to retrieve the next set of text-detection results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -387,7 +828,118 @@ pub struct HumanLoopDataAttributes {
     /// <p>Sets whether the input image is free of personally identifiable information or adult content.</p>
     #[serde(rename = "ContentClassifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_classifiers: Option<Vec<String>>,
+    pub content_classifiers: Option<Vec<ContentClassifier>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Failed,
+    InProgress,
+    PartialSuccess,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Failed => "FAILED".to_string(),
+            JobStatus::InProgress => "IN_PROGRESS".to_string(),
+            JobStatus::PartialSuccess => "PARTIAL_SUCCESS".to_string(),
+            JobStatus::Succeeded => "SUCCEEDED".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Failed => &"FAILED",
+            JobStatus::InProgress => &"IN_PROGRESS",
+            JobStatus::PartialSuccess => &"PARTIAL_SUCCESS",
+            JobStatus::Succeeded => &"SUCCEEDED",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => JobStatus::Failed,
+            "IN_PROGRESS" => JobStatus::InProgress,
+            "PARTIAL_SUCCESS" => JobStatus::PartialSuccess,
+            "SUCCEEDED" => JobStatus::Succeeded,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => JobStatus::Failed,
+            "IN_PROGRESS" => JobStatus::InProgress,
+            "PARTIAL_SUCCESS" => JobStatus::PartialSuccess,
+            "SUCCEEDED" => JobStatus::Succeeded,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Amazon Simple Notification Service (Amazon SNS) topic to which Amazon Textract publishes the completion status of an asynchronous document operation, such as <a>StartDocumentTextDetection</a>. </p>
@@ -440,7 +992,117 @@ pub struct Relationship {
     /// <p>The type of relationship that the blocks in the IDs array have with the current block. The relationship can be <code>VALUE</code> or <code>CHILD</code>. A relationship of type VALUE is a list that contains the ID of the VALUE block that's associated with the KEY of a key-value pair. A relationship of type CHILD is a list of IDs that identify WORD blocks in the case of lines Cell blocks in the case of Tables, and WORD blocks in the case of Selection Elements.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<RelationshipType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelationshipType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelationshipType {
+    Child,
+    ComplexFeatures,
+    Value,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelationshipType),
+}
+
+impl Default for RelationshipType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelationshipType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelationshipType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelationshipType {
+    fn into(self) -> String {
+        match self {
+            RelationshipType::Child => "CHILD".to_string(),
+            RelationshipType::ComplexFeatures => "COMPLEX_FEATURES".to_string(),
+            RelationshipType::Value => "VALUE".to_string(),
+            RelationshipType::UnknownVariant(UnknownRelationshipType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelationshipType {
+    fn into(self) -> &'a str {
+        match self {
+            RelationshipType::Child => &"CHILD",
+            RelationshipType::ComplexFeatures => &"COMPLEX_FEATURES",
+            RelationshipType::Value => &"VALUE",
+            RelationshipType::UnknownVariant(UnknownRelationshipType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RelationshipType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHILD" => RelationshipType::Child,
+            "COMPLEX_FEATURES" => RelationshipType::ComplexFeatures,
+            "VALUE" => RelationshipType::Value,
+            _ => RelationshipType::UnknownVariant(UnknownRelationshipType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RelationshipType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHILD" => RelationshipType::Child,
+            "COMPLEX_FEATURES" => RelationshipType::ComplexFeatures,
+            "VALUE" => RelationshipType::Value,
+            _ => RelationshipType::UnknownVariant(UnknownRelationshipType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelationshipType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RelationshipType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RelationshipType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The S3 bucket name and file name that identifies the document.</p> <p>The AWS Region for the S3 bucket that contains the document must match the Region that you use for Amazon Textract operations.</p> <p>For Amazon Textract to process a file in an S3 bucket, the user must have permission to access the S3 bucket and file. </p>
@@ -461,6 +1123,107 @@ pub struct S3Object {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSelectionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SelectionStatus {
+    NotSelected,
+    Selected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSelectionStatus),
+}
+
+impl Default for SelectionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SelectionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SelectionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SelectionStatus {
+    fn into(self) -> String {
+        match self {
+            SelectionStatus::NotSelected => "NOT_SELECTED".to_string(),
+            SelectionStatus::Selected => "SELECTED".to_string(),
+            SelectionStatus::UnknownVariant(UnknownSelectionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SelectionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SelectionStatus::NotSelected => &"NOT_SELECTED",
+            SelectionStatus::Selected => &"SELECTED",
+            SelectionStatus::UnknownVariant(UnknownSelectionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SelectionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_SELECTED" => SelectionStatus::NotSelected,
+            "SELECTED" => SelectionStatus::Selected,
+            _ => SelectionStatus::UnknownVariant(UnknownSelectionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SelectionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_SELECTED" => SelectionStatus::NotSelected,
+            "SELECTED" => SelectionStatus::Selected,
+            _ => SelectionStatus::UnknownVariant(UnknownSelectionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SelectionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SelectionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SelectionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentAnalysisRequest {
@@ -473,7 +1236,7 @@ pub struct StartDocumentAnalysisRequest {
     pub document_location: DocumentLocation,
     /// <p>A list of the types of analysis to perform. Add TABLES to the list to return information about the tables that are detected in the input document. Add FORMS to return detected form data. To perform both types of analysis, add TABLES and FORMS to <code>FeatureTypes</code>. All lines and words detected in the document are included in the response (including text that isn't related to the value of <code>FeatureTypes</code>). </p>
     #[serde(rename = "FeatureTypes")]
-    pub feature_types: Vec<String>,
+    pub feature_types: Vec<FeatureType>,
     /// <p>An identifier that you specify that's included in the completion notification published to the Amazon SNS topic. For example, you can use <code>JobTag</code> to identify the type of document that the completion notification corresponds to (such as a tax form or a receipt).</p>
     #[serde(rename = "JobTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -536,6 +1299,107 @@ pub struct StartDocumentTextDetectionResponse {
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTextType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TextType {
+    Handwriting,
+    Printed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTextType),
+}
+
+impl Default for TextType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TextType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TextType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TextType {
+    fn into(self) -> String {
+        match self {
+            TextType::Handwriting => "HANDWRITING".to_string(),
+            TextType::Printed => "PRINTED".to_string(),
+            TextType::UnknownVariant(UnknownTextType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TextType {
+    fn into(self) -> &'a str {
+        match self {
+            TextType::Handwriting => &"HANDWRITING",
+            TextType::Printed => &"PRINTED",
+            TextType::UnknownVariant(UnknownTextType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TextType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HANDWRITING" => TextType::Handwriting,
+            "PRINTED" => TextType::Printed,
+            _ => TextType::UnknownVariant(UnknownTextType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TextType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HANDWRITING" => TextType::Handwriting,
+            "PRINTED" => TextType::Printed,
+            _ => TextType::UnknownVariant(UnknownTextType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TextType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TextType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A warning about an issue that occurred during asynchronous text analysis (<a>StartDocumentAnalysis</a>) or asynchronous document text detection (<a>StartDocumentTextDetection</a>). </p>

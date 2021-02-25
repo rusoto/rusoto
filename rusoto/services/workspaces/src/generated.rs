@@ -50,6 +50,111 @@ impl WorkspacesClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessPropertyValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessPropertyValue {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessPropertyValue),
+}
+
+impl Default for AccessPropertyValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessPropertyValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessPropertyValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessPropertyValue {
+    fn into(self) -> String {
+        match self {
+            AccessPropertyValue::Allow => "ALLOW".to_string(),
+            AccessPropertyValue::Deny => "DENY".to_string(),
+            AccessPropertyValue::UnknownVariant(UnknownAccessPropertyValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessPropertyValue {
+    fn into(self) -> &'a str {
+        match self {
+            AccessPropertyValue::Allow => &"ALLOW",
+            AccessPropertyValue::Deny => &"DENY",
+            AccessPropertyValue::UnknownVariant(UnknownAccessPropertyValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AccessPropertyValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => AccessPropertyValue::Allow,
+            "DENY" => AccessPropertyValue::Deny,
+            _ => AccessPropertyValue::UnknownVariant(UnknownAccessPropertyValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccessPropertyValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => AccessPropertyValue::Allow,
+            "DENY" => AccessPropertyValue::Deny,
+            _ => AccessPropertyValue::UnknownVariant(UnknownAccessPropertyValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessPropertyValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AccessPropertyValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccessPropertyValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a modification to the configuration of Bring Your Own License (BYOL) for the specified account. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -61,7 +166,7 @@ pub struct AccountModification {
     /// <p>The status of BYOL (whether BYOL is being enabled or disabled).</p>
     #[serde(rename = "DedicatedTenancySupport")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dedicated_tenancy_support: Option<String>,
+    pub dedicated_tenancy_support: Option<DedicatedTenancySupportResultEnum>,
     /// <p>The error code that is returned if the configuration of BYOL cannot be modified.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -73,11 +178,112 @@ pub struct AccountModification {
     /// <p>The state of the modification to the configuration of BYOL.</p>
     #[serde(rename = "ModificationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub modification_state: Option<String>,
+    pub modification_state: Option<DedicatedTenancyModificationStateEnum>,
     /// <p>The timestamp when the modification of the BYOL configuration was started.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplication {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Application {
+    MicrosoftOffice2016,
+    MicrosoftOffice2019,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplication),
+}
+
+impl Default for Application {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Application {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Application {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Application {
+    fn into(self) -> String {
+        match self {
+            Application::MicrosoftOffice2016 => "Microsoft_Office_2016".to_string(),
+            Application::MicrosoftOffice2019 => "Microsoft_Office_2019".to_string(),
+            Application::UnknownVariant(UnknownApplication { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Application {
+    fn into(self) -> &'a str {
+        match self {
+            Application::MicrosoftOffice2016 => &"Microsoft_Office_2016",
+            Application::MicrosoftOffice2019 => &"Microsoft_Office_2019",
+            Application::UnknownVariant(UnknownApplication { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Application {
+    fn from(name: &str) -> Self {
+        match name {
+            "Microsoft_Office_2016" => Application::MicrosoftOffice2016,
+            "Microsoft_Office_2019" => Application::MicrosoftOffice2019,
+            _ => Application::UnknownVariant(UnknownApplication {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Application {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Microsoft_Office_2016" => Application::MicrosoftOffice2016,
+            "Microsoft_Office_2019" => Application::MicrosoftOffice2019,
+            _ => Application::UnknownVariant(UnknownApplication { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Application {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Application {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Application {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -115,6 +321,130 @@ pub struct AssociateIpGroupsRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateIpGroupsResult {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationStatus {
+    AssociatedWithOwnerAccount,
+    AssociatedWithSharedAccount,
+    NotAssociated,
+    PendingAssociation,
+    PendingDisassociation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationStatus),
+}
+
+impl Default for AssociationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationStatus {
+    fn into(self) -> String {
+        match self {
+            AssociationStatus::AssociatedWithOwnerAccount => {
+                "ASSOCIATED_WITH_OWNER_ACCOUNT".to_string()
+            }
+            AssociationStatus::AssociatedWithSharedAccount => {
+                "ASSOCIATED_WITH_SHARED_ACCOUNT".to_string()
+            }
+            AssociationStatus::NotAssociated => "NOT_ASSOCIATED".to_string(),
+            AssociationStatus::PendingAssociation => "PENDING_ASSOCIATION".to_string(),
+            AssociationStatus::PendingDisassociation => "PENDING_DISASSOCIATION".to_string(),
+            AssociationStatus::UnknownVariant(UnknownAssociationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationStatus::AssociatedWithOwnerAccount => &"ASSOCIATED_WITH_OWNER_ACCOUNT",
+            AssociationStatus::AssociatedWithSharedAccount => &"ASSOCIATED_WITH_SHARED_ACCOUNT",
+            AssociationStatus::NotAssociated => &"NOT_ASSOCIATED",
+            AssociationStatus::PendingAssociation => &"PENDING_ASSOCIATION",
+            AssociationStatus::PendingDisassociation => &"PENDING_DISASSOCIATION",
+            AssociationStatus::UnknownVariant(UnknownAssociationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AssociationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSOCIATED_WITH_OWNER_ACCOUNT" => AssociationStatus::AssociatedWithOwnerAccount,
+            "ASSOCIATED_WITH_SHARED_ACCOUNT" => AssociationStatus::AssociatedWithSharedAccount,
+            "NOT_ASSOCIATED" => AssociationStatus::NotAssociated,
+            "PENDING_ASSOCIATION" => AssociationStatus::PendingAssociation,
+            "PENDING_DISASSOCIATION" => AssociationStatus::PendingDisassociation,
+            _ => AssociationStatus::UnknownVariant(UnknownAssociationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssociationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSOCIATED_WITH_OWNER_ACCOUNT" => AssociationStatus::AssociatedWithOwnerAccount,
+            "ASSOCIATED_WITH_SHARED_ACCOUNT" => AssociationStatus::AssociatedWithSharedAccount,
+            "NOT_ASSOCIATED" => AssociationStatus::NotAssociated,
+            "PENDING_ASSOCIATION" => AssociationStatus::PendingAssociation,
+            "PENDING_DISASSOCIATION" => AssociationStatus::PendingDisassociation,
+            _ => AssociationStatus::UnknownVariant(UnknownAssociationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AssociationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssociationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeIpRulesRequest {
@@ -136,7 +466,7 @@ pub struct ClientProperties {
     /// <p>Specifies whether users can cache their credentials on the Amazon WorkSpaces client. When enabled, users can choose to reconnect to their WorkSpaces without re-entering their credentials. </p>
     #[serde(rename = "ReconnectEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reconnect_enabled: Option<String>,
+    pub reconnect_enabled: Option<ReconnectEnum>,
 }
 
 /// <p>Information about the Amazon WorkSpaces client.</p>
@@ -153,6 +483,131 @@ pub struct ClientPropertiesResult {
     pub resource_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Compute {
+    Graphics,
+    Graphicspro,
+    Performance,
+    Power,
+    Powerpro,
+    Standard,
+    Value,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompute),
+}
+
+impl Default for Compute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Compute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Compute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Compute {
+    fn into(self) -> String {
+        match self {
+            Compute::Graphics => "GRAPHICS".to_string(),
+            Compute::Graphicspro => "GRAPHICSPRO".to_string(),
+            Compute::Performance => "PERFORMANCE".to_string(),
+            Compute::Power => "POWER".to_string(),
+            Compute::Powerpro => "POWERPRO".to_string(),
+            Compute::Standard => "STANDARD".to_string(),
+            Compute::Value => "VALUE".to_string(),
+            Compute::UnknownVariant(UnknownCompute { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Compute {
+    fn into(self) -> &'a str {
+        match self {
+            Compute::Graphics => &"GRAPHICS",
+            Compute::Graphicspro => &"GRAPHICSPRO",
+            Compute::Performance => &"PERFORMANCE",
+            Compute::Power => &"POWER",
+            Compute::Powerpro => &"POWERPRO",
+            Compute::Standard => &"STANDARD",
+            Compute::Value => &"VALUE",
+            Compute::UnknownVariant(UnknownCompute { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Compute {
+    fn from(name: &str) -> Self {
+        match name {
+            "GRAPHICS" => Compute::Graphics,
+            "GRAPHICSPRO" => Compute::Graphicspro,
+            "PERFORMANCE" => Compute::Performance,
+            "POWER" => Compute::Power,
+            "POWERPRO" => Compute::Powerpro,
+            "STANDARD" => Compute::Standard,
+            "VALUE" => Compute::Value,
+            _ => Compute::UnknownVariant(UnknownCompute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Compute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GRAPHICS" => Compute::Graphics,
+            "GRAPHICSPRO" => Compute::Graphicspro,
+            "PERFORMANCE" => Compute::Performance,
+            "POWER" => Compute::Power,
+            "POWERPRO" => Compute::Powerpro,
+            "STANDARD" => Compute::Standard,
+            "VALUE" => Compute::Value,
+            _ => Compute::UnknownVariant(UnknownCompute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Compute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Compute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Compute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the compute type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -160,7 +615,7 @@ pub struct ComputeType {
     /// <p>The compute type.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<Compute>,
 }
 
 /// <p>Describes a connection alias. Connection aliases are used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
@@ -186,7 +641,7 @@ pub struct ConnectionAlias {
     /// <p>The current state of the connection alias.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ConnectionAliasState>,
 }
 
 /// <p>Describes a connection alias association that is used for cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p>
@@ -200,7 +655,7 @@ pub struct ConnectionAliasAssociation {
     /// <p>The association status of the connection alias.</p>
     #[serde(rename = "AssociationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_status: Option<String>,
+    pub association_status: Option<AssociationStatus>,
     /// <p>The identifier of the connection alias association. You use the connection identifier in the DNS TXT record when you're configuring your DNS routing policies.</p>
     #[serde(rename = "ConnectionIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -220,6 +675,222 @@ pub struct ConnectionAliasPermission {
     /// <p>The identifier of the AWS account that the connection alias is shared with.</p>
     #[serde(rename = "SharedAccountId")]
     pub shared_account_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionAliasState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionAliasState {
+    Created,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionAliasState),
+}
+
+impl Default for ConnectionAliasState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionAliasState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionAliasState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionAliasState {
+    fn into(self) -> String {
+        match self {
+            ConnectionAliasState::Created => "CREATED".to_string(),
+            ConnectionAliasState::Creating => "CREATING".to_string(),
+            ConnectionAliasState::Deleting => "DELETING".to_string(),
+            ConnectionAliasState::UnknownVariant(UnknownConnectionAliasState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionAliasState {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionAliasState::Created => &"CREATED",
+            ConnectionAliasState::Creating => &"CREATING",
+            ConnectionAliasState::Deleting => &"DELETING",
+            ConnectionAliasState::UnknownVariant(UnknownConnectionAliasState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionAliasState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => ConnectionAliasState::Created,
+            "CREATING" => ConnectionAliasState::Creating,
+            "DELETING" => ConnectionAliasState::Deleting,
+            _ => ConnectionAliasState::UnknownVariant(UnknownConnectionAliasState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionAliasState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => ConnectionAliasState::Created,
+            "CREATING" => ConnectionAliasState::Creating,
+            "DELETING" => ConnectionAliasState::Deleting,
+            _ => ConnectionAliasState::UnknownVariant(UnknownConnectionAliasState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionAliasState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionAliasState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionAliasState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionState {
+    Connected,
+    Disconnected,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionState),
+}
+
+impl Default for ConnectionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionState {
+    fn into(self) -> String {
+        match self {
+            ConnectionState::Connected => "CONNECTED".to_string(),
+            ConnectionState::Disconnected => "DISCONNECTED".to_string(),
+            ConnectionState::Unknown => "UNKNOWN".to_string(),
+            ConnectionState::UnknownVariant(UnknownConnectionState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionState {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionState::Connected => &"CONNECTED",
+            ConnectionState::Disconnected => &"DISCONNECTED",
+            ConnectionState::Unknown => &"UNKNOWN",
+            ConnectionState::UnknownVariant(UnknownConnectionState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECTED" => ConnectionState::Connected,
+            "DISCONNECTED" => ConnectionState::Disconnected,
+            "UNKNOWN" => ConnectionState::Unknown,
+            _ => ConnectionState::UnknownVariant(UnknownConnectionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECTED" => ConnectionState::Connected,
+            "DISCONNECTED" => ConnectionState::Disconnected,
+            "UNKNOWN" => ConnectionState::Unknown,
+            _ => ConnectionState::UnknownVariant(UnknownConnectionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -337,6 +1008,331 @@ pub struct CreateWorkspacesResult {
     #[serde(rename = "PendingRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_requests: Option<Vec<Workspace>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDedicatedTenancyModificationStateEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DedicatedTenancyModificationStateEnum {
+    Completed,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDedicatedTenancyModificationStateEnum),
+}
+
+impl Default for DedicatedTenancyModificationStateEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DedicatedTenancyModificationStateEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DedicatedTenancyModificationStateEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DedicatedTenancyModificationStateEnum {
+    fn into(self) -> String {
+        match self {
+            DedicatedTenancyModificationStateEnum::Completed => "COMPLETED".to_string(),
+            DedicatedTenancyModificationStateEnum::Failed => "FAILED".to_string(),
+            DedicatedTenancyModificationStateEnum::Pending => "PENDING".to_string(),
+            DedicatedTenancyModificationStateEnum::UnknownVariant(
+                UnknownDedicatedTenancyModificationStateEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DedicatedTenancyModificationStateEnum {
+    fn into(self) -> &'a str {
+        match self {
+            DedicatedTenancyModificationStateEnum::Completed => &"COMPLETED",
+            DedicatedTenancyModificationStateEnum::Failed => &"FAILED",
+            DedicatedTenancyModificationStateEnum::Pending => &"PENDING",
+            DedicatedTenancyModificationStateEnum::UnknownVariant(
+                UnknownDedicatedTenancyModificationStateEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DedicatedTenancyModificationStateEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => DedicatedTenancyModificationStateEnum::Completed,
+            "FAILED" => DedicatedTenancyModificationStateEnum::Failed,
+            "PENDING" => DedicatedTenancyModificationStateEnum::Pending,
+            _ => DedicatedTenancyModificationStateEnum::UnknownVariant(
+                UnknownDedicatedTenancyModificationStateEnum {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DedicatedTenancyModificationStateEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => DedicatedTenancyModificationStateEnum::Completed,
+            "FAILED" => DedicatedTenancyModificationStateEnum::Failed,
+            "PENDING" => DedicatedTenancyModificationStateEnum::Pending,
+            _ => DedicatedTenancyModificationStateEnum::UnknownVariant(
+                UnknownDedicatedTenancyModificationStateEnum { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DedicatedTenancyModificationStateEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DedicatedTenancyModificationStateEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DedicatedTenancyModificationStateEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDedicatedTenancySupportEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DedicatedTenancySupportEnum {
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDedicatedTenancySupportEnum),
+}
+
+impl Default for DedicatedTenancySupportEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DedicatedTenancySupportEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DedicatedTenancySupportEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DedicatedTenancySupportEnum {
+    fn into(self) -> String {
+        match self {
+            DedicatedTenancySupportEnum::Enabled => "ENABLED".to_string(),
+            DedicatedTenancySupportEnum::UnknownVariant(UnknownDedicatedTenancySupportEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DedicatedTenancySupportEnum {
+    fn into(self) -> &'a str {
+        match self {
+            DedicatedTenancySupportEnum::Enabled => &"ENABLED",
+            DedicatedTenancySupportEnum::UnknownVariant(UnknownDedicatedTenancySupportEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DedicatedTenancySupportEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENABLED" => DedicatedTenancySupportEnum::Enabled,
+            _ => DedicatedTenancySupportEnum::UnknownVariant(UnknownDedicatedTenancySupportEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DedicatedTenancySupportEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENABLED" => DedicatedTenancySupportEnum::Enabled,
+            _ => DedicatedTenancySupportEnum::UnknownVariant(UnknownDedicatedTenancySupportEnum {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DedicatedTenancySupportEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DedicatedTenancySupportEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DedicatedTenancySupportEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDedicatedTenancySupportResultEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DedicatedTenancySupportResultEnum {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDedicatedTenancySupportResultEnum),
+}
+
+impl Default for DedicatedTenancySupportResultEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DedicatedTenancySupportResultEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DedicatedTenancySupportResultEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DedicatedTenancySupportResultEnum {
+    fn into(self) -> String {
+        match self {
+            DedicatedTenancySupportResultEnum::Disabled => "DISABLED".to_string(),
+            DedicatedTenancySupportResultEnum::Enabled => "ENABLED".to_string(),
+            DedicatedTenancySupportResultEnum::UnknownVariant(
+                UnknownDedicatedTenancySupportResultEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DedicatedTenancySupportResultEnum {
+    fn into(self) -> &'a str {
+        match self {
+            DedicatedTenancySupportResultEnum::Disabled => &"DISABLED",
+            DedicatedTenancySupportResultEnum::Enabled => &"ENABLED",
+            DedicatedTenancySupportResultEnum::UnknownVariant(
+                UnknownDedicatedTenancySupportResultEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DedicatedTenancySupportResultEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => DedicatedTenancySupportResultEnum::Disabled,
+            "ENABLED" => DedicatedTenancySupportResultEnum::Enabled,
+            _ => DedicatedTenancySupportResultEnum::UnknownVariant(
+                UnknownDedicatedTenancySupportResultEnum {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DedicatedTenancySupportResultEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => DedicatedTenancySupportResultEnum::Disabled,
+            "ENABLED" => DedicatedTenancySupportResultEnum::Enabled,
+            _ => DedicatedTenancySupportResultEnum::UnknownVariant(
+                UnknownDedicatedTenancySupportResultEnum { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DedicatedTenancySupportResultEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DedicatedTenancySupportResultEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DedicatedTenancySupportResultEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the default values that are used to create WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html">Update Directory Details for Your WorkSpaces</a>.</p>
@@ -468,7 +1464,7 @@ pub struct DescribeAccountResult {
     /// <p>The status of BYOL (whether BYOL is enabled or disabled).</p>
     #[serde(rename = "DedicatedTenancySupport")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dedicated_tenancy_support: Option<String>,
+    pub dedicated_tenancy_support: Option<DedicatedTenancySupportResultEnum>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -705,7 +1701,7 @@ pub struct DescribeWorkspaceImagesRequest {
     /// <p>The type (owned or shared) of the image.</p>
     #[serde(rename = "ImageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_type: Option<String>,
+    pub image_type: Option<ImageType>,
     /// <p>The maximum number of items to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -891,13 +1887,114 @@ pub struct ImagePermission {
     pub shared_account_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageType {
+    Owned,
+    Shared,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageType),
+}
+
+impl Default for ImageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageType {
+    fn into(self) -> String {
+        match self {
+            ImageType::Owned => "OWNED".to_string(),
+            ImageType::Shared => "SHARED".to_string(),
+            ImageType::UnknownVariant(UnknownImageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageType {
+    fn into(self) -> &'a str {
+        match self {
+            ImageType::Owned => &"OWNED",
+            ImageType::Shared => &"SHARED",
+            ImageType::UnknownVariant(UnknownImageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "OWNED" => ImageType::Owned,
+            "SHARED" => ImageType::Shared,
+            _ => ImageType::UnknownVariant(UnknownImageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OWNED" => ImageType::Owned,
+            "SHARED" => ImageType::Shared,
+            _ => ImageType::UnknownVariant(UnknownImageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportWorkspaceImageRequest {
     /// <p><p>If specified, the version of Microsoft Office to subscribe to. Valid only for Windows 10 BYOL images. For more information about subscribing to Office for BYOL images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html"> Bring Your Own Windows Desktop Licenses</a>.</p> <note> <p>Although this parameter is an array, only one item is allowed at this time.</p> </note></p>
     #[serde(rename = "Applications")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub applications: Option<Vec<String>>,
+    pub applications: Option<Vec<Application>>,
     /// <p>The identifier of the EC2 image.</p>
     #[serde(rename = "Ec2ImageId")]
     pub ec_2_image_id: String,
@@ -909,7 +2006,7 @@ pub struct ImportWorkspaceImageRequest {
     pub image_name: String,
     /// <p>The ingestion process to be used when importing the image, depending on which protocol you want to use for your BYOL Workspace image, either PCoIP or WorkSpaces Streaming Protocol (WSP). To use WSP, specify a value that ends in <code>_WSP</code>. To use PCoIP, specify a value that does not end in <code>_WSP</code>. </p> <p>For non-GPU-enabled bundles (bundles other than Graphics or GraphicsPro), specify <code>BYOL_REGULAR</code> or <code>BYOL_REGULAR_WSP</code>, depending on the protocol.</p>
     #[serde(rename = "IngestionProcess")]
-    pub ingestion_process: String,
+    pub ingestion_process: WorkspaceImageIngestionProcess,
     /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -991,6 +2088,116 @@ pub struct MigrateWorkspaceResult {
     pub target_workspace_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModificationResourceEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModificationResourceEnum {
+    ComputeType,
+    RootVolume,
+    UserVolume,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModificationResourceEnum),
+}
+
+impl Default for ModificationResourceEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModificationResourceEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModificationResourceEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModificationResourceEnum {
+    fn into(self) -> String {
+        match self {
+            ModificationResourceEnum::ComputeType => "COMPUTE_TYPE".to_string(),
+            ModificationResourceEnum::RootVolume => "ROOT_VOLUME".to_string(),
+            ModificationResourceEnum::UserVolume => "USER_VOLUME".to_string(),
+            ModificationResourceEnum::UnknownVariant(UnknownModificationResourceEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModificationResourceEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ModificationResourceEnum::ComputeType => &"COMPUTE_TYPE",
+            ModificationResourceEnum::RootVolume => &"ROOT_VOLUME",
+            ModificationResourceEnum::UserVolume => &"USER_VOLUME",
+            ModificationResourceEnum::UnknownVariant(UnknownModificationResourceEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModificationResourceEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPUTE_TYPE" => ModificationResourceEnum::ComputeType,
+            "ROOT_VOLUME" => ModificationResourceEnum::RootVolume,
+            "USER_VOLUME" => ModificationResourceEnum::UserVolume,
+            _ => ModificationResourceEnum::UnknownVariant(UnknownModificationResourceEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModificationResourceEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPUTE_TYPE" => ModificationResourceEnum::ComputeType,
+            "ROOT_VOLUME" => ModificationResourceEnum::RootVolume,
+            "USER_VOLUME" => ModificationResourceEnum::UserVolume,
+            _ => ModificationResourceEnum::UnknownVariant(UnknownModificationResourceEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModificationResourceEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ModificationResourceEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModificationResourceEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a WorkSpace modification.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -998,11 +2205,116 @@ pub struct ModificationState {
     /// <p>The resource.</p>
     #[serde(rename = "Resource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource: Option<String>,
+    pub resource: Option<ModificationResourceEnum>,
     /// <p>The modification state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ModificationStateEnum>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModificationStateEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModificationStateEnum {
+    UpdateInitiated,
+    UpdateInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModificationStateEnum),
+}
+
+impl Default for ModificationStateEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModificationStateEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModificationStateEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModificationStateEnum {
+    fn into(self) -> String {
+        match self {
+            ModificationStateEnum::UpdateInitiated => "UPDATE_INITIATED".to_string(),
+            ModificationStateEnum::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            ModificationStateEnum::UnknownVariant(UnknownModificationStateEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModificationStateEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ModificationStateEnum::UpdateInitiated => &"UPDATE_INITIATED",
+            ModificationStateEnum::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            ModificationStateEnum::UnknownVariant(UnknownModificationStateEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModificationStateEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "UPDATE_INITIATED" => ModificationStateEnum::UpdateInitiated,
+            "UPDATE_IN_PROGRESS" => ModificationStateEnum::UpdateInProgress,
+            _ => ModificationStateEnum::UnknownVariant(UnknownModificationStateEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModificationStateEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "UPDATE_INITIATED" => ModificationStateEnum::UpdateInitiated,
+            "UPDATE_IN_PROGRESS" => ModificationStateEnum::UpdateInProgress,
+            _ => ModificationStateEnum::UnknownVariant(UnknownModificationStateEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModificationStateEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ModificationStateEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModificationStateEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1015,7 +2327,7 @@ pub struct ModifyAccountRequest {
     /// <p>The status of BYOL.</p>
     #[serde(rename = "DedicatedTenancySupport")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dedicated_tenancy_support: Option<String>,
+    pub dedicated_tenancy_support: Option<DedicatedTenancySupportEnum>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1105,7 +2417,7 @@ pub struct ModifyWorkspaceStateRequest {
     pub workspace_id: String,
     /// <p>The WorkSpace state.</p>
     #[serde(rename = "WorkspaceState")]
-    pub workspace_state: String,
+    pub workspace_state: TargetWorkspaceState,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1119,7 +2431,112 @@ pub struct OperatingSystem {
     /// <p>The operating system.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<OperatingSystemType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperatingSystemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperatingSystemType {
+    Linux,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperatingSystemType),
+}
+
+impl Default for OperatingSystemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperatingSystemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperatingSystemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperatingSystemType {
+    fn into(self) -> String {
+        match self {
+            OperatingSystemType::Linux => "LINUX".to_string(),
+            OperatingSystemType::Windows => "WINDOWS".to_string(),
+            OperatingSystemType::UnknownVariant(UnknownOperatingSystemType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperatingSystemType {
+    fn into(self) -> &'a str {
+        match self {
+            OperatingSystemType::Linux => &"LINUX",
+            OperatingSystemType::Windows => &"WINDOWS",
+            OperatingSystemType::UnknownVariant(UnknownOperatingSystemType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OperatingSystemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LINUX" => OperatingSystemType::Linux,
+            "WINDOWS" => OperatingSystemType::Windows,
+            _ => OperatingSystemType::UnknownVariant(UnknownOperatingSystemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperatingSystemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LINUX" => OperatingSystemType::Linux,
+            "WINDOWS" => OperatingSystemType::Windows,
+            _ => OperatingSystemType::UnknownVariant(UnknownOperatingSystemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatingSystemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperatingSystemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperatingSystemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the information used to reboot a WorkSpace.</p>
@@ -1174,6 +2591,106 @@ pub struct RebuildWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReconnectEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReconnectEnum {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReconnectEnum),
+}
+
+impl Default for ReconnectEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReconnectEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReconnectEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReconnectEnum {
+    fn into(self) -> String {
+        match self {
+            ReconnectEnum::Disabled => "DISABLED".to_string(),
+            ReconnectEnum::Enabled => "ENABLED".to_string(),
+            ReconnectEnum::UnknownVariant(UnknownReconnectEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReconnectEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ReconnectEnum::Disabled => &"DISABLED",
+            ReconnectEnum::Enabled => &"ENABLED",
+            ReconnectEnum::UnknownVariant(UnknownReconnectEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReconnectEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ReconnectEnum::Disabled,
+            "ENABLED" => ReconnectEnum::Enabled,
+            _ => ReconnectEnum::UnknownVariant(UnknownReconnectEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReconnectEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ReconnectEnum::Disabled,
+            "ENABLED" => ReconnectEnum::Enabled,
+            _ => ReconnectEnum::UnknownVariant(UnknownReconnectEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReconnectEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReconnectEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReconnectEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWorkspaceDirectoryRequest {
@@ -1198,7 +2715,7 @@ pub struct RegisterWorkspaceDirectoryRequest {
     /// <p>Indicates whether your WorkSpace directory is dedicated or shared. To use Bring Your Own License (BYOL) images, this value must be set to <code>DEDICATED</code> and your AWS account must be enabled for BYOL. If your account has not been enabled for BYOL, you will receive an InvalidParameterValuesException error. For more information about BYOL images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
     #[serde(rename = "Tenancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tenancy: Option<String>,
+    pub tenancy: Option<Tenancy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1242,29 +2759,129 @@ pub struct RootStorage {
     pub capacity: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRunningMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RunningMode {
+    AlwaysOn,
+    AutoStop,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRunningMode),
+}
+
+impl Default for RunningMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RunningMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RunningMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RunningMode {
+    fn into(self) -> String {
+        match self {
+            RunningMode::AlwaysOn => "ALWAYS_ON".to_string(),
+            RunningMode::AutoStop => "AUTO_STOP".to_string(),
+            RunningMode::UnknownVariant(UnknownRunningMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RunningMode {
+    fn into(self) -> &'a str {
+        match self {
+            RunningMode::AlwaysOn => &"ALWAYS_ON",
+            RunningMode::AutoStop => &"AUTO_STOP",
+            RunningMode::UnknownVariant(UnknownRunningMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RunningMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS_ON" => RunningMode::AlwaysOn,
+            "AUTO_STOP" => RunningMode::AutoStop,
+            _ => RunningMode::UnknownVariant(UnknownRunningMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RunningMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS_ON" => RunningMode::AlwaysOn,
+            "AUTO_STOP" => RunningMode::AutoStop,
+            _ => RunningMode::UnknownVariant(UnknownRunningMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RunningMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RunningMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RunningMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the self-service permissions for a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html">Enable Self-Service WorkSpace Management Capabilities for Your Users</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SelfservicePermissions {
     /// <p>Specifies whether users can change the compute type (bundle) for their WorkSpace.</p>
     #[serde(rename = "ChangeComputeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub change_compute_type: Option<String>,
+    pub change_compute_type: Option<ReconnectEnum>,
     /// <p>Specifies whether users can increase the volume size of the drives on their WorkSpace.</p>
     #[serde(rename = "IncreaseVolumeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub increase_volume_size: Option<String>,
+    pub increase_volume_size: Option<ReconnectEnum>,
     /// <p>Specifies whether users can rebuild the operating system of a WorkSpace to its original state.</p>
     #[serde(rename = "RebuildWorkspace")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rebuild_workspace: Option<String>,
+    pub rebuild_workspace: Option<ReconnectEnum>,
     /// <p>Specifies whether users can restart their WorkSpace.</p>
     #[serde(rename = "RestartWorkspace")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub restart_workspace: Option<String>,
+    pub restart_workspace: Option<ReconnectEnum>,
     /// <p>Specifies whether users can switch the running mode of their WorkSpace.</p>
     #[serde(rename = "SwitchRunningMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub switch_running_mode: Option<String>,
+    pub switch_running_mode: Option<ReconnectEnum>,
 }
 
 /// <p>Describes a snapshot.</p>
@@ -1341,6 +2958,211 @@ pub struct Tag {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetWorkspaceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetWorkspaceState {
+    AdminMaintenance,
+    Available,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetWorkspaceState),
+}
+
+impl Default for TargetWorkspaceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetWorkspaceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetWorkspaceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetWorkspaceState {
+    fn into(self) -> String {
+        match self {
+            TargetWorkspaceState::AdminMaintenance => "ADMIN_MAINTENANCE".to_string(),
+            TargetWorkspaceState::Available => "AVAILABLE".to_string(),
+            TargetWorkspaceState::UnknownVariant(UnknownTargetWorkspaceState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetWorkspaceState {
+    fn into(self) -> &'a str {
+        match self {
+            TargetWorkspaceState::AdminMaintenance => &"ADMIN_MAINTENANCE",
+            TargetWorkspaceState::Available => &"AVAILABLE",
+            TargetWorkspaceState::UnknownVariant(UnknownTargetWorkspaceState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetWorkspaceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN_MAINTENANCE" => TargetWorkspaceState::AdminMaintenance,
+            "AVAILABLE" => TargetWorkspaceState::Available,
+            _ => TargetWorkspaceState::UnknownVariant(UnknownTargetWorkspaceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetWorkspaceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN_MAINTENANCE" => TargetWorkspaceState::AdminMaintenance,
+            "AVAILABLE" => TargetWorkspaceState::Available,
+            _ => TargetWorkspaceState::UnknownVariant(UnknownTargetWorkspaceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetWorkspaceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetWorkspaceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TargetWorkspaceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTenancy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Tenancy {
+    Dedicated,
+    Shared,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTenancy),
+}
+
+impl Default for Tenancy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Tenancy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Tenancy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Tenancy {
+    fn into(self) -> String {
+        match self {
+            Tenancy::Dedicated => "DEDICATED".to_string(),
+            Tenancy::Shared => "SHARED".to_string(),
+            Tenancy::UnknownVariant(UnknownTenancy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Tenancy {
+    fn into(self) -> &'a str {
+        match self {
+            Tenancy::Dedicated => &"DEDICATED",
+            Tenancy::Shared => &"SHARED",
+            Tenancy::UnknownVariant(UnknownTenancy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Tenancy {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEDICATED" => Tenancy::Dedicated,
+            "SHARED" => Tenancy::Shared,
+            _ => Tenancy::UnknownVariant(UnknownTenancy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Tenancy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEDICATED" => Tenancy::Dedicated,
+            "SHARED" => Tenancy::Shared,
+            _ => Tenancy::UnknownVariant(UnknownTenancy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Tenancy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Tenancy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Tenancy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the information used to terminate a WorkSpace.</p>
@@ -1466,7 +3288,7 @@ pub struct Workspace {
     /// <p><p>The operational state of the WorkSpace.</p> <note> <p>After a WorkSpace is terminated, the <code>TERMINATED</code> state is returned only briefly before the WorkSpace directory metadata is cleaned up, so this state is rarely returned. To confirm that a WorkSpace is terminated, check for the WorkSpace ID by using <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaces.html"> DescribeWorkSpaces</a>. If the WorkSpace ID isn&#39;t returned, then the WorkSpace has been successfully terminated.</p> </note></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<WorkspaceState>,
     /// <p>The identifier of the subnet for the WorkSpace.</p>
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1499,31 +3321,31 @@ pub struct WorkspaceAccessProperties {
     /// <p>Indicates whether users can use Android devices to access their WorkSpaces.</p>
     #[serde(rename = "DeviceTypeAndroid")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_android: Option<String>,
+    pub device_type_android: Option<AccessPropertyValue>,
     /// <p>Indicates whether users can use Chromebooks to access their WorkSpaces.</p>
     #[serde(rename = "DeviceTypeChromeOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_chrome_os: Option<String>,
+    pub device_type_chrome_os: Option<AccessPropertyValue>,
     /// <p>Indicates whether users can use iOS devices to access their WorkSpaces.</p>
     #[serde(rename = "DeviceTypeIos")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_ios: Option<String>,
+    pub device_type_ios: Option<AccessPropertyValue>,
     /// <p>Indicates whether users can use macOS clients to access their WorkSpaces. To restrict WorkSpaces access to trusted devices (also known as managed devices) with valid certificates, specify a value of <code>TRUST</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/trusted-devices.html">Restrict WorkSpaces Access to Trusted Devices</a>. </p>
     #[serde(rename = "DeviceTypeOsx")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_osx: Option<String>,
+    pub device_type_osx: Option<AccessPropertyValue>,
     /// <p>Indicates whether users can access their WorkSpaces through a web browser.</p>
     #[serde(rename = "DeviceTypeWeb")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_web: Option<String>,
+    pub device_type_web: Option<AccessPropertyValue>,
     /// <p>Indicates whether users can use Windows clients to access their WorkSpaces. To restrict WorkSpaces access to trusted devices (also known as managed devices) with valid certificates, specify a value of <code>TRUST</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/trusted-devices.html">Restrict WorkSpaces Access to Trusted Devices</a>. </p>
     #[serde(rename = "DeviceTypeWindows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_windows: Option<String>,
+    pub device_type_windows: Option<AccessPropertyValue>,
     /// <p>Indicates whether users can use zero client devices to access their WorkSpaces.</p>
     #[serde(rename = "DeviceTypeZeroClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_type_zero_client: Option<String>,
+    pub device_type_zero_client: Option<AccessPropertyValue>,
 }
 
 /// <p>Describes a WorkSpace bundle.</p>
@@ -1575,7 +3397,7 @@ pub struct WorkspaceConnectionStatus {
     /// <p>The connection state of the WorkSpace. The connection state is unknown if the WorkSpace is stopped.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<ConnectionState>,
     /// <p>The timestamp of the connection status check.</p>
     #[serde(rename = "ConnectionStateCheckTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1643,7 +3465,7 @@ pub struct WorkspaceDirectory {
     /// <p>The directory type.</p>
     #[serde(rename = "DirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub directory_type: Option<String>,
+    pub directory_type: Option<WorkspaceDirectoryType>,
     /// <p>The IP addresses of the DNS servers for the directory.</p>
     #[serde(rename = "DnsIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1663,7 +3485,7 @@ pub struct WorkspaceDirectory {
     /// <p>The state of the directory's registration with Amazon WorkSpaces. After a directory is deregistered, the <code>DEREGISTERED</code> state is returned very briefly before the directory metadata is cleaned up, so this state is rarely returned. To confirm that a directory is deregistered, check for the directory ID by using <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceDirectories.html"> DescribeWorkspaceDirectories</a>. If the directory ID isn't returned, then the directory has been successfully deregistered.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<WorkspaceDirectoryState>,
     /// <p>The identifiers of the subnets used with the directory.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1671,7 +3493,7 @@ pub struct WorkspaceDirectory {
     /// <p>Specifies whether the directory is dedicated or shared. To use Bring Your Own License (BYOL), this value must be set to <code>DEDICATED</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
     #[serde(rename = "Tenancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tenancy: Option<String>,
+    pub tenancy: Option<Tenancy>,
     /// <p>The devices and operating systems that users can use to access WorkSpaces.</p>
     #[serde(rename = "WorkspaceAccessProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1688,6 +3510,231 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "ipGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_group_ids: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkspaceDirectoryState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkspaceDirectoryState {
+    Deregistered,
+    Deregistering,
+    Error,
+    Registered,
+    Registering,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkspaceDirectoryState),
+}
+
+impl Default for WorkspaceDirectoryState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkspaceDirectoryState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkspaceDirectoryState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkspaceDirectoryState {
+    fn into(self) -> String {
+        match self {
+            WorkspaceDirectoryState::Deregistered => "DEREGISTERED".to_string(),
+            WorkspaceDirectoryState::Deregistering => "DEREGISTERING".to_string(),
+            WorkspaceDirectoryState::Error => "ERROR".to_string(),
+            WorkspaceDirectoryState::Registered => "REGISTERED".to_string(),
+            WorkspaceDirectoryState::Registering => "REGISTERING".to_string(),
+            WorkspaceDirectoryState::UnknownVariant(UnknownWorkspaceDirectoryState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkspaceDirectoryState {
+    fn into(self) -> &'a str {
+        match self {
+            WorkspaceDirectoryState::Deregistered => &"DEREGISTERED",
+            WorkspaceDirectoryState::Deregistering => &"DEREGISTERING",
+            WorkspaceDirectoryState::Error => &"ERROR",
+            WorkspaceDirectoryState::Registered => &"REGISTERED",
+            WorkspaceDirectoryState::Registering => &"REGISTERING",
+            WorkspaceDirectoryState::UnknownVariant(UnknownWorkspaceDirectoryState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkspaceDirectoryState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEREGISTERED" => WorkspaceDirectoryState::Deregistered,
+            "DEREGISTERING" => WorkspaceDirectoryState::Deregistering,
+            "ERROR" => WorkspaceDirectoryState::Error,
+            "REGISTERED" => WorkspaceDirectoryState::Registered,
+            "REGISTERING" => WorkspaceDirectoryState::Registering,
+            _ => WorkspaceDirectoryState::UnknownVariant(UnknownWorkspaceDirectoryState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorkspaceDirectoryState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEREGISTERED" => WorkspaceDirectoryState::Deregistered,
+            "DEREGISTERING" => WorkspaceDirectoryState::Deregistering,
+            "ERROR" => WorkspaceDirectoryState::Error,
+            "REGISTERED" => WorkspaceDirectoryState::Registered,
+            "REGISTERING" => WorkspaceDirectoryState::Registering,
+            _ => WorkspaceDirectoryState::UnknownVariant(UnknownWorkspaceDirectoryState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceDirectoryState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkspaceDirectoryState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceDirectoryState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkspaceDirectoryType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkspaceDirectoryType {
+    AdConnector,
+    SimpleAd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkspaceDirectoryType),
+}
+
+impl Default for WorkspaceDirectoryType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkspaceDirectoryType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkspaceDirectoryType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkspaceDirectoryType {
+    fn into(self) -> String {
+        match self {
+            WorkspaceDirectoryType::AdConnector => "AD_CONNECTOR".to_string(),
+            WorkspaceDirectoryType::SimpleAd => "SIMPLE_AD".to_string(),
+            WorkspaceDirectoryType::UnknownVariant(UnknownWorkspaceDirectoryType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkspaceDirectoryType {
+    fn into(self) -> &'a str {
+        match self {
+            WorkspaceDirectoryType::AdConnector => &"AD_CONNECTOR",
+            WorkspaceDirectoryType::SimpleAd => &"SIMPLE_AD",
+            WorkspaceDirectoryType::UnknownVariant(UnknownWorkspaceDirectoryType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkspaceDirectoryType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AD_CONNECTOR" => WorkspaceDirectoryType::AdConnector,
+            "SIMPLE_AD" => WorkspaceDirectoryType::SimpleAd,
+            _ => WorkspaceDirectoryType::UnknownVariant(UnknownWorkspaceDirectoryType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorkspaceDirectoryType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AD_CONNECTOR" => WorkspaceDirectoryType::AdConnector,
+            "SIMPLE_AD" => WorkspaceDirectoryType::SimpleAd,
+            _ => WorkspaceDirectoryType::UnknownVariant(UnknownWorkspaceDirectoryType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceDirectoryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkspaceDirectoryType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceDirectoryType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a WorkSpace image.</p>
@@ -1729,11 +3776,349 @@ pub struct WorkspaceImage {
     /// <p>Specifies whether the image is running on dedicated hardware. When Bring Your Own License (BYOL) is enabled, this value is set to <code>DEDICATED</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
     #[serde(rename = "RequiredTenancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub required_tenancy: Option<String>,
+    pub required_tenancy: Option<WorkspaceImageRequiredTenancy>,
     /// <p>The status of the image.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<WorkspaceImageState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkspaceImageIngestionProcess {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkspaceImageIngestionProcess {
+    ByolGraphics,
+    ByolGraphicspro,
+    ByolRegular,
+    ByolRegularWsp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkspaceImageIngestionProcess),
+}
+
+impl Default for WorkspaceImageIngestionProcess {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkspaceImageIngestionProcess {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkspaceImageIngestionProcess {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkspaceImageIngestionProcess {
+    fn into(self) -> String {
+        match self {
+            WorkspaceImageIngestionProcess::ByolGraphics => "BYOL_GRAPHICS".to_string(),
+            WorkspaceImageIngestionProcess::ByolGraphicspro => "BYOL_GRAPHICSPRO".to_string(),
+            WorkspaceImageIngestionProcess::ByolRegular => "BYOL_REGULAR".to_string(),
+            WorkspaceImageIngestionProcess::ByolRegularWsp => "BYOL_REGULAR_WSP".to_string(),
+            WorkspaceImageIngestionProcess::UnknownVariant(
+                UnknownWorkspaceImageIngestionProcess { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkspaceImageIngestionProcess {
+    fn into(self) -> &'a str {
+        match self {
+            WorkspaceImageIngestionProcess::ByolGraphics => &"BYOL_GRAPHICS",
+            WorkspaceImageIngestionProcess::ByolGraphicspro => &"BYOL_GRAPHICSPRO",
+            WorkspaceImageIngestionProcess::ByolRegular => &"BYOL_REGULAR",
+            WorkspaceImageIngestionProcess::ByolRegularWsp => &"BYOL_REGULAR_WSP",
+            WorkspaceImageIngestionProcess::UnknownVariant(
+                UnknownWorkspaceImageIngestionProcess { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkspaceImageIngestionProcess {
+    fn from(name: &str) -> Self {
+        match name {
+            "BYOL_GRAPHICS" => WorkspaceImageIngestionProcess::ByolGraphics,
+            "BYOL_GRAPHICSPRO" => WorkspaceImageIngestionProcess::ByolGraphicspro,
+            "BYOL_REGULAR" => WorkspaceImageIngestionProcess::ByolRegular,
+            "BYOL_REGULAR_WSP" => WorkspaceImageIngestionProcess::ByolRegularWsp,
+            _ => WorkspaceImageIngestionProcess::UnknownVariant(
+                UnknownWorkspaceImageIngestionProcess {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for WorkspaceImageIngestionProcess {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BYOL_GRAPHICS" => WorkspaceImageIngestionProcess::ByolGraphics,
+            "BYOL_GRAPHICSPRO" => WorkspaceImageIngestionProcess::ByolGraphicspro,
+            "BYOL_REGULAR" => WorkspaceImageIngestionProcess::ByolRegular,
+            "BYOL_REGULAR_WSP" => WorkspaceImageIngestionProcess::ByolRegularWsp,
+            _ => WorkspaceImageIngestionProcess::UnknownVariant(
+                UnknownWorkspaceImageIngestionProcess { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceImageIngestionProcess {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WorkspaceImageIngestionProcess {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for WorkspaceImageIngestionProcess {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkspaceImageRequiredTenancy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkspaceImageRequiredTenancy {
+    Dedicated,
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkspaceImageRequiredTenancy),
+}
+
+impl Default for WorkspaceImageRequiredTenancy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkspaceImageRequiredTenancy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkspaceImageRequiredTenancy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkspaceImageRequiredTenancy {
+    fn into(self) -> String {
+        match self {
+            WorkspaceImageRequiredTenancy::Dedicated => "DEDICATED".to_string(),
+            WorkspaceImageRequiredTenancy::Default => "DEFAULT".to_string(),
+            WorkspaceImageRequiredTenancy::UnknownVariant(
+                UnknownWorkspaceImageRequiredTenancy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkspaceImageRequiredTenancy {
+    fn into(self) -> &'a str {
+        match self {
+            WorkspaceImageRequiredTenancy::Dedicated => &"DEDICATED",
+            WorkspaceImageRequiredTenancy::Default => &"DEFAULT",
+            WorkspaceImageRequiredTenancy::UnknownVariant(
+                UnknownWorkspaceImageRequiredTenancy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkspaceImageRequiredTenancy {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEDICATED" => WorkspaceImageRequiredTenancy::Dedicated,
+            "DEFAULT" => WorkspaceImageRequiredTenancy::Default,
+            _ => WorkspaceImageRequiredTenancy::UnknownVariant(
+                UnknownWorkspaceImageRequiredTenancy {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for WorkspaceImageRequiredTenancy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEDICATED" => WorkspaceImageRequiredTenancy::Dedicated,
+            "DEFAULT" => WorkspaceImageRequiredTenancy::Default,
+            _ => WorkspaceImageRequiredTenancy::UnknownVariant(
+                UnknownWorkspaceImageRequiredTenancy { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceImageRequiredTenancy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkspaceImageRequiredTenancy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceImageRequiredTenancy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkspaceImageState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkspaceImageState {
+    Available,
+    Error,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkspaceImageState),
+}
+
+impl Default for WorkspaceImageState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkspaceImageState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkspaceImageState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkspaceImageState {
+    fn into(self) -> String {
+        match self {
+            WorkspaceImageState::Available => "AVAILABLE".to_string(),
+            WorkspaceImageState::Error => "ERROR".to_string(),
+            WorkspaceImageState::Pending => "PENDING".to_string(),
+            WorkspaceImageState::UnknownVariant(UnknownWorkspaceImageState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkspaceImageState {
+    fn into(self) -> &'a str {
+        match self {
+            WorkspaceImageState::Available => &"AVAILABLE",
+            WorkspaceImageState::Error => &"ERROR",
+            WorkspaceImageState::Pending => &"PENDING",
+            WorkspaceImageState::UnknownVariant(UnknownWorkspaceImageState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for WorkspaceImageState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => WorkspaceImageState::Available,
+            "ERROR" => WorkspaceImageState::Error,
+            "PENDING" => WorkspaceImageState::Pending,
+            _ => WorkspaceImageState::UnknownVariant(UnknownWorkspaceImageState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorkspaceImageState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => WorkspaceImageState::Available,
+            "ERROR" => WorkspaceImageState::Error,
+            "PENDING" => WorkspaceImageState::Pending,
+            _ => WorkspaceImageState::UnknownVariant(UnknownWorkspaceImageState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceImageState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkspaceImageState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceImageState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a WorkSpace.</p>
@@ -1742,7 +4127,7 @@ pub struct WorkspaceProperties {
     /// <p>The compute type. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
     #[serde(rename = "ComputeTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_type_name: Option<String>,
+    pub compute_type_name: Option<Compute>,
     /// <p>The size of the root volume. For important information about how to modify the size of the root and user volumes, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/modify-workspaces.html">Modify a WorkSpace</a>.</p>
     #[serde(rename = "RootVolumeSizeGib")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1750,7 +4135,7 @@ pub struct WorkspaceProperties {
     /// <p>The running mode. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/running-mode.html">Manage the WorkSpace Running Mode</a>.</p>
     #[serde(rename = "RunningMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub running_mode: Option<String>,
+    pub running_mode: Option<RunningMode>,
     /// <p>The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60-minute intervals.</p>
     #[serde(rename = "RunningModeAutoStopTimeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1793,6 +4178,182 @@ pub struct WorkspaceRequest {
     #[serde(rename = "WorkspaceProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkspaceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkspaceState {
+    AdminMaintenance,
+    Available,
+    Error,
+    Impaired,
+    Maintenance,
+    Pending,
+    Rebooting,
+    Rebuilding,
+    Restoring,
+    Starting,
+    Stopped,
+    Stopping,
+    Suspended,
+    Terminated,
+    Terminating,
+    Unhealthy,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkspaceState),
+}
+
+impl Default for WorkspaceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkspaceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkspaceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkspaceState {
+    fn into(self) -> String {
+        match self {
+            WorkspaceState::AdminMaintenance => "ADMIN_MAINTENANCE".to_string(),
+            WorkspaceState::Available => "AVAILABLE".to_string(),
+            WorkspaceState::Error => "ERROR".to_string(),
+            WorkspaceState::Impaired => "IMPAIRED".to_string(),
+            WorkspaceState::Maintenance => "MAINTENANCE".to_string(),
+            WorkspaceState::Pending => "PENDING".to_string(),
+            WorkspaceState::Rebooting => "REBOOTING".to_string(),
+            WorkspaceState::Rebuilding => "REBUILDING".to_string(),
+            WorkspaceState::Restoring => "RESTORING".to_string(),
+            WorkspaceState::Starting => "STARTING".to_string(),
+            WorkspaceState::Stopped => "STOPPED".to_string(),
+            WorkspaceState::Stopping => "STOPPING".to_string(),
+            WorkspaceState::Suspended => "SUSPENDED".to_string(),
+            WorkspaceState::Terminated => "TERMINATED".to_string(),
+            WorkspaceState::Terminating => "TERMINATING".to_string(),
+            WorkspaceState::Unhealthy => "UNHEALTHY".to_string(),
+            WorkspaceState::Updating => "UPDATING".to_string(),
+            WorkspaceState::UnknownVariant(UnknownWorkspaceState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkspaceState {
+    fn into(self) -> &'a str {
+        match self {
+            WorkspaceState::AdminMaintenance => &"ADMIN_MAINTENANCE",
+            WorkspaceState::Available => &"AVAILABLE",
+            WorkspaceState::Error => &"ERROR",
+            WorkspaceState::Impaired => &"IMPAIRED",
+            WorkspaceState::Maintenance => &"MAINTENANCE",
+            WorkspaceState::Pending => &"PENDING",
+            WorkspaceState::Rebooting => &"REBOOTING",
+            WorkspaceState::Rebuilding => &"REBUILDING",
+            WorkspaceState::Restoring => &"RESTORING",
+            WorkspaceState::Starting => &"STARTING",
+            WorkspaceState::Stopped => &"STOPPED",
+            WorkspaceState::Stopping => &"STOPPING",
+            WorkspaceState::Suspended => &"SUSPENDED",
+            WorkspaceState::Terminated => &"TERMINATED",
+            WorkspaceState::Terminating => &"TERMINATING",
+            WorkspaceState::Unhealthy => &"UNHEALTHY",
+            WorkspaceState::Updating => &"UPDATING",
+            WorkspaceState::UnknownVariant(UnknownWorkspaceState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkspaceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN_MAINTENANCE" => WorkspaceState::AdminMaintenance,
+            "AVAILABLE" => WorkspaceState::Available,
+            "ERROR" => WorkspaceState::Error,
+            "IMPAIRED" => WorkspaceState::Impaired,
+            "MAINTENANCE" => WorkspaceState::Maintenance,
+            "PENDING" => WorkspaceState::Pending,
+            "REBOOTING" => WorkspaceState::Rebooting,
+            "REBUILDING" => WorkspaceState::Rebuilding,
+            "RESTORING" => WorkspaceState::Restoring,
+            "STARTING" => WorkspaceState::Starting,
+            "STOPPED" => WorkspaceState::Stopped,
+            "STOPPING" => WorkspaceState::Stopping,
+            "SUSPENDED" => WorkspaceState::Suspended,
+            "TERMINATED" => WorkspaceState::Terminated,
+            "TERMINATING" => WorkspaceState::Terminating,
+            "UNHEALTHY" => WorkspaceState::Unhealthy,
+            "UPDATING" => WorkspaceState::Updating,
+            _ => WorkspaceState::UnknownVariant(UnknownWorkspaceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorkspaceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN_MAINTENANCE" => WorkspaceState::AdminMaintenance,
+            "AVAILABLE" => WorkspaceState::Available,
+            "ERROR" => WorkspaceState::Error,
+            "IMPAIRED" => WorkspaceState::Impaired,
+            "MAINTENANCE" => WorkspaceState::Maintenance,
+            "PENDING" => WorkspaceState::Pending,
+            "REBOOTING" => WorkspaceState::Rebooting,
+            "REBUILDING" => WorkspaceState::Rebuilding,
+            "RESTORING" => WorkspaceState::Restoring,
+            "STARTING" => WorkspaceState::Starting,
+            "STOPPED" => WorkspaceState::Stopped,
+            "STOPPING" => WorkspaceState::Stopping,
+            "SUSPENDED" => WorkspaceState::Suspended,
+            "TERMINATED" => WorkspaceState::Terminated,
+            "TERMINATING" => WorkspaceState::Terminating,
+            "UNHEALTHY" => WorkspaceState::Unhealthy,
+            "UPDATING" => WorkspaceState::Updating,
+            _ => WorkspaceState::UnknownVariant(UnknownWorkspaceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkspaceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes an IP access control group.</p>

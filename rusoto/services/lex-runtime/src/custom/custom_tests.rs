@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use crate::generated::{LexRuntime, LexRuntimeClient, PostTextRequest, PostTextResponse};
+use crate::generated::{LexRuntime, LexRuntimeClient, PostTextRequest, PostTextResponse, MessageFormatType, DialogState};
 use rusoto_core::Region;
 use std::collections::HashMap;
 
@@ -40,10 +40,10 @@ async fn test_post_text_resposnse_serialization() {
         active_contexts: None,
         alternative_intents: None,
         bot_version: None,
-        dialog_state: Some("ElicitSlot".to_owned()),
+        dialog_state: Some(DialogState::ElicitSlot),
         intent_name: Some("BookCar".to_owned()),
         message: Some("In what city do you need to rent a car?".to_owned()),
-        message_format: Some("PlainText".to_owned()),
+        message_format: Some(MessageFormatType::PlainText),
         nlu_intent_confidence: None,
         slot_to_elicit: Some("PickUpCity".to_owned()),
         slots: Some(slots),

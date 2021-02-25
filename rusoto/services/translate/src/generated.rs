@@ -95,7 +95,7 @@ pub struct CreateParallelDataResponse {
     /// <p>The status of the parallel data resource. When the resource is ready for you to use, the status is <code>ACTIVE</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ParallelDataStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -116,7 +116,7 @@ pub struct DeleteParallelDataResponse {
     /// <p>The status of the parallel data deletion.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ParallelDataStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -152,7 +152,106 @@ pub struct EncryptionKey {
     pub id: String,
     /// <p>The type of encryption key used by Amazon Translate to encrypt custom terminologies.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: EncryptionKeyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionKeyType {
+    Kms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionKeyType),
+}
+
+impl Default for EncryptionKeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionKeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionKeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionKeyType {
+    fn into(self) -> String {
+        match self {
+            EncryptionKeyType::Kms => "KMS".to_string(),
+            EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionKeyType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionKeyType::Kms => &"KMS",
+            EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionKeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KMS" => EncryptionKeyType::Kms,
+            _ => EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionKeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KMS" => EncryptionKeyType::Kms,
+            _ => EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionKeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionKeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -192,7 +291,7 @@ pub struct GetTerminologyRequest {
     pub name: String,
     /// <p>The data format of the custom terminology being retrieved, either CSV or TMX.</p>
     #[serde(rename = "TerminologyDataFormat")]
-    pub terminology_data_format: String,
+    pub terminology_data_format: TerminologyDataFormat,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -221,7 +320,7 @@ pub struct ImportTerminologyRequest {
     pub encryption_key: Option<EncryptionKey>,
     /// <p>The merge strategy of the custom terminology being imported. Currently, only the OVERWRITE merge strategy is supported. In this case, the imported terminology will overwrite an existing terminology of the same name.</p>
     #[serde(rename = "MergeStrategy")]
-    pub merge_strategy: String,
+    pub merge_strategy: MergeStrategy,
     /// <p>The name of the custom terminology being imported.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -266,6 +365,131 @@ pub struct JobDetails {
     #[serde(rename = "TranslatedDocumentsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub translated_documents_count: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Completed,
+    CompletedWithError,
+    Failed,
+    InProgress,
+    Stopped,
+    StopRequested,
+    Submitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Completed => "COMPLETED".to_string(),
+            JobStatus::CompletedWithError => "COMPLETED_WITH_ERROR".to_string(),
+            JobStatus::Failed => "FAILED".to_string(),
+            JobStatus::InProgress => "IN_PROGRESS".to_string(),
+            JobStatus::Stopped => "STOPPED".to_string(),
+            JobStatus::StopRequested => "STOP_REQUESTED".to_string(),
+            JobStatus::Submitted => "SUBMITTED".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Completed => &"COMPLETED",
+            JobStatus::CompletedWithError => &"COMPLETED_WITH_ERROR",
+            JobStatus::Failed => &"FAILED",
+            JobStatus::InProgress => &"IN_PROGRESS",
+            JobStatus::Stopped => &"STOPPED",
+            JobStatus::StopRequested => &"STOP_REQUESTED",
+            JobStatus::Submitted => &"SUBMITTED",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => JobStatus::Completed,
+            "COMPLETED_WITH_ERROR" => JobStatus::CompletedWithError,
+            "FAILED" => JobStatus::Failed,
+            "IN_PROGRESS" => JobStatus::InProgress,
+            "STOPPED" => JobStatus::Stopped,
+            "STOP_REQUESTED" => JobStatus::StopRequested,
+            "SUBMITTED" => JobStatus::Submitted,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => JobStatus::Completed,
+            "COMPLETED_WITH_ERROR" => JobStatus::CompletedWithError,
+            "FAILED" => JobStatus::Failed,
+            "IN_PROGRESS" => JobStatus::InProgress,
+            "STOPPED" => JobStatus::Stopped,
+            "STOP_REQUESTED" => JobStatus::StopRequested,
+            "SUBMITTED" => JobStatus::Submitted,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -350,6 +574,102 @@ pub struct ListTextTranslationJobsResponse {
     pub text_translation_job_properties_list: Option<Vec<TextTranslationJobProperties>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMergeStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MergeStrategy {
+    Overwrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMergeStrategy),
+}
+
+impl Default for MergeStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MergeStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MergeStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MergeStrategy {
+    fn into(self) -> String {
+        match self {
+            MergeStrategy::Overwrite => "OVERWRITE".to_string(),
+            MergeStrategy::UnknownVariant(UnknownMergeStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MergeStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            MergeStrategy::Overwrite => &"OVERWRITE",
+            MergeStrategy::UnknownVariant(UnknownMergeStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MergeStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "OVERWRITE" => MergeStrategy::Overwrite,
+            _ => MergeStrategy::UnknownVariant(UnknownMergeStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MergeStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OVERWRITE" => MergeStrategy::Overwrite,
+            _ => MergeStrategy::UnknownVariant(UnknownMergeStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MergeStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MergeStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MergeStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The output configuration properties for a batch translation job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputDataConfig {
@@ -363,7 +683,7 @@ pub struct OutputDataConfig {
 pub struct ParallelDataConfig {
     /// <p>The format of the parallel data input file.</p>
     #[serde(rename = "Format")]
-    pub format: String,
+    pub format: ParallelDataFormat,
     /// <p>The URI of the Amazon S3 folder that contains the parallel data input file. The folder must be in the same Region as the API endpoint you are calling.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
@@ -379,6 +699,115 @@ pub struct ParallelDataDataLocation {
     /// <p>Describes the repository that contains the parallel data input file.</p>
     #[serde(rename = "RepositoryType")]
     pub repository_type: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParallelDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParallelDataFormat {
+    Csv,
+    Tmx,
+    Tsv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParallelDataFormat),
+}
+
+impl Default for ParallelDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParallelDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParallelDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParallelDataFormat {
+    fn into(self) -> String {
+        match self {
+            ParallelDataFormat::Csv => "CSV".to_string(),
+            ParallelDataFormat::Tmx => "TMX".to_string(),
+            ParallelDataFormat::Tsv => "TSV".to_string(),
+            ParallelDataFormat::UnknownVariant(UnknownParallelDataFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParallelDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ParallelDataFormat::Csv => &"CSV",
+            ParallelDataFormat::Tmx => &"TMX",
+            ParallelDataFormat::Tsv => &"TSV",
+            ParallelDataFormat::UnknownVariant(UnknownParallelDataFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ParallelDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => ParallelDataFormat::Csv,
+            "TMX" => ParallelDataFormat::Tmx,
+            "TSV" => ParallelDataFormat::Tsv,
+            _ => ParallelDataFormat::UnknownVariant(UnknownParallelDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParallelDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => ParallelDataFormat::Csv,
+            "TMX" => ParallelDataFormat::Tmx,
+            "TSV" => ParallelDataFormat::Tsv,
+            _ => ParallelDataFormat::UnknownVariant(UnknownParallelDataFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParallelDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParallelDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParallelDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The properties of a parallel data resource.</p>
@@ -423,7 +852,7 @@ pub struct ParallelDataProperties {
     /// <p>The status of the most recent update attempt for the parallel data resource.</p>
     #[serde(rename = "LatestUpdateAttemptStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub latest_update_attempt_status: Option<String>,
+    pub latest_update_attempt_status: Option<ParallelDataStatus>,
     /// <p>Additional information from Amazon Translate about the parallel data resource. </p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,11 +876,131 @@ pub struct ParallelDataProperties {
     /// <p>The status of the parallel data resource. When the parallel data is ready for you to use, the status is <code>ACTIVE</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ParallelDataStatus>,
     /// <p>The language codes for the target languages available in the parallel data file. All possible target languages are returned as an array.</p>
     #[serde(rename = "TargetLanguageCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_language_codes: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParallelDataStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParallelDataStatus {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParallelDataStatus),
+}
+
+impl Default for ParallelDataStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParallelDataStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParallelDataStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParallelDataStatus {
+    fn into(self) -> String {
+        match self {
+            ParallelDataStatus::Active => "ACTIVE".to_string(),
+            ParallelDataStatus::Creating => "CREATING".to_string(),
+            ParallelDataStatus::Deleting => "DELETING".to_string(),
+            ParallelDataStatus::Failed => "FAILED".to_string(),
+            ParallelDataStatus::Updating => "UPDATING".to_string(),
+            ParallelDataStatus::UnknownVariant(UnknownParallelDataStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParallelDataStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ParallelDataStatus::Active => &"ACTIVE",
+            ParallelDataStatus::Creating => &"CREATING",
+            ParallelDataStatus::Deleting => &"DELETING",
+            ParallelDataStatus::Failed => &"FAILED",
+            ParallelDataStatus::Updating => &"UPDATING",
+            ParallelDataStatus::UnknownVariant(UnknownParallelDataStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ParallelDataStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ParallelDataStatus::Active,
+            "CREATING" => ParallelDataStatus::Creating,
+            "DELETING" => ParallelDataStatus::Deleting,
+            "FAILED" => ParallelDataStatus::Failed,
+            "UPDATING" => ParallelDataStatus::Updating,
+            _ => ParallelDataStatus::UnknownVariant(UnknownParallelDataStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParallelDataStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ParallelDataStatus::Active,
+            "CREATING" => ParallelDataStatus::Creating,
+            "DELETING" => ParallelDataStatus::Deleting,
+            "FAILED" => ParallelDataStatus::Failed,
+            "UPDATING" => ParallelDataStatus::Updating,
+            _ => ParallelDataStatus::UnknownVariant(UnknownParallelDataStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParallelDataStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ParallelDataStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParallelDataStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -499,7 +1048,7 @@ pub struct StartTextTranslationJobResponse {
     /// <p><p>The status of the job. Possible values include:</p> <ul> <li> <p> <code>SUBMITTED</code> - The job has been received and is queued for processing.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon Translate is processing the job.</p> </li> <li> <p> <code>COMPLETED</code> - The job was successfully completed and the output is available.</p> </li> <li> <p> <code>COMPLETED</em>WITH<em>ERROR</code> - The job was completed with errors. The errors can be analyzed in the job&#39;s output.</p> </li> <li> <p> <code>FAILED</code> - The job did not complete. To get details, use the <a>DescribeTextTranslationJob</a> operation.</p> </li> <li> <p> <code>STOP</em>REQUESTED</code> - The user who started the job has requested that it be stopped.</p> </li> <li> <p> <code>STOPPED</code> - The job has been stopped.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -520,7 +1069,7 @@ pub struct StopTextTranslationJobResponse {
     /// <p>The status of the designated job. Upon successful completion, the job's status will be <code>STOPPED</code>.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 /// <p>The term being translated by the custom terminology.</p>
@@ -551,7 +1100,112 @@ pub struct TerminologyData {
     pub file: bytes::Bytes,
     /// <p>The data format of the custom terminology. Either CSV or TMX.</p>
     #[serde(rename = "Format")]
-    pub format: String,
+    pub format: TerminologyDataFormat,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTerminologyDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TerminologyDataFormat {
+    Csv,
+    Tmx,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTerminologyDataFormat),
+}
+
+impl Default for TerminologyDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TerminologyDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TerminologyDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TerminologyDataFormat {
+    fn into(self) -> String {
+        match self {
+            TerminologyDataFormat::Csv => "CSV".to_string(),
+            TerminologyDataFormat::Tmx => "TMX".to_string(),
+            TerminologyDataFormat::UnknownVariant(UnknownTerminologyDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TerminologyDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            TerminologyDataFormat::Csv => &"CSV",
+            TerminologyDataFormat::Tmx => &"TMX",
+            TerminologyDataFormat::UnknownVariant(UnknownTerminologyDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TerminologyDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => TerminologyDataFormat::Csv,
+            "TMX" => TerminologyDataFormat::Tmx,
+            _ => TerminologyDataFormat::UnknownVariant(UnknownTerminologyDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TerminologyDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => TerminologyDataFormat::Csv,
+            "TMX" => TerminologyDataFormat::Tmx,
+            _ => TerminologyDataFormat::UnknownVariant(UnknownTerminologyDataFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TerminologyDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TerminologyDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TerminologyDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The location of the custom terminology data.</p>
@@ -623,7 +1277,7 @@ pub struct TextTranslationJobFilter {
     /// <p>Filters the list of jobs based by job status.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>Filters the list of jobs based on the time that the job was submitted for processing and returns only the jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmittedAfterTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -665,7 +1319,7 @@ pub struct TextTranslationJobProperties {
     /// <p>The status of the translation job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>An explanation of any errors that may have occured during the translation job.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -760,7 +1414,7 @@ pub struct UpdateParallelDataResponse {
     /// <p>The status of the parallel data update attempt. When the updated parallel data resource is ready for you to use, the status is <code>ACTIVE</code>.</p>
     #[serde(rename = "LatestUpdateAttemptStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub latest_update_attempt_status: Option<String>,
+    pub latest_update_attempt_status: Option<ParallelDataStatus>,
     /// <p>The name of the parallel data resource being updated.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -768,7 +1422,7 @@ pub struct UpdateParallelDataResponse {
     /// <p>The status of the parallel data resource that you are attempting to update. Your update request is accepted only if this status is either <code>ACTIVE</code> or <code>FAILED</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ParallelDataStatus>,
 }
 
 /// Errors returned by CreateParallelData

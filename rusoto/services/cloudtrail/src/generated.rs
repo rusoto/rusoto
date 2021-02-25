@@ -310,6 +310,102 @@ pub struct Event {
     pub username: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventCategory {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventCategory {
+    Insight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventCategory),
+}
+
+impl Default for EventCategory {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventCategory {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventCategory {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventCategory {
+    fn into(self) -> String {
+        match self {
+            EventCategory::Insight => "insight".to_string(),
+            EventCategory::UnknownVariant(UnknownEventCategory { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventCategory {
+    fn into(self) -> &'a str {
+        match self {
+            EventCategory::Insight => &"insight",
+            EventCategory::UnknownVariant(UnknownEventCategory { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventCategory {
+    fn from(name: &str) -> Self {
+        match name {
+            "insight" => EventCategory::Insight,
+            _ => EventCategory::UnknownVariant(UnknownEventCategory {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventCategory {
+    fn from(name: String) -> Self {
+        match &*name {
+            "insight" => EventCategory::Insight,
+            _ => EventCategory::UnknownVariant(UnknownEventCategory { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventCategory {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EventCategory {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. When an event occurs in your account, CloudTrail evaluates the event selector for all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event.</p> <p>You can configure up to five event selectors for a trail.</p> <p>You cannot apply both event selectors and advanced event selectors to a trail.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EventSelector {
@@ -328,7 +424,7 @@ pub struct EventSelector {
     /// <p>Specify if you want your trail to log read-only events, write-only events, or all. For example, the EC2 <code>GetConsoleOutput</code> is a read-only API operation and <code>RunInstances</code> is a write-only API operation.</p> <p> By default, the value is <code>All</code>.</p>
     #[serde(rename = "ReadWriteType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub read_write_type: Option<String>,
+    pub read_write_type: Option<ReadWriteType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -482,7 +578,102 @@ pub struct InsightSelector {
     /// <p>The type of insights to log on a trail. In this release, only <code>ApiCallRateInsight</code> is supported as an insight type.</p>
     #[serde(rename = "InsightType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub insight_type: Option<String>,
+    pub insight_type: Option<InsightType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInsightType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InsightType {
+    ApiCallRateInsight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInsightType),
+}
+
+impl Default for InsightType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InsightType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InsightType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InsightType {
+    fn into(self) -> String {
+        match self {
+            InsightType::ApiCallRateInsight => "ApiCallRateInsight".to_string(),
+            InsightType::UnknownVariant(UnknownInsightType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InsightType {
+    fn into(self) -> &'a str {
+        match self {
+            InsightType::ApiCallRateInsight => &"ApiCallRateInsight",
+            InsightType::UnknownVariant(UnknownInsightType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InsightType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ApiCallRateInsight" => InsightType::ApiCallRateInsight,
+            _ => InsightType::UnknownVariant(UnknownInsightType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InsightType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ApiCallRateInsight" => InsightType::ApiCallRateInsight,
+            _ => InsightType::UnknownVariant(UnknownInsightType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InsightType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InsightType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InsightType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Requests the public keys for a specified time range.</p>
@@ -572,10 +763,145 @@ pub struct ListTrailsResponse {
 pub struct LookupAttribute {
     /// <p>Specifies an attribute on which to filter the events returned.</p>
     #[serde(rename = "AttributeKey")]
-    pub attribute_key: String,
+    pub attribute_key: LookupAttributeKey,
     /// <p>Specifies a value for the specified AttributeKey.</p>
     #[serde(rename = "AttributeValue")]
     pub attribute_value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLookupAttributeKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LookupAttributeKey {
+    AccessKeyId,
+    EventId,
+    EventName,
+    EventSource,
+    ReadOnly,
+    ResourceName,
+    ResourceType,
+    Username,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLookupAttributeKey),
+}
+
+impl Default for LookupAttributeKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LookupAttributeKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LookupAttributeKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LookupAttributeKey {
+    fn into(self) -> String {
+        match self {
+            LookupAttributeKey::AccessKeyId => "AccessKeyId".to_string(),
+            LookupAttributeKey::EventId => "EventId".to_string(),
+            LookupAttributeKey::EventName => "EventName".to_string(),
+            LookupAttributeKey::EventSource => "EventSource".to_string(),
+            LookupAttributeKey::ReadOnly => "ReadOnly".to_string(),
+            LookupAttributeKey::ResourceName => "ResourceName".to_string(),
+            LookupAttributeKey::ResourceType => "ResourceType".to_string(),
+            LookupAttributeKey::Username => "Username".to_string(),
+            LookupAttributeKey::UnknownVariant(UnknownLookupAttributeKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LookupAttributeKey {
+    fn into(self) -> &'a str {
+        match self {
+            LookupAttributeKey::AccessKeyId => &"AccessKeyId",
+            LookupAttributeKey::EventId => &"EventId",
+            LookupAttributeKey::EventName => &"EventName",
+            LookupAttributeKey::EventSource => &"EventSource",
+            LookupAttributeKey::ReadOnly => &"ReadOnly",
+            LookupAttributeKey::ResourceName => &"ResourceName",
+            LookupAttributeKey::ResourceType => &"ResourceType",
+            LookupAttributeKey::Username => &"Username",
+            LookupAttributeKey::UnknownVariant(UnknownLookupAttributeKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LookupAttributeKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessKeyId" => LookupAttributeKey::AccessKeyId,
+            "EventId" => LookupAttributeKey::EventId,
+            "EventName" => LookupAttributeKey::EventName,
+            "EventSource" => LookupAttributeKey::EventSource,
+            "ReadOnly" => LookupAttributeKey::ReadOnly,
+            "ResourceName" => LookupAttributeKey::ResourceName,
+            "ResourceType" => LookupAttributeKey::ResourceType,
+            "Username" => LookupAttributeKey::Username,
+            _ => LookupAttributeKey::UnknownVariant(UnknownLookupAttributeKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LookupAttributeKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessKeyId" => LookupAttributeKey::AccessKeyId,
+            "EventId" => LookupAttributeKey::EventId,
+            "EventName" => LookupAttributeKey::EventName,
+            "EventSource" => LookupAttributeKey::EventSource,
+            "ReadOnly" => LookupAttributeKey::ReadOnly,
+            "ResourceName" => LookupAttributeKey::ResourceName,
+            "ResourceType" => LookupAttributeKey::ResourceType,
+            "Username" => LookupAttributeKey::Username,
+            _ => LookupAttributeKey::UnknownVariant(UnknownLookupAttributeKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LookupAttributeKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LookupAttributeKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LookupAttributeKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains a request for LookupEvents.</p>
@@ -589,7 +915,7 @@ pub struct LookupEventsRequest {
     /// <p>Specifies the event category. If you do not specify an event category, events of the category are not returned in the response. For example, if you do not specify <code>insight</code> as the value of <code>EventCategory</code>, no Insights events are returned.</p>
     #[serde(rename = "EventCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_category: Option<String>,
+    pub event_category: Option<EventCategory>,
     /// <p>Contains a list of lookup attributes. Currently the list can contain only one item.</p>
     #[serde(rename = "LookupAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -704,6 +1030,111 @@ pub struct PutInsightSelectorsResponse {
     #[serde(rename = "TrailARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReadWriteType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReadWriteType {
+    All,
+    ReadOnly,
+    WriteOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReadWriteType),
+}
+
+impl Default for ReadWriteType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReadWriteType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReadWriteType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReadWriteType {
+    fn into(self) -> String {
+        match self {
+            ReadWriteType::All => "All".to_string(),
+            ReadWriteType::ReadOnly => "ReadOnly".to_string(),
+            ReadWriteType::WriteOnly => "WriteOnly".to_string(),
+            ReadWriteType::UnknownVariant(UnknownReadWriteType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReadWriteType {
+    fn into(self) -> &'a str {
+        match self {
+            ReadWriteType::All => &"All",
+            ReadWriteType::ReadOnly => &"ReadOnly",
+            ReadWriteType::WriteOnly => &"WriteOnly",
+            ReadWriteType::UnknownVariant(UnknownReadWriteType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReadWriteType {
+    fn from(name: &str) -> Self {
+        match name {
+            "All" => ReadWriteType::All,
+            "ReadOnly" => ReadWriteType::ReadOnly,
+            "WriteOnly" => ReadWriteType::WriteOnly,
+            _ => ReadWriteType::UnknownVariant(UnknownReadWriteType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReadWriteType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All" => ReadWriteType::All,
+            "ReadOnly" => ReadWriteType::ReadOnly,
+            "WriteOnly" => ReadWriteType::WriteOnly,
+            _ => ReadWriteType::UnknownVariant(UnknownReadWriteType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReadWriteType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReadWriteType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReadWriteType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the tags to remove from a trail.</p>

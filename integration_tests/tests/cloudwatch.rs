@@ -3,7 +3,9 @@
 extern crate rusoto_cloudwatch;
 extern crate rusoto_core;
 
-use rusoto_cloudwatch::{CloudWatch, CloudWatchClient, Dimension, MetricDatum, PutMetricDataInput};
+use rusoto_cloudwatch::{
+    CloudWatch, CloudWatchClient, Dimension, MetricDatum, PutMetricDataInput, StandardUnit,
+};
 use rusoto_core::Region;
 
 #[tokio::test]
@@ -18,7 +20,7 @@ async fn should_put_metric_data() {
         metric_name: "buffers".to_string(),
         statistic_values: None,
         timestamp: None,
-        unit: Some("Bytes".to_string()),
+        unit: Some(StandardUnit::Bytes),
         value: Some(1.0),
         ..Default::default()
     }];

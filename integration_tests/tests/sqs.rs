@@ -16,7 +16,8 @@ use rusoto_sqs::{
     SendMessageBatchRequestEntry,
 };
 use rusoto_sqs::{
-    DeleteMessageRequest, DeleteQueueRequest, GetQueueAttributesRequest, ReceiveMessageRequest,
+    DeleteMessageRequest, DeleteQueueRequest, GetQueueAttributesRequest, QueueAttributeName,
+    ReceiveMessageRequest,
 };
 use rusoto_sqs::{Sqs, SqsClient};
 
@@ -41,7 +42,7 @@ async fn sqs_roundtrip_tests() {
     let q_name = &format!("test_q_{}", rand::random::<u64>());
     let mut attrs = HashMap::new();
     attrs.insert(
-        String::from("ReceiveMessageWaitTimeSeconds"),
+        QueueAttributeName::ReceiveMessageWaitTimeSeconds,
         String::from("1"),
     );
     let q_creation_req = CreateQueueRequest {
@@ -86,7 +87,7 @@ async fn sqs_roundtrip_tests() {
     // queue attributes
     let queue_attributes_req = GetQueueAttributesRequest {
         queue_url: queue_url.clone(),
-        attribute_names: Some(vec!["All".to_string()]),
+        attribute_names: Some(vec![QueueAttributeName::All]),
     };
     match sqs.get_queue_attributes(queue_attributes_req).await {
         Ok(result) => println!("Queue attributes: {:?}", result),
@@ -238,7 +239,7 @@ async fn sqs_bulk_roundtrip_tests() {
     // queue attributes
     let queue_attributes_req = GetQueueAttributesRequest {
         queue_url: queue_url.clone(),
-        attribute_names: Some(vec!["All".to_string()]),
+        attribute_names: Some(vec![QueueAttributeName::All]),
     };
     match sqs.get_queue_attributes(queue_attributes_req).await {
         Ok(result) => println!("Queue attributes: {:?}", result),

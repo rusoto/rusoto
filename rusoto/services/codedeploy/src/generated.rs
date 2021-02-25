@@ -116,7 +116,7 @@ pub struct ApplicationInfo {
     /// <p>The destination platform type for deployment of the application (<code>Lambda</code> or <code>Server</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>The time at which the application was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,6 +131,118 @@ pub struct ApplicationInfo {
     pub linked_to_git_hub: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplicationRevisionSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApplicationRevisionSortBy {
+    FirstUsedTime,
+    LastUsedTime,
+    RegisterTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplicationRevisionSortBy),
+}
+
+impl Default for ApplicationRevisionSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApplicationRevisionSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApplicationRevisionSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApplicationRevisionSortBy {
+    fn into(self) -> String {
+        match self {
+            ApplicationRevisionSortBy::FirstUsedTime => "firstUsedTime".to_string(),
+            ApplicationRevisionSortBy::LastUsedTime => "lastUsedTime".to_string(),
+            ApplicationRevisionSortBy::RegisterTime => "registerTime".to_string(),
+            ApplicationRevisionSortBy::UnknownVariant(UnknownApplicationRevisionSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApplicationRevisionSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ApplicationRevisionSortBy::FirstUsedTime => &"firstUsedTime",
+            ApplicationRevisionSortBy::LastUsedTime => &"lastUsedTime",
+            ApplicationRevisionSortBy::RegisterTime => &"registerTime",
+            ApplicationRevisionSortBy::UnknownVariant(UnknownApplicationRevisionSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApplicationRevisionSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "firstUsedTime" => ApplicationRevisionSortBy::FirstUsedTime,
+            "lastUsedTime" => ApplicationRevisionSortBy::LastUsedTime,
+            "registerTime" => ApplicationRevisionSortBy::RegisterTime,
+            _ => ApplicationRevisionSortBy::UnknownVariant(UnknownApplicationRevisionSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApplicationRevisionSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "firstUsedTime" => ApplicationRevisionSortBy::FirstUsedTime,
+            "lastUsedTime" => ApplicationRevisionSortBy::LastUsedTime,
+            "registerTime" => ApplicationRevisionSortBy::RegisterTime,
+            _ => {
+                ApplicationRevisionSortBy::UnknownVariant(UnknownApplicationRevisionSortBy { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationRevisionSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApplicationRevisionSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ApplicationRevisionSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment is not completed successfully.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoRollbackConfiguration {
@@ -141,7 +253,116 @@ pub struct AutoRollbackConfiguration {
     /// <p>The event type or types that trigger a rollback.</p>
     #[serde(rename = "events")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub events: Option<Vec<String>>,
+    pub events: Option<Vec<AutoRollbackEvent>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoRollbackEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoRollbackEvent {
+    DeploymentFailure,
+    DeploymentStopOnAlarm,
+    DeploymentStopOnRequest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoRollbackEvent),
+}
+
+impl Default for AutoRollbackEvent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoRollbackEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoRollbackEvent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoRollbackEvent {
+    fn into(self) -> String {
+        match self {
+            AutoRollbackEvent::DeploymentFailure => "DEPLOYMENT_FAILURE".to_string(),
+            AutoRollbackEvent::DeploymentStopOnAlarm => "DEPLOYMENT_STOP_ON_ALARM".to_string(),
+            AutoRollbackEvent::DeploymentStopOnRequest => "DEPLOYMENT_STOP_ON_REQUEST".to_string(),
+            AutoRollbackEvent::UnknownVariant(UnknownAutoRollbackEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoRollbackEvent {
+    fn into(self) -> &'a str {
+        match self {
+            AutoRollbackEvent::DeploymentFailure => &"DEPLOYMENT_FAILURE",
+            AutoRollbackEvent::DeploymentStopOnAlarm => &"DEPLOYMENT_STOP_ON_ALARM",
+            AutoRollbackEvent::DeploymentStopOnRequest => &"DEPLOYMENT_STOP_ON_REQUEST",
+            AutoRollbackEvent::UnknownVariant(UnknownAutoRollbackEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AutoRollbackEvent {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPLOYMENT_FAILURE" => AutoRollbackEvent::DeploymentFailure,
+            "DEPLOYMENT_STOP_ON_ALARM" => AutoRollbackEvent::DeploymentStopOnAlarm,
+            "DEPLOYMENT_STOP_ON_REQUEST" => AutoRollbackEvent::DeploymentStopOnRequest,
+            _ => AutoRollbackEvent::UnknownVariant(UnknownAutoRollbackEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoRollbackEvent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPLOYMENT_FAILURE" => AutoRollbackEvent::DeploymentFailure,
+            "DEPLOYMENT_STOP_ON_ALARM" => AutoRollbackEvent::DeploymentStopOnAlarm,
+            "DEPLOYMENT_STOP_ON_REQUEST" => AutoRollbackEvent::DeploymentStopOnRequest,
+            _ => AutoRollbackEvent::UnknownVariant(UnknownAutoRollbackEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoRollbackEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoRollbackEvent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoRollbackEvent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an Auto Scaling group.</p>
@@ -342,11 +563,126 @@ pub struct BlueInstanceTerminationOption {
     /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p> <code>TERMINATE</code>: Instances are terminated after a specified wait time.</p> </li> <li> <p> <code>KEEP_ALIVE</code>: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<InstanceAction>,
     /// <p>For an Amazon EC2 deployment, the number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p> <p> For an Amazon ECS deployment, the number of minutes before deleting the original (blue) task set. During an Amazon ECS deployment, CodeDeploy shifts traffic from the original (blue) task set to a replacement (green) task set. </p> <p> The maximum setting is 2880 minutes (2 days). </p>
     #[serde(rename = "terminationWaitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_wait_time_in_minutes: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBundleType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BundleType {
+    Json,
+    Yaml,
+    Tar,
+    Tgz,
+    Zip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBundleType),
+}
+
+impl Default for BundleType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BundleType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BundleType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BundleType {
+    fn into(self) -> String {
+        match self {
+            BundleType::Json => "JSON".to_string(),
+            BundleType::Yaml => "YAML".to_string(),
+            BundleType::Tar => "tar".to_string(),
+            BundleType::Tgz => "tgz".to_string(),
+            BundleType::Zip => "zip".to_string(),
+            BundleType::UnknownVariant(UnknownBundleType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BundleType {
+    fn into(self) -> &'a str {
+        match self {
+            BundleType::Json => &"JSON",
+            BundleType::Yaml => &"YAML",
+            BundleType::Tar => &"tar",
+            BundleType::Tgz => &"tgz",
+            BundleType::Zip => &"zip",
+            BundleType::UnknownVariant(UnknownBundleType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BundleType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => BundleType::Json,
+            "YAML" => BundleType::Yaml,
+            "tar" => BundleType::Tar,
+            "tgz" => BundleType::Tgz,
+            "zip" => BundleType::Zip,
+            _ => BundleType::UnknownVariant(UnknownBundleType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BundleType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => BundleType::Json,
+            "YAML" => BundleType::Yaml,
+            "tar" => BundleType::Tar,
+            "tgz" => BundleType::Tgz,
+            "zip" => BundleType::Zip,
+            _ => BundleType::UnknownVariant(UnknownBundleType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BundleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BundleType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BundleType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Information about the target to be updated by an AWS CloudFormation blue/green deployment. This target type is used for all deployments initiated by a CloudFormation stack update.</p>
@@ -372,7 +708,7 @@ pub struct CloudFormationTarget {
     /// <p> The status of an AWS CloudFormation blue/green deployment's target application. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TargetStatus>,
     /// <p> The unique ID of a deployment target that has a type of <code>CloudFormationTarget</code>. </p>
     #[serde(rename = "targetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -381,6 +717,111 @@ pub struct CloudFormationTarget {
     #[serde(rename = "targetVersionWeight")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_version_weight: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComputePlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComputePlatform {
+    Ecs,
+    Lambda,
+    Server,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComputePlatform),
+}
+
+impl Default for ComputePlatform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComputePlatform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComputePlatform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComputePlatform {
+    fn into(self) -> String {
+        match self {
+            ComputePlatform::Ecs => "ECS".to_string(),
+            ComputePlatform::Lambda => "Lambda".to_string(),
+            ComputePlatform::Server => "Server".to_string(),
+            ComputePlatform::UnknownVariant(UnknownComputePlatform { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComputePlatform {
+    fn into(self) -> &'a str {
+        match self {
+            ComputePlatform::Ecs => &"ECS",
+            ComputePlatform::Lambda => &"Lambda",
+            ComputePlatform::Server => &"Server",
+            ComputePlatform::UnknownVariant(UnknownComputePlatform { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComputePlatform {
+    fn from(name: &str) -> Self {
+        match name {
+            "ECS" => ComputePlatform::Ecs,
+            "Lambda" => ComputePlatform::Lambda,
+            "Server" => ComputePlatform::Server,
+            _ => ComputePlatform::UnknownVariant(UnknownComputePlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComputePlatform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ECS" => ComputePlatform::Ecs,
+            "Lambda" => ComputePlatform::Lambda,
+            "Server" => ComputePlatform::Server,
+            _ => ComputePlatform::UnknownVariant(UnknownComputePlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputePlatform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComputePlatform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComputePlatform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -393,7 +834,7 @@ pub struct ContinueDeploymentInput {
     /// <p> The status of the deployment's waiting period. <code>READY_WAIT</code> indicates that the deployment is ready to start shifting traffic. <code>TERMINATION_WAIT</code> indicates that the traffic is shifted, but the original target is not terminated. </p>
     #[serde(rename = "deploymentWaitType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_wait_type: Option<String>,
+    pub deployment_wait_type: Option<DeploymentWaitType>,
 }
 
 /// <p>Represents the input of a <code>CreateApplication</code> operation.</p>
@@ -406,7 +847,7 @@ pub struct CreateApplicationInput {
     /// <p> The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p> The metadata that you apply to CodeDeploy applications to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -430,7 +871,7 @@ pub struct CreateDeploymentConfigInput {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>The name of the deployment configuration to create.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
@@ -561,7 +1002,7 @@ pub struct CreateDeploymentInput {
     /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <p>The <code>fileExistsBehavior</code> parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_exists_behavior: Option<String>,
+    pub file_exists_behavior: Option<FileExistsBehavior>,
     /// <p> If true, then if an <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, or <code>AfterBlockTraffic</code> deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if <code>ApplicationStop</code> fails, the deployment continues with <code>DownloadBundle</code>. If <code>BeforeBlockTraffic</code> fails, the deployment continues with <code>BlockTraffic</code>. If <code>AfterBlockTraffic</code> fails, the deployment continues with <code>ApplicationStop</code>. </p> <p> If false or not specified, then if a lifecycle event fails during a deployment to an instance, that deployment fails. If deployment to that instance is part of an overall deployment and the number of healthy hosts is not less than the minimum number of healthy hosts, then a deployment to the next instance is attempted. </p> <p> During a deployment, the AWS CodeDeploy agent runs the scripts specified for <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> in the AppSpec file from the previous successful deployment. (All other scripts are run from the AppSpec file in the current deployment.) If one of these scripts contains an error and does not run successfully, the deployment can fail. </p> <p> If the cause of the failure is a script from the last successful deployment that will never run successfully, create a new deployment and use <code>ignoreApplicationStopFailures</code> to specify that the <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> failures should be ignored. </p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -670,7 +1111,7 @@ pub struct DeploymentConfigInfo {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>The time at which the deployment configuration was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -691,6 +1132,131 @@ pub struct DeploymentConfigInfo {
     #[serde(rename = "trafficRoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traffic_routing_config: Option<TrafficRoutingConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentCreator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentCreator {
+    CloudFormation,
+    CloudFormationRollback,
+    CodeDeploy,
+    Autoscaling,
+    CodeDeployRollback,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentCreator),
+}
+
+impl Default for DeploymentCreator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentCreator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentCreator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentCreator {
+    fn into(self) -> String {
+        match self {
+            DeploymentCreator::CloudFormation => "CloudFormation".to_string(),
+            DeploymentCreator::CloudFormationRollback => "CloudFormationRollback".to_string(),
+            DeploymentCreator::CodeDeploy => "CodeDeploy".to_string(),
+            DeploymentCreator::Autoscaling => "autoscaling".to_string(),
+            DeploymentCreator::CodeDeployRollback => "codeDeployRollback".to_string(),
+            DeploymentCreator::User => "user".to_string(),
+            DeploymentCreator::UnknownVariant(UnknownDeploymentCreator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentCreator {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentCreator::CloudFormation => &"CloudFormation",
+            DeploymentCreator::CloudFormationRollback => &"CloudFormationRollback",
+            DeploymentCreator::CodeDeploy => &"CodeDeploy",
+            DeploymentCreator::Autoscaling => &"autoscaling",
+            DeploymentCreator::CodeDeployRollback => &"codeDeployRollback",
+            DeploymentCreator::User => &"user",
+            DeploymentCreator::UnknownVariant(UnknownDeploymentCreator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentCreator {
+    fn from(name: &str) -> Self {
+        match name {
+            "CloudFormation" => DeploymentCreator::CloudFormation,
+            "CloudFormationRollback" => DeploymentCreator::CloudFormationRollback,
+            "CodeDeploy" => DeploymentCreator::CodeDeploy,
+            "autoscaling" => DeploymentCreator::Autoscaling,
+            "codeDeployRollback" => DeploymentCreator::CodeDeployRollback,
+            "user" => DeploymentCreator::User,
+            _ => DeploymentCreator::UnknownVariant(UnknownDeploymentCreator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentCreator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CloudFormation" => DeploymentCreator::CloudFormation,
+            "CloudFormationRollback" => DeploymentCreator::CloudFormationRollback,
+            "CodeDeploy" => DeploymentCreator::CodeDeploy,
+            "autoscaling" => DeploymentCreator::Autoscaling,
+            "codeDeployRollback" => DeploymentCreator::CodeDeployRollback,
+            "user" => DeploymentCreator::User,
+            _ => DeploymentCreator::UnknownVariant(UnknownDeploymentCreator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentCreator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentCreator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentCreator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a deployment group.</p>
@@ -720,7 +1286,7 @@ pub struct DeploymentGroupInfo {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>The deployment configuration name.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -810,7 +1376,7 @@ pub struct DeploymentInfo {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>A timestamp that indicates when the deployment was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -818,7 +1384,7 @@ pub struct DeploymentInfo {
     /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p> <code>user</code>: A user created the deployment.</p> </li> <li> <p> <code>autoscaling</code>: Amazon EC2 Auto Scaling created the deployment.</p> </li> <li> <p> <code>codeDeployRollback</code>: A rollback process created the deployment.</p> </li> </ul></p>
     #[serde(rename = "creator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creator: Option<String>,
+    pub creator: Option<DeploymentCreator>,
     /// <p> The deployment configuration name. </p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -858,7 +1424,7 @@ pub struct DeploymentInfo {
     /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <ul> <li> <p> <code>DISALLOW</code>: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p> <code>OVERWRITE</code>: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p> <code>RETAIN</code>: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_exists_behavior: Option<String>,
+    pub file_exists_behavior: Option<FileExistsBehavior>,
     /// <p> If true, then if an <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, or <code>AfterBlockTraffic</code> deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if <code>ApplicationStop</code> fails, the deployment continues with DownloadBundle. If <code>BeforeBlockTraffic</code> fails, the deployment continues with <code>BlockTraffic</code>. If <code>AfterBlockTraffic</code> fails, the deployment continues with <code>ApplicationStop</code>. </p> <p> If false or not specified, then if a lifecycle event fails during a deployment to an instance, that deployment fails. If deployment to that instance is part of an overall deployment and the number of healthy hosts is not less than the minimum number of healthy hosts, then a deployment to the next instance is attempted. </p> <p> During a deployment, the AWS CodeDeploy agent runs the scripts specified for <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> in the AppSpec file from the previous successful deployment. (All other scripts are run from the AppSpec file in the current deployment.) If one of these scripts contains an error and does not run successfully, the deployment can fail. </p> <p> If the cause of the failure is a script from the last successful deployment that will never run successfully, create a new deployment and use <code>ignoreApplicationStopFailures</code> to specify that the <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> failures should be ignored. </p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -890,7 +1456,7 @@ pub struct DeploymentInfo {
     /// <p>The current state of the deployment as a whole.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeploymentStatus>,
     /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
     #[serde(rename = "targetInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -899,6 +1465,110 @@ pub struct DeploymentInfo {
     #[serde(rename = "updateOutdatedInstancesOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_outdated_instances_only: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentOption {
+    WithoutTrafficControl,
+    WithTrafficControl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentOption),
+}
+
+impl Default for DeploymentOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentOption {
+    fn into(self) -> String {
+        match self {
+            DeploymentOption::WithoutTrafficControl => "WITHOUT_TRAFFIC_CONTROL".to_string(),
+            DeploymentOption::WithTrafficControl => "WITH_TRAFFIC_CONTROL".to_string(),
+            DeploymentOption::UnknownVariant(UnknownDeploymentOption { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentOption {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentOption::WithoutTrafficControl => &"WITHOUT_TRAFFIC_CONTROL",
+            DeploymentOption::WithTrafficControl => &"WITH_TRAFFIC_CONTROL",
+            DeploymentOption::UnknownVariant(UnknownDeploymentOption { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "WITHOUT_TRAFFIC_CONTROL" => DeploymentOption::WithoutTrafficControl,
+            "WITH_TRAFFIC_CONTROL" => DeploymentOption::WithTrafficControl,
+            _ => DeploymentOption::UnknownVariant(UnknownDeploymentOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "WITHOUT_TRAFFIC_CONTROL" => DeploymentOption::WithoutTrafficControl,
+            "WITH_TRAFFIC_CONTROL" => DeploymentOption::WithTrafficControl,
+            _ => DeploymentOption::UnknownVariant(UnknownDeploymentOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the deployment status of the instances in the deployment.</p>
@@ -931,17 +1601,255 @@ pub struct DeploymentOverview {
     pub succeeded: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentReadyAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentReadyAction {
+    ContinueDeployment,
+    StopDeployment,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentReadyAction),
+}
+
+impl Default for DeploymentReadyAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentReadyAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentReadyAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentReadyAction {
+    fn into(self) -> String {
+        match self {
+            DeploymentReadyAction::ContinueDeployment => "CONTINUE_DEPLOYMENT".to_string(),
+            DeploymentReadyAction::StopDeployment => "STOP_DEPLOYMENT".to_string(),
+            DeploymentReadyAction::UnknownVariant(UnknownDeploymentReadyAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentReadyAction {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentReadyAction::ContinueDeployment => &"CONTINUE_DEPLOYMENT",
+            DeploymentReadyAction::StopDeployment => &"STOP_DEPLOYMENT",
+            DeploymentReadyAction::UnknownVariant(UnknownDeploymentReadyAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentReadyAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTINUE_DEPLOYMENT" => DeploymentReadyAction::ContinueDeployment,
+            "STOP_DEPLOYMENT" => DeploymentReadyAction::StopDeployment,
+            _ => DeploymentReadyAction::UnknownVariant(UnknownDeploymentReadyAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentReadyAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTINUE_DEPLOYMENT" => DeploymentReadyAction::ContinueDeployment,
+            "STOP_DEPLOYMENT" => DeploymentReadyAction::StopDeployment,
+            _ => DeploymentReadyAction::UnknownVariant(UnknownDeploymentReadyAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentReadyAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentReadyAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentReadyAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentReadyOption {
     /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with a load balancer unless traffic rerouting is started using <a>ContinueDeployment</a>. If traffic rerouting is not started before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
     #[serde(rename = "actionOnTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_on_timeout: Option<String>,
+    pub action_on_timeout: Option<DeploymentReadyAction>,
     /// <p>The number of minutes to wait before the status of a blue/green deployment is changed to Stopped if rerouting is not started manually. Applies only to the <code>STOP_DEPLOYMENT</code> option for <code>actionOnTimeout</code>.</p>
     #[serde(rename = "waitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub wait_time_in_minutes: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentStatus {
+    Baking,
+    Created,
+    Failed,
+    InProgress,
+    Queued,
+    Ready,
+    Stopped,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentStatus),
+}
+
+impl Default for DeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            DeploymentStatus::Baking => "Baking".to_string(),
+            DeploymentStatus::Created => "Created".to_string(),
+            DeploymentStatus::Failed => "Failed".to_string(),
+            DeploymentStatus::InProgress => "InProgress".to_string(),
+            DeploymentStatus::Queued => "Queued".to_string(),
+            DeploymentStatus::Ready => "Ready".to_string(),
+            DeploymentStatus::Stopped => "Stopped".to_string(),
+            DeploymentStatus::Succeeded => "Succeeded".to_string(),
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentStatus::Baking => &"Baking",
+            DeploymentStatus::Created => &"Created",
+            DeploymentStatus::Failed => &"Failed",
+            DeploymentStatus::InProgress => &"InProgress",
+            DeploymentStatus::Queued => &"Queued",
+            DeploymentStatus::Ready => &"Ready",
+            DeploymentStatus::Stopped => &"Stopped",
+            DeploymentStatus::Succeeded => &"Succeeded",
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Baking" => DeploymentStatus::Baking,
+            "Created" => DeploymentStatus::Created,
+            "Failed" => DeploymentStatus::Failed,
+            "InProgress" => DeploymentStatus::InProgress,
+            "Queued" => DeploymentStatus::Queued,
+            "Ready" => DeploymentStatus::Ready,
+            "Stopped" => DeploymentStatus::Stopped,
+            "Succeeded" => DeploymentStatus::Succeeded,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Baking" => DeploymentStatus::Baking,
+            "Created" => DeploymentStatus::Created,
+            "Failed" => DeploymentStatus::Failed,
+            "InProgress" => DeploymentStatus::InProgress,
+            "Queued" => DeploymentStatus::Queued,
+            "Ready" => DeploymentStatus::Ready,
+            "Stopped" => DeploymentStatus::Stopped,
+            "Succeeded" => DeploymentStatus::Succeeded,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
@@ -950,11 +1858,11 @@ pub struct DeploymentStyle {
     /// <p>Indicates whether to route deployment traffic behind a load balancer.</p>
     #[serde(rename = "deploymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_option: Option<String>,
+    pub deployment_option: Option<DeploymentOption>,
     /// <p>Indicates whether to run an in-place deployment or a blue/green deployment.</p>
     #[serde(rename = "deploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<DeploymentType>,
 }
 
 /// <p> Information about the deployment target. </p>
@@ -967,7 +1875,7 @@ pub struct DeploymentTarget {
     /// <p>The deployment type that is specific to the deployment's compute platform or deployments initiated by a CloudFormation stack update.</p>
     #[serde(rename = "deploymentTargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_target_type: Option<String>,
+    pub deployment_target_type: Option<DeploymentTargetType>,
     /// <p> Information about the target for a deployment that uses the Amazon ECS compute platform. </p>
     #[serde(rename = "ecsTarget")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -980,6 +1888,326 @@ pub struct DeploymentTarget {
     #[serde(rename = "lambdaTarget")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_target: Option<LambdaTarget>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentTargetType {
+    CloudFormationTarget,
+    Ecstarget,
+    InstanceTarget,
+    LambdaTarget,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentTargetType),
+}
+
+impl Default for DeploymentTargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentTargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentTargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentTargetType {
+    fn into(self) -> String {
+        match self {
+            DeploymentTargetType::CloudFormationTarget => "CloudFormationTarget".to_string(),
+            DeploymentTargetType::Ecstarget => "ECSTarget".to_string(),
+            DeploymentTargetType::InstanceTarget => "InstanceTarget".to_string(),
+            DeploymentTargetType::LambdaTarget => "LambdaTarget".to_string(),
+            DeploymentTargetType::UnknownVariant(UnknownDeploymentTargetType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentTargetType {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentTargetType::CloudFormationTarget => &"CloudFormationTarget",
+            DeploymentTargetType::Ecstarget => &"ECSTarget",
+            DeploymentTargetType::InstanceTarget => &"InstanceTarget",
+            DeploymentTargetType::LambdaTarget => &"LambdaTarget",
+            DeploymentTargetType::UnknownVariant(UnknownDeploymentTargetType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentTargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CloudFormationTarget" => DeploymentTargetType::CloudFormationTarget,
+            "ECSTarget" => DeploymentTargetType::Ecstarget,
+            "InstanceTarget" => DeploymentTargetType::InstanceTarget,
+            "LambdaTarget" => DeploymentTargetType::LambdaTarget,
+            _ => DeploymentTargetType::UnknownVariant(UnknownDeploymentTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentTargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CloudFormationTarget" => DeploymentTargetType::CloudFormationTarget,
+            "ECSTarget" => DeploymentTargetType::Ecstarget,
+            "InstanceTarget" => DeploymentTargetType::InstanceTarget,
+            "LambdaTarget" => DeploymentTargetType::LambdaTarget,
+            _ => DeploymentTargetType::UnknownVariant(UnknownDeploymentTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentTargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentTargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentTargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentType {
+    BlueGreen,
+    InPlace,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentType),
+}
+
+impl Default for DeploymentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentType {
+    fn into(self) -> String {
+        match self {
+            DeploymentType::BlueGreen => "BLUE_GREEN".to_string(),
+            DeploymentType::InPlace => "IN_PLACE".to_string(),
+            DeploymentType::UnknownVariant(UnknownDeploymentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentType {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentType::BlueGreen => &"BLUE_GREEN",
+            DeploymentType::InPlace => &"IN_PLACE",
+            DeploymentType::UnknownVariant(UnknownDeploymentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLUE_GREEN" => DeploymentType::BlueGreen,
+            "IN_PLACE" => DeploymentType::InPlace,
+            _ => DeploymentType::UnknownVariant(UnknownDeploymentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLUE_GREEN" => DeploymentType::BlueGreen,
+            "IN_PLACE" => DeploymentType::InPlace,
+            _ => DeploymentType::UnknownVariant(UnknownDeploymentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentWaitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentWaitType {
+    ReadyWait,
+    TerminationWait,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentWaitType),
+}
+
+impl Default for DeploymentWaitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentWaitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentWaitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentWaitType {
+    fn into(self) -> String {
+        match self {
+            DeploymentWaitType::ReadyWait => "READY_WAIT".to_string(),
+            DeploymentWaitType::TerminationWait => "TERMINATION_WAIT".to_string(),
+            DeploymentWaitType::UnknownVariant(UnknownDeploymentWaitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentWaitType {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentWaitType::ReadyWait => &"READY_WAIT",
+            DeploymentWaitType::TerminationWait => &"TERMINATION_WAIT",
+            DeploymentWaitType::UnknownVariant(UnknownDeploymentWaitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentWaitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "READY_WAIT" => DeploymentWaitType::ReadyWait,
+            "TERMINATION_WAIT" => DeploymentWaitType::TerminationWait,
+            _ => DeploymentWaitType::UnknownVariant(UnknownDeploymentWaitType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentWaitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "READY_WAIT" => DeploymentWaitType::ReadyWait,
+            "TERMINATION_WAIT" => DeploymentWaitType::TerminationWait,
+            _ => DeploymentWaitType::UnknownVariant(UnknownDeploymentWaitType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentWaitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentWaitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DeploymentWaitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a <code>DeregisterOnPremisesInstance</code> operation.</p>
@@ -998,7 +2226,7 @@ pub struct Diagnostics {
     /// <p><p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul></p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<LifecycleErrorCode>,
     /// <p>The last portion of the diagnostic log.</p> <p>If available, AWS CodeDeploy returns up to the last 4 KB of the diagnostic log.</p>
     #[serde(rename = "logTail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1023,11 +2251,120 @@ pub struct EC2TagFilter {
     /// <p><p>The tag filter type:</p> <ul> <li> <p> <code>KEY<em>ONLY</code>: Key only.</p> </li> <li> <p> <code>VALUE</em>ONLY</code>: Value only.</p> </li> <li> <p> <code>KEY<em>AND</em>VALUE</code>: Key and value.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EC2TagFilterType>,
     /// <p>The tag filter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEC2TagFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EC2TagFilterType {
+    KeyAndValue,
+    KeyOnly,
+    ValueOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEC2TagFilterType),
+}
+
+impl Default for EC2TagFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EC2TagFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EC2TagFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EC2TagFilterType {
+    fn into(self) -> String {
+        match self {
+            EC2TagFilterType::KeyAndValue => "KEY_AND_VALUE".to_string(),
+            EC2TagFilterType::KeyOnly => "KEY_ONLY".to_string(),
+            EC2TagFilterType::ValueOnly => "VALUE_ONLY".to_string(),
+            EC2TagFilterType::UnknownVariant(UnknownEC2TagFilterType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EC2TagFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            EC2TagFilterType::KeyAndValue => &"KEY_AND_VALUE",
+            EC2TagFilterType::KeyOnly => &"KEY_ONLY",
+            EC2TagFilterType::ValueOnly => &"VALUE_ONLY",
+            EC2TagFilterType::UnknownVariant(UnknownEC2TagFilterType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EC2TagFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEY_AND_VALUE" => EC2TagFilterType::KeyAndValue,
+            "KEY_ONLY" => EC2TagFilterType::KeyOnly,
+            "VALUE_ONLY" => EC2TagFilterType::ValueOnly,
+            _ => EC2TagFilterType::UnknownVariant(UnknownEC2TagFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EC2TagFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEY_AND_VALUE" => EC2TagFilterType::KeyAndValue,
+            "KEY_ONLY" => EC2TagFilterType::KeyOnly,
+            "VALUE_ONLY" => EC2TagFilterType::ValueOnly,
+            _ => EC2TagFilterType::UnknownVariant(UnknownEC2TagFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EC2TagFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EC2TagFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EC2TagFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about groups of EC2 instance tags.</p>
@@ -1071,7 +2408,7 @@ pub struct ECSTarget {
     /// <p> The status an Amazon ECS deployment's target ECS application. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TargetStatus>,
     /// <p> The Amazon Resource Name (ARN) of the target. </p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1117,7 +2454,7 @@ pub struct ECSTaskSet {
     /// <p> A label that identifies whether the ECS task set is an original target (<code>BLUE</code>) or a replacement target (<code>GREEN</code>). </p>
     #[serde(rename = "taskSetLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_set_label: Option<String>,
+    pub task_set_label: Option<TargetLabel>,
     /// <p> The percentage of traffic served by this task set. </p>
     #[serde(rename = "trafficWeight")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1133,6 +2470,279 @@ pub struct ELBInfo {
     pub name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    AgentIssue,
+    AlarmActive,
+    ApplicationMissing,
+    AutoscalingValidationError,
+    AutoScalingConfiguration,
+    AutoScalingIamRolePermissions,
+    CloudformationStackFailure,
+    CodedeployResourceCannotBeFound,
+    CustomerApplicationUnhealthy,
+    DeploymentGroupMissing,
+    EcsUpdateError,
+    ElasticLoadBalancingInvalid,
+    ElbInvalidInstance,
+    HealthConstraints,
+    HealthConstraintsInvalid,
+    HookExecutionFailure,
+    IamRoleMissing,
+    IamRolePermissions,
+    InternalError,
+    InvalidEcsService,
+    InvalidLambdaConfiguration,
+    InvalidLambdaFunction,
+    InvalidRevision,
+    ManualStop,
+    MissingBlueGreenDeploymentConfiguration,
+    MissingElbInformation,
+    MissingGithubToken,
+    NoEc2Subscription,
+    NoInstances,
+    OverMaxInstances,
+    ResourceLimitExceeded,
+    RevisionMissing,
+    Throttled,
+    Timeout,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::AgentIssue => "AGENT_ISSUE".to_string(),
+            ErrorCode::AlarmActive => "ALARM_ACTIVE".to_string(),
+            ErrorCode::ApplicationMissing => "APPLICATION_MISSING".to_string(),
+            ErrorCode::AutoscalingValidationError => "AUTOSCALING_VALIDATION_ERROR".to_string(),
+            ErrorCode::AutoScalingConfiguration => "AUTO_SCALING_CONFIGURATION".to_string(),
+            ErrorCode::AutoScalingIamRolePermissions => {
+                "AUTO_SCALING_IAM_ROLE_PERMISSIONS".to_string()
+            }
+            ErrorCode::CloudformationStackFailure => "CLOUDFORMATION_STACK_FAILURE".to_string(),
+            ErrorCode::CodedeployResourceCannotBeFound => {
+                "CODEDEPLOY_RESOURCE_CANNOT_BE_FOUND".to_string()
+            }
+            ErrorCode::CustomerApplicationUnhealthy => "CUSTOMER_APPLICATION_UNHEALTHY".to_string(),
+            ErrorCode::DeploymentGroupMissing => "DEPLOYMENT_GROUP_MISSING".to_string(),
+            ErrorCode::EcsUpdateError => "ECS_UPDATE_ERROR".to_string(),
+            ErrorCode::ElasticLoadBalancingInvalid => "ELASTIC_LOAD_BALANCING_INVALID".to_string(),
+            ErrorCode::ElbInvalidInstance => "ELB_INVALID_INSTANCE".to_string(),
+            ErrorCode::HealthConstraints => "HEALTH_CONSTRAINTS".to_string(),
+            ErrorCode::HealthConstraintsInvalid => "HEALTH_CONSTRAINTS_INVALID".to_string(),
+            ErrorCode::HookExecutionFailure => "HOOK_EXECUTION_FAILURE".to_string(),
+            ErrorCode::IamRoleMissing => "IAM_ROLE_MISSING".to_string(),
+            ErrorCode::IamRolePermissions => "IAM_ROLE_PERMISSIONS".to_string(),
+            ErrorCode::InternalError => "INTERNAL_ERROR".to_string(),
+            ErrorCode::InvalidEcsService => "INVALID_ECS_SERVICE".to_string(),
+            ErrorCode::InvalidLambdaConfiguration => "INVALID_LAMBDA_CONFIGURATION".to_string(),
+            ErrorCode::InvalidLambdaFunction => "INVALID_LAMBDA_FUNCTION".to_string(),
+            ErrorCode::InvalidRevision => "INVALID_REVISION".to_string(),
+            ErrorCode::ManualStop => "MANUAL_STOP".to_string(),
+            ErrorCode::MissingBlueGreenDeploymentConfiguration => {
+                "MISSING_BLUE_GREEN_DEPLOYMENT_CONFIGURATION".to_string()
+            }
+            ErrorCode::MissingElbInformation => "MISSING_ELB_INFORMATION".to_string(),
+            ErrorCode::MissingGithubToken => "MISSING_GITHUB_TOKEN".to_string(),
+            ErrorCode::NoEc2Subscription => "NO_EC2_SUBSCRIPTION".to_string(),
+            ErrorCode::NoInstances => "NO_INSTANCES".to_string(),
+            ErrorCode::OverMaxInstances => "OVER_MAX_INSTANCES".to_string(),
+            ErrorCode::ResourceLimitExceeded => "RESOURCE_LIMIT_EXCEEDED".to_string(),
+            ErrorCode::RevisionMissing => "REVISION_MISSING".to_string(),
+            ErrorCode::Throttled => "THROTTLED".to_string(),
+            ErrorCode::Timeout => "TIMEOUT".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::AgentIssue => &"AGENT_ISSUE",
+            ErrorCode::AlarmActive => &"ALARM_ACTIVE",
+            ErrorCode::ApplicationMissing => &"APPLICATION_MISSING",
+            ErrorCode::AutoscalingValidationError => &"AUTOSCALING_VALIDATION_ERROR",
+            ErrorCode::AutoScalingConfiguration => &"AUTO_SCALING_CONFIGURATION",
+            ErrorCode::AutoScalingIamRolePermissions => &"AUTO_SCALING_IAM_ROLE_PERMISSIONS",
+            ErrorCode::CloudformationStackFailure => &"CLOUDFORMATION_STACK_FAILURE",
+            ErrorCode::CodedeployResourceCannotBeFound => &"CODEDEPLOY_RESOURCE_CANNOT_BE_FOUND",
+            ErrorCode::CustomerApplicationUnhealthy => &"CUSTOMER_APPLICATION_UNHEALTHY",
+            ErrorCode::DeploymentGroupMissing => &"DEPLOYMENT_GROUP_MISSING",
+            ErrorCode::EcsUpdateError => &"ECS_UPDATE_ERROR",
+            ErrorCode::ElasticLoadBalancingInvalid => &"ELASTIC_LOAD_BALANCING_INVALID",
+            ErrorCode::ElbInvalidInstance => &"ELB_INVALID_INSTANCE",
+            ErrorCode::HealthConstraints => &"HEALTH_CONSTRAINTS",
+            ErrorCode::HealthConstraintsInvalid => &"HEALTH_CONSTRAINTS_INVALID",
+            ErrorCode::HookExecutionFailure => &"HOOK_EXECUTION_FAILURE",
+            ErrorCode::IamRoleMissing => &"IAM_ROLE_MISSING",
+            ErrorCode::IamRolePermissions => &"IAM_ROLE_PERMISSIONS",
+            ErrorCode::InternalError => &"INTERNAL_ERROR",
+            ErrorCode::InvalidEcsService => &"INVALID_ECS_SERVICE",
+            ErrorCode::InvalidLambdaConfiguration => &"INVALID_LAMBDA_CONFIGURATION",
+            ErrorCode::InvalidLambdaFunction => &"INVALID_LAMBDA_FUNCTION",
+            ErrorCode::InvalidRevision => &"INVALID_REVISION",
+            ErrorCode::ManualStop => &"MANUAL_STOP",
+            ErrorCode::MissingBlueGreenDeploymentConfiguration => {
+                &"MISSING_BLUE_GREEN_DEPLOYMENT_CONFIGURATION"
+            }
+            ErrorCode::MissingElbInformation => &"MISSING_ELB_INFORMATION",
+            ErrorCode::MissingGithubToken => &"MISSING_GITHUB_TOKEN",
+            ErrorCode::NoEc2Subscription => &"NO_EC2_SUBSCRIPTION",
+            ErrorCode::NoInstances => &"NO_INSTANCES",
+            ErrorCode::OverMaxInstances => &"OVER_MAX_INSTANCES",
+            ErrorCode::ResourceLimitExceeded => &"RESOURCE_LIMIT_EXCEEDED",
+            ErrorCode::RevisionMissing => &"REVISION_MISSING",
+            ErrorCode::Throttled => &"THROTTLED",
+            ErrorCode::Timeout => &"TIMEOUT",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AGENT_ISSUE" => ErrorCode::AgentIssue,
+            "ALARM_ACTIVE" => ErrorCode::AlarmActive,
+            "APPLICATION_MISSING" => ErrorCode::ApplicationMissing,
+            "AUTOSCALING_VALIDATION_ERROR" => ErrorCode::AutoscalingValidationError,
+            "AUTO_SCALING_CONFIGURATION" => ErrorCode::AutoScalingConfiguration,
+            "AUTO_SCALING_IAM_ROLE_PERMISSIONS" => ErrorCode::AutoScalingIamRolePermissions,
+            "CLOUDFORMATION_STACK_FAILURE" => ErrorCode::CloudformationStackFailure,
+            "CODEDEPLOY_RESOURCE_CANNOT_BE_FOUND" => ErrorCode::CodedeployResourceCannotBeFound,
+            "CUSTOMER_APPLICATION_UNHEALTHY" => ErrorCode::CustomerApplicationUnhealthy,
+            "DEPLOYMENT_GROUP_MISSING" => ErrorCode::DeploymentGroupMissing,
+            "ECS_UPDATE_ERROR" => ErrorCode::EcsUpdateError,
+            "ELASTIC_LOAD_BALANCING_INVALID" => ErrorCode::ElasticLoadBalancingInvalid,
+            "ELB_INVALID_INSTANCE" => ErrorCode::ElbInvalidInstance,
+            "HEALTH_CONSTRAINTS" => ErrorCode::HealthConstraints,
+            "HEALTH_CONSTRAINTS_INVALID" => ErrorCode::HealthConstraintsInvalid,
+            "HOOK_EXECUTION_FAILURE" => ErrorCode::HookExecutionFailure,
+            "IAM_ROLE_MISSING" => ErrorCode::IamRoleMissing,
+            "IAM_ROLE_PERMISSIONS" => ErrorCode::IamRolePermissions,
+            "INTERNAL_ERROR" => ErrorCode::InternalError,
+            "INVALID_ECS_SERVICE" => ErrorCode::InvalidEcsService,
+            "INVALID_LAMBDA_CONFIGURATION" => ErrorCode::InvalidLambdaConfiguration,
+            "INVALID_LAMBDA_FUNCTION" => ErrorCode::InvalidLambdaFunction,
+            "INVALID_REVISION" => ErrorCode::InvalidRevision,
+            "MANUAL_STOP" => ErrorCode::ManualStop,
+            "MISSING_BLUE_GREEN_DEPLOYMENT_CONFIGURATION" => {
+                ErrorCode::MissingBlueGreenDeploymentConfiguration
+            }
+            "MISSING_ELB_INFORMATION" => ErrorCode::MissingElbInformation,
+            "MISSING_GITHUB_TOKEN" => ErrorCode::MissingGithubToken,
+            "NO_EC2_SUBSCRIPTION" => ErrorCode::NoEc2Subscription,
+            "NO_INSTANCES" => ErrorCode::NoInstances,
+            "OVER_MAX_INSTANCES" => ErrorCode::OverMaxInstances,
+            "RESOURCE_LIMIT_EXCEEDED" => ErrorCode::ResourceLimitExceeded,
+            "REVISION_MISSING" => ErrorCode::RevisionMissing,
+            "THROTTLED" => ErrorCode::Throttled,
+            "TIMEOUT" => ErrorCode::Timeout,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AGENT_ISSUE" => ErrorCode::AgentIssue,
+            "ALARM_ACTIVE" => ErrorCode::AlarmActive,
+            "APPLICATION_MISSING" => ErrorCode::ApplicationMissing,
+            "AUTOSCALING_VALIDATION_ERROR" => ErrorCode::AutoscalingValidationError,
+            "AUTO_SCALING_CONFIGURATION" => ErrorCode::AutoScalingConfiguration,
+            "AUTO_SCALING_IAM_ROLE_PERMISSIONS" => ErrorCode::AutoScalingIamRolePermissions,
+            "CLOUDFORMATION_STACK_FAILURE" => ErrorCode::CloudformationStackFailure,
+            "CODEDEPLOY_RESOURCE_CANNOT_BE_FOUND" => ErrorCode::CodedeployResourceCannotBeFound,
+            "CUSTOMER_APPLICATION_UNHEALTHY" => ErrorCode::CustomerApplicationUnhealthy,
+            "DEPLOYMENT_GROUP_MISSING" => ErrorCode::DeploymentGroupMissing,
+            "ECS_UPDATE_ERROR" => ErrorCode::EcsUpdateError,
+            "ELASTIC_LOAD_BALANCING_INVALID" => ErrorCode::ElasticLoadBalancingInvalid,
+            "ELB_INVALID_INSTANCE" => ErrorCode::ElbInvalidInstance,
+            "HEALTH_CONSTRAINTS" => ErrorCode::HealthConstraints,
+            "HEALTH_CONSTRAINTS_INVALID" => ErrorCode::HealthConstraintsInvalid,
+            "HOOK_EXECUTION_FAILURE" => ErrorCode::HookExecutionFailure,
+            "IAM_ROLE_MISSING" => ErrorCode::IamRoleMissing,
+            "IAM_ROLE_PERMISSIONS" => ErrorCode::IamRolePermissions,
+            "INTERNAL_ERROR" => ErrorCode::InternalError,
+            "INVALID_ECS_SERVICE" => ErrorCode::InvalidEcsService,
+            "INVALID_LAMBDA_CONFIGURATION" => ErrorCode::InvalidLambdaConfiguration,
+            "INVALID_LAMBDA_FUNCTION" => ErrorCode::InvalidLambdaFunction,
+            "INVALID_REVISION" => ErrorCode::InvalidRevision,
+            "MANUAL_STOP" => ErrorCode::ManualStop,
+            "MISSING_BLUE_GREEN_DEPLOYMENT_CONFIGURATION" => {
+                ErrorCode::MissingBlueGreenDeploymentConfiguration
+            }
+            "MISSING_ELB_INFORMATION" => ErrorCode::MissingElbInformation,
+            "MISSING_GITHUB_TOKEN" => ErrorCode::MissingGithubToken,
+            "NO_EC2_SUBSCRIPTION" => ErrorCode::NoEc2Subscription,
+            "NO_INSTANCES" => ErrorCode::NoInstances,
+            "OVER_MAX_INSTANCES" => ErrorCode::OverMaxInstances,
+            "RESOURCE_LIMIT_EXCEEDED" => ErrorCode::ResourceLimitExceeded,
+            "REVISION_MISSING" => ErrorCode::RevisionMissing,
+            "THROTTLED" => ErrorCode::Throttled,
+            "TIMEOUT" => ErrorCode::Timeout,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a deployment error.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1140,11 +2750,120 @@ pub struct ErrorInformation {
     /// <p><p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code is most likely raised if the application is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code is most likely raised if the deployment group is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to Amazon EC2.</p> </li> <li> <p>NO</em>INSTANCES: No instances were specified, or no instances can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instances was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code is most likely raised if the revision is deleted after the deployment is created, but before it is started.</p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<ErrorCode>,
     /// <p>An accompanying error message.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileExistsBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileExistsBehavior {
+    Disallow,
+    Overwrite,
+    Retain,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileExistsBehavior),
+}
+
+impl Default for FileExistsBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileExistsBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileExistsBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileExistsBehavior {
+    fn into(self) -> String {
+        match self {
+            FileExistsBehavior::Disallow => "DISALLOW".to_string(),
+            FileExistsBehavior::Overwrite => "OVERWRITE".to_string(),
+            FileExistsBehavior::Retain => "RETAIN".to_string(),
+            FileExistsBehavior::UnknownVariant(UnknownFileExistsBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileExistsBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            FileExistsBehavior::Disallow => &"DISALLOW",
+            FileExistsBehavior::Overwrite => &"OVERWRITE",
+            FileExistsBehavior::Retain => &"RETAIN",
+            FileExistsBehavior::UnknownVariant(UnknownFileExistsBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FileExistsBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISALLOW" => FileExistsBehavior::Disallow,
+            "OVERWRITE" => FileExistsBehavior::Overwrite,
+            "RETAIN" => FileExistsBehavior::Retain,
+            _ => FileExistsBehavior::UnknownVariant(UnknownFileExistsBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileExistsBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISALLOW" => FileExistsBehavior::Disallow,
+            "OVERWRITE" => FileExistsBehavior::Overwrite,
+            "RETAIN" => FileExistsBehavior::Retain,
+            _ => FileExistsBehavior::UnknownVariant(UnknownFileExistsBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileExistsBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileExistsBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileExistsBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an application revision.</p>
@@ -1358,13 +3077,225 @@ pub struct GitHubLocation {
     pub repository: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGreenFleetProvisioningAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GreenFleetProvisioningAction {
+    CopyAutoScalingGroup,
+    DiscoverExisting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGreenFleetProvisioningAction),
+}
+
+impl Default for GreenFleetProvisioningAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GreenFleetProvisioningAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GreenFleetProvisioningAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GreenFleetProvisioningAction {
+    fn into(self) -> String {
+        match self {
+            GreenFleetProvisioningAction::CopyAutoScalingGroup => {
+                "COPY_AUTO_SCALING_GROUP".to_string()
+            }
+            GreenFleetProvisioningAction::DiscoverExisting => "DISCOVER_EXISTING".to_string(),
+            GreenFleetProvisioningAction::UnknownVariant(UnknownGreenFleetProvisioningAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GreenFleetProvisioningAction {
+    fn into(self) -> &'a str {
+        match self {
+            GreenFleetProvisioningAction::CopyAutoScalingGroup => &"COPY_AUTO_SCALING_GROUP",
+            GreenFleetProvisioningAction::DiscoverExisting => &"DISCOVER_EXISTING",
+            GreenFleetProvisioningAction::UnknownVariant(UnknownGreenFleetProvisioningAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GreenFleetProvisioningAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "COPY_AUTO_SCALING_GROUP" => GreenFleetProvisioningAction::CopyAutoScalingGroup,
+            "DISCOVER_EXISTING" => GreenFleetProvisioningAction::DiscoverExisting,
+            _ => {
+                GreenFleetProvisioningAction::UnknownVariant(UnknownGreenFleetProvisioningAction {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for GreenFleetProvisioningAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COPY_AUTO_SCALING_GROUP" => GreenFleetProvisioningAction::CopyAutoScalingGroup,
+            "DISCOVER_EXISTING" => GreenFleetProvisioningAction::DiscoverExisting,
+            _ => {
+                GreenFleetProvisioningAction::UnknownVariant(UnknownGreenFleetProvisioningAction {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for GreenFleetProvisioningAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GreenFleetProvisioningAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GreenFleetProvisioningAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GreenFleetProvisioningOption {
     /// <p><p>The method used to add instances to a replacement environment.</p> <ul> <li> <p> <code>DISCOVER<em>EXISTING</code>: Use instances that already exist or will be created manually.</p> </li> <li> <p> <code>COPY</em>AUTO<em>SCALING</em>GROUP</code>: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<GreenFleetProvisioningAction>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceAction {
+    KeepAlive,
+    Terminate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceAction),
+}
+
+impl Default for InstanceAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceAction {
+    fn into(self) -> String {
+        match self {
+            InstanceAction::KeepAlive => "KEEP_ALIVE".to_string(),
+            InstanceAction::Terminate => "TERMINATE".to_string(),
+            InstanceAction::UnknownVariant(UnknownInstanceAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceAction {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceAction::KeepAlive => &"KEEP_ALIVE",
+            InstanceAction::Terminate => &"TERMINATE",
+            InstanceAction::UnknownVariant(UnknownInstanceAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEEP_ALIVE" => InstanceAction::KeepAlive,
+            "TERMINATE" => InstanceAction::Terminate,
+            _ => InstanceAction::UnknownVariant(UnknownInstanceAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEEP_ALIVE" => InstanceAction::KeepAlive,
+            "TERMINATE" => InstanceAction::Terminate,
+            _ => InstanceAction::UnknownVariant(UnknownInstanceAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an on-premises instance.</p>
@@ -1401,6 +3332,131 @@ pub struct InstanceInfo {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceStatus {
+    Failed,
+    InProgress,
+    Pending,
+    Ready,
+    Skipped,
+    Succeeded,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceStatus),
+}
+
+impl Default for InstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceStatus {
+    fn into(self) -> String {
+        match self {
+            InstanceStatus::Failed => "Failed".to_string(),
+            InstanceStatus::InProgress => "InProgress".to_string(),
+            InstanceStatus::Pending => "Pending".to_string(),
+            InstanceStatus::Ready => "Ready".to_string(),
+            InstanceStatus::Skipped => "Skipped".to_string(),
+            InstanceStatus::Succeeded => "Succeeded".to_string(),
+            InstanceStatus::Unknown => "Unknown".to_string(),
+            InstanceStatus::UnknownVariant(UnknownInstanceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceStatus::Failed => &"Failed",
+            InstanceStatus::InProgress => &"InProgress",
+            InstanceStatus::Pending => &"Pending",
+            InstanceStatus::Ready => &"Ready",
+            InstanceStatus::Skipped => &"Skipped",
+            InstanceStatus::Succeeded => &"Succeeded",
+            InstanceStatus::Unknown => &"Unknown",
+            InstanceStatus::UnknownVariant(UnknownInstanceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => InstanceStatus::Failed,
+            "InProgress" => InstanceStatus::InProgress,
+            "Pending" => InstanceStatus::Pending,
+            "Ready" => InstanceStatus::Ready,
+            "Skipped" => InstanceStatus::Skipped,
+            "Succeeded" => InstanceStatus::Succeeded,
+            "Unknown" => InstanceStatus::Unknown,
+            _ => InstanceStatus::UnknownVariant(UnknownInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => InstanceStatus::Failed,
+            "InProgress" => InstanceStatus::InProgress,
+            "Pending" => InstanceStatus::Pending,
+            "Ready" => InstanceStatus::Ready,
+            "Skipped" => InstanceStatus::Skipped,
+            "Succeeded" => InstanceStatus::Succeeded,
+            "Unknown" => InstanceStatus::Unknown,
+            _ => InstanceStatus::UnknownVariant(UnknownInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about an instance in a deployment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1416,7 +3472,7 @@ pub struct InstanceSummary {
     /// <p><p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul></p>
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<InstanceType>,
     /// <p>A timestamp that indicates when the instance information was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1428,7 +3484,7 @@ pub struct InstanceSummary {
     /// <p><p>The deployment status for this instance:</p> <ul> <li> <p> <code>Pending</code>: The deployment is pending for this instance.</p> </li> <li> <p> <code>In Progress</code>: The deployment is in progress for this instance.</p> </li> <li> <p> <code>Succeeded</code>: The deployment has succeeded for this instance.</p> </li> <li> <p> <code>Failed</code>: The deployment has failed for this instance.</p> </li> <li> <p> <code>Skipped</code>: The deployment has been skipped for this instance.</p> </li> <li> <p> <code>Unknown</code>: The deployment status is unknown for this instance.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<InstanceStatus>,
 }
 
 /// <p> A target Amazon EC2 or on-premises instance during a deployment that uses the EC2/On-premises compute platform. </p>
@@ -1442,7 +3498,7 @@ pub struct InstanceTarget {
     /// <p> A label that identifies whether the instance is an original target (<code>BLUE</code>) or a replacement target (<code>GREEN</code>). </p>
     #[serde(rename = "instanceLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_label: Option<String>,
+    pub instance_label: Option<TargetLabel>,
     /// <p> The date and time when the target instance was updated by a deployment. </p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1454,7 +3510,7 @@ pub struct InstanceTarget {
     /// <p> The status an EC2/On-premises deployment's target instance. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TargetStatus>,
     /// <p> The Amazon Resource Name (ARN) of the target. </p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1463,6 +3519,106 @@ pub struct InstanceTarget {
     #[serde(rename = "targetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceType {
+    Blue,
+    Green,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceType),
+}
+
+impl Default for InstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceType {
+    fn into(self) -> String {
+        match self {
+            InstanceType::Blue => "Blue".to_string(),
+            InstanceType::Green => "Green".to_string(),
+            InstanceType::UnknownVariant(UnknownInstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceType::Blue => &"Blue",
+            InstanceType::Green => &"Green",
+            InstanceType::UnknownVariant(UnknownInstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Blue" => InstanceType::Blue,
+            "Green" => InstanceType::Green,
+            _ => InstanceType::UnknownVariant(UnknownInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Blue" => InstanceType::Blue,
+            "Green" => InstanceType::Green,
+            _ => InstanceType::UnknownVariant(UnknownInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Information about a Lambda function specified in a deployment. </p>
@@ -1514,7 +3670,7 @@ pub struct LambdaTarget {
     /// <p> The status an AWS Lambda deployment's target Lambda function. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TargetStatus>,
     /// <p> The Amazon Resource Name (ARN) of the target. </p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1544,7 +3700,132 @@ pub struct LastDeploymentInfo {
     /// <p>The status of the most recent deployment.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeploymentStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLifecycleErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LifecycleErrorCode {
+    ScriptFailed,
+    ScriptMissing,
+    ScriptNotExecutable,
+    ScriptTimedOut,
+    Success,
+    UnknownError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLifecycleErrorCode),
+}
+
+impl Default for LifecycleErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LifecycleErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LifecycleErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LifecycleErrorCode {
+    fn into(self) -> String {
+        match self {
+            LifecycleErrorCode::ScriptFailed => "ScriptFailed".to_string(),
+            LifecycleErrorCode::ScriptMissing => "ScriptMissing".to_string(),
+            LifecycleErrorCode::ScriptNotExecutable => "ScriptNotExecutable".to_string(),
+            LifecycleErrorCode::ScriptTimedOut => "ScriptTimedOut".to_string(),
+            LifecycleErrorCode::Success => "Success".to_string(),
+            LifecycleErrorCode::UnknownError => "UnknownError".to_string(),
+            LifecycleErrorCode::UnknownVariant(UnknownLifecycleErrorCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LifecycleErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            LifecycleErrorCode::ScriptFailed => &"ScriptFailed",
+            LifecycleErrorCode::ScriptMissing => &"ScriptMissing",
+            LifecycleErrorCode::ScriptNotExecutable => &"ScriptNotExecutable",
+            LifecycleErrorCode::ScriptTimedOut => &"ScriptTimedOut",
+            LifecycleErrorCode::Success => &"Success",
+            LifecycleErrorCode::UnknownError => &"UnknownError",
+            LifecycleErrorCode::UnknownVariant(UnknownLifecycleErrorCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LifecycleErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ScriptFailed" => LifecycleErrorCode::ScriptFailed,
+            "ScriptMissing" => LifecycleErrorCode::ScriptMissing,
+            "ScriptNotExecutable" => LifecycleErrorCode::ScriptNotExecutable,
+            "ScriptTimedOut" => LifecycleErrorCode::ScriptTimedOut,
+            "Success" => LifecycleErrorCode::Success,
+            "UnknownError" => LifecycleErrorCode::UnknownError,
+            _ => LifecycleErrorCode::UnknownVariant(UnknownLifecycleErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LifecycleErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ScriptFailed" => LifecycleErrorCode::ScriptFailed,
+            "ScriptMissing" => LifecycleErrorCode::ScriptMissing,
+            "ScriptNotExecutable" => LifecycleErrorCode::ScriptNotExecutable,
+            "ScriptTimedOut" => LifecycleErrorCode::ScriptTimedOut,
+            "Success" => LifecycleErrorCode::Success,
+            "UnknownError" => LifecycleErrorCode::UnknownError,
+            _ => LifecycleErrorCode::UnknownVariant(UnknownLifecycleErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecycleErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LifecycleErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LifecycleErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a deployment lifecycle event.</p>
@@ -1570,7 +3851,131 @@ pub struct LifecycleEvent {
     /// <p><p>The deployment lifecycle event status:</p> <ul> <li> <p>Pending: The deployment lifecycle event is pending.</p> </li> <li> <p>InProgress: The deployment lifecycle event is in progress.</p> </li> <li> <p>Succeeded: The deployment lifecycle event ran successfully.</p> </li> <li> <p>Failed: The deployment lifecycle event has failed.</p> </li> <li> <p>Skipped: The deployment lifecycle event has been skipped.</p> </li> <li> <p>Unknown: The deployment lifecycle event is unknown.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LifecycleEventStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLifecycleEventStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LifecycleEventStatus {
+    Failed,
+    InProgress,
+    Pending,
+    Skipped,
+    Succeeded,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLifecycleEventStatus),
+}
+
+impl Default for LifecycleEventStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LifecycleEventStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LifecycleEventStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LifecycleEventStatus {
+    fn into(self) -> String {
+        match self {
+            LifecycleEventStatus::Failed => "Failed".to_string(),
+            LifecycleEventStatus::InProgress => "InProgress".to_string(),
+            LifecycleEventStatus::Pending => "Pending".to_string(),
+            LifecycleEventStatus::Skipped => "Skipped".to_string(),
+            LifecycleEventStatus::Succeeded => "Succeeded".to_string(),
+            LifecycleEventStatus::Unknown => "Unknown".to_string(),
+            LifecycleEventStatus::UnknownVariant(UnknownLifecycleEventStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LifecycleEventStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LifecycleEventStatus::Failed => &"Failed",
+            LifecycleEventStatus::InProgress => &"InProgress",
+            LifecycleEventStatus::Pending => &"Pending",
+            LifecycleEventStatus::Skipped => &"Skipped",
+            LifecycleEventStatus::Succeeded => &"Succeeded",
+            LifecycleEventStatus::Unknown => &"Unknown",
+            LifecycleEventStatus::UnknownVariant(UnknownLifecycleEventStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LifecycleEventStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => LifecycleEventStatus::Failed,
+            "InProgress" => LifecycleEventStatus::InProgress,
+            "Pending" => LifecycleEventStatus::Pending,
+            "Skipped" => LifecycleEventStatus::Skipped,
+            "Succeeded" => LifecycleEventStatus::Succeeded,
+            "Unknown" => LifecycleEventStatus::Unknown,
+            _ => LifecycleEventStatus::UnknownVariant(UnknownLifecycleEventStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LifecycleEventStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => LifecycleEventStatus::Failed,
+            "InProgress" => LifecycleEventStatus::InProgress,
+            "Pending" => LifecycleEventStatus::Pending,
+            "Skipped" => LifecycleEventStatus::Skipped,
+            "Succeeded" => LifecycleEventStatus::Succeeded,
+            "Unknown" => LifecycleEventStatus::Unknown,
+            _ => LifecycleEventStatus::UnknownVariant(UnknownLifecycleEventStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecycleEventStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LifecycleEventStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LifecycleEventStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Represents the input of a <code>ListApplicationRevisions</code> operation. </p>
@@ -1583,7 +3988,7 @@ pub struct ListApplicationRevisionsInput {
     /// <p><p> Whether to list revisions based on whether the revision is the target revision of a deployment group: </p> <ul> <li> <p> <code>include</code>: List revisions that are target revisions of a deployment group.</p> </li> <li> <p> <code>exclude</code>: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p> <code>ignore</code>: List all revisions.</p> </li> </ul></p>
     #[serde(rename = "deployed")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployed: Option<String>,
+    pub deployed: Option<ListStateFilterAction>,
     /// <p>An identifier returned from the previous <code>ListApplicationRevisions</code> call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1599,11 +4004,11 @@ pub struct ListApplicationRevisionsInput {
     /// <p>The column name to use to sort the list results:</p> <ul> <li> <p> <code>registerTime</code>: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p> <code>firstUsedTime</code>: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p> <code>lastUsedTime</code>: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p> If not specified or set to null, the results are returned in an arbitrary order. </p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ApplicationRevisionSortBy>,
     /// <p> The order in which to sort the list results: </p> <ul> <li> <p> <code>ascending</code>: ascending order.</p> </li> <li> <p> <code>descending</code>: descending order.</p> </li> </ul> <p>If not specified, the results are sorted in ascending order.</p> <p>If set to null, the results are sorted in an arbitrary order.</p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 /// <p>Represents the output of a <code>ListApplicationRevisions</code> operation.</p>
@@ -1709,11 +4114,11 @@ pub struct ListDeploymentInstancesInput {
     /// <p><p>A subset of instances to list by status:</p> <ul> <li> <p> <code>Pending</code>: Include those instances with pending deployments.</p> </li> <li> <p> <code>InProgress</code>: Include those instances where deployments are still in progress.</p> </li> <li> <p> <code>Succeeded</code>: Include those instances with successful deployments.</p> </li> <li> <p> <code>Failed</code>: Include those instances with failed deployments.</p> </li> <li> <p> <code>Skipped</code>: Include those instances with skipped deployments.</p> </li> <li> <p> <code>Unknown</code>: Include those instances with deployments in an unknown state.</p> </li> </ul></p>
     #[serde(rename = "instanceStatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_status_filter: Option<Vec<String>>,
+    pub instance_status_filter: Option<Vec<InstanceStatus>>,
     /// <p>The set of instances in a blue/green deployment, either those in the original environment ("BLUE") or those in the replacement environment ("GREEN"), for which you want to view instance information.</p>
     #[serde(rename = "instanceTypeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type_filter: Option<Vec<String>>,
+    pub instance_type_filter: Option<Vec<InstanceType>>,
     /// <p>An identifier returned from the previous list deployment instances call. It can be used to return the next set of deployment instances in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1748,7 +4153,7 @@ pub struct ListDeploymentTargetsInput {
     /// <p><p> A key used to filter the returned targets. The two valid values are:</p> <ul> <li> <p> <code>TargetStatus</code> - A <code>TargetStatus</code> filter string can be <code>Failed</code>, <code>InProgress</code>, <code>Pending</code>, <code>Ready</code>, <code>Skipped</code>, <code>Succeeded</code>, or <code>Unknown</code>. </p> </li> <li> <p> <code>ServerInstanceLabel</code> - A <code>ServerInstanceLabel</code> filter string can be <code>Blue</code> or <code>Green</code>. </p> </li> </ul></p>
     #[serde(rename = "targetFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    pub target_filters: Option<::std::collections::HashMap<TargetFilterName, Vec<String>>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1787,7 +4192,7 @@ pub struct ListDeploymentsInput {
     /// <p><p>A subset of deployments to list by status:</p> <ul> <li> <p> <code>Created</code>: Include created deployments in the resulting list.</p> </li> <li> <p> <code>Queued</code>: Include queued deployments in the resulting list.</p> </li> <li> <p> <code>In Progress</code>: Include in-progress deployments in the resulting list.</p> </li> <li> <p> <code>Succeeded</code>: Include successful deployments in the resulting list.</p> </li> <li> <p> <code>Failed</code>: Include failed deployments in the resulting list.</p> </li> <li> <p> <code>Stopped</code>: Include stopped deployments in the resulting list.</p> </li> </ul></p>
     #[serde(rename = "includeOnlyStatuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include_only_statuses: Option<Vec<String>>,
+    pub include_only_statuses: Option<Vec<DeploymentStatus>>,
     /// <p>An identifier returned from the previous list deployments call. It can be used to return the next set of deployments in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1843,7 +4248,7 @@ pub struct ListOnPremisesInstancesInput {
     /// <p><p>The registration status of the on-premises instances:</p> <ul> <li> <p> <code>Deregistered</code>: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p> <code>Registered</code>: Include registered on-premises instances in the resulting list.</p> </li> </ul></p>
     #[serde(rename = "registrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub registration_status: Option<String>,
+    pub registration_status: Option<RegistrationStatus>,
     /// <p>The on-premises instance tags that are used to restrict the on-premises instance names returned.</p>
     #[serde(rename = "tagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1862,6 +4267,116 @@ pub struct ListOnPremisesInstancesOutput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListStateFilterAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListStateFilterAction {
+    Exclude,
+    Ignore,
+    Include,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListStateFilterAction),
+}
+
+impl Default for ListStateFilterAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListStateFilterAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListStateFilterAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListStateFilterAction {
+    fn into(self) -> String {
+        match self {
+            ListStateFilterAction::Exclude => "exclude".to_string(),
+            ListStateFilterAction::Ignore => "ignore".to_string(),
+            ListStateFilterAction::Include => "include".to_string(),
+            ListStateFilterAction::UnknownVariant(UnknownListStateFilterAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListStateFilterAction {
+    fn into(self) -> &'a str {
+        match self {
+            ListStateFilterAction::Exclude => &"exclude",
+            ListStateFilterAction::Ignore => &"ignore",
+            ListStateFilterAction::Include => &"include",
+            ListStateFilterAction::UnknownVariant(UnknownListStateFilterAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListStateFilterAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "exclude" => ListStateFilterAction::Exclude,
+            "ignore" => ListStateFilterAction::Ignore,
+            "include" => ListStateFilterAction::Include,
+            _ => ListStateFilterAction::UnknownVariant(UnknownListStateFilterAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListStateFilterAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "exclude" => ListStateFilterAction::Exclude,
+            "ignore" => ListStateFilterAction::Ignore,
+            "include" => ListStateFilterAction::Include,
+            _ => ListStateFilterAction::UnknownVariant(UnknownListStateFilterAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListStateFilterAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListStateFilterAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListStateFilterAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1912,11 +4427,115 @@ pub struct MinimumHealthyHosts {
     /// <p>The minimum healthy instance type:</p> <ul> <li> <p> <code>HOST_COUNT</code>: The minimum number of healthy instances as an absolute value.</p> </li> <li> <p> <code>FLEET_PERCENT</code>: The minimum number of healthy instances as a percentage of the total number of instances in the deployment.</p> </li> </ul> <p>In an example of nine instances, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instances at a time. The deployment is successful if four or more instances are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the <code>GetDeploymentConfig</code>, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<MinimumHealthyHostsType>,
     /// <p>The minimum healthy instance value.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMinimumHealthyHostsType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MinimumHealthyHostsType {
+    FleetPercent,
+    HostCount,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMinimumHealthyHostsType),
+}
+
+impl Default for MinimumHealthyHostsType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MinimumHealthyHostsType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MinimumHealthyHostsType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MinimumHealthyHostsType {
+    fn into(self) -> String {
+        match self {
+            MinimumHealthyHostsType::FleetPercent => "FLEET_PERCENT".to_string(),
+            MinimumHealthyHostsType::HostCount => "HOST_COUNT".to_string(),
+            MinimumHealthyHostsType::UnknownVariant(UnknownMinimumHealthyHostsType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MinimumHealthyHostsType {
+    fn into(self) -> &'a str {
+        match self {
+            MinimumHealthyHostsType::FleetPercent => &"FLEET_PERCENT",
+            MinimumHealthyHostsType::HostCount => &"HOST_COUNT",
+            MinimumHealthyHostsType::UnknownVariant(UnknownMinimumHealthyHostsType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MinimumHealthyHostsType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FLEET_PERCENT" => MinimumHealthyHostsType::FleetPercent,
+            "HOST_COUNT" => MinimumHealthyHostsType::HostCount,
+            _ => MinimumHealthyHostsType::UnknownVariant(UnknownMinimumHealthyHostsType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MinimumHealthyHostsType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FLEET_PERCENT" => MinimumHealthyHostsType::FleetPercent,
+            "HOST_COUNT" => MinimumHealthyHostsType::HostCount,
+            _ => MinimumHealthyHostsType::UnknownVariant(UnknownMinimumHealthyHostsType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MinimumHealthyHostsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MinimumHealthyHostsType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MinimumHealthyHostsType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about groups of on-premises instance tags.</p>
@@ -1942,7 +4561,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
     /// <p>The result of a Lambda function that validates a deployment lifecycle event (<code>Succeeded</code> or <code>Failed</code>).</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LifecycleEventStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2000,6 +4619,111 @@ pub struct RegisterOnPremisesInstanceInput {
     pub instance_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegistrationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegistrationStatus {
+    Deregistered,
+    Registered,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegistrationStatus),
+}
+
+impl Default for RegistrationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegistrationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegistrationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegistrationStatus {
+    fn into(self) -> String {
+        match self {
+            RegistrationStatus::Deregistered => "Deregistered".to_string(),
+            RegistrationStatus::Registered => "Registered".to_string(),
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegistrationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RegistrationStatus::Deregistered => &"Deregistered",
+            RegistrationStatus::Registered => &"Registered",
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RegistrationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Deregistered" => RegistrationStatus::Deregistered,
+            "Registered" => RegistrationStatus::Registered,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegistrationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Deregistered" => RegistrationStatus::Deregistered,
+            "Registered" => RegistrationStatus::Registered,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RegistrationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RegistrationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the input of a <code>RemoveTagsFromOnPremisesInstances</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2040,7 +4764,7 @@ pub struct RevisionLocation {
     /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub (EC2/On-premises deployments only).</p> </li> <li> <p>String: A YAML-formatted or JSON-formatted string (AWS Lambda deployments only).</p> </li> <li> <p>AppSpecContent: An <code>AppSpecContent</code> object that contains the contents of an AppSpec file for an AWS Lambda or Amazon ECS deployment. The content is formatted as JSON or YAML stored as a RawString.</p> </li> </ul></p>
     #[serde(rename = "revisionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub revision_type: Option<String>,
+    pub revision_type: Option<RevisionLocationType>,
     /// <p>Information about the location of a revision stored in Amazon S3. </p>
     #[serde(rename = "s3Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2049,6 +4773,120 @@ pub struct RevisionLocation {
     #[serde(rename = "string")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub string: Option<RawString>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRevisionLocationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RevisionLocationType {
+    AppSpecContent,
+    GitHub,
+    S3,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRevisionLocationType),
+}
+
+impl Default for RevisionLocationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RevisionLocationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RevisionLocationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RevisionLocationType {
+    fn into(self) -> String {
+        match self {
+            RevisionLocationType::AppSpecContent => "AppSpecContent".to_string(),
+            RevisionLocationType::GitHub => "GitHub".to_string(),
+            RevisionLocationType::S3 => "S3".to_string(),
+            RevisionLocationType::String => "String".to_string(),
+            RevisionLocationType::UnknownVariant(UnknownRevisionLocationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RevisionLocationType {
+    fn into(self) -> &'a str {
+        match self {
+            RevisionLocationType::AppSpecContent => &"AppSpecContent",
+            RevisionLocationType::GitHub => &"GitHub",
+            RevisionLocationType::S3 => &"S3",
+            RevisionLocationType::String => &"String",
+            RevisionLocationType::UnknownVariant(UnknownRevisionLocationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RevisionLocationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AppSpecContent" => RevisionLocationType::AppSpecContent,
+            "GitHub" => RevisionLocationType::GitHub,
+            "S3" => RevisionLocationType::S3,
+            "String" => RevisionLocationType::String,
+            _ => RevisionLocationType::UnknownVariant(UnknownRevisionLocationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RevisionLocationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AppSpecContent" => RevisionLocationType::AppSpecContent,
+            "GitHub" => RevisionLocationType::GitHub,
+            "S3" => RevisionLocationType::S3,
+            "String" => RevisionLocationType::String,
+            _ => RevisionLocationType::UnknownVariant(UnknownRevisionLocationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RevisionLocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RevisionLocationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RevisionLocationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a deployment rollback.</p>
@@ -2079,7 +4917,7 @@ pub struct S3Location {
     /// <p><p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p> <code>tar</code>: A tar archive file.</p> </li> <li> <p> <code>tgz</code>: A compressed tar archive file.</p> </li> <li> <p> <code>zip</code>: A zip archive file.</p> </li> </ul></p>
     #[serde(rename = "bundleType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bundle_type: Option<String>,
+    pub bundle_type: Option<BundleType>,
     /// <p>The ETag of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the ETag is not specified as an input parameter, ETag validation of the object is skipped.</p>
     #[serde(rename = "eTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2103,6 +4941,107 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
     pub deployment_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "ascending".to_string(),
+            SortOrder::Descending => "descending".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"ascending",
+            SortOrder::Descending => &"descending",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ascending" => SortOrder::Ascending,
+            "descending" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ascending" => SortOrder::Ascending,
+            "descending" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Represents the input of a <code>StopDeployment</code> operation. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2123,11 +5062,112 @@ pub struct StopDeploymentOutput {
     /// <p><p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StopStatus>,
     /// <p>An accompanying status message.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStopStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StopStatus {
+    Pending,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStopStatus),
+}
+
+impl Default for StopStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StopStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StopStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StopStatus {
+    fn into(self) -> String {
+        match self {
+            StopStatus::Pending => "Pending".to_string(),
+            StopStatus::Succeeded => "Succeeded".to_string(),
+            StopStatus::UnknownVariant(UnknownStopStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StopStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StopStatus::Pending => &"Pending",
+            StopStatus::Succeeded => &"Succeeded",
+            StopStatus::UnknownVariant(UnknownStopStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StopStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Pending" => StopStatus::Pending,
+            "Succeeded" => StopStatus::Succeeded,
+            _ => StopStatus::UnknownVariant(UnknownStopStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StopStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Pending" => StopStatus::Pending,
+            "Succeeded" => StopStatus::Succeeded,
+            _ => StopStatus::UnknownVariant(UnknownStopStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StopStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StopStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StopStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a tag.</p>
@@ -2153,11 +5193,116 @@ pub struct TagFilter {
     /// <p><p>The on-premises instance tag filter type:</p> <ul> <li> <p>KEY<em>ONLY: Key only.</p> </li> <li> <p>VALUE</em>ONLY: Value only.</p> </li> <li> <p>KEY<em>AND</em>VALUE: Key and value.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TagFilterType>,
     /// <p>The on-premises instance tag filter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTagFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TagFilterType {
+    KeyAndValue,
+    KeyOnly,
+    ValueOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTagFilterType),
+}
+
+impl Default for TagFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TagFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TagFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TagFilterType {
+    fn into(self) -> String {
+        match self {
+            TagFilterType::KeyAndValue => "KEY_AND_VALUE".to_string(),
+            TagFilterType::KeyOnly => "KEY_ONLY".to_string(),
+            TagFilterType::ValueOnly => "VALUE_ONLY".to_string(),
+            TagFilterType::UnknownVariant(UnknownTagFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TagFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            TagFilterType::KeyAndValue => &"KEY_AND_VALUE",
+            TagFilterType::KeyOnly => &"KEY_ONLY",
+            TagFilterType::ValueOnly => &"VALUE_ONLY",
+            TagFilterType::UnknownVariant(UnknownTagFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TagFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEY_AND_VALUE" => TagFilterType::KeyAndValue,
+            "KEY_ONLY" => TagFilterType::KeyOnly,
+            "VALUE_ONLY" => TagFilterType::ValueOnly,
+            _ => TagFilterType::UnknownVariant(UnknownTagFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TagFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEY_AND_VALUE" => TagFilterType::KeyAndValue,
+            "KEY_ONLY" => TagFilterType::KeyOnly,
+            "VALUE_ONLY" => TagFilterType::ValueOnly,
+            _ => TagFilterType::UnknownVariant(UnknownTagFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TagFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TagFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TagFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2174,6 +5319,111 @@ pub struct TagResourceInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetFilterName {
+    ServerInstanceLabel,
+    TargetStatus,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetFilterName),
+}
+
+impl Default for TargetFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetFilterName {
+    fn into(self) -> String {
+        match self {
+            TargetFilterName::ServerInstanceLabel => "ServerInstanceLabel".to_string(),
+            TargetFilterName::TargetStatus => "TargetStatus".to_string(),
+            TargetFilterName::UnknownVariant(UnknownTargetFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            TargetFilterName::ServerInstanceLabel => &"ServerInstanceLabel",
+            TargetFilterName::TargetStatus => &"TargetStatus",
+            TargetFilterName::UnknownVariant(UnknownTargetFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TargetFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ServerInstanceLabel" => TargetFilterName::ServerInstanceLabel,
+            "TargetStatus" => TargetFilterName::TargetStatus,
+            _ => TargetFilterName::UnknownVariant(UnknownTargetFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ServerInstanceLabel" => TargetFilterName::ServerInstanceLabel,
+            "TargetStatus" => TargetFilterName::TargetStatus,
+            _ => TargetFilterName::UnknownVariant(UnknownTargetFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TargetFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -2216,6 +5466,233 @@ pub struct TargetInstances {
     #[serde(rename = "tagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<EC2TagFilter>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetLabel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetLabel {
+    Blue,
+    Green,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetLabel),
+}
+
+impl Default for TargetLabel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetLabel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetLabel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetLabel {
+    fn into(self) -> String {
+        match self {
+            TargetLabel::Blue => "Blue".to_string(),
+            TargetLabel::Green => "Green".to_string(),
+            TargetLabel::UnknownVariant(UnknownTargetLabel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetLabel {
+    fn into(self) -> &'a str {
+        match self {
+            TargetLabel::Blue => &"Blue",
+            TargetLabel::Green => &"Green",
+            TargetLabel::UnknownVariant(UnknownTargetLabel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetLabel {
+    fn from(name: &str) -> Self {
+        match name {
+            "Blue" => TargetLabel::Blue,
+            "Green" => TargetLabel::Green,
+            _ => TargetLabel::UnknownVariant(UnknownTargetLabel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetLabel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Blue" => TargetLabel::Blue,
+            "Green" => TargetLabel::Green,
+            _ => TargetLabel::UnknownVariant(UnknownTargetLabel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetLabel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TargetLabel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetLabel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetStatus {
+    Failed,
+    InProgress,
+    Pending,
+    Ready,
+    Skipped,
+    Succeeded,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetStatus),
+}
+
+impl Default for TargetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetStatus {
+    fn into(self) -> String {
+        match self {
+            TargetStatus::Failed => "Failed".to_string(),
+            TargetStatus::InProgress => "InProgress".to_string(),
+            TargetStatus::Pending => "Pending".to_string(),
+            TargetStatus::Ready => "Ready".to_string(),
+            TargetStatus::Skipped => "Skipped".to_string(),
+            TargetStatus::Succeeded => "Succeeded".to_string(),
+            TargetStatus::Unknown => "Unknown".to_string(),
+            TargetStatus::UnknownVariant(UnknownTargetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TargetStatus::Failed => &"Failed",
+            TargetStatus::InProgress => &"InProgress",
+            TargetStatus::Pending => &"Pending",
+            TargetStatus::Ready => &"Ready",
+            TargetStatus::Skipped => &"Skipped",
+            TargetStatus::Succeeded => &"Succeeded",
+            TargetStatus::Unknown => &"Unknown",
+            TargetStatus::UnknownVariant(UnknownTargetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => TargetStatus::Failed,
+            "InProgress" => TargetStatus::InProgress,
+            "Pending" => TargetStatus::Pending,
+            "Ready" => TargetStatus::Ready,
+            "Skipped" => TargetStatus::Skipped,
+            "Succeeded" => TargetStatus::Succeeded,
+            "Unknown" => TargetStatus::Unknown,
+            _ => TargetStatus::UnknownVariant(UnknownTargetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => TargetStatus::Failed,
+            "InProgress" => TargetStatus::InProgress,
+            "Pending" => TargetStatus::Pending,
+            "Ready" => TargetStatus::Ready,
+            "Skipped" => TargetStatus::Skipped,
+            "Succeeded" => TargetStatus::Succeeded,
+            "Unknown" => TargetStatus::Unknown,
+            _ => TargetStatus::UnknownVariant(UnknownTargetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TargetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
@@ -2281,7 +5758,116 @@ pub struct TrafficRoutingConfig {
     /// <p>The type of traffic shifting (<code>TimeBasedCanary</code> or <code>TimeBasedLinear</code>) used by a deployment configuration.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TrafficRoutingType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrafficRoutingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrafficRoutingType {
+    AllAtOnce,
+    TimeBasedCanary,
+    TimeBasedLinear,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrafficRoutingType),
+}
+
+impl Default for TrafficRoutingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrafficRoutingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrafficRoutingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrafficRoutingType {
+    fn into(self) -> String {
+        match self {
+            TrafficRoutingType::AllAtOnce => "AllAtOnce".to_string(),
+            TrafficRoutingType::TimeBasedCanary => "TimeBasedCanary".to_string(),
+            TrafficRoutingType::TimeBasedLinear => "TimeBasedLinear".to_string(),
+            TrafficRoutingType::UnknownVariant(UnknownTrafficRoutingType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrafficRoutingType {
+    fn into(self) -> &'a str {
+        match self {
+            TrafficRoutingType::AllAtOnce => &"AllAtOnce",
+            TrafficRoutingType::TimeBasedCanary => &"TimeBasedCanary",
+            TrafficRoutingType::TimeBasedLinear => &"TimeBasedLinear",
+            TrafficRoutingType::UnknownVariant(UnknownTrafficRoutingType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TrafficRoutingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AllAtOnce" => TrafficRoutingType::AllAtOnce,
+            "TimeBasedCanary" => TrafficRoutingType::TimeBasedCanary,
+            "TimeBasedLinear" => TrafficRoutingType::TimeBasedLinear,
+            _ => TrafficRoutingType::UnknownVariant(UnknownTrafficRoutingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrafficRoutingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AllAtOnce" => TrafficRoutingType::AllAtOnce,
+            "TimeBasedCanary" => TrafficRoutingType::TimeBasedCanary,
+            "TimeBasedLinear" => TrafficRoutingType::TimeBasedLinear,
+            _ => TrafficRoutingType::UnknownVariant(UnknownTrafficRoutingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrafficRoutingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrafficRoutingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrafficRoutingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about notification triggers for the deployment group.</p>
@@ -2290,7 +5876,7 @@ pub struct TriggerConfig {
     /// <p>The event type or types for which notifications are triggered.</p>
     #[serde(rename = "triggerEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trigger_events: Option<Vec<String>>,
+    pub trigger_events: Option<Vec<TriggerEventType>>,
     /// <p>The name of the notification trigger.</p>
     #[serde(rename = "triggerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2299,6 +5885,150 @@ pub struct TriggerConfig {
     #[serde(rename = "triggerTargetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_target_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTriggerEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TriggerEventType {
+    DeploymentFailure,
+    DeploymentReady,
+    DeploymentRollback,
+    DeploymentStart,
+    DeploymentStop,
+    DeploymentSuccess,
+    InstanceFailure,
+    InstanceReady,
+    InstanceStart,
+    InstanceSuccess,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTriggerEventType),
+}
+
+impl Default for TriggerEventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TriggerEventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TriggerEventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TriggerEventType {
+    fn into(self) -> String {
+        match self {
+            TriggerEventType::DeploymentFailure => "DeploymentFailure".to_string(),
+            TriggerEventType::DeploymentReady => "DeploymentReady".to_string(),
+            TriggerEventType::DeploymentRollback => "DeploymentRollback".to_string(),
+            TriggerEventType::DeploymentStart => "DeploymentStart".to_string(),
+            TriggerEventType::DeploymentStop => "DeploymentStop".to_string(),
+            TriggerEventType::DeploymentSuccess => "DeploymentSuccess".to_string(),
+            TriggerEventType::InstanceFailure => "InstanceFailure".to_string(),
+            TriggerEventType::InstanceReady => "InstanceReady".to_string(),
+            TriggerEventType::InstanceStart => "InstanceStart".to_string(),
+            TriggerEventType::InstanceSuccess => "InstanceSuccess".to_string(),
+            TriggerEventType::UnknownVariant(UnknownTriggerEventType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TriggerEventType {
+    fn into(self) -> &'a str {
+        match self {
+            TriggerEventType::DeploymentFailure => &"DeploymentFailure",
+            TriggerEventType::DeploymentReady => &"DeploymentReady",
+            TriggerEventType::DeploymentRollback => &"DeploymentRollback",
+            TriggerEventType::DeploymentStart => &"DeploymentStart",
+            TriggerEventType::DeploymentStop => &"DeploymentStop",
+            TriggerEventType::DeploymentSuccess => &"DeploymentSuccess",
+            TriggerEventType::InstanceFailure => &"InstanceFailure",
+            TriggerEventType::InstanceReady => &"InstanceReady",
+            TriggerEventType::InstanceStart => &"InstanceStart",
+            TriggerEventType::InstanceSuccess => &"InstanceSuccess",
+            TriggerEventType::UnknownVariant(UnknownTriggerEventType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TriggerEventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DeploymentFailure" => TriggerEventType::DeploymentFailure,
+            "DeploymentReady" => TriggerEventType::DeploymentReady,
+            "DeploymentRollback" => TriggerEventType::DeploymentRollback,
+            "DeploymentStart" => TriggerEventType::DeploymentStart,
+            "DeploymentStop" => TriggerEventType::DeploymentStop,
+            "DeploymentSuccess" => TriggerEventType::DeploymentSuccess,
+            "InstanceFailure" => TriggerEventType::InstanceFailure,
+            "InstanceReady" => TriggerEventType::InstanceReady,
+            "InstanceStart" => TriggerEventType::InstanceStart,
+            "InstanceSuccess" => TriggerEventType::InstanceSuccess,
+            _ => TriggerEventType::UnknownVariant(UnknownTriggerEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TriggerEventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DeploymentFailure" => TriggerEventType::DeploymentFailure,
+            "DeploymentReady" => TriggerEventType::DeploymentReady,
+            "DeploymentRollback" => TriggerEventType::DeploymentRollback,
+            "DeploymentStart" => TriggerEventType::DeploymentStart,
+            "DeploymentStop" => TriggerEventType::DeploymentStop,
+            "DeploymentSuccess" => TriggerEventType::DeploymentSuccess,
+            "InstanceFailure" => TriggerEventType::InstanceFailure,
+            "InstanceReady" => TriggerEventType::InstanceReady,
+            "InstanceStart" => TriggerEventType::InstanceStart,
+            "InstanceSuccess" => TriggerEventType::InstanceSuccess,
+            _ => TriggerEventType::UnknownVariant(UnknownTriggerEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TriggerEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TriggerEventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TriggerEventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

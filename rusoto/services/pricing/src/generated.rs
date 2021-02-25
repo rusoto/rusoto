@@ -108,10 +108,106 @@ pub struct Filter {
     pub field: String,
     /// <p>The type of filter that you want to use.</p> <p>Valid values are: <code>TERM_MATCH</code>. <code>TERM_MATCH</code> returns only products that match both the given filter field and the given value.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: FilterType,
     /// <p>The service code or attribute value that you want to filter by. If you are filtering by service code this is the actual service code, such as <code>AmazonEC2</code>. If you are filtering by attribute name, this is the attribute value that you want the returned products to match, such as a <code>Provisioned IOPS</code> volume.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterType {
+    TermMatch,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterType),
+}
+
+impl Default for FilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterType {
+    fn into(self) -> String {
+        match self {
+            FilterType::TermMatch => "TERM_MATCH".to_string(),
+            FilterType::UnknownVariant(UnknownFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterType {
+    fn into(self) -> &'a str {
+        match self {
+            FilterType::TermMatch => &"TERM_MATCH",
+            FilterType::UnknownVariant(UnknownFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "TERM_MATCH" => FilterType::TermMatch,
+            _ => FilterType::UnknownVariant(UnknownFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TERM_MATCH" => FilterType::TermMatch,
+            _ => FilterType::UnknownVariant(UnknownFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

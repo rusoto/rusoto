@@ -254,7 +254,7 @@ pub struct ApplicationCodeConfiguration {
     pub code_content: Option<CodeContent>,
     /// <p>Specifies whether the code content is in text or zip format.</p>
     #[serde(rename = "CodeContentType")]
-    pub code_content_type: String,
+    pub code_content_type: CodeContentType,
 }
 
 /// <p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>
@@ -267,7 +267,7 @@ pub struct ApplicationCodeConfigurationDescription {
     pub code_content_description: Option<CodeContentDescription>,
     /// <p>Specifies whether the code content is in text or zip format.</p>
     #[serde(rename = "CodeContentType")]
-    pub code_content_type: String,
+    pub code_content_type: CodeContentType,
 }
 
 /// <p>Describes code configuration updates to a Flink-based Kinesis Data Analytics application.</p>
@@ -277,7 +277,7 @@ pub struct ApplicationCodeConfigurationUpdate {
     /// <p>Describes updates to the code content type.</p>
     #[serde(rename = "CodeContentTypeUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code_content_type_update: Option<String>,
+    pub code_content_type_update: Option<CodeContentType>,
     /// <p>Describes updates to the code content of an application.</p>
     #[serde(rename = "CodeContentUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -399,7 +399,7 @@ pub struct ApplicationDetail {
     pub application_name: String,
     /// <p>The status of the application.</p>
     #[serde(rename = "ApplicationStatus")]
-    pub application_status: String,
+    pub application_status: ApplicationStatus,
     /// <p>Provides the current application version. Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update the application.</p>
     #[serde(rename = "ApplicationVersionId")]
     pub application_version_id: i64,
@@ -417,7 +417,7 @@ pub struct ApplicationDetail {
     pub last_update_timestamp: Option<f64>,
     /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
-    pub runtime_environment: String,
+    pub runtime_environment: RuntimeEnvironment,
     /// <p>Specifies the IAM role that the application uses to access external resources.</p>
     #[serde(rename = "ServiceExecutionRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -429,11 +429,126 @@ pub struct ApplicationDetail {
 pub struct ApplicationRestoreConfiguration {
     /// <p>Specifies how the application should be restored.</p>
     #[serde(rename = "ApplicationRestoreType")]
-    pub application_restore_type: String,
+    pub application_restore_type: ApplicationRestoreType,
     /// <p>The identifier of an existing snapshot of application state to use to restart an application. The application uses this value if <code>RESTORE_FROM_CUSTOM_SNAPSHOT</code> is specified for the <code>ApplicationRestoreType</code>.</p>
     #[serde(rename = "SnapshotName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplicationRestoreType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApplicationRestoreType {
+    RestoreFromCustomSnapshot,
+    RestoreFromLatestSnapshot,
+    SkipRestoreFromSnapshot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplicationRestoreType),
+}
+
+impl Default for ApplicationRestoreType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApplicationRestoreType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApplicationRestoreType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApplicationRestoreType {
+    fn into(self) -> String {
+        match self {
+            ApplicationRestoreType::RestoreFromCustomSnapshot => {
+                "RESTORE_FROM_CUSTOM_SNAPSHOT".to_string()
+            }
+            ApplicationRestoreType::RestoreFromLatestSnapshot => {
+                "RESTORE_FROM_LATEST_SNAPSHOT".to_string()
+            }
+            ApplicationRestoreType::SkipRestoreFromSnapshot => {
+                "SKIP_RESTORE_FROM_SNAPSHOT".to_string()
+            }
+            ApplicationRestoreType::UnknownVariant(UnknownApplicationRestoreType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApplicationRestoreType {
+    fn into(self) -> &'a str {
+        match self {
+            ApplicationRestoreType::RestoreFromCustomSnapshot => &"RESTORE_FROM_CUSTOM_SNAPSHOT",
+            ApplicationRestoreType::RestoreFromLatestSnapshot => &"RESTORE_FROM_LATEST_SNAPSHOT",
+            ApplicationRestoreType::SkipRestoreFromSnapshot => &"SKIP_RESTORE_FROM_SNAPSHOT",
+            ApplicationRestoreType::UnknownVariant(UnknownApplicationRestoreType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApplicationRestoreType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RESTORE_FROM_CUSTOM_SNAPSHOT" => ApplicationRestoreType::RestoreFromCustomSnapshot,
+            "RESTORE_FROM_LATEST_SNAPSHOT" => ApplicationRestoreType::RestoreFromLatestSnapshot,
+            "SKIP_RESTORE_FROM_SNAPSHOT" => ApplicationRestoreType::SkipRestoreFromSnapshot,
+            _ => ApplicationRestoreType::UnknownVariant(UnknownApplicationRestoreType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApplicationRestoreType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RESTORE_FROM_CUSTOM_SNAPSHOT" => ApplicationRestoreType::RestoreFromCustomSnapshot,
+            "RESTORE_FROM_LATEST_SNAPSHOT" => ApplicationRestoreType::RestoreFromLatestSnapshot,
+            "SKIP_RESTORE_FROM_SNAPSHOT" => ApplicationRestoreType::SkipRestoreFromSnapshot,
+            _ => ApplicationRestoreType::UnknownVariant(UnknownApplicationRestoreType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationRestoreType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApplicationRestoreType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApplicationRestoreType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
@@ -463,6 +578,141 @@ pub struct ApplicationSnapshotConfigurationUpdate {
     pub snapshots_enabled_update: bool,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApplicationStatus {
+    Autoscaling,
+    Deleting,
+    ForceStopping,
+    Ready,
+    Running,
+    Starting,
+    Stopping,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplicationStatus),
+}
+
+impl Default for ApplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApplicationStatus {
+    fn into(self) -> String {
+        match self {
+            ApplicationStatus::Autoscaling => "AUTOSCALING".to_string(),
+            ApplicationStatus::Deleting => "DELETING".to_string(),
+            ApplicationStatus::ForceStopping => "FORCE_STOPPING".to_string(),
+            ApplicationStatus::Ready => "READY".to_string(),
+            ApplicationStatus::Running => "RUNNING".to_string(),
+            ApplicationStatus::Starting => "STARTING".to_string(),
+            ApplicationStatus::Stopping => "STOPPING".to_string(),
+            ApplicationStatus::Updating => "UPDATING".to_string(),
+            ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ApplicationStatus::Autoscaling => &"AUTOSCALING",
+            ApplicationStatus::Deleting => &"DELETING",
+            ApplicationStatus::ForceStopping => &"FORCE_STOPPING",
+            ApplicationStatus::Ready => &"READY",
+            ApplicationStatus::Running => &"RUNNING",
+            ApplicationStatus::Starting => &"STARTING",
+            ApplicationStatus::Stopping => &"STOPPING",
+            ApplicationStatus::Updating => &"UPDATING",
+            ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ApplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOSCALING" => ApplicationStatus::Autoscaling,
+            "DELETING" => ApplicationStatus::Deleting,
+            "FORCE_STOPPING" => ApplicationStatus::ForceStopping,
+            "READY" => ApplicationStatus::Ready,
+            "RUNNING" => ApplicationStatus::Running,
+            "STARTING" => ApplicationStatus::Starting,
+            "STOPPING" => ApplicationStatus::Stopping,
+            "UPDATING" => ApplicationStatus::Updating,
+            _ => ApplicationStatus::UnknownVariant(UnknownApplicationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOSCALING" => ApplicationStatus::Autoscaling,
+            "DELETING" => ApplicationStatus::Deleting,
+            "FORCE_STOPPING" => ApplicationStatus::ForceStopping,
+            "READY" => ApplicationStatus::Ready,
+            "RUNNING" => ApplicationStatus::Running,
+            "STARTING" => ApplicationStatus::Starting,
+            "STOPPING" => ApplicationStatus::Stopping,
+            "UPDATING" => ApplicationStatus::Updating,
+            _ => ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ApplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides application summary information, including the application Amazon Resource Name (ARN), name, and status.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -475,13 +725,13 @@ pub struct ApplicationSummary {
     pub application_name: String,
     /// <p>The status of the application.</p>
     #[serde(rename = "ApplicationStatus")]
-    pub application_status: String,
+    pub application_status: ApplicationStatus,
     /// <p>Provides the current application version.</p>
     #[serde(rename = "ApplicationVersionId")]
     pub application_version_id: i64,
     /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
-    pub runtime_environment: String,
+    pub runtime_environment: RuntimeEnvironment,
 }
 
 /// <p>For a SQL-based Kinesis Data Analytics application, provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1"</code> </p> <p> <code>"name2", "address2"</code> </p>
@@ -509,7 +759,7 @@ pub struct CheckpointConfiguration {
     pub checkpointing_enabled: Option<bool>,
     /// <p><p>Describes whether the application uses Kinesis Data Analytics&#39; default checkpointing behavior. You must set this property to <code>CUSTOM</code> in order to set the <code>CheckpointingEnabled</code>, <code>CheckpointInterval</code>, or <code>MinPauseBetweenCheckpoints</code> parameters.</p> <note> <p>If this value is set to <code>DEFAULT</code>, the application will use the following values, even if they are set to other values using APIs or application code:</p> <ul> <li> <p> <b>CheckpointingEnabled:</b> true</p> </li> <li> <p> <b>CheckpointInterval:</b> 60000</p> </li> <li> <p> <b>MinPauseBetweenCheckpoints:</b> 5000</p> </li> </ul> </note></p>
     #[serde(rename = "ConfigurationType")]
-    pub configuration_type: String,
+    pub configuration_type: ConfigurationType,
     /// <p><p>Describes the minimum time in milliseconds after a checkpoint operation completes that a new checkpoint operation can start. If a checkpoint operation takes longer than the <code>CheckpointInterval</code>, the application otherwise performs continual checkpoint operations. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/large_state_tuning.html#tuning-checkpointing"> Tuning Checkpointing</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>MinPauseBetweenCheckpoints</code> value of 5000, even if this value is set using this API or in application code.</p> </note></p>
     #[serde(rename = "MinPauseBetweenCheckpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -531,7 +781,7 @@ pub struct CheckpointConfigurationDescription {
     /// <p><p>Describes whether the application uses the default checkpointing behavior in Kinesis Data Analytics. </p> <note> <p>If this value is set to <code>DEFAULT</code>, the application will use the following values, even if they are set to other values using APIs or application code:</p> <ul> <li> <p> <b>CheckpointingEnabled:</b> true</p> </li> <li> <p> <b>CheckpointInterval:</b> 60000</p> </li> <li> <p> <b>MinPauseBetweenCheckpoints:</b> 5000</p> </li> </ul> </note></p>
     #[serde(rename = "ConfigurationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type: Option<String>,
+    pub configuration_type: Option<ConfigurationType>,
     /// <p><p>Describes the minimum time in milliseconds after a checkpoint operation completes that a new checkpoint operation can start. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>MinPauseBetweenCheckpoints</code> value of 5000, even if this value is set using this API or in application code.</p> </note></p>
     #[serde(rename = "MinPauseBetweenCheckpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -553,7 +803,7 @@ pub struct CheckpointConfigurationUpdate {
     /// <p><p>Describes updates to whether the application uses the default checkpointing behavior of Kinesis Data Analytics. You must set this property to <code>CUSTOM</code> in order to set the <code>CheckpointingEnabled</code>, <code>CheckpointInterval</code>, or <code>MinPauseBetweenCheckpoints</code> parameters. </p> <note> <p>If this value is set to <code>DEFAULT</code>, the application will use the following values, even if they are set to other values using APIs or application code:</p> <ul> <li> <p> <b>CheckpointingEnabled:</b> true</p> </li> <li> <p> <b>CheckpointInterval:</b> 60000</p> </li> <li> <p> <b>MinPauseBetweenCheckpoints:</b> 5000</p> </li> </ul> </note></p>
     #[serde(rename = "ConfigurationTypeUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type_update: Option<String>,
+    pub configuration_type_update: Option<ConfigurationType>,
     /// <p><p>Describes updates to the minimum time in milliseconds after a checkpoint operation completes that a new checkpoint operation can start.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>MinPauseBetweenCheckpoints</code> value of 5000, even if this value is set using this API or in application code.</p> </note></p>
     #[serde(rename = "MinPauseBetweenCheckpointsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -644,6 +894,106 @@ pub struct CodeContentDescription {
     pub text_content: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCodeContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CodeContentType {
+    Plaintext,
+    Zipfile,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCodeContentType),
+}
+
+impl Default for CodeContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CodeContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CodeContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CodeContentType {
+    fn into(self) -> String {
+        match self {
+            CodeContentType::Plaintext => "PLAINTEXT".to_string(),
+            CodeContentType::Zipfile => "ZIPFILE".to_string(),
+            CodeContentType::UnknownVariant(UnknownCodeContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CodeContentType {
+    fn into(self) -> &'a str {
+        match self {
+            CodeContentType::Plaintext => &"PLAINTEXT",
+            CodeContentType::Zipfile => &"ZIPFILE",
+            CodeContentType::UnknownVariant(UnknownCodeContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CodeContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PLAINTEXT" => CodeContentType::Plaintext,
+            "ZIPFILE" => CodeContentType::Zipfile,
+            _ => CodeContentType::UnknownVariant(UnknownCodeContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CodeContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PLAINTEXT" => CodeContentType::Plaintext,
+            "ZIPFILE" => CodeContentType::Zipfile,
+            _ => CodeContentType::UnknownVariant(UnknownCodeContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CodeContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CodeContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CodeContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes an update to the code of a Flink-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -667,6 +1017,110 @@ pub struct CodeContentUpdate {
     pub zip_file_content_update: Option<bytes::Bytes>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationType {
+    Custom,
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationType),
+}
+
+impl Default for ConfigurationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationType {
+    fn into(self) -> String {
+        match self {
+            ConfigurationType::Custom => "CUSTOM".to_string(),
+            ConfigurationType::Default => "DEFAULT".to_string(),
+            ConfigurationType::UnknownVariant(UnknownConfigurationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationType {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationType::Custom => &"CUSTOM",
+            ConfigurationType::Default => &"DEFAULT",
+            ConfigurationType::UnknownVariant(UnknownConfigurationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConfigurationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CUSTOM" => ConfigurationType::Custom,
+            "DEFAULT" => ConfigurationType::Default,
+            _ => ConfigurationType::UnknownVariant(UnknownConfigurationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CUSTOM" => ConfigurationType::Custom,
+            "DEFAULT" => ConfigurationType::Default,
+            _ => ConfigurationType::UnknownVariant(UnknownConfigurationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfigurationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationPresignedUrlRequest {
@@ -679,7 +1133,7 @@ pub struct CreateApplicationPresignedUrlRequest {
     pub session_expiration_duration_in_seconds: Option<i64>,
     /// <p>The type of the extension for which to create and return a URL. Currently, the only valid extension URL type is <code>FLINK_DASHBOARD_URL</code>. </p>
     #[serde(rename = "UrlType")]
-    pub url_type: String,
+    pub url_type: UrlType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -711,7 +1165,7 @@ pub struct CreateApplicationRequest {
     pub cloud_watch_logging_options: Option<Vec<CloudWatchLoggingOption>>,
     /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
-    pub runtime_environment: String,
+    pub runtime_environment: RuntimeEnvironment,
     /// <p>The IAM role used by the application to access Kinesis data streams, Kinesis Data Firehose delivery streams, Amazon S3 objects, and other external resources.</p>
     #[serde(rename = "ServiceExecutionRole")]
     pub service_execution_role: String,
@@ -960,7 +1414,7 @@ pub struct DescribeApplicationSnapshotResponse {
 pub struct DestinationSchema {
     /// <p>Specifies the format of the records on the output stream.</p>
     #[serde(rename = "RecordFormatType")]
-    pub record_format_type: String,
+    pub record_format_type: RecordFormatType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1268,13 +1722,122 @@ pub struct InputSchemaUpdate {
     pub record_format_update: Option<RecordFormat>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputStartingPosition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputStartingPosition {
+    LastStoppedPoint,
+    Now,
+    TrimHorizon,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputStartingPosition),
+}
+
+impl Default for InputStartingPosition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputStartingPosition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputStartingPosition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputStartingPosition {
+    fn into(self) -> String {
+        match self {
+            InputStartingPosition::LastStoppedPoint => "LAST_STOPPED_POINT".to_string(),
+            InputStartingPosition::Now => "NOW".to_string(),
+            InputStartingPosition::TrimHorizon => "TRIM_HORIZON".to_string(),
+            InputStartingPosition::UnknownVariant(UnknownInputStartingPosition {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputStartingPosition {
+    fn into(self) -> &'a str {
+        match self {
+            InputStartingPosition::LastStoppedPoint => &"LAST_STOPPED_POINT",
+            InputStartingPosition::Now => &"NOW",
+            InputStartingPosition::TrimHorizon => &"TRIM_HORIZON",
+            InputStartingPosition::UnknownVariant(UnknownInputStartingPosition {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputStartingPosition {
+    fn from(name: &str) -> Self {
+        match name {
+            "LAST_STOPPED_POINT" => InputStartingPosition::LastStoppedPoint,
+            "NOW" => InputStartingPosition::Now,
+            "TRIM_HORIZON" => InputStartingPosition::TrimHorizon,
+            _ => InputStartingPosition::UnknownVariant(UnknownInputStartingPosition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputStartingPosition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LAST_STOPPED_POINT" => InputStartingPosition::LastStoppedPoint,
+            "NOW" => InputStartingPosition::Now,
+            "TRIM_HORIZON" => InputStartingPosition::TrimHorizon,
+            _ => InputStartingPosition::UnknownVariant(UnknownInputStartingPosition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputStartingPosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputStartingPosition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputStartingPosition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the point at which the application reads from the streaming source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputStartingPositionConfiguration {
     /// <p><p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, and start at the request timestamp that the customer issued.</p> </li> <li> <p> <code>TRIM<em>HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Data Firehose delivery stream.</p> </li> <li> <p> <code>LAST</em>STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul></p>
     #[serde(rename = "InputStartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_starting_position: Option<String>,
+    pub input_starting_position: Option<InputStartingPosition>,
 }
 
 /// <p>For a SQL-based Kinesis Data Analytics application, describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
@@ -1544,6 +2107,116 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogLevel {
+    Debug,
+    Error,
+    Info,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogLevel),
+}
+
+impl Default for LogLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogLevel {
+    fn into(self) -> String {
+        match self {
+            LogLevel::Debug => "DEBUG".to_string(),
+            LogLevel::Error => "ERROR".to_string(),
+            LogLevel::Info => "INFO".to_string(),
+            LogLevel::Warn => "WARN".to_string(),
+            LogLevel::UnknownVariant(UnknownLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LogLevel::Debug => &"DEBUG",
+            LogLevel::Error => &"ERROR",
+            LogLevel::Info => &"INFO",
+            LogLevel::Warn => &"WARN",
+            LogLevel::UnknownVariant(UnknownLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEBUG" => LogLevel::Debug,
+            "ERROR" => LogLevel::Error,
+            "INFO" => LogLevel::Info,
+            "WARN" => LogLevel::Warn,
+            _ => LogLevel::UnknownVariant(UnknownLogLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEBUG" => LogLevel::Debug,
+            "ERROR" => LogLevel::Error,
+            "INFO" => LogLevel::Info,
+            "WARN" => LogLevel::Warn,
+            _ => LogLevel::UnknownVariant(UnknownLogLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>When you configure a SQL-based Kinesis Data Analytics application's input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MappingParameters {
@@ -1557,21 +2230,131 @@ pub struct MappingParameters {
     pub json_mapping_parameters: Option<JSONMappingParameters>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricsLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricsLevel {
+    Application,
+    Operator,
+    Parallelism,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricsLevel),
+}
+
+impl Default for MetricsLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricsLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricsLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricsLevel {
+    fn into(self) -> String {
+        match self {
+            MetricsLevel::Application => "APPLICATION".to_string(),
+            MetricsLevel::Operator => "OPERATOR".to_string(),
+            MetricsLevel::Parallelism => "PARALLELISM".to_string(),
+            MetricsLevel::Task => "TASK".to_string(),
+            MetricsLevel::UnknownVariant(UnknownMetricsLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricsLevel {
+    fn into(self) -> &'a str {
+        match self {
+            MetricsLevel::Application => &"APPLICATION",
+            MetricsLevel::Operator => &"OPERATOR",
+            MetricsLevel::Parallelism => &"PARALLELISM",
+            MetricsLevel::Task => &"TASK",
+            MetricsLevel::UnknownVariant(UnknownMetricsLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricsLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION" => MetricsLevel::Application,
+            "OPERATOR" => MetricsLevel::Operator,
+            "PARALLELISM" => MetricsLevel::Parallelism,
+            "TASK" => MetricsLevel::Task,
+            _ => MetricsLevel::UnknownVariant(UnknownMetricsLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricsLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION" => MetricsLevel::Application,
+            "OPERATOR" => MetricsLevel::Operator,
+            "PARALLELISM" => MetricsLevel::Parallelism,
+            "TASK" => MetricsLevel::Task,
+            _ => MetricsLevel::UnknownVariant(UnknownMetricsLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricsLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricsLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricsLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfiguration {
     /// <p>Describes whether to use the default CloudWatch logging configuration for an application. You must set this property to <code>CUSTOM</code> in order to set the <code>LogLevel</code> or <code>MetricsLevel</code> parameters.</p>
     #[serde(rename = "ConfigurationType")]
-    pub configuration_type: String,
+    pub configuration_type: ConfigurationType,
     /// <p>Describes the verbosity of the CloudWatch Logs for an application.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>Describes the granularity of the CloudWatch Logs for an application. The <code>Parallelism</code> level is not recommended for applications with a Parallelism over 64 due to excessive costs.</p>
     #[serde(rename = "MetricsLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metrics_level: Option<String>,
+    pub metrics_level: Option<MetricsLevel>,
 }
 
 /// <p>Describes configuration parameters for CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>
@@ -1581,15 +2364,15 @@ pub struct MonitoringConfigurationDescription {
     /// <p>Describes whether to use the default CloudWatch logging configuration for an application.</p>
     #[serde(rename = "ConfigurationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type: Option<String>,
+    pub configuration_type: Option<ConfigurationType>,
     /// <p>Describes the verbosity of the CloudWatch Logs for an application.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>Describes the granularity of the CloudWatch Logs for an application.</p>
     #[serde(rename = "MetricsLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metrics_level: Option<String>,
+    pub metrics_level: Option<MetricsLevel>,
 }
 
 /// <p>Describes updates to configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>
@@ -1599,15 +2382,15 @@ pub struct MonitoringConfigurationUpdate {
     /// <p>Describes updates to whether to use the default CloudWatch logging configuration for an application. You must set this property to <code>CUSTOM</code> in order to set the <code>LogLevel</code> or <code>MetricsLevel</code> parameters.</p>
     #[serde(rename = "ConfigurationTypeUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type_update: Option<String>,
+    pub configuration_type_update: Option<ConfigurationType>,
     /// <p>Describes updates to the verbosity of the CloudWatch Logs for an application.</p>
     #[serde(rename = "LogLevelUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level_update: Option<String>,
+    pub log_level_update: Option<LogLevel>,
     /// <p>Describes updates to the granularity of the CloudWatch Logs for an application. The <code>Parallelism</code> level is not recommended for applications with a Parallelism over 64 due to excessive costs.</p>
     #[serde(rename = "MetricsLevelUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metrics_level_update: Option<String>,
+    pub metrics_level_update: Option<MetricsLevel>,
 }
 
 /// <p><p> Describes a SQL-based Kinesis Data Analytics application&#39;s output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p> <p/></p>
@@ -1703,7 +2486,7 @@ pub struct ParallelismConfiguration {
     pub auto_scaling_enabled: Option<bool>,
     /// <p>Describes whether the application uses the default parallelism for the Kinesis Data Analytics service. You must set this property to <code>CUSTOM</code> in order to change your application's <code>AutoScalingEnabled</code>, <code>Parallelism</code>, or <code>ParallelismPerKPU</code> properties.</p>
     #[serde(rename = "ConfigurationType")]
-    pub configuration_type: String,
+    pub configuration_type: ConfigurationType,
     /// <p>Describes the initial number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, Kinesis Data Analytics increases the <code>CurrentParallelism</code> value in response to application load. The service can increase the <code>CurrentParallelism</code> value up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
     #[serde(rename = "Parallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1725,7 +2508,7 @@ pub struct ParallelismConfigurationDescription {
     /// <p>Describes whether the application uses the default parallelism for the Kinesis Data Analytics service. </p>
     #[serde(rename = "ConfigurationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type: Option<String>,
+    pub configuration_type: Option<ConfigurationType>,
     /// <p>Describes the current number of parallel tasks that a Flink-based Kinesis Data Analytics application can perform. If <code>AutoScalingEnabled</code> is set to True, Kinesis Data Analytics can increase this value in response to application load. The service can increase this value up to the maximum parallelism, which is <code>ParalellismPerKPU</code> times the maximum KPUs for the application. The maximum KPUs for an application is 32 by default, and can be increased by requesting a limit increase. If application load is reduced, the service can reduce the <code>CurrentParallelism</code> value down to the <code>Parallelism</code> setting.</p>
     #[serde(rename = "CurrentParallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1751,7 +2534,7 @@ pub struct ParallelismConfigurationUpdate {
     /// <p>Describes updates to whether the application uses the default parallelism for the Kinesis Data Analytics service, or if a custom parallelism is used. You must set this property to <code>CUSTOM</code> in order to change your application's <code>AutoScalingEnabled</code>, <code>Parallelism</code>, or <code>ParallelismPerKPU</code> properties.</p>
     #[serde(rename = "ConfigurationTypeUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type_update: Option<String>,
+    pub configuration_type_update: Option<ConfigurationType>,
     /// <p>Describes updates to the number of parallel tasks an application can perform per Kinesis Processing Unit (KPU) used by the application.</p>
     #[serde(rename = "ParallelismPerKPUUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1797,7 +2580,111 @@ pub struct RecordFormat {
     pub mapping_parameters: Option<MappingParameters>,
     /// <p>The type of record format.</p>
     #[serde(rename = "RecordFormatType")]
-    pub record_format_type: String,
+    pub record_format_type: RecordFormatType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecordFormatType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecordFormatType {
+    Csv,
+    Json,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecordFormatType),
+}
+
+impl Default for RecordFormatType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecordFormatType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecordFormatType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecordFormatType {
+    fn into(self) -> String {
+        match self {
+            RecordFormatType::Csv => "CSV".to_string(),
+            RecordFormatType::Json => "JSON".to_string(),
+            RecordFormatType::UnknownVariant(UnknownRecordFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecordFormatType {
+    fn into(self) -> &'a str {
+        match self {
+            RecordFormatType::Csv => &"CSV",
+            RecordFormatType::Json => &"JSON",
+            RecordFormatType::UnknownVariant(UnknownRecordFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RecordFormatType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => RecordFormatType::Csv,
+            "JSON" => RecordFormatType::Json,
+            _ => RecordFormatType::UnknownVariant(UnknownRecordFormatType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecordFormatType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => RecordFormatType::Csv,
+            "JSON" => RecordFormatType::Json,
+            _ => RecordFormatType::UnknownVariant(UnknownRecordFormatType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecordFormatType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecordFormatType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>For a SQL-based Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
@@ -1899,6 +2786,120 @@ pub struct RunConfigurationUpdate {
     #[serde(rename = "FlinkRunConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flink_run_configuration: Option<FlinkRunConfiguration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuntimeEnvironment {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RuntimeEnvironment {
+    Flink111,
+    Flink16,
+    Flink18,
+    Sql10,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuntimeEnvironment),
+}
+
+impl Default for RuntimeEnvironment {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RuntimeEnvironment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RuntimeEnvironment {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RuntimeEnvironment {
+    fn into(self) -> String {
+        match self {
+            RuntimeEnvironment::Flink111 => "FLINK-1_11".to_string(),
+            RuntimeEnvironment::Flink16 => "FLINK-1_6".to_string(),
+            RuntimeEnvironment::Flink18 => "FLINK-1_8".to_string(),
+            RuntimeEnvironment::Sql10 => "SQL-1_0".to_string(),
+            RuntimeEnvironment::UnknownVariant(UnknownRuntimeEnvironment { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RuntimeEnvironment {
+    fn into(self) -> &'a str {
+        match self {
+            RuntimeEnvironment::Flink111 => &"FLINK-1_11",
+            RuntimeEnvironment::Flink16 => &"FLINK-1_6",
+            RuntimeEnvironment::Flink18 => &"FLINK-1_8",
+            RuntimeEnvironment::Sql10 => &"SQL-1_0",
+            RuntimeEnvironment::UnknownVariant(UnknownRuntimeEnvironment { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RuntimeEnvironment {
+    fn from(name: &str) -> Self {
+        match name {
+            "FLINK-1_11" => RuntimeEnvironment::Flink111,
+            "FLINK-1_6" => RuntimeEnvironment::Flink16,
+            "FLINK-1_8" => RuntimeEnvironment::Flink18,
+            "SQL-1_0" => RuntimeEnvironment::Sql10,
+            _ => RuntimeEnvironment::UnknownVariant(UnknownRuntimeEnvironment {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RuntimeEnvironment {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FLINK-1_11" => RuntimeEnvironment::Flink111,
+            "FLINK-1_6" => RuntimeEnvironment::Flink16,
+            "FLINK-1_8" => RuntimeEnvironment::Flink18,
+            "SQL-1_0" => RuntimeEnvironment::Sql10,
+            _ => RuntimeEnvironment::UnknownVariant(UnknownRuntimeEnvironment { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuntimeEnvironment {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RuntimeEnvironment {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuntimeEnvironment {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the location of a Flink-based Kinesis Data Analytics application's code stored in an S3 bucket.</p>
@@ -2023,7 +3024,118 @@ pub struct SnapshotDetails {
     pub snapshot_name: String,
     /// <p>The status of the application snapshot.</p>
     #[serde(rename = "SnapshotStatus")]
-    pub snapshot_status: String,
+    pub snapshot_status: SnapshotStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSnapshotStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SnapshotStatus {
+    Creating,
+    Deleting,
+    Failed,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSnapshotStatus),
+}
+
+impl Default for SnapshotStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SnapshotStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SnapshotStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SnapshotStatus {
+    fn into(self) -> String {
+        match self {
+            SnapshotStatus::Creating => "CREATING".to_string(),
+            SnapshotStatus::Deleting => "DELETING".to_string(),
+            SnapshotStatus::Failed => "FAILED".to_string(),
+            SnapshotStatus::Ready => "READY".to_string(),
+            SnapshotStatus::UnknownVariant(UnknownSnapshotStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SnapshotStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SnapshotStatus::Creating => &"CREATING",
+            SnapshotStatus::Deleting => &"DELETING",
+            SnapshotStatus::Failed => &"FAILED",
+            SnapshotStatus::Ready => &"READY",
+            SnapshotStatus::UnknownVariant(UnknownSnapshotStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SnapshotStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => SnapshotStatus::Creating,
+            "DELETING" => SnapshotStatus::Deleting,
+            "FAILED" => SnapshotStatus::Failed,
+            "READY" => SnapshotStatus::Ready,
+            _ => SnapshotStatus::UnknownVariant(UnknownSnapshotStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SnapshotStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => SnapshotStatus::Creating,
+            "DELETING" => SnapshotStatus::Deleting,
+            "FAILED" => SnapshotStatus::Failed,
+            "READY" => SnapshotStatus::Ready,
+            _ => SnapshotStatus::UnknownVariant(UnknownSnapshotStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SnapshotStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SnapshotStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>For a SQL-based Kinesis Data Analytics application, describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream. </p>
@@ -2213,6 +3325,102 @@ pub struct UpdateApplicationResponse {
     /// <p>Describes application updates.</p>
     #[serde(rename = "ApplicationDetail")]
     pub application_detail: ApplicationDetail,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUrlType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UrlType {
+    FlinkDashboardUrl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUrlType),
+}
+
+impl Default for UrlType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UrlType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UrlType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UrlType {
+    fn into(self) -> String {
+        match self {
+            UrlType::FlinkDashboardUrl => "FLINK_DASHBOARD_URL".to_string(),
+            UrlType::UnknownVariant(UnknownUrlType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UrlType {
+    fn into(self) -> &'a str {
+        match self {
+            UrlType::FlinkDashboardUrl => &"FLINK_DASHBOARD_URL",
+            UrlType::UnknownVariant(UnknownUrlType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UrlType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FLINK_DASHBOARD_URL" => UrlType::FlinkDashboardUrl,
+            _ => UrlType::UnknownVariant(UnknownUrlType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UrlType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FLINK_DASHBOARD_URL" => UrlType::FlinkDashboardUrl,
+            _ => UrlType::UnknownVariant(UnknownUrlType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UrlType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UrlType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UrlType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the parameters of a VPC used by the application.</p>

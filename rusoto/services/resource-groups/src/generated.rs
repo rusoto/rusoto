@@ -216,7 +216,7 @@ pub struct GroupConfiguration {
     /// <p>The current status of an attempt to update the group configuration.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GroupConfigurationStatus>,
 }
 
 /// <p>An item in a group configuration. A group configuration can have one or more items.</p>
@@ -243,16 +243,227 @@ pub struct GroupConfigurationParameter {
     pub values: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGroupConfigurationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GroupConfigurationStatus {
+    UpdateComplete,
+    UpdateFailed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGroupConfigurationStatus),
+}
+
+impl Default for GroupConfigurationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GroupConfigurationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GroupConfigurationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GroupConfigurationStatus {
+    fn into(self) -> String {
+        match self {
+            GroupConfigurationStatus::UpdateComplete => "UPDATE_COMPLETE".to_string(),
+            GroupConfigurationStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            GroupConfigurationStatus::Updating => "UPDATING".to_string(),
+            GroupConfigurationStatus::UnknownVariant(UnknownGroupConfigurationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GroupConfigurationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GroupConfigurationStatus::UpdateComplete => &"UPDATE_COMPLETE",
+            GroupConfigurationStatus::UpdateFailed => &"UPDATE_FAILED",
+            GroupConfigurationStatus::Updating => &"UPDATING",
+            GroupConfigurationStatus::UnknownVariant(UnknownGroupConfigurationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GroupConfigurationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "UPDATE_COMPLETE" => GroupConfigurationStatus::UpdateComplete,
+            "UPDATE_FAILED" => GroupConfigurationStatus::UpdateFailed,
+            "UPDATING" => GroupConfigurationStatus::Updating,
+            _ => GroupConfigurationStatus::UnknownVariant(UnknownGroupConfigurationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GroupConfigurationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "UPDATE_COMPLETE" => GroupConfigurationStatus::UpdateComplete,
+            "UPDATE_FAILED" => GroupConfigurationStatus::UpdateFailed,
+            "UPDATING" => GroupConfigurationStatus::Updating,
+            _ => GroupConfigurationStatus::UnknownVariant(UnknownGroupConfigurationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GroupConfigurationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GroupConfigurationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GroupConfigurationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A filter collection that you can use to restrict the results from a <code>List</code> operation to only those you want to include.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GroupFilter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: GroupFilterName,
     /// <p>One or more filter values. Allowed filter values vary by group filter name, and are case-sensitive.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGroupFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GroupFilterName {
+    ConfigurationType,
+    ResourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGroupFilterName),
+}
+
+impl Default for GroupFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GroupFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GroupFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GroupFilterName {
+    fn into(self) -> String {
+        match self {
+            GroupFilterName::ConfigurationType => "configuration-type".to_string(),
+            GroupFilterName::ResourceType => "resource-type".to_string(),
+            GroupFilterName::UnknownVariant(UnknownGroupFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GroupFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            GroupFilterName::ConfigurationType => &"configuration-type",
+            GroupFilterName::ResourceType => &"resource-type",
+            GroupFilterName::UnknownVariant(UnknownGroupFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GroupFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "configuration-type" => GroupFilterName::ConfigurationType,
+            "resource-type" => GroupFilterName::ResourceType,
+            _ => GroupFilterName::UnknownVariant(UnknownGroupFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GroupFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "configuration-type" => GroupFilterName::ConfigurationType,
+            "resource-type" => GroupFilterName::ResourceType,
+            _ => GroupFilterName::UnknownVariant(UnknownGroupFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GroupFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GroupFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GroupFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The unique identifiers for a resource group.</p>
@@ -380,11 +591,216 @@ pub struct QueryError {
     /// <p>Possible values are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<QueryErrorCode>,
     /// <p>A message that explains the <code>ErrorCode</code> value. Messages might state that the specified CloudFormation stack does not exist (or no longer exists). For <code>CLOUDFORMATION_STACK_INACTIVE</code>, the message typically states that the CloudFormation stack has a status that is not (or no longer) active, such as <code>CREATE_FAILED</code>.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryErrorCode {
+    CloudformationStackInactive,
+    CloudformationStackNotExisting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryErrorCode),
+}
+
+impl Default for QueryErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryErrorCode {
+    fn into(self) -> String {
+        match self {
+            QueryErrorCode::CloudformationStackInactive => {
+                "CLOUDFORMATION_STACK_INACTIVE".to_string()
+            }
+            QueryErrorCode::CloudformationStackNotExisting => {
+                "CLOUDFORMATION_STACK_NOT_EXISTING".to_string()
+            }
+            QueryErrorCode::UnknownVariant(UnknownQueryErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            QueryErrorCode::CloudformationStackInactive => &"CLOUDFORMATION_STACK_INACTIVE",
+            QueryErrorCode::CloudformationStackNotExisting => &"CLOUDFORMATION_STACK_NOT_EXISTING",
+            QueryErrorCode::UnknownVariant(UnknownQueryErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QueryErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUDFORMATION_STACK_INACTIVE" => QueryErrorCode::CloudformationStackInactive,
+            "CLOUDFORMATION_STACK_NOT_EXISTING" => QueryErrorCode::CloudformationStackNotExisting,
+            _ => QueryErrorCode::UnknownVariant(UnknownQueryErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueryErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUDFORMATION_STACK_INACTIVE" => QueryErrorCode::CloudformationStackInactive,
+            "CLOUDFORMATION_STACK_NOT_EXISTING" => QueryErrorCode::CloudformationStackNotExisting,
+            _ => QueryErrorCode::UnknownVariant(UnknownQueryErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for QueryErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueryErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryType {
+    CloudformationStack10,
+    TagFilters10,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryType),
+}
+
+impl Default for QueryType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryType {
+    fn into(self) -> String {
+        match self {
+            QueryType::CloudformationStack10 => "CLOUDFORMATION_STACK_1_0".to_string(),
+            QueryType::TagFilters10 => "TAG_FILTERS_1_0".to_string(),
+            QueryType::UnknownVariant(UnknownQueryType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryType {
+    fn into(self) -> &'a str {
+        match self {
+            QueryType::CloudformationStack10 => &"CLOUDFORMATION_STACK_1_0",
+            QueryType::TagFilters10 => &"TAG_FILTERS_1_0",
+            QueryType::UnknownVariant(UnknownQueryType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QueryType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUDFORMATION_STACK_1_0" => QueryType::CloudformationStack10,
+            "TAG_FILTERS_1_0" => QueryType::TagFilters10,
+            _ => QueryType::UnknownVariant(UnknownQueryType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueryType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUDFORMATION_STACK_1_0" => QueryType::CloudformationStack10,
+            "TAG_FILTERS_1_0" => QueryType::TagFilters10,
+            _ => QueryType::UnknownVariant(UnknownQueryType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QueryType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueryType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A filter name and value pair that is used to obtain more specific results from a list of resources.</p>
@@ -393,10 +809,110 @@ pub struct QueryError {
 pub struct ResourceFilter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: ResourceFilterName,
     /// <p>One or more filter values. Allowed filter values vary by resource filter name, and are case-sensitive.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceFilterName {
+    ResourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceFilterName),
+}
+
+impl Default for ResourceFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceFilterName {
+    fn into(self) -> String {
+        match self {
+            ResourceFilterName::ResourceType => "resource-type".to_string(),
+            ResourceFilterName::UnknownVariant(UnknownResourceFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceFilterName::ResourceType => &"resource-type",
+            ResourceFilterName::UnknownVariant(UnknownResourceFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "resource-type" => ResourceFilterName::ResourceType,
+            _ => ResourceFilterName::UnknownVariant(UnknownResourceFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "resource-type" => ResourceFilterName::ResourceType,
+            _ => ResourceFilterName::UnknownVariant(UnknownResourceFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The ARN of a resource, and its resource type.</p>
@@ -421,7 +937,7 @@ pub struct ResourceQuery {
     pub query: String,
     /// <p><p>The type of the query. You can use the following values:</p> <ul> <li> <p> <i> <code>CLOUDFORMATION<em>STACK</em>1<em>0:</code> </i>Specifies that the <code>Query</code> contains an ARN for a CloudFormation stack.</p> </li> <li> <p> <i> <code>TAG</em>FILTERS<em>1</em>0:</code> </i>Specifies that the <code>Query</code> parameter contains a JSON string that represents a collection of simple tag filters for resource types and tags. The JSON string uses a syntax similar to the <code> <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html">GetResources</a> </code> operation, but uses only the <code> <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html#resourcegrouptagging-GetResources-request-ResourceTypeFilters"> ResourceTypeFilters</a> </code> and <code> <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html#resourcegrouptagging-GetResources-request-TagFiltersTagFilters">TagFilters</a> </code> fields. If you specify more than one tag key, only resources that match all tag keys, and at least one value of each specified tag key, are returned in your query. If you specify more than one value for a tag key, a resource matches the filter if it has a tag key value that matches <i>any</i> of the specified values.</p> <p>For example, consider the following sample query for resources that have two tags, <code>Stage</code> and <code>Version</code>, with two values each:</p> <p> <code>[{&quot;Stage&quot;:[&quot;Test&quot;,&quot;Deploy&quot;]},{&quot;Version&quot;:[&quot;1&quot;,&quot;2&quot;]}]</code> </p> <p>The results of this query could include the following.</p> <ul> <li> <p>An EC2 instance that has the following two tags: <code>{&quot;Stage&quot;:&quot;Deploy&quot;}</code>, and <code>{&quot;Version&quot;:&quot;2&quot;}</code> </p> </li> <li> <p>An S3 bucket that has the following two tags: <code>{&quot;Stage&quot;:&quot;Test&quot;}</code>, and <code>{&quot;Version&quot;:&quot;1&quot;}</code> </p> </li> </ul> <p>The query would not include the following items in the results, however. </p> <ul> <li> <p>An EC2 instance that has only the following tag: <code>{&quot;Stage&quot;:&quot;Deploy&quot;}</code>.</p> <p>The instance does not have <b>all</b> of the tag keys specified in the filter, so it is excluded from the results.</p> </li> <li> <p>An RDS database that has the following two tags: <code>{&quot;Stage&quot;:&quot;Archived&quot;}</code> and <code>{&quot;Version&quot;:&quot;4&quot;}</code> </p> <p>The database has all of the tag keys, but none of those keys has an associated value that matches at least one of the specified values in the filter.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: QueryType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

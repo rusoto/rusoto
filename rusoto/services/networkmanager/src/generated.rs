@@ -171,11 +171,122 @@ pub struct Connection {
     /// <p>The state of the connection.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ConnectionState>,
     /// <p>The tags for the connection.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionState {
+    Available,
+    Deleting,
+    Pending,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionState),
+}
+
+impl Default for ConnectionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionState {
+    fn into(self) -> String {
+        match self {
+            ConnectionState::Available => "AVAILABLE".to_string(),
+            ConnectionState::Deleting => "DELETING".to_string(),
+            ConnectionState::Pending => "PENDING".to_string(),
+            ConnectionState::Updating => "UPDATING".to_string(),
+            ConnectionState::UnknownVariant(UnknownConnectionState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionState {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionState::Available => &"AVAILABLE",
+            ConnectionState::Deleting => &"DELETING",
+            ConnectionState::Pending => &"PENDING",
+            ConnectionState::Updating => &"UPDATING",
+            ConnectionState::UnknownVariant(UnknownConnectionState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ConnectionState::Available,
+            "DELETING" => ConnectionState::Deleting,
+            "PENDING" => ConnectionState::Pending,
+            "UPDATING" => ConnectionState::Updating,
+            _ => ConnectionState::UnknownVariant(UnknownConnectionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ConnectionState::Available,
+            "DELETING" => ConnectionState::Deleting,
+            "PENDING" => ConnectionState::Pending,
+            "UPDATING" => ConnectionState::Updating,
+            _ => ConnectionState::UnknownVariant(UnknownConnectionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -383,7 +494,126 @@ pub struct CustomerGatewayAssociation {
     /// <p>The association state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CustomerGatewayAssociationState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomerGatewayAssociationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomerGatewayAssociationState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomerGatewayAssociationState),
+}
+
+impl Default for CustomerGatewayAssociationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomerGatewayAssociationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomerGatewayAssociationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomerGatewayAssociationState {
+    fn into(self) -> String {
+        match self {
+            CustomerGatewayAssociationState::Available => "AVAILABLE".to_string(),
+            CustomerGatewayAssociationState::Deleted => "DELETED".to_string(),
+            CustomerGatewayAssociationState::Deleting => "DELETING".to_string(),
+            CustomerGatewayAssociationState::Pending => "PENDING".to_string(),
+            CustomerGatewayAssociationState::UnknownVariant(
+                UnknownCustomerGatewayAssociationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomerGatewayAssociationState {
+    fn into(self) -> &'a str {
+        match self {
+            CustomerGatewayAssociationState::Available => &"AVAILABLE",
+            CustomerGatewayAssociationState::Deleted => &"DELETED",
+            CustomerGatewayAssociationState::Deleting => &"DELETING",
+            CustomerGatewayAssociationState::Pending => &"PENDING",
+            CustomerGatewayAssociationState::UnknownVariant(
+                UnknownCustomerGatewayAssociationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomerGatewayAssociationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => CustomerGatewayAssociationState::Available,
+            "DELETED" => CustomerGatewayAssociationState::Deleted,
+            "DELETING" => CustomerGatewayAssociationState::Deleting,
+            "PENDING" => CustomerGatewayAssociationState::Pending,
+            _ => CustomerGatewayAssociationState::UnknownVariant(
+                UnknownCustomerGatewayAssociationState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CustomerGatewayAssociationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => CustomerGatewayAssociationState::Available,
+            "DELETED" => CustomerGatewayAssociationState::Deleted,
+            "DELETING" => CustomerGatewayAssociationState::Deleting,
+            "PENDING" => CustomerGatewayAssociationState::Pending,
+            _ => CustomerGatewayAssociationState::UnknownVariant(
+                UnknownCustomerGatewayAssociationState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomerGatewayAssociationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CustomerGatewayAssociationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomerGatewayAssociationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -580,7 +810,7 @@ pub struct Device {
     /// <p>The device state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DeviceState>,
     /// <p>The tags for the device.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -593,6 +823,117 @@ pub struct Device {
     #[serde(rename = "Vendor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceState {
+    Available,
+    Deleting,
+    Pending,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceState),
+}
+
+impl Default for DeviceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceState {
+    fn into(self) -> String {
+        match self {
+            DeviceState::Available => "AVAILABLE".to_string(),
+            DeviceState::Deleting => "DELETING".to_string(),
+            DeviceState::Pending => "PENDING".to_string(),
+            DeviceState::Updating => "UPDATING".to_string(),
+            DeviceState::UnknownVariant(UnknownDeviceState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceState {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceState::Available => &"AVAILABLE",
+            DeviceState::Deleting => &"DELETING",
+            DeviceState::Pending => &"PENDING",
+            DeviceState::Updating => &"UPDATING",
+            DeviceState::UnknownVariant(UnknownDeviceState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeviceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => DeviceState::Available,
+            "DELETING" => DeviceState::Deleting,
+            "PENDING" => DeviceState::Pending,
+            "UPDATING" => DeviceState::Updating,
+            _ => DeviceState::UnknownVariant(UnknownDeviceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => DeviceState::Available,
+            "DELETING" => DeviceState::Deleting,
+            "PENDING" => DeviceState::Pending,
+            "UPDATING" => DeviceState::Updating,
+            _ => DeviceState::UnknownVariant(UnknownDeviceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeviceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeviceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -970,11 +1311,126 @@ pub struct GlobalNetwork {
     /// <p>The state of the global network.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<GlobalNetworkState>,
     /// <p>The tags for the global network.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalNetworkState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalNetworkState {
+    Available,
+    Deleting,
+    Pending,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalNetworkState),
+}
+
+impl Default for GlobalNetworkState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalNetworkState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalNetworkState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalNetworkState {
+    fn into(self) -> String {
+        match self {
+            GlobalNetworkState::Available => "AVAILABLE".to_string(),
+            GlobalNetworkState::Deleting => "DELETING".to_string(),
+            GlobalNetworkState::Pending => "PENDING".to_string(),
+            GlobalNetworkState::Updating => "UPDATING".to_string(),
+            GlobalNetworkState::UnknownVariant(UnknownGlobalNetworkState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalNetworkState {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalNetworkState::Available => &"AVAILABLE",
+            GlobalNetworkState::Deleting => &"DELETING",
+            GlobalNetworkState::Pending => &"PENDING",
+            GlobalNetworkState::Updating => &"UPDATING",
+            GlobalNetworkState::UnknownVariant(UnknownGlobalNetworkState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GlobalNetworkState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => GlobalNetworkState::Available,
+            "DELETING" => GlobalNetworkState::Deleting,
+            "PENDING" => GlobalNetworkState::Pending,
+            "UPDATING" => GlobalNetworkState::Updating,
+            _ => GlobalNetworkState::UnknownVariant(UnknownGlobalNetworkState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GlobalNetworkState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => GlobalNetworkState::Available,
+            "DELETING" => GlobalNetworkState::Deleting,
+            "PENDING" => GlobalNetworkState::Pending,
+            "UPDATING" => GlobalNetworkState::Updating,
+            _ => GlobalNetworkState::UnknownVariant(UnknownGlobalNetworkState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalNetworkState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GlobalNetworkState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GlobalNetworkState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a link.</p>
@@ -1016,7 +1472,7 @@ pub struct Link {
     /// <p>The state of the link.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<LinkState>,
     /// <p>The tags for the link.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1042,11 +1498,237 @@ pub struct LinkAssociation {
     /// <p>The state of the association.</p>
     #[serde(rename = "LinkAssociationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub link_association_state: Option<String>,
+    pub link_association_state: Option<LinkAssociationState>,
     /// <p>The ID of the link.</p>
     #[serde(rename = "LinkId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLinkAssociationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LinkAssociationState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLinkAssociationState),
+}
+
+impl Default for LinkAssociationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LinkAssociationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LinkAssociationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LinkAssociationState {
+    fn into(self) -> String {
+        match self {
+            LinkAssociationState::Available => "AVAILABLE".to_string(),
+            LinkAssociationState::Deleted => "DELETED".to_string(),
+            LinkAssociationState::Deleting => "DELETING".to_string(),
+            LinkAssociationState::Pending => "PENDING".to_string(),
+            LinkAssociationState::UnknownVariant(UnknownLinkAssociationState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LinkAssociationState {
+    fn into(self) -> &'a str {
+        match self {
+            LinkAssociationState::Available => &"AVAILABLE",
+            LinkAssociationState::Deleted => &"DELETED",
+            LinkAssociationState::Deleting => &"DELETING",
+            LinkAssociationState::Pending => &"PENDING",
+            LinkAssociationState::UnknownVariant(UnknownLinkAssociationState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LinkAssociationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => LinkAssociationState::Available,
+            "DELETED" => LinkAssociationState::Deleted,
+            "DELETING" => LinkAssociationState::Deleting,
+            "PENDING" => LinkAssociationState::Pending,
+            _ => LinkAssociationState::UnknownVariant(UnknownLinkAssociationState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LinkAssociationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => LinkAssociationState::Available,
+            "DELETED" => LinkAssociationState::Deleted,
+            "DELETING" => LinkAssociationState::Deleting,
+            "PENDING" => LinkAssociationState::Pending,
+            _ => LinkAssociationState::UnknownVariant(UnknownLinkAssociationState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LinkAssociationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LinkAssociationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LinkAssociationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLinkState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LinkState {
+    Available,
+    Deleting,
+    Pending,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLinkState),
+}
+
+impl Default for LinkState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LinkState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LinkState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LinkState {
+    fn into(self) -> String {
+        match self {
+            LinkState::Available => "AVAILABLE".to_string(),
+            LinkState::Deleting => "DELETING".to_string(),
+            LinkState::Pending => "PENDING".to_string(),
+            LinkState::Updating => "UPDATING".to_string(),
+            LinkState::UnknownVariant(UnknownLinkState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LinkState {
+    fn into(self) -> &'a str {
+        match self {
+            LinkState::Available => &"AVAILABLE",
+            LinkState::Deleting => &"DELETING",
+            LinkState::Pending => &"PENDING",
+            LinkState::Updating => &"UPDATING",
+            LinkState::UnknownVariant(UnknownLinkState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LinkState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => LinkState::Available,
+            "DELETING" => LinkState::Deleting,
+            "PENDING" => LinkState::Pending,
+            "UPDATING" => LinkState::Updating,
+            _ => LinkState::UnknownVariant(UnknownLinkState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LinkState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => LinkState::Available,
+            "DELETING" => LinkState::Deleting,
+            "PENDING" => LinkState::Pending,
+            "UPDATING" => LinkState::Updating,
+            _ => LinkState::UnknownVariant(UnknownLinkState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LinkState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LinkState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LinkState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1134,11 +1816,122 @@ pub struct Site {
     /// <p>The state of the site.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<SiteState>,
     /// <p>The tags for the site.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSiteState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SiteState {
+    Available,
+    Deleting,
+    Pending,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSiteState),
+}
+
+impl Default for SiteState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SiteState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SiteState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SiteState {
+    fn into(self) -> String {
+        match self {
+            SiteState::Available => "AVAILABLE".to_string(),
+            SiteState::Deleting => "DELETING".to_string(),
+            SiteState::Pending => "PENDING".to_string(),
+            SiteState::Updating => "UPDATING".to_string(),
+            SiteState::UnknownVariant(UnknownSiteState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SiteState {
+    fn into(self) -> &'a str {
+        match self {
+            SiteState::Available => &"AVAILABLE",
+            SiteState::Deleting => &"DELETING",
+            SiteState::Pending => &"PENDING",
+            SiteState::Updating => &"UPDATING",
+            SiteState::UnknownVariant(UnknownSiteState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SiteState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => SiteState::Available,
+            "DELETING" => SiteState::Deleting,
+            "PENDING" => SiteState::Pending,
+            "UPDATING" => SiteState::Updating,
+            _ => SiteState::UnknownVariant(UnknownSiteState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SiteState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => SiteState::Available,
+            "DELETING" => SiteState::Deleting,
+            "PENDING" => SiteState::Pending,
+            "UPDATING" => SiteState::Updating,
+            _ => SiteState::UnknownVariant(UnknownSiteState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SiteState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SiteState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SiteState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a tag.</p>
@@ -1188,11 +1981,130 @@ pub struct TransitGatewayConnectPeerAssociation {
     /// <p>The state of the association.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<TransitGatewayConnectPeerAssociationState>,
     /// <p>The Amazon Resource Name (ARN) of the transit gateway Connect peer.</p>
     #[serde(rename = "TransitGatewayConnectPeerArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transit_gateway_connect_peer_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransitGatewayConnectPeerAssociationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransitGatewayConnectPeerAssociationState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransitGatewayConnectPeerAssociationState),
+}
+
+impl Default for TransitGatewayConnectPeerAssociationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransitGatewayConnectPeerAssociationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransitGatewayConnectPeerAssociationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransitGatewayConnectPeerAssociationState {
+    fn into(self) -> String {
+        match self {
+            TransitGatewayConnectPeerAssociationState::Available => "AVAILABLE".to_string(),
+            TransitGatewayConnectPeerAssociationState::Deleted => "DELETED".to_string(),
+            TransitGatewayConnectPeerAssociationState::Deleting => "DELETING".to_string(),
+            TransitGatewayConnectPeerAssociationState::Pending => "PENDING".to_string(),
+            TransitGatewayConnectPeerAssociationState::UnknownVariant(
+                UnknownTransitGatewayConnectPeerAssociationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransitGatewayConnectPeerAssociationState {
+    fn into(self) -> &'a str {
+        match self {
+            TransitGatewayConnectPeerAssociationState::Available => &"AVAILABLE",
+            TransitGatewayConnectPeerAssociationState::Deleted => &"DELETED",
+            TransitGatewayConnectPeerAssociationState::Deleting => &"DELETING",
+            TransitGatewayConnectPeerAssociationState::Pending => &"PENDING",
+            TransitGatewayConnectPeerAssociationState::UnknownVariant(
+                UnknownTransitGatewayConnectPeerAssociationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for TransitGatewayConnectPeerAssociationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => TransitGatewayConnectPeerAssociationState::Available,
+            "DELETED" => TransitGatewayConnectPeerAssociationState::Deleted,
+            "DELETING" => TransitGatewayConnectPeerAssociationState::Deleting,
+            "PENDING" => TransitGatewayConnectPeerAssociationState::Pending,
+            _ => TransitGatewayConnectPeerAssociationState::UnknownVariant(
+                UnknownTransitGatewayConnectPeerAssociationState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for TransitGatewayConnectPeerAssociationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => TransitGatewayConnectPeerAssociationState::Available,
+            "DELETED" => TransitGatewayConnectPeerAssociationState::Deleted,
+            "DELETING" => TransitGatewayConnectPeerAssociationState::Deleting,
+            "PENDING" => TransitGatewayConnectPeerAssociationState::Pending,
+            _ => TransitGatewayConnectPeerAssociationState::UnknownVariant(
+                UnknownTransitGatewayConnectPeerAssociationState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransitGatewayConnectPeerAssociationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TransitGatewayConnectPeerAssociationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TransitGatewayConnectPeerAssociationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the registration of a transit gateway to a global network.</p>
@@ -1213,6 +2125,130 @@ pub struct TransitGatewayRegistration {
     pub transit_gateway_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransitGatewayRegistrationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransitGatewayRegistrationState {
+    Available,
+    Deleted,
+    Deleting,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransitGatewayRegistrationState),
+}
+
+impl Default for TransitGatewayRegistrationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransitGatewayRegistrationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransitGatewayRegistrationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransitGatewayRegistrationState {
+    fn into(self) -> String {
+        match self {
+            TransitGatewayRegistrationState::Available => "AVAILABLE".to_string(),
+            TransitGatewayRegistrationState::Deleted => "DELETED".to_string(),
+            TransitGatewayRegistrationState::Deleting => "DELETING".to_string(),
+            TransitGatewayRegistrationState::Failed => "FAILED".to_string(),
+            TransitGatewayRegistrationState::Pending => "PENDING".to_string(),
+            TransitGatewayRegistrationState::UnknownVariant(
+                UnknownTransitGatewayRegistrationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransitGatewayRegistrationState {
+    fn into(self) -> &'a str {
+        match self {
+            TransitGatewayRegistrationState::Available => &"AVAILABLE",
+            TransitGatewayRegistrationState::Deleted => &"DELETED",
+            TransitGatewayRegistrationState::Deleting => &"DELETING",
+            TransitGatewayRegistrationState::Failed => &"FAILED",
+            TransitGatewayRegistrationState::Pending => &"PENDING",
+            TransitGatewayRegistrationState::UnknownVariant(
+                UnknownTransitGatewayRegistrationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for TransitGatewayRegistrationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => TransitGatewayRegistrationState::Available,
+            "DELETED" => TransitGatewayRegistrationState::Deleted,
+            "DELETING" => TransitGatewayRegistrationState::Deleting,
+            "FAILED" => TransitGatewayRegistrationState::Failed,
+            "PENDING" => TransitGatewayRegistrationState::Pending,
+            _ => TransitGatewayRegistrationState::UnknownVariant(
+                UnknownTransitGatewayRegistrationState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for TransitGatewayRegistrationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => TransitGatewayRegistrationState::Available,
+            "DELETED" => TransitGatewayRegistrationState::Deleted,
+            "DELETING" => TransitGatewayRegistrationState::Deleting,
+            "FAILED" => TransitGatewayRegistrationState::Failed,
+            "PENDING" => TransitGatewayRegistrationState::Pending,
+            _ => TransitGatewayRegistrationState::UnknownVariant(
+                UnknownTransitGatewayRegistrationState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransitGatewayRegistrationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TransitGatewayRegistrationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TransitGatewayRegistrationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the status of a transit gateway registration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1220,7 +2256,7 @@ pub struct TransitGatewayRegistrationStateReason {
     /// <p>The code for the state reason.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<TransitGatewayRegistrationState>,
     /// <p>The message for the state reason.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1417,6 +2453,124 @@ pub struct ValidationExceptionField {
     pub message: String,
     /// <p>The name of the field.</p>
     pub name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidationExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidationExceptionReason {
+    CannotParse,
+    FieldValidationFailed,
+    Other,
+    UnknownOperation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidationExceptionReason),
+}
+
+impl Default for ValidationExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidationExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidationExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidationExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ValidationExceptionReason::CannotParse => "CannotParse".to_string(),
+            ValidationExceptionReason::FieldValidationFailed => "FieldValidationFailed".to_string(),
+            ValidationExceptionReason::Other => "Other".to_string(),
+            ValidationExceptionReason::UnknownOperation => "UnknownOperation".to_string(),
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidationExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ValidationExceptionReason::CannotParse => &"CannotParse",
+            ValidationExceptionReason::FieldValidationFailed => &"FieldValidationFailed",
+            ValidationExceptionReason::Other => &"Other",
+            ValidationExceptionReason::UnknownOperation => &"UnknownOperation",
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ValidationExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "CannotParse" => ValidationExceptionReason::CannotParse,
+            "FieldValidationFailed" => ValidationExceptionReason::FieldValidationFailed,
+            "Other" => ValidationExceptionReason::Other,
+            "UnknownOperation" => ValidationExceptionReason::UnknownOperation,
+            _ => ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidationExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CannotParse" => ValidationExceptionReason::CannotParse,
+            "FieldValidationFailed" => ValidationExceptionReason::FieldValidationFailed,
+            "Other" => ValidationExceptionReason::Other,
+            "UnknownOperation" => ValidationExceptionReason::UnknownOperation,
+            _ => {
+                ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ValidationExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ValidationExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateCustomerGateway

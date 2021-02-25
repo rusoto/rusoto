@@ -65,7 +65,7 @@ impl AWSAccountIDDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountLimit {
     /// <p><p>The limit that you requested. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>HEALTH</em>CHECKS<em>BY</em>OWNER</b>: The maximum number of health checks that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>HOSTED</em>ZONES<em>BY</em>OWNER</b>: The maximum number of hosted zones that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>REUSABLE</em>DELEGATION<em>SETS</em>BY<em>OWNER</b>: The maximum number of reusable delegation sets that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICIES</em>BY<em>OWNER</b>: The maximum number of traffic policies that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICY</em>INSTANCES<em>BY</em>OWNER</b>: The maximum number of traffic policy instances that you can create using the current account. (Traffic policy instances are referred to as traffic flow policy records in the Amazon Route 53 console.)</p> </li> </ul></p>
-    pub type_: String,
+    pub type_: AccountLimitType,
     /// <p>The current value for the limit that is specified by <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_AccountLimit.html#Route53-Type-AccountLimit-Type">Type</a>.</p>
     pub value: i64,
 }
@@ -92,12 +92,155 @@ impl AccountLimitDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountLimitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountLimitType {
+    MaxHealthChecksByOwner,
+    MaxHostedZonesByOwner,
+    MaxReusableDelegationSetsByOwner,
+    MaxTrafficPoliciesByOwner,
+    MaxTrafficPolicyInstancesByOwner,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountLimitType),
+}
+
+impl Default for AccountLimitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountLimitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountLimitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountLimitType {
+    fn into(self) -> String {
+        match self {
+            AccountLimitType::MaxHealthChecksByOwner => "MAX_HEALTH_CHECKS_BY_OWNER".to_string(),
+            AccountLimitType::MaxHostedZonesByOwner => "MAX_HOSTED_ZONES_BY_OWNER".to_string(),
+            AccountLimitType::MaxReusableDelegationSetsByOwner => {
+                "MAX_REUSABLE_DELEGATION_SETS_BY_OWNER".to_string()
+            }
+            AccountLimitType::MaxTrafficPoliciesByOwner => {
+                "MAX_TRAFFIC_POLICIES_BY_OWNER".to_string()
+            }
+            AccountLimitType::MaxTrafficPolicyInstancesByOwner => {
+                "MAX_TRAFFIC_POLICY_INSTANCES_BY_OWNER".to_string()
+            }
+            AccountLimitType::UnknownVariant(UnknownAccountLimitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountLimitType {
+    fn into(self) -> &'a str {
+        match self {
+            AccountLimitType::MaxHealthChecksByOwner => &"MAX_HEALTH_CHECKS_BY_OWNER",
+            AccountLimitType::MaxHostedZonesByOwner => &"MAX_HOSTED_ZONES_BY_OWNER",
+            AccountLimitType::MaxReusableDelegationSetsByOwner => {
+                &"MAX_REUSABLE_DELEGATION_SETS_BY_OWNER"
+            }
+            AccountLimitType::MaxTrafficPoliciesByOwner => &"MAX_TRAFFIC_POLICIES_BY_OWNER",
+            AccountLimitType::MaxTrafficPolicyInstancesByOwner => {
+                &"MAX_TRAFFIC_POLICY_INSTANCES_BY_OWNER"
+            }
+            AccountLimitType::UnknownVariant(UnknownAccountLimitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AccountLimitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX_HEALTH_CHECKS_BY_OWNER" => AccountLimitType::MaxHealthChecksByOwner,
+            "MAX_HOSTED_ZONES_BY_OWNER" => AccountLimitType::MaxHostedZonesByOwner,
+            "MAX_REUSABLE_DELEGATION_SETS_BY_OWNER" => {
+                AccountLimitType::MaxReusableDelegationSetsByOwner
+            }
+            "MAX_TRAFFIC_POLICIES_BY_OWNER" => AccountLimitType::MaxTrafficPoliciesByOwner,
+            "MAX_TRAFFIC_POLICY_INSTANCES_BY_OWNER" => {
+                AccountLimitType::MaxTrafficPolicyInstancesByOwner
+            }
+            _ => AccountLimitType::UnknownVariant(UnknownAccountLimitType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountLimitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX_HEALTH_CHECKS_BY_OWNER" => AccountLimitType::MaxHealthChecksByOwner,
+            "MAX_HOSTED_ZONES_BY_OWNER" => AccountLimitType::MaxHostedZonesByOwner,
+            "MAX_REUSABLE_DELEGATION_SETS_BY_OWNER" => {
+                AccountLimitType::MaxReusableDelegationSetsByOwner
+            }
+            "MAX_TRAFFIC_POLICIES_BY_OWNER" => AccountLimitType::MaxTrafficPoliciesByOwner,
+            "MAX_TRAFFIC_POLICY_INSTANCES_BY_OWNER" => {
+                AccountLimitType::MaxTrafficPolicyInstancesByOwner
+            }
+            _ => AccountLimitType::UnknownVariant(UnknownAccountLimitType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountLimitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AccountLimitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AccountLimitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AccountLimitTypeDeserializer;
 impl AccountLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccountLimitType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -107,12 +250,12 @@ impl AccountLimitTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &AccountLimitType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -162,7 +305,7 @@ pub struct AlarmIdentifier {
     /// <p><p>The name of the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p> <note> <p>Route 53 supports CloudWatch alarms with the following features:</p> <ul> <li> <p>Standard-resolution metrics. High-resolution metrics aren&#39;t supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/publishingMetrics.html#high-resolution-metrics">High-Resolution Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Statistics: Average, Minimum, Maximum, Sum, and SampleCount. Extended statistics aren&#39;t supported.</p> </li> </ul> </note></p>
     pub name: String,
     /// <p>For the CloudWatch alarm that you want Route 53 health checkers to use to determine whether this health check is healthy, the region that the alarm was created in.</p> <p>For the current list of CloudWatch regions, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#cw_region">Amazon CloudWatch</a> in the <i>AWS Service Endpoints</i> chapter of the <i>Amazon Web Services General Reference</i>.</p>
-    pub region: String,
+    pub region: CloudWatchRegion,
 }
 
 #[allow(dead_code)]
@@ -401,7 +544,7 @@ impl AssociateVPCWithHostedZoneResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Change {
     /// <p><p>The action to perform:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes a existing resource record set.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicyInstance.html">DeleteTrafficPolicyInstance</a>. Amazon Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Route 53 doesn&#39;t automatically delete the traffic policy instance, and you&#39;ll continue to be charged for it even though it&#39;s no longer in use. </p> </important> </li> <li> <p> <code>UPSERT</code>: If a resource record set doesn&#39;t already exist, Route 53 creates it. If a resource record set does exist, Route 53 updates it with the values in the request.</p> </li> </ul></p>
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Information about the resource record set to create, delete, or update.</p>
     pub resource_record_set: ResourceRecordSet,
 }
@@ -428,18 +571,125 @@ impl ChangeSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeAction {
+    Create,
+    Delete,
+    Upsert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeAction),
+}
+
+impl Default for ChangeAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeAction {
+    fn into(self) -> String {
+        match self {
+            ChangeAction::Create => "CREATE".to_string(),
+            ChangeAction::Delete => "DELETE".to_string(),
+            ChangeAction::Upsert => "UPSERT".to_string(),
+            ChangeAction::UnknownVariant(UnknownChangeAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeAction {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeAction::Create => &"CREATE",
+            ChangeAction::Delete => &"DELETE",
+            ChangeAction::Upsert => &"UPSERT",
+            ChangeAction::UnknownVariant(UnknownChangeAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE" => ChangeAction::Create,
+            "DELETE" => ChangeAction::Delete,
+            "UPSERT" => ChangeAction::Upsert,
+            _ => ChangeAction::UnknownVariant(UnknownChangeAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE" => ChangeAction::Create,
+            "DELETE" => ChangeAction::Delete,
+            "UPSERT" => ChangeAction::Upsert,
+            _ => ChangeAction::UnknownVariant(UnknownChangeAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct ChangeActionSerializer;
 impl ChangeActionSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ChangeAction,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -482,7 +732,7 @@ pub struct ChangeInfo {
     /// <p>The ID of the request.</p>
     pub id: String,
     /// <p>The current state of the request. <code>PENDING</code> indicates that this request has not yet been applied to all Amazon Route 53 DNS servers.</p>
-    pub status: String,
+    pub status: ChangeStatus,
     /// <p>The date and time that the change request was submitted in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 format</a> and Coordinated Universal Time (UTC). For example, the value <code>2017-03-27T17:48:16.751Z</code> represents March 27, 2017 at 17:48:16.751 UTC.</p>
     pub submitted_at: String,
 }
@@ -575,12 +825,118 @@ impl ChangeResourceRecordSetsResponseDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeStatus {
+    Insync,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeStatus),
+}
+
+impl Default for ChangeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeStatus {
+    fn into(self) -> String {
+        match self {
+            ChangeStatus::Insync => "INSYNC".to_string(),
+            ChangeStatus::Pending => "PENDING".to_string(),
+            ChangeStatus::UnknownVariant(UnknownChangeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeStatus::Insync => &"INSYNC",
+            ChangeStatus::Pending => &"PENDING",
+            ChangeStatus::UnknownVariant(UnknownChangeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSYNC" => ChangeStatus::Insync,
+            "PENDING" => ChangeStatus::Pending,
+            _ => ChangeStatus::UnknownVariant(UnknownChangeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSYNC" => ChangeStatus::Insync,
+            "PENDING" => ChangeStatus::Pending,
+            _ => ChangeStatus::UnknownVariant(UnknownChangeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ChangeStatusDeserializer;
 impl ChangeStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangeStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A complex type that contains information about the tags that you want to add, edit, or delete.</p>
@@ -594,7 +950,7 @@ pub struct ChangeTagsForResourceRequest {
     /// <p>The ID of the resource for which you want to add, change, or delete tags.</p>
     pub resource_id: String,
     /// <p><p>The type of the resource.</p> <ul> <li> <p>The resource type for health checks is <code>healthcheck</code>.</p> </li> <li> <p>The resource type for hosted zones is <code>hostedzone</code>.</p> </li> </ul></p>
-    pub resource_type: String,
+    pub resource_type: TagResourceType,
 }
 
 pub struct ChangeTagsForResourceRequestSerializer;
@@ -727,7 +1083,7 @@ impl ChildHealthCheckListSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudWatchAlarmConfiguration {
     /// <p>For the metric that the CloudWatch alarm is associated with, the arithmetic operation that is used for the comparison.</p>
-    pub comparison_operator: String,
+    pub comparison_operator: ComparisonOperator,
     /// <p>For the metric that the CloudWatch alarm is associated with, a complex type that contains information about the dimensions for the metric. For information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html">Amazon CloudWatch Namespaces, Dimensions, and Metrics Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub dimensions: Option<Vec<Dimension>>,
     /// <p>For the metric that the CloudWatch alarm is associated with, the number of periods that the metric is compared to the threshold.</p>
@@ -739,7 +1095,7 @@ pub struct CloudWatchAlarmConfiguration {
     /// <p>For the metric that the CloudWatch alarm is associated with, the duration of one evaluation period in seconds.</p>
     pub period: i64,
     /// <p>For the metric that the CloudWatch alarm is associated with, the statistic that is applied to the metric.</p>
-    pub statistic: String,
+    pub statistic: Statistic,
     /// <p>For the metric that the CloudWatch alarm is associated with, the value the metric is compared with.</p>
     pub threshold: f64,
 }
@@ -818,12 +1174,246 @@ impl CloudWatchLogsLogGroupArnSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudWatchRegion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudWatchRegion {
+    AfSouth1,
+    ApEast1,
+    ApNortheast1,
+    ApNortheast2,
+    ApNortheast3,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    CnNorth1,
+    CnNorthwest1,
+    EuCentral1,
+    EuNorth1,
+    EuSouth1,
+    EuWest1,
+    EuWest2,
+    EuWest3,
+    MeSouth1,
+    SaEast1,
+    UsEast1,
+    UsEast2,
+    UsGovEast1,
+    UsGovWest1,
+    UsIsoEast1,
+    UsIsobEast1,
+    UsWest1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudWatchRegion),
+}
+
+impl Default for CloudWatchRegion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudWatchRegion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudWatchRegion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudWatchRegion {
+    fn into(self) -> String {
+        match self {
+            CloudWatchRegion::AfSouth1 => "af-south-1".to_string(),
+            CloudWatchRegion::ApEast1 => "ap-east-1".to_string(),
+            CloudWatchRegion::ApNortheast1 => "ap-northeast-1".to_string(),
+            CloudWatchRegion::ApNortheast2 => "ap-northeast-2".to_string(),
+            CloudWatchRegion::ApNortheast3 => "ap-northeast-3".to_string(),
+            CloudWatchRegion::ApSouth1 => "ap-south-1".to_string(),
+            CloudWatchRegion::ApSoutheast1 => "ap-southeast-1".to_string(),
+            CloudWatchRegion::ApSoutheast2 => "ap-southeast-2".to_string(),
+            CloudWatchRegion::CaCentral1 => "ca-central-1".to_string(),
+            CloudWatchRegion::CnNorth1 => "cn-north-1".to_string(),
+            CloudWatchRegion::CnNorthwest1 => "cn-northwest-1".to_string(),
+            CloudWatchRegion::EuCentral1 => "eu-central-1".to_string(),
+            CloudWatchRegion::EuNorth1 => "eu-north-1".to_string(),
+            CloudWatchRegion::EuSouth1 => "eu-south-1".to_string(),
+            CloudWatchRegion::EuWest1 => "eu-west-1".to_string(),
+            CloudWatchRegion::EuWest2 => "eu-west-2".to_string(),
+            CloudWatchRegion::EuWest3 => "eu-west-3".to_string(),
+            CloudWatchRegion::MeSouth1 => "me-south-1".to_string(),
+            CloudWatchRegion::SaEast1 => "sa-east-1".to_string(),
+            CloudWatchRegion::UsEast1 => "us-east-1".to_string(),
+            CloudWatchRegion::UsEast2 => "us-east-2".to_string(),
+            CloudWatchRegion::UsGovEast1 => "us-gov-east-1".to_string(),
+            CloudWatchRegion::UsGovWest1 => "us-gov-west-1".to_string(),
+            CloudWatchRegion::UsIsoEast1 => "us-iso-east-1".to_string(),
+            CloudWatchRegion::UsIsobEast1 => "us-isob-east-1".to_string(),
+            CloudWatchRegion::UsWest1 => "us-west-1".to_string(),
+            CloudWatchRegion::UsWest2 => "us-west-2".to_string(),
+            CloudWatchRegion::UnknownVariant(UnknownCloudWatchRegion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudWatchRegion {
+    fn into(self) -> &'a str {
+        match self {
+            CloudWatchRegion::AfSouth1 => &"af-south-1",
+            CloudWatchRegion::ApEast1 => &"ap-east-1",
+            CloudWatchRegion::ApNortheast1 => &"ap-northeast-1",
+            CloudWatchRegion::ApNortheast2 => &"ap-northeast-2",
+            CloudWatchRegion::ApNortheast3 => &"ap-northeast-3",
+            CloudWatchRegion::ApSouth1 => &"ap-south-1",
+            CloudWatchRegion::ApSoutheast1 => &"ap-southeast-1",
+            CloudWatchRegion::ApSoutheast2 => &"ap-southeast-2",
+            CloudWatchRegion::CaCentral1 => &"ca-central-1",
+            CloudWatchRegion::CnNorth1 => &"cn-north-1",
+            CloudWatchRegion::CnNorthwest1 => &"cn-northwest-1",
+            CloudWatchRegion::EuCentral1 => &"eu-central-1",
+            CloudWatchRegion::EuNorth1 => &"eu-north-1",
+            CloudWatchRegion::EuSouth1 => &"eu-south-1",
+            CloudWatchRegion::EuWest1 => &"eu-west-1",
+            CloudWatchRegion::EuWest2 => &"eu-west-2",
+            CloudWatchRegion::EuWest3 => &"eu-west-3",
+            CloudWatchRegion::MeSouth1 => &"me-south-1",
+            CloudWatchRegion::SaEast1 => &"sa-east-1",
+            CloudWatchRegion::UsEast1 => &"us-east-1",
+            CloudWatchRegion::UsEast2 => &"us-east-2",
+            CloudWatchRegion::UsGovEast1 => &"us-gov-east-1",
+            CloudWatchRegion::UsGovWest1 => &"us-gov-west-1",
+            CloudWatchRegion::UsIsoEast1 => &"us-iso-east-1",
+            CloudWatchRegion::UsIsobEast1 => &"us-isob-east-1",
+            CloudWatchRegion::UsWest1 => &"us-west-1",
+            CloudWatchRegion::UsWest2 => &"us-west-2",
+            CloudWatchRegion::UnknownVariant(UnknownCloudWatchRegion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CloudWatchRegion {
+    fn from(name: &str) -> Self {
+        match name {
+            "af-south-1" => CloudWatchRegion::AfSouth1,
+            "ap-east-1" => CloudWatchRegion::ApEast1,
+            "ap-northeast-1" => CloudWatchRegion::ApNortheast1,
+            "ap-northeast-2" => CloudWatchRegion::ApNortheast2,
+            "ap-northeast-3" => CloudWatchRegion::ApNortheast3,
+            "ap-south-1" => CloudWatchRegion::ApSouth1,
+            "ap-southeast-1" => CloudWatchRegion::ApSoutheast1,
+            "ap-southeast-2" => CloudWatchRegion::ApSoutheast2,
+            "ca-central-1" => CloudWatchRegion::CaCentral1,
+            "cn-north-1" => CloudWatchRegion::CnNorth1,
+            "cn-northwest-1" => CloudWatchRegion::CnNorthwest1,
+            "eu-central-1" => CloudWatchRegion::EuCentral1,
+            "eu-north-1" => CloudWatchRegion::EuNorth1,
+            "eu-south-1" => CloudWatchRegion::EuSouth1,
+            "eu-west-1" => CloudWatchRegion::EuWest1,
+            "eu-west-2" => CloudWatchRegion::EuWest2,
+            "eu-west-3" => CloudWatchRegion::EuWest3,
+            "me-south-1" => CloudWatchRegion::MeSouth1,
+            "sa-east-1" => CloudWatchRegion::SaEast1,
+            "us-east-1" => CloudWatchRegion::UsEast1,
+            "us-east-2" => CloudWatchRegion::UsEast2,
+            "us-gov-east-1" => CloudWatchRegion::UsGovEast1,
+            "us-gov-west-1" => CloudWatchRegion::UsGovWest1,
+            "us-iso-east-1" => CloudWatchRegion::UsIsoEast1,
+            "us-isob-east-1" => CloudWatchRegion::UsIsobEast1,
+            "us-west-1" => CloudWatchRegion::UsWest1,
+            "us-west-2" => CloudWatchRegion::UsWest2,
+            _ => CloudWatchRegion::UnknownVariant(UnknownCloudWatchRegion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CloudWatchRegion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "af-south-1" => CloudWatchRegion::AfSouth1,
+            "ap-east-1" => CloudWatchRegion::ApEast1,
+            "ap-northeast-1" => CloudWatchRegion::ApNortheast1,
+            "ap-northeast-2" => CloudWatchRegion::ApNortheast2,
+            "ap-northeast-3" => CloudWatchRegion::ApNortheast3,
+            "ap-south-1" => CloudWatchRegion::ApSouth1,
+            "ap-southeast-1" => CloudWatchRegion::ApSoutheast1,
+            "ap-southeast-2" => CloudWatchRegion::ApSoutheast2,
+            "ca-central-1" => CloudWatchRegion::CaCentral1,
+            "cn-north-1" => CloudWatchRegion::CnNorth1,
+            "cn-northwest-1" => CloudWatchRegion::CnNorthwest1,
+            "eu-central-1" => CloudWatchRegion::EuCentral1,
+            "eu-north-1" => CloudWatchRegion::EuNorth1,
+            "eu-south-1" => CloudWatchRegion::EuSouth1,
+            "eu-west-1" => CloudWatchRegion::EuWest1,
+            "eu-west-2" => CloudWatchRegion::EuWest2,
+            "eu-west-3" => CloudWatchRegion::EuWest3,
+            "me-south-1" => CloudWatchRegion::MeSouth1,
+            "sa-east-1" => CloudWatchRegion::SaEast1,
+            "us-east-1" => CloudWatchRegion::UsEast1,
+            "us-east-2" => CloudWatchRegion::UsEast2,
+            "us-gov-east-1" => CloudWatchRegion::UsGovEast1,
+            "us-gov-west-1" => CloudWatchRegion::UsGovWest1,
+            "us-iso-east-1" => CloudWatchRegion::UsIsoEast1,
+            "us-isob-east-1" => CloudWatchRegion::UsIsobEast1,
+            "us-west-1" => CloudWatchRegion::UsWest1,
+            "us-west-2" => CloudWatchRegion::UsWest2,
+            _ => CloudWatchRegion::UnknownVariant(UnknownCloudWatchRegion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CloudWatchRegion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CloudWatchRegion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CloudWatchRegionDeserializer;
 impl CloudWatchRegionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CloudWatchRegion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -833,12 +1423,132 @@ impl CloudWatchRegionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &CloudWatchRegion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => {
+                "GreaterThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperator::GreaterThanThreshold => "GreaterThanThreshold".to_string(),
+            ComparisonOperator::LessThanOrEqualToThreshold => {
+                "LessThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperator::LessThanThreshold => "LessThanThreshold".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => &"GreaterThanOrEqualToThreshold",
+            ComparisonOperator::GreaterThanThreshold => &"GreaterThanThreshold",
+            ComparisonOperator::LessThanOrEqualToThreshold => &"LessThanOrEqualToThreshold",
+            ComparisonOperator::LessThanThreshold => &"LessThanThreshold",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "GreaterThanOrEqualToThreshold" => ComparisonOperator::GreaterThanOrEqualToThreshold,
+            "GreaterThanThreshold" => ComparisonOperator::GreaterThanThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperator::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperator::LessThanThreshold,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GreaterThanOrEqualToThreshold" => ComparisonOperator::GreaterThanOrEqualToThreshold,
+            "GreaterThanThreshold" => ComparisonOperator::GreaterThanThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperator::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperator::LessThanThreshold,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -846,8 +1556,11 @@ impl CloudWatchRegionSerializer {
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ComparisonOperator, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A complex type that contains the health check request information.</p>
@@ -2541,7 +3254,7 @@ impl GeoLocationSubdivisionNameDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountLimitRequest {
     /// <p><p>The limit that you want to get. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>HEALTH</em>CHECKS<em>BY</em>OWNER</b>: The maximum number of health checks that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>HOSTED</em>ZONES<em>BY</em>OWNER</b>: The maximum number of hosted zones that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>REUSABLE</em>DELEGATION<em>SETS</em>BY<em>OWNER</b>: The maximum number of reusable delegation sets that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICIES</em>BY<em>OWNER</b>: The maximum number of traffic policies that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICY</em>INSTANCES<em>BY</em>OWNER</b>: The maximum number of traffic policy instances that you can create using the current account. (Traffic policy instances are referred to as traffic flow policy records in the Amazon Route 53 console.)</p> </li> </ul></p>
-    pub type_: String,
+    pub type_: AccountLimitType,
 }
 
 /// <p>A complex type that contains the requested limit. </p>
@@ -2941,7 +3654,7 @@ pub struct GetHostedZoneLimitRequest {
     /// <p>The ID of the hosted zone that you want to get a limit for.</p>
     pub hosted_zone_id: String,
     /// <p><p>The limit that you want to get. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>RRSETS</em>BY<em>ZONE</b>: The maximum number of records that you can create in the specified hosted zone.</p> </li> <li> <p> <b>MAX</em>VPCS<em>ASSOCIATED</em>BY_ZONE</b>: The maximum number of Amazon VPCs that you can associate with the specified private hosted zone.</p> </li> </ul></p>
-    pub type_: String,
+    pub type_: HostedZoneLimitType,
 }
 
 /// <p>A complex type that contains the requested limit. </p>
@@ -3077,7 +3790,7 @@ pub struct GetReusableDelegationSetLimitRequest {
     /// <p>The ID of the delegation set that you want to get the limit for.</p>
     pub delegation_set_id: String,
     /// <p>Specify <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code> to get the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p>
-    pub type_: String,
+    pub type_: ReusableDelegationSetLimitType,
 }
 
 /// <p>A complex type that contains the requested limit. </p>
@@ -3366,7 +4079,7 @@ pub struct HealthCheckConfig {
     /// <p>The IPv4 or IPv6 IP address of the endpoint that you want Amazon Route 53 to perform health checks on. If you don't specify a value for <code>IPAddress</code>, Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address returned by DNS, Route 53 then checks the health of the endpoint.</p> <p>Use one of the following formats for the value of <code>IPAddress</code>: </p> <ul> <li> <p> <b>IPv4 address</b>: four values between 0 and 255, separated by periods (.), for example, <code>192.0.2.44</code>.</p> </li> <li> <p> <b>IPv6 address</b>: eight groups of four hexadecimal values, separated by colons (:), for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>. You can also shorten IPv6 addresses as described in RFC 5952, for example, <code>2001:db8:85a3::abcd:1:2345</code>.</p> </li> </ul> <p>If the endpoint is an EC2 instance, we recommend that you create an Elastic IP address, associate it with your EC2 instance, and specify the Elastic IP address for <code>IPAddress</code>. This ensures that the IP address of your instance will never change.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_UpdateHealthCheck.html#Route53-UpdateHealthCheck-request-FullyQualifiedDomainName">FullyQualifiedDomainName</a>. </p> <p>Constraints: Route 53 can't check the health of endpoints for which the IP address is in local, private, non-routable, or multicast ranges. For more information about IP addresses for which you can't create health checks, see the following documents:</p> <ul> <li> <p> <a href="https://tools.ietf.org/html/rfc5735">RFC 5735, Special Use IPv4 Addresses</a> </p> </li> <li> <p> <a href="https://tools.ietf.org/html/rfc6598">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a> </p> </li> <li> <p> <a href="https://tools.ietf.org/html/rfc5156">RFC 5156, Special-Use IPv6 Addresses</a> </p> </li> </ul> <p>When the value of <code>Type</code> is <code>CALCULATED</code> or <code>CLOUDWATCH_METRIC</code>, omit <code>IPAddress</code>.</p>
     pub ip_address: Option<String>,
     /// <p><p>When CloudWatch has insufficient data about the metric to determine the alarm state, the status that you want Amazon Route 53 to assign to the health check:</p> <ul> <li> <p> <code>Healthy</code>: Route 53 considers the health check to be healthy.</p> </li> <li> <p> <code>Unhealthy</code>: Route 53 considers the health check to be unhealthy.</p> </li> <li> <p> <code>LastKnownStatus</code>: Route 53 uses the status of the health check from the last time that CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the default status for the health check is healthy.</p> </li> </ul></p>
-    pub insufficient_data_health_status: Option<String>,
+    pub insufficient_data_health_status: Option<InsufficientDataHealthStatus>,
     /// <p>Specify whether you want Amazon Route 53 to invert the status of a health check, for example, to consider a health check unhealthy when it otherwise would be considered healthy.</p>
     pub inverted: Option<bool>,
     /// <p><p>Specify whether you want Amazon Route 53 to measure the latency between health checkers in multiple AWS regions and your endpoint, and to display CloudWatch latency graphs on the <b>Health Checks</b> page in the Route 53 console.</p> <important> <p>You can&#39;t change the value of <code>MeasureLatency</code> after you create a health check.</p> </important></p>
@@ -3374,7 +4087,7 @@ pub struct HealthCheckConfig {
     /// <p><p>The port on the endpoint that you want Amazon Route 53 to perform health checks on.</p> <note> <p>Don&#39;t specify a value for <code>Port</code> when you specify a value for <code>Type</code> of <code>CLOUDWATCH_METRIC</code> or <code>CALCULATED</code>.</p> </note></p>
     pub port: Option<i64>,
     /// <p>A complex type that contains one <code>Region</code> element for each region from which you want Amazon Route 53 health checkers to check the specified endpoint.</p> <p>If you don't specify any regions, Route 53 health checkers automatically performs checks from all of the regions that are listed under <b>Valid Values</b>.</p> <p>If you update a health check to remove a region that has been performing health checks, Route 53 will briefly continue to perform checks from that region to ensure that some health checkers are always checking the endpoint (for example, if you replace three regions with four different regions). </p>
-    pub regions: Option<Vec<String>>,
+    pub regions: Option<Vec<HealthCheckRegion>>,
     /// <p>The number of seconds between the time that Amazon Route 53 gets a response from your endpoint and the time that it sends the next health check request. Each Route 53 health checker makes requests at this interval.</p> <important> <p>You can't change the value of <code>RequestInterval</code> after you create a health check.</p> </important> <p>If you don't specify a value for <code>RequestInterval</code>, the default value is <code>30</code> seconds.</p>
     pub request_interval: Option<i64>,
     /// <p>The path, if any, that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example, the file /docs/route53-health-check.html. You can also include query string parameters, for example, <code>/welcome.html?language=jp&amp;login=y</code>. </p>
@@ -3382,7 +4095,7 @@ pub struct HealthCheckConfig {
     /// <p>If the value of Type is <code>HTTP_STR_MATCH</code> or <code>HTTPS_STR_MATCH</code>, the string that you want Amazon Route 53 to search for in the response body from the specified resource. If the string appears in the response body, Route 53 considers the resource healthy.</p> <p>Route 53 considers case when searching for <code>SearchString</code> in the response body. </p>
     pub search_string: Option<String>,
     /// <p>The type of health check that you want to create, which indicates how Amazon Route 53 determines whether an endpoint is healthy.</p> <important> <p>You can't change the value of <code>Type</code> after you create a health check.</p> </important> <p>You can create the following types of health checks:</p> <ul> <li> <p> <b>HTTP</b>: Route 53 tries to establish a TCP connection. If successful, Route 53 submits an HTTP request and waits for an HTTP status code of 200 or greater and less than 400.</p> </li> <li> <p> <b>HTTPS</b>: Route 53 tries to establish a TCP connection. If successful, Route 53 submits an HTTPS request and waits for an HTTP status code of 200 or greater and less than 400.</p> <important> <p>If you specify <code>HTTPS</code> for the value of <code>Type</code>, the endpoint must support TLS v1.0 or later.</p> </important> </li> <li> <p> <b>HTTP_STR_MATCH</b>: Route 53 tries to establish a TCP connection. If successful, Route 53 submits an HTTP request and searches the first 5,120 bytes of the response body for the string that you specify in <code>SearchString</code>.</p> </li> <li> <p> <b>HTTPS_STR_MATCH</b>: Route 53 tries to establish a TCP connection. If successful, Route 53 submits an <code>HTTPS</code> request and searches the first 5,120 bytes of the response body for the string that you specify in <code>SearchString</code>.</p> </li> <li> <p> <b>TCP</b>: Route 53 tries to establish a TCP connection.</p> </li> <li> <p> <b>CLOUDWATCH_METRIC</b>: The health check is associated with a CloudWatch alarm. If the state of the alarm is <code>OK</code>, the health check is considered healthy. If the state is <code>ALARM</code>, the health check is considered unhealthy. If CloudWatch doesn't have sufficient data to determine whether the state is <code>OK</code> or <code>ALARM</code>, the health check status depends on the setting for <code>InsufficientDataHealthStatus</code>: <code>Healthy</code>, <code>Unhealthy</code>, or <code>LastKnownStatus</code>. </p> </li> <li> <p> <b>CALCULATED</b>: For health checks that monitor the status of other health checks, Route 53 adds up the number of health checks that Route 53 health checkers consider to be healthy and compares that number with the value of <code>HealthThreshold</code>. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html">How Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
-    pub type_: String,
+    pub type_: HealthCheckType,
 }
 
 #[allow(dead_code)]
@@ -3614,7 +4327,7 @@ pub struct HealthCheckObservation {
     /// <p>The IP address of the Amazon Route 53 health checker that provided the failure reason in <code>StatusReport</code>.</p>
     pub ip_address: Option<String>,
     /// <p>The region of the Amazon Route 53 health checker that provided the status in <code>StatusReport</code>.</p>
-    pub region: Option<String>,
+    pub region: Option<HealthCheckRegion>,
     /// <p>A complex type that contains the last failure reason as reported by one Amazon Route 53 health checker and the time of the failed health check.</p>
     pub status_report: Option<StatusReport>,
 }
@@ -3668,12 +4381,152 @@ impl HealthCheckObservationsDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthCheckRegion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthCheckRegion {
+    ApNortheast1,
+    ApSoutheast1,
+    ApSoutheast2,
+    EuWest1,
+    SaEast1,
+    UsEast1,
+    UsWest1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthCheckRegion),
+}
+
+impl Default for HealthCheckRegion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthCheckRegion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthCheckRegion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthCheckRegion {
+    fn into(self) -> String {
+        match self {
+            HealthCheckRegion::ApNortheast1 => "ap-northeast-1".to_string(),
+            HealthCheckRegion::ApSoutheast1 => "ap-southeast-1".to_string(),
+            HealthCheckRegion::ApSoutheast2 => "ap-southeast-2".to_string(),
+            HealthCheckRegion::EuWest1 => "eu-west-1".to_string(),
+            HealthCheckRegion::SaEast1 => "sa-east-1".to_string(),
+            HealthCheckRegion::UsEast1 => "us-east-1".to_string(),
+            HealthCheckRegion::UsWest1 => "us-west-1".to_string(),
+            HealthCheckRegion::UsWest2 => "us-west-2".to_string(),
+            HealthCheckRegion::UnknownVariant(UnknownHealthCheckRegion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthCheckRegion {
+    fn into(self) -> &'a str {
+        match self {
+            HealthCheckRegion::ApNortheast1 => &"ap-northeast-1",
+            HealthCheckRegion::ApSoutheast1 => &"ap-southeast-1",
+            HealthCheckRegion::ApSoutheast2 => &"ap-southeast-2",
+            HealthCheckRegion::EuWest1 => &"eu-west-1",
+            HealthCheckRegion::SaEast1 => &"sa-east-1",
+            HealthCheckRegion::UsEast1 => &"us-east-1",
+            HealthCheckRegion::UsWest1 => &"us-west-1",
+            HealthCheckRegion::UsWest2 => &"us-west-2",
+            HealthCheckRegion::UnknownVariant(UnknownHealthCheckRegion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HealthCheckRegion {
+    fn from(name: &str) -> Self {
+        match name {
+            "ap-northeast-1" => HealthCheckRegion::ApNortheast1,
+            "ap-southeast-1" => HealthCheckRegion::ApSoutheast1,
+            "ap-southeast-2" => HealthCheckRegion::ApSoutheast2,
+            "eu-west-1" => HealthCheckRegion::EuWest1,
+            "sa-east-1" => HealthCheckRegion::SaEast1,
+            "us-east-1" => HealthCheckRegion::UsEast1,
+            "us-west-1" => HealthCheckRegion::UsWest1,
+            "us-west-2" => HealthCheckRegion::UsWest2,
+            _ => HealthCheckRegion::UnknownVariant(UnknownHealthCheckRegion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthCheckRegion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ap-northeast-1" => HealthCheckRegion::ApNortheast1,
+            "ap-southeast-1" => HealthCheckRegion::ApSoutheast1,
+            "ap-southeast-2" => HealthCheckRegion::ApSoutheast2,
+            "eu-west-1" => HealthCheckRegion::EuWest1,
+            "sa-east-1" => HealthCheckRegion::SaEast1,
+            "us-east-1" => HealthCheckRegion::UsEast1,
+            "us-west-1" => HealthCheckRegion::UsWest1,
+            "us-west-2" => HealthCheckRegion::UsWest2,
+            _ => HealthCheckRegion::UnknownVariant(UnknownHealthCheckRegion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthCheckRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HealthCheckRegion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HealthCheckRegion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct HealthCheckRegionDeserializer;
 impl HealthCheckRegionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HealthCheckRegion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3683,12 +4536,12 @@ impl HealthCheckRegionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &HealthCheckRegion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3699,7 +4552,7 @@ impl HealthCheckRegionListDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<HealthCheckRegion>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Region" {
                 obj.push(HealthCheckRegionDeserializer::deserialize("Region", stack)?);
@@ -3717,7 +4570,7 @@ impl HealthCheckRegionListSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<String>,
+        obj: &Vec<HealthCheckRegion>,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -3731,12 +4584,142 @@ impl HealthCheckRegionListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthCheckType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthCheckType {
+    Calculated,
+    CloudwatchMetric,
+    Http,
+    Https,
+    HttpsStrMatch,
+    HttpStrMatch,
+    Tcp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthCheckType),
+}
+
+impl Default for HealthCheckType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthCheckType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthCheckType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthCheckType {
+    fn into(self) -> String {
+        match self {
+            HealthCheckType::Calculated => "CALCULATED".to_string(),
+            HealthCheckType::CloudwatchMetric => "CLOUDWATCH_METRIC".to_string(),
+            HealthCheckType::Http => "HTTP".to_string(),
+            HealthCheckType::Https => "HTTPS".to_string(),
+            HealthCheckType::HttpsStrMatch => "HTTPS_STR_MATCH".to_string(),
+            HealthCheckType::HttpStrMatch => "HTTP_STR_MATCH".to_string(),
+            HealthCheckType::Tcp => "TCP".to_string(),
+            HealthCheckType::UnknownVariant(UnknownHealthCheckType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthCheckType {
+    fn into(self) -> &'a str {
+        match self {
+            HealthCheckType::Calculated => &"CALCULATED",
+            HealthCheckType::CloudwatchMetric => &"CLOUDWATCH_METRIC",
+            HealthCheckType::Http => &"HTTP",
+            HealthCheckType::Https => &"HTTPS",
+            HealthCheckType::HttpsStrMatch => &"HTTPS_STR_MATCH",
+            HealthCheckType::HttpStrMatch => &"HTTP_STR_MATCH",
+            HealthCheckType::Tcp => &"TCP",
+            HealthCheckType::UnknownVariant(UnknownHealthCheckType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HealthCheckType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CALCULATED" => HealthCheckType::Calculated,
+            "CLOUDWATCH_METRIC" => HealthCheckType::CloudwatchMetric,
+            "HTTP" => HealthCheckType::Http,
+            "HTTPS" => HealthCheckType::Https,
+            "HTTPS_STR_MATCH" => HealthCheckType::HttpsStrMatch,
+            "HTTP_STR_MATCH" => HealthCheckType::HttpStrMatch,
+            "TCP" => HealthCheckType::Tcp,
+            _ => HealthCheckType::UnknownVariant(UnknownHealthCheckType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthCheckType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CALCULATED" => HealthCheckType::Calculated,
+            "CLOUDWATCH_METRIC" => HealthCheckType::CloudwatchMetric,
+            "HTTP" => HealthCheckType::Http,
+            "HTTPS" => HealthCheckType::Https,
+            "HTTPS_STR_MATCH" => HealthCheckType::HttpsStrMatch,
+            "HTTP_STR_MATCH" => HealthCheckType::HttpStrMatch,
+            "TCP" => HealthCheckType::Tcp,
+            _ => HealthCheckType::UnknownVariant(UnknownHealthCheckType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthCheckType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HealthCheckType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HealthCheckType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct HealthCheckTypeDeserializer;
 impl HealthCheckTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HealthCheckType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3746,12 +4729,12 @@ impl HealthCheckTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &HealthCheckType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3955,7 +4938,7 @@ impl HostedZoneCountDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HostedZoneLimit {
     /// <p><p>The limit that you requested. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>RRSETS</em>BY<em>ZONE</b>: The maximum number of records that you can create in the specified hosted zone.</p> </li> <li> <p> <b>MAX</em>VPCS<em>ASSOCIATED</em>BY_ZONE</b>: The maximum number of Amazon VPCs that you can associate with the specified private hosted zone.</p> </li> </ul></p>
-    pub type_: String,
+    pub type_: HostedZoneLimitType,
     /// <p>The current value for the limit that is specified by <code>Type</code>.</p>
     pub value: i64,
 }
@@ -3982,12 +4965,124 @@ impl HostedZoneLimitDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHostedZoneLimitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HostedZoneLimitType {
+    MaxRrsetsByZone,
+    MaxVpcsAssociatedByZone,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHostedZoneLimitType),
+}
+
+impl Default for HostedZoneLimitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HostedZoneLimitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HostedZoneLimitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HostedZoneLimitType {
+    fn into(self) -> String {
+        match self {
+            HostedZoneLimitType::MaxRrsetsByZone => "MAX_RRSETS_BY_ZONE".to_string(),
+            HostedZoneLimitType::MaxVpcsAssociatedByZone => {
+                "MAX_VPCS_ASSOCIATED_BY_ZONE".to_string()
+            }
+            HostedZoneLimitType::UnknownVariant(UnknownHostedZoneLimitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HostedZoneLimitType {
+    fn into(self) -> &'a str {
+        match self {
+            HostedZoneLimitType::MaxRrsetsByZone => &"MAX_RRSETS_BY_ZONE",
+            HostedZoneLimitType::MaxVpcsAssociatedByZone => &"MAX_VPCS_ASSOCIATED_BY_ZONE",
+            HostedZoneLimitType::UnknownVariant(UnknownHostedZoneLimitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HostedZoneLimitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX_RRSETS_BY_ZONE" => HostedZoneLimitType::MaxRrsetsByZone,
+            "MAX_VPCS_ASSOCIATED_BY_ZONE" => HostedZoneLimitType::MaxVpcsAssociatedByZone,
+            _ => HostedZoneLimitType::UnknownVariant(UnknownHostedZoneLimitType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HostedZoneLimitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX_RRSETS_BY_ZONE" => HostedZoneLimitType::MaxRrsetsByZone,
+            "MAX_VPCS_ASSOCIATED_BY_ZONE" => HostedZoneLimitType::MaxVpcsAssociatedByZone,
+            _ => HostedZoneLimitType::UnknownVariant(UnknownHostedZoneLimitType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HostedZoneLimitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HostedZoneLimitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HostedZoneLimitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct HostedZoneLimitTypeDeserializer;
 impl HostedZoneLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HostedZoneLimitType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3997,12 +5092,12 @@ impl HostedZoneLimitTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &HostedZoneLimitType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -4169,12 +5264,133 @@ impl IPAddressCidrDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInsufficientDataHealthStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InsufficientDataHealthStatus {
+    Healthy,
+    LastKnownStatus,
+    Unhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInsufficientDataHealthStatus),
+}
+
+impl Default for InsufficientDataHealthStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InsufficientDataHealthStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InsufficientDataHealthStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InsufficientDataHealthStatus {
+    fn into(self) -> String {
+        match self {
+            InsufficientDataHealthStatus::Healthy => "Healthy".to_string(),
+            InsufficientDataHealthStatus::LastKnownStatus => "LastKnownStatus".to_string(),
+            InsufficientDataHealthStatus::Unhealthy => "Unhealthy".to_string(),
+            InsufficientDataHealthStatus::UnknownVariant(UnknownInsufficientDataHealthStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InsufficientDataHealthStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InsufficientDataHealthStatus::Healthy => &"Healthy",
+            InsufficientDataHealthStatus::LastKnownStatus => &"LastKnownStatus",
+            InsufficientDataHealthStatus::Unhealthy => &"Unhealthy",
+            InsufficientDataHealthStatus::UnknownVariant(UnknownInsufficientDataHealthStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InsufficientDataHealthStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Healthy" => InsufficientDataHealthStatus::Healthy,
+            "LastKnownStatus" => InsufficientDataHealthStatus::LastKnownStatus,
+            "Unhealthy" => InsufficientDataHealthStatus::Unhealthy,
+            _ => {
+                InsufficientDataHealthStatus::UnknownVariant(UnknownInsufficientDataHealthStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for InsufficientDataHealthStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Healthy" => InsufficientDataHealthStatus::Healthy,
+            "LastKnownStatus" => InsufficientDataHealthStatus::LastKnownStatus,
+            "Unhealthy" => InsufficientDataHealthStatus::Unhealthy,
+            _ => {
+                InsufficientDataHealthStatus::UnknownVariant(UnknownInsufficientDataHealthStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for InsufficientDataHealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InsufficientDataHealthStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InsufficientDataHealthStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct InsufficientDataHealthStatusDeserializer;
 impl InsufficientDataHealthStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InsufficientDataHealthStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -4184,12 +5400,12 @@ impl InsufficientDataHealthStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &InsufficientDataHealthStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -4685,7 +5901,7 @@ pub struct ListHostedZonesByVPCRequest {
     /// <p>The ID of the Amazon VPC that you want to list hosted zones for.</p>
     pub vpc_id: String,
     /// <p>For the Amazon VPC that you specified for <code>VPCId</code>, the AWS Region that you created the VPC in. </p>
-    pub vpc_region: String,
+    pub vpc_region: VPCRegion,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -4868,7 +6084,7 @@ pub struct ListResourceRecordSetsRequest {
     /// <p>The first name in the lexicographic ordering of resource record sets that you want to list. If the specified record name doesn't exist, the results begin with the first resource record set that has a name greater than the value of <code>name</code>.</p>
     pub start_record_name: Option<String>,
     /// <p>The type of resource record set to begin the record listing from.</p> <p>Valid values for basic resource record sets: <code>A</code> | <code>AAAA</code> | <code>CAA</code> | <code>CNAME</code> | <code>MX</code> | <code>NAPTR</code> | <code>NS</code> | <code>PTR</code> | <code>SOA</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code> </p> <p>Values for weighted, latency, geolocation, and failover resource record sets: <code>A</code> | <code>AAAA</code> | <code>CAA</code> | <code>CNAME</code> | <code>MX</code> | <code>NAPTR</code> | <code>PTR</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code> </p> <p>Values for alias resource record sets: </p> <ul> <li> <p> <b>API Gateway custom regional API or edge-optimized API</b>: A</p> </li> <li> <p> <b>CloudFront distribution</b>: A or AAAA</p> </li> <li> <p> <b>Elastic Beanstalk environment that has a regionalized subdomain</b>: A</p> </li> <li> <p> <b>Elastic Load Balancing load balancer</b>: A | AAAA</p> </li> <li> <p> <b>S3 bucket</b>: A</p> </li> <li> <p> <b>VPC interface VPC endpoint</b>: A</p> </li> <li> <p> <b>Another resource record set in this hosted zone:</b> The type of the resource record set that the alias references.</p> </li> </ul> <p>Constraint: Specifying <code>type</code> without specifying <code>name</code> returns an <code>InvalidInput</code> error.</p>
-    pub start_record_type: Option<String>,
+    pub start_record_type: Option<RRType>,
 }
 
 /// <p>A complex type that contains list information for the resource record set.</p>
@@ -4884,7 +6100,7 @@ pub struct ListResourceRecordSetsResponse {
     /// <p>If the results were truncated, the name of the next record in the list.</p> <p>This element is present only if <code>IsTruncated</code> is true. </p>
     pub next_record_name: Option<String>,
     /// <p>If the results were truncated, the type of the next record in the list.</p> <p>This element is present only if <code>IsTruncated</code> is true. </p>
-    pub next_record_type: Option<String>,
+    pub next_record_type: Option<RRType>,
     /// <p>Information about multiple resource record sets.</p>
     pub resource_record_sets: Vec<ResourceRecordSet>,
 }
@@ -5013,7 +6229,7 @@ pub struct ListTagsForResourceRequest {
     /// <p>The ID of the resource for which you want to retrieve tags.</p>
     pub resource_id: String,
     /// <p><p>The type of the resource.</p> <ul> <li> <p>The resource type for health checks is <code>healthcheck</code>.</p> </li> <li> <p>The resource type for hosted zones is <code>hostedzone</code>.</p> </li> </ul></p>
-    pub resource_type: String,
+    pub resource_type: TagResourceType,
 }
 
 /// <p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>
@@ -5055,7 +6271,7 @@ pub struct ListTagsForResourcesRequest {
     /// <p>A complex type that contains the ResourceId element for each resource for which you want to get a list of tags.</p>
     pub resource_ids: Vec<String>,
     /// <p><p>The type of the resources.</p> <ul> <li> <p>The resource type for health checks is <code>healthcheck</code>.</p> </li> <li> <p>The resource type for hosted zones is <code>hostedzone</code>.</p> </li> </ul></p>
-    pub resource_type: String,
+    pub resource_type: TagResourceType,
 }
 
 pub struct ListTagsForResourcesRequestSerializer;
@@ -5186,7 +6402,7 @@ pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response is true, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancename</code>, specify the value of <code>TrafficPolicyInstanceNameMarker</code> from the previous response, which is the name of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
     pub traffic_policy_instance_name_marker: Option<String>,
     /// <p>If the value of <code>IsTruncated</code> in the previous response is true, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancetype</code>, specify the value of <code>TrafficPolicyInstanceTypeMarker</code> from the previous response, which is the type of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
-    pub traffic_policy_instance_type_marker: Option<String>,
+    pub traffic_policy_instance_type_marker: Option<RRType>,
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
@@ -5200,7 +6416,7 @@ pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of traffic policy instances.</p>
     pub traffic_policy_instance_name_marker: Option<String>,
     /// <p>If <code>IsTruncated</code> is true, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance in the next group of traffic policy instances.</p>
-    pub traffic_policy_instance_type_marker: Option<String>,
+    pub traffic_policy_instance_type_marker: Option<RRType>,
     /// <p>A list that contains one <code>TrafficPolicyInstance</code> element for each traffic policy instance that matches the elements in the request. </p>
     pub traffic_policy_instances: Vec<TrafficPolicyInstance>,
 }
@@ -5267,7 +6483,7 @@ pub struct ListTrafficPolicyInstancesByPolicyRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request.</p> <p>For the value of <code>trafficpolicyinstancename</code>, specify the value of <code>TrafficPolicyInstanceNameMarker</code> from the previous response, which is the name of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
     pub traffic_policy_instance_name_marker: Option<String>,
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request.</p> <p>For the value of <code>trafficpolicyinstancetype</code>, specify the value of <code>TrafficPolicyInstanceTypeMarker</code> from the previous response, which is the name of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
-    pub traffic_policy_instance_type_marker: Option<String>,
+    pub traffic_policy_instance_type_marker: Option<RRType>,
     /// <p>The version of the traffic policy for which you want to list traffic policy instances. The version must be associated with the traffic policy that is specified by <code>TrafficPolicyId</code>.</p>
     pub traffic_policy_version: i64,
 }
@@ -5285,7 +6501,7 @@ pub struct ListTrafficPolicyInstancesByPolicyResponse {
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>
     pub traffic_policy_instance_name_marker: Option<String>,
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>
-    pub traffic_policy_instance_type_marker: Option<String>,
+    pub traffic_policy_instance_type_marker: Option<RRType>,
     /// <p>A list that contains one <code>TrafficPolicyInstance</code> element for each traffic policy instance that matches the elements in the request.</p>
     pub traffic_policy_instances: Vec<TrafficPolicyInstance>,
 }
@@ -5356,7 +6572,7 @@ pub struct ListTrafficPolicyInstancesRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancename</code>, specify the value of <code>TrafficPolicyInstanceNameMarker</code> from the previous response, which is the name of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
     pub traffic_policy_instance_name_marker: Option<String>,
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancetype</code>, specify the value of <code>TrafficPolicyInstanceTypeMarker</code> from the previous response, which is the type of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
-    pub traffic_policy_instance_type_marker: Option<String>,
+    pub traffic_policy_instance_type_marker: Option<RRType>,
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
@@ -5372,7 +6588,7 @@ pub struct ListTrafficPolicyInstancesResponse {
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance that Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>
     pub traffic_policy_instance_name_marker: Option<String>,
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance that Amazon Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>
-    pub traffic_policy_instance_type_marker: Option<String>,
+    pub traffic_policy_instance_type_marker: Option<RRType>,
     /// <p>A list that contains one <code>TrafficPolicyInstance</code> element for each traffic policy instance that matches the elements in the request.</p>
     pub traffic_policy_instances: Vec<TrafficPolicyInstance>,
 }
@@ -5876,12 +7092,169 @@ impl RDataSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRRType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RRType {
+    A,
+    Aaaa,
+    Caa,
+    Cname,
+    Ds,
+    Mx,
+    Naptr,
+    Ns,
+    Ptr,
+    Soa,
+    Spf,
+    Srv,
+    Txt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRRType),
+}
+
+impl Default for RRType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RRType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RRType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RRType {
+    fn into(self) -> String {
+        match self {
+            RRType::A => "A".to_string(),
+            RRType::Aaaa => "AAAA".to_string(),
+            RRType::Caa => "CAA".to_string(),
+            RRType::Cname => "CNAME".to_string(),
+            RRType::Ds => "DS".to_string(),
+            RRType::Mx => "MX".to_string(),
+            RRType::Naptr => "NAPTR".to_string(),
+            RRType::Ns => "NS".to_string(),
+            RRType::Ptr => "PTR".to_string(),
+            RRType::Soa => "SOA".to_string(),
+            RRType::Spf => "SPF".to_string(),
+            RRType::Srv => "SRV".to_string(),
+            RRType::Txt => "TXT".to_string(),
+            RRType::UnknownVariant(UnknownRRType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RRType {
+    fn into(self) -> &'a str {
+        match self {
+            RRType::A => &"A",
+            RRType::Aaaa => &"AAAA",
+            RRType::Caa => &"CAA",
+            RRType::Cname => &"CNAME",
+            RRType::Ds => &"DS",
+            RRType::Mx => &"MX",
+            RRType::Naptr => &"NAPTR",
+            RRType::Ns => &"NS",
+            RRType::Ptr => &"PTR",
+            RRType::Soa => &"SOA",
+            RRType::Spf => &"SPF",
+            RRType::Srv => &"SRV",
+            RRType::Txt => &"TXT",
+            RRType::UnknownVariant(UnknownRRType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RRType {
+    fn from(name: &str) -> Self {
+        match name {
+            "A" => RRType::A,
+            "AAAA" => RRType::Aaaa,
+            "CAA" => RRType::Caa,
+            "CNAME" => RRType::Cname,
+            "DS" => RRType::Ds,
+            "MX" => RRType::Mx,
+            "NAPTR" => RRType::Naptr,
+            "NS" => RRType::Ns,
+            "PTR" => RRType::Ptr,
+            "SOA" => RRType::Soa,
+            "SPF" => RRType::Spf,
+            "SRV" => RRType::Srv,
+            "TXT" => RRType::Txt,
+            _ => RRType::UnknownVariant(UnknownRRType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RRType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "A" => RRType::A,
+            "AAAA" => RRType::Aaaa,
+            "CAA" => RRType::Caa,
+            "CNAME" => RRType::Cname,
+            "DS" => RRType::Ds,
+            "MX" => RRType::Mx,
+            "NAPTR" => RRType::Naptr,
+            "NS" => RRType::Ns,
+            "PTR" => RRType::Ptr,
+            "SOA" => RRType::Soa,
+            "SPF" => RRType::Spf,
+            "SRV" => RRType::Srv,
+            "TXT" => RRType::Txt,
+            _ => RRType::UnknownVariant(UnknownRRType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RRType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RRType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RRType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct RRTypeDeserializer;
 impl RRTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RRType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -5891,12 +7264,12 @@ impl RRTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &RRType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -5953,18 +7326,136 @@ impl RequestIntervalSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResettableElementName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResettableElementName {
+    ChildHealthChecks,
+    FullyQualifiedDomainName,
+    Regions,
+    ResourcePath,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResettableElementName),
+}
+
+impl Default for ResettableElementName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResettableElementName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResettableElementName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResettableElementName {
+    fn into(self) -> String {
+        match self {
+            ResettableElementName::ChildHealthChecks => "ChildHealthChecks".to_string(),
+            ResettableElementName::FullyQualifiedDomainName => {
+                "FullyQualifiedDomainName".to_string()
+            }
+            ResettableElementName::Regions => "Regions".to_string(),
+            ResettableElementName::ResourcePath => "ResourcePath".to_string(),
+            ResettableElementName::UnknownVariant(UnknownResettableElementName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResettableElementName {
+    fn into(self) -> &'a str {
+        match self {
+            ResettableElementName::ChildHealthChecks => &"ChildHealthChecks",
+            ResettableElementName::FullyQualifiedDomainName => &"FullyQualifiedDomainName",
+            ResettableElementName::Regions => &"Regions",
+            ResettableElementName::ResourcePath => &"ResourcePath",
+            ResettableElementName::UnknownVariant(UnknownResettableElementName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResettableElementName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ChildHealthChecks" => ResettableElementName::ChildHealthChecks,
+            "FullyQualifiedDomainName" => ResettableElementName::FullyQualifiedDomainName,
+            "Regions" => ResettableElementName::Regions,
+            "ResourcePath" => ResettableElementName::ResourcePath,
+            _ => ResettableElementName::UnknownVariant(UnknownResettableElementName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResettableElementName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ChildHealthChecks" => ResettableElementName::ChildHealthChecks,
+            "FullyQualifiedDomainName" => ResettableElementName::FullyQualifiedDomainName,
+            "Regions" => ResettableElementName::Regions,
+            "ResourcePath" => ResettableElementName::ResourcePath,
+            _ => ResettableElementName::UnknownVariant(UnknownResettableElementName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResettableElementName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResettableElementName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResettableElementName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct ResettableElementNameSerializer;
 impl ResettableElementNameSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ResettableElementName,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -5974,7 +7465,7 @@ impl ResettableElementNameListSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<String>,
+        obj: &Vec<ResettableElementName>,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -6114,7 +7605,7 @@ pub struct ResourceRecordSet {
     /// <p><p> <i>Alias resource record sets only:</i> Information about the AWS resource, such as a CloudFront distribution or an Amazon S3 bucket, that you want to route traffic to. </p> <p>If you&#39;re creating resource records sets for a private hosted zone, note the following:</p> <ul> <li> <p>You can&#39;t create an alias resource record set in a private hosted zone to route traffic to a CloudFront distribution.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html">Configuring Failover in a Private Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> </ul></p>
     pub alias_target: Option<AliasTarget>,
     /// <p><p> <i>Failover resource record sets only:</i> To configure failover, you add the <code>Failover</code> element to two resource record sets. For one resource record set, you specify <code>PRIMARY</code> as the value for <code>Failover</code>; for the other resource record set, you specify <code>SECONDARY</code>. In addition, you include the <code>HealthCheckId</code> element and specify the health check that you want Amazon Route 53 to perform for each resource record set.</p> <p>Except where noted, the following failover behaviors assume that you have included the <code>HealthCheckId</code> element in both resource record sets:</p> <ul> <li> <p>When the primary resource record set is healthy, Route 53 responds to DNS queries with the applicable value from the primary resource record set regardless of the health of the secondary resource record set.</p> </li> <li> <p>When the primary resource record set is unhealthy and the secondary resource record set is healthy, Route 53 responds to DNS queries with the applicable value from the secondary resource record set.</p> </li> <li> <p>When the secondary resource record set is unhealthy, Route 53 responds to DNS queries with the applicable value from the primary resource record set regardless of the health of the primary resource record set.</p> </li> <li> <p>If you omit the <code>HealthCheckId</code> element for the secondary resource record set, and if the primary resource record set is unhealthy, Route 53 always responds to DNS queries with the applicable value from the secondary resource record set. This is true regardless of the health of the associated endpoint.</p> </li> </ul> <p>You can&#39;t create non-failover resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as failover resource record sets.</p> <p>For failover alias resource record sets, you must also include the <code>EvaluateTargetHealth</code> element and set the value to true.</p> <p>For more information about configuring failover for Route 53, see the following topics in the <i>Amazon Route 53 Developer Guide</i>: </p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html">Route 53 Health Checks and DNS Failover</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html">Configuring Failover in a Private Hosted Zone</a> </p> </li> </ul></p>
-    pub failover: Option<String>,
+    pub failover: Option<ResourceRecordSetFailover>,
     /// <p> <i>Geolocation resource record sets only:</i> A complex type that lets you control how Amazon Route 53 responds to DNS queries based on the geographic origin of the query. For example, if you want all queries from Africa to be routed to a web server with an IP address of <code>192.0.2.111</code>, create a resource record set with a <code>Type</code> of <code>A</code> and a <code>ContinentCode</code> of <code>AF</code>.</p> <note> <p>Although creating geolocation and geolocation alias resource record sets in a private hosted zone is allowed, it's not supported.</p> </note> <p>If you create separate resource record sets for overlapping geographic regions (for example, one resource record set for a continent and one for a country on the same continent), priority goes to the smallest geographic region. This allows you to route most queries for a continent to one resource and to route queries for a country on that continent to a different resource.</p> <p>You can't create two geolocation resource record sets that specify the same geographic location.</p> <p>The value <code>*</code> in the <code>CountryCode</code> element matches all geographic locations that aren't specified in other geolocation resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements.</p> <important> <p>Geolocation works by mapping IP addresses to locations. However, some IP addresses aren't mapped to geographic locations, so even if you create geolocation resource record sets that cover all seven continents, Route 53 will receive some DNS queries from locations that it can't identify. We recommend that you create a resource record set for which the value of <code>CountryCode</code> is <code>*</code>. Two groups of queries are routed to the resource that you specify in this record: queries that come from locations for which you haven't created geolocation resource record sets and queries from IP addresses that aren't mapped to a location. If you don't create a <code>*</code> resource record set, Route 53 returns a "no answer" response for queries from those locations.</p> </important> <p>You can't create non-geolocation resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as geolocation resource record sets.</p>
     pub geo_location: Option<GeoLocation>,
     /// <p><p>If you want Amazon Route 53 to return this resource record set in response to a DNS query only when the status of a health check is healthy, include the <code>HealthCheckId</code> element and specify the ID of the applicable health check.</p> <p>Route 53 determines whether a resource record set is healthy based on one of the following:</p> <ul> <li> <p>By periodically sending a request to the endpoint that is specified in the health check</p> </li> <li> <p>By aggregating the status of a specified group of health checks (calculated health checks)</p> </li> <li> <p>By determining the current state of a CloudWatch alarm (CloudWatch metric health checks)</p> </li> </ul> <important> <p>Route 53 doesn&#39;t check the health of the endpoint that is specified in the resource record set, for example, the endpoint specified by the IP address in the <code>Value</code> element. When you add a <code>HealthCheckId</code> element to a resource record set, Route 53 checks the health of the endpoint that you specified in the health check. </p> </important> <p>For more information, see the following topics in the <i>Amazon Route 53 Developer Guide</i>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html">Route 53 Health Checks and DNS Failover</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html">Configuring Failover in a Private Hosted Zone</a> </p> </li> </ul> <p> <b>When to Specify HealthCheckId</b> </p> <p>Specifying a value for <code>HealthCheckId</code> is useful only when Route 53 is choosing between two or more resource record sets to respond to a DNS query, and you want Route 53 to base the choice in part on the status of a health check. Configuring health checks makes sense only in the following configurations:</p> <ul> <li> <p> <b>Non-alias resource record sets</b>: You&#39;re checking the health of a group of non-alias resource record sets that have the same routing policy, name, and type (such as multiple weighted records named www.example.com with a type of A) and you specify health check IDs for all the resource record sets. </p> <p>If the health check status for a resource record set is healthy, Route 53 includes the record among the records that it responds to DNS queries with.</p> <p>If the health check status for a resource record set is unhealthy, Route 53 stops responding to DNS queries using the value for that resource record set.</p> <p>If the health check status for all resource record sets in the group is unhealthy, Route 53 considers all resource record sets in the group healthy and responds to DNS queries accordingly. </p> </li> <li> <p> <b>Alias resource record sets</b>: You specify the following settings:</p> <ul> <li> <p>You set <code>EvaluateTargetHealth</code> to true for an alias resource record set in a group of resource record sets that have the same routing policy, name, and type (such as multiple weighted records named www.example.com with a type of A). </p> </li> <li> <p>You configure the alias resource record set to route traffic to a non-alias resource record set in the same hosted zone.</p> </li> <li> <p>You specify a health check ID for the non-alias resource record set. </p> </li> </ul> <p>If the health check status is healthy, Route 53 considers the alias resource record set to be healthy and includes the alias record among the records that it responds to DNS queries with.</p> <p>If the health check status is unhealthy, Route 53 stops responding to DNS queries using the alias resource record set.</p> <note> <p>The alias resource record set can also route traffic to a <i>group</i> of non-alias resource record sets that have the same routing policy, name, and type. In that configuration, associate health checks with all of the resource record sets in the group of non-alias resource record sets.</p> </note> </li> </ul> <p> <b>Geolocation Routing</b> </p> <p>For geolocation resource record sets, if an endpoint is unhealthy, Route 53 looks for a resource record set for the larger, associated geographic region. For example, suppose you have resource record sets for a state in the United States, for the entire United States, for North America, and a resource record set that has <code><em></code> for <code>CountryCode</code> is <code></em></code>, which applies to all locations. If the endpoint for the state resource record set is unhealthy, Route 53 checks for healthy resource record sets in the following order until it finds a resource record set for which the endpoint is healthy:</p> <ul> <li> <p>The United States</p> </li> <li> <p>North America</p> </li> <li> <p>The default resource record set</p> </li> </ul> <p> <b>Specifying the Health Check Endpoint by Domain Name</b> </p> <p>If your health checks specify the endpoint only by domain name, we recommend that you create a separate health check for each endpoint. For example, create a health check for each <code>HTTP</code> server that is serving content for <code>www.example.com</code>. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-2-www.example.com</code>), not the name of the resource record sets (<code>www.example.com</code>).</p> <important> <p>Health check results will be unpredictable if you do the following:</p> <ul> <li> <p>Create a health check that has the same value for <code>FullyQualifiedDomainName</code> as the name of a resource record set.</p> </li> <li> <p>Associate that health check with the resource record set.</p> </li> </ul> </important></p>
@@ -6124,7 +7615,7 @@ pub struct ResourceRecordSet {
     /// <p>For <code>ChangeResourceRecordSets</code> requests, the name of the record that you want to create, update, or delete. For <code>ListResourceRecordSets</code> responses, the name of a record in the specified hosted zone.</p> <p> <b>ChangeResourceRecordSets Only</b> </p> <p>Enter a fully qualified domain name, for example, <code>www.example.com</code>. You can optionally include a trailing dot. If you omit the trailing dot, Amazon Route 53 assumes that the domain name that you specify is fully qualified. This means that Route 53 treats <code>www.example.com</code> (without a trailing dot) and <code>www.example.com.</code> (with a trailing dot) as identical.</p> <p>For information about how to specify characters other than <code>a-z</code>, <code>0-9</code>, and <code>-</code> (hyphen) and how to specify internationalized domain names, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can use the asterisk (*) wildcard to replace the leftmost label in a domain name, for example, <code>*.example.com</code>. Note the following:</p> <ul> <li> <p>The * must replace the entire label. For example, you can't specify <code>*prod.example.com</code> or <code>prod*.example.com</code>.</p> </li> <li> <p>The * can't replace any of the middle labels, for example, marketing.*.example.com.</p> </li> <li> <p>If you include * in any position other than the leftmost label in a domain name, DNS treats it as an * character (ASCII 42), not as a wildcard.</p> <important> <p>You can't use the * wildcard for resource records sets that have a type of NS.</p> </important> </li> </ul> <p>You can use the * wildcard as the leftmost label in a domain name, for example, <code>*.example.com</code>. You can't use an * for one of the middle labels, for example, <code>marketing.*.example.com</code>. In addition, the * must replace the entire label; for example, you can't specify <code>prod*.example.com</code>.</p>
     pub name: String,
     /// <p><p> <i>Latency-based resource record sets only:</i> The Amazon EC2 Region where you created the resource that this resource record set refers to. The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer, and is referred to by an IP address or a DNS domain name, depending on the record type.</p> <note> <p>Although creating latency and latency alias resource record sets in a private hosted zone is allowed, it&#39;s not supported.</p> </note> <p>When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets, Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region. Route 53 then returns the value that is associated with the selected resource record set.</p> <p>Note the following:</p> <ul> <li> <p>You can only specify one <code>ResourceRecord</code> per latency resource record set.</p> </li> <li> <p>You can only create one latency resource record set for each Amazon EC2 Region.</p> </li> <li> <p>You aren&#39;t required to create latency resource record sets for all Amazon EC2 Regions. Route 53 will choose the region with the best latency from among the regions that you create latency resource record sets for.</p> </li> <li> <p>You can&#39;t create non-latency resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as latency resource record sets.</p> </li> </ul></p>
-    pub region: Option<String>,
+    pub region: Option<ResourceRecordSetRegion>,
     /// <p><p>Information about the resource records to act upon.</p> <note> <p>If you&#39;re creating an alias resource record set, omit <code>ResourceRecords</code>.</p> </note></p>
     pub resource_records: Option<Vec<ResourceRecord>>,
     /// <p> <i>Resource record sets that have a routing policy other than simple:</i> An identifier that differentiates among multiple resource record sets that have the same combination of name and type, such as multiple weighted resource record sets named acme.example.com that have a type of A. In a group of resource record sets that have the same name and type, the value of <code>SetIdentifier</code> must be unique for each resource record set. </p> <p>For information about routing policies, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html">Choosing a Routing Policy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
@@ -6134,7 +7625,7 @@ pub struct ResourceRecordSet {
     /// <p><p>When you create a traffic policy instance, Amazon Route 53 automatically creates a resource record set. <code>TrafficPolicyInstanceId</code> is the ID of the traffic policy instance that Route 53 created this resource record set for.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <code>DeleteTrafficPolicyInstance</code>. Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Route 53 doesn&#39;t automatically delete the traffic policy instance, and you&#39;ll continue to be charged for it even though it&#39;s no longer in use. </p> </important></p>
     pub traffic_policy_instance_id: Option<String>,
     /// <p><p>The DNS record type. For information about different record types and how data is encoded for them, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ResourceRecordTypes.html">Supported DNS Resource Record Types</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Valid values for basic resource record sets: <code>A</code> | <code>AAAA</code> | <code>CAA</code> | <code>CNAME</code> | <code>MX</code> | <code>NAPTR</code> | <code>NS</code> | <code>PTR</code> | <code>SOA</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code> </p> <p>Values for weighted, latency, geolocation, and failover resource record sets: <code>A</code> | <code>AAAA</code> | <code>CAA</code> | <code>CNAME</code> | <code>MX</code> | <code>NAPTR</code> | <code>PTR</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code>. When creating a group of weighted, latency, geolocation, or failover resource record sets, specify the same value for all of the resource record sets in the group.</p> <p>Valid values for multivalue answer resource record sets: <code>A</code> | <code>AAAA</code> | <code>MX</code> | <code>NAPTR</code> | <code>PTR</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code> </p> <note> <p>SPF records were formerly used to verify the identity of the sender of email messages. However, we no longer recommend that you create resource record sets for which the value of <code>Type</code> is <code>SPF</code>. RFC 7208, <i>Sender Policy Framework (SPF) for Authorizing Use of Domains in Email, Version 1</i>, has been updated to say, &quot;...[I]ts existence and mechanism defined in [RFC4408] have led to some interoperability issues. Accordingly, its use is no longer appropriate for SPF version 1; implementations are not to use it.&quot; In RFC 7208, see section 14.1, <a href="http://tools.ietf.org/html/rfc7208#section-14.1">The SPF DNS Record Type</a>.</p> </note> <p>Values for alias resource record sets:</p> <ul> <li> <p> <b>Amazon API Gateway custom regional APIs and edge-optimized APIs:</b> <code>A</code> </p> </li> <li> <p> <b>CloudFront distributions:</b> <code>A</code> </p> <p>If IPv6 is enabled for the distribution, create two resource record sets to route traffic to your distribution, one with a value of <code>A</code> and one with a value of <code>AAAA</code>. </p> </li> <li> <p> <b>Amazon API Gateway environment that has a regionalized subdomain</b>: <code>A</code> </p> </li> <li> <p> <b>ELB load balancers:</b> <code>A</code> | <code>AAAA</code> </p> </li> <li> <p> <b>Amazon S3 buckets:</b> <code>A</code> </p> </li> <li> <p> <b>Amazon Virtual Private Cloud interface VPC endpoints</b> <code>A</code> </p> </li> <li> <p> <b>Another resource record set in this hosted zone:</b> Specify the type of the resource record set that you&#39;re creating the alias for. All values are supported except <code>NS</code> and <code>SOA</code>.</p> <note> <p>If you&#39;re creating an alias record that has the same name as the hosted zone (known as the zone apex), you can&#39;t route traffic to a record for which the value of <code>Type</code> is <code>CNAME</code>. This is because the alias record must have the same type as the record you&#39;re routing traffic to, and creating a CNAME record for the zone apex isn&#39;t supported even for an alias record.</p> </note> </li> </ul></p>
-    pub type_: String,
+    pub type_: RRType,
     /// <p><p> <i>Weighted resource record sets only:</i> Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. Route 53 calculates the sum of the weights for the resource record sets that have the same combination of DNS name and type. Route 53 then responds to queries based on the ratio of a resource&#39;s weight to the total. Note the following:</p> <ul> <li> <p>You must specify a value for the <code>Weight</code> element for every weighted resource record set.</p> </li> <li> <p>You can only specify one <code>ResourceRecord</code> per weighted resource record set.</p> </li> <li> <p>You can&#39;t create latency, failover, or geolocation resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as weighted resource record sets.</p> </li> <li> <p>You can create a maximum of 100 weighted resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements.</p> </li> <li> <p>For weighted (but not weighted alias) resource record sets, if you set <code>Weight</code> to <code>0</code> for a resource record set, Route 53 never responds to queries with the applicable value for that resource record set. However, if you set <code>Weight</code> to <code>0</code> for all resource record sets that have the same combination of DNS name and type, traffic is routed to all resources with equal probability.</p> <p>The effect of setting <code>Weight</code> to <code>0</code> is different when you associate health checks with weighted resource record sets. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-configuring-options.html">Options for Configuring Route 53 Active-Active and Active-Passive Failover</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> </ul></p>
     pub weight: Option<i64>,
 }
@@ -6271,12 +7762,123 @@ impl ResourceRecordSetSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceRecordSetFailover {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceRecordSetFailover {
+    Primary,
+    Secondary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceRecordSetFailover),
+}
+
+impl Default for ResourceRecordSetFailover {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceRecordSetFailover {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceRecordSetFailover {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceRecordSetFailover {
+    fn into(self) -> String {
+        match self {
+            ResourceRecordSetFailover::Primary => "PRIMARY".to_string(),
+            ResourceRecordSetFailover::Secondary => "SECONDARY".to_string(),
+            ResourceRecordSetFailover::UnknownVariant(UnknownResourceRecordSetFailover {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceRecordSetFailover {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceRecordSetFailover::Primary => &"PRIMARY",
+            ResourceRecordSetFailover::Secondary => &"SECONDARY",
+            ResourceRecordSetFailover::UnknownVariant(UnknownResourceRecordSetFailover {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceRecordSetFailover {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRIMARY" => ResourceRecordSetFailover::Primary,
+            "SECONDARY" => ResourceRecordSetFailover::Secondary,
+            _ => ResourceRecordSetFailover::UnknownVariant(UnknownResourceRecordSetFailover {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceRecordSetFailover {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRIMARY" => ResourceRecordSetFailover::Primary,
+            "SECONDARY" => ResourceRecordSetFailover::Secondary,
+            _ => {
+                ResourceRecordSetFailover::UnknownVariant(UnknownResourceRecordSetFailover { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceRecordSetFailover {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceRecordSetFailover {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceRecordSetFailover {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ResourceRecordSetFailoverDeserializer;
 impl ResourceRecordSetFailoverDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceRecordSetFailover, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6286,12 +7888,12 @@ impl ResourceRecordSetFailoverSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ResourceRecordSetFailover,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6343,12 +7945,226 @@ impl ResourceRecordSetMultiValueAnswerSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceRecordSetRegion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceRecordSetRegion {
+    AfSouth1,
+    ApEast1,
+    ApNortheast1,
+    ApNortheast2,
+    ApNortheast3,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    CnNorth1,
+    CnNorthwest1,
+    EuCentral1,
+    EuNorth1,
+    EuSouth1,
+    EuWest1,
+    EuWest2,
+    EuWest3,
+    MeSouth1,
+    SaEast1,
+    UsEast1,
+    UsEast2,
+    UsWest1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceRecordSetRegion),
+}
+
+impl Default for ResourceRecordSetRegion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceRecordSetRegion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceRecordSetRegion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceRecordSetRegion {
+    fn into(self) -> String {
+        match self {
+            ResourceRecordSetRegion::AfSouth1 => "af-south-1".to_string(),
+            ResourceRecordSetRegion::ApEast1 => "ap-east-1".to_string(),
+            ResourceRecordSetRegion::ApNortheast1 => "ap-northeast-1".to_string(),
+            ResourceRecordSetRegion::ApNortheast2 => "ap-northeast-2".to_string(),
+            ResourceRecordSetRegion::ApNortheast3 => "ap-northeast-3".to_string(),
+            ResourceRecordSetRegion::ApSouth1 => "ap-south-1".to_string(),
+            ResourceRecordSetRegion::ApSoutheast1 => "ap-southeast-1".to_string(),
+            ResourceRecordSetRegion::ApSoutheast2 => "ap-southeast-2".to_string(),
+            ResourceRecordSetRegion::CaCentral1 => "ca-central-1".to_string(),
+            ResourceRecordSetRegion::CnNorth1 => "cn-north-1".to_string(),
+            ResourceRecordSetRegion::CnNorthwest1 => "cn-northwest-1".to_string(),
+            ResourceRecordSetRegion::EuCentral1 => "eu-central-1".to_string(),
+            ResourceRecordSetRegion::EuNorth1 => "eu-north-1".to_string(),
+            ResourceRecordSetRegion::EuSouth1 => "eu-south-1".to_string(),
+            ResourceRecordSetRegion::EuWest1 => "eu-west-1".to_string(),
+            ResourceRecordSetRegion::EuWest2 => "eu-west-2".to_string(),
+            ResourceRecordSetRegion::EuWest3 => "eu-west-3".to_string(),
+            ResourceRecordSetRegion::MeSouth1 => "me-south-1".to_string(),
+            ResourceRecordSetRegion::SaEast1 => "sa-east-1".to_string(),
+            ResourceRecordSetRegion::UsEast1 => "us-east-1".to_string(),
+            ResourceRecordSetRegion::UsEast2 => "us-east-2".to_string(),
+            ResourceRecordSetRegion::UsWest1 => "us-west-1".to_string(),
+            ResourceRecordSetRegion::UsWest2 => "us-west-2".to_string(),
+            ResourceRecordSetRegion::UnknownVariant(UnknownResourceRecordSetRegion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceRecordSetRegion {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceRecordSetRegion::AfSouth1 => &"af-south-1",
+            ResourceRecordSetRegion::ApEast1 => &"ap-east-1",
+            ResourceRecordSetRegion::ApNortheast1 => &"ap-northeast-1",
+            ResourceRecordSetRegion::ApNortheast2 => &"ap-northeast-2",
+            ResourceRecordSetRegion::ApNortheast3 => &"ap-northeast-3",
+            ResourceRecordSetRegion::ApSouth1 => &"ap-south-1",
+            ResourceRecordSetRegion::ApSoutheast1 => &"ap-southeast-1",
+            ResourceRecordSetRegion::ApSoutheast2 => &"ap-southeast-2",
+            ResourceRecordSetRegion::CaCentral1 => &"ca-central-1",
+            ResourceRecordSetRegion::CnNorth1 => &"cn-north-1",
+            ResourceRecordSetRegion::CnNorthwest1 => &"cn-northwest-1",
+            ResourceRecordSetRegion::EuCentral1 => &"eu-central-1",
+            ResourceRecordSetRegion::EuNorth1 => &"eu-north-1",
+            ResourceRecordSetRegion::EuSouth1 => &"eu-south-1",
+            ResourceRecordSetRegion::EuWest1 => &"eu-west-1",
+            ResourceRecordSetRegion::EuWest2 => &"eu-west-2",
+            ResourceRecordSetRegion::EuWest3 => &"eu-west-3",
+            ResourceRecordSetRegion::MeSouth1 => &"me-south-1",
+            ResourceRecordSetRegion::SaEast1 => &"sa-east-1",
+            ResourceRecordSetRegion::UsEast1 => &"us-east-1",
+            ResourceRecordSetRegion::UsEast2 => &"us-east-2",
+            ResourceRecordSetRegion::UsWest1 => &"us-west-1",
+            ResourceRecordSetRegion::UsWest2 => &"us-west-2",
+            ResourceRecordSetRegion::UnknownVariant(UnknownResourceRecordSetRegion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceRecordSetRegion {
+    fn from(name: &str) -> Self {
+        match name {
+            "af-south-1" => ResourceRecordSetRegion::AfSouth1,
+            "ap-east-1" => ResourceRecordSetRegion::ApEast1,
+            "ap-northeast-1" => ResourceRecordSetRegion::ApNortheast1,
+            "ap-northeast-2" => ResourceRecordSetRegion::ApNortheast2,
+            "ap-northeast-3" => ResourceRecordSetRegion::ApNortheast3,
+            "ap-south-1" => ResourceRecordSetRegion::ApSouth1,
+            "ap-southeast-1" => ResourceRecordSetRegion::ApSoutheast1,
+            "ap-southeast-2" => ResourceRecordSetRegion::ApSoutheast2,
+            "ca-central-1" => ResourceRecordSetRegion::CaCentral1,
+            "cn-north-1" => ResourceRecordSetRegion::CnNorth1,
+            "cn-northwest-1" => ResourceRecordSetRegion::CnNorthwest1,
+            "eu-central-1" => ResourceRecordSetRegion::EuCentral1,
+            "eu-north-1" => ResourceRecordSetRegion::EuNorth1,
+            "eu-south-1" => ResourceRecordSetRegion::EuSouth1,
+            "eu-west-1" => ResourceRecordSetRegion::EuWest1,
+            "eu-west-2" => ResourceRecordSetRegion::EuWest2,
+            "eu-west-3" => ResourceRecordSetRegion::EuWest3,
+            "me-south-1" => ResourceRecordSetRegion::MeSouth1,
+            "sa-east-1" => ResourceRecordSetRegion::SaEast1,
+            "us-east-1" => ResourceRecordSetRegion::UsEast1,
+            "us-east-2" => ResourceRecordSetRegion::UsEast2,
+            "us-west-1" => ResourceRecordSetRegion::UsWest1,
+            "us-west-2" => ResourceRecordSetRegion::UsWest2,
+            _ => ResourceRecordSetRegion::UnknownVariant(UnknownResourceRecordSetRegion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceRecordSetRegion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "af-south-1" => ResourceRecordSetRegion::AfSouth1,
+            "ap-east-1" => ResourceRecordSetRegion::ApEast1,
+            "ap-northeast-1" => ResourceRecordSetRegion::ApNortheast1,
+            "ap-northeast-2" => ResourceRecordSetRegion::ApNortheast2,
+            "ap-northeast-3" => ResourceRecordSetRegion::ApNortheast3,
+            "ap-south-1" => ResourceRecordSetRegion::ApSouth1,
+            "ap-southeast-1" => ResourceRecordSetRegion::ApSoutheast1,
+            "ap-southeast-2" => ResourceRecordSetRegion::ApSoutheast2,
+            "ca-central-1" => ResourceRecordSetRegion::CaCentral1,
+            "cn-north-1" => ResourceRecordSetRegion::CnNorth1,
+            "cn-northwest-1" => ResourceRecordSetRegion::CnNorthwest1,
+            "eu-central-1" => ResourceRecordSetRegion::EuCentral1,
+            "eu-north-1" => ResourceRecordSetRegion::EuNorth1,
+            "eu-south-1" => ResourceRecordSetRegion::EuSouth1,
+            "eu-west-1" => ResourceRecordSetRegion::EuWest1,
+            "eu-west-2" => ResourceRecordSetRegion::EuWest2,
+            "eu-west-3" => ResourceRecordSetRegion::EuWest3,
+            "me-south-1" => ResourceRecordSetRegion::MeSouth1,
+            "sa-east-1" => ResourceRecordSetRegion::SaEast1,
+            "us-east-1" => ResourceRecordSetRegion::UsEast1,
+            "us-east-2" => ResourceRecordSetRegion::UsEast2,
+            "us-west-1" => ResourceRecordSetRegion::UsWest1,
+            "us-west-2" => ResourceRecordSetRegion::UsWest2,
+            _ => ResourceRecordSetRegion::UnknownVariant(UnknownResourceRecordSetRegion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceRecordSetRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceRecordSetRegion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceRecordSetRegion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ResourceRecordSetRegionDeserializer;
 impl ResourceRecordSetRegionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceRecordSetRegion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6358,12 +8174,12 @@ impl ResourceRecordSetRegionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ResourceRecordSetRegion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6461,7 +8277,7 @@ pub struct ResourceTagSet {
     /// <p>The ID for the specified resource.</p>
     pub resource_id: Option<String>,
     /// <p><p>The type of the resource.</p> <ul> <li> <p>The resource type for health checks is <code>healthcheck</code>.</p> </li> <li> <p>The resource type for hosted zones is <code>hostedzone</code>.</p> </li> </ul></p>
-    pub resource_type: Option<String>,
+    pub resource_type: Option<TagResourceType>,
     /// <p>The tags associated with the specified resource.</p>
     pub tags: Option<Vec<Tag>>,
 }
@@ -6523,7 +8339,7 @@ impl ResourceTagSetListDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReusableDelegationSetLimit {
     /// <p>The limit that you requested: <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code>, the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p>
-    pub type_: String,
+    pub type_: ReusableDelegationSetLimitType,
     /// <p>The current value for the <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code> limit.</p>
     pub value: i64,
 }
@@ -6555,12 +8371,129 @@ impl ReusableDelegationSetLimitDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReusableDelegationSetLimitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReusableDelegationSetLimitType {
+    MaxZonesByReusableDelegationSet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReusableDelegationSetLimitType),
+}
+
+impl Default for ReusableDelegationSetLimitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReusableDelegationSetLimitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReusableDelegationSetLimitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReusableDelegationSetLimitType {
+    fn into(self) -> String {
+        match self {
+            ReusableDelegationSetLimitType::MaxZonesByReusableDelegationSet => {
+                "MAX_ZONES_BY_REUSABLE_DELEGATION_SET".to_string()
+            }
+            ReusableDelegationSetLimitType::UnknownVariant(
+                UnknownReusableDelegationSetLimitType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReusableDelegationSetLimitType {
+    fn into(self) -> &'a str {
+        match self {
+            ReusableDelegationSetLimitType::MaxZonesByReusableDelegationSet => {
+                &"MAX_ZONES_BY_REUSABLE_DELEGATION_SET"
+            }
+            ReusableDelegationSetLimitType::UnknownVariant(
+                UnknownReusableDelegationSetLimitType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ReusableDelegationSetLimitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX_ZONES_BY_REUSABLE_DELEGATION_SET" => {
+                ReusableDelegationSetLimitType::MaxZonesByReusableDelegationSet
+            }
+            _ => ReusableDelegationSetLimitType::UnknownVariant(
+                UnknownReusableDelegationSetLimitType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ReusableDelegationSetLimitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX_ZONES_BY_REUSABLE_DELEGATION_SET" => {
+                ReusableDelegationSetLimitType::MaxZonesByReusableDelegationSet
+            }
+            _ => ReusableDelegationSetLimitType::UnknownVariant(
+                UnknownReusableDelegationSetLimitType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReusableDelegationSetLimitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReusableDelegationSetLimitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReusableDelegationSetLimitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReusableDelegationSetLimitTypeDeserializer;
 impl ReusableDelegationSetLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReusableDelegationSetLimitType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6570,12 +8503,12 @@ impl ReusableDelegationSetLimitTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ReusableDelegationSetLimitType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6715,12 +8648,133 @@ impl SigningKeyTagDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Statistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatistic),
+}
+
+impl Default for Statistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Statistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Statistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        match self {
+            Statistic::Average => "Average".to_string(),
+            Statistic::Maximum => "Maximum".to_string(),
+            Statistic::Minimum => "Minimum".to_string(),
+            Statistic::SampleCount => "SampleCount".to_string(),
+            Statistic::Sum => "Sum".to_string(),
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Statistic {
+    fn into(self) -> &'a str {
+        match self {
+            Statistic::Average => &"Average",
+            Statistic::Maximum => &"Maximum",
+            Statistic::Minimum => &"Minimum",
+            Statistic::SampleCount => &"SampleCount",
+            Statistic::Sum => &"Sum",
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Statistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "Average" => Statistic::Average,
+            "Maximum" => Statistic::Maximum,
+            "Minimum" => Statistic::Minimum,
+            "SampleCount" => Statistic::SampleCount,
+            "Sum" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Statistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Average" => Statistic::Average,
+            "Maximum" => Statistic::Maximum,
+            "Minimum" => Statistic::Minimum,
+            "SampleCount" => Statistic::SampleCount,
+            "Sum" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Statistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Statistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Statistic, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6984,12 +9038,117 @@ impl TagResourceIdListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTagResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TagResourceType {
+    Healthcheck,
+    Hostedzone,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTagResourceType),
+}
+
+impl Default for TagResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TagResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TagResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TagResourceType {
+    fn into(self) -> String {
+        match self {
+            TagResourceType::Healthcheck => "healthcheck".to_string(),
+            TagResourceType::Hostedzone => "hostedzone".to_string(),
+            TagResourceType::UnknownVariant(UnknownTagResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TagResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            TagResourceType::Healthcheck => &"healthcheck",
+            TagResourceType::Hostedzone => &"hostedzone",
+            TagResourceType::UnknownVariant(UnknownTagResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TagResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "healthcheck" => TagResourceType::Healthcheck,
+            "hostedzone" => TagResourceType::Hostedzone,
+            _ => TagResourceType::UnknownVariant(UnknownTagResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TagResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "healthcheck" => TagResourceType::Healthcheck,
+            "hostedzone" => TagResourceType::Hostedzone,
+            _ => TagResourceType::UnknownVariant(UnknownTagResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TagResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TagResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TagResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TagResourceTypeDeserializer;
 impl TagResourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TagResourceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6999,12 +9158,12 @@ impl TagResourceTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &TagResourceType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -7045,7 +9204,7 @@ pub struct TestDNSAnswerRequest {
     /// <p>The name of the resource record set that you want Amazon Route 53 to simulate a query for.</p>
     pub record_name: String,
     /// <p>The type of the resource record set.</p>
-    pub record_type: String,
+    pub record_type: RRType,
     /// <p>If you want to simulate a request from a specific DNS resolver, specify the IP address for that resolver. If you omit this value, <code>TestDnsAnswer</code> uses the IP address of a DNS resolver in the AWS US East (N. Virginia) Region (<code>us-east-1</code>).</p>
     pub resolver_ip: Option<String>,
 }
@@ -7063,7 +9222,7 @@ pub struct TestDNSAnswerResponse {
     /// <p>The name of the resource record set that you submitted a request for.</p>
     pub record_name: String,
     /// <p>The type of the resource record set that you submitted a request for.</p>
-    pub record_type: String,
+    pub record_type: RRType,
     /// <p>A code that indicates whether the request is valid or not. The most common response code is <code>NOERROR</code>, meaning that the request is valid. If the response is not valid, Amazon Route 53 returns a response code that describes the error. For a list of possible response codes, see <a href="http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">DNS RCODES</a> on the IANA website. </p>
     pub response_code: String,
 }
@@ -7153,7 +9312,7 @@ pub struct TrafficPolicy {
     /// <p>The name that you specified when you created the traffic policy.</p>
     pub name: String,
     /// <p>The DNS type of the resource record sets that Amazon Route 53 creates when you use a traffic policy to create a traffic policy instance.</p>
-    pub type_: String,
+    pub type_: RRType,
     /// <p>The version number that Amazon Route 53 assigns to a traffic policy. For a new traffic policy, the value of <code>Version</code> is always 1.</p>
     pub version: i64,
 }
@@ -7286,7 +9445,7 @@ pub struct TrafficPolicyInstance {
     /// <p>The ID of the traffic policy that Amazon Route 53 used to create resource record sets in the specified hosted zone.</p>
     pub traffic_policy_id: String,
     /// <p>The DNS type that Amazon Route 53 assigned to all of the resource record sets that it created for this traffic policy instance. </p>
-    pub traffic_policy_type: String,
+    pub traffic_policy_type: RRType,
     /// <p>The version of the traffic policy that Amazon Route 53 used to create resource record sets in the specified hosted zone.</p>
     pub traffic_policy_version: i64,
 }
@@ -7460,7 +9619,7 @@ pub struct TrafficPolicySummary {
     /// <p>The number of traffic policies that are associated with the current AWS account.</p>
     pub traffic_policy_count: i64,
     /// <p>The DNS type of the resource record sets that Amazon Route 53 creates when you use a traffic policy to create a traffic policy instance.</p>
-    pub type_: String,
+    pub type_: RRType,
 }
 
 #[allow(dead_code)]
@@ -7577,15 +9736,15 @@ pub struct UpdateHealthCheckRequest {
     /// <p><p>The IPv4 or IPv6 IP address for the endpoint that you want Amazon Route 53 to perform health checks on. If you don&#39;t specify a value for <code>IPAddress</code>, Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address that is returned by DNS, Route 53 then checks the health of the endpoint.</p> <p>Use one of the following formats for the value of <code>IPAddress</code>: </p> <ul> <li> <p> <b>IPv4 address</b>: four values between 0 and 255, separated by periods (.), for example, <code>192.0.2.44</code>.</p> </li> <li> <p> <b>IPv6 address</b>: eight groups of four hexadecimal values, separated by colons (:), for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>. You can also shorten IPv6 addresses as described in RFC 5952, for example, <code>2001:db8:85a3::abcd:1:2345</code>.</p> </li> </ul> <p>If the endpoint is an EC2 instance, we recommend that you create an Elastic IP address, associate it with your EC2 instance, and specify the Elastic IP address for <code>IPAddress</code>. This ensures that the IP address of your instance never changes. For more information, see the applicable documentation:</p> <ul> <li> <p>Linux: <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses (EIP)</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> </p> </li> <li> <p>Windows: <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses (EIP)</a> in the <i>Amazon EC2 User Guide for Windows Instances</i> </p> </li> </ul> <note> <p>If a health check already has a value for <code>IPAddress</code>, you can change the value. However, you can&#39;t update an existing health check to add or remove the value of <code>IPAddress</code>. </p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_UpdateHealthCheck.html#Route53-UpdateHealthCheck-request-FullyQualifiedDomainName">FullyQualifiedDomainName</a>. </p> <p>Constraints: Route 53 can&#39;t check the health of endpoints for which the IP address is in local, private, non-routable, or multicast ranges. For more information about IP addresses for which you can&#39;t create health checks, see the following documents:</p> <ul> <li> <p> <a href="https://tools.ietf.org/html/rfc5735">RFC 5735, Special Use IPv4 Addresses</a> </p> </li> <li> <p> <a href="https://tools.ietf.org/html/rfc6598">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a> </p> </li> <li> <p> <a href="https://tools.ietf.org/html/rfc5156">RFC 5156, Special-Use IPv6 Addresses</a> </p> </li> </ul></p>
     pub ip_address: Option<String>,
     /// <p><p>When CloudWatch has insufficient data about the metric to determine the alarm state, the status that you want Amazon Route 53 to assign to the health check:</p> <ul> <li> <p> <code>Healthy</code>: Route 53 considers the health check to be healthy.</p> </li> <li> <p> <code>Unhealthy</code>: Route 53 considers the health check to be unhealthy.</p> </li> <li> <p> <code>LastKnownStatus</code>: Route 53 uses the status of the health check from the last time CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the default status for the health check is healthy.</p> </li> </ul></p>
-    pub insufficient_data_health_status: Option<String>,
+    pub insufficient_data_health_status: Option<InsufficientDataHealthStatus>,
     /// <p>Specify whether you want Amazon Route 53 to invert the status of a health check, for example, to consider a health check unhealthy when it otherwise would be considered healthy.</p>
     pub inverted: Option<bool>,
     /// <p><p>The port on the endpoint that you want Amazon Route 53 to perform health checks on.</p> <note> <p>Don&#39;t specify a value for <code>Port</code> when you specify a value for <code>Type</code> of <code>CLOUDWATCH_METRIC</code> or <code>CALCULATED</code>.</p> </note></p>
     pub port: Option<i64>,
     /// <p>A complex type that contains one <code>Region</code> element for each region that you want Amazon Route 53 health checkers to check the specified endpoint from.</p>
-    pub regions: Option<Vec<String>>,
+    pub regions: Option<Vec<HealthCheckRegion>>,
     /// <p><p>A complex type that contains one <code>ResettableElementName</code> element for each element that you want to reset to the default value. Valid values for <code>ResettableElementName</code> include the following:</p> <ul> <li> <p> <code>ChildHealthChecks</code>: Amazon Route 53 resets <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html#Route53-Type-HealthCheckConfig-ChildHealthChecks">ChildHealthChecks</a> to null.</p> </li> <li> <p> <code>FullyQualifiedDomainName</code>: Route 53 resets <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_UpdateHealthCheck.html#Route53-UpdateHealthCheck-request-FullyQualifiedDomainName">FullyQualifiedDomainName</a>. to null.</p> </li> <li> <p> <code>Regions</code>: Route 53 resets the <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html#Route53-Type-HealthCheckConfig-Regions">Regions</a> list to the default set of regions. </p> </li> <li> <p> <code>ResourcePath</code>: Route 53 resets <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html#Route53-Type-HealthCheckConfig-ResourcePath">ResourcePath</a> to null.</p> </li> </ul></p>
-    pub reset_elements: Option<Vec<String>>,
+    pub reset_elements: Option<Vec<ResettableElementName>>,
     /// <p>The path that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example the file /docs/route53-health-check.html. You can also include query string parameters, for example, <code>/welcome.html?language=jp&amp;login=y</code>. </p> <p>Specify this value only if you want to change it.</p>
     pub resource_path: Option<String>,
     /// <p>If the value of <code>Type</code> is <code>HTTP_STR_MATCH</code> or <code>HTTPS_STR_MATCH</code>, the string that you want Amazon Route 53 to search for in the response body from the specified resource. If the string appears in the response body, Route 53 considers the resource healthy. (You can't change the value of <code>Type</code> when you update a health check.)</p>
@@ -7908,7 +10067,7 @@ impl UsageCountDeserializer {
 pub struct VPC {
     pub vpc_id: Option<String>,
     /// <p>(Private hosted zones only) The region that an Amazon VPC was created in.</p>
-    pub vpc_region: Option<String>,
+    pub vpc_region: Option<VPCRegion>,
 }
 
 #[allow(dead_code)]
@@ -7977,12 +10136,237 @@ impl VPCIdSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVPCRegion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VPCRegion {
+    AfSouth1,
+    ApEast1,
+    ApNortheast1,
+    ApNortheast2,
+    ApNortheast3,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    CnNorth1,
+    EuCentral1,
+    EuNorth1,
+    EuSouth1,
+    EuWest1,
+    EuWest2,
+    EuWest3,
+    MeSouth1,
+    SaEast1,
+    UsEast1,
+    UsEast2,
+    UsGovEast1,
+    UsGovWest1,
+    UsIsoEast1,
+    UsIsobEast1,
+    UsWest1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVPCRegion),
+}
+
+impl Default for VPCRegion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VPCRegion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VPCRegion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VPCRegion {
+    fn into(self) -> String {
+        match self {
+            VPCRegion::AfSouth1 => "af-south-1".to_string(),
+            VPCRegion::ApEast1 => "ap-east-1".to_string(),
+            VPCRegion::ApNortheast1 => "ap-northeast-1".to_string(),
+            VPCRegion::ApNortheast2 => "ap-northeast-2".to_string(),
+            VPCRegion::ApNortheast3 => "ap-northeast-3".to_string(),
+            VPCRegion::ApSouth1 => "ap-south-1".to_string(),
+            VPCRegion::ApSoutheast1 => "ap-southeast-1".to_string(),
+            VPCRegion::ApSoutheast2 => "ap-southeast-2".to_string(),
+            VPCRegion::CaCentral1 => "ca-central-1".to_string(),
+            VPCRegion::CnNorth1 => "cn-north-1".to_string(),
+            VPCRegion::EuCentral1 => "eu-central-1".to_string(),
+            VPCRegion::EuNorth1 => "eu-north-1".to_string(),
+            VPCRegion::EuSouth1 => "eu-south-1".to_string(),
+            VPCRegion::EuWest1 => "eu-west-1".to_string(),
+            VPCRegion::EuWest2 => "eu-west-2".to_string(),
+            VPCRegion::EuWest3 => "eu-west-3".to_string(),
+            VPCRegion::MeSouth1 => "me-south-1".to_string(),
+            VPCRegion::SaEast1 => "sa-east-1".to_string(),
+            VPCRegion::UsEast1 => "us-east-1".to_string(),
+            VPCRegion::UsEast2 => "us-east-2".to_string(),
+            VPCRegion::UsGovEast1 => "us-gov-east-1".to_string(),
+            VPCRegion::UsGovWest1 => "us-gov-west-1".to_string(),
+            VPCRegion::UsIsoEast1 => "us-iso-east-1".to_string(),
+            VPCRegion::UsIsobEast1 => "us-isob-east-1".to_string(),
+            VPCRegion::UsWest1 => "us-west-1".to_string(),
+            VPCRegion::UsWest2 => "us-west-2".to_string(),
+            VPCRegion::UnknownVariant(UnknownVPCRegion { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VPCRegion {
+    fn into(self) -> &'a str {
+        match self {
+            VPCRegion::AfSouth1 => &"af-south-1",
+            VPCRegion::ApEast1 => &"ap-east-1",
+            VPCRegion::ApNortheast1 => &"ap-northeast-1",
+            VPCRegion::ApNortheast2 => &"ap-northeast-2",
+            VPCRegion::ApNortheast3 => &"ap-northeast-3",
+            VPCRegion::ApSouth1 => &"ap-south-1",
+            VPCRegion::ApSoutheast1 => &"ap-southeast-1",
+            VPCRegion::ApSoutheast2 => &"ap-southeast-2",
+            VPCRegion::CaCentral1 => &"ca-central-1",
+            VPCRegion::CnNorth1 => &"cn-north-1",
+            VPCRegion::EuCentral1 => &"eu-central-1",
+            VPCRegion::EuNorth1 => &"eu-north-1",
+            VPCRegion::EuSouth1 => &"eu-south-1",
+            VPCRegion::EuWest1 => &"eu-west-1",
+            VPCRegion::EuWest2 => &"eu-west-2",
+            VPCRegion::EuWest3 => &"eu-west-3",
+            VPCRegion::MeSouth1 => &"me-south-1",
+            VPCRegion::SaEast1 => &"sa-east-1",
+            VPCRegion::UsEast1 => &"us-east-1",
+            VPCRegion::UsEast2 => &"us-east-2",
+            VPCRegion::UsGovEast1 => &"us-gov-east-1",
+            VPCRegion::UsGovWest1 => &"us-gov-west-1",
+            VPCRegion::UsIsoEast1 => &"us-iso-east-1",
+            VPCRegion::UsIsobEast1 => &"us-isob-east-1",
+            VPCRegion::UsWest1 => &"us-west-1",
+            VPCRegion::UsWest2 => &"us-west-2",
+            VPCRegion::UnknownVariant(UnknownVPCRegion { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VPCRegion {
+    fn from(name: &str) -> Self {
+        match name {
+            "af-south-1" => VPCRegion::AfSouth1,
+            "ap-east-1" => VPCRegion::ApEast1,
+            "ap-northeast-1" => VPCRegion::ApNortheast1,
+            "ap-northeast-2" => VPCRegion::ApNortheast2,
+            "ap-northeast-3" => VPCRegion::ApNortheast3,
+            "ap-south-1" => VPCRegion::ApSouth1,
+            "ap-southeast-1" => VPCRegion::ApSoutheast1,
+            "ap-southeast-2" => VPCRegion::ApSoutheast2,
+            "ca-central-1" => VPCRegion::CaCentral1,
+            "cn-north-1" => VPCRegion::CnNorth1,
+            "eu-central-1" => VPCRegion::EuCentral1,
+            "eu-north-1" => VPCRegion::EuNorth1,
+            "eu-south-1" => VPCRegion::EuSouth1,
+            "eu-west-1" => VPCRegion::EuWest1,
+            "eu-west-2" => VPCRegion::EuWest2,
+            "eu-west-3" => VPCRegion::EuWest3,
+            "me-south-1" => VPCRegion::MeSouth1,
+            "sa-east-1" => VPCRegion::SaEast1,
+            "us-east-1" => VPCRegion::UsEast1,
+            "us-east-2" => VPCRegion::UsEast2,
+            "us-gov-east-1" => VPCRegion::UsGovEast1,
+            "us-gov-west-1" => VPCRegion::UsGovWest1,
+            "us-iso-east-1" => VPCRegion::UsIsoEast1,
+            "us-isob-east-1" => VPCRegion::UsIsobEast1,
+            "us-west-1" => VPCRegion::UsWest1,
+            "us-west-2" => VPCRegion::UsWest2,
+            _ => VPCRegion::UnknownVariant(UnknownVPCRegion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VPCRegion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "af-south-1" => VPCRegion::AfSouth1,
+            "ap-east-1" => VPCRegion::ApEast1,
+            "ap-northeast-1" => VPCRegion::ApNortheast1,
+            "ap-northeast-2" => VPCRegion::ApNortheast2,
+            "ap-northeast-3" => VPCRegion::ApNortheast3,
+            "ap-south-1" => VPCRegion::ApSouth1,
+            "ap-southeast-1" => VPCRegion::ApSoutheast1,
+            "ap-southeast-2" => VPCRegion::ApSoutheast2,
+            "ca-central-1" => VPCRegion::CaCentral1,
+            "cn-north-1" => VPCRegion::CnNorth1,
+            "eu-central-1" => VPCRegion::EuCentral1,
+            "eu-north-1" => VPCRegion::EuNorth1,
+            "eu-south-1" => VPCRegion::EuSouth1,
+            "eu-west-1" => VPCRegion::EuWest1,
+            "eu-west-2" => VPCRegion::EuWest2,
+            "eu-west-3" => VPCRegion::EuWest3,
+            "me-south-1" => VPCRegion::MeSouth1,
+            "sa-east-1" => VPCRegion::SaEast1,
+            "us-east-1" => VPCRegion::UsEast1,
+            "us-east-2" => VPCRegion::UsEast2,
+            "us-gov-east-1" => VPCRegion::UsGovEast1,
+            "us-gov-west-1" => VPCRegion::UsGovWest1,
+            "us-iso-east-1" => VPCRegion::UsIsoEast1,
+            "us-isob-east-1" => VPCRegion::UsIsobEast1,
+            "us-west-1" => VPCRegion::UsWest1,
+            "us-west-2" => VPCRegion::UsWest2,
+            _ => VPCRegion::UnknownVariant(UnknownVPCRegion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VPCRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for VPCRegion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for VPCRegion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct VPCRegionDeserializer;
 impl VPCRegionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VPCRegion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -7992,12 +10376,12 @@ impl VPCRegionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &VPCRegion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 

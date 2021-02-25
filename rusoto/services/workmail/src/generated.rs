@@ -73,7 +73,7 @@ pub struct AccessControlRule {
     /// <p>The rule effect.</p>
     #[serde(rename = "Effect")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub effect: Option<String>,
+    pub effect: Option<AccessControlRuleEffect>,
     /// <p>IPv4 CIDR ranges to include in the rule.</p>
     #[serde(rename = "IpRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -98,6 +98,110 @@ pub struct AccessControlRule {
     #[serde(rename = "UserIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessControlRuleEffect {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessControlRuleEffect {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessControlRuleEffect),
+}
+
+impl Default for AccessControlRuleEffect {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessControlRuleEffect {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessControlRuleEffect {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessControlRuleEffect {
+    fn into(self) -> String {
+        match self {
+            AccessControlRuleEffect::Allow => "ALLOW".to_string(),
+            AccessControlRuleEffect::Deny => "DENY".to_string(),
+            AccessControlRuleEffect::UnknownVariant(UnknownAccessControlRuleEffect {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessControlRuleEffect {
+    fn into(self) -> &'a str {
+        match self {
+            AccessControlRuleEffect::Allow => &"ALLOW",
+            AccessControlRuleEffect::Deny => &"DENY",
+            AccessControlRuleEffect::UnknownVariant(UnknownAccessControlRuleEffect {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccessControlRuleEffect {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => AccessControlRuleEffect::Allow,
+            "DENY" => AccessControlRuleEffect::Deny,
+            _ => AccessControlRuleEffect::UnknownVariant(UnknownAccessControlRuleEffect {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccessControlRuleEffect {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => AccessControlRuleEffect::Allow,
+            "DENY" => AccessControlRuleEffect::Deny,
+            _ => AccessControlRuleEffect::UnknownVariant(UnknownAccessControlRuleEffect { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessControlRuleEffect {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AccessControlRuleEffect {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccessControlRuleEffect {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -257,7 +361,7 @@ pub struct CreateResourceRequest {
     pub organization_id: String,
     /// <p>The type of the new resource. The available types are <code>equipment</code> and <code>room</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ResourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -304,7 +408,7 @@ pub struct Delegate {
     pub id: String,
     /// <p>The type of the delegate: user or group.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: MemberType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -498,7 +602,7 @@ pub struct DescribeGroupResponse {
     /// <p>The state of the user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -562,7 +666,7 @@ pub struct DescribeMailboxExportJobResponse {
     /// <p>The state of the mailbox export job.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MailboxExportJobState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -655,11 +759,11 @@ pub struct DescribeResourceResponse {
     /// <p>The state of the resource: enabled (registered to Amazon WorkMail), disabled (deregistered or never registered to WorkMail), or deleted.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
     /// <p>The type of the described resource.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ResourceType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -699,7 +803,7 @@ pub struct DescribeUserResponse {
     /// <p>The state of a user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
     /// <p>The identifier for the described user.</p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -707,7 +811,7 @@ pub struct DescribeUserResponse {
     /// <p>In certain cases, other entities are modeled as users. If interoperability is enabled, resources are imported into Amazon WorkMail as users. Because different WorkMail organizations rely on different directory types, administrators can distinguish between an unregistered user (account is disabled and has a user role) and the directory administrators. The values are USER, RESOURCE, and SYSTEM_USER.</p>
     #[serde(rename = "UserRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_role: Option<String>,
+    pub user_role: Option<UserRole>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -760,19 +864,240 @@ pub struct Domain {
     pub hosted_zone_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityState {
+    Deleted,
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityState),
+}
+
+impl Default for EntityState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityState {
+    fn into(self) -> String {
+        match self {
+            EntityState::Deleted => "DELETED".to_string(),
+            EntityState::Disabled => "DISABLED".to_string(),
+            EntityState::Enabled => "ENABLED".to_string(),
+            EntityState::UnknownVariant(UnknownEntityState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityState {
+    fn into(self) -> &'a str {
+        match self {
+            EntityState::Deleted => &"DELETED",
+            EntityState::Disabled => &"DISABLED",
+            EntityState::Enabled => &"ENABLED",
+            EntityState::UnknownVariant(UnknownEntityState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED" => EntityState::Deleted,
+            "DISABLED" => EntityState::Disabled,
+            "ENABLED" => EntityState::Enabled,
+            _ => EntityState::UnknownVariant(UnknownEntityState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED" => EntityState::Deleted,
+            "DISABLED" => EntityState::Disabled,
+            "ENABLED" => EntityState::Enabled,
+            _ => EntityState::UnknownVariant(UnknownEntityState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EntityState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The configuration applied to an organization's folders by its retention policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FolderConfiguration {
     /// <p>The action to take on the folder contents at the end of the folder configuration period.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: RetentionAction,
     /// <p>The folder name.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: FolderName,
     /// <p>The period of time at which the folder configuration action is applied.</p>
     #[serde(rename = "Period")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFolderName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FolderName {
+    DeletedItems,
+    Drafts,
+    Inbox,
+    JunkEmail,
+    SentItems,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFolderName),
+}
+
+impl Default for FolderName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FolderName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FolderName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FolderName {
+    fn into(self) -> String {
+        match self {
+            FolderName::DeletedItems => "DELETED_ITEMS".to_string(),
+            FolderName::Drafts => "DRAFTS".to_string(),
+            FolderName::Inbox => "INBOX".to_string(),
+            FolderName::JunkEmail => "JUNK_EMAIL".to_string(),
+            FolderName::SentItems => "SENT_ITEMS".to_string(),
+            FolderName::UnknownVariant(UnknownFolderName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FolderName {
+    fn into(self) -> &'a str {
+        match self {
+            FolderName::DeletedItems => &"DELETED_ITEMS",
+            FolderName::Drafts => &"DRAFTS",
+            FolderName::Inbox => &"INBOX",
+            FolderName::JunkEmail => &"JUNK_EMAIL",
+            FolderName::SentItems => &"SENT_ITEMS",
+            FolderName::UnknownVariant(UnknownFolderName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FolderName {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED_ITEMS" => FolderName::DeletedItems,
+            "DRAFTS" => FolderName::Drafts,
+            "INBOX" => FolderName::Inbox,
+            "JUNK_EMAIL" => FolderName::JunkEmail,
+            "SENT_ITEMS" => FolderName::SentItems,
+            _ => FolderName::UnknownVariant(UnknownFolderName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FolderName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED_ITEMS" => FolderName::DeletedItems,
+            "DRAFTS" => FolderName::Drafts,
+            "INBOX" => FolderName::Inbox,
+            "JUNK_EMAIL" => FolderName::JunkEmail,
+            "SENT_ITEMS" => FolderName::SentItems,
+            _ => FolderName::UnknownVariant(UnknownFolderName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FolderName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FolderName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FolderName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -798,7 +1123,7 @@ pub struct GetAccessControlEffectResponse {
     /// <p>The rule effect.</p>
     #[serde(rename = "Effect")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub effect: Option<String>,
+    pub effect: Option<AccessControlRuleEffect>,
     /// <p>The rules that match the given parameters, resulting in an effect.</p>
     #[serde(rename = "MatchedRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -885,7 +1210,7 @@ pub struct Group {
     /// <p>The state of the group, which can be ENABLED, DISABLED, or DELETED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1231,7 +1556,122 @@ pub struct MailboxExportJob {
     /// <p>The state of the mailbox export job.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MailboxExportJobState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMailboxExportJobState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MailboxExportJobState {
+    Cancelled,
+    Completed,
+    Failed,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMailboxExportJobState),
+}
+
+impl Default for MailboxExportJobState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MailboxExportJobState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MailboxExportJobState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MailboxExportJobState {
+    fn into(self) -> String {
+        match self {
+            MailboxExportJobState::Cancelled => "CANCELLED".to_string(),
+            MailboxExportJobState::Completed => "COMPLETED".to_string(),
+            MailboxExportJobState::Failed => "FAILED".to_string(),
+            MailboxExportJobState::Running => "RUNNING".to_string(),
+            MailboxExportJobState::UnknownVariant(UnknownMailboxExportJobState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MailboxExportJobState {
+    fn into(self) -> &'a str {
+        match self {
+            MailboxExportJobState::Cancelled => &"CANCELLED",
+            MailboxExportJobState::Completed => &"COMPLETED",
+            MailboxExportJobState::Failed => &"FAILED",
+            MailboxExportJobState::Running => &"RUNNING",
+            MailboxExportJobState::UnknownVariant(UnknownMailboxExportJobState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MailboxExportJobState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => MailboxExportJobState::Cancelled,
+            "COMPLETED" => MailboxExportJobState::Completed,
+            "FAILED" => MailboxExportJobState::Failed,
+            "RUNNING" => MailboxExportJobState::Running,
+            _ => MailboxExportJobState::UnknownVariant(UnknownMailboxExportJobState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MailboxExportJobState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => MailboxExportJobState::Cancelled,
+            "COMPLETED" => MailboxExportJobState::Completed,
+            "FAILED" => MailboxExportJobState::Failed,
+            "RUNNING" => MailboxExportJobState::Running,
+            _ => MailboxExportJobState::UnknownVariant(UnknownMailboxExportJobState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MailboxExportJobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MailboxExportJobState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MailboxExportJobState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The representation of a user or group.</p>
@@ -1257,11 +1697,112 @@ pub struct Member {
     /// <p>The state of the member, which can be ENABLED, DISABLED, or DELETED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
     /// <p>A member can be a user or group.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<MemberType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberType {
+    Group,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberType),
+}
+
+impl Default for MemberType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberType {
+    fn into(self) -> String {
+        match self {
+            MemberType::Group => "GROUP".to_string(),
+            MemberType::User => "USER".to_string(),
+            MemberType::UnknownVariant(UnknownMemberType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberType {
+    fn into(self) -> &'a str {
+        match self {
+            MemberType::Group => &"GROUP",
+            MemberType::User => &"USER",
+            MemberType::UnknownVariant(UnknownMemberType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MemberType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GROUP" => MemberType::Group,
+            "USER" => MemberType::User,
+            _ => MemberType::UnknownVariant(UnknownMemberType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GROUP" => MemberType::Group,
+            "USER" => MemberType::User,
+            _ => MemberType::UnknownVariant(UnknownMemberType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MemberType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MemberType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The representation of an organization.</p>
@@ -1299,10 +1840,115 @@ pub struct Permission {
     pub grantee_id: String,
     /// <p>The type of user, group, or resource referred to in GranteeId.</p>
     #[serde(rename = "GranteeType")]
-    pub grantee_type: String,
+    pub grantee_type: MemberType,
     /// <p>The permissions granted to the grantee. SEND_AS allows the grantee to send email as the owner of the mailbox (the grantee is not mentioned on these emails). SEND_ON_BEHALF allows the grantee to send email on behalf of the owner of the mailbox (the grantee is not mentioned as the physical sender of these emails). FULL_ACCESS allows the grantee full access to the mailbox, irrespective of other folder-level permissions set on the mailbox.</p>
     #[serde(rename = "PermissionValues")]
-    pub permission_values: Vec<String>,
+    pub permission_values: Vec<PermissionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermissionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PermissionType {
+    FullAccess,
+    SendAs,
+    SendOnBehalf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermissionType),
+}
+
+impl Default for PermissionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PermissionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PermissionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PermissionType {
+    fn into(self) -> String {
+        match self {
+            PermissionType::FullAccess => "FULL_ACCESS".to_string(),
+            PermissionType::SendAs => "SEND_AS".to_string(),
+            PermissionType::SendOnBehalf => "SEND_ON_BEHALF".to_string(),
+            PermissionType::UnknownVariant(UnknownPermissionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PermissionType {
+    fn into(self) -> &'a str {
+        match self {
+            PermissionType::FullAccess => &"FULL_ACCESS",
+            PermissionType::SendAs => &"SEND_AS",
+            PermissionType::SendOnBehalf => &"SEND_ON_BEHALF",
+            PermissionType::UnknownVariant(UnknownPermissionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PermissionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_ACCESS" => PermissionType::FullAccess,
+            "SEND_AS" => PermissionType::SendAs,
+            "SEND_ON_BEHALF" => PermissionType::SendOnBehalf,
+            _ => PermissionType::UnknownVariant(UnknownPermissionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PermissionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_ACCESS" => PermissionType::FullAccess,
+            "SEND_AS" => PermissionType::SendAs,
+            "SEND_ON_BEHALF" => PermissionType::SendOnBehalf,
+            _ => PermissionType::UnknownVariant(UnknownPermissionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PermissionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PermissionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PermissionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1317,7 +1963,7 @@ pub struct PutAccessControlRuleRequest {
     pub description: String,
     /// <p>The rule effect.</p>
     #[serde(rename = "Effect")]
-    pub effect: String,
+    pub effect: AccessControlRuleEffect,
     /// <p>IPv4 CIDR ranges to include in the rule.</p>
     #[serde(rename = "IpRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1364,7 +2010,7 @@ pub struct PutMailboxPermissionsRequest {
     pub organization_id: String,
     /// <p>The permissions granted to the grantee. SEND_AS allows the grantee to send email as the owner of the mailbox (the grantee is not mentioned on these emails). SEND_ON_BEHALF allows the grantee to send email on behalf of the owner of the mailbox (the grantee is not mentioned as the physical sender of these emails). FULL_ACCESS allows the grantee full access to the mailbox, irrespective of other folder-level permissions set on the mailbox.</p>
     #[serde(rename = "PermissionValues")]
-    pub permission_values: Vec<String>,
+    pub permission_values: Vec<PermissionType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1460,11 +2106,216 @@ pub struct Resource {
     /// <p>The state of the resource, which can be ENABLED, DISABLED, or DELETED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
     /// <p>The type of the resource: equipment or room.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Equipment,
+    Room,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Equipment => "EQUIPMENT".to_string(),
+            ResourceType::Room => "ROOM".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Equipment => &"EQUIPMENT",
+            ResourceType::Room => &"ROOM",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EQUIPMENT" => ResourceType::Equipment,
+            "ROOM" => ResourceType::Room,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EQUIPMENT" => ResourceType::Equipment,
+            "ROOM" => ResourceType::Room,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRetentionAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RetentionAction {
+    Delete,
+    None,
+    PermanentlyDelete,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRetentionAction),
+}
+
+impl Default for RetentionAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RetentionAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RetentionAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RetentionAction {
+    fn into(self) -> String {
+        match self {
+            RetentionAction::Delete => "DELETE".to_string(),
+            RetentionAction::None => "NONE".to_string(),
+            RetentionAction::PermanentlyDelete => "PERMANENTLY_DELETE".to_string(),
+            RetentionAction::UnknownVariant(UnknownRetentionAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RetentionAction {
+    fn into(self) -> &'a str {
+        match self {
+            RetentionAction::Delete => &"DELETE",
+            RetentionAction::None => &"NONE",
+            RetentionAction::PermanentlyDelete => &"PERMANENTLY_DELETE",
+            RetentionAction::UnknownVariant(UnknownRetentionAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RetentionAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => RetentionAction::Delete,
+            "NONE" => RetentionAction::None,
+            "PERMANENTLY_DELETE" => RetentionAction::PermanentlyDelete,
+            _ => RetentionAction::UnknownVariant(UnknownRetentionAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RetentionAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => RetentionAction::Delete,
+            "NONE" => RetentionAction::None,
+            "PERMANENTLY_DELETE" => RetentionAction::PermanentlyDelete,
+            _ => RetentionAction::UnknownVariant(UnknownRetentionAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RetentionAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RetentionAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RetentionAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1637,11 +2488,117 @@ pub struct User {
     /// <p>The state of the user, which can be ENABLED, DISABLED, or DELETED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EntityState>,
     /// <p>The role of the user.</p>
     #[serde(rename = "UserRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_role: Option<String>,
+    pub user_role: Option<UserRole>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserRole {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserRole {
+    Resource,
+    SystemUser,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserRole),
+}
+
+impl Default for UserRole {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserRole {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserRole {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserRole {
+    fn into(self) -> String {
+        match self {
+            UserRole::Resource => "RESOURCE".to_string(),
+            UserRole::SystemUser => "SYSTEM_USER".to_string(),
+            UserRole::User => "USER".to_string(),
+            UserRole::UnknownVariant(UnknownUserRole { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserRole {
+    fn into(self) -> &'a str {
+        match self {
+            UserRole::Resource => &"RESOURCE",
+            UserRole::SystemUser => &"SYSTEM_USER",
+            UserRole::User => &"USER",
+            UserRole::UnknownVariant(UnknownUserRole { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserRole {
+    fn from(name: &str) -> Self {
+        match name {
+            "RESOURCE" => UserRole::Resource,
+            "SYSTEM_USER" => UserRole::SystemUser,
+            "USER" => UserRole::User,
+            _ => UserRole::UnknownVariant(UnknownUserRole {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserRole {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RESOURCE" => UserRole::Resource,
+            "SYSTEM_USER" => UserRole::SystemUser,
+            "USER" => UserRole::User,
+            _ => UserRole::UnknownVariant(UnknownUserRole { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserRole {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UserRole {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserRole {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateDelegateToResource

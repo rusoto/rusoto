@@ -109,7 +109,7 @@ pub struct JobExecution {
     /// <p>The status of the job execution. Can be one of: "QUEUED", "IN_PROGRESS", "FAILED", "SUCCESS", "CANCELED", "REJECTED", or "REMOVED".</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JobExecutionStatus>,
     /// <p>A collection of name/value pairs that describe the status of the job execution.</p>
     #[serde(rename = "statusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,7 +131,7 @@ pub struct JobExecutionState {
     /// <p>The status of the job execution. Can be one of: "QUEUED", "IN_PROGRESS", "FAILED", "SUCCESS", "CANCELED", "REJECTED", or "REMOVED".</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JobExecutionStatus>,
     /// <p>A collection of name/value pairs that describe the status of the job execution.</p>
     #[serde(rename = "statusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -140,6 +140,140 @@ pub struct JobExecutionState {
     #[serde(rename = "versionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_number: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobExecutionStatus {
+    Canceled,
+    Failed,
+    InProgress,
+    Queued,
+    Rejected,
+    Removed,
+    Succeeded,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobExecutionStatus),
+}
+
+impl Default for JobExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            JobExecutionStatus::Canceled => "CANCELED".to_string(),
+            JobExecutionStatus::Failed => "FAILED".to_string(),
+            JobExecutionStatus::InProgress => "IN_PROGRESS".to_string(),
+            JobExecutionStatus::Queued => "QUEUED".to_string(),
+            JobExecutionStatus::Rejected => "REJECTED".to_string(),
+            JobExecutionStatus::Removed => "REMOVED".to_string(),
+            JobExecutionStatus::Succeeded => "SUCCEEDED".to_string(),
+            JobExecutionStatus::TimedOut => "TIMED_OUT".to_string(),
+            JobExecutionStatus::UnknownVariant(UnknownJobExecutionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobExecutionStatus::Canceled => &"CANCELED",
+            JobExecutionStatus::Failed => &"FAILED",
+            JobExecutionStatus::InProgress => &"IN_PROGRESS",
+            JobExecutionStatus::Queued => &"QUEUED",
+            JobExecutionStatus::Rejected => &"REJECTED",
+            JobExecutionStatus::Removed => &"REMOVED",
+            JobExecutionStatus::Succeeded => &"SUCCEEDED",
+            JobExecutionStatus::TimedOut => &"TIMED_OUT",
+            JobExecutionStatus::UnknownVariant(UnknownJobExecutionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for JobExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELED" => JobExecutionStatus::Canceled,
+            "FAILED" => JobExecutionStatus::Failed,
+            "IN_PROGRESS" => JobExecutionStatus::InProgress,
+            "QUEUED" => JobExecutionStatus::Queued,
+            "REJECTED" => JobExecutionStatus::Rejected,
+            "REMOVED" => JobExecutionStatus::Removed,
+            "SUCCEEDED" => JobExecutionStatus::Succeeded,
+            "TIMED_OUT" => JobExecutionStatus::TimedOut,
+            _ => JobExecutionStatus::UnknownVariant(UnknownJobExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELED" => JobExecutionStatus::Canceled,
+            "FAILED" => JobExecutionStatus::Failed,
+            "IN_PROGRESS" => JobExecutionStatus::InProgress,
+            "QUEUED" => JobExecutionStatus::Queued,
+            "REJECTED" => JobExecutionStatus::Rejected,
+            "REMOVED" => JobExecutionStatus::Removed,
+            "SUCCEEDED" => JobExecutionStatus::Succeeded,
+            "TIMED_OUT" => JobExecutionStatus::TimedOut,
+            _ => JobExecutionStatus::UnknownVariant(UnknownJobExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains a subset of information about a job execution.</p>
@@ -221,7 +355,7 @@ pub struct UpdateJobExecutionRequest {
     pub job_id: String,
     /// <p>The new status for the job execution (IN_PROGRESS, FAILED, SUCCESS, or REJECTED). This must be specified on every update.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: JobExecutionStatus,
     /// <p> Optional. A collection of name/value pairs that describe the status of the job execution. If not specified, the statusDetails are unchanged.</p>
     #[serde(rename = "statusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]

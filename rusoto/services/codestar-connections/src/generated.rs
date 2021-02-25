@@ -70,7 +70,7 @@ pub struct Connection {
     /// <p>The current status of the connection. </p>
     #[serde(rename = "ConnectionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_status: Option<String>,
+    pub connection_status: Option<ConnectionStatus>,
     /// <p>The Amazon Resource Name (ARN) of the host associated with the connection.</p>
     #[serde(rename = "HostArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -82,7 +82,117 @@ pub struct Connection {
     /// <p>The name of the external provider where your third-party code repository is configured.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionStatus {
+    Available,
+    Error,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionStatus),
+}
+
+impl Default for ConnectionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionStatus {
+    fn into(self) -> String {
+        match self {
+            ConnectionStatus::Available => "AVAILABLE".to_string(),
+            ConnectionStatus::Error => "ERROR".to_string(),
+            ConnectionStatus::Pending => "PENDING".to_string(),
+            ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionStatus::Available => &"AVAILABLE",
+            ConnectionStatus::Error => &"ERROR",
+            ConnectionStatus::Pending => &"PENDING",
+            ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConnectionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ConnectionStatus::Available,
+            "ERROR" => ConnectionStatus::Error,
+            "PENDING" => ConnectionStatus::Pending,
+            _ => ConnectionStatus::UnknownVariant(UnknownConnectionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ConnectionStatus::Available,
+            "ERROR" => ConnectionStatus::Error,
+            "PENDING" => ConnectionStatus::Pending,
+            _ => ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -98,7 +208,7 @@ pub struct CreateConnectionInput {
     /// <p>The name of the external provider where your third-party code repository is configured.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p>The key-value pair to use when tagging the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -128,7 +238,7 @@ pub struct CreateHostInput {
     pub provider_endpoint: String,
     /// <p>The name of the installed provider to be associated with your connection. The host resource represents the infrastructure where your provider type is installed. The valid provider type is GitHub Enterprise Server.</p>
     #[serde(rename = "ProviderType")]
-    pub provider_type: String,
+    pub provider_type: ProviderType,
     /// <p>The VPC configuration to be provisioned for the host. A VPC must be configured and the infrastructure to be represented by the host must already be connected to the VPC.</p>
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -207,7 +317,7 @@ pub struct GetHostOutput {
     /// <p>The provider type of the requested host, such as GitHub Enterprise Server.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p>The status of the requested host.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,7 +347,7 @@ pub struct Host {
     /// <p>The name of the installed provider to be associated with your connection. The host resource represents the infrastructure where your provider type is installed. The valid provider type is GitHub Enterprise Server.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<ProviderType>,
     /// <p>The status of the host, such as PENDING, AVAILABLE, VPC_CONFIG_DELETING, VPC_CONFIG_INITIALIZING, and VPC_CONFIG_FAILED_INITIALIZATION.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -270,7 +380,7 @@ pub struct ListConnectionsInput {
     /// <p>Filters the list of connections to those associated with a specified provider, such as Bitbucket.</p>
     #[serde(rename = "ProviderTypeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type_filter: Option<String>,
+    pub provider_type_filter: Option<ProviderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -327,6 +437,111 @@ pub struct ListTagsForResourceOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProviderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProviderType {
+    Bitbucket,
+    GitHub,
+    GitHubEnterpriseServer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProviderType),
+}
+
+impl Default for ProviderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProviderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProviderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProviderType {
+    fn into(self) -> String {
+        match self {
+            ProviderType::Bitbucket => "Bitbucket".to_string(),
+            ProviderType::GitHub => "GitHub".to_string(),
+            ProviderType::GitHubEnterpriseServer => "GitHubEnterpriseServer".to_string(),
+            ProviderType::UnknownVariant(UnknownProviderType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProviderType {
+    fn into(self) -> &'a str {
+        match self {
+            ProviderType::Bitbucket => &"Bitbucket",
+            ProviderType::GitHub => &"GitHub",
+            ProviderType::GitHubEnterpriseServer => &"GitHubEnterpriseServer",
+            ProviderType::UnknownVariant(UnknownProviderType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProviderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bitbucket" => ProviderType::Bitbucket,
+            "GitHub" => ProviderType::GitHub,
+            "GitHubEnterpriseServer" => ProviderType::GitHubEnterpriseServer,
+            _ => ProviderType::UnknownVariant(UnknownProviderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProviderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bitbucket" => ProviderType::Bitbucket,
+            "GitHub" => ProviderType::GitHub,
+            "GitHubEnterpriseServer" => ProviderType::GitHubEnterpriseServer,
+            _ => ProviderType::UnknownVariant(UnknownProviderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProviderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProviderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProviderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A tag is a key-value pair that is used to manage the resource.</p> <p>This tag is available for use by AWS services that support tags.</p>

@@ -54,7 +54,7 @@ pub struct AnalyzedResource {
     pub resource_owner_account: String,
     /// <p>The type of the resource that was analyzed.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
     /// <p>Indicates how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
     #[serde(rename = "sharedVia")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -62,7 +62,7 @@ pub struct AnalyzedResource {
     /// <p>The current status of the finding generated from the analyzed resource.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<FindingStatus>,
     /// <p>The time at which the finding was updated.</p>
     #[serde(rename = "updatedAt")]
     pub updated_at: f64,
@@ -80,7 +80,118 @@ pub struct AnalyzedResourceSummary {
     pub resource_owner_account: String,
     /// <p>The type of resource that was analyzed.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnalyzerStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnalyzerStatus {
+    Active,
+    Creating,
+    Disabled,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnalyzerStatus),
+}
+
+impl Default for AnalyzerStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnalyzerStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnalyzerStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnalyzerStatus {
+    fn into(self) -> String {
+        match self {
+            AnalyzerStatus::Active => "ACTIVE".to_string(),
+            AnalyzerStatus::Creating => "CREATING".to_string(),
+            AnalyzerStatus::Disabled => "DISABLED".to_string(),
+            AnalyzerStatus::Failed => "FAILED".to_string(),
+            AnalyzerStatus::UnknownVariant(UnknownAnalyzerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnalyzerStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AnalyzerStatus::Active => &"ACTIVE",
+            AnalyzerStatus::Creating => &"CREATING",
+            AnalyzerStatus::Disabled => &"DISABLED",
+            AnalyzerStatus::Failed => &"FAILED",
+            AnalyzerStatus::UnknownVariant(UnknownAnalyzerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AnalyzerStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => AnalyzerStatus::Active,
+            "CREATING" => AnalyzerStatus::Creating,
+            "DISABLED" => AnalyzerStatus::Disabled,
+            "FAILED" => AnalyzerStatus::Failed,
+            _ => AnalyzerStatus::UnknownVariant(UnknownAnalyzerStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnalyzerStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => AnalyzerStatus::Active,
+            "CREATING" => AnalyzerStatus::Creating,
+            "DISABLED" => AnalyzerStatus::Disabled,
+            "FAILED" => AnalyzerStatus::Failed,
+            _ => AnalyzerStatus::UnknownVariant(UnknownAnalyzerStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalyzerStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AnalyzerStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AnalyzerStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about the analyzer.</p>
@@ -106,7 +217,7 @@ pub struct AnalyzerSummary {
     pub name: String,
     /// <p>The status of the analyzer. An <code>Active</code> analyzer successfully monitors supported resources and generates new findings. The analyzer is <code>Disabled</code> when a user action, such as removing trusted access for IAM Access Analyzer from AWS Organizations, causes the analyzer to stop generating new findings. The status is <code>Creating</code> when the analyzer creation is in progress and <code>Failed</code> when the analyzer creation has failed. </p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: AnalyzerStatus,
     /// <p>The <code>statusReason</code> provides more details about the current status of the analyzer. For example, if the creation for the analyzer fails, a <code>Failed</code> status is displayed. For an analyzer with organization as the type, this failure can be due to an issue with creating the service-linked roles required in the member accounts of the AWS organization.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +228,7 @@ pub struct AnalyzerSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of analyzer, which corresponds to the zone of trust chosen for the analyzer.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 /// <p>Retroactively applies an archive rule.</p>
@@ -175,7 +286,7 @@ pub struct CreateAnalyzerRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of analyzer to create. Only ACCOUNT analyzers are supported. You can create only one analyzer per account per Region.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 /// <p>The response to the request to create an analyzer.</p>
@@ -298,14 +409,14 @@ pub struct Finding {
     pub resource_owner_account: String,
     /// <p>The type of the resource reported in the finding.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
     /// <p>The sources of the finding. This indicates how the access that generated the finding is granted. It is populated for Amazon S3 bucket findings.</p>
     #[serde(rename = "sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sources: Option<Vec<FindingSource>>,
     /// <p>The current status of the finding.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: FindingStatus,
     /// <p>The time at which the finding was updated.</p>
     #[serde(rename = "updatedAt")]
     pub updated_at: f64,
@@ -321,7 +432,7 @@ pub struct FindingSource {
     pub detail: Option<FindingSourceDetail>,
     /// <p>Indicates the type of access that generated the finding.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: FindingSourceType,
 }
 
 /// <p>Includes details about how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
@@ -332,6 +443,327 @@ pub struct FindingSourceDetail {
     #[serde(rename = "accessPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_point_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFindingSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FindingSourceType {
+    BucketAcl,
+    Policy,
+    S3AccessPoint,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFindingSourceType),
+}
+
+impl Default for FindingSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FindingSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FindingSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FindingSourceType {
+    fn into(self) -> String {
+        match self {
+            FindingSourceType::BucketAcl => "BUCKET_ACL".to_string(),
+            FindingSourceType::Policy => "POLICY".to_string(),
+            FindingSourceType::S3AccessPoint => "S3_ACCESS_POINT".to_string(),
+            FindingSourceType::UnknownVariant(UnknownFindingSourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FindingSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            FindingSourceType::BucketAcl => &"BUCKET_ACL",
+            FindingSourceType::Policy => &"POLICY",
+            FindingSourceType::S3AccessPoint => &"S3_ACCESS_POINT",
+            FindingSourceType::UnknownVariant(UnknownFindingSourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FindingSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUCKET_ACL" => FindingSourceType::BucketAcl,
+            "POLICY" => FindingSourceType::Policy,
+            "S3_ACCESS_POINT" => FindingSourceType::S3AccessPoint,
+            _ => FindingSourceType::UnknownVariant(UnknownFindingSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FindingSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUCKET_ACL" => FindingSourceType::BucketAcl,
+            "POLICY" => FindingSourceType::Policy,
+            "S3_ACCESS_POINT" => FindingSourceType::S3AccessPoint,
+            _ => FindingSourceType::UnknownVariant(UnknownFindingSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FindingSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FindingSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FindingSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFindingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FindingStatus {
+    Active,
+    Archived,
+    Resolved,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFindingStatus),
+}
+
+impl Default for FindingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FindingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FindingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FindingStatus {
+    fn into(self) -> String {
+        match self {
+            FindingStatus::Active => "ACTIVE".to_string(),
+            FindingStatus::Archived => "ARCHIVED".to_string(),
+            FindingStatus::Resolved => "RESOLVED".to_string(),
+            FindingStatus::UnknownVariant(UnknownFindingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FindingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FindingStatus::Active => &"ACTIVE",
+            FindingStatus::Archived => &"ARCHIVED",
+            FindingStatus::Resolved => &"RESOLVED",
+            FindingStatus::UnknownVariant(UnknownFindingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FindingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => FindingStatus::Active,
+            "ARCHIVED" => FindingStatus::Archived,
+            "RESOLVED" => FindingStatus::Resolved,
+            _ => FindingStatus::UnknownVariant(UnknownFindingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FindingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => FindingStatus::Active,
+            "ARCHIVED" => FindingStatus::Archived,
+            "RESOLVED" => FindingStatus::Resolved,
+            _ => FindingStatus::UnknownVariant(UnknownFindingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FindingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FindingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FindingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFindingStatusUpdate {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FindingStatusUpdate {
+    Active,
+    Archived,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFindingStatusUpdate),
+}
+
+impl Default for FindingStatusUpdate {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FindingStatusUpdate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FindingStatusUpdate {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FindingStatusUpdate {
+    fn into(self) -> String {
+        match self {
+            FindingStatusUpdate::Active => "ACTIVE".to_string(),
+            FindingStatusUpdate::Archived => "ARCHIVED".to_string(),
+            FindingStatusUpdate::UnknownVariant(UnknownFindingStatusUpdate { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FindingStatusUpdate {
+    fn into(self) -> &'a str {
+        match self {
+            FindingStatusUpdate::Active => &"ACTIVE",
+            FindingStatusUpdate::Archived => &"ARCHIVED",
+            FindingStatusUpdate::UnknownVariant(UnknownFindingStatusUpdate { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FindingStatusUpdate {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => FindingStatusUpdate::Active,
+            "ARCHIVED" => FindingStatusUpdate::Archived,
+            _ => FindingStatusUpdate::UnknownVariant(UnknownFindingStatusUpdate {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FindingStatusUpdate {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => FindingStatusUpdate::Active,
+            "ARCHIVED" => FindingStatusUpdate::Archived,
+            _ => FindingStatusUpdate::UnknownVariant(UnknownFindingStatusUpdate { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FindingStatusUpdate {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FindingStatusUpdate {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FindingStatusUpdate {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a finding.</p>
@@ -375,14 +807,14 @@ pub struct FindingSummary {
     pub resource_owner_account: String,
     /// <p>The type of the resource that the external principal has access to.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
     /// <p>The sources of the finding. This indicates how the access that generated the finding is granted. It is populated for Amazon S3 bucket findings.</p>
     #[serde(rename = "sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sources: Option<Vec<FindingSource>>,
     /// <p>The status of the finding.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: FindingStatus,
     /// <p>The time at which the finding was most recently updated.</p>
     #[serde(rename = "updatedAt")]
     pub updated_at: f64,
@@ -500,7 +932,7 @@ pub struct ListAnalyzedResourcesRequest {
     /// <p>The type of resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>The response to the request.</p>
@@ -531,7 +963,7 @@ pub struct ListAnalyzersRequest {
     /// <p>The type of analyzer.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 /// <p>The response to the request.</p>
@@ -634,6 +1066,348 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderBy {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderBy),
+}
+
+impl Default for OrderBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderBy {
+    fn into(self) -> String {
+        match self {
+            OrderBy::Asc => "ASC".to_string(),
+            OrderBy::Desc => "DESC".to_string(),
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderBy {
+    fn into(self) -> &'a str {
+        match self {
+            OrderBy::Asc => &"ASC",
+            OrderBy::Desc => &"DESC",
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASC" => OrderBy::Asc,
+            "DESC" => OrderBy::Desc,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASC" => OrderBy::Asc,
+            "DESC" => OrderBy::Desc,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReasonCode {
+    AwsServiceAccessDisabled,
+    DelegatedAdministratorDeregistered,
+    OrganizationDeleted,
+    ServiceLinkedRoleCreationFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReasonCode),
+}
+
+impl Default for ReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReasonCode {
+    fn into(self) -> String {
+        match self {
+            ReasonCode::AwsServiceAccessDisabled => "AWS_SERVICE_ACCESS_DISABLED".to_string(),
+            ReasonCode::DelegatedAdministratorDeregistered => {
+                "DELEGATED_ADMINISTRATOR_DEREGISTERED".to_string()
+            }
+            ReasonCode::OrganizationDeleted => "ORGANIZATION_DELETED".to_string(),
+            ReasonCode::ServiceLinkedRoleCreationFailed => {
+                "SERVICE_LINKED_ROLE_CREATION_FAILED".to_string()
+            }
+            ReasonCode::UnknownVariant(UnknownReasonCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            ReasonCode::AwsServiceAccessDisabled => &"AWS_SERVICE_ACCESS_DISABLED",
+            ReasonCode::DelegatedAdministratorDeregistered => {
+                &"DELEGATED_ADMINISTRATOR_DEREGISTERED"
+            }
+            ReasonCode::OrganizationDeleted => &"ORGANIZATION_DELETED",
+            ReasonCode::ServiceLinkedRoleCreationFailed => &"SERVICE_LINKED_ROLE_CREATION_FAILED",
+            ReasonCode::UnknownVariant(UnknownReasonCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_SERVICE_ACCESS_DISABLED" => ReasonCode::AwsServiceAccessDisabled,
+            "DELEGATED_ADMINISTRATOR_DEREGISTERED" => {
+                ReasonCode::DelegatedAdministratorDeregistered
+            }
+            "ORGANIZATION_DELETED" => ReasonCode::OrganizationDeleted,
+            "SERVICE_LINKED_ROLE_CREATION_FAILED" => ReasonCode::ServiceLinkedRoleCreationFailed,
+            _ => ReasonCode::UnknownVariant(UnknownReasonCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_SERVICE_ACCESS_DISABLED" => ReasonCode::AwsServiceAccessDisabled,
+            "DELEGATED_ADMINISTRATOR_DEREGISTERED" => {
+                ReasonCode::DelegatedAdministratorDeregistered
+            }
+            "ORGANIZATION_DELETED" => ReasonCode::OrganizationDeleted,
+            "SERVICE_LINKED_ROLE_CREATION_FAILED" => ReasonCode::ServiceLinkedRoleCreationFailed,
+            _ => ReasonCode::UnknownVariant(UnknownReasonCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    AwsIamRole,
+    AwsKmsKey,
+    AwsLambdaFunction,
+    AwsLambdaLayerVersion,
+    AwsS3Bucket,
+    AwsSqsQueue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::AwsIamRole => "AWS::IAM::Role".to_string(),
+            ResourceType::AwsKmsKey => "AWS::KMS::Key".to_string(),
+            ResourceType::AwsLambdaFunction => "AWS::Lambda::Function".to_string(),
+            ResourceType::AwsLambdaLayerVersion => "AWS::Lambda::LayerVersion".to_string(),
+            ResourceType::AwsS3Bucket => "AWS::S3::Bucket".to_string(),
+            ResourceType::AwsSqsQueue => "AWS::SQS::Queue".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::AwsIamRole => &"AWS::IAM::Role",
+            ResourceType::AwsKmsKey => &"AWS::KMS::Key",
+            ResourceType::AwsLambdaFunction => &"AWS::Lambda::Function",
+            ResourceType::AwsLambdaLayerVersion => &"AWS::Lambda::LayerVersion",
+            ResourceType::AwsS3Bucket => &"AWS::S3::Bucket",
+            ResourceType::AwsSqsQueue => &"AWS::SQS::Queue",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS::IAM::Role" => ResourceType::AwsIamRole,
+            "AWS::KMS::Key" => ResourceType::AwsKmsKey,
+            "AWS::Lambda::Function" => ResourceType::AwsLambdaFunction,
+            "AWS::Lambda::LayerVersion" => ResourceType::AwsLambdaLayerVersion,
+            "AWS::S3::Bucket" => ResourceType::AwsS3Bucket,
+            "AWS::SQS::Queue" => ResourceType::AwsSqsQueue,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS::IAM::Role" => ResourceType::AwsIamRole,
+            "AWS::KMS::Key" => ResourceType::AwsKmsKey,
+            "AWS::Lambda::Function" => ResourceType::AwsLambdaFunction,
+            "AWS::Lambda::LayerVersion" => ResourceType::AwsLambdaLayerVersion,
+            "AWS::S3::Bucket" => ResourceType::AwsS3Bucket,
+            "AWS::SQS::Queue" => ResourceType::AwsSqsQueue,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The criteria used to sort.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -645,7 +1419,7 @@ pub struct SortCriteria {
     /// <p>The sort order, ascending or descending.</p>
     #[serde(rename = "orderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order_by: Option<String>,
+    pub order_by: Option<OrderBy>,
 }
 
 /// <p>Starts a scan of the policies applied to the specified resource.</p>
@@ -666,7 +1440,7 @@ pub struct StartResourceScanRequest {
 pub struct StatusReason {
     /// <p>The reason code for the current status of the analyzer.</p>
     #[serde(rename = "code")]
-    pub code: String,
+    pub code: ReasonCode,
 }
 
 /// <p>Adds a tag to the specified resource.</p>
@@ -685,6 +1459,106 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    Account,
+    Organization,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::Account => "ACCOUNT".to_string(),
+            Type::Organization => "ORGANIZATION".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::Account => &"ACCOUNT",
+            Type::Organization => &"ORGANIZATION",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => Type::Account,
+            "ORGANIZATION" => Type::Organization,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => Type::Account,
+            "ORGANIZATION" => Type::Organization,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Removes a tag from the specified resource.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -743,7 +1617,7 @@ pub struct UpdateFindingsRequest {
     pub resource_arn: Option<String>,
     /// <p>The state represents the action to take to update the finding Status. Use <code>ARCHIVE</code> to change an Active finding to an Archived finding. Use <code>ACTIVE</code> to change an Archived finding to an Active finding.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: FindingStatusUpdate,
 }
 
 /// <p>Contains information about a validation exception.</p>
@@ -753,6 +1627,124 @@ pub struct ValidationExceptionField {
     pub message: String,
     /// <p>The name of the validation exception.</p>
     pub name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidationExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidationExceptionReason {
+    CannotParse,
+    FieldValidationFailed,
+    Other,
+    UnknownOperation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidationExceptionReason),
+}
+
+impl Default for ValidationExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidationExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidationExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidationExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ValidationExceptionReason::CannotParse => "cannotParse".to_string(),
+            ValidationExceptionReason::FieldValidationFailed => "fieldValidationFailed".to_string(),
+            ValidationExceptionReason::Other => "other".to_string(),
+            ValidationExceptionReason::UnknownOperation => "unknownOperation".to_string(),
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidationExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ValidationExceptionReason::CannotParse => &"cannotParse",
+            ValidationExceptionReason::FieldValidationFailed => &"fieldValidationFailed",
+            ValidationExceptionReason::Other => &"other",
+            ValidationExceptionReason::UnknownOperation => &"unknownOperation",
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ValidationExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "cannotParse" => ValidationExceptionReason::CannotParse,
+            "fieldValidationFailed" => ValidationExceptionReason::FieldValidationFailed,
+            "other" => ValidationExceptionReason::Other,
+            "unknownOperation" => ValidationExceptionReason::UnknownOperation,
+            _ => ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidationExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cannotParse" => ValidationExceptionReason::CannotParse,
+            "fieldValidationFailed" => ValidationExceptionReason::FieldValidationFailed,
+            "other" => ValidationExceptionReason::Other,
+            "unknownOperation" => ValidationExceptionReason::UnknownOperation,
+            _ => {
+                ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ValidationExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ValidationExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by ApplyArchiveRule

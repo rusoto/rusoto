@@ -4,7 +4,9 @@ extern crate rusoto_core;
 extern crate rusoto_lambda;
 
 use rusoto_core::{Region, RusotoError};
-use rusoto_lambda::{InvocationRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
+use rusoto_lambda::{
+    InvocationRequest, InvocationType, InvokeError, Lambda, LambdaClient, ListFunctionsRequest,
+};
 
 #[tokio::test]
 async fn should_list_functions() {
@@ -21,7 +23,7 @@ async fn should_function_not_found() {
     {
         let request = InvocationRequest {
             function_name: "no-such-a-function".to_string(),
-            invocation_type: Some("RequestResponse".to_string()),
+            invocation_type: Some(InvocationType::RequestResponse),
             ..Default::default()
         };
 

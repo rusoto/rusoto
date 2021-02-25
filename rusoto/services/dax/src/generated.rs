@@ -50,6 +50,108 @@ impl DynamodbAcceleratorClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeType {
+    Immediate,
+    RequiresReboot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeType),
+}
+
+impl Default for ChangeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeType {
+    fn into(self) -> String {
+        match self {
+            ChangeType::Immediate => "IMMEDIATE".to_string(),
+            ChangeType::RequiresReboot => "REQUIRES_REBOOT".to_string(),
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeType {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeType::Immediate => &"IMMEDIATE",
+            ChangeType::RequiresReboot => &"REQUIRES_REBOOT",
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "IMMEDIATE" => ChangeType::Immediate,
+            "REQUIRES_REBOOT" => ChangeType::RequiresReboot,
+            _ => ChangeType::UnknownVariant(UnknownChangeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IMMEDIATE" => ChangeType::Immediate,
+            "REQUIRES_REBOOT" => ChangeType::RequiresReboot,
+            _ => ChangeType::UnknownVariant(UnknownChangeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChangeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChangeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -392,7 +494,7 @@ pub struct DescribeEventsRequest {
     /// <p>The event source to retrieve events for. If no value is specified, all events are returned.</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
     /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -538,7 +640,7 @@ pub struct Event {
     /// <p>Specifies the origin of this event - a cluster, a parameter group, a node ID, etc.</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -563,6 +665,112 @@ pub struct IncreaseReplicationFactorResponse {
     #[serde(rename = "Cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIsModifiable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IsModifiable {
+    Conditional,
+    False,
+    True,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIsModifiable),
+}
+
+impl Default for IsModifiable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IsModifiable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IsModifiable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IsModifiable {
+    fn into(self) -> String {
+        match self {
+            IsModifiable::Conditional => "CONDITIONAL".to_string(),
+            IsModifiable::False => "FALSE".to_string(),
+            IsModifiable::True => "TRUE".to_string(),
+            IsModifiable::UnknownVariant(UnknownIsModifiable { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IsModifiable {
+    fn into(self) -> &'a str {
+        match self {
+            IsModifiable::Conditional => &"CONDITIONAL",
+            IsModifiable::False => &"FALSE",
+            IsModifiable::True => &"TRUE",
+            IsModifiable::UnknownVariant(UnknownIsModifiable { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IsModifiable {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONDITIONAL" => IsModifiable::Conditional,
+            "FALSE" => IsModifiable::False,
+            "TRUE" => IsModifiable::True,
+            _ => IsModifiable::UnknownVariant(UnknownIsModifiable {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IsModifiable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONDITIONAL" => IsModifiable::Conditional,
+            "FALSE" => IsModifiable::False,
+            "TRUE" => IsModifiable::True,
+            _ => IsModifiable::UnknownVariant(UnknownIsModifiable { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IsModifiable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IsModifiable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IsModifiable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -659,7 +867,7 @@ pub struct Parameter {
     /// <p>The conditions under which changes to this parameter can be applied. For example, <code>requires-reboot</code> indicates that a new value for this parameter will only take effect if a node is rebooted.</p>
     #[serde(rename = "ChangeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub change_type: Option<String>,
+    pub change_type: Option<ChangeType>,
     /// <p>The data type of the parameter. For example, <code>integer</code>:</p>
     #[serde(rename = "DataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -671,7 +879,7 @@ pub struct Parameter {
     /// <p>Whether the customer is allowed to modify the parameter.</p>
     #[serde(rename = "IsModifiable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub is_modifiable: Option<String>,
+    pub is_modifiable: Option<IsModifiable>,
     /// <p>A list of node types, and specific parameter values for each node.</p>
     #[serde(rename = "NodeTypeSpecificValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,7 +891,7 @@ pub struct Parameter {
     /// <p>Determines whether the parameter can be applied to any nodes, or only nodes of a particular type.</p>
     #[serde(rename = "ParameterType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub parameter_type: Option<String>,
+    pub parameter_type: Option<ParameterType>,
     /// <p>The value for the parameter.</p>
     #[serde(rename = "ParameterValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -740,6 +948,107 @@ pub struct ParameterNameValue {
     pub parameter_value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterType {
+    Default,
+    NodeTypeSpecific,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterType),
+}
+
+impl Default for ParameterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterType {
+    fn into(self) -> String {
+        match self {
+            ParameterType::Default => "DEFAULT".to_string(),
+            ParameterType::NodeTypeSpecific => "NODE_TYPE_SPECIFIC".to_string(),
+            ParameterType::UnknownVariant(UnknownParameterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterType {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterType::Default => &"DEFAULT",
+            ParameterType::NodeTypeSpecific => &"NODE_TYPE_SPECIFIC",
+            ParameterType::UnknownVariant(UnknownParameterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParameterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => ParameterType::Default,
+            "NODE_TYPE_SPECIFIC" => ParameterType::NodeTypeSpecific,
+            _ => ParameterType::UnknownVariant(UnknownParameterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => ParameterType::Default,
+            "NODE_TYPE_SPECIFIC" => ParameterType::NodeTypeSpecific,
+            _ => ParameterType::UnknownVariant(UnknownParameterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ParameterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParameterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootNodeRequest {
@@ -767,7 +1076,7 @@ pub struct SSEDescription {
     /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SSEStatus>,
 }
 
 /// <p>Represents the settings used to enable server-side encryption.</p>
@@ -777,6 +1086,117 @@ pub struct SSESpecification {
     /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the cluster.</p>
     #[serde(rename = "Enabled")]
     pub enabled: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSSEStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SSEStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSSEStatus),
+}
+
+impl Default for SSEStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SSEStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SSEStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SSEStatus {
+    fn into(self) -> String {
+        match self {
+            SSEStatus::Disabled => "DISABLED".to_string(),
+            SSEStatus::Disabling => "DISABLING".to_string(),
+            SSEStatus::Enabled => "ENABLED".to_string(),
+            SSEStatus::Enabling => "ENABLING".to_string(),
+            SSEStatus::UnknownVariant(UnknownSSEStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SSEStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SSEStatus::Disabled => &"DISABLED",
+            SSEStatus::Disabling => &"DISABLING",
+            SSEStatus::Enabled => &"ENABLED",
+            SSEStatus::Enabling => &"ENABLING",
+            SSEStatus::UnknownVariant(UnknownSSEStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SSEStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => SSEStatus::Disabled,
+            "DISABLING" => SSEStatus::Disabling,
+            "ENABLED" => SSEStatus::Enabled,
+            "ENABLING" => SSEStatus::Enabling,
+            _ => SSEStatus::UnknownVariant(UnknownSSEStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SSEStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => SSEStatus::Disabled,
+            "DISABLING" => SSEStatus::Disabling,
+            "ENABLED" => SSEStatus::Enabled,
+            "ENABLING" => SSEStatus::Enabling,
+            _ => SSEStatus::UnknownVariant(UnknownSSEStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SSEStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SSEStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SSEStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An individual VPC security group and its status.</p>
@@ -791,6 +1211,111 @@ pub struct SecurityGroupMembership {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Cluster,
+    ParameterGroup,
+    SubnetGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Cluster => "CLUSTER".to_string(),
+            SourceType::ParameterGroup => "PARAMETER_GROUP".to_string(),
+            SourceType::SubnetGroup => "SUBNET_GROUP".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Cluster => &"CLUSTER",
+            SourceType::ParameterGroup => &"PARAMETER_GROUP",
+            SourceType::SubnetGroup => &"SUBNET_GROUP",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLUSTER" => SourceType::Cluster,
+            "PARAMETER_GROUP" => SourceType::ParameterGroup,
+            "SUBNET_GROUP" => SourceType::SubnetGroup,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLUSTER" => SourceType::Cluster,
+            "PARAMETER_GROUP" => SourceType::ParameterGroup,
+            "SUBNET_GROUP" => SourceType::SubnetGroup,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>

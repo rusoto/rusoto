@@ -60,12 +60,125 @@ impl IamClient {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessAdvisorUsageGranularityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessAdvisorUsageGranularityType {
+    ActionLevel,
+    ServiceLevel,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessAdvisorUsageGranularityType),
+}
+
+impl Default for AccessAdvisorUsageGranularityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessAdvisorUsageGranularityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessAdvisorUsageGranularityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessAdvisorUsageGranularityType {
+    fn into(self) -> String {
+        match self {
+            AccessAdvisorUsageGranularityType::ActionLevel => "ACTION_LEVEL".to_string(),
+            AccessAdvisorUsageGranularityType::ServiceLevel => "SERVICE_LEVEL".to_string(),
+            AccessAdvisorUsageGranularityType::UnknownVariant(
+                UnknownAccessAdvisorUsageGranularityType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessAdvisorUsageGranularityType {
+    fn into(self) -> &'a str {
+        match self {
+            AccessAdvisorUsageGranularityType::ActionLevel => &"ACTION_LEVEL",
+            AccessAdvisorUsageGranularityType::ServiceLevel => &"SERVICE_LEVEL",
+            AccessAdvisorUsageGranularityType::UnknownVariant(
+                UnknownAccessAdvisorUsageGranularityType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AccessAdvisorUsageGranularityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTION_LEVEL" => AccessAdvisorUsageGranularityType::ActionLevel,
+            "SERVICE_LEVEL" => AccessAdvisorUsageGranularityType::ServiceLevel,
+            _ => AccessAdvisorUsageGranularityType::UnknownVariant(
+                UnknownAccessAdvisorUsageGranularityType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AccessAdvisorUsageGranularityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTION_LEVEL" => AccessAdvisorUsageGranularityType::ActionLevel,
+            "SERVICE_LEVEL" => AccessAdvisorUsageGranularityType::ServiceLevel,
+            _ => AccessAdvisorUsageGranularityType::UnknownVariant(
+                UnknownAccessAdvisorUsageGranularityType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessAdvisorUsageGranularityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AccessAdvisorUsageGranularityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AccessAdvisorUsageGranularityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AccessAdvisorUsageGranularityTypeDeserializer;
 impl AccessAdvisorUsageGranularityTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccessAdvisorUsageGranularityType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>An object that contains details about when a principal in the reported AWS Organizations entity last attempted to access an AWS service. A principal can be an IAM user, an IAM role, or the AWS account root user within the reported Organizations entity.</p> <p>This data type is a response element in the <a>GetOrganizationsAccessReport</a> operation.</p>
@@ -160,7 +273,7 @@ pub struct AccessKey {
     /// <p>The secret key used to sign requests.</p>
     pub secret_access_key: String,
     /// <p>The status of the access key. <code>Active</code> means that the key is valid for API calls, while <code>Inactive</code> means it is not. </p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the IAM user that the access key is associated with.</p>
     pub user_name: String,
 }
@@ -252,7 +365,7 @@ pub struct AccessKeyMetadata {
     /// <p>The date when the access key was created.</p>
     pub create_date: Option<String>,
     /// <p>The status of the access key. <code>Active</code> means that the key is valid for API calls; <code>Inactive</code> means it is not.</p>
-    pub status: Option<String>,
+    pub status: Option<StatusType>,
     /// <p>The name of the IAM user that the key is associated with.</p>
     pub user_name: Option<String>,
 }
@@ -347,7 +460,7 @@ impl ActionNameListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -378,10 +491,13 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
+        params.put(
+            &format!("{}{}", prefix, "ClientID"),
+            &obj.client_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn,
+            &obj.open_id_connect_provider_arn.to_string(),
         );
     }
 }
@@ -406,9 +522,12 @@ impl AddRoleToInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name,
+            &obj.instance_profile_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -430,8 +549,14 @@ impl AddUserToGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -461,6 +586,118 @@ impl ArnTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssignmentStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssignmentStatusType {
+    Any,
+    Assigned,
+    Unassigned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssignmentStatusType),
+}
+
+impl Default for AssignmentStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssignmentStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssignmentStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssignmentStatusType {
+    fn into(self) -> String {
+        match self {
+            AssignmentStatusType::Any => "Any".to_string(),
+            AssignmentStatusType::Assigned => "Assigned".to_string(),
+            AssignmentStatusType::Unassigned => "Unassigned".to_string(),
+            AssignmentStatusType::UnknownVariant(UnknownAssignmentStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssignmentStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            AssignmentStatusType::Any => &"Any",
+            AssignmentStatusType::Assigned => &"Assigned",
+            AssignmentStatusType::Unassigned => &"Unassigned",
+            AssignmentStatusType::UnknownVariant(UnknownAssignmentStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssignmentStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Any" => AssignmentStatusType::Any,
+            "Assigned" => AssignmentStatusType::Assigned,
+            "Unassigned" => AssignmentStatusType::Unassigned,
+            _ => AssignmentStatusType::UnknownVariant(UnknownAssignmentStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssignmentStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Any" => AssignmentStatusType::Any,
+            "Assigned" => AssignmentStatusType::Assigned,
+            "Unassigned" => AssignmentStatusType::Unassigned,
+            _ => AssignmentStatusType::UnknownVariant(UnknownAssignmentStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignmentStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AssignmentStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AssignmentStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachGroupPolicyRequest {
@@ -479,8 +716,14 @@ impl AttachGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
     }
 }
 
@@ -502,8 +745,14 @@ impl AttachRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -525,8 +774,14 @@ impl AttachUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -537,7 +792,7 @@ pub struct AttachedPermissionsBoundary {
     /// <p> The ARN of the policy used to set the permissions boundary for the user or role.</p>
     pub permissions_boundary_arn: Option<String>,
     /// <p> The permissions boundary usage type that indicates what type of IAM resource is used as the permissions boundary for an entity. This data type can only have a value of <code>Policy</code>.</p>
-    pub permissions_boundary_type: Option<String>,
+    pub permissions_boundary_type: Option<PermissionsBoundaryAttachmentType>,
 }
 
 #[allow(dead_code)]
@@ -722,8 +977,14 @@ impl ChangePasswordRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "NewPassword"), &obj.new_password);
-        params.put(&format!("{}{}", prefix, "OldPassword"), &obj.old_password);
+        params.put(
+            &format!("{}{}", prefix, "NewPassword"),
+            &obj.new_password.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "OldPassword"),
+            &obj.old_password.to_string(),
+        );
     }
 }
 
@@ -752,7 +1013,7 @@ impl ClientIDListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -780,7 +1041,7 @@ pub struct ContextEntry {
     /// <p>The full name of a condition context key, including the service prefix. For example, <code>aws:SourceIp</code> or <code>s3:VersionId</code>.</p>
     pub context_key_name: Option<String>,
     /// <p>The data type of the value (or values) specified in the <code>ContextKeyValues</code> parameter.</p>
-    pub context_key_type: Option<String>,
+    pub context_key_type: Option<ContextKeyTypeEnum>,
     /// <p>The value (or values, if the condition context key supports multiple values) to provide to the simulation when the key is referenced by a <code>Condition</code> element in an input policy.</p>
     pub context_key_values: Option<Vec<String>>,
 }
@@ -795,10 +1056,16 @@ impl ContextEntrySerializer {
         }
 
         if let Some(ref field_value) = obj.context_key_name {
-            params.put(&format!("{}{}", prefix, "ContextKeyName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ContextKeyName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.context_key_type {
-            params.put(&format!("{}{}", prefix, "ContextKeyType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ContextKeyType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.context_key_values {
             ContextKeyValueListTypeSerializer::serialize(
@@ -850,13 +1117,169 @@ impl ContextKeyNamesResultListTypeDeserializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContextKeyTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContextKeyTypeEnum {
+    Binary,
+    BinaryList,
+    Boolean,
+    BooleanList,
+    Date,
+    DateList,
+    Ip,
+    IpList,
+    Numeric,
+    NumericList,
+    String,
+    StringList,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContextKeyTypeEnum),
+}
+
+impl Default for ContextKeyTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContextKeyTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContextKeyTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContextKeyTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ContextKeyTypeEnum::Binary => "binary".to_string(),
+            ContextKeyTypeEnum::BinaryList => "binaryList".to_string(),
+            ContextKeyTypeEnum::Boolean => "boolean".to_string(),
+            ContextKeyTypeEnum::BooleanList => "booleanList".to_string(),
+            ContextKeyTypeEnum::Date => "date".to_string(),
+            ContextKeyTypeEnum::DateList => "dateList".to_string(),
+            ContextKeyTypeEnum::Ip => "ip".to_string(),
+            ContextKeyTypeEnum::IpList => "ipList".to_string(),
+            ContextKeyTypeEnum::Numeric => "numeric".to_string(),
+            ContextKeyTypeEnum::NumericList => "numericList".to_string(),
+            ContextKeyTypeEnum::String => "string".to_string(),
+            ContextKeyTypeEnum::StringList => "stringList".to_string(),
+            ContextKeyTypeEnum::UnknownVariant(UnknownContextKeyTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContextKeyTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ContextKeyTypeEnum::Binary => &"binary",
+            ContextKeyTypeEnum::BinaryList => &"binaryList",
+            ContextKeyTypeEnum::Boolean => &"boolean",
+            ContextKeyTypeEnum::BooleanList => &"booleanList",
+            ContextKeyTypeEnum::Date => &"date",
+            ContextKeyTypeEnum::DateList => &"dateList",
+            ContextKeyTypeEnum::Ip => &"ip",
+            ContextKeyTypeEnum::IpList => &"ipList",
+            ContextKeyTypeEnum::Numeric => &"numeric",
+            ContextKeyTypeEnum::NumericList => &"numericList",
+            ContextKeyTypeEnum::String => &"string",
+            ContextKeyTypeEnum::StringList => &"stringList",
+            ContextKeyTypeEnum::UnknownVariant(UnknownContextKeyTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContextKeyTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "binary" => ContextKeyTypeEnum::Binary,
+            "binaryList" => ContextKeyTypeEnum::BinaryList,
+            "boolean" => ContextKeyTypeEnum::Boolean,
+            "booleanList" => ContextKeyTypeEnum::BooleanList,
+            "date" => ContextKeyTypeEnum::Date,
+            "dateList" => ContextKeyTypeEnum::DateList,
+            "ip" => ContextKeyTypeEnum::Ip,
+            "ipList" => ContextKeyTypeEnum::IpList,
+            "numeric" => ContextKeyTypeEnum::Numeric,
+            "numericList" => ContextKeyTypeEnum::NumericList,
+            "string" => ContextKeyTypeEnum::String,
+            "stringList" => ContextKeyTypeEnum::StringList,
+            _ => ContextKeyTypeEnum::UnknownVariant(UnknownContextKeyTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContextKeyTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "binary" => ContextKeyTypeEnum::Binary,
+            "binaryList" => ContextKeyTypeEnum::BinaryList,
+            "boolean" => ContextKeyTypeEnum::Boolean,
+            "booleanList" => ContextKeyTypeEnum::BooleanList,
+            "date" => ContextKeyTypeEnum::Date,
+            "dateList" => ContextKeyTypeEnum::DateList,
+            "ip" => ContextKeyTypeEnum::Ip,
+            "ipList" => ContextKeyTypeEnum::IpList,
+            "numeric" => ContextKeyTypeEnum::Numeric,
+            "numericList" => ContextKeyTypeEnum::NumericList,
+            "string" => ContextKeyTypeEnum::String,
+            "stringList" => ContextKeyTypeEnum::StringList,
+            _ => ContextKeyTypeEnum::UnknownVariant(UnknownContextKeyTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContextKeyTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ContextKeyTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContextKeyTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// Serialize `ContextKeyValueListType` contents to a `SignedRequest`.
 struct ContextKeyValueListTypeSerializer;
 impl ContextKeyValueListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -878,7 +1301,10 @@ impl CreateAccessKeyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -930,7 +1356,10 @@ impl CreateAccountAliasRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
+        params.put(
+            &format!("{}{}", prefix, "AccountAlias"),
+            &obj.account_alias.to_string(),
+        );
     }
 }
 
@@ -952,9 +1381,12 @@ impl CreateGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
     }
 }
@@ -1006,10 +1438,10 @@ impl CreateInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name,
+            &obj.instance_profile_name.to_string(),
         );
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
     }
 }
@@ -1066,14 +1498,20 @@ impl CreateLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Password"), &obj.password);
+        params.put(
+            &format!("{}{}", prefix, "Password"),
+            &obj.password.to_string(),
+        );
         if let Some(ref field_value) = obj.password_reset_required {
             params.put(
                 &format!("{}{}", prefix, "PasswordResetRequired"),
                 &field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -1141,7 +1579,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
             &format!("{}{}", prefix, "ThumbprintList"),
             &obj.thumbprint_list,
         );
-        params.put(&format!("{}{}", prefix, "Url"), &obj.url);
+        params.put(&format!("{}{}", prefix, "Url"), &obj.url.to_string());
     }
 }
 
@@ -1202,16 +1640,22 @@ impl CreatePolicyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document,
+            &obj.policy_document.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -1262,10 +1706,13 @@ impl CreatePolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document,
+            &obj.policy_document.to_string(),
         );
         if let Some(ref field_value) = obj.set_as_default {
             params.put(&format!("{}{}", prefix, "SetAsDefault"), &field_value);
@@ -1337,24 +1784,30 @@ impl CreateRoleRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AssumeRolePolicyDocument"),
-            &obj.assume_role_policy_document,
+            &obj.assume_role_policy_document.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_session_duration {
             params.put(&format!("{}{}", prefix, "MaxSessionDuration"), &field_value);
         }
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.permissions_boundary {
             params.put(
                 &format!("{}{}", prefix, "PermissionsBoundary"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
         if let Some(ref field_value) = obj.tags {
             TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -1406,10 +1859,10 @@ impl CreateSAMLProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         params.put(
             &format!("{}{}", prefix, "SAMLMetadataDocument"),
-            &obj.saml_metadata_document,
+            &obj.saml_metadata_document.to_string(),
         );
     }
 }
@@ -1468,13 +1921,19 @@ impl CreateServiceLinkedRoleRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AWSServiceName"),
-            &obj.aws_service_name,
+            &obj.aws_service_name.to_string(),
         );
         if let Some(ref field_value) = obj.custom_suffix {
-            params.put(&format!("{}{}", prefix, "CustomSuffix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CustomSuffix"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1527,8 +1986,14 @@ impl CreateServiceSpecificCredentialRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ServiceName"), &obj.service_name);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "ServiceName"),
+            &obj.service_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -1589,18 +2054,21 @@ impl CreateUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.permissions_boundary {
             params.put(
                 &format!("{}{}", prefix, "PermissionsBoundary"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.tags {
             TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -1650,11 +2118,11 @@ impl CreateVirtualMFADeviceRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
         params.put(
             &format!("{}{}", prefix, "VirtualMFADeviceName"),
-            &obj.virtual_mfa_device_name,
+            &obj.virtual_mfa_device_name.to_string(),
         );
     }
 }
@@ -1717,8 +2185,14 @@ impl DeactivateMFADeviceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "SerialNumber"),
+            &obj.serial_number.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -1740,9 +2214,15 @@ impl DeleteAccessKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
+        params.put(
+            &format!("{}{}", prefix, "AccessKeyId"),
+            &obj.access_key_id.to_string(),
+        );
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1763,7 +2243,10 @@ impl DeleteAccountAliasRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccountAlias"), &obj.account_alias);
+        params.put(
+            &format!("{}{}", prefix, "AccountAlias"),
+            &obj.account_alias.to_string(),
+        );
     }
 }
 
@@ -1785,8 +2268,14 @@ impl DeleteGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -1806,7 +2295,10 @@ impl DeleteGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
     }
 }
 
@@ -1828,7 +2320,7 @@ impl DeleteInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name,
+            &obj.instance_profile_name.to_string(),
         );
     }
 }
@@ -1849,7 +2341,10 @@ impl DeleteLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -1871,7 +2366,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn,
+            &obj.open_id_connect_provider_arn.to_string(),
         );
     }
 }
@@ -1892,7 +2387,10 @@ impl DeletePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
     }
 }
 
@@ -1914,8 +2412,14 @@ impl DeletePolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "VersionId"),
+            &obj.version_id.to_string(),
+        );
     }
 }
 
@@ -1935,7 +2439,10 @@ impl DeleteRolePermissionsBoundaryRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -1957,8 +2464,14 @@ impl DeleteRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -1978,7 +2491,10 @@ impl DeleteRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -2000,7 +2516,7 @@ impl DeleteSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn,
+            &obj.saml_provider_arn.to_string(),
         );
     }
 }
@@ -2025,9 +2541,12 @@ impl DeleteSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id,
+            &obj.ssh_public_key_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -2049,7 +2568,7 @@ impl DeleteServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name,
+            &obj.server_certificate_name.to_string(),
         );
     }
 }
@@ -2070,7 +2589,10 @@ impl DeleteServiceLinkedRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -2125,10 +2647,13 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id,
+            &obj.service_specific_credential_id.to_string(),
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2153,10 +2678,13 @@ impl DeleteSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateId"),
-            &obj.certificate_id,
+            &obj.certificate_id.to_string(),
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2177,7 +2705,10 @@ impl DeleteUserPermissionsBoundaryRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -2199,8 +2730,14 @@ impl DeleteUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -2220,7 +2757,10 @@ impl DeleteUserRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -2240,7 +2780,10 @@ impl DeleteVirtualMFADeviceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
+        params.put(
+            &format!("{}{}", prefix, "SerialNumber"),
+            &obj.serial_number.to_string(),
+        );
     }
 }
 
@@ -2290,12 +2833,132 @@ impl DeletionTaskIdTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeletionTaskStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeletionTaskStatusType {
+    Failed,
+    InProgress,
+    NotStarted,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeletionTaskStatusType),
+}
+
+impl Default for DeletionTaskStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeletionTaskStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeletionTaskStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeletionTaskStatusType {
+    fn into(self) -> String {
+        match self {
+            DeletionTaskStatusType::Failed => "FAILED".to_string(),
+            DeletionTaskStatusType::InProgress => "IN_PROGRESS".to_string(),
+            DeletionTaskStatusType::NotStarted => "NOT_STARTED".to_string(),
+            DeletionTaskStatusType::Succeeded => "SUCCEEDED".to_string(),
+            DeletionTaskStatusType::UnknownVariant(UnknownDeletionTaskStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeletionTaskStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            DeletionTaskStatusType::Failed => &"FAILED",
+            DeletionTaskStatusType::InProgress => &"IN_PROGRESS",
+            DeletionTaskStatusType::NotStarted => &"NOT_STARTED",
+            DeletionTaskStatusType::Succeeded => &"SUCCEEDED",
+            DeletionTaskStatusType::UnknownVariant(UnknownDeletionTaskStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeletionTaskStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => DeletionTaskStatusType::Failed,
+            "IN_PROGRESS" => DeletionTaskStatusType::InProgress,
+            "NOT_STARTED" => DeletionTaskStatusType::NotStarted,
+            "SUCCEEDED" => DeletionTaskStatusType::Succeeded,
+            _ => DeletionTaskStatusType::UnknownVariant(UnknownDeletionTaskStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeletionTaskStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => DeletionTaskStatusType::Failed,
+            "IN_PROGRESS" => DeletionTaskStatusType::InProgress,
+            "NOT_STARTED" => DeletionTaskStatusType::NotStarted,
+            "SUCCEEDED" => DeletionTaskStatusType::Succeeded,
+            _ => DeletionTaskStatusType::UnknownVariant(UnknownDeletionTaskStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeletionTaskStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for DeletionTaskStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DeletionTaskStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct DeletionTaskStatusTypeDeserializer;
 impl DeletionTaskStatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletionTaskStatusType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -2316,8 +2979,14 @@ impl DetachGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
     }
 }
 
@@ -2339,8 +3008,14 @@ impl DetachRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -2362,8 +3037,14 @@ impl DetachUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -2391,14 +3072,122 @@ impl EnableMFADeviceRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode1"),
-            &obj.authentication_code_1,
+            &obj.authentication_code_1.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode2"),
-            &obj.authentication_code_2,
+            &obj.authentication_code_2.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "SerialNumber"),
+            &obj.serial_number.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncodingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncodingType {
+    Pem,
+    Ssh,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncodingType),
+}
+
+impl Default for EncodingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncodingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncodingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncodingType {
+    fn into(self) -> String {
+        match self {
+            EncodingType::Pem => "PEM".to_string(),
+            EncodingType::Ssh => "SSH".to_string(),
+            EncodingType::UnknownVariant(UnknownEncodingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncodingType {
+    fn into(self) -> &'a str {
+        match self {
+            EncodingType::Pem => &"PEM",
+            EncodingType::Ssh => &"SSH",
+            EncodingType::UnknownVariant(UnknownEncodingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncodingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PEM" => EncodingType::Pem,
+            "SSH" => EncodingType::Ssh,
+            _ => EncodingType::UnknownVariant(UnknownEncodingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncodingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PEM" => EncodingType::Pem,
+            "SSH" => EncodingType::Ssh,
+            _ => EncodingType::UnknownVariant(UnknownEncodingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncodingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EncodingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EncodingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -2467,7 +3256,7 @@ pub struct EntityInfo {
     /// <p>The path to the entity (user or role). For more information about paths, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>. </p>
     pub path: Option<String>,
     /// <p>The type of entity (user or role).</p>
-    pub type_: String,
+    pub type_: PolicyOwnerEntityType,
 }
 
 #[allow(dead_code)]
@@ -2505,10 +3294,10 @@ impl EntityInfoDeserializer {
 /// Serialize `EntityListType` contents to a `SignedRequest`.
 struct EntityListTypeSerializer;
 impl EntityListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<EntityType>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2521,6 +3310,124 @@ impl EntityNameTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityType {
+    AwsmanagedPolicy,
+    Group,
+    LocalManagedPolicy,
+    Role,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityType),
+}
+
+impl Default for EntityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityType {
+    fn into(self) -> String {
+        match self {
+            EntityType::AwsmanagedPolicy => "AWSManagedPolicy".to_string(),
+            EntityType::Group => "Group".to_string(),
+            EntityType::LocalManagedPolicy => "LocalManagedPolicy".to_string(),
+            EntityType::Role => "Role".to_string(),
+            EntityType::User => "User".to_string(),
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityType {
+    fn into(self) -> &'a str {
+        match self {
+            EntityType::AwsmanagedPolicy => &"AWSManagedPolicy",
+            EntityType::Group => &"Group",
+            EntityType::LocalManagedPolicy => &"LocalManagedPolicy",
+            EntityType::Role => &"Role",
+            EntityType::User => &"User",
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSManagedPolicy" => EntityType::AwsmanagedPolicy,
+            "Group" => EntityType::Group,
+            "LocalManagedPolicy" => EntityType::LocalManagedPolicy,
+            "Role" => EntityType::Role,
+            "User" => EntityType::User,
+            _ => EntityType::UnknownVariant(UnknownEntityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSManagedPolicy" => EntityType::AwsmanagedPolicy,
+            "Group" => EntityType::Group,
+            "LocalManagedPolicy" => EntityType::LocalManagedPolicy,
+            "Role" => EntityType::Role,
+            "User" => EntityType::User,
+            _ => EntityType::UnknownVariant(UnknownEntityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EntityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EntityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the reason that the operation failed.</p> <p>This data type is used as a response element in the <a>GetOrganizationsAccessReport</a>, <a>GetServiceLastAccessedDetails</a>, and <a>GetServiceLastAccessedDetailsWithEntities</a> operations.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -2560,7 +3467,8 @@ impl EvalDecisionDetailsTypeDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+    ) -> Result<::std::collections::HashMap<String, PolicyEvaluationDecisionType>, XmlParseError>
+    {
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2592,9 +3500,10 @@ pub struct EvaluationResult {
     /// <p>The name of the API operation tested on the indicated resource.</p>
     pub eval_action_name: String,
     /// <p>The result of the simulation.</p>
-    pub eval_decision: String,
+    pub eval_decision: PolicyEvaluationDecisionType,
     /// <p>Additional details about the results of the cross-account evaluation decision. This parameter is populated for only cross-account simulations. It contains a brief summary of how each policy type contributes to the final evaluation decision.</p> <p>If the simulation evaluates policies within the same account and includes a resource ARN, then the parameter is present but the response is empty. If the simulation evaluates policies within the same account and specifies all resources (<code>*</code>), then the parameter is not returned.</p> <p>When you make a cross-account request, AWS evaluates the request in the trusting account and the trusted account. The request is allowed only if both evaluations return <code>true</code>. For more information about how policies are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies Within a Single Account</a>.</p> <p>If an AWS Organizations SCP included in the evaluation denies access, the simulation ends. In this case, policy evaluation does not proceed any further and this parameter is not returned.</p>
-    pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
+    pub eval_decision_details:
+        Option<::std::collections::HashMap<String, PolicyEvaluationDecisionType>>,
     /// <p>The ARN of the resource that the indicated API operation was tested on.</p>
     pub eval_resource_name: Option<String>,
     /// <p>A list of the statements in the input policies that determine the result for this scenario. Remember that even if multiple statements allow the operation on the resource, if only one statement denies that operation, then the explicit deny overrides any allow. In addition, the deny statement is the only entry included in the result.</p>
@@ -2716,7 +3625,7 @@ pub struct GenerateCredentialReportResponse {
     /// <p>Information about the credential report.</p>
     pub description: Option<String>,
     /// <p>Information about the state of the credential report.</p>
-    pub state: Option<String>,
+    pub state: Option<ReportStateType>,
 }
 
 #[allow(dead_code)]
@@ -2767,11 +3676,14 @@ impl GenerateOrganizationsAccessReportRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EntityPath"), &obj.entity_path);
+        params.put(
+            &format!("{}{}", prefix, "EntityPath"),
+            &obj.entity_path.to_string(),
+        );
         if let Some(ref field_value) = obj.organizations_policy_id {
             params.put(
                 &format!("{}{}", prefix, "OrganizationsPolicyId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -2813,7 +3725,7 @@ pub struct GenerateServiceLastAccessedDetailsRequest {
     /// <p>The ARN of the IAM resource (user, group, role, or managed policy) used to generate information about when the resource was last used in an attempt to access an AWS service.</p>
     pub arn: String,
     /// <p>The level of detail that you want to generate. You can specify whether you want to generate information about the last attempt to access services or actions. If you specify service-level granularity, this operation generates only service data. If you specify action-level granularity, it generates service and action data. If you don't include this optional parameter, the operation generates service data.</p>
-    pub granularity: Option<String>,
+    pub granularity: Option<AccessAdvisorUsageGranularityType>,
 }
 
 /// Serialize `GenerateServiceLastAccessedDetailsRequest` contents to a `SignedRequest`.
@@ -2825,9 +3737,12 @@ impl GenerateServiceLastAccessedDetailsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
+        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn.to_string());
         if let Some(ref field_value) = obj.granularity {
-            params.put(&format!("{}{}", prefix, "Granularity"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Granularity"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2878,7 +3793,10 @@ impl GetAccessKeyLastUsedRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
+        params.put(
+            &format!("{}{}", prefix, "AccessKeyId"),
+            &obj.access_key_id.to_string(),
+        );
     }
 }
 
@@ -2926,7 +3844,7 @@ impl GetAccessKeyLastUsedResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountAuthorizationDetailsRequest {
     /// <p>A list of entity types used to filter the results. Only the entities that match the types you specify are included in the output. Use the value <code>LocalManagedPolicy</code> to include customer managed policies.</p> <p>The format for this parameter is a comma-separated (if more than one) list of strings. Each string value in the list must be one of the valid values listed below.</p>
-    pub filter: Option<Vec<String>>,
+    pub filter: Option<Vec<EntityType>>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
@@ -2950,7 +3868,7 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -3064,7 +3982,7 @@ impl GetAccountPasswordPolicyResponseDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountSummaryResponse {
     /// <p>A set of key–value pairs containing information about IAM entity usage and IAM quotas.</p>
-    pub summary_map: Option<::std::collections::HashMap<String, i64>>,
+    pub summary_map: Option<::std::collections::HashMap<SummaryKeyType, i64>>,
 }
 
 #[allow(dead_code)]
@@ -3180,7 +4098,7 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "PolicySourceArn"),
-            &obj.policy_source_arn,
+            &obj.policy_source_arn.to_string(),
         );
     }
 }
@@ -3194,7 +4112,7 @@ pub struct GetCredentialReportResponse {
     /// <p> The date and time when the credential report was created, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>.</p>
     pub generated_time: Option<String>,
     /// <p>The format (MIME type) of the credential report.</p>
-    pub report_format: Option<String>,
+    pub report_format: Option<ReportFormatType>,
 }
 
 #[allow(dead_code)]
@@ -3250,8 +4168,14 @@ impl GetGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -3313,9 +4237,12 @@ impl GetGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -3387,7 +4314,7 @@ impl GetInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name,
+            &obj.instance_profile_name.to_string(),
         );
     }
 }
@@ -3440,7 +4367,10 @@ impl GetLoginProfileRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -3494,7 +4424,7 @@ impl GetOpenIDConnectProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn,
+            &obj.open_id_connect_provider_arn.to_string(),
         );
     }
 }
@@ -3562,7 +4492,7 @@ pub struct GetOrganizationsAccessReportRequest {
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
     /// <p>The key that is used to sort the results. If you choose the namespace key, the results are returned in alphabetical order. If you choose the time key, the results are sorted numerically by the date and time.</p>
-    pub sort_key: Option<String>,
+    pub sort_key: Option<SortKeyType>,
 }
 
 /// Serialize `GetOrganizationsAccessReportRequest` contents to a `SignedRequest`.
@@ -3574,15 +4504,18 @@ impl GetOrganizationsAccessReportRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id.to_string());
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.sort_key {
-            params.put(&format!("{}{}", prefix, "SortKey"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SortKey"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3600,7 +4533,7 @@ pub struct GetOrganizationsAccessReportResponse {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the report job was created.</p>
     pub job_creation_date: String,
     /// <p>The status of the job.</p>
-    pub job_status: String,
+    pub job_status: JobStatusType,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
     /// <p>The number of services that the applicable SCPs allow account principals to access.</p>
@@ -3691,7 +4624,10 @@ impl GetPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
     }
 }
 
@@ -3740,8 +4676,14 @@ impl GetPolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "VersionId"),
+            &obj.version_id.to_string(),
+        );
     }
 }
 
@@ -3797,8 +4739,14 @@ impl GetRolePolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -3856,7 +4804,10 @@ impl GetRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -3905,7 +4856,7 @@ impl GetSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn,
+            &obj.saml_provider_arn.to_string(),
         );
     }
 }
@@ -3961,7 +4912,7 @@ impl GetSAMLProviderResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSSHPublicKeyRequest {
     /// <p>Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use <code>SSH</code>. To retrieve the public key in PEM format, use <code>PEM</code>.</p>
-    pub encoding: String,
+    pub encoding: EncodingType,
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
     /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
@@ -3977,12 +4928,18 @@ impl GetSSHPublicKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Encoding"), &obj.encoding);
+        params.put(
+            &format!("{}{}", prefix, "Encoding"),
+            &obj.encoding.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id,
+            &obj.ssh_public_key_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -4038,7 +4995,7 @@ impl GetServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name,
+            &obj.server_certificate_name.to_string(),
         );
     }
 }
@@ -4095,9 +5052,9 @@ impl GetServiceLastAccessedDetailsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id.to_string());
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -4117,9 +5074,9 @@ pub struct GetServiceLastAccessedDetailsResponse {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the report job was created.</p>
     pub job_creation_date: String,
     /// <p>The status of the job.</p>
-    pub job_status: String,
+    pub job_status: JobStatusType,
     /// <p>The type of job. Service jobs return information about when each service was last accessed. Action jobs also include information about when tracked actions within the service were last accessed.</p>
-    pub job_type: Option<String>,
+    pub job_type: Option<AccessAdvisorUsageGranularityType>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
     /// <p> A <code>ServiceLastAccessed</code> object that contains details about the most recent attempt to access the service.</p>
@@ -4210,16 +5167,16 @@ impl GetServiceLastAccessedDetailsWithEntitiesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id.to_string());
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ServiceNamespace"),
-            &obj.service_namespace,
+            &obj.service_namespace.to_string(),
         );
     }
 }
@@ -4238,7 +5195,7 @@ pub struct GetServiceLastAccessedDetailsWithEntitiesResponse {
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the report job was created.</p>
     pub job_creation_date: String,
     /// <p>The status of the job.</p>
-    pub job_status: String,
+    pub job_status: JobStatusType,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
 }
@@ -4313,7 +5270,7 @@ impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DeletionTaskId"),
-            &obj.deletion_task_id,
+            &obj.deletion_task_id.to_string(),
         );
     }
 }
@@ -4324,7 +5281,7 @@ pub struct GetServiceLinkedRoleDeletionStatusResponse {
     /// <p>An object that contains details about the reason the deletion failed.</p>
     pub reason: Option<DeletionTaskFailureReasonType>,
     /// <p>The status of the deletion.</p>
-    pub status: String,
+    pub status: DeletionTaskStatusType,
 }
 
 #[allow(dead_code)]
@@ -4374,8 +5331,14 @@ impl GetUserPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -4435,7 +5398,10 @@ impl GetUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4467,6 +5433,115 @@ impl GetUserResponseDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalEndpointTokenVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalEndpointTokenVersion {
+    V1Token,
+    V2Token,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalEndpointTokenVersion),
+}
+
+impl Default for GlobalEndpointTokenVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalEndpointTokenVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalEndpointTokenVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalEndpointTokenVersion {
+    fn into(self) -> String {
+        match self {
+            GlobalEndpointTokenVersion::V1Token => "v1Token".to_string(),
+            GlobalEndpointTokenVersion::V2Token => "v2Token".to_string(),
+            GlobalEndpointTokenVersion::UnknownVariant(UnknownGlobalEndpointTokenVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalEndpointTokenVersion {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalEndpointTokenVersion::V1Token => &"v1Token",
+            GlobalEndpointTokenVersion::V2Token => &"v2Token",
+            GlobalEndpointTokenVersion::UnknownVariant(UnknownGlobalEndpointTokenVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GlobalEndpointTokenVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "v1Token" => GlobalEndpointTokenVersion::V1Token,
+            "v2Token" => GlobalEndpointTokenVersion::V2Token,
+            _ => GlobalEndpointTokenVersion::UnknownVariant(UnknownGlobalEndpointTokenVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GlobalEndpointTokenVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "v1Token" => GlobalEndpointTokenVersion::V1Token,
+            "v2Token" => GlobalEndpointTokenVersion::V2Token,
+            _ => GlobalEndpointTokenVersion::UnknownVariant(UnknownGlobalEndpointTokenVersion {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalEndpointTokenVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for GlobalEndpointTokenVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GlobalEndpointTokenVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -4744,12 +5819,123 @@ impl JobIDTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatusType {
+    Completed,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatusType),
+}
+
+impl Default for JobStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatusType {
+    fn into(self) -> String {
+        match self {
+            JobStatusType::Completed => "COMPLETED".to_string(),
+            JobStatusType::Failed => "FAILED".to_string(),
+            JobStatusType::InProgress => "IN_PROGRESS".to_string(),
+            JobStatusType::UnknownVariant(UnknownJobStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatusType::Completed => &"COMPLETED",
+            JobStatusType::Failed => &"FAILED",
+            JobStatusType::InProgress => &"IN_PROGRESS",
+            JobStatusType::UnknownVariant(UnknownJobStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => JobStatusType::Completed,
+            "FAILED" => JobStatusType::Failed,
+            "IN_PROGRESS" => JobStatusType::InProgress,
+            _ => JobStatusType::UnknownVariant(UnknownJobStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => JobStatusType::Completed,
+            "FAILED" => JobStatusType::Failed,
+            "IN_PROGRESS" => JobStatusType::InProgress,
+            _ => JobStatusType::UnknownVariant(UnknownJobStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for JobStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for JobStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct JobStatusTypeDeserializer;
 impl JobStatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<JobStatusType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -4781,13 +5967,16 @@ impl ListAccessKeysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4856,7 +6045,7 @@ impl ListAccountAliasesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -4934,15 +6123,21 @@ impl ListAttachedGroupPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5019,15 +6214,21 @@ impl ListAttachedRolePoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -5103,15 +6304,21 @@ impl ListAttachedUserPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -5168,7 +6375,7 @@ impl ListAttachedUserPoliciesResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesForPolicyRequest {
     /// <p>The entity type to use for filtering the results.</p> <p>For example, when <code>EntityFilter</code> is <code>Role</code>, only the roles that are attached to the specified policy are returned. This parameter is optional. If it is not included, all attached entities (users, groups, and roles) are returned. The argument for this parameter must be one of the valid values listed below.</p>
-    pub entity_filter: Option<String>,
+    pub entity_filter: Option<EntityType>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
@@ -5178,7 +6385,7 @@ pub struct ListEntitiesForPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
     /// <p>The policy usage method to use for filtering the results.</p> <p>To list only permissions policies, set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the policies used to set permissions boundaries, set the value to <code>PermissionsBoundary</code>.</p> <p>This parameter is optional. If it is not included, all policies are returned. </p>
-    pub policy_usage_filter: Option<String>,
+    pub policy_usage_filter: Option<PolicyUsageType>,
 }
 
 /// Serialize `ListEntitiesForPolicyRequest` contents to a `SignedRequest`.
@@ -5191,20 +6398,32 @@ impl ListEntitiesForPolicyRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.entity_filter {
-            params.put(&format!("{}{}", prefix, "EntityFilter"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EntityFilter"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
         if let Some(ref field_value) = obj.policy_usage_filter {
-            params.put(&format!("{}{}", prefix, "PolicyUsageFilter"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PolicyUsageFilter"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5289,9 +6508,12 @@ impl ListGroupPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -5368,12 +6590,15 @@ impl ListGroupsForUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -5443,13 +6668,16 @@ impl ListGroupsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5516,12 +6744,15 @@ impl ListInstanceProfilesForRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -5595,13 +6826,16 @@ impl ListInstanceProfilesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5676,13 +6910,16 @@ impl ListMFADevicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5846,9 +7083,9 @@ impl ListPoliciesGrantingServiceAccessRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
+        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn.to_string());
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         ServiceNamespaceListTypeSerializer::serialize(
             params,
@@ -5913,9 +7150,9 @@ pub struct ListPoliciesRequest {
     /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
     /// <p>The policy usage method to use for filtering the results.</p> <p>To list only permissions policies, set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the policies used to set permissions boundaries, set the value to <code>PermissionsBoundary</code>.</p> <p>This parameter is optional. If it is not included, all policies are returned. </p>
-    pub policy_usage_filter: Option<String>,
+    pub policy_usage_filter: Option<PolicyUsageType>,
     /// <p>The scope to use for filtering the results.</p> <p>To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>. To list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>.</p> <p>This parameter is optional. If it is not included, or if it is set to <code>All</code>, all policies are returned.</p>
-    pub scope: Option<String>,
+    pub scope: Option<PolicyScopeType>,
 }
 
 /// Serialize `ListPoliciesRequest` contents to a `SignedRequest`.
@@ -5928,7 +7165,7 @@ impl ListPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -5937,13 +7174,19 @@ impl ListPoliciesRequestSerializer {
             params.put(&format!("{}{}", prefix, "OnlyAttached"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.policy_usage_filter {
-            params.put(&format!("{}{}", prefix, "PolicyUsageFilter"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PolicyUsageFilter"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.scope {
-            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value.to_string());
         }
     }
 }
@@ -6033,12 +7276,15 @@ impl ListPolicyVersionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
     }
 }
 
@@ -6111,12 +7357,15 @@ impl ListRolePoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -6189,12 +7438,15 @@ impl ListRoleTagsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -6259,13 +7511,16 @@ impl ListRolesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6383,13 +7638,16 @@ impl ListSSHPublicKeysRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6461,13 +7719,16 @@ impl ListServerCertificatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6540,10 +7801,16 @@ impl ListServiceSpecificCredentialsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.service_name {
-            params.put(&format!("{}{}", prefix, "ServiceName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ServiceName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6604,13 +7871,16 @@ impl ListSigningCertificatesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6684,12 +7954,15 @@ impl ListUserPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -6762,12 +8035,15 @@ impl ListUserTagsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -6832,13 +8108,16 @@ impl ListUsersRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.path_prefix {
-            params.put(&format!("{}{}", prefix, "PathPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PathPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6888,7 +8167,7 @@ impl ListUsersResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualMFADevicesRequest {
     /// <p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the operation defaults to <code>Any</code>, which lists both assigned and unassigned virtual MFA devices.,</p>
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatusType>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
@@ -6905,10 +8184,13 @@ impl ListVirtualMFADevicesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.assignment_status {
-            params.put(&format!("{}{}", prefix, "AssignmentStatus"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AssignmentStatus"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -7427,12 +8709,129 @@ impl PathTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermissionsBoundaryAttachmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PermissionsBoundaryAttachmentType {
+    PermissionsBoundaryPolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermissionsBoundaryAttachmentType),
+}
+
+impl Default for PermissionsBoundaryAttachmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PermissionsBoundaryAttachmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PermissionsBoundaryAttachmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PermissionsBoundaryAttachmentType {
+    fn into(self) -> String {
+        match self {
+            PermissionsBoundaryAttachmentType::PermissionsBoundaryPolicy => {
+                "PermissionsBoundaryPolicy".to_string()
+            }
+            PermissionsBoundaryAttachmentType::UnknownVariant(
+                UnknownPermissionsBoundaryAttachmentType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PermissionsBoundaryAttachmentType {
+    fn into(self) -> &'a str {
+        match self {
+            PermissionsBoundaryAttachmentType::PermissionsBoundaryPolicy => {
+                &"PermissionsBoundaryPolicy"
+            }
+            PermissionsBoundaryAttachmentType::UnknownVariant(
+                UnknownPermissionsBoundaryAttachmentType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for PermissionsBoundaryAttachmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PermissionsBoundaryPolicy" => {
+                PermissionsBoundaryAttachmentType::PermissionsBoundaryPolicy
+            }
+            _ => PermissionsBoundaryAttachmentType::UnknownVariant(
+                UnknownPermissionsBoundaryAttachmentType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for PermissionsBoundaryAttachmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PermissionsBoundaryPolicy" => {
+                PermissionsBoundaryAttachmentType::PermissionsBoundaryPolicy
+            }
+            _ => PermissionsBoundaryAttachmentType::UnknownVariant(
+                UnknownPermissionsBoundaryAttachmentType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PermissionsBoundaryAttachmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PermissionsBoundaryAttachmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PermissionsBoundaryAttachmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PermissionsBoundaryAttachmentTypeDeserializer;
 impl PermissionsBoundaryAttachmentTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PermissionsBoundaryAttachmentType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Contains information about the effect that a permissions boundary has on a policy simulation when the boundary is applied to an IAM entity.</p>
@@ -7652,12 +9051,133 @@ impl PolicyDocumentVersionListTypeDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyEvaluationDecisionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyEvaluationDecisionType {
+    Allowed,
+    ExplicitDeny,
+    ImplicitDeny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyEvaluationDecisionType),
+}
+
+impl Default for PolicyEvaluationDecisionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyEvaluationDecisionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyEvaluationDecisionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyEvaluationDecisionType {
+    fn into(self) -> String {
+        match self {
+            PolicyEvaluationDecisionType::Allowed => "allowed".to_string(),
+            PolicyEvaluationDecisionType::ExplicitDeny => "explicitDeny".to_string(),
+            PolicyEvaluationDecisionType::ImplicitDeny => "implicitDeny".to_string(),
+            PolicyEvaluationDecisionType::UnknownVariant(UnknownPolicyEvaluationDecisionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyEvaluationDecisionType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyEvaluationDecisionType::Allowed => &"allowed",
+            PolicyEvaluationDecisionType::ExplicitDeny => &"explicitDeny",
+            PolicyEvaluationDecisionType::ImplicitDeny => &"implicitDeny",
+            PolicyEvaluationDecisionType::UnknownVariant(UnknownPolicyEvaluationDecisionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyEvaluationDecisionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "allowed" => PolicyEvaluationDecisionType::Allowed,
+            "explicitDeny" => PolicyEvaluationDecisionType::ExplicitDeny,
+            "implicitDeny" => PolicyEvaluationDecisionType::ImplicitDeny,
+            _ => {
+                PolicyEvaluationDecisionType::UnknownVariant(UnknownPolicyEvaluationDecisionType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for PolicyEvaluationDecisionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "allowed" => PolicyEvaluationDecisionType::Allowed,
+            "explicitDeny" => PolicyEvaluationDecisionType::ExplicitDeny,
+            "implicitDeny" => PolicyEvaluationDecisionType::ImplicitDeny,
+            _ => {
+                PolicyEvaluationDecisionType::UnknownVariant(UnknownPolicyEvaluationDecisionType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyEvaluationDecisionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PolicyEvaluationDecisionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PolicyEvaluationDecisionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PolicyEvaluationDecisionTypeDeserializer;
 impl PolicyEvaluationDecisionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyEvaluationDecisionType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is an element of the <a>ListPoliciesGrantingServiceAccessEntry</a> object.</p>
@@ -7667,12 +9187,12 @@ pub struct PolicyGrantingServiceAccess {
     /// <p>The name of the entity (user or role) to which the inline policy is attached.</p> <p>This field is null for managed policies. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     pub entity_name: Option<String>,
     /// <p>The type of entity (user or role) that used the policy to access the service to which the inline policy is attached.</p> <p>This field is null for managed policies. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    pub entity_type: Option<String>,
+    pub entity_type: Option<PolicyOwnerEntityType>,
     pub policy_arn: Option<String>,
     /// <p>The policy name.</p>
     pub policy_name: String,
     /// <p>The policy type. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    pub policy_type: String,
+    pub policy_type: PolicyType,
 }
 
 #[allow(dead_code)]
@@ -7841,12 +9361,127 @@ impl PolicyNameTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyOwnerEntityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyOwnerEntityType {
+    Group,
+    Role,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyOwnerEntityType),
+}
+
+impl Default for PolicyOwnerEntityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyOwnerEntityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyOwnerEntityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyOwnerEntityType {
+    fn into(self) -> String {
+        match self {
+            PolicyOwnerEntityType::Group => "GROUP".to_string(),
+            PolicyOwnerEntityType::Role => "ROLE".to_string(),
+            PolicyOwnerEntityType::User => "USER".to_string(),
+            PolicyOwnerEntityType::UnknownVariant(UnknownPolicyOwnerEntityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyOwnerEntityType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyOwnerEntityType::Group => &"GROUP",
+            PolicyOwnerEntityType::Role => &"ROLE",
+            PolicyOwnerEntityType::User => &"USER",
+            PolicyOwnerEntityType::UnknownVariant(UnknownPolicyOwnerEntityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyOwnerEntityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GROUP" => PolicyOwnerEntityType::Group,
+            "ROLE" => PolicyOwnerEntityType::Role,
+            "USER" => PolicyOwnerEntityType::User,
+            _ => PolicyOwnerEntityType::UnknownVariant(UnknownPolicyOwnerEntityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyOwnerEntityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GROUP" => PolicyOwnerEntityType::Group,
+            "ROLE" => PolicyOwnerEntityType::Role,
+            "USER" => PolicyOwnerEntityType::User,
+            _ => PolicyOwnerEntityType::UnknownVariant(UnknownPolicyOwnerEntityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyOwnerEntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PolicyOwnerEntityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PolicyOwnerEntityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PolicyOwnerEntityTypeDeserializer;
 impl PolicyOwnerEntityTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyOwnerEntityType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -7907,22 +9542,474 @@ impl PolicyRoleListTypeDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyScopeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyScopeType {
+    Aws,
+    All,
+    Local,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyScopeType),
+}
+
+impl Default for PolicyScopeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyScopeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyScopeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyScopeType {
+    fn into(self) -> String {
+        match self {
+            PolicyScopeType::Aws => "AWS".to_string(),
+            PolicyScopeType::All => "All".to_string(),
+            PolicyScopeType::Local => "Local".to_string(),
+            PolicyScopeType::UnknownVariant(UnknownPolicyScopeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyScopeType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyScopeType::Aws => &"AWS",
+            PolicyScopeType::All => &"All",
+            PolicyScopeType::Local => &"Local",
+            PolicyScopeType::UnknownVariant(UnknownPolicyScopeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyScopeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => PolicyScopeType::Aws,
+            "All" => PolicyScopeType::All,
+            "Local" => PolicyScopeType::Local,
+            _ => PolicyScopeType::UnknownVariant(UnknownPolicyScopeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyScopeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => PolicyScopeType::Aws,
+            "All" => PolicyScopeType::All,
+            "Local" => PolicyScopeType::Local,
+            _ => PolicyScopeType::UnknownVariant(UnknownPolicyScopeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyScopeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PolicyScopeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PolicyScopeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicySourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicySourceType {
+    AwsManaged,
+    Group,
+    None,
+    Resource,
+    Role,
+    User,
+    UserManaged,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicySourceType),
+}
+
+impl Default for PolicySourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicySourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicySourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicySourceType {
+    fn into(self) -> String {
+        match self {
+            PolicySourceType::AwsManaged => "aws-managed".to_string(),
+            PolicySourceType::Group => "group".to_string(),
+            PolicySourceType::None => "none".to_string(),
+            PolicySourceType::Resource => "resource".to_string(),
+            PolicySourceType::Role => "role".to_string(),
+            PolicySourceType::User => "user".to_string(),
+            PolicySourceType::UserManaged => "user-managed".to_string(),
+            PolicySourceType::UnknownVariant(UnknownPolicySourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicySourceType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicySourceType::AwsManaged => &"aws-managed",
+            PolicySourceType::Group => &"group",
+            PolicySourceType::None => &"none",
+            PolicySourceType::Resource => &"resource",
+            PolicySourceType::Role => &"role",
+            PolicySourceType::User => &"user",
+            PolicySourceType::UserManaged => &"user-managed",
+            PolicySourceType::UnknownVariant(UnknownPolicySourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PolicySourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "aws-managed" => PolicySourceType::AwsManaged,
+            "group" => PolicySourceType::Group,
+            "none" => PolicySourceType::None,
+            "resource" => PolicySourceType::Resource,
+            "role" => PolicySourceType::Role,
+            "user" => PolicySourceType::User,
+            "user-managed" => PolicySourceType::UserManaged,
+            _ => PolicySourceType::UnknownVariant(UnknownPolicySourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicySourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aws-managed" => PolicySourceType::AwsManaged,
+            "group" => PolicySourceType::Group,
+            "none" => PolicySourceType::None,
+            "resource" => PolicySourceType::Resource,
+            "role" => PolicySourceType::Role,
+            "user" => PolicySourceType::User,
+            "user-managed" => PolicySourceType::UserManaged,
+            _ => PolicySourceType::UnknownVariant(UnknownPolicySourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicySourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PolicySourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PolicySourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PolicySourceTypeDeserializer;
 impl PolicySourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicySourceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyType {
+    Inline,
+    Managed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyType),
+}
+
+impl Default for PolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyType {
+    fn into(self) -> String {
+        match self {
+            PolicyType::Inline => "INLINE".to_string(),
+            PolicyType::Managed => "MANAGED".to_string(),
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyType::Inline => &"INLINE",
+            PolicyType::Managed => &"MANAGED",
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INLINE" => PolicyType::Inline,
+            "MANAGED" => PolicyType::Managed,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INLINE" => PolicyType::Inline,
+            "MANAGED" => PolicyType::Managed,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PolicyTypeDeserializer;
 impl PolicyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+/// <p>The policy usage type that indicates whether the policy is used as a permissions policy or as the permissions boundary for an entity.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyUsageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyUsageType {
+    PermissionsBoundary,
+    PermissionsPolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyUsageType),
+}
+
+impl Default for PolicyUsageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyUsageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyUsageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyUsageType {
+    fn into(self) -> String {
+        match self {
+            PolicyUsageType::PermissionsBoundary => "PermissionsBoundary".to_string(),
+            PolicyUsageType::PermissionsPolicy => "PermissionsPolicy".to_string(),
+            PolicyUsageType::UnknownVariant(UnknownPolicyUsageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyUsageType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyUsageType::PermissionsBoundary => &"PermissionsBoundary",
+            PolicyUsageType::PermissionsPolicy => &"PermissionsPolicy",
+            PolicyUsageType::UnknownVariant(UnknownPolicyUsageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyUsageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PermissionsBoundary" => PolicyUsageType::PermissionsBoundary,
+            "PermissionsPolicy" => PolicyUsageType::PermissionsPolicy,
+            _ => PolicyUsageType::UnknownVariant(UnknownPolicyUsageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyUsageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PermissionsBoundary" => PolicyUsageType::PermissionsBoundary,
+            "PermissionsPolicy" => PolicyUsageType::PermissionsPolicy,
+            _ => PolicyUsageType::UnknownVariant(UnknownPolicyUsageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyUsageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PolicyUsageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PolicyUsageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about a user that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -8107,12 +10194,18 @@ impl PutGroupPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document,
+            &obj.policy_document.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -8136,9 +10229,12 @@ impl PutRolePermissionsBoundaryRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PermissionsBoundary"),
-            &obj.permissions_boundary,
+            &obj.permissions_boundary.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -8164,10 +10260,16 @@ impl PutRolePolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document,
+            &obj.policy_document.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -8191,9 +10293,12 @@ impl PutUserPermissionsBoundaryRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PermissionsBoundary"),
-            &obj.permissions_boundary,
+            &obj.permissions_boundary.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -8219,10 +10324,16 @@ impl PutUserPolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document,
+            &obj.policy_document.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -8264,10 +10375,13 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ClientID"), &obj.client_id);
+        params.put(
+            &format!("{}{}", prefix, "ClientID"),
+            &obj.client_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn,
+            &obj.open_id_connect_provider_arn.to_string(),
         );
     }
 }
@@ -8292,9 +10406,12 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "InstanceProfileName"),
-            &obj.instance_profile_name,
+            &obj.instance_profile_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -8316,8 +10433,14 @@ impl RemoveUserFromGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -8332,12 +10455,117 @@ impl ReportContentTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportFormatType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportFormatType {
+    TextCsv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportFormatType),
+}
+
+impl Default for ReportFormatType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportFormatType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportFormatType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportFormatType {
+    fn into(self) -> String {
+        match self {
+            ReportFormatType::TextCsv => "text/csv".to_string(),
+            ReportFormatType::UnknownVariant(UnknownReportFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportFormatType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportFormatType::TextCsv => &"text/csv",
+            ReportFormatType::UnknownVariant(UnknownReportFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReportFormatType {
+    fn from(name: &str) -> Self {
+        match name {
+            "text/csv" => ReportFormatType::TextCsv,
+            _ => ReportFormatType::UnknownVariant(UnknownReportFormatType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportFormatType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "text/csv" => ReportFormatType::TextCsv,
+            _ => ReportFormatType::UnknownVariant(UnknownReportFormatType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReportFormatType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportFormatType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReportFormatTypeDeserializer;
 impl ReportFormatTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReportFormatType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8348,12 +10576,123 @@ impl ReportStateDescriptionTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportStateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportStateType {
+    Complete,
+    Inprogress,
+    Started,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportStateType),
+}
+
+impl Default for ReportStateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportStateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportStateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportStateType {
+    fn into(self) -> String {
+        match self {
+            ReportStateType::Complete => "COMPLETE".to_string(),
+            ReportStateType::Inprogress => "INPROGRESS".to_string(),
+            ReportStateType::Started => "STARTED".to_string(),
+            ReportStateType::UnknownVariant(UnknownReportStateType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportStateType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportStateType::Complete => &"COMPLETE",
+            ReportStateType::Inprogress => &"INPROGRESS",
+            ReportStateType::Started => &"STARTED",
+            ReportStateType::UnknownVariant(UnknownReportStateType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportStateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ReportStateType::Complete,
+            "INPROGRESS" => ReportStateType::Inprogress,
+            "STARTED" => ReportStateType::Started,
+            _ => ReportStateType::UnknownVariant(UnknownReportStateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportStateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ReportStateType::Complete,
+            "INPROGRESS" => ReportStateType::Inprogress,
+            "STARTED" => ReportStateType::Started,
+            _ => ReportStateType::UnknownVariant(UnknownReportStateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportStateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReportStateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportStateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReportStateTypeDeserializer;
 impl ReportStateTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReportStateType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -8376,10 +10715,13 @@ impl ResetServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id,
+            &obj.service_specific_credential_id.to_string(),
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -8425,7 +10767,7 @@ impl ResourceNameListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -8443,9 +10785,10 @@ impl ResourceNameTypeDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceSpecificResult {
     /// <p>Additional details about the results of the evaluation decision on a single resource. This parameter is returned only for cross-account simulations. This parameter explains how each policy type contributes to the resource-specific evaluation decision.</p>
-    pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
+    pub eval_decision_details:
+        Option<::std::collections::HashMap<String, PolicyEvaluationDecisionType>>,
     /// <p>The result of the simulation of the simulated API operation on the resource specified in <code>EvalResourceName</code>.</p>
-    pub eval_resource_decision: String,
+    pub eval_resource_decision: PolicyEvaluationDecisionType,
     /// <p>The name of the simulated resource, in Amazon Resource Name (ARN) format.</p>
     pub eval_resource_name: String,
     /// <p>A list of the statements in the input policies that determine the result for this part of the simulation. Remember that even if multiple statements allow the operation on the resource, if <i>any</i> statement denies that operation, then the explicit deny overrides any allow. In addition, the deny statement is the only entry included in the result.</p>
@@ -8562,14 +10905,20 @@ impl ResyncMFADeviceRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode1"),
-            &obj.authentication_code_1,
+            &obj.authentication_code_1.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "AuthenticationCode2"),
-            &obj.authentication_code_2,
+            &obj.authentication_code_2.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "SerialNumber"), &obj.serial_number);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "SerialNumber"),
+            &obj.serial_number.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -8994,7 +11343,7 @@ pub struct SSHPublicKey {
     /// <p>The unique identifier for the SSH public key.</p>
     pub ssh_public_key_id: String,
     /// <p>The status of the SSH public key. <code>Active</code> means that the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means that the key cannot be used.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the SSH public key was uploaded.</p>
     pub upload_date: Option<String>,
     /// <p>The name of the IAM user associated with the SSH public key.</p>
@@ -9065,7 +11414,7 @@ pub struct SSHPublicKeyMetadata {
     /// <p>The unique identifier for the SSH public key.</p>
     pub ssh_public_key_id: String,
     /// <p>The status of the SSH public key. <code>Active</code> means that the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means that the key cannot be used.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the SSH public key was uploaded.</p>
     pub upload_date: String,
     /// <p>The name of the IAM user associated with the SSH public key.</p>
@@ -9344,7 +11693,7 @@ impl ServiceNamespaceListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -9380,7 +11729,7 @@ pub struct ServiceSpecificCredential {
     /// <p>The generated user name for the service-specific credential. This value is generated by combining the IAM user's name combined with the ID number of the AWS account, as in <code>jane-at-123456789012</code>, for example. This value cannot be configured by the user.</p>
     pub service_user_name: String,
     /// <p>The status of the service-specific credential. <code>Active</code> means that the key is valid for API calls, while <code>Inactive</code> means it is not.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the IAM user associated with the service-specific credential.</p>
     pub user_name: String,
 }
@@ -9454,7 +11803,7 @@ pub struct ServiceSpecificCredentialMetadata {
     /// <p>The generated user name for the service-specific credential.</p>
     pub service_user_name: String,
     /// <p>The status of the service-specific credential. <code>Active</code> means that the key is valid for API calls, while <code>Inactive</code> means it is not.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the IAM user associated with the service-specific credential.</p>
     pub user_name: String,
 }
@@ -9569,8 +11918,14 @@ impl SetDefaultPolicyVersionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PolicyArn"), &obj.policy_arn);
-        params.put(&format!("{}{}", prefix, "VersionId"), &obj.version_id);
+        params.put(
+            &format!("{}{}", prefix, "PolicyArn"),
+            &obj.policy_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "VersionId"),
+            &obj.version_id.to_string(),
+        );
     }
 }
 
@@ -9578,7 +11933,7 @@ impl SetDefaultPolicyVersionRequestSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSecurityTokenServicePreferencesRequest {
     /// <p>The version of the global endpoint token. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens.</p> <p>For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
-    pub global_endpoint_token_version: String,
+    pub global_endpoint_token_version: GlobalEndpointTokenVersion,
 }
 
 /// Serialize `SetSecurityTokenServicePreferencesRequest` contents to a `SignedRequest`.
@@ -9592,7 +11947,7 @@ impl SetSecurityTokenServicePreferencesRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "GlobalEndpointTokenVersion"),
-            &obj.global_endpoint_token_version,
+            &obj.global_endpoint_token_version.to_string(),
         );
     }
 }
@@ -9606,7 +11961,7 @@ pub struct SigningCertificate {
     /// <p>The ID for the signing certificate.</p>
     pub certificate_id: String,
     /// <p>The status of the signing certificate. <code>Active</code> means that the key is valid for API calls, while <code>Inactive</code> means it is not.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The date when the signing certificate was uploaded.</p>
     pub upload_date: Option<String>,
     /// <p>The name of the user the signing certificate is associated with.</p>
@@ -9688,7 +12043,10 @@ impl SimulateCustomPolicyRequestSerializer {
             &obj.action_names,
         );
         if let Some(ref field_value) = obj.caller_arn {
-            params.put(&format!("{}{}", prefix, "CallerArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CallerArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.context_entries {
             ContextEntryListTypeSerializer::serialize(
@@ -9698,7 +12056,7 @@ impl SimulateCustomPolicyRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -9725,14 +12083,20 @@ impl SimulateCustomPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_handling_option {
             params.put(
                 &format!("{}{}", prefix, "ResourceHandlingOption"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.resource_owner {
-            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceOwner"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_policy {
-            params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourcePolicy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -9826,7 +12190,10 @@ impl SimulatePrincipalPolicyRequestSerializer {
             &obj.action_names,
         );
         if let Some(ref field_value) = obj.caller_arn {
-            params.put(&format!("{}{}", prefix, "CallerArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CallerArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.context_entries {
             ContextEntryListTypeSerializer::serialize(
@@ -9836,7 +12203,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
@@ -9857,7 +12224,7 @@ impl SimulatePrincipalPolicyRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "PolicySourceArn"),
-            &obj.policy_source_arn,
+            &obj.policy_source_arn.to_string(),
         );
         if let Some(ref field_value) = obj.resource_arns {
             ResourceNameListTypeSerializer::serialize(
@@ -9869,14 +12236,20 @@ impl SimulatePrincipalPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_handling_option {
             params.put(
                 &format!("{}{}", prefix, "ResourceHandlingOption"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.resource_owner {
-            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceOwner"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_policy {
-            params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourcePolicy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -9887,8 +12260,124 @@ impl SimulationPolicyListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortKeyType {
+    LastAuthenticatedTimeAscending,
+    LastAuthenticatedTimeDescending,
+    ServiceNamespaceAscending,
+    ServiceNamespaceDescending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortKeyType),
+}
+
+impl Default for SortKeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortKeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortKeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortKeyType {
+    fn into(self) -> String {
+        match self {
+            SortKeyType::LastAuthenticatedTimeAscending => {
+                "LAST_AUTHENTICATED_TIME_ASCENDING".to_string()
+            }
+            SortKeyType::LastAuthenticatedTimeDescending => {
+                "LAST_AUTHENTICATED_TIME_DESCENDING".to_string()
+            }
+            SortKeyType::ServiceNamespaceAscending => "SERVICE_NAMESPACE_ASCENDING".to_string(),
+            SortKeyType::ServiceNamespaceDescending => "SERVICE_NAMESPACE_DESCENDING".to_string(),
+            SortKeyType::UnknownVariant(UnknownSortKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortKeyType {
+    fn into(self) -> &'a str {
+        match self {
+            SortKeyType::LastAuthenticatedTimeAscending => &"LAST_AUTHENTICATED_TIME_ASCENDING",
+            SortKeyType::LastAuthenticatedTimeDescending => &"LAST_AUTHENTICATED_TIME_DESCENDING",
+            SortKeyType::ServiceNamespaceAscending => &"SERVICE_NAMESPACE_ASCENDING",
+            SortKeyType::ServiceNamespaceDescending => &"SERVICE_NAMESPACE_DESCENDING",
+            SortKeyType::UnknownVariant(UnknownSortKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortKeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LAST_AUTHENTICATED_TIME_ASCENDING" => SortKeyType::LastAuthenticatedTimeAscending,
+            "LAST_AUTHENTICATED_TIME_DESCENDING" => SortKeyType::LastAuthenticatedTimeDescending,
+            "SERVICE_NAMESPACE_ASCENDING" => SortKeyType::ServiceNamespaceAscending,
+            "SERVICE_NAMESPACE_DESCENDING" => SortKeyType::ServiceNamespaceDescending,
+            _ => SortKeyType::UnknownVariant(UnknownSortKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortKeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LAST_AUTHENTICATED_TIME_ASCENDING" => SortKeyType::LastAuthenticatedTimeAscending,
+            "LAST_AUTHENTICATED_TIME_DESCENDING" => SortKeyType::LastAuthenticatedTimeDescending,
+            "SERVICE_NAMESPACE_ASCENDING" => SortKeyType::ServiceNamespaceAscending,
+            "SERVICE_NAMESPACE_DESCENDING" => SortKeyType::ServiceNamespaceDescending,
+            _ => SortKeyType::UnknownVariant(UnknownSortKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SortKeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortKeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -9901,7 +12390,7 @@ pub struct Statement {
     /// <p>The identifier of the policy that was provided as an input.</p>
     pub source_policy_id: Option<String>,
     /// <p>The type of the policy.</p>
-    pub source_policy_type: Option<String>,
+    pub source_policy_type: Option<PolicySourceType>,
     /// <p>The row and column of the beginning of the <code>Statement</code> in an IAM policy.</p>
     pub start_position: Option<Position>,
 }
@@ -9960,12 +12449,118 @@ impl StatementListTypeDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatusType {
+    Active,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatusType),
+}
+
+impl Default for StatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        match self {
+            StatusType::Active => "Active".to_string(),
+            StatusType::Inactive => "Inactive".to_string(),
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatusType {
+    fn into(self) -> &'a str {
+        match self {
+            StatusType::Active => &"Active",
+            StatusType::Inactive => &"Inactive",
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => StatusType::Active,
+            "Inactive" => StatusType::Inactive,
+            _ => StatusType::UnknownVariant(UnknownStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => StatusType::Active,
+            "Inactive" => StatusType::Inactive,
+            _ => StatusType::UnknownVariant(UnknownStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StatusType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -9976,12 +12571,254 @@ impl StringTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSummaryKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SummaryKeyType {
+    AccessKeysPerUserQuota,
+    AccountAccessKeysPresent,
+    AccountMFAEnabled,
+    AccountSigningCertificatesPresent,
+    AttachedPoliciesPerGroupQuota,
+    AttachedPoliciesPerRoleQuota,
+    AttachedPoliciesPerUserQuota,
+    GlobalEndpointTokenVersion,
+    GroupPolicySizeQuota,
+    Groups,
+    GroupsPerUserQuota,
+    GroupsQuota,
+    Mfadevices,
+    MfadevicesInUse,
+    Policies,
+    PoliciesQuota,
+    PolicySizeQuota,
+    PolicyVersionsInUse,
+    PolicyVersionsInUseQuota,
+    ServerCertificates,
+    ServerCertificatesQuota,
+    SigningCertificatesPerUserQuota,
+    UserPolicySizeQuota,
+    Users,
+    UsersQuota,
+    VersionsPerPolicyQuota,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSummaryKeyType),
+}
+
+impl Default for SummaryKeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SummaryKeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SummaryKeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SummaryKeyType {
+    fn into(self) -> String {
+        match self {
+            SummaryKeyType::AccessKeysPerUserQuota => "AccessKeysPerUserQuota".to_string(),
+            SummaryKeyType::AccountAccessKeysPresent => "AccountAccessKeysPresent".to_string(),
+            SummaryKeyType::AccountMFAEnabled => "AccountMFAEnabled".to_string(),
+            SummaryKeyType::AccountSigningCertificatesPresent => {
+                "AccountSigningCertificatesPresent".to_string()
+            }
+            SummaryKeyType::AttachedPoliciesPerGroupQuota => {
+                "AttachedPoliciesPerGroupQuota".to_string()
+            }
+            SummaryKeyType::AttachedPoliciesPerRoleQuota => {
+                "AttachedPoliciesPerRoleQuota".to_string()
+            }
+            SummaryKeyType::AttachedPoliciesPerUserQuota => {
+                "AttachedPoliciesPerUserQuota".to_string()
+            }
+            SummaryKeyType::GlobalEndpointTokenVersion => "GlobalEndpointTokenVersion".to_string(),
+            SummaryKeyType::GroupPolicySizeQuota => "GroupPolicySizeQuota".to_string(),
+            SummaryKeyType::Groups => "Groups".to_string(),
+            SummaryKeyType::GroupsPerUserQuota => "GroupsPerUserQuota".to_string(),
+            SummaryKeyType::GroupsQuota => "GroupsQuota".to_string(),
+            SummaryKeyType::Mfadevices => "MFADevices".to_string(),
+            SummaryKeyType::MfadevicesInUse => "MFADevicesInUse".to_string(),
+            SummaryKeyType::Policies => "Policies".to_string(),
+            SummaryKeyType::PoliciesQuota => "PoliciesQuota".to_string(),
+            SummaryKeyType::PolicySizeQuota => "PolicySizeQuota".to_string(),
+            SummaryKeyType::PolicyVersionsInUse => "PolicyVersionsInUse".to_string(),
+            SummaryKeyType::PolicyVersionsInUseQuota => "PolicyVersionsInUseQuota".to_string(),
+            SummaryKeyType::ServerCertificates => "ServerCertificates".to_string(),
+            SummaryKeyType::ServerCertificatesQuota => "ServerCertificatesQuota".to_string(),
+            SummaryKeyType::SigningCertificatesPerUserQuota => {
+                "SigningCertificatesPerUserQuota".to_string()
+            }
+            SummaryKeyType::UserPolicySizeQuota => "UserPolicySizeQuota".to_string(),
+            SummaryKeyType::Users => "Users".to_string(),
+            SummaryKeyType::UsersQuota => "UsersQuota".to_string(),
+            SummaryKeyType::VersionsPerPolicyQuota => "VersionsPerPolicyQuota".to_string(),
+            SummaryKeyType::UnknownVariant(UnknownSummaryKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SummaryKeyType {
+    fn into(self) -> &'a str {
+        match self {
+            SummaryKeyType::AccessKeysPerUserQuota => &"AccessKeysPerUserQuota",
+            SummaryKeyType::AccountAccessKeysPresent => &"AccountAccessKeysPresent",
+            SummaryKeyType::AccountMFAEnabled => &"AccountMFAEnabled",
+            SummaryKeyType::AccountSigningCertificatesPresent => {
+                &"AccountSigningCertificatesPresent"
+            }
+            SummaryKeyType::AttachedPoliciesPerGroupQuota => &"AttachedPoliciesPerGroupQuota",
+            SummaryKeyType::AttachedPoliciesPerRoleQuota => &"AttachedPoliciesPerRoleQuota",
+            SummaryKeyType::AttachedPoliciesPerUserQuota => &"AttachedPoliciesPerUserQuota",
+            SummaryKeyType::GlobalEndpointTokenVersion => &"GlobalEndpointTokenVersion",
+            SummaryKeyType::GroupPolicySizeQuota => &"GroupPolicySizeQuota",
+            SummaryKeyType::Groups => &"Groups",
+            SummaryKeyType::GroupsPerUserQuota => &"GroupsPerUserQuota",
+            SummaryKeyType::GroupsQuota => &"GroupsQuota",
+            SummaryKeyType::Mfadevices => &"MFADevices",
+            SummaryKeyType::MfadevicesInUse => &"MFADevicesInUse",
+            SummaryKeyType::Policies => &"Policies",
+            SummaryKeyType::PoliciesQuota => &"PoliciesQuota",
+            SummaryKeyType::PolicySizeQuota => &"PolicySizeQuota",
+            SummaryKeyType::PolicyVersionsInUse => &"PolicyVersionsInUse",
+            SummaryKeyType::PolicyVersionsInUseQuota => &"PolicyVersionsInUseQuota",
+            SummaryKeyType::ServerCertificates => &"ServerCertificates",
+            SummaryKeyType::ServerCertificatesQuota => &"ServerCertificatesQuota",
+            SummaryKeyType::SigningCertificatesPerUserQuota => &"SigningCertificatesPerUserQuota",
+            SummaryKeyType::UserPolicySizeQuota => &"UserPolicySizeQuota",
+            SummaryKeyType::Users => &"Users",
+            SummaryKeyType::UsersQuota => &"UsersQuota",
+            SummaryKeyType::VersionsPerPolicyQuota => &"VersionsPerPolicyQuota",
+            SummaryKeyType::UnknownVariant(UnknownSummaryKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SummaryKeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessKeysPerUserQuota" => SummaryKeyType::AccessKeysPerUserQuota,
+            "AccountAccessKeysPresent" => SummaryKeyType::AccountAccessKeysPresent,
+            "AccountMFAEnabled" => SummaryKeyType::AccountMFAEnabled,
+            "AccountSigningCertificatesPresent" => {
+                SummaryKeyType::AccountSigningCertificatesPresent
+            }
+            "AttachedPoliciesPerGroupQuota" => SummaryKeyType::AttachedPoliciesPerGroupQuota,
+            "AttachedPoliciesPerRoleQuota" => SummaryKeyType::AttachedPoliciesPerRoleQuota,
+            "AttachedPoliciesPerUserQuota" => SummaryKeyType::AttachedPoliciesPerUserQuota,
+            "GlobalEndpointTokenVersion" => SummaryKeyType::GlobalEndpointTokenVersion,
+            "GroupPolicySizeQuota" => SummaryKeyType::GroupPolicySizeQuota,
+            "Groups" => SummaryKeyType::Groups,
+            "GroupsPerUserQuota" => SummaryKeyType::GroupsPerUserQuota,
+            "GroupsQuota" => SummaryKeyType::GroupsQuota,
+            "MFADevices" => SummaryKeyType::Mfadevices,
+            "MFADevicesInUse" => SummaryKeyType::MfadevicesInUse,
+            "Policies" => SummaryKeyType::Policies,
+            "PoliciesQuota" => SummaryKeyType::PoliciesQuota,
+            "PolicySizeQuota" => SummaryKeyType::PolicySizeQuota,
+            "PolicyVersionsInUse" => SummaryKeyType::PolicyVersionsInUse,
+            "PolicyVersionsInUseQuota" => SummaryKeyType::PolicyVersionsInUseQuota,
+            "ServerCertificates" => SummaryKeyType::ServerCertificates,
+            "ServerCertificatesQuota" => SummaryKeyType::ServerCertificatesQuota,
+            "SigningCertificatesPerUserQuota" => SummaryKeyType::SigningCertificatesPerUserQuota,
+            "UserPolicySizeQuota" => SummaryKeyType::UserPolicySizeQuota,
+            "Users" => SummaryKeyType::Users,
+            "UsersQuota" => SummaryKeyType::UsersQuota,
+            "VersionsPerPolicyQuota" => SummaryKeyType::VersionsPerPolicyQuota,
+            _ => SummaryKeyType::UnknownVariant(UnknownSummaryKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SummaryKeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessKeysPerUserQuota" => SummaryKeyType::AccessKeysPerUserQuota,
+            "AccountAccessKeysPresent" => SummaryKeyType::AccountAccessKeysPresent,
+            "AccountMFAEnabled" => SummaryKeyType::AccountMFAEnabled,
+            "AccountSigningCertificatesPresent" => {
+                SummaryKeyType::AccountSigningCertificatesPresent
+            }
+            "AttachedPoliciesPerGroupQuota" => SummaryKeyType::AttachedPoliciesPerGroupQuota,
+            "AttachedPoliciesPerRoleQuota" => SummaryKeyType::AttachedPoliciesPerRoleQuota,
+            "AttachedPoliciesPerUserQuota" => SummaryKeyType::AttachedPoliciesPerUserQuota,
+            "GlobalEndpointTokenVersion" => SummaryKeyType::GlobalEndpointTokenVersion,
+            "GroupPolicySizeQuota" => SummaryKeyType::GroupPolicySizeQuota,
+            "Groups" => SummaryKeyType::Groups,
+            "GroupsPerUserQuota" => SummaryKeyType::GroupsPerUserQuota,
+            "GroupsQuota" => SummaryKeyType::GroupsQuota,
+            "MFADevices" => SummaryKeyType::Mfadevices,
+            "MFADevicesInUse" => SummaryKeyType::MfadevicesInUse,
+            "Policies" => SummaryKeyType::Policies,
+            "PoliciesQuota" => SummaryKeyType::PoliciesQuota,
+            "PolicySizeQuota" => SummaryKeyType::PolicySizeQuota,
+            "PolicyVersionsInUse" => SummaryKeyType::PolicyVersionsInUse,
+            "PolicyVersionsInUseQuota" => SummaryKeyType::PolicyVersionsInUseQuota,
+            "ServerCertificates" => SummaryKeyType::ServerCertificates,
+            "ServerCertificatesQuota" => SummaryKeyType::ServerCertificatesQuota,
+            "SigningCertificatesPerUserQuota" => SummaryKeyType::SigningCertificatesPerUserQuota,
+            "UserPolicySizeQuota" => SummaryKeyType::UserPolicySizeQuota,
+            "Users" => SummaryKeyType::Users,
+            "UsersQuota" => SummaryKeyType::UsersQuota,
+            "VersionsPerPolicyQuota" => SummaryKeyType::VersionsPerPolicyQuota,
+            _ => SummaryKeyType::UnknownVariant(UnknownSummaryKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SummaryKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SummaryKeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SummaryKeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SummaryKeyTypeDeserializer;
 impl SummaryKeyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SummaryKeyType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -9991,7 +12828,7 @@ impl SummaryMapTypeDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<::std::collections::HashMap<String, i64>, XmlParseError> {
+    ) -> Result<::std::collections::HashMap<SummaryKeyType, i64>, XmlParseError> {
         xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
@@ -10056,8 +12893,8 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -10067,7 +12904,7 @@ impl TagKeyListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -10128,7 +12965,10 @@ impl TagRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
         TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
     }
 }
@@ -10152,7 +12992,10 @@ impl TagUserRequestSerializer {
         }
 
         TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -10189,7 +13032,7 @@ impl ThumbprintListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -10295,7 +13138,10 @@ impl UntagRoleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
         TagKeyListTypeSerializer::serialize(
             params,
             &format!("{}{}", prefix, "TagKeys"),
@@ -10327,7 +13173,10 @@ impl UntagUserRequestSerializer {
             &format!("{}{}", prefix, "TagKeys"),
             &obj.tag_keys,
         );
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -10337,7 +13186,7 @@ pub struct UpdateAccessKeyRequest {
     /// <p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
     /// <p> The status you want to assign to the secret access key. <code>Active</code> means that the key can be used for API calls to AWS, while <code>Inactive</code> means that the key cannot be used.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the user whose key you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
@@ -10351,10 +13200,16 @@ impl UpdateAccessKeyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
-        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(
+            &format!("{}{}", prefix, "AccessKeyId"),
+            &obj.access_key_id.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status.to_string());
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -10456,9 +13311,12 @@ impl UpdateAssumeRolePolicyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PolicyDocument"),
-            &obj.policy_document,
+            &obj.policy_document.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -10482,12 +13340,21 @@ impl UpdateGroupRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "GroupName"), &obj.group_name);
+        params.put(
+            &format!("{}{}", prefix, "GroupName"),
+            &obj.group_name.to_string(),
+        );
         if let Some(ref field_value) = obj.new_group_name {
-            params.put(&format!("{}{}", prefix, "NewGroupName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NewGroupName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.new_path {
-            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NewPath"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -10513,7 +13380,10 @@ impl UpdateLoginProfileRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.password {
-            params.put(&format!("{}{}", prefix, "Password"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Password"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.password_reset_required {
             params.put(
@@ -10521,7 +13391,10 @@ impl UpdateLoginProfileRequestSerializer {
                 &field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -10549,7 +13422,7 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OpenIDConnectProviderArn"),
-            &obj.open_id_connect_provider_arn,
+            &obj.open_id_connect_provider_arn.to_string(),
         );
         ThumbprintListTypeSerializer::serialize(
             params,
@@ -10577,8 +13450,14 @@ impl UpdateRoleDescriptionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -10633,12 +13512,18 @@ impl UpdateRoleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_session_duration {
             params.put(&format!("{}{}", prefix, "MaxSessionDuration"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.to_string(),
+        );
     }
 }
 
@@ -10683,11 +13568,11 @@ impl UpdateSAMLProviderRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SAMLMetadataDocument"),
-            &obj.saml_metadata_document,
+            &obj.saml_metadata_document.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "SAMLProviderArn"),
-            &obj.saml_provider_arn,
+            &obj.saml_provider_arn.to_string(),
         );
     }
 }
@@ -10730,7 +13615,7 @@ pub struct UpdateSSHPublicKeyRequest {
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
     /// <p>The status to assign to the SSH public key. <code>Active</code> means that the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means that the key cannot be used.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
@@ -10746,10 +13631,13 @@ impl UpdateSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyId"),
-            &obj.ssh_public_key_id,
+            &obj.ssh_public_key_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status.to_string());
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -10774,17 +13662,20 @@ impl UpdateServerCertificateRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.new_path {
-            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NewPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.new_server_certificate_name {
             params.put(
                 &format!("{}{}", prefix, "NewServerCertificateName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name,
+            &obj.server_certificate_name.to_string(),
         );
     }
 }
@@ -10795,7 +13686,7 @@ pub struct UpdateServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
     /// <p>The status to be assigned to the service-specific credential.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the IAM user associated with the service-specific credential. If you do not specify this value, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
@@ -10811,11 +13702,14 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ServiceSpecificCredentialId"),
-            &obj.service_specific_credential_id,
+            &obj.service_specific_credential_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status.to_string());
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -10826,7 +13720,7 @@ pub struct UpdateSigningCertificateRequest {
     /// <p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub certificate_id: String,
     /// <p> The status you want to assign to the certificate. <code>Active</code> means that the certificate can be used for API calls to AWS <code>Inactive</code> means that the certificate cannot be used.</p>
-    pub status: String,
+    pub status: StatusType,
     /// <p>The name of the IAM user the signing certificate belongs to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
@@ -10842,11 +13736,14 @@ impl UpdateSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateId"),
-            &obj.certificate_id,
+            &obj.certificate_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status.to_string());
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -10872,12 +13769,21 @@ impl UpdateUserRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.new_path {
-            params.put(&format!("{}{}", prefix, "NewPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NewPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.new_user_name {
-            params.put(&format!("{}{}", prefix, "NewUserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NewUserName"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -10901,9 +13807,12 @@ impl UploadSSHPublicKeyRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SSHPublicKeyBody"),
-            &obj.ssh_public_key_body,
+            &obj.ssh_public_key_body.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+        params.put(
+            &format!("{}{}", prefix, "UserName"),
+            &obj.user_name.to_string(),
+        );
     }
 }
 
@@ -10967,18 +13876,24 @@ impl UploadServerCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateBody"),
-            &obj.certificate_body,
+            &obj.certificate_body.to_string(),
         );
         if let Some(ref field_value) = obj.certificate_chain {
-            params.put(&format!("{}{}", prefix, "CertificateChain"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CertificateChain"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
-        params.put(&format!("{}{}", prefix, "PrivateKey"), &obj.private_key);
+        params.put(
+            &format!("{}{}", prefix, "PrivateKey"),
+            &obj.private_key.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ServerCertificateName"),
-            &obj.server_certificate_name,
+            &obj.server_certificate_name.to_string(),
         );
     }
 }
@@ -11038,10 +13953,13 @@ impl UploadSigningCertificateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "CertificateBody"),
-            &obj.certificate_body,
+            &obj.certificate_body.to_string(),
         );
         if let Some(ref field_value) = obj.user_name {
-            params.put(&format!("{}{}", prefix, "UserName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserName"),
+                &field_value.to_string(),
+            );
         }
     }
 }

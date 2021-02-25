@@ -111,6 +111,328 @@ pub struct ASN1Subject {
     pub title: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionType {
+    GetCertificate,
+    IssueCertificate,
+    ListPermissions,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionType),
+}
+
+impl Default for ActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionType {
+    fn into(self) -> String {
+        match self {
+            ActionType::GetCertificate => "GetCertificate".to_string(),
+            ActionType::IssueCertificate => "IssueCertificate".to_string(),
+            ActionType::ListPermissions => "ListPermissions".to_string(),
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionType {
+    fn into(self) -> &'a str {
+        match self {
+            ActionType::GetCertificate => &"GetCertificate",
+            ActionType::IssueCertificate => &"IssueCertificate",
+            ActionType::ListPermissions => &"ListPermissions",
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GetCertificate" => ActionType::GetCertificate,
+            "IssueCertificate" => ActionType::IssueCertificate,
+            "ListPermissions" => ActionType::ListPermissions,
+            _ => ActionType::UnknownVariant(UnknownActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GetCertificate" => ActionType::GetCertificate,
+            "IssueCertificate" => ActionType::IssueCertificate,
+            "ListPermissions" => ActionType::ListPermissions,
+            _ => ActionType::UnknownVariant(UnknownActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuditReportResponseFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuditReportResponseFormat {
+    Csv,
+    Json,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuditReportResponseFormat),
+}
+
+impl Default for AuditReportResponseFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuditReportResponseFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuditReportResponseFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuditReportResponseFormat {
+    fn into(self) -> String {
+        match self {
+            AuditReportResponseFormat::Csv => "CSV".to_string(),
+            AuditReportResponseFormat::Json => "JSON".to_string(),
+            AuditReportResponseFormat::UnknownVariant(UnknownAuditReportResponseFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuditReportResponseFormat {
+    fn into(self) -> &'a str {
+        match self {
+            AuditReportResponseFormat::Csv => &"CSV",
+            AuditReportResponseFormat::Json => &"JSON",
+            AuditReportResponseFormat::UnknownVariant(UnknownAuditReportResponseFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuditReportResponseFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => AuditReportResponseFormat::Csv,
+            "JSON" => AuditReportResponseFormat::Json,
+            _ => AuditReportResponseFormat::UnknownVariant(UnknownAuditReportResponseFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuditReportResponseFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => AuditReportResponseFormat::Csv,
+            "JSON" => AuditReportResponseFormat::Json,
+            _ => {
+                AuditReportResponseFormat::UnknownVariant(UnknownAuditReportResponseFormat { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuditReportResponseFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuditReportResponseFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuditReportResponseFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuditReportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuditReportStatus {
+    Creating,
+    Failed,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuditReportStatus),
+}
+
+impl Default for AuditReportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuditReportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuditReportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuditReportStatus {
+    fn into(self) -> String {
+        match self {
+            AuditReportStatus::Creating => "CREATING".to_string(),
+            AuditReportStatus::Failed => "FAILED".to_string(),
+            AuditReportStatus::Success => "SUCCESS".to_string(),
+            AuditReportStatus::UnknownVariant(UnknownAuditReportStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuditReportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AuditReportStatus::Creating => &"CREATING",
+            AuditReportStatus::Failed => &"FAILED",
+            AuditReportStatus::Success => &"SUCCESS",
+            AuditReportStatus::UnknownVariant(UnknownAuditReportStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AuditReportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => AuditReportStatus::Creating,
+            "FAILED" => AuditReportStatus::Failed,
+            "SUCCESS" => AuditReportStatus::Success,
+            _ => AuditReportStatus::UnknownVariant(UnknownAuditReportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuditReportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => AuditReportStatus::Creating,
+            "FAILED" => AuditReportStatus::Failed,
+            "SUCCESS" => AuditReportStatus::Success,
+            _ => AuditReportStatus::UnknownVariant(UnknownAuditReportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuditReportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AuditReportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuditReportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about your private certificate authority (CA). Your private CA can issue and revoke X.509 digital certificates. Digital certificates verify that the entity named in the certificate <b>Subject</b> field owns or controls the public key contained in the <b>Subject Public Key Info</b> field. Call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html">CreateCertificateAuthority</a> action to create your private CA. You must then call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_GetCertificateAuthorityCertificate.html">GetCertificateAuthorityCertificate</a> action to retrieve a private CA certificate signing request (CSR). Sign the CSR with your ACM Private CA-hosted or on-premises root or subordinate CA certificate. Call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_ImportCertificateAuthorityCertificate.html">ImportCertificateAuthorityCertificate</a> action to import the signed certificate into AWS Certificate Manager (ACM). </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -130,7 +452,7 @@ pub struct CertificateAuthority {
     /// <p>Reason the request to create your private CA failed.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_reason: Option<String>,
+    pub failure_reason: Option<FailureReason>,
     /// <p>Date and time at which your private CA was last updated.</p>
     #[serde(rename = "LastStateChangeAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,11 +484,11 @@ pub struct CertificateAuthority {
     /// <p>Status of your private CA.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CertificateAuthorityStatus>,
     /// <p>Type of your private CA.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<CertificateAuthorityType>,
 }
 
 /// <p>Contains configuration information for your private certificate authority (CA). This includes information about the class of public key algorithm and the key pair that your private CA creates when it issues a certificate. It also includes the signature algorithm that it uses when issuing certificates, and its X.500 distinguished name. You must specify this information when you call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html">CreateCertificateAuthority</a> action. </p>
@@ -174,13 +496,248 @@ pub struct CertificateAuthority {
 pub struct CertificateAuthorityConfiguration {
     /// <p>Type of the public key algorithm and size, in bits, of the key pair that your CA creates when it issues a certificate. When you create a subordinate CA, you must use a key algorithm supported by the parent CA.</p>
     #[serde(rename = "KeyAlgorithm")]
-    pub key_algorithm: String,
+    pub key_algorithm: KeyAlgorithm,
     /// <p>Name of the algorithm your private CA uses to sign certificate requests.</p> <p>This parameter should not be confused with the <code>SigningAlgorithm</code> parameter used to sign certificates when they are issued.</p>
     #[serde(rename = "SigningAlgorithm")]
-    pub signing_algorithm: String,
+    pub signing_algorithm: SigningAlgorithm,
     /// <p>Structure that contains X.500 distinguished name information for your private CA.</p>
     #[serde(rename = "Subject")]
     pub subject: ASN1Subject,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateAuthorityStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateAuthorityStatus {
+    Active,
+    Creating,
+    Deleted,
+    Disabled,
+    Expired,
+    Failed,
+    PendingCertificate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateAuthorityStatus),
+}
+
+impl Default for CertificateAuthorityStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateAuthorityStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateAuthorityStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateAuthorityStatus {
+    fn into(self) -> String {
+        match self {
+            CertificateAuthorityStatus::Active => "ACTIVE".to_string(),
+            CertificateAuthorityStatus::Creating => "CREATING".to_string(),
+            CertificateAuthorityStatus::Deleted => "DELETED".to_string(),
+            CertificateAuthorityStatus::Disabled => "DISABLED".to_string(),
+            CertificateAuthorityStatus::Expired => "EXPIRED".to_string(),
+            CertificateAuthorityStatus::Failed => "FAILED".to_string(),
+            CertificateAuthorityStatus::PendingCertificate => "PENDING_CERTIFICATE".to_string(),
+            CertificateAuthorityStatus::UnknownVariant(UnknownCertificateAuthorityStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateAuthorityStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateAuthorityStatus::Active => &"ACTIVE",
+            CertificateAuthorityStatus::Creating => &"CREATING",
+            CertificateAuthorityStatus::Deleted => &"DELETED",
+            CertificateAuthorityStatus::Disabled => &"DISABLED",
+            CertificateAuthorityStatus::Expired => &"EXPIRED",
+            CertificateAuthorityStatus::Failed => &"FAILED",
+            CertificateAuthorityStatus::PendingCertificate => &"PENDING_CERTIFICATE",
+            CertificateAuthorityStatus::UnknownVariant(UnknownCertificateAuthorityStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CertificateAuthorityStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => CertificateAuthorityStatus::Active,
+            "CREATING" => CertificateAuthorityStatus::Creating,
+            "DELETED" => CertificateAuthorityStatus::Deleted,
+            "DISABLED" => CertificateAuthorityStatus::Disabled,
+            "EXPIRED" => CertificateAuthorityStatus::Expired,
+            "FAILED" => CertificateAuthorityStatus::Failed,
+            "PENDING_CERTIFICATE" => CertificateAuthorityStatus::PendingCertificate,
+            _ => CertificateAuthorityStatus::UnknownVariant(UnknownCertificateAuthorityStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateAuthorityStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => CertificateAuthorityStatus::Active,
+            "CREATING" => CertificateAuthorityStatus::Creating,
+            "DELETED" => CertificateAuthorityStatus::Deleted,
+            "DISABLED" => CertificateAuthorityStatus::Disabled,
+            "EXPIRED" => CertificateAuthorityStatus::Expired,
+            "FAILED" => CertificateAuthorityStatus::Failed,
+            "PENDING_CERTIFICATE" => CertificateAuthorityStatus::PendingCertificate,
+            _ => CertificateAuthorityStatus::UnknownVariant(UnknownCertificateAuthorityStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateAuthorityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CertificateAuthorityStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CertificateAuthorityStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateAuthorityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateAuthorityType {
+    Root,
+    Subordinate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateAuthorityType),
+}
+
+impl Default for CertificateAuthorityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateAuthorityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateAuthorityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateAuthorityType {
+    fn into(self) -> String {
+        match self {
+            CertificateAuthorityType::Root => "ROOT".to_string(),
+            CertificateAuthorityType::Subordinate => "SUBORDINATE".to_string(),
+            CertificateAuthorityType::UnknownVariant(UnknownCertificateAuthorityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateAuthorityType {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateAuthorityType::Root => &"ROOT",
+            CertificateAuthorityType::Subordinate => &"SUBORDINATE",
+            CertificateAuthorityType::UnknownVariant(UnknownCertificateAuthorityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CertificateAuthorityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ROOT" => CertificateAuthorityType::Root,
+            "SUBORDINATE" => CertificateAuthorityType::Subordinate,
+            _ => CertificateAuthorityType::UnknownVariant(UnknownCertificateAuthorityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateAuthorityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ROOT" => CertificateAuthorityType::Root,
+            "SUBORDINATE" => CertificateAuthorityType::Subordinate,
+            _ => CertificateAuthorityType::UnknownVariant(UnknownCertificateAuthorityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateAuthorityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CertificateAuthorityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CertificateAuthorityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -188,7 +745,7 @@ pub struct CertificateAuthorityConfiguration {
 pub struct CreateCertificateAuthorityAuditReportRequest {
     /// <p>The format in which to create the report. This can be either <b>JSON</b> or <b>CSV</b>.</p>
     #[serde(rename = "AuditReportResponseFormat")]
-    pub audit_report_response_format: String,
+    pub audit_report_response_format: AuditReportResponseFormat,
     /// <p>The Amazon Resource Name (ARN) of the CA to be audited. This is of the form:</p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>.</p>
     #[serde(rename = "CertificateAuthorityArn")]
     pub certificate_authority_arn: String,
@@ -218,7 +775,7 @@ pub struct CreateCertificateAuthorityRequest {
     pub certificate_authority_configuration: CertificateAuthorityConfiguration,
     /// <p>The type of the certificate authority.</p>
     #[serde(rename = "CertificateAuthorityType")]
-    pub certificate_authority_type: String,
+    pub certificate_authority_type: CertificateAuthorityType,
     /// <p>Alphanumeric string that can be used to distinguish between calls to <b>CreateCertificateAuthority</b>. For a given token, ACM Private CA creates exactly one CA. If you issue a subsequent call using the same token, ACM Private CA returns the ARN of the existing CA and takes no further action. If you change the idempotency token across multiple calls, ACM Private CA creates a unique CA for each unique token.</p>
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -247,7 +804,7 @@ pub struct CreateCertificateAuthorityResponse {
 pub struct CreatePermissionRequest {
     /// <p>The actions that the specified AWS service principal can use. These include <code>IssueCertificate</code>, <code>GetCertificate</code>, and <code>ListPermissions</code>.</p>
     #[serde(rename = "Actions")]
-    pub actions: Vec<String>,
+    pub actions: Vec<ActionType>,
     /// <p>The Amazon Resource Name (ARN) of the CA that grants the permissions. You can find the ARN by calling the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_ListCertificateAuthorities.html">ListCertificateAuthorities</a> action. This must have the following form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>. </p>
     #[serde(rename = "CertificateAuthorityArn")]
     pub certificate_authority_arn: String,
@@ -332,7 +889,7 @@ pub struct DescribeCertificateAuthorityAuditReportResponse {
     /// <p>Specifies whether report creation is in progress, has succeeded, or has failed.</p>
     #[serde(rename = "AuditReportStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audit_report_status: Option<String>,
+    pub audit_report_status: Option<AuditReportStatus>,
     /// <p>The date and time at which the report was created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -362,6 +919,112 @@ pub struct DescribeCertificateAuthorityResponse {
     #[serde(rename = "CertificateAuthority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_authority: Option<CertificateAuthority>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailureReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailureReason {
+    Other,
+    RequestTimedOut,
+    UnsupportedAlgorithm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailureReason),
+}
+
+impl Default for FailureReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailureReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailureReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailureReason {
+    fn into(self) -> String {
+        match self {
+            FailureReason::Other => "OTHER".to_string(),
+            FailureReason::RequestTimedOut => "REQUEST_TIMED_OUT".to_string(),
+            FailureReason::UnsupportedAlgorithm => "UNSUPPORTED_ALGORITHM".to_string(),
+            FailureReason::UnknownVariant(UnknownFailureReason { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailureReason {
+    fn into(self) -> &'a str {
+        match self {
+            FailureReason::Other => &"OTHER",
+            FailureReason::RequestTimedOut => &"REQUEST_TIMED_OUT",
+            FailureReason::UnsupportedAlgorithm => &"UNSUPPORTED_ALGORITHM",
+            FailureReason::UnknownVariant(UnknownFailureReason { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FailureReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "OTHER" => FailureReason::Other,
+            "REQUEST_TIMED_OUT" => FailureReason::RequestTimedOut,
+            "UNSUPPORTED_ALGORITHM" => FailureReason::UnsupportedAlgorithm,
+            _ => FailureReason::UnknownVariant(UnknownFailureReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FailureReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OTHER" => FailureReason::Other,
+            "REQUEST_TIMED_OUT" => FailureReason::RequestTimedOut,
+            "UNSUPPORTED_ALGORITHM" => FailureReason::UnsupportedAlgorithm,
+            _ => FailureReason::UnknownVariant(UnknownFailureReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FailureReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FailureReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -488,7 +1151,7 @@ pub struct IssueCertificateRequest {
     pub idempotency_token: Option<String>,
     /// <p>The name of the algorithm that will be used to sign the certificate to be issued. </p> <p>This parameter should not be confused with the <code>SigningAlgorithm</code> parameter used to sign a CSR.</p>
     #[serde(rename = "SigningAlgorithm")]
-    pub signing_algorithm: String,
+    pub signing_algorithm: SigningAlgorithm,
     /// <p>Specifies a custom configuration template to use when issuing a certificate. If this parameter is not provided, ACM Private CA defaults to the <code>EndEntityCertificate/V1</code> template. For CA certificates, you should choose the shortest path length that meets your needs. The path length is indicated by the PathLen<i>N</i> portion of the ARN, where <i>N</i> is the <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaTerms.html#terms-cadepth">CA depth</a>.</p> <p>Note: The CA depth configured on a subordinate CA certificate must not exceed the limit set by its parents in the CA hierarchy.</p> <p>The following service-owned <code>TemplateArn</code> values are supported by ACM Private CA: </p> <ul> <li> <p>arn:aws:acm-pca:::template/CodeSigningCertificate/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/CodeSigningCertificate_CSRPassthrough/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/EndEntityCertificate/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/EndEntityCertificate_CSRPassthrough/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/EndEntityClientAuthCertificate/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/EndEntityClientAuthCertificate_CSRPassthrough/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/EndEntityServerAuthCertificate/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/EndEntityServerAuthCertificate_CSRPassthrough/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/OCSPSigningCertificate/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/OCSPSigningCertificate_CSRPassthrough/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/RootCACertificate/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen0/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen1/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen2/V1</p> </li> <li> <p>arn:aws:acm-pca:::template/SubordinateCACertificate_PathLen3/V1</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/UsingTemplates.html">Using Templates</a>.</p>
     #[serde(rename = "TemplateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -507,6 +1170,116 @@ pub struct IssueCertificateResponse {
     pub certificate_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyAlgorithm {
+    EcPrime256V1,
+    EcSecp384R1,
+    Rsa2048,
+    Rsa4096,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyAlgorithm),
+}
+
+impl Default for KeyAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyAlgorithm {
+    fn into(self) -> String {
+        match self {
+            KeyAlgorithm::EcPrime256V1 => "EC_prime256v1".to_string(),
+            KeyAlgorithm::EcSecp384R1 => "EC_secp384r1".to_string(),
+            KeyAlgorithm::Rsa2048 => "RSA_2048".to_string(),
+            KeyAlgorithm::Rsa4096 => "RSA_4096".to_string(),
+            KeyAlgorithm::UnknownVariant(UnknownKeyAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            KeyAlgorithm::EcPrime256V1 => &"EC_prime256v1",
+            KeyAlgorithm::EcSecp384R1 => &"EC_secp384r1",
+            KeyAlgorithm::Rsa2048 => &"RSA_2048",
+            KeyAlgorithm::Rsa4096 => &"RSA_4096",
+            KeyAlgorithm::UnknownVariant(UnknownKeyAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC_prime256v1" => KeyAlgorithm::EcPrime256V1,
+            "EC_secp384r1" => KeyAlgorithm::EcSecp384R1,
+            "RSA_2048" => KeyAlgorithm::Rsa2048,
+            "RSA_4096" => KeyAlgorithm::Rsa4096,
+            _ => KeyAlgorithm::UnknownVariant(UnknownKeyAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC_prime256v1" => KeyAlgorithm::EcPrime256V1,
+            "EC_secp384r1" => KeyAlgorithm::EcSecp384R1,
+            "RSA_2048" => KeyAlgorithm::Rsa2048,
+            "RSA_4096" => KeyAlgorithm::Rsa4096,
+            _ => KeyAlgorithm::UnknownVariant(UnknownKeyAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for KeyAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificateAuthoritiesRequest {
@@ -521,7 +1294,7 @@ pub struct ListCertificateAuthoritiesRequest {
     /// <p>Use this parameter to filter the returned set of certificate authorities based on their owner. The default is SELF.</p>
     #[serde(rename = "ResourceOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_owner: Option<String>,
+    pub resource_owner: Option<ResourceOwner>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -602,7 +1375,7 @@ pub struct Permission {
     /// <p>The private CA actions that can be performed by the designated AWS service.</p>
     #[serde(rename = "Actions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions: Option<Vec<String>>,
+    pub actions: Option<Vec<ActionType>>,
     /// <p>The Amazon Resource Number (ARN) of the private CA from which the permission was issued.</p>
     #[serde(rename = "CertificateAuthorityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -636,6 +1409,107 @@ pub struct PutPolicyRequest {
     pub resource_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceOwner {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceOwner {
+    OtherAccounts,
+    AwsSelf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceOwner),
+}
+
+impl Default for ResourceOwner {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceOwner {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceOwner {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceOwner {
+    fn into(self) -> String {
+        match self {
+            ResourceOwner::OtherAccounts => "OTHER_ACCOUNTS".to_string(),
+            ResourceOwner::AwsSelf => "SELF".to_string(),
+            ResourceOwner::UnknownVariant(UnknownResourceOwner { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceOwner {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceOwner::OtherAccounts => &"OTHER_ACCOUNTS",
+            ResourceOwner::AwsSelf => &"SELF",
+            ResourceOwner::UnknownVariant(UnknownResourceOwner { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceOwner {
+    fn from(name: &str) -> Self {
+        match name {
+            "OTHER_ACCOUNTS" => ResourceOwner::OtherAccounts,
+            "SELF" => ResourceOwner::AwsSelf,
+            _ => ResourceOwner::UnknownVariant(UnknownResourceOwner {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceOwner {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OTHER_ACCOUNTS" => ResourceOwner::OtherAccounts,
+            "SELF" => ResourceOwner::AwsSelf,
+            _ => ResourceOwner::UnknownVariant(UnknownResourceOwner { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceOwner {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceOwner {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceOwner {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreCertificateAuthorityRequest {
@@ -653,6 +1527,143 @@ pub struct RevocationConfiguration {
     pub crl_configuration: Option<CrlConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRevocationReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RevocationReason {
+    AffiliationChanged,
+    AACompromise,
+    CertificateAuthorityCompromise,
+    CessationOfOperation,
+    KeyCompromise,
+    PrivilegeWithdrawn,
+    Superseded,
+    Unspecified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRevocationReason),
+}
+
+impl Default for RevocationReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RevocationReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RevocationReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RevocationReason {
+    fn into(self) -> String {
+        match self {
+            RevocationReason::AffiliationChanged => "AFFILIATION_CHANGED".to_string(),
+            RevocationReason::AACompromise => "A_A_COMPROMISE".to_string(),
+            RevocationReason::CertificateAuthorityCompromise => {
+                "CERTIFICATE_AUTHORITY_COMPROMISE".to_string()
+            }
+            RevocationReason::CessationOfOperation => "CESSATION_OF_OPERATION".to_string(),
+            RevocationReason::KeyCompromise => "KEY_COMPROMISE".to_string(),
+            RevocationReason::PrivilegeWithdrawn => "PRIVILEGE_WITHDRAWN".to_string(),
+            RevocationReason::Superseded => "SUPERSEDED".to_string(),
+            RevocationReason::Unspecified => "UNSPECIFIED".to_string(),
+            RevocationReason::UnknownVariant(UnknownRevocationReason { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RevocationReason {
+    fn into(self) -> &'a str {
+        match self {
+            RevocationReason::AffiliationChanged => &"AFFILIATION_CHANGED",
+            RevocationReason::AACompromise => &"A_A_COMPROMISE",
+            RevocationReason::CertificateAuthorityCompromise => &"CERTIFICATE_AUTHORITY_COMPROMISE",
+            RevocationReason::CessationOfOperation => &"CESSATION_OF_OPERATION",
+            RevocationReason::KeyCompromise => &"KEY_COMPROMISE",
+            RevocationReason::PrivilegeWithdrawn => &"PRIVILEGE_WITHDRAWN",
+            RevocationReason::Superseded => &"SUPERSEDED",
+            RevocationReason::Unspecified => &"UNSPECIFIED",
+            RevocationReason::UnknownVariant(UnknownRevocationReason { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RevocationReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFFILIATION_CHANGED" => RevocationReason::AffiliationChanged,
+            "A_A_COMPROMISE" => RevocationReason::AACompromise,
+            "CERTIFICATE_AUTHORITY_COMPROMISE" => RevocationReason::CertificateAuthorityCompromise,
+            "CESSATION_OF_OPERATION" => RevocationReason::CessationOfOperation,
+            "KEY_COMPROMISE" => RevocationReason::KeyCompromise,
+            "PRIVILEGE_WITHDRAWN" => RevocationReason::PrivilegeWithdrawn,
+            "SUPERSEDED" => RevocationReason::Superseded,
+            "UNSPECIFIED" => RevocationReason::Unspecified,
+            _ => RevocationReason::UnknownVariant(UnknownRevocationReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RevocationReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFFILIATION_CHANGED" => RevocationReason::AffiliationChanged,
+            "A_A_COMPROMISE" => RevocationReason::AACompromise,
+            "CERTIFICATE_AUTHORITY_COMPROMISE" => RevocationReason::CertificateAuthorityCompromise,
+            "CESSATION_OF_OPERATION" => RevocationReason::CessationOfOperation,
+            "KEY_COMPROMISE" => RevocationReason::KeyCompromise,
+            "PRIVILEGE_WITHDRAWN" => RevocationReason::PrivilegeWithdrawn,
+            "SUPERSEDED" => RevocationReason::Superseded,
+            "UNSPECIFIED" => RevocationReason::Unspecified,
+            _ => RevocationReason::UnknownVariant(UnknownRevocationReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RevocationReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RevocationReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RevocationReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeCertificateRequest {
@@ -664,7 +1675,131 @@ pub struct RevokeCertificateRequest {
     pub certificate_serial: String,
     /// <p>Specifies why you revoked the certificate.</p>
     #[serde(rename = "RevocationReason")]
-    pub revocation_reason: String,
+    pub revocation_reason: RevocationReason,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSigningAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SigningAlgorithm {
+    Sha256Withecdsa,
+    Sha256Withrsa,
+    Sha384Withecdsa,
+    Sha384Withrsa,
+    Sha512Withecdsa,
+    Sha512Withrsa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSigningAlgorithm),
+}
+
+impl Default for SigningAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SigningAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SigningAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SigningAlgorithm {
+    fn into(self) -> String {
+        match self {
+            SigningAlgorithm::Sha256Withecdsa => "SHA256WITHECDSA".to_string(),
+            SigningAlgorithm::Sha256Withrsa => "SHA256WITHRSA".to_string(),
+            SigningAlgorithm::Sha384Withecdsa => "SHA384WITHECDSA".to_string(),
+            SigningAlgorithm::Sha384Withrsa => "SHA384WITHRSA".to_string(),
+            SigningAlgorithm::Sha512Withecdsa => "SHA512WITHECDSA".to_string(),
+            SigningAlgorithm::Sha512Withrsa => "SHA512WITHRSA".to_string(),
+            SigningAlgorithm::UnknownVariant(UnknownSigningAlgorithm { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SigningAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            SigningAlgorithm::Sha256Withecdsa => &"SHA256WITHECDSA",
+            SigningAlgorithm::Sha256Withrsa => &"SHA256WITHRSA",
+            SigningAlgorithm::Sha384Withecdsa => &"SHA384WITHECDSA",
+            SigningAlgorithm::Sha384Withrsa => &"SHA384WITHRSA",
+            SigningAlgorithm::Sha512Withecdsa => &"SHA512WITHECDSA",
+            SigningAlgorithm::Sha512Withrsa => &"SHA512WITHRSA",
+            SigningAlgorithm::UnknownVariant(UnknownSigningAlgorithm { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SigningAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHA256WITHECDSA" => SigningAlgorithm::Sha256Withecdsa,
+            "SHA256WITHRSA" => SigningAlgorithm::Sha256Withrsa,
+            "SHA384WITHECDSA" => SigningAlgorithm::Sha384Withecdsa,
+            "SHA384WITHRSA" => SigningAlgorithm::Sha384Withrsa,
+            "SHA512WITHECDSA" => SigningAlgorithm::Sha512Withecdsa,
+            "SHA512WITHRSA" => SigningAlgorithm::Sha512Withrsa,
+            _ => SigningAlgorithm::UnknownVariant(UnknownSigningAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SigningAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHA256WITHECDSA" => SigningAlgorithm::Sha256Withecdsa,
+            "SHA256WITHRSA" => SigningAlgorithm::Sha256Withrsa,
+            "SHA384WITHECDSA" => SigningAlgorithm::Sha384Withecdsa,
+            "SHA384WITHRSA" => SigningAlgorithm::Sha384Withrsa,
+            "SHA512WITHECDSA" => SigningAlgorithm::Sha512Withecdsa,
+            "SHA512WITHRSA" => SigningAlgorithm::Sha512Withrsa,
+            _ => SigningAlgorithm::UnknownVariant(UnknownSigningAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SigningAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SigningAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SigningAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Tags are labels that you can use to identify and organize your private CAs. Each tag consists of a key and an optional value. You can associate up to 50 tags with a private CA. To add one or more tags to a private CA, call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_TagCertificateAuthority.html">TagCertificateAuthority</a> action. To remove a tag, call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_UntagCertificateAuthority.html">UntagCertificateAuthority</a> action. </p>
@@ -714,7 +1849,7 @@ pub struct UpdateCertificateAuthorityRequest {
     /// <p>Status of your private CA.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CertificateAuthorityStatus>,
 }
 
 /// <p>Validity specifies the period of time during which a certificate is valid. Validity can be expressed as an explicit date and time when the certificate expires, or as a span of time after issuance, stated in days, months, or years. For more information, see <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.5">Validity</a> in RFC 5280.</p> <p>You can issue a certificate by calling the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_IssueCertificate.html">IssueCertificate</a> action.</p>
@@ -723,10 +1858,130 @@ pub struct UpdateCertificateAuthorityRequest {
 pub struct Validity {
     /// <p><p>Determines how <i>ACM Private CA</i> interprets the <code>Value</code> parameter, an integer. Supported validity types include those listed below. Type definitions with values include a sample input value and the resulting output. </p> <p> <code>END_DATE</code>: The specific date and time when the certificate will expire, expressed using UTCTime (YYMMDDHHMMSS) or GeneralizedTime (YYYYMMDDHHMMSS) format. When UTCTime is used, if the year field (YY) is greater than or equal to 50, the year is interpreted as 19YY. If the year field is less than 50, the year is interpreted as 20YY.</p> <ul> <li> <p>Sample input value: 491231235959 (UTCTime format)</p> </li> <li> <p>Output expiration date/time: 12/31/2049 23:59:59</p> </li> </ul> <p> <code>ABSOLUTE</code>: The specific date and time when the certificate will expire, expressed in seconds since the Unix Epoch. </p> <ul> <li> <p>Sample input value: 2524608000</p> </li> <li> <p>Output expiration date/time: 01/01/2050 00:00:00</p> </li> </ul> <p> <code>DAYS</code>, <code>MONTHS</code>, <code>YEARS</code>: The relative time from the moment of issuance until the certificate will expire, expressed in days, months, or years. </p> <p>Example if <code>DAYS</code>, issued on 10/12/2020 at 12:34:54 UTC:</p> <ul> <li> <p>Sample input value: 90</p> </li> <li> <p>Output expiration date: 01/10/2020 12:34:54 UTC</p> </li> </ul></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ValidityPeriodType,
     /// <p>A long integer interpreted according to the value of <code>Type</code>, below.</p>
     #[serde(rename = "Value")]
     pub value: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidityPeriodType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidityPeriodType {
+    Absolute,
+    Days,
+    EndDate,
+    Months,
+    Years,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidityPeriodType),
+}
+
+impl Default for ValidityPeriodType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidityPeriodType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidityPeriodType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidityPeriodType {
+    fn into(self) -> String {
+        match self {
+            ValidityPeriodType::Absolute => "ABSOLUTE".to_string(),
+            ValidityPeriodType::Days => "DAYS".to_string(),
+            ValidityPeriodType::EndDate => "END_DATE".to_string(),
+            ValidityPeriodType::Months => "MONTHS".to_string(),
+            ValidityPeriodType::Years => "YEARS".to_string(),
+            ValidityPeriodType::UnknownVariant(UnknownValidityPeriodType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidityPeriodType {
+    fn into(self) -> &'a str {
+        match self {
+            ValidityPeriodType::Absolute => &"ABSOLUTE",
+            ValidityPeriodType::Days => &"DAYS",
+            ValidityPeriodType::EndDate => &"END_DATE",
+            ValidityPeriodType::Months => &"MONTHS",
+            ValidityPeriodType::Years => &"YEARS",
+            ValidityPeriodType::UnknownVariant(UnknownValidityPeriodType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ValidityPeriodType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABSOLUTE" => ValidityPeriodType::Absolute,
+            "DAYS" => ValidityPeriodType::Days,
+            "END_DATE" => ValidityPeriodType::EndDate,
+            "MONTHS" => ValidityPeriodType::Months,
+            "YEARS" => ValidityPeriodType::Years,
+            _ => ValidityPeriodType::UnknownVariant(UnknownValidityPeriodType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidityPeriodType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABSOLUTE" => ValidityPeriodType::Absolute,
+            "DAYS" => ValidityPeriodType::Days,
+            "END_DATE" => ValidityPeriodType::EndDate,
+            "MONTHS" => ValidityPeriodType::Months,
+            "YEARS" => ValidityPeriodType::Years,
+            _ => ValidityPeriodType::UnknownVariant(UnknownValidityPeriodType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidityPeriodType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ValidityPeriodType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ValidityPeriodType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateCertificateAuthority

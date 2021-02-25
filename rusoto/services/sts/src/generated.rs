@@ -130,10 +130,13 @@ impl AssumeRoleRequestSerializer {
             params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.external_id {
-            params.put(&format!("{}{}", prefix, "ExternalId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ExternalId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.policy_arns {
             PolicyDescriptorListTypeSerializer::serialize(
@@ -142,19 +145,28 @@ impl AssumeRoleRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        params.put(
+            &format!("{}{}", prefix, "RoleArn"),
+            &obj.role_arn.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "RoleSessionName"),
-            &obj.role_session_name,
+            &obj.role_session_name.to_string(),
         );
         if let Some(ref field_value) = obj.serial_number {
-            params.put(&format!("{}{}", prefix, "SerialNumber"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SerialNumber"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.token_code {
-            params.put(&format!("{}{}", prefix, "TokenCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TokenCode"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.transitive_tag_keys {
             TagKeyListTypeSerializer::serialize(
@@ -240,7 +252,7 @@ impl AssumeRoleWithSAMLRequestSerializer {
             params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.policy_arns {
             PolicyDescriptorListTypeSerializer::serialize(
@@ -249,11 +261,17 @@ impl AssumeRoleWithSAMLRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "PrincipalArn"), &obj.principal_arn);
-        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        params.put(
+            &format!("{}{}", prefix, "PrincipalArn"),
+            &obj.principal_arn.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RoleArn"),
+            &obj.role_arn.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "SAMLAssertion"),
-            &obj.saml_assertion,
+            &obj.saml_assertion.to_string(),
         );
     }
 }
@@ -368,7 +386,7 @@ impl AssumeRoleWithWebIdentityRequestSerializer {
             params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.policy_arns {
             PolicyDescriptorListTypeSerializer::serialize(
@@ -378,16 +396,22 @@ impl AssumeRoleWithWebIdentityRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.provider_id {
-            params.put(&format!("{}{}", prefix, "ProviderId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ProviderId"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        params.put(
+            &format!("{}{}", prefix, "RoleArn"),
+            &obj.role_arn.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "RoleSessionName"),
-            &obj.role_session_name,
+            &obj.role_session_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "WebIdentityToken"),
-            &obj.web_identity_token,
+            &obj.web_identity_token.to_string(),
         );
     }
 }
@@ -579,7 +603,7 @@ impl DecodeAuthorizationMessageRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "EncodedMessage"),
-            &obj.encoded_message,
+            &obj.encoded_message.to_string(),
         );
     }
 }
@@ -683,7 +707,10 @@ impl GetAccessKeyInfoRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccessKeyId"), &obj.access_key_id);
+        params.put(
+            &format!("{}{}", prefix, "AccessKeyId"),
+            &obj.access_key_id.to_string(),
+        );
     }
 }
 
@@ -800,9 +827,9 @@ impl GetFederationTokenRequestSerializer {
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.policy {
-            params.put(&format!("{}{}", prefix, "Policy"), &field_value);
+            params.put(&format!("{}{}", prefix, "Policy"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.policy_arns {
             PolicyDescriptorListTypeSerializer::serialize(
@@ -890,10 +917,16 @@ impl GetSessionTokenRequestSerializer {
             params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
         if let Some(ref field_value) = obj.serial_number {
-            params.put(&format!("{}{}", prefix, "SerialNumber"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SerialNumber"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.token_code {
-            params.put(&format!("{}{}", prefix, "TokenCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TokenCode"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -984,7 +1017,7 @@ impl PolicyDescriptorTypeSerializer {
         }
 
         if let Some(ref field_value) = obj.arn {
-            params.put(&format!("{}{}", prefix, "arn"), &field_value);
+            params.put(&format!("{}{}", prefix, "arn"), &field_value.to_string());
         }
     }
 }
@@ -1024,8 +1057,8 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -1035,7 +1068,7 @@ impl TagKeyListTypeSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }

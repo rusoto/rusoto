@@ -60,6 +60,106 @@ pub struct CreateSavingsPlanResponse {
     pub savings_plan_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCurrencyCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CurrencyCode {
+    Cny,
+    Usd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCurrencyCode),
+}
+
+impl Default for CurrencyCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CurrencyCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CurrencyCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CurrencyCode {
+    fn into(self) -> String {
+        match self {
+            CurrencyCode::Cny => "CNY".to_string(),
+            CurrencyCode::Usd => "USD".to_string(),
+            CurrencyCode::UnknownVariant(UnknownCurrencyCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CurrencyCode {
+    fn into(self) -> &'a str {
+        match self {
+            CurrencyCode::Cny => &"CNY",
+            CurrencyCode::Usd => &"USD",
+            CurrencyCode::UnknownVariant(UnknownCurrencyCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CurrencyCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CNY" => CurrencyCode::Cny,
+            "USD" => CurrencyCode::Usd,
+            _ => CurrencyCode::UnknownVariant(UnknownCurrencyCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CurrencyCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CNY" => CurrencyCode::Cny,
+            "USD" => CurrencyCode::Usd,
+            _ => CurrencyCode::UnknownVariant(UnknownCurrencyCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CurrencyCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CurrencyCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CurrencyCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueuedSavingsPlanRequest {
@@ -131,7 +231,7 @@ pub struct DescribeSavingsPlansOfferingRatesRequest {
     /// <p>The AWS products.</p>
     #[serde(rename = "products")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub products: Option<Vec<String>>,
+    pub products: Option<Vec<SavingsPlanProductType>>,
     /// <p>The IDs of the offerings.</p>
     #[serde(rename = "savingsPlanOfferingIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,15 +239,15 @@ pub struct DescribeSavingsPlansOfferingRatesRequest {
     /// <p>The payment options.</p>
     #[serde(rename = "savingsPlanPaymentOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub savings_plan_payment_options: Option<Vec<String>>,
+    pub savings_plan_payment_options: Option<Vec<SavingsPlanPaymentOption>>,
     /// <p>The plan types.</p>
     #[serde(rename = "savingsPlanTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub savings_plan_types: Option<Vec<String>>,
+    pub savings_plan_types: Option<Vec<SavingsPlanType>>,
     /// <p>The services.</p>
     #[serde(rename = "serviceCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_codes: Option<Vec<String>>,
+    pub service_codes: Option<Vec<SavingsPlanRateServiceCode>>,
     /// <p>The usage details of the line item in the billing report.</p>
     #[serde(rename = "usageTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -173,7 +273,7 @@ pub struct DescribeSavingsPlansOfferingsRequest {
     /// <p>The currencies.</p>
     #[serde(rename = "currencies")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currencies: Option<Vec<String>>,
+    pub currencies: Option<Vec<CurrencyCode>>,
     /// <p>The descriptions.</p>
     #[serde(rename = "descriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -205,15 +305,15 @@ pub struct DescribeSavingsPlansOfferingsRequest {
     /// <p>The payment options.</p>
     #[serde(rename = "paymentOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_options: Option<Vec<String>>,
+    pub payment_options: Option<Vec<SavingsPlanPaymentOption>>,
     /// <p>The plan type.</p>
     #[serde(rename = "planTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub plan_types: Option<Vec<String>>,
+    pub plan_types: Option<Vec<SavingsPlanType>>,
     /// <p>The product type.</p>
     #[serde(rename = "productType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<SavingsPlanProductType>,
     /// <p>The services.</p>
     #[serde(rename = "serviceCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -263,7 +363,7 @@ pub struct DescribeSavingsPlansRequest {
     /// <p>The states.</p>
     #[serde(rename = "states")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub states: Option<Vec<String>>,
+    pub states: Option<Vec<SavingsPlanState>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -303,7 +403,7 @@ pub struct ParentSavingsPlanOffering {
     /// <p>The currency.</p>
     #[serde(rename = "currency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currency: Option<String>,
+    pub currency: Option<CurrencyCode>,
     /// <p>The duration, in seconds.</p>
     #[serde(rename = "durationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -315,7 +415,7 @@ pub struct ParentSavingsPlanOffering {
     /// <p>The payment option.</p>
     #[serde(rename = "paymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<SavingsPlanPaymentOption>,
     /// <p>The description.</p>
     #[serde(rename = "planDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,7 +423,7 @@ pub struct ParentSavingsPlanOffering {
     /// <p>The plan type.</p>
     #[serde(rename = "planType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub plan_type: Option<String>,
+    pub plan_type: Option<SavingsPlanType>,
 }
 
 /// <p>Information about a Savings Plan.</p>
@@ -337,7 +437,7 @@ pub struct SavingsPlan {
     /// <p>The currency.</p>
     #[serde(rename = "currency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currency: Option<String>,
+    pub currency: Option<CurrencyCode>,
     /// <p>The description.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -357,11 +457,11 @@ pub struct SavingsPlan {
     /// <p>The payment option.</p>
     #[serde(rename = "paymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<SavingsPlanPaymentOption>,
     /// <p>The product types.</p>
     #[serde(rename = "productTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_types: Option<Vec<String>>,
+    pub product_types: Option<Vec<SavingsPlanProductType>>,
     /// <p>The recurring payment amount.</p>
     #[serde(rename = "recurringPaymentAmount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -381,7 +481,7 @@ pub struct SavingsPlan {
     /// <p>The plan type.</p>
     #[serde(rename = "savingsPlanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub savings_plan_type: Option<String>,
+    pub savings_plan_type: Option<SavingsPlanType>,
     /// <p>The start time.</p>
     #[serde(rename = "start")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -389,7 +489,7 @@ pub struct SavingsPlan {
     /// <p>The state.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<SavingsPlanState>,
     /// <p>One or more tags.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -411,7 +511,7 @@ pub struct SavingsPlanFilter {
     /// <p>The filter name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SavingsPlansFilterName>,
     /// <p>The filter value.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -425,7 +525,7 @@ pub struct SavingsPlanOffering {
     /// <p>The currency.</p>
     #[serde(rename = "currency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currency: Option<String>,
+    pub currency: Option<CurrencyCode>,
     /// <p>The description.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -445,15 +545,15 @@ pub struct SavingsPlanOffering {
     /// <p>The payment option.</p>
     #[serde(rename = "paymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<SavingsPlanPaymentOption>,
     /// <p>The plan type.</p>
     #[serde(rename = "planType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub plan_type: Option<String>,
+    pub plan_type: Option<SavingsPlanType>,
     /// <p>The product type.</p>
     #[serde(rename = "productTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_types: Option<Vec<String>>,
+    pub product_types: Option<Vec<SavingsPlanProductType>>,
     /// <p>The properties.</p>
     #[serde(rename = "properties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -468,6 +568,115 @@ pub struct SavingsPlanOffering {
     pub usage_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanOfferingFilterAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanOfferingFilterAttribute {
+    InstanceFamily,
+    Region,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanOfferingFilterAttribute),
+}
+
+impl Default for SavingsPlanOfferingFilterAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanOfferingFilterAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanOfferingFilterAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanOfferingFilterAttribute {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanOfferingFilterAttribute::InstanceFamily => "instanceFamily".to_string(),
+            SavingsPlanOfferingFilterAttribute::Region => "region".to_string(),
+            SavingsPlanOfferingFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanOfferingFilterAttribute { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanOfferingFilterAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanOfferingFilterAttribute::InstanceFamily => &"instanceFamily",
+            SavingsPlanOfferingFilterAttribute::Region => &"region",
+            SavingsPlanOfferingFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanOfferingFilterAttribute { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanOfferingFilterAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "instanceFamily" => SavingsPlanOfferingFilterAttribute::InstanceFamily,
+            "region" => SavingsPlanOfferingFilterAttribute::Region,
+            _ => SavingsPlanOfferingFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanOfferingFilterAttribute {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanOfferingFilterAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "instanceFamily" => SavingsPlanOfferingFilterAttribute::InstanceFamily,
+            "region" => SavingsPlanOfferingFilterAttribute::Region,
+            _ => SavingsPlanOfferingFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanOfferingFilterAttribute { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanOfferingFilterAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanOfferingFilterAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SavingsPlanOfferingFilterAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a filter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -475,7 +684,7 @@ pub struct SavingsPlanOfferingFilterElement {
     /// <p>The filter name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SavingsPlanOfferingFilterAttribute>,
     /// <p>The filter values.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -489,11 +698,120 @@ pub struct SavingsPlanOfferingProperty {
     /// <p>The property name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SavingsPlanOfferingPropertyKey>,
     /// <p>The property value.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanOfferingPropertyKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanOfferingPropertyKey {
+    InstanceFamily,
+    Region,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanOfferingPropertyKey),
+}
+
+impl Default for SavingsPlanOfferingPropertyKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanOfferingPropertyKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanOfferingPropertyKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanOfferingPropertyKey {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanOfferingPropertyKey::InstanceFamily => "instanceFamily".to_string(),
+            SavingsPlanOfferingPropertyKey::Region => "region".to_string(),
+            SavingsPlanOfferingPropertyKey::UnknownVariant(
+                UnknownSavingsPlanOfferingPropertyKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanOfferingPropertyKey {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanOfferingPropertyKey::InstanceFamily => &"instanceFamily",
+            SavingsPlanOfferingPropertyKey::Region => &"region",
+            SavingsPlanOfferingPropertyKey::UnknownVariant(
+                UnknownSavingsPlanOfferingPropertyKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanOfferingPropertyKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "instanceFamily" => SavingsPlanOfferingPropertyKey::InstanceFamily,
+            "region" => SavingsPlanOfferingPropertyKey::Region,
+            _ => SavingsPlanOfferingPropertyKey::UnknownVariant(
+                UnknownSavingsPlanOfferingPropertyKey {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanOfferingPropertyKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "instanceFamily" => SavingsPlanOfferingPropertyKey::InstanceFamily,
+            "region" => SavingsPlanOfferingPropertyKey::Region,
+            _ => SavingsPlanOfferingPropertyKey::UnknownVariant(
+                UnknownSavingsPlanOfferingPropertyKey { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanOfferingPropertyKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SavingsPlanOfferingPropertyKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanOfferingPropertyKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a Savings Plan offering rate.</p>
@@ -507,7 +825,7 @@ pub struct SavingsPlanOfferingRate {
     /// <p>The product type.</p>
     #[serde(rename = "productType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<SavingsPlanProductType>,
     /// <p>The properties.</p>
     #[serde(rename = "properties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -523,11 +841,11 @@ pub struct SavingsPlanOfferingRate {
     /// <p>The service.</p>
     #[serde(rename = "serviceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_code: Option<String>,
+    pub service_code: Option<SavingsPlanRateServiceCode>,
     /// <p>The unit.</p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<SavingsPlanRateUnit>,
     /// <p>The usage details of the line item in the billing report.</p>
     #[serde(rename = "usageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -541,7 +859,7 @@ pub struct SavingsPlanOfferingRateFilterElement {
     /// <p>The filter name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SavingsPlanRateFilterAttribute>,
     /// <p>The filter values.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -562,6 +880,224 @@ pub struct SavingsPlanOfferingRateProperty {
     pub value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanPaymentOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanPaymentOption {
+    AllUpfront,
+    NoUpfront,
+    PartialUpfront,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanPaymentOption),
+}
+
+impl Default for SavingsPlanPaymentOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanPaymentOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanPaymentOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanPaymentOption {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanPaymentOption::AllUpfront => "All Upfront".to_string(),
+            SavingsPlanPaymentOption::NoUpfront => "No Upfront".to_string(),
+            SavingsPlanPaymentOption::PartialUpfront => "Partial Upfront".to_string(),
+            SavingsPlanPaymentOption::UnknownVariant(UnknownSavingsPlanPaymentOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanPaymentOption {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanPaymentOption::AllUpfront => &"All Upfront",
+            SavingsPlanPaymentOption::NoUpfront => &"No Upfront",
+            SavingsPlanPaymentOption::PartialUpfront => &"Partial Upfront",
+            SavingsPlanPaymentOption::UnknownVariant(UnknownSavingsPlanPaymentOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanPaymentOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "All Upfront" => SavingsPlanPaymentOption::AllUpfront,
+            "No Upfront" => SavingsPlanPaymentOption::NoUpfront,
+            "Partial Upfront" => SavingsPlanPaymentOption::PartialUpfront,
+            _ => SavingsPlanPaymentOption::UnknownVariant(UnknownSavingsPlanPaymentOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanPaymentOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All Upfront" => SavingsPlanPaymentOption::AllUpfront,
+            "No Upfront" => SavingsPlanPaymentOption::NoUpfront,
+            "Partial Upfront" => SavingsPlanPaymentOption::PartialUpfront,
+            _ => SavingsPlanPaymentOption::UnknownVariant(UnknownSavingsPlanPaymentOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanPaymentOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanPaymentOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanPaymentOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanProductType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanProductType {
+    Ec2,
+    Fargate,
+    Lambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanProductType),
+}
+
+impl Default for SavingsPlanProductType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanProductType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanProductType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanProductType {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanProductType::Ec2 => "EC2".to_string(),
+            SavingsPlanProductType::Fargate => "Fargate".to_string(),
+            SavingsPlanProductType::Lambda => "Lambda".to_string(),
+            SavingsPlanProductType::UnknownVariant(UnknownSavingsPlanProductType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanProductType {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanProductType::Ec2 => &"EC2",
+            SavingsPlanProductType::Fargate => &"Fargate",
+            SavingsPlanProductType::Lambda => &"Lambda",
+            SavingsPlanProductType::UnknownVariant(UnknownSavingsPlanProductType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanProductType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => SavingsPlanProductType::Ec2,
+            "Fargate" => SavingsPlanProductType::Fargate,
+            "Lambda" => SavingsPlanProductType::Lambda,
+            _ => SavingsPlanProductType::UnknownVariant(UnknownSavingsPlanProductType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanProductType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => SavingsPlanProductType::Ec2,
+            "Fargate" => SavingsPlanProductType::Fargate,
+            "Lambda" => SavingsPlanProductType::Lambda,
+            _ => SavingsPlanProductType::UnknownVariant(UnknownSavingsPlanProductType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanProductType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanProductType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanProductType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a Savings Plan rate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -569,7 +1105,7 @@ pub struct SavingsPlanRate {
     /// <p>The currency.</p>
     #[serde(rename = "currency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currency: Option<String>,
+    pub currency: Option<CurrencyCode>,
     /// <p>The specific AWS operation for the line item in the billing report.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -577,7 +1113,7 @@ pub struct SavingsPlanRate {
     /// <p>The product type.</p>
     #[serde(rename = "productType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<SavingsPlanProductType>,
     /// <p>The properties.</p>
     #[serde(rename = "properties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -589,11 +1125,11 @@ pub struct SavingsPlanRate {
     /// <p>The service.</p>
     #[serde(rename = "serviceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_code: Option<String>,
+    pub service_code: Option<SavingsPlanRateServiceCode>,
     /// <p>The unit.</p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<SavingsPlanRateUnit>,
     /// <p>The usage details of the line item in the billing report.</p>
     #[serde(rename = "usageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -607,11 +1143,277 @@ pub struct SavingsPlanRateFilter {
     /// <p>The filter name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SavingsPlanRateFilterName>,
     /// <p>The filter values.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanRateFilterAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanRateFilterAttribute {
+    InstanceFamily,
+    InstanceType,
+    ProductDescription,
+    ProductId,
+    Region,
+    Tenancy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanRateFilterAttribute),
+}
+
+impl Default for SavingsPlanRateFilterAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanRateFilterAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanRateFilterAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanRateFilterAttribute {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanRateFilterAttribute::InstanceFamily => "instanceFamily".to_string(),
+            SavingsPlanRateFilterAttribute::InstanceType => "instanceType".to_string(),
+            SavingsPlanRateFilterAttribute::ProductDescription => "productDescription".to_string(),
+            SavingsPlanRateFilterAttribute::ProductId => "productId".to_string(),
+            SavingsPlanRateFilterAttribute::Region => "region".to_string(),
+            SavingsPlanRateFilterAttribute::Tenancy => "tenancy".to_string(),
+            SavingsPlanRateFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanRateFilterAttribute { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanRateFilterAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanRateFilterAttribute::InstanceFamily => &"instanceFamily",
+            SavingsPlanRateFilterAttribute::InstanceType => &"instanceType",
+            SavingsPlanRateFilterAttribute::ProductDescription => &"productDescription",
+            SavingsPlanRateFilterAttribute::ProductId => &"productId",
+            SavingsPlanRateFilterAttribute::Region => &"region",
+            SavingsPlanRateFilterAttribute::Tenancy => &"tenancy",
+            SavingsPlanRateFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanRateFilterAttribute { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanRateFilterAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "instanceFamily" => SavingsPlanRateFilterAttribute::InstanceFamily,
+            "instanceType" => SavingsPlanRateFilterAttribute::InstanceType,
+            "productDescription" => SavingsPlanRateFilterAttribute::ProductDescription,
+            "productId" => SavingsPlanRateFilterAttribute::ProductId,
+            "region" => SavingsPlanRateFilterAttribute::Region,
+            "tenancy" => SavingsPlanRateFilterAttribute::Tenancy,
+            _ => SavingsPlanRateFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanRateFilterAttribute {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanRateFilterAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "instanceFamily" => SavingsPlanRateFilterAttribute::InstanceFamily,
+            "instanceType" => SavingsPlanRateFilterAttribute::InstanceType,
+            "productDescription" => SavingsPlanRateFilterAttribute::ProductDescription,
+            "productId" => SavingsPlanRateFilterAttribute::ProductId,
+            "region" => SavingsPlanRateFilterAttribute::Region,
+            "tenancy" => SavingsPlanRateFilterAttribute::Tenancy,
+            _ => SavingsPlanRateFilterAttribute::UnknownVariant(
+                UnknownSavingsPlanRateFilterAttribute { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanRateFilterAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanRateFilterAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SavingsPlanRateFilterAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanRateFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanRateFilterName {
+    InstanceType,
+    Operation,
+    ProductDescription,
+    ProductType,
+    Region,
+    ServiceCode,
+    Tenancy,
+    UsageType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanRateFilterName),
+}
+
+impl Default for SavingsPlanRateFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanRateFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanRateFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanRateFilterName {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanRateFilterName::InstanceType => "instanceType".to_string(),
+            SavingsPlanRateFilterName::Operation => "operation".to_string(),
+            SavingsPlanRateFilterName::ProductDescription => "productDescription".to_string(),
+            SavingsPlanRateFilterName::ProductType => "productType".to_string(),
+            SavingsPlanRateFilterName::Region => "region".to_string(),
+            SavingsPlanRateFilterName::ServiceCode => "serviceCode".to_string(),
+            SavingsPlanRateFilterName::Tenancy => "tenancy".to_string(),
+            SavingsPlanRateFilterName::UsageType => "usageType".to_string(),
+            SavingsPlanRateFilterName::UnknownVariant(UnknownSavingsPlanRateFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanRateFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanRateFilterName::InstanceType => &"instanceType",
+            SavingsPlanRateFilterName::Operation => &"operation",
+            SavingsPlanRateFilterName::ProductDescription => &"productDescription",
+            SavingsPlanRateFilterName::ProductType => &"productType",
+            SavingsPlanRateFilterName::Region => &"region",
+            SavingsPlanRateFilterName::ServiceCode => &"serviceCode",
+            SavingsPlanRateFilterName::Tenancy => &"tenancy",
+            SavingsPlanRateFilterName::UsageType => &"usageType",
+            SavingsPlanRateFilterName::UnknownVariant(UnknownSavingsPlanRateFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanRateFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "instanceType" => SavingsPlanRateFilterName::InstanceType,
+            "operation" => SavingsPlanRateFilterName::Operation,
+            "productDescription" => SavingsPlanRateFilterName::ProductDescription,
+            "productType" => SavingsPlanRateFilterName::ProductType,
+            "region" => SavingsPlanRateFilterName::Region,
+            "serviceCode" => SavingsPlanRateFilterName::ServiceCode,
+            "tenancy" => SavingsPlanRateFilterName::Tenancy,
+            "usageType" => SavingsPlanRateFilterName::UsageType,
+            _ => SavingsPlanRateFilterName::UnknownVariant(UnknownSavingsPlanRateFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanRateFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "instanceType" => SavingsPlanRateFilterName::InstanceType,
+            "operation" => SavingsPlanRateFilterName::Operation,
+            "productDescription" => SavingsPlanRateFilterName::ProductDescription,
+            "productType" => SavingsPlanRateFilterName::ProductType,
+            "region" => SavingsPlanRateFilterName::Region,
+            "serviceCode" => SavingsPlanRateFilterName::ServiceCode,
+            "tenancy" => SavingsPlanRateFilterName::Tenancy,
+            "usageType" => SavingsPlanRateFilterName::UsageType,
+            _ => {
+                SavingsPlanRateFilterName::UnknownVariant(UnknownSavingsPlanRateFilterName { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanRateFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanRateFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SavingsPlanRateFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a property.</p>
@@ -621,11 +1423,718 @@ pub struct SavingsPlanRateProperty {
     /// <p>The property name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SavingsPlanRatePropertyKey>,
     /// <p>The property value.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanRatePropertyKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanRatePropertyKey {
+    InstanceFamily,
+    InstanceType,
+    ProductDescription,
+    Region,
+    Tenancy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanRatePropertyKey),
+}
+
+impl Default for SavingsPlanRatePropertyKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanRatePropertyKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanRatePropertyKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanRatePropertyKey {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanRatePropertyKey::InstanceFamily => "instanceFamily".to_string(),
+            SavingsPlanRatePropertyKey::InstanceType => "instanceType".to_string(),
+            SavingsPlanRatePropertyKey::ProductDescription => "productDescription".to_string(),
+            SavingsPlanRatePropertyKey::Region => "region".to_string(),
+            SavingsPlanRatePropertyKey::Tenancy => "tenancy".to_string(),
+            SavingsPlanRatePropertyKey::UnknownVariant(UnknownSavingsPlanRatePropertyKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanRatePropertyKey {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanRatePropertyKey::InstanceFamily => &"instanceFamily",
+            SavingsPlanRatePropertyKey::InstanceType => &"instanceType",
+            SavingsPlanRatePropertyKey::ProductDescription => &"productDescription",
+            SavingsPlanRatePropertyKey::Region => &"region",
+            SavingsPlanRatePropertyKey::Tenancy => &"tenancy",
+            SavingsPlanRatePropertyKey::UnknownVariant(UnknownSavingsPlanRatePropertyKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanRatePropertyKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "instanceFamily" => SavingsPlanRatePropertyKey::InstanceFamily,
+            "instanceType" => SavingsPlanRatePropertyKey::InstanceType,
+            "productDescription" => SavingsPlanRatePropertyKey::ProductDescription,
+            "region" => SavingsPlanRatePropertyKey::Region,
+            "tenancy" => SavingsPlanRatePropertyKey::Tenancy,
+            _ => SavingsPlanRatePropertyKey::UnknownVariant(UnknownSavingsPlanRatePropertyKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanRatePropertyKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "instanceFamily" => SavingsPlanRatePropertyKey::InstanceFamily,
+            "instanceType" => SavingsPlanRatePropertyKey::InstanceType,
+            "productDescription" => SavingsPlanRatePropertyKey::ProductDescription,
+            "region" => SavingsPlanRatePropertyKey::Region,
+            "tenancy" => SavingsPlanRatePropertyKey::Tenancy,
+            _ => SavingsPlanRatePropertyKey::UnknownVariant(UnknownSavingsPlanRatePropertyKey {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanRatePropertyKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SavingsPlanRatePropertyKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanRatePropertyKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanRateServiceCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanRateServiceCode {
+    Awslambda,
+    AmazonEC2,
+    AmazonECS,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanRateServiceCode),
+}
+
+impl Default for SavingsPlanRateServiceCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanRateServiceCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanRateServiceCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanRateServiceCode {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanRateServiceCode::Awslambda => "AWSLambda".to_string(),
+            SavingsPlanRateServiceCode::AmazonEC2 => "AmazonEC2".to_string(),
+            SavingsPlanRateServiceCode::AmazonECS => "AmazonECS".to_string(),
+            SavingsPlanRateServiceCode::UnknownVariant(UnknownSavingsPlanRateServiceCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanRateServiceCode {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanRateServiceCode::Awslambda => &"AWSLambda",
+            SavingsPlanRateServiceCode::AmazonEC2 => &"AmazonEC2",
+            SavingsPlanRateServiceCode::AmazonECS => &"AmazonECS",
+            SavingsPlanRateServiceCode::UnknownVariant(UnknownSavingsPlanRateServiceCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanRateServiceCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSLambda" => SavingsPlanRateServiceCode::Awslambda,
+            "AmazonEC2" => SavingsPlanRateServiceCode::AmazonEC2,
+            "AmazonECS" => SavingsPlanRateServiceCode::AmazonECS,
+            _ => SavingsPlanRateServiceCode::UnknownVariant(UnknownSavingsPlanRateServiceCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanRateServiceCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSLambda" => SavingsPlanRateServiceCode::Awslambda,
+            "AmazonEC2" => SavingsPlanRateServiceCode::AmazonEC2,
+            "AmazonECS" => SavingsPlanRateServiceCode::AmazonECS,
+            _ => SavingsPlanRateServiceCode::UnknownVariant(UnknownSavingsPlanRateServiceCode {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanRateServiceCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanRateServiceCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanRateServiceCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanRateUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanRateUnit {
+    Hrs,
+    LambdaGBSecond,
+    Request,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanRateUnit),
+}
+
+impl Default for SavingsPlanRateUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanRateUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanRateUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanRateUnit {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanRateUnit::Hrs => "Hrs".to_string(),
+            SavingsPlanRateUnit::LambdaGBSecond => "Lambda-GB-Second".to_string(),
+            SavingsPlanRateUnit::Request => "Request".to_string(),
+            SavingsPlanRateUnit::UnknownVariant(UnknownSavingsPlanRateUnit { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanRateUnit {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanRateUnit::Hrs => &"Hrs",
+            SavingsPlanRateUnit::LambdaGBSecond => &"Lambda-GB-Second",
+            SavingsPlanRateUnit::Request => &"Request",
+            SavingsPlanRateUnit::UnknownVariant(UnknownSavingsPlanRateUnit { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanRateUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "Hrs" => SavingsPlanRateUnit::Hrs,
+            "Lambda-GB-Second" => SavingsPlanRateUnit::LambdaGBSecond,
+            "Request" => SavingsPlanRateUnit::Request,
+            _ => SavingsPlanRateUnit::UnknownVariant(UnknownSavingsPlanRateUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanRateUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Hrs" => SavingsPlanRateUnit::Hrs,
+            "Lambda-GB-Second" => SavingsPlanRateUnit::LambdaGBSecond,
+            "Request" => SavingsPlanRateUnit::Request,
+            _ => SavingsPlanRateUnit::UnknownVariant(UnknownSavingsPlanRateUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanRateUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SavingsPlanRateUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanRateUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanState {
+    Active,
+    PaymentFailed,
+    PaymentPending,
+    Queued,
+    QueuedDeleted,
+    Retired,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanState),
+}
+
+impl Default for SavingsPlanState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanState {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanState::Active => "active".to_string(),
+            SavingsPlanState::PaymentFailed => "payment-failed".to_string(),
+            SavingsPlanState::PaymentPending => "payment-pending".to_string(),
+            SavingsPlanState::Queued => "queued".to_string(),
+            SavingsPlanState::QueuedDeleted => "queued-deleted".to_string(),
+            SavingsPlanState::Retired => "retired".to_string(),
+            SavingsPlanState::UnknownVariant(UnknownSavingsPlanState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanState {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanState::Active => &"active",
+            SavingsPlanState::PaymentFailed => &"payment-failed",
+            SavingsPlanState::PaymentPending => &"payment-pending",
+            SavingsPlanState::Queued => &"queued",
+            SavingsPlanState::QueuedDeleted => &"queued-deleted",
+            SavingsPlanState::Retired => &"retired",
+            SavingsPlanState::UnknownVariant(UnknownSavingsPlanState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanState {
+    fn from(name: &str) -> Self {
+        match name {
+            "active" => SavingsPlanState::Active,
+            "payment-failed" => SavingsPlanState::PaymentFailed,
+            "payment-pending" => SavingsPlanState::PaymentPending,
+            "queued" => SavingsPlanState::Queued,
+            "queued-deleted" => SavingsPlanState::QueuedDeleted,
+            "retired" => SavingsPlanState::Retired,
+            _ => SavingsPlanState::UnknownVariant(UnknownSavingsPlanState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "active" => SavingsPlanState::Active,
+            "payment-failed" => SavingsPlanState::PaymentFailed,
+            "payment-pending" => SavingsPlanState::PaymentPending,
+            "queued" => SavingsPlanState::Queued,
+            "queued-deleted" => SavingsPlanState::QueuedDeleted,
+            "retired" => SavingsPlanState::Retired,
+            _ => SavingsPlanState::UnknownVariant(UnknownSavingsPlanState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlanType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlanType {
+    Compute,
+    Ec2Instance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlanType),
+}
+
+impl Default for SavingsPlanType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlanType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlanType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlanType {
+    fn into(self) -> String {
+        match self {
+            SavingsPlanType::Compute => "Compute".to_string(),
+            SavingsPlanType::Ec2Instance => "EC2Instance".to_string(),
+            SavingsPlanType::UnknownVariant(UnknownSavingsPlanType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlanType {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlanType::Compute => &"Compute",
+            SavingsPlanType::Ec2Instance => &"EC2Instance",
+            SavingsPlanType::UnknownVariant(UnknownSavingsPlanType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlanType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Compute" => SavingsPlanType::Compute,
+            "EC2Instance" => SavingsPlanType::Ec2Instance,
+            _ => SavingsPlanType::UnknownVariant(UnknownSavingsPlanType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlanType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Compute" => SavingsPlanType::Compute,
+            "EC2Instance" => SavingsPlanType::Ec2Instance,
+            _ => SavingsPlanType::UnknownVariant(UnknownSavingsPlanType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlanType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlanType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SavingsPlanType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSavingsPlansFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SavingsPlansFilterName {
+    Commitment,
+    Ec2InstanceFamily,
+    End,
+    PaymentOption,
+    Region,
+    SavingsPlanType,
+    Start,
+    Term,
+    Upfront,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSavingsPlansFilterName),
+}
+
+impl Default for SavingsPlansFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SavingsPlansFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SavingsPlansFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SavingsPlansFilterName {
+    fn into(self) -> String {
+        match self {
+            SavingsPlansFilterName::Commitment => "commitment".to_string(),
+            SavingsPlansFilterName::Ec2InstanceFamily => "ec2-instance-family".to_string(),
+            SavingsPlansFilterName::End => "end".to_string(),
+            SavingsPlansFilterName::PaymentOption => "payment-option".to_string(),
+            SavingsPlansFilterName::Region => "region".to_string(),
+            SavingsPlansFilterName::SavingsPlanType => "savings-plan-type".to_string(),
+            SavingsPlansFilterName::Start => "start".to_string(),
+            SavingsPlansFilterName::Term => "term".to_string(),
+            SavingsPlansFilterName::Upfront => "upfront".to_string(),
+            SavingsPlansFilterName::UnknownVariant(UnknownSavingsPlansFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SavingsPlansFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            SavingsPlansFilterName::Commitment => &"commitment",
+            SavingsPlansFilterName::Ec2InstanceFamily => &"ec2-instance-family",
+            SavingsPlansFilterName::End => &"end",
+            SavingsPlansFilterName::PaymentOption => &"payment-option",
+            SavingsPlansFilterName::Region => &"region",
+            SavingsPlansFilterName::SavingsPlanType => &"savings-plan-type",
+            SavingsPlansFilterName::Start => &"start",
+            SavingsPlansFilterName::Term => &"term",
+            SavingsPlansFilterName::Upfront => &"upfront",
+            SavingsPlansFilterName::UnknownVariant(UnknownSavingsPlansFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SavingsPlansFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "commitment" => SavingsPlansFilterName::Commitment,
+            "ec2-instance-family" => SavingsPlansFilterName::Ec2InstanceFamily,
+            "end" => SavingsPlansFilterName::End,
+            "payment-option" => SavingsPlansFilterName::PaymentOption,
+            "region" => SavingsPlansFilterName::Region,
+            "savings-plan-type" => SavingsPlansFilterName::SavingsPlanType,
+            "start" => SavingsPlansFilterName::Start,
+            "term" => SavingsPlansFilterName::Term,
+            "upfront" => SavingsPlansFilterName::Upfront,
+            _ => SavingsPlansFilterName::UnknownVariant(UnknownSavingsPlansFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SavingsPlansFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "commitment" => SavingsPlansFilterName::Commitment,
+            "ec2-instance-family" => SavingsPlansFilterName::Ec2InstanceFamily,
+            "end" => SavingsPlansFilterName::End,
+            "payment-option" => SavingsPlansFilterName::PaymentOption,
+            "region" => SavingsPlansFilterName::Region,
+            "savings-plan-type" => SavingsPlansFilterName::SavingsPlanType,
+            "start" => SavingsPlansFilterName::Start,
+            "term" => SavingsPlansFilterName::Term,
+            "upfront" => SavingsPlansFilterName::Upfront,
+            _ => SavingsPlansFilterName::UnknownVariant(UnknownSavingsPlansFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SavingsPlansFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SavingsPlansFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SavingsPlansFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

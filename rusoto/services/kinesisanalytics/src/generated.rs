@@ -170,7 +170,7 @@ pub struct ApplicationDetail {
     pub application_name: String,
     /// <p>Status of the application.</p>
     #[serde(rename = "ApplicationStatus")]
-    pub application_status: String,
+    pub application_status: ApplicationStatus,
     /// <p>Provides the current application version.</p>
     #[serde(rename = "ApplicationVersionId")]
     pub application_version_id: i64,
@@ -200,6 +200,131 @@ pub struct ApplicationDetail {
     pub reference_data_source_descriptions: Option<Vec<ReferenceDataSourceDescription>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApplicationStatus {
+    Deleting,
+    Ready,
+    Running,
+    Starting,
+    Stopping,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplicationStatus),
+}
+
+impl Default for ApplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApplicationStatus {
+    fn into(self) -> String {
+        match self {
+            ApplicationStatus::Deleting => "DELETING".to_string(),
+            ApplicationStatus::Ready => "READY".to_string(),
+            ApplicationStatus::Running => "RUNNING".to_string(),
+            ApplicationStatus::Starting => "STARTING".to_string(),
+            ApplicationStatus::Stopping => "STOPPING".to_string(),
+            ApplicationStatus::Updating => "UPDATING".to_string(),
+            ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ApplicationStatus::Deleting => &"DELETING",
+            ApplicationStatus::Ready => &"READY",
+            ApplicationStatus::Running => &"RUNNING",
+            ApplicationStatus::Starting => &"STARTING",
+            ApplicationStatus::Stopping => &"STOPPING",
+            ApplicationStatus::Updating => &"UPDATING",
+            ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ApplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETING" => ApplicationStatus::Deleting,
+            "READY" => ApplicationStatus::Ready,
+            "RUNNING" => ApplicationStatus::Running,
+            "STARTING" => ApplicationStatus::Starting,
+            "STOPPING" => ApplicationStatus::Stopping,
+            "UPDATING" => ApplicationStatus::Updating,
+            _ => ApplicationStatus::UnknownVariant(UnknownApplicationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETING" => ApplicationStatus::Deleting,
+            "READY" => ApplicationStatus::Ready,
+            "RUNNING" => ApplicationStatus::Running,
+            "STARTING" => ApplicationStatus::Starting,
+            "STOPPING" => ApplicationStatus::Stopping,
+            "UPDATING" => ApplicationStatus::Updating,
+            _ => ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ApplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><note> <p>This documentation is for version 1 of the Amazon Kinesis Data Analytics API, which only supports SQL applications. Version 2 of the API supports SQL and Java applications. For more information about version 2, see <a href="/kinesisanalytics/latest/apiv2/Welcome.html">Amazon Kinesis Data Analytics API V2 Documentation</a>.</p> </note> <p>Provides application summary information, including the application Amazon Resource Name (ARN), name, and status.</p></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -212,7 +337,7 @@ pub struct ApplicationSummary {
     pub application_name: String,
     /// <p>Status of the application.</p>
     #[serde(rename = "ApplicationStatus")]
-    pub application_status: String,
+    pub application_status: ApplicationStatus,
 }
 
 /// <p>Describes updates to apply to an existing Amazon Kinesis Analytics application.</p>
@@ -453,7 +578,7 @@ pub struct DescribeApplicationResponse {
 pub struct DestinationSchema {
     /// <p>Specifies the format of the records on the output stream.</p>
     #[serde(rename = "RecordFormatType")]
-    pub record_format_type: String,
+    pub record_format_type: RecordFormatType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -690,13 +815,122 @@ pub struct InputSchemaUpdate {
     pub record_format_update: Option<RecordFormat>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputStartingPosition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputStartingPosition {
+    LastStoppedPoint,
+    Now,
+    TrimHorizon,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputStartingPosition),
+}
+
+impl Default for InputStartingPosition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputStartingPosition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputStartingPosition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputStartingPosition {
+    fn into(self) -> String {
+        match self {
+            InputStartingPosition::LastStoppedPoint => "LAST_STOPPED_POINT".to_string(),
+            InputStartingPosition::Now => "NOW".to_string(),
+            InputStartingPosition::TrimHorizon => "TRIM_HORIZON".to_string(),
+            InputStartingPosition::UnknownVariant(UnknownInputStartingPosition {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputStartingPosition {
+    fn into(self) -> &'a str {
+        match self {
+            InputStartingPosition::LastStoppedPoint => &"LAST_STOPPED_POINT",
+            InputStartingPosition::Now => &"NOW",
+            InputStartingPosition::TrimHorizon => &"TRIM_HORIZON",
+            InputStartingPosition::UnknownVariant(UnknownInputStartingPosition {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputStartingPosition {
+    fn from(name: &str) -> Self {
+        match name {
+            "LAST_STOPPED_POINT" => InputStartingPosition::LastStoppedPoint,
+            "NOW" => InputStartingPosition::Now,
+            "TRIM_HORIZON" => InputStartingPosition::TrimHorizon,
+            _ => InputStartingPosition::UnknownVariant(UnknownInputStartingPosition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputStartingPosition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LAST_STOPPED_POINT" => InputStartingPosition::LastStoppedPoint,
+            "NOW" => InputStartingPosition::Now,
+            "TRIM_HORIZON" => InputStartingPosition::TrimHorizon,
+            _ => InputStartingPosition::UnknownVariant(UnknownInputStartingPosition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputStartingPosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputStartingPosition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputStartingPosition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the point at which the application reads from the streaming source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputStartingPositionConfiguration {
     /// <p><p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, start at the request time stamp that the customer issued.</p> </li> <li> <p> <code>TRIM<em>HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Firehose delivery stream.</p> </li> <li> <p> <code>LAST</em>STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul></p>
     #[serde(rename = "InputStartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_starting_position: Option<String>,
+    pub input_starting_position: Option<InputStartingPosition>,
 }
 
 /// <p>Describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
@@ -1103,7 +1337,111 @@ pub struct RecordFormat {
     pub mapping_parameters: Option<MappingParameters>,
     /// <p>The type of record format.</p>
     #[serde(rename = "RecordFormatType")]
-    pub record_format_type: String,
+    pub record_format_type: RecordFormatType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecordFormatType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecordFormatType {
+    Csv,
+    Json,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecordFormatType),
+}
+
+impl Default for RecordFormatType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecordFormatType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecordFormatType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecordFormatType {
+    fn into(self) -> String {
+        match self {
+            RecordFormatType::Csv => "CSV".to_string(),
+            RecordFormatType::Json => "JSON".to_string(),
+            RecordFormatType::UnknownVariant(UnknownRecordFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecordFormatType {
+    fn into(self) -> &'a str {
+        match self {
+            RecordFormatType::Csv => &"CSV",
+            RecordFormatType::Json => &"JSON",
+            RecordFormatType::UnknownVariant(UnknownRecordFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RecordFormatType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => RecordFormatType::Csv,
+            "JSON" => RecordFormatType::Json,
+            _ => RecordFormatType::UnknownVariant(UnknownRecordFormatType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecordFormatType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => RecordFormatType::Csv,
+            "JSON" => RecordFormatType::Json,
+            _ => RecordFormatType::UnknownVariant(UnknownRecordFormatType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecordFormatType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecordFormatType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the reference data source by providing the source information (S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>

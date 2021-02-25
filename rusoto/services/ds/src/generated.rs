@@ -173,7 +173,7 @@ pub struct Certificate {
     /// <p>The state of the certificate.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CertificateState>,
     /// <p>Describes a state change for the certificate.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -181,7 +181,7 @@ pub struct Certificate {
     /// <p>The function that the registered certificate performs. Valid values include <code>ClientLDAPS</code> or <code>ClientCertAuth</code>. The default value is <code>ClientLDAPS</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<CertificateType>,
 }
 
 /// <p>Contains general information about a certificate.</p>
@@ -203,11 +203,336 @@ pub struct CertificateInfo {
     /// <p>The state of the certificate.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CertificateState>,
     /// <p>The function that the registered certificate performs. Valid values include <code>ClientLDAPS</code> or <code>ClientCertAuth</code>. The default value is <code>ClientLDAPS</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<CertificateType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateState {
+    DeregisterFailed,
+    Deregistered,
+    Deregistering,
+    RegisterFailed,
+    Registered,
+    Registering,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateState),
+}
+
+impl Default for CertificateState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateState {
+    fn into(self) -> String {
+        match self {
+            CertificateState::DeregisterFailed => "DeregisterFailed".to_string(),
+            CertificateState::Deregistered => "Deregistered".to_string(),
+            CertificateState::Deregistering => "Deregistering".to_string(),
+            CertificateState::RegisterFailed => "RegisterFailed".to_string(),
+            CertificateState::Registered => "Registered".to_string(),
+            CertificateState::Registering => "Registering".to_string(),
+            CertificateState::UnknownVariant(UnknownCertificateState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateState {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateState::DeregisterFailed => &"DeregisterFailed",
+            CertificateState::Deregistered => &"Deregistered",
+            CertificateState::Deregistering => &"Deregistering",
+            CertificateState::RegisterFailed => &"RegisterFailed",
+            CertificateState::Registered => &"Registered",
+            CertificateState::Registering => &"Registering",
+            CertificateState::UnknownVariant(UnknownCertificateState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CertificateState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DeregisterFailed" => CertificateState::DeregisterFailed,
+            "Deregistered" => CertificateState::Deregistered,
+            "Deregistering" => CertificateState::Deregistering,
+            "RegisterFailed" => CertificateState::RegisterFailed,
+            "Registered" => CertificateState::Registered,
+            "Registering" => CertificateState::Registering,
+            _ => CertificateState::UnknownVariant(UnknownCertificateState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DeregisterFailed" => CertificateState::DeregisterFailed,
+            "Deregistered" => CertificateState::Deregistered,
+            "Deregistering" => CertificateState::Deregistering,
+            "RegisterFailed" => CertificateState::RegisterFailed,
+            "Registered" => CertificateState::Registered,
+            "Registering" => CertificateState::Registering,
+            _ => CertificateState::UnknownVariant(UnknownCertificateState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CertificateState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CertificateState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateType {
+    ClientCertAuth,
+    ClientLDAPS,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateType),
+}
+
+impl Default for CertificateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateType {
+    fn into(self) -> String {
+        match self {
+            CertificateType::ClientCertAuth => "ClientCertAuth".to_string(),
+            CertificateType::ClientLDAPS => "ClientLDAPS".to_string(),
+            CertificateType::UnknownVariant(UnknownCertificateType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateType {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateType::ClientCertAuth => &"ClientCertAuth",
+            CertificateType::ClientLDAPS => &"ClientLDAPS",
+            CertificateType::UnknownVariant(UnknownCertificateType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CertificateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ClientCertAuth" => CertificateType::ClientCertAuth,
+            "ClientLDAPS" => CertificateType::ClientLDAPS,
+            _ => CertificateType::UnknownVariant(UnknownCertificateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ClientCertAuth" => CertificateType::ClientCertAuth,
+            "ClientLDAPS" => CertificateType::ClientLDAPS,
+            _ => CertificateType::UnknownVariant(UnknownCertificateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CertificateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CertificateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClientAuthenticationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClientAuthenticationType {
+    SmartCard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClientAuthenticationType),
+}
+
+impl Default for ClientAuthenticationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClientAuthenticationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClientAuthenticationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClientAuthenticationType {
+    fn into(self) -> String {
+        match self {
+            ClientAuthenticationType::SmartCard => "SmartCard".to_string(),
+            ClientAuthenticationType::UnknownVariant(UnknownClientAuthenticationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClientAuthenticationType {
+    fn into(self) -> &'a str {
+        match self {
+            ClientAuthenticationType::SmartCard => &"SmartCard",
+            ClientAuthenticationType::UnknownVariant(UnknownClientAuthenticationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClientAuthenticationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SmartCard" => ClientAuthenticationType::SmartCard,
+            _ => ClientAuthenticationType::UnknownVariant(UnknownClientAuthenticationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClientAuthenticationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SmartCard" => ClientAuthenticationType::SmartCard,
+            _ => ClientAuthenticationType::UnknownVariant(UnknownClientAuthenticationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClientAuthenticationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClientAuthenticationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ClientAuthenticationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about the client certificate authentication settings for the <code>RegisterCertificate</code> and <code>DescribeCertificate</code> operations. </p>
@@ -252,7 +577,7 @@ pub struct ConditionalForwarder {
     /// <p>The replication scope of the conditional forwarder. The only allowed value is <code>Domain</code>, which will replicate the conditional forwarder to all of the domain controllers for your AWS directory.</p>
     #[serde(rename = "ReplicationScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replication_scope: Option<String>,
+    pub replication_scope: Option<ReplicationScope>,
 }
 
 /// <p>Contains the inputs for the <a>ConnectDirectory</a> operation.</p>
@@ -278,7 +603,7 @@ pub struct ConnectDirectoryRequest {
     pub short_name: Option<String>,
     /// <p>The size of the directory.</p>
     #[serde(rename = "Size")]
-    pub size: String,
+    pub size: DirectorySize,
     /// <p>The tags to be assigned to AD Connector.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -394,7 +719,7 @@ pub struct CreateDirectoryRequest {
     pub short_name: Option<String>,
     /// <p>The size of the directory.</p>
     #[serde(rename = "Size")]
-    pub size: String,
+    pub size: DirectorySize,
     /// <p>The tags to be assigned to the Simple AD directory.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -441,7 +766,7 @@ pub struct CreateMicrosoftADRequest {
     /// <p>AWS Managed Microsoft AD is available in two editions: <code>Standard</code> and <code>Enterprise</code>. <code>Enterprise</code> is the default.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<DirectoryEdition>,
     /// <p>The fully qualified domain name for the AWS Managed Microsoft AD directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -511,17 +836,17 @@ pub struct CreateTrustRequest {
     /// <p>Optional parameter to enable selective authentication for the trust.</p>
     #[serde(rename = "SelectiveAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub selective_auth: Option<String>,
+    pub selective_auth: Option<SelectiveAuth>,
     /// <p>The direction of the trust relationship.</p>
     #[serde(rename = "TrustDirection")]
-    pub trust_direction: String,
+    pub trust_direction: TrustDirection,
     /// <p>The trust password. The must be the same password that was used when creating the trust relationship on the external domain.</p>
     #[serde(rename = "TrustPassword")]
     pub trust_password: String,
     /// <p>The trust relationship type. <code>Forest</code> is the default.</p>
     #[serde(rename = "TrustType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trust_type: Option<String>,
+    pub trust_type: Option<TrustType>,
 }
 
 /// <p>The result of a CreateTrust request.</p>
@@ -805,7 +1130,7 @@ pub struct DescribeLDAPSSettingsRequest {
     /// <p>The type of LDAP security to enable. Currently only the value <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<LDAPSType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1038,7 +1363,7 @@ pub struct DirectoryDescription {
     /// <p>The edition associated with this directory.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<DirectoryEdition>,
     /// <p>Specifies when the directory was created.</p>
     #[serde(rename = "LaunchTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1058,7 +1383,7 @@ pub struct DirectoryDescription {
     /// <p>The status of the RADIUS MFA server connection.</p>
     #[serde(rename = "RadiusStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub radius_status: Option<String>,
+    pub radius_status: Option<RadiusStatus>,
     /// <p>Lists the Regions where the directory has replicated.</p>
     #[serde(rename = "RegionsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1066,7 +1391,7 @@ pub struct DirectoryDescription {
     /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a shared directory request (<code>HANDSHAKE</code>).</p>
     #[serde(rename = "ShareMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub share_method: Option<String>,
+    pub share_method: Option<ShareMethod>,
     /// <p>A directory share request that is sent by the directory owner to the directory consumer. The request includes a typed message to help the directory consumer administrator determine whether to approve or reject the share invitation.</p>
     #[serde(rename = "ShareNotes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1074,7 +1399,7 @@ pub struct DirectoryDescription {
     /// <p>Current directory status of the shared AWS Managed Microsoft AD directory.</p>
     #[serde(rename = "ShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub share_status: Option<String>,
+    pub share_status: Option<ShareStatus>,
     /// <p>The short name of the directory.</p>
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1082,7 +1407,7 @@ pub struct DirectoryDescription {
     /// <p>The directory size.</p>
     #[serde(rename = "Size")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub size: Option<String>,
+    pub size: Option<DirectorySize>,
     /// <p>Indicates if single sign-on is enabled for the directory. For more information, see <a>EnableSso</a> and <a>DisableSso</a>.</p>
     #[serde(rename = "SsoEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1090,7 +1415,7 @@ pub struct DirectoryDescription {
     /// <p>The current stage of the directory.</p>
     #[serde(rename = "Stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stage: Option<String>,
+    pub stage: Option<DirectoryStage>,
     /// <p>The date and time that the stage was last updated.</p>
     #[serde(rename = "StageLastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1102,11 +1427,115 @@ pub struct DirectoryDescription {
     /// <p>The directory size.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DirectoryType>,
     /// <p>A <a>DirectoryVpcSettingsDescription</a> object that contains additional information about a directory. This member is only present if the directory is a Simple AD or Managed AD directory.</p>
     #[serde(rename = "VpcSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectoryEdition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectoryEdition {
+    Enterprise,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectoryEdition),
+}
+
+impl Default for DirectoryEdition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectoryEdition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectoryEdition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectoryEdition {
+    fn into(self) -> String {
+        match self {
+            DirectoryEdition::Enterprise => "Enterprise".to_string(),
+            DirectoryEdition::Standard => "Standard".to_string(),
+            DirectoryEdition::UnknownVariant(UnknownDirectoryEdition { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectoryEdition {
+    fn into(self) -> &'a str {
+        match self {
+            DirectoryEdition::Enterprise => &"Enterprise",
+            DirectoryEdition::Standard => &"Standard",
+            DirectoryEdition::UnknownVariant(UnknownDirectoryEdition { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DirectoryEdition {
+    fn from(name: &str) -> Self {
+        match name {
+            "Enterprise" => DirectoryEdition::Enterprise,
+            "Standard" => DirectoryEdition::Standard,
+            _ => DirectoryEdition::UnknownVariant(UnknownDirectoryEdition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectoryEdition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Enterprise" => DirectoryEdition::Enterprise,
+            "Standard" => DirectoryEdition::Standard,
+            _ => DirectoryEdition::UnknownVariant(UnknownDirectoryEdition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryEdition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DirectoryEdition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectoryEdition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains directory limit information for a Region.</p>
@@ -1151,6 +1580,363 @@ pub struct DirectoryLimits {
     pub connected_directories_limit_reached: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectorySize {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectorySize {
+    Large,
+    Small,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectorySize),
+}
+
+impl Default for DirectorySize {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectorySize {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectorySize {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectorySize {
+    fn into(self) -> String {
+        match self {
+            DirectorySize::Large => "Large".to_string(),
+            DirectorySize::Small => "Small".to_string(),
+            DirectorySize::UnknownVariant(UnknownDirectorySize { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectorySize {
+    fn into(self) -> &'a str {
+        match self {
+            DirectorySize::Large => &"Large",
+            DirectorySize::Small => &"Small",
+            DirectorySize::UnknownVariant(UnknownDirectorySize { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectorySize {
+    fn from(name: &str) -> Self {
+        match name {
+            "Large" => DirectorySize::Large,
+            "Small" => DirectorySize::Small,
+            _ => DirectorySize::UnknownVariant(UnknownDirectorySize {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectorySize {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Large" => DirectorySize::Large,
+            "Small" => DirectorySize::Small,
+            _ => DirectorySize::UnknownVariant(UnknownDirectorySize { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectorySize {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DirectorySize {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectorySize {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectoryStage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectoryStage {
+    Active,
+    Created,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Impaired,
+    Inoperable,
+    Requested,
+    RestoreFailed,
+    Restoring,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectoryStage),
+}
+
+impl Default for DirectoryStage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectoryStage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectoryStage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectoryStage {
+    fn into(self) -> String {
+        match self {
+            DirectoryStage::Active => "Active".to_string(),
+            DirectoryStage::Created => "Created".to_string(),
+            DirectoryStage::Creating => "Creating".to_string(),
+            DirectoryStage::Deleted => "Deleted".to_string(),
+            DirectoryStage::Deleting => "Deleting".to_string(),
+            DirectoryStage::Failed => "Failed".to_string(),
+            DirectoryStage::Impaired => "Impaired".to_string(),
+            DirectoryStage::Inoperable => "Inoperable".to_string(),
+            DirectoryStage::Requested => "Requested".to_string(),
+            DirectoryStage::RestoreFailed => "RestoreFailed".to_string(),
+            DirectoryStage::Restoring => "Restoring".to_string(),
+            DirectoryStage::UnknownVariant(UnknownDirectoryStage { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectoryStage {
+    fn into(self) -> &'a str {
+        match self {
+            DirectoryStage::Active => &"Active",
+            DirectoryStage::Created => &"Created",
+            DirectoryStage::Creating => &"Creating",
+            DirectoryStage::Deleted => &"Deleted",
+            DirectoryStage::Deleting => &"Deleting",
+            DirectoryStage::Failed => &"Failed",
+            DirectoryStage::Impaired => &"Impaired",
+            DirectoryStage::Inoperable => &"Inoperable",
+            DirectoryStage::Requested => &"Requested",
+            DirectoryStage::RestoreFailed => &"RestoreFailed",
+            DirectoryStage::Restoring => &"Restoring",
+            DirectoryStage::UnknownVariant(UnknownDirectoryStage { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectoryStage {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => DirectoryStage::Active,
+            "Created" => DirectoryStage::Created,
+            "Creating" => DirectoryStage::Creating,
+            "Deleted" => DirectoryStage::Deleted,
+            "Deleting" => DirectoryStage::Deleting,
+            "Failed" => DirectoryStage::Failed,
+            "Impaired" => DirectoryStage::Impaired,
+            "Inoperable" => DirectoryStage::Inoperable,
+            "Requested" => DirectoryStage::Requested,
+            "RestoreFailed" => DirectoryStage::RestoreFailed,
+            "Restoring" => DirectoryStage::Restoring,
+            _ => DirectoryStage::UnknownVariant(UnknownDirectoryStage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectoryStage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => DirectoryStage::Active,
+            "Created" => DirectoryStage::Created,
+            "Creating" => DirectoryStage::Creating,
+            "Deleted" => DirectoryStage::Deleted,
+            "Deleting" => DirectoryStage::Deleting,
+            "Failed" => DirectoryStage::Failed,
+            "Impaired" => DirectoryStage::Impaired,
+            "Inoperable" => DirectoryStage::Inoperable,
+            "Requested" => DirectoryStage::Requested,
+            "RestoreFailed" => DirectoryStage::RestoreFailed,
+            "Restoring" => DirectoryStage::Restoring,
+            _ => DirectoryStage::UnknownVariant(UnknownDirectoryStage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryStage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectoryStage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectoryStage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectoryType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectoryType {
+    Adconnector,
+    MicrosoftAD,
+    SharedMicrosoftAD,
+    SimpleAD,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectoryType),
+}
+
+impl Default for DirectoryType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectoryType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectoryType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectoryType {
+    fn into(self) -> String {
+        match self {
+            DirectoryType::Adconnector => "ADConnector".to_string(),
+            DirectoryType::MicrosoftAD => "MicrosoftAD".to_string(),
+            DirectoryType::SharedMicrosoftAD => "SharedMicrosoftAD".to_string(),
+            DirectoryType::SimpleAD => "SimpleAD".to_string(),
+            DirectoryType::UnknownVariant(UnknownDirectoryType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectoryType {
+    fn into(self) -> &'a str {
+        match self {
+            DirectoryType::Adconnector => &"ADConnector",
+            DirectoryType::MicrosoftAD => &"MicrosoftAD",
+            DirectoryType::SharedMicrosoftAD => &"SharedMicrosoftAD",
+            DirectoryType::SimpleAD => &"SimpleAD",
+            DirectoryType::UnknownVariant(UnknownDirectoryType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectoryType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADConnector" => DirectoryType::Adconnector,
+            "MicrosoftAD" => DirectoryType::MicrosoftAD,
+            "SharedMicrosoftAD" => DirectoryType::SharedMicrosoftAD,
+            "SimpleAD" => DirectoryType::SimpleAD,
+            _ => DirectoryType::UnknownVariant(UnknownDirectoryType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectoryType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADConnector" => DirectoryType::Adconnector,
+            "MicrosoftAD" => DirectoryType::MicrosoftAD,
+            "SharedMicrosoftAD" => DirectoryType::SharedMicrosoftAD,
+            "SimpleAD" => DirectoryType::SimpleAD,
+            _ => DirectoryType::UnknownVariant(UnknownDirectoryType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectoryType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectoryType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains VPC information for the <a>CreateDirectory</a> or <a>CreateMicrosoftAD</a> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DirectoryVpcSettings {
@@ -1192,7 +1978,7 @@ pub struct DisableClientAuthenticationRequest {
     pub directory_id: String,
     /// <p>The type of client authentication to disable. Currently, only the parameter, <code>SmartCard</code> is supported.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ClientAuthenticationType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1207,7 +1993,7 @@ pub struct DisableLDAPSRequest {
     pub directory_id: String,
     /// <p>The type of LDAP security to enable. Currently only the value <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: LDAPSType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1277,7 +2063,7 @@ pub struct DomainController {
     /// <p>The status of the domain controller.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DomainControllerStatus>,
     /// <p>The date and time that the status was last updated.</p>
     #[serde(rename = "StatusLastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1296,6 +2082,136 @@ pub struct DomainController {
     pub vpc_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainControllerStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainControllerStatus {
+    Active,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Impaired,
+    Restoring,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainControllerStatus),
+}
+
+impl Default for DomainControllerStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainControllerStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainControllerStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainControllerStatus {
+    fn into(self) -> String {
+        match self {
+            DomainControllerStatus::Active => "Active".to_string(),
+            DomainControllerStatus::Creating => "Creating".to_string(),
+            DomainControllerStatus::Deleted => "Deleted".to_string(),
+            DomainControllerStatus::Deleting => "Deleting".to_string(),
+            DomainControllerStatus::Failed => "Failed".to_string(),
+            DomainControllerStatus::Impaired => "Impaired".to_string(),
+            DomainControllerStatus::Restoring => "Restoring".to_string(),
+            DomainControllerStatus::UnknownVariant(UnknownDomainControllerStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainControllerStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainControllerStatus::Active => &"Active",
+            DomainControllerStatus::Creating => &"Creating",
+            DomainControllerStatus::Deleted => &"Deleted",
+            DomainControllerStatus::Deleting => &"Deleting",
+            DomainControllerStatus::Failed => &"Failed",
+            DomainControllerStatus::Impaired => &"Impaired",
+            DomainControllerStatus::Restoring => &"Restoring",
+            DomainControllerStatus::UnknownVariant(UnknownDomainControllerStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DomainControllerStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => DomainControllerStatus::Active,
+            "Creating" => DomainControllerStatus::Creating,
+            "Deleted" => DomainControllerStatus::Deleted,
+            "Deleting" => DomainControllerStatus::Deleting,
+            "Failed" => DomainControllerStatus::Failed,
+            "Impaired" => DomainControllerStatus::Impaired,
+            "Restoring" => DomainControllerStatus::Restoring,
+            _ => DomainControllerStatus::UnknownVariant(UnknownDomainControllerStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainControllerStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => DomainControllerStatus::Active,
+            "Creating" => DomainControllerStatus::Creating,
+            "Deleted" => DomainControllerStatus::Deleted,
+            "Deleting" => DomainControllerStatus::Deleting,
+            "Failed" => DomainControllerStatus::Failed,
+            "Impaired" => DomainControllerStatus::Impaired,
+            "Restoring" => DomainControllerStatus::Restoring,
+            _ => DomainControllerStatus::UnknownVariant(UnknownDomainControllerStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainControllerStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainControllerStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainControllerStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableClientAuthenticationRequest {
@@ -1304,7 +2220,7 @@ pub struct EnableClientAuthenticationRequest {
     pub directory_id: String,
     /// <p>The type of client authentication to enable. Currently only the value <code>SmartCard</code> is supported. Smart card authentication in AD Connector requires that you enable Kerberos Constrained Delegation for the Service User to the LDAP service in the on-premises AD. </p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ClientAuthenticationType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1319,7 +2235,7 @@ pub struct EnableLDAPSRequest {
     pub directory_id: String,
     /// <p>The type of LDAP security to enable. Currently only the value <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: LDAPSType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1380,7 +2296,7 @@ pub struct EventTopic {
     /// <p>The topic registration status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TopicStatus>,
     /// <p>The SNS topic ARN (Amazon Resource Name).</p>
     #[serde(rename = "TopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1462,11 +2378,136 @@ pub struct IpRouteInfo {
     /// <p>The status of the IP address block.</p>
     #[serde(rename = "IpRouteStatusMsg")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_route_status_msg: Option<String>,
+    pub ip_route_status_msg: Option<IpRouteStatusMsg>,
     /// <p>The reason for the IpRouteStatusMsg.</p>
     #[serde(rename = "IpRouteStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_route_status_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpRouteStatusMsg {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpRouteStatusMsg {
+    AddFailed,
+    Added,
+    Adding,
+    RemoveFailed,
+    Removed,
+    Removing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpRouteStatusMsg),
+}
+
+impl Default for IpRouteStatusMsg {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpRouteStatusMsg {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpRouteStatusMsg {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpRouteStatusMsg {
+    fn into(self) -> String {
+        match self {
+            IpRouteStatusMsg::AddFailed => "AddFailed".to_string(),
+            IpRouteStatusMsg::Added => "Added".to_string(),
+            IpRouteStatusMsg::Adding => "Adding".to_string(),
+            IpRouteStatusMsg::RemoveFailed => "RemoveFailed".to_string(),
+            IpRouteStatusMsg::Removed => "Removed".to_string(),
+            IpRouteStatusMsg::Removing => "Removing".to_string(),
+            IpRouteStatusMsg::UnknownVariant(UnknownIpRouteStatusMsg { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpRouteStatusMsg {
+    fn into(self) -> &'a str {
+        match self {
+            IpRouteStatusMsg::AddFailed => &"AddFailed",
+            IpRouteStatusMsg::Added => &"Added",
+            IpRouteStatusMsg::Adding => &"Adding",
+            IpRouteStatusMsg::RemoveFailed => &"RemoveFailed",
+            IpRouteStatusMsg::Removed => &"Removed",
+            IpRouteStatusMsg::Removing => &"Removing",
+            IpRouteStatusMsg::UnknownVariant(UnknownIpRouteStatusMsg { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for IpRouteStatusMsg {
+    fn from(name: &str) -> Self {
+        match name {
+            "AddFailed" => IpRouteStatusMsg::AddFailed,
+            "Added" => IpRouteStatusMsg::Added,
+            "Adding" => IpRouteStatusMsg::Adding,
+            "RemoveFailed" => IpRouteStatusMsg::RemoveFailed,
+            "Removed" => IpRouteStatusMsg::Removed,
+            "Removing" => IpRouteStatusMsg::Removing,
+            _ => IpRouteStatusMsg::UnknownVariant(UnknownIpRouteStatusMsg {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpRouteStatusMsg {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AddFailed" => IpRouteStatusMsg::AddFailed,
+            "Added" => IpRouteStatusMsg::Added,
+            "Adding" => IpRouteStatusMsg::Adding,
+            "RemoveFailed" => IpRouteStatusMsg::RemoveFailed,
+            "Removed" => IpRouteStatusMsg::Removed,
+            "Removing" => IpRouteStatusMsg::Removing,
+            _ => IpRouteStatusMsg::UnknownVariant(UnknownIpRouteStatusMsg { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpRouteStatusMsg {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IpRouteStatusMsg {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpRouteStatusMsg {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains general information about the LDAPS settings.</p>
@@ -1476,7 +2517,7 @@ pub struct LDAPSSettingInfo {
     /// <p>The state of the LDAPS settings.</p>
     #[serde(rename = "LDAPSStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ldaps_status: Option<String>,
+    pub ldaps_status: Option<LDAPSStatus>,
     /// <p>Describes a state change for LDAPS.</p>
     #[serde(rename = "LDAPSStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1485,6 +2526,213 @@ pub struct LDAPSSettingInfo {
     #[serde(rename = "LastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLDAPSStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LDAPSStatus {
+    Disabled,
+    EnableFailed,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLDAPSStatus),
+}
+
+impl Default for LDAPSStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LDAPSStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LDAPSStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LDAPSStatus {
+    fn into(self) -> String {
+        match self {
+            LDAPSStatus::Disabled => "Disabled".to_string(),
+            LDAPSStatus::EnableFailed => "EnableFailed".to_string(),
+            LDAPSStatus::Enabled => "Enabled".to_string(),
+            LDAPSStatus::Enabling => "Enabling".to_string(),
+            LDAPSStatus::UnknownVariant(UnknownLDAPSStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LDAPSStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LDAPSStatus::Disabled => &"Disabled",
+            LDAPSStatus::EnableFailed => &"EnableFailed",
+            LDAPSStatus::Enabled => &"Enabled",
+            LDAPSStatus::Enabling => &"Enabling",
+            LDAPSStatus::UnknownVariant(UnknownLDAPSStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LDAPSStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => LDAPSStatus::Disabled,
+            "EnableFailed" => LDAPSStatus::EnableFailed,
+            "Enabled" => LDAPSStatus::Enabled,
+            "Enabling" => LDAPSStatus::Enabling,
+            _ => LDAPSStatus::UnknownVariant(UnknownLDAPSStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LDAPSStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => LDAPSStatus::Disabled,
+            "EnableFailed" => LDAPSStatus::EnableFailed,
+            "Enabled" => LDAPSStatus::Enabled,
+            "Enabling" => LDAPSStatus::Enabling,
+            _ => LDAPSStatus::UnknownVariant(UnknownLDAPSStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LDAPSStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LDAPSStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LDAPSStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLDAPSType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LDAPSType {
+    Client,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLDAPSType),
+}
+
+impl Default for LDAPSType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LDAPSType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LDAPSType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LDAPSType {
+    fn into(self) -> String {
+        match self {
+            LDAPSType::Client => "Client".to_string(),
+            LDAPSType::UnknownVariant(UnknownLDAPSType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LDAPSType {
+    fn into(self) -> &'a str {
+        match self {
+            LDAPSType::Client => &"Client",
+            LDAPSType::UnknownVariant(UnknownLDAPSType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LDAPSType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Client" => LDAPSType::Client,
+            _ => LDAPSType::UnknownVariant(UnknownLDAPSType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LDAPSType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Client" => LDAPSType::Client,
+            _ => LDAPSType::UnknownVariant(UnknownLDAPSType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LDAPSType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LDAPSType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LDAPSType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1674,11 +2922,131 @@ pub struct OwnerDirectoryDescription {
     /// <p>Information about the status of the RADIUS server.</p>
     #[serde(rename = "RadiusStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub radius_status: Option<String>,
+    pub radius_status: Option<RadiusStatus>,
     /// <p>Information about the VPC settings for the directory.</p>
     #[serde(rename = "VpcSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRadiusAuthenticationProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RadiusAuthenticationProtocol {
+    Chap,
+    MsChapv1,
+    MsChapv2,
+    Pap,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRadiusAuthenticationProtocol),
+}
+
+impl Default for RadiusAuthenticationProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RadiusAuthenticationProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RadiusAuthenticationProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RadiusAuthenticationProtocol {
+    fn into(self) -> String {
+        match self {
+            RadiusAuthenticationProtocol::Chap => "CHAP".to_string(),
+            RadiusAuthenticationProtocol::MsChapv1 => "MS-CHAPv1".to_string(),
+            RadiusAuthenticationProtocol::MsChapv2 => "MS-CHAPv2".to_string(),
+            RadiusAuthenticationProtocol::Pap => "PAP".to_string(),
+            RadiusAuthenticationProtocol::UnknownVariant(UnknownRadiusAuthenticationProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RadiusAuthenticationProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            RadiusAuthenticationProtocol::Chap => &"CHAP",
+            RadiusAuthenticationProtocol::MsChapv1 => &"MS-CHAPv1",
+            RadiusAuthenticationProtocol::MsChapv2 => &"MS-CHAPv2",
+            RadiusAuthenticationProtocol::Pap => &"PAP",
+            RadiusAuthenticationProtocol::UnknownVariant(UnknownRadiusAuthenticationProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RadiusAuthenticationProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHAP" => RadiusAuthenticationProtocol::Chap,
+            "MS-CHAPv1" => RadiusAuthenticationProtocol::MsChapv1,
+            "MS-CHAPv2" => RadiusAuthenticationProtocol::MsChapv2,
+            "PAP" => RadiusAuthenticationProtocol::Pap,
+            _ => {
+                RadiusAuthenticationProtocol::UnknownVariant(UnknownRadiusAuthenticationProtocol {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for RadiusAuthenticationProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHAP" => RadiusAuthenticationProtocol::Chap,
+            "MS-CHAPv1" => RadiusAuthenticationProtocol::MsChapv1,
+            "MS-CHAPv2" => RadiusAuthenticationProtocol::MsChapv2,
+            "PAP" => RadiusAuthenticationProtocol::Pap,
+            _ => {
+                RadiusAuthenticationProtocol::UnknownVariant(UnknownRadiusAuthenticationProtocol {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RadiusAuthenticationProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RadiusAuthenticationProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RadiusAuthenticationProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a Remote Authentication Dial In User Service (RADIUS) server.</p>
@@ -1687,7 +3055,7 @@ pub struct RadiusSettings {
     /// <p>The protocol specified for your RADIUS endpoints.</p>
     #[serde(rename = "AuthenticationProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_protocol: Option<String>,
+    pub authentication_protocol: Option<RadiusAuthenticationProtocol>,
     /// <p>Not currently used.</p>
     #[serde(rename = "DisplayLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1718,6 +3086,112 @@ pub struct RadiusSettings {
     pub use_same_username: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRadiusStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RadiusStatus {
+    Completed,
+    Creating,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRadiusStatus),
+}
+
+impl Default for RadiusStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RadiusStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RadiusStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RadiusStatus {
+    fn into(self) -> String {
+        match self {
+            RadiusStatus::Completed => "Completed".to_string(),
+            RadiusStatus::Creating => "Creating".to_string(),
+            RadiusStatus::Failed => "Failed".to_string(),
+            RadiusStatus::UnknownVariant(UnknownRadiusStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RadiusStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RadiusStatus::Completed => &"Completed",
+            RadiusStatus::Creating => &"Creating",
+            RadiusStatus::Failed => &"Failed",
+            RadiusStatus::UnknownVariant(UnknownRadiusStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RadiusStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => RadiusStatus::Completed,
+            "Creating" => RadiusStatus::Creating,
+            "Failed" => RadiusStatus::Failed,
+            _ => RadiusStatus::UnknownVariant(UnknownRadiusStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RadiusStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => RadiusStatus::Completed,
+            "Creating" => RadiusStatus::Creating,
+            "Failed" => RadiusStatus::Failed,
+            _ => RadiusStatus::UnknownVariant(UnknownRadiusStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RadiusStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RadiusStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RadiusStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The replicated Region information for a directory.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1745,11 +3219,11 @@ pub struct RegionDescription {
     /// <p>Specifies whether the Region is the primary Region or an additional Region.</p>
     #[serde(rename = "RegionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub region_type: Option<String>,
+    pub region_type: Option<RegionType>,
     /// <p>The status of the replication process for the specified Region.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DirectoryStage>,
     /// <p>The date and time that the Region status was last updated.</p>
     #[serde(rename = "StatusLastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1757,6 +3231,107 @@ pub struct RegionDescription {
     #[serde(rename = "VpcSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_settings: Option<DirectoryVpcSettings>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegionType {
+    Additional,
+    Primary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegionType),
+}
+
+impl Default for RegionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegionType {
+    fn into(self) -> String {
+        match self {
+            RegionType::Additional => "Additional".to_string(),
+            RegionType::Primary => "Primary".to_string(),
+            RegionType::UnknownVariant(UnknownRegionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegionType {
+    fn into(self) -> &'a str {
+        match self {
+            RegionType::Additional => &"Additional",
+            RegionType::Primary => &"Primary",
+            RegionType::UnknownVariant(UnknownRegionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RegionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Additional" => RegionType::Additional,
+            "Primary" => RegionType::Primary,
+            _ => RegionType::UnknownVariant(UnknownRegionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Additional" => RegionType::Additional,
+            "Primary" => RegionType::Primary,
+            _ => RegionType::UnknownVariant(UnknownRegionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RegionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RegionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information about the Regions that are configured for multi-Region replication.</p>
@@ -1789,7 +3364,7 @@ pub struct RegisterCertificateRequest {
     /// <p>The function that the registered certificate performs. Valid values include <code>ClientLDAPS</code> or <code>ClientCertAuth</code>. The default value is <code>ClientLDAPS</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<CertificateType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1877,6 +3452,106 @@ pub struct RemoveTagsFromResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationScope {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationScope {
+    Domain,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationScope),
+}
+
+impl Default for ReplicationScope {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationScope {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationScope {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationScope {
+    fn into(self) -> String {
+        match self {
+            ReplicationScope::Domain => "Domain".to_string(),
+            ReplicationScope::UnknownVariant(UnknownReplicationScope { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationScope {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationScope::Domain => &"Domain",
+            ReplicationScope::UnknownVariant(UnknownReplicationScope { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReplicationScope {
+    fn from(name: &str) -> Self {
+        match name {
+            "Domain" => ReplicationScope::Domain,
+            _ => ReplicationScope::UnknownVariant(UnknownReplicationScope {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationScope {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Domain" => ReplicationScope::Domain,
+            _ => ReplicationScope::UnknownVariant(UnknownReplicationScope { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationScope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReplicationScope {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicationScope {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetUserPasswordRequest {
@@ -1932,7 +3607,7 @@ pub struct SchemaExtensionInfo {
     /// <p>The current status of the schema extension.</p>
     #[serde(rename = "SchemaExtensionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub schema_extension_status: Option<String>,
+    pub schema_extension_status: Option<SchemaExtensionStatus>,
     /// <p>The reason for the <code>SchemaExtensionStatus</code>.</p>
     #[serde(rename = "SchemaExtensionStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1943,6 +3618,246 @@ pub struct SchemaExtensionInfo {
     pub start_date_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSchemaExtensionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SchemaExtensionStatus {
+    CancelInProgress,
+    Cancelled,
+    Completed,
+    CreatingSnapshot,
+    Failed,
+    Initializing,
+    Replicating,
+    RollbackInProgress,
+    UpdatingSchema,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSchemaExtensionStatus),
+}
+
+impl Default for SchemaExtensionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SchemaExtensionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SchemaExtensionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SchemaExtensionStatus {
+    fn into(self) -> String {
+        match self {
+            SchemaExtensionStatus::CancelInProgress => "CancelInProgress".to_string(),
+            SchemaExtensionStatus::Cancelled => "Cancelled".to_string(),
+            SchemaExtensionStatus::Completed => "Completed".to_string(),
+            SchemaExtensionStatus::CreatingSnapshot => "CreatingSnapshot".to_string(),
+            SchemaExtensionStatus::Failed => "Failed".to_string(),
+            SchemaExtensionStatus::Initializing => "Initializing".to_string(),
+            SchemaExtensionStatus::Replicating => "Replicating".to_string(),
+            SchemaExtensionStatus::RollbackInProgress => "RollbackInProgress".to_string(),
+            SchemaExtensionStatus::UpdatingSchema => "UpdatingSchema".to_string(),
+            SchemaExtensionStatus::UnknownVariant(UnknownSchemaExtensionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SchemaExtensionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SchemaExtensionStatus::CancelInProgress => &"CancelInProgress",
+            SchemaExtensionStatus::Cancelled => &"Cancelled",
+            SchemaExtensionStatus::Completed => &"Completed",
+            SchemaExtensionStatus::CreatingSnapshot => &"CreatingSnapshot",
+            SchemaExtensionStatus::Failed => &"Failed",
+            SchemaExtensionStatus::Initializing => &"Initializing",
+            SchemaExtensionStatus::Replicating => &"Replicating",
+            SchemaExtensionStatus::RollbackInProgress => &"RollbackInProgress",
+            SchemaExtensionStatus::UpdatingSchema => &"UpdatingSchema",
+            SchemaExtensionStatus::UnknownVariant(UnknownSchemaExtensionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SchemaExtensionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CancelInProgress" => SchemaExtensionStatus::CancelInProgress,
+            "Cancelled" => SchemaExtensionStatus::Cancelled,
+            "Completed" => SchemaExtensionStatus::Completed,
+            "CreatingSnapshot" => SchemaExtensionStatus::CreatingSnapshot,
+            "Failed" => SchemaExtensionStatus::Failed,
+            "Initializing" => SchemaExtensionStatus::Initializing,
+            "Replicating" => SchemaExtensionStatus::Replicating,
+            "RollbackInProgress" => SchemaExtensionStatus::RollbackInProgress,
+            "UpdatingSchema" => SchemaExtensionStatus::UpdatingSchema,
+            _ => SchemaExtensionStatus::UnknownVariant(UnknownSchemaExtensionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SchemaExtensionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CancelInProgress" => SchemaExtensionStatus::CancelInProgress,
+            "Cancelled" => SchemaExtensionStatus::Cancelled,
+            "Completed" => SchemaExtensionStatus::Completed,
+            "CreatingSnapshot" => SchemaExtensionStatus::CreatingSnapshot,
+            "Failed" => SchemaExtensionStatus::Failed,
+            "Initializing" => SchemaExtensionStatus::Initializing,
+            "Replicating" => SchemaExtensionStatus::Replicating,
+            "RollbackInProgress" => SchemaExtensionStatus::RollbackInProgress,
+            "UpdatingSchema" => SchemaExtensionStatus::UpdatingSchema,
+            _ => SchemaExtensionStatus::UnknownVariant(UnknownSchemaExtensionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SchemaExtensionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SchemaExtensionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SchemaExtensionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSelectiveAuth {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SelectiveAuth {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSelectiveAuth),
+}
+
+impl Default for SelectiveAuth {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SelectiveAuth {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SelectiveAuth {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SelectiveAuth {
+    fn into(self) -> String {
+        match self {
+            SelectiveAuth::Disabled => "Disabled".to_string(),
+            SelectiveAuth::Enabled => "Enabled".to_string(),
+            SelectiveAuth::UnknownVariant(UnknownSelectiveAuth { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SelectiveAuth {
+    fn into(self) -> &'a str {
+        match self {
+            SelectiveAuth::Disabled => &"Disabled",
+            SelectiveAuth::Enabled => &"Enabled",
+            SelectiveAuth::UnknownVariant(UnknownSelectiveAuth { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SelectiveAuth {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => SelectiveAuth::Disabled,
+            "Enabled" => SelectiveAuth::Enabled,
+            _ => SelectiveAuth::UnknownVariant(UnknownSelectiveAuth {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SelectiveAuth {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => SelectiveAuth::Disabled,
+            "Enabled" => SelectiveAuth::Enabled,
+            _ => SelectiveAuth::UnknownVariant(UnknownSelectiveAuth { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SelectiveAuth {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SelectiveAuth {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SelectiveAuth {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ShareDirectoryRequest {
@@ -1951,7 +3866,7 @@ pub struct ShareDirectoryRequest {
     pub directory_id: String,
     /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a directory sharing request (<code>HANDSHAKE</code>).</p>
     #[serde(rename = "ShareMethod")]
-    pub share_method: String,
+    pub share_method: ShareMethod,
     /// <p>A directory share request that is sent by the directory owner to the directory consumer. The request includes a typed message to help the directory consumer administrator determine whether to approve or reject the share invitation.</p>
     #[serde(rename = "ShareNotes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1970,6 +3885,242 @@ pub struct ShareDirectoryResult {
     pub shared_directory_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShareMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShareMethod {
+    Handshake,
+    Organizations,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShareMethod),
+}
+
+impl Default for ShareMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShareMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShareMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShareMethod {
+    fn into(self) -> String {
+        match self {
+            ShareMethod::Handshake => "HANDSHAKE".to_string(),
+            ShareMethod::Organizations => "ORGANIZATIONS".to_string(),
+            ShareMethod::UnknownVariant(UnknownShareMethod { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShareMethod {
+    fn into(self) -> &'a str {
+        match self {
+            ShareMethod::Handshake => &"HANDSHAKE",
+            ShareMethod::Organizations => &"ORGANIZATIONS",
+            ShareMethod::UnknownVariant(UnknownShareMethod { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShareMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "HANDSHAKE" => ShareMethod::Handshake,
+            "ORGANIZATIONS" => ShareMethod::Organizations,
+            _ => ShareMethod::UnknownVariant(UnknownShareMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShareMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HANDSHAKE" => ShareMethod::Handshake,
+            "ORGANIZATIONS" => ShareMethod::Organizations,
+            _ => ShareMethod::UnknownVariant(UnknownShareMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShareMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ShareMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ShareMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShareStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShareStatus {
+    Deleted,
+    Deleting,
+    PendingAcceptance,
+    RejectFailed,
+    Rejected,
+    Rejecting,
+    ShareFailed,
+    Shared,
+    Sharing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShareStatus),
+}
+
+impl Default for ShareStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShareStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShareStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShareStatus {
+    fn into(self) -> String {
+        match self {
+            ShareStatus::Deleted => "Deleted".to_string(),
+            ShareStatus::Deleting => "Deleting".to_string(),
+            ShareStatus::PendingAcceptance => "PendingAcceptance".to_string(),
+            ShareStatus::RejectFailed => "RejectFailed".to_string(),
+            ShareStatus::Rejected => "Rejected".to_string(),
+            ShareStatus::Rejecting => "Rejecting".to_string(),
+            ShareStatus::ShareFailed => "ShareFailed".to_string(),
+            ShareStatus::Shared => "Shared".to_string(),
+            ShareStatus::Sharing => "Sharing".to_string(),
+            ShareStatus::UnknownVariant(UnknownShareStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShareStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ShareStatus::Deleted => &"Deleted",
+            ShareStatus::Deleting => &"Deleting",
+            ShareStatus::PendingAcceptance => &"PendingAcceptance",
+            ShareStatus::RejectFailed => &"RejectFailed",
+            ShareStatus::Rejected => &"Rejected",
+            ShareStatus::Rejecting => &"Rejecting",
+            ShareStatus::ShareFailed => &"ShareFailed",
+            ShareStatus::Shared => &"Shared",
+            ShareStatus::Sharing => &"Sharing",
+            ShareStatus::UnknownVariant(UnknownShareStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShareStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Deleted" => ShareStatus::Deleted,
+            "Deleting" => ShareStatus::Deleting,
+            "PendingAcceptance" => ShareStatus::PendingAcceptance,
+            "RejectFailed" => ShareStatus::RejectFailed,
+            "Rejected" => ShareStatus::Rejected,
+            "Rejecting" => ShareStatus::Rejecting,
+            "ShareFailed" => ShareStatus::ShareFailed,
+            "Shared" => ShareStatus::Shared,
+            "Sharing" => ShareStatus::Sharing,
+            _ => ShareStatus::UnknownVariant(UnknownShareStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShareStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Deleted" => ShareStatus::Deleted,
+            "Deleting" => ShareStatus::Deleting,
+            "PendingAcceptance" => ShareStatus::PendingAcceptance,
+            "RejectFailed" => ShareStatus::RejectFailed,
+            "Rejected" => ShareStatus::Rejected,
+            "Rejecting" => ShareStatus::Rejecting,
+            "ShareFailed" => ShareStatus::ShareFailed,
+            "Shared" => ShareStatus::Shared,
+            "Sharing" => ShareStatus::Sharing,
+            _ => ShareStatus::UnknownVariant(UnknownShareStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShareStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ShareStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ShareStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Identifier that contains details about the directory consumer account.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1979,7 +4130,7 @@ pub struct ShareTarget {
     pub id: String,
     /// <p>Type of identifier to be used in the <code>Id</code> field.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: TargetType,
 }
 
 /// <p>Details about the shared directory in the directory owner account for which the share request in the directory consumer account has been accepted.</p>
@@ -2005,7 +4156,7 @@ pub struct SharedDirectory {
     /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a shared directory request (<code>HANDSHAKE</code>).</p>
     #[serde(rename = "ShareMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub share_method: Option<String>,
+    pub share_method: Option<ShareMethod>,
     /// <p>A directory share request that is sent by the directory owner to the directory consumer. The request includes a typed message to help the directory consumer administrator determine whether to approve or reject the share invitation.</p>
     #[serde(rename = "ShareNotes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2013,7 +4164,7 @@ pub struct SharedDirectory {
     /// <p>Current directory status of the shared AWS Managed Microsoft AD directory.</p>
     #[serde(rename = "ShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub share_status: Option<String>,
+    pub share_status: Option<ShareStatus>,
     /// <p>Identifier of the directory consumer account that has access to the shared directory (<code>OwnerDirectoryId</code>) in the directory owner account.</p>
     #[serde(rename = "SharedAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2047,11 +4198,11 @@ pub struct Snapshot {
     /// <p>The snapshot status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SnapshotStatus>,
     /// <p>The snapshot type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SnapshotType>,
 }
 
 /// <p>Contains manual snapshot limit information for a directory.</p>
@@ -2070,6 +4221,213 @@ pub struct SnapshotLimits {
     #[serde(rename = "ManualSnapshotsLimitReached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub manual_snapshots_limit_reached: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSnapshotStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SnapshotStatus {
+    Completed,
+    Creating,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSnapshotStatus),
+}
+
+impl Default for SnapshotStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SnapshotStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SnapshotStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SnapshotStatus {
+    fn into(self) -> String {
+        match self {
+            SnapshotStatus::Completed => "Completed".to_string(),
+            SnapshotStatus::Creating => "Creating".to_string(),
+            SnapshotStatus::Failed => "Failed".to_string(),
+            SnapshotStatus::UnknownVariant(UnknownSnapshotStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SnapshotStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SnapshotStatus::Completed => &"Completed",
+            SnapshotStatus::Creating => &"Creating",
+            SnapshotStatus::Failed => &"Failed",
+            SnapshotStatus::UnknownVariant(UnknownSnapshotStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SnapshotStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => SnapshotStatus::Completed,
+            "Creating" => SnapshotStatus::Creating,
+            "Failed" => SnapshotStatus::Failed,
+            _ => SnapshotStatus::UnknownVariant(UnknownSnapshotStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SnapshotStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => SnapshotStatus::Completed,
+            "Creating" => SnapshotStatus::Creating,
+            "Failed" => SnapshotStatus::Failed,
+            _ => SnapshotStatus::UnknownVariant(UnknownSnapshotStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SnapshotStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SnapshotStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSnapshotType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SnapshotType {
+    Auto,
+    Manual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSnapshotType),
+}
+
+impl Default for SnapshotType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SnapshotType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SnapshotType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SnapshotType {
+    fn into(self) -> String {
+        match self {
+            SnapshotType::Auto => "Auto".to_string(),
+            SnapshotType::Manual => "Manual".to_string(),
+            SnapshotType::UnknownVariant(UnknownSnapshotType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SnapshotType {
+    fn into(self) -> &'a str {
+        match self {
+            SnapshotType::Auto => &"Auto",
+            SnapshotType::Manual => &"Manual",
+            SnapshotType::UnknownVariant(UnknownSnapshotType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SnapshotType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Auto" => SnapshotType::Auto,
+            "Manual" => SnapshotType::Manual,
+            _ => SnapshotType::UnknownVariant(UnknownSnapshotType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SnapshotType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Auto" => SnapshotType::Auto,
+            "Manual" => SnapshotType::Manual,
+            _ => SnapshotType::UnknownVariant(UnknownSnapshotType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SnapshotType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SnapshotType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2109,6 +4467,213 @@ pub struct Tag {
     pub value: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetType {
+    Account,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetType),
+}
+
+impl Default for TargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetType {
+    fn into(self) -> String {
+        match self {
+            TargetType::Account => "ACCOUNT".to_string(),
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetType {
+    fn into(self) -> &'a str {
+        match self {
+            TargetType::Account => &"ACCOUNT",
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => TargetType::Account,
+            _ => TargetType::UnknownVariant(UnknownTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => TargetType::Account,
+            _ => TargetType::UnknownVariant(UnknownTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTopicStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TopicStatus {
+    Deleted,
+    Failed,
+    Registered,
+    TopicNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTopicStatus),
+}
+
+impl Default for TopicStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TopicStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TopicStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TopicStatus {
+    fn into(self) -> String {
+        match self {
+            TopicStatus::Deleted => "Deleted".to_string(),
+            TopicStatus::Failed => "Failed".to_string(),
+            TopicStatus::Registered => "Registered".to_string(),
+            TopicStatus::TopicNotFound => "Topic not found".to_string(),
+            TopicStatus::UnknownVariant(UnknownTopicStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TopicStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TopicStatus::Deleted => &"Deleted",
+            TopicStatus::Failed => &"Failed",
+            TopicStatus::Registered => &"Registered",
+            TopicStatus::TopicNotFound => &"Topic not found",
+            TopicStatus::UnknownVariant(UnknownTopicStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TopicStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Deleted" => TopicStatus::Deleted,
+            "Failed" => TopicStatus::Failed,
+            "Registered" => TopicStatus::Registered,
+            "Topic not found" => TopicStatus::TopicNotFound,
+            _ => TopicStatus::UnknownVariant(UnknownTopicStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TopicStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Deleted" => TopicStatus::Deleted,
+            "Failed" => TopicStatus::Failed,
+            "Registered" => TopicStatus::Registered,
+            "Topic not found" => TopicStatus::TopicNotFound,
+            _ => TopicStatus::UnknownVariant(UnknownTopicStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TopicStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TopicStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TopicStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2132,7 +4697,7 @@ pub struct Trust {
     /// <p>Current state of selective authentication for the trust.</p>
     #[serde(rename = "SelectiveAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub selective_auth: Option<String>,
+    pub selective_auth: Option<SelectiveAuth>,
     /// <p>The date and time that the TrustState was last updated.</p>
     #[serde(rename = "StateLastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2140,7 +4705,7 @@ pub struct Trust {
     /// <p>The trust relationship direction.</p>
     #[serde(rename = "TrustDirection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trust_direction: Option<String>,
+    pub trust_direction: Option<TrustDirection>,
     /// <p>The unique ID of the trust relationship.</p>
     #[serde(rename = "TrustId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2148,7 +4713,7 @@ pub struct Trust {
     /// <p>The trust relationship state.</p>
     #[serde(rename = "TrustState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trust_state: Option<String>,
+    pub trust_state: Option<TrustState>,
     /// <p>The reason for the TrustState.</p>
     #[serde(rename = "TrustStateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2156,7 +4721,358 @@ pub struct Trust {
     /// <p>The trust relationship type. <code>Forest</code> is the default.</p>
     #[serde(rename = "TrustType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trust_type: Option<String>,
+    pub trust_type: Option<TrustType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrustDirection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrustDirection {
+    OneWayIncoming,
+    OneWayOutgoing,
+    TwoWay,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrustDirection),
+}
+
+impl Default for TrustDirection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrustDirection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrustDirection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrustDirection {
+    fn into(self) -> String {
+        match self {
+            TrustDirection::OneWayIncoming => "One-Way: Incoming".to_string(),
+            TrustDirection::OneWayOutgoing => "One-Way: Outgoing".to_string(),
+            TrustDirection::TwoWay => "Two-Way".to_string(),
+            TrustDirection::UnknownVariant(UnknownTrustDirection { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrustDirection {
+    fn into(self) -> &'a str {
+        match self {
+            TrustDirection::OneWayIncoming => &"One-Way: Incoming",
+            TrustDirection::OneWayOutgoing => &"One-Way: Outgoing",
+            TrustDirection::TwoWay => &"Two-Way",
+            TrustDirection::UnknownVariant(UnknownTrustDirection { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrustDirection {
+    fn from(name: &str) -> Self {
+        match name {
+            "One-Way: Incoming" => TrustDirection::OneWayIncoming,
+            "One-Way: Outgoing" => TrustDirection::OneWayOutgoing,
+            "Two-Way" => TrustDirection::TwoWay,
+            _ => TrustDirection::UnknownVariant(UnknownTrustDirection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrustDirection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "One-Way: Incoming" => TrustDirection::OneWayIncoming,
+            "One-Way: Outgoing" => TrustDirection::OneWayOutgoing,
+            "Two-Way" => TrustDirection::TwoWay,
+            _ => TrustDirection::UnknownVariant(UnknownTrustDirection { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrustDirection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrustDirection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrustDirection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrustState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrustState {
+    Created,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    UpdateFailed,
+    Updated,
+    Updating,
+    Verified,
+    VerifyFailed,
+    Verifying,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrustState),
+}
+
+impl Default for TrustState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrustState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrustState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrustState {
+    fn into(self) -> String {
+        match self {
+            TrustState::Created => "Created".to_string(),
+            TrustState::Creating => "Creating".to_string(),
+            TrustState::Deleted => "Deleted".to_string(),
+            TrustState::Deleting => "Deleting".to_string(),
+            TrustState::Failed => "Failed".to_string(),
+            TrustState::UpdateFailed => "UpdateFailed".to_string(),
+            TrustState::Updated => "Updated".to_string(),
+            TrustState::Updating => "Updating".to_string(),
+            TrustState::Verified => "Verified".to_string(),
+            TrustState::VerifyFailed => "VerifyFailed".to_string(),
+            TrustState::Verifying => "Verifying".to_string(),
+            TrustState::UnknownVariant(UnknownTrustState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrustState {
+    fn into(self) -> &'a str {
+        match self {
+            TrustState::Created => &"Created",
+            TrustState::Creating => &"Creating",
+            TrustState::Deleted => &"Deleted",
+            TrustState::Deleting => &"Deleting",
+            TrustState::Failed => &"Failed",
+            TrustState::UpdateFailed => &"UpdateFailed",
+            TrustState::Updated => &"Updated",
+            TrustState::Updating => &"Updating",
+            TrustState::Verified => &"Verified",
+            TrustState::VerifyFailed => &"VerifyFailed",
+            TrustState::Verifying => &"Verifying",
+            TrustState::UnknownVariant(UnknownTrustState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrustState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Created" => TrustState::Created,
+            "Creating" => TrustState::Creating,
+            "Deleted" => TrustState::Deleted,
+            "Deleting" => TrustState::Deleting,
+            "Failed" => TrustState::Failed,
+            "UpdateFailed" => TrustState::UpdateFailed,
+            "Updated" => TrustState::Updated,
+            "Updating" => TrustState::Updating,
+            "Verified" => TrustState::Verified,
+            "VerifyFailed" => TrustState::VerifyFailed,
+            "Verifying" => TrustState::Verifying,
+            _ => TrustState::UnknownVariant(UnknownTrustState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrustState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Created" => TrustState::Created,
+            "Creating" => TrustState::Creating,
+            "Deleted" => TrustState::Deleted,
+            "Deleting" => TrustState::Deleting,
+            "Failed" => TrustState::Failed,
+            "UpdateFailed" => TrustState::UpdateFailed,
+            "Updated" => TrustState::Updated,
+            "Updating" => TrustState::Updating,
+            "Verified" => TrustState::Verified,
+            "VerifyFailed" => TrustState::VerifyFailed,
+            "Verifying" => TrustState::Verifying,
+            _ => TrustState::UnknownVariant(UnknownTrustState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrustState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TrustState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrustState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrustType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrustType {
+    External,
+    Forest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrustType),
+}
+
+impl Default for TrustType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrustType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrustType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrustType {
+    fn into(self) -> String {
+        match self {
+            TrustType::External => "External".to_string(),
+            TrustType::Forest => "Forest".to_string(),
+            TrustType::UnknownVariant(UnknownTrustType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrustType {
+    fn into(self) -> &'a str {
+        match self {
+            TrustType::External => &"External",
+            TrustType::Forest => &"Forest",
+            TrustType::UnknownVariant(UnknownTrustType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrustType {
+    fn from(name: &str) -> Self {
+        match name {
+            "External" => TrustType::External,
+            "Forest" => TrustType::Forest,
+            _ => TrustType::UnknownVariant(UnknownTrustType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrustType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "External" => TrustType::External,
+            "Forest" => TrustType::Forest,
+            _ => TrustType::UnknownVariant(UnknownTrustType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrustType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrustType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrustType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2188,7 +5104,7 @@ pub struct UnshareTarget {
     pub id: String,
     /// <p>Type of identifier to be used in the <i>Id</i> field.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: TargetType,
 }
 
 /// <p>Updates a conditional forwarder.</p>
@@ -2249,7 +5165,7 @@ pub struct UpdateTrustRequest {
     /// <p>Updates selective authentication for the trust.</p>
     #[serde(rename = "SelectiveAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub selective_auth: Option<String>,
+    pub selective_auth: Option<SelectiveAuth>,
     /// <p>Identifier of the trust relationship.</p>
     #[serde(rename = "TrustId")]
     pub trust_id: String,

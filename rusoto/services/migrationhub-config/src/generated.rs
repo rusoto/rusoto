@@ -157,7 +157,102 @@ pub struct Target {
     pub id: Option<String>,
     /// <p>The target type is always an <code>ACCOUNT</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: TargetType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetType {
+    Account,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetType),
+}
+
+impl Default for TargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetType {
+    fn into(self) -> String {
+        match self {
+            TargetType::Account => "ACCOUNT".to_string(),
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetType {
+    fn into(self) -> &'a str {
+        match self {
+            TargetType::Account => &"ACCOUNT",
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => TargetType::Account,
+            _ => TargetType::UnknownVariant(UnknownTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => TargetType::Account,
+            _ => TargetType::UnknownVariant(UnknownTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateHomeRegionControl

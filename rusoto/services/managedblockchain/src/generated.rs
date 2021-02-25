@@ -35,7 +35,7 @@ pub struct ApprovalThresholdPolicy {
     /// <p>Determines whether the vote percentage must be greater than the <code>ThresholdPercentage</code> or must be greater than or equal to the <code>ThreholdPercentage</code> to be approved.</p>
     #[serde(rename = "ThresholdComparator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub threshold_comparator: Option<String>,
+    pub threshold_comparator: Option<ThresholdComparator>,
     /// <p>The percentage of votes among all members that must be <code>YES</code> for a proposal to be approved. For example, a <code>ThresholdPercentage</code> value of <code>50</code> indicates 50%. The <code>ThresholdComparator</code> determines the precise comparison. If a <code>ThresholdPercentage</code> value of <code>50</code> is specified on a network with 10 members, along with a <code>ThresholdComparator</code> value of <code>GREATER_THAN</code>, this indicates that 6 <code>YES</code> votes are required for the proposal to be approved.</p>
     #[serde(rename = "ThresholdPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -80,7 +80,7 @@ pub struct CreateNetworkInput {
     pub description: Option<String>,
     /// <p>The blockchain framework that the network uses.</p>
     #[serde(rename = "Framework")]
-    pub framework: String,
+    pub framework: Framework,
     /// <p> Configuration properties of the blockchain framework relevant to the network configuration. </p>
     #[serde(rename = "FrameworkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,6 +203,206 @@ pub struct DeleteNodeInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNodeOutput {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEdition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Edition {
+    Standard,
+    Starter,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEdition),
+}
+
+impl Default for Edition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Edition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Edition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Edition {
+    fn into(self) -> String {
+        match self {
+            Edition::Standard => "STANDARD".to_string(),
+            Edition::Starter => "STARTER".to_string(),
+            Edition::UnknownVariant(UnknownEdition { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Edition {
+    fn into(self) -> &'a str {
+        match self {
+            Edition::Standard => &"STANDARD",
+            Edition::Starter => &"STARTER",
+            Edition::UnknownVariant(UnknownEdition { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Edition {
+    fn from(name: &str) -> Self {
+        match name {
+            "STANDARD" => Edition::Standard,
+            "STARTER" => Edition::Starter,
+            _ => Edition::UnknownVariant(UnknownEdition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Edition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STANDARD" => Edition::Standard,
+            "STARTER" => Edition::Starter,
+            _ => Edition::UnknownVariant(UnknownEdition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Edition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Edition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Edition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFramework {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Framework {
+    Ethereum,
+    HyperledgerFabric,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFramework),
+}
+
+impl Default for Framework {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Framework {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Framework {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Framework {
+    fn into(self) -> String {
+        match self {
+            Framework::Ethereum => "ETHEREUM".to_string(),
+            Framework::HyperledgerFabric => "HYPERLEDGER_FABRIC".to_string(),
+            Framework::UnknownVariant(UnknownFramework { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Framework {
+    fn into(self) -> &'a str {
+        match self {
+            Framework::Ethereum => &"ETHEREUM",
+            Framework::HyperledgerFabric => &"HYPERLEDGER_FABRIC",
+            Framework::UnknownVariant(UnknownFramework { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Framework {
+    fn from(name: &str) -> Self {
+        match name {
+            "ETHEREUM" => Framework::Ethereum,
+            "HYPERLEDGER_FABRIC" => Framework::HyperledgerFabric,
+            _ => Framework::UnknownVariant(UnknownFramework {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Framework {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ETHEREUM" => Framework::Ethereum,
+            "HYPERLEDGER_FABRIC" => Framework::HyperledgerFabric,
+            _ => Framework::UnknownVariant(UnknownFramework { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Framework {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Framework {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Framework {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMemberInput {
@@ -306,7 +506,127 @@ pub struct Invitation {
     /// <p><p>The status of the invitation:</p> <ul> <li> <p> <code>PENDING</code> - The invitee has not created a member to join the network, and the invitation has not yet expired.</p> </li> <li> <p> <code>ACCEPTING</code> - The invitee has begun creating a member, and creation has not yet completed.</p> </li> <li> <p> <code>ACCEPTED</code> - The invitee created a member and joined the network using the <code>InvitationID</code>.</p> </li> <li> <p> <code>REJECTED</code> - The invitee rejected the invitation.</p> </li> <li> <p> <code>EXPIRED</code> - The invitee neither created a member nor rejected the invitation before the <code>ExpirationDate</code>.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<InvitationStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInvitationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InvitationStatus {
+    Accepted,
+    Accepting,
+    Expired,
+    Pending,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInvitationStatus),
+}
+
+impl Default for InvitationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InvitationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InvitationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InvitationStatus {
+    fn into(self) -> String {
+        match self {
+            InvitationStatus::Accepted => "ACCEPTED".to_string(),
+            InvitationStatus::Accepting => "ACCEPTING".to_string(),
+            InvitationStatus::Expired => "EXPIRED".to_string(),
+            InvitationStatus::Pending => "PENDING".to_string(),
+            InvitationStatus::Rejected => "REJECTED".to_string(),
+            InvitationStatus::UnknownVariant(UnknownInvitationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InvitationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InvitationStatus::Accepted => &"ACCEPTED",
+            InvitationStatus::Accepting => &"ACCEPTING",
+            InvitationStatus::Expired => &"EXPIRED",
+            InvitationStatus::Pending => &"PENDING",
+            InvitationStatus::Rejected => &"REJECTED",
+            InvitationStatus::UnknownVariant(UnknownInvitationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InvitationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPTED" => InvitationStatus::Accepted,
+            "ACCEPTING" => InvitationStatus::Accepting,
+            "EXPIRED" => InvitationStatus::Expired,
+            "PENDING" => InvitationStatus::Pending,
+            "REJECTED" => InvitationStatus::Rejected,
+            _ => InvitationStatus::UnknownVariant(UnknownInvitationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InvitationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPTED" => InvitationStatus::Accepted,
+            "ACCEPTING" => InvitationStatus::Accepting,
+            "EXPIRED" => InvitationStatus::Expired,
+            "PENDING" => InvitationStatus::Pending,
+            "REJECTED" => InvitationStatus::Rejected,
+            _ => InvitationStatus::UnknownVariant(UnknownInvitationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvitationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InvitationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InvitationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An action to invite a specific AWS account to create a member and join the network. The <code>InviteAction</code> is carried out when a <code>Proposal</code> is <code>APPROVED</code>.</p> <p>Applies only to Hyperledger Fabric.</p>
@@ -368,7 +688,7 @@ pub struct ListMembersInput {
     /// <p>An optional status specifier. If provided, only members currently in this status are listed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MemberStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -390,7 +710,7 @@ pub struct ListNetworksInput {
     /// <p>An optional framework specifier. If provided, only networks of this framework type are listed.</p>
     #[serde(rename = "Framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub framework: Option<String>,
+    pub framework: Option<Framework>,
     /// <p>The maximum number of networks to list.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -406,7 +726,7 @@ pub struct ListNetworksInput {
     /// <p>An optional status specifier. If provided, only networks currently in this status are listed.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NetworkStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -443,7 +763,7 @@ pub struct ListNodesInput {
     /// <p>An optional status specifier. If provided, only nodes currently in this status are listed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NodeStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -573,7 +893,7 @@ pub struct Member {
     /// <p><p>The status of a member.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a member.</p> </li> <li> <p> <code>AVAILABLE</code> - The member has been created and can participate in the network.</p> </li> <li> <p> <code>CREATE_FAILED</code> - The AWS account attempted to create a member and creation failed.</p> </li> <li> <p> <code>DELETING</code> - The member and all associated resources are in the process of being deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>DELETED</code> - The member can no longer participate on the network and all associated resources are deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MemberStatus>,
 }
 
 /// <p>Configuration properties of the member.</p> <p>Applies only to Hyperledger Fabric.</p>
@@ -660,6 +980,126 @@ pub struct MemberLogPublishingConfiguration {
     pub fabric: Option<MemberFabricLogPublishingConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberStatus {
+    Available,
+    CreateFailed,
+    Creating,
+    Deleted,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberStatus),
+}
+
+impl Default for MemberStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberStatus {
+    fn into(self) -> String {
+        match self {
+            MemberStatus::Available => "AVAILABLE".to_string(),
+            MemberStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            MemberStatus::Creating => "CREATING".to_string(),
+            MemberStatus::Deleted => "DELETED".to_string(),
+            MemberStatus::Deleting => "DELETING".to_string(),
+            MemberStatus::Updating => "UPDATING".to_string(),
+            MemberStatus::UnknownVariant(UnknownMemberStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MemberStatus::Available => &"AVAILABLE",
+            MemberStatus::CreateFailed => &"CREATE_FAILED",
+            MemberStatus::Creating => &"CREATING",
+            MemberStatus::Deleted => &"DELETED",
+            MemberStatus::Deleting => &"DELETING",
+            MemberStatus::Updating => &"UPDATING",
+            MemberStatus::UnknownVariant(UnknownMemberStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MemberStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => MemberStatus::Available,
+            "CREATE_FAILED" => MemberStatus::CreateFailed,
+            "CREATING" => MemberStatus::Creating,
+            "DELETED" => MemberStatus::Deleted,
+            "DELETING" => MemberStatus::Deleting,
+            "UPDATING" => MemberStatus::Updating,
+            _ => MemberStatus::UnknownVariant(UnknownMemberStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => MemberStatus::Available,
+            "CREATE_FAILED" => MemberStatus::CreateFailed,
+            "CREATING" => MemberStatus::Creating,
+            "DELETED" => MemberStatus::Deleted,
+            "DELETING" => MemberStatus::Deleting,
+            "UPDATING" => MemberStatus::Updating,
+            _ => MemberStatus::UnknownVariant(UnknownMemberStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MemberStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MemberStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of configuration properties for a member.</p> <p>Applies only to Hyperledger Fabric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -687,7 +1127,7 @@ pub struct MemberSummary {
     /// <p><p>The status of the member.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a member.</p> </li> <li> <p> <code>AVAILABLE</code> - The member has been created and can participate in the network.</p> </li> <li> <p> <code>CREATE_FAILED</code> - The AWS account attempted to create a member and creation failed.</p> </li> <li> <p> <code>DELETING</code> - The member and all associated resources are in the process of being deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>DELETED</code> - The member can no longer participate on the network and all associated resources are deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MemberStatus>,
 }
 
 /// <p>Network configuration properties.</p>
@@ -705,7 +1145,7 @@ pub struct Network {
     /// <p>The blockchain framework that the network uses.</p>
     #[serde(rename = "Framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub framework: Option<String>,
+    pub framework: Option<Framework>,
     /// <p>Attributes of the blockchain framework that the network uses.</p>
     #[serde(rename = "FrameworkAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -725,7 +1165,7 @@ pub struct Network {
     /// <p>The current status of the network.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NetworkStatus>,
     /// <p>The voting rules for the network to decide if a proposal is accepted.</p>
     #[serde(rename = "VotingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -753,7 +1193,7 @@ pub struct NetworkFabricAttributes {
     /// <p>The edition of Amazon Managed Blockchain that Hyperledger Fabric uses. For more information, see <a href="http://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<Edition>,
     /// <p>The endpoint of the ordering service for the network.</p>
     #[serde(rename = "OrderingServiceEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -766,7 +1206,7 @@ pub struct NetworkFabricAttributes {
 pub struct NetworkFabricConfiguration {
     /// <p>The edition of Amazon Managed Blockchain that the network uses. For more information, see <a href="http://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
     #[serde(rename = "Edition")]
-    pub edition: String,
+    pub edition: Edition,
 }
 
 /// <p>Attributes relevant to the network for the blockchain framework that the network uses.</p>
@@ -793,6 +1233,121 @@ pub struct NetworkFrameworkConfiguration {
     pub fabric: Option<NetworkFabricConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNetworkStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NetworkStatus {
+    Available,
+    CreateFailed,
+    Creating,
+    Deleted,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNetworkStatus),
+}
+
+impl Default for NetworkStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NetworkStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NetworkStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NetworkStatus {
+    fn into(self) -> String {
+        match self {
+            NetworkStatus::Available => "AVAILABLE".to_string(),
+            NetworkStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            NetworkStatus::Creating => "CREATING".to_string(),
+            NetworkStatus::Deleted => "DELETED".to_string(),
+            NetworkStatus::Deleting => "DELETING".to_string(),
+            NetworkStatus::UnknownVariant(UnknownNetworkStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NetworkStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NetworkStatus::Available => &"AVAILABLE",
+            NetworkStatus::CreateFailed => &"CREATE_FAILED",
+            NetworkStatus::Creating => &"CREATING",
+            NetworkStatus::Deleted => &"DELETED",
+            NetworkStatus::Deleting => &"DELETING",
+            NetworkStatus::UnknownVariant(UnknownNetworkStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NetworkStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => NetworkStatus::Available,
+            "CREATE_FAILED" => NetworkStatus::CreateFailed,
+            "CREATING" => NetworkStatus::Creating,
+            "DELETED" => NetworkStatus::Deleted,
+            "DELETING" => NetworkStatus::Deleting,
+            _ => NetworkStatus::UnknownVariant(UnknownNetworkStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NetworkStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => NetworkStatus::Available,
+            "CREATE_FAILED" => NetworkStatus::CreateFailed,
+            "CREATING" => NetworkStatus::Creating,
+            "DELETED" => NetworkStatus::Deleted,
+            "DELETING" => NetworkStatus::Deleting,
+            _ => NetworkStatus::UnknownVariant(UnknownNetworkStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NetworkStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NetworkStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of network configuration properties.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -808,7 +1363,7 @@ pub struct NetworkSummary {
     /// <p>The blockchain framework that the network uses.</p>
     #[serde(rename = "Framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub framework: Option<String>,
+    pub framework: Option<Framework>,
     /// <p>The version of the blockchain framework that the network uses.</p>
     #[serde(rename = "FrameworkVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -824,7 +1379,7 @@ pub struct NetworkSummary {
     /// <p>The current status of the network.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NetworkStatus>,
 }
 
 /// <p>Configuration properties of a node.</p>
@@ -866,11 +1421,11 @@ pub struct Node {
     /// <p>The state database that the node uses. Values are <code>LevelDB</code> or <code>CouchDB</code>.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "StateDB")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state_db: Option<String>,
+    pub state_db: Option<StateDBType>,
     /// <p>The status of the node.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NodeStatus>,
 }
 
 /// <p>Configuration properties of a node.</p>
@@ -891,7 +1446,7 @@ pub struct NodeConfiguration {
     /// <p>The state database that the node uses. Values are <code>LevelDB</code> or <code>CouchDB</code>. When using an Amazon Managed Blockchain network with Hyperledger Fabric version 1.4 or later, the default is <code>CouchDB</code>.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[serde(rename = "StateDB")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state_db: Option<String>,
+    pub state_db: Option<StateDBType>,
 }
 
 /// <p>Attributes of an Ethereum node.</p>
@@ -958,6 +1513,136 @@ pub struct NodeLogPublishingConfiguration {
     pub fabric: Option<NodeFabricLogPublishingConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodeStatus {
+    Available,
+    CreateFailed,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Unhealthy,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodeStatus),
+}
+
+impl Default for NodeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodeStatus {
+    fn into(self) -> String {
+        match self {
+            NodeStatus::Available => "AVAILABLE".to_string(),
+            NodeStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            NodeStatus::Creating => "CREATING".to_string(),
+            NodeStatus::Deleted => "DELETED".to_string(),
+            NodeStatus::Deleting => "DELETING".to_string(),
+            NodeStatus::Failed => "FAILED".to_string(),
+            NodeStatus::Unhealthy => "UNHEALTHY".to_string(),
+            NodeStatus::Updating => "UPDATING".to_string(),
+            NodeStatus::UnknownVariant(UnknownNodeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NodeStatus::Available => &"AVAILABLE",
+            NodeStatus::CreateFailed => &"CREATE_FAILED",
+            NodeStatus::Creating => &"CREATING",
+            NodeStatus::Deleted => &"DELETED",
+            NodeStatus::Deleting => &"DELETING",
+            NodeStatus::Failed => &"FAILED",
+            NodeStatus::Unhealthy => &"UNHEALTHY",
+            NodeStatus::Updating => &"UPDATING",
+            NodeStatus::UnknownVariant(UnknownNodeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NodeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => NodeStatus::Available,
+            "CREATE_FAILED" => NodeStatus::CreateFailed,
+            "CREATING" => NodeStatus::Creating,
+            "DELETED" => NodeStatus::Deleted,
+            "DELETING" => NodeStatus::Deleting,
+            "FAILED" => NodeStatus::Failed,
+            "UNHEALTHY" => NodeStatus::Unhealthy,
+            "UPDATING" => NodeStatus::Updating,
+            _ => NodeStatus::UnknownVariant(UnknownNodeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => NodeStatus::Available,
+            "CREATE_FAILED" => NodeStatus::CreateFailed,
+            "CREATING" => NodeStatus::Creating,
+            "DELETED" => NodeStatus::Deleted,
+            "DELETING" => NodeStatus::Deleting,
+            "FAILED" => NodeStatus::Failed,
+            "UNHEALTHY" => NodeStatus::Unhealthy,
+            "UPDATING" => NodeStatus::Updating,
+            _ => NodeStatus::UnknownVariant(UnknownNodeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NodeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NodeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of configuration properties for a node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -981,7 +1666,7 @@ pub struct NodeSummary {
     /// <p>The status of the node.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NodeStatus>,
 }
 
 /// <p>Properties of a proposal on a Managed Blockchain network.</p> <p>Applies only to Hyperledger Fabric.</p>
@@ -1031,7 +1716,7 @@ pub struct Proposal {
     /// <p><p>The status of the proposal. Values are as follows:</p> <ul> <li> <p> <code>IN<em>PROGRESS</code> - The proposal is active and open for member voting.</p> </li> <li> <p> <code>APPROVED</code> - The proposal was approved with sufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified proposal actions are carried out.</p> </li> <li> <p> <code>REJECTED</code> - The proposal was rejected with insufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>EXPIRED</code> - Members did not cast the number of votes required to determine the proposal outcome before the proposal expired. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>ACTION</em>FAILED</code> - One or more of the specified <code>ProposalActions</code> in a proposal that was approved could not be completed because of an error. The <code>ACTION_FAILED</code> status occurs even if only one ProposalAction fails and other actions are successful.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProposalStatus>,
     /// <p> The current total of <code>YES</code> votes cast on the proposal by members. </p>
     #[serde(rename = "YesVoteCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1049,6 +1734,122 @@ pub struct ProposalActions {
     #[serde(rename = "Removals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub removals: Option<Vec<RemoveAction>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProposalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProposalStatus {
+    ActionFailed,
+    Approved,
+    Expired,
+    InProgress,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProposalStatus),
+}
+
+impl Default for ProposalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProposalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProposalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProposalStatus {
+    fn into(self) -> String {
+        match self {
+            ProposalStatus::ActionFailed => "ACTION_FAILED".to_string(),
+            ProposalStatus::Approved => "APPROVED".to_string(),
+            ProposalStatus::Expired => "EXPIRED".to_string(),
+            ProposalStatus::InProgress => "IN_PROGRESS".to_string(),
+            ProposalStatus::Rejected => "REJECTED".to_string(),
+            ProposalStatus::UnknownVariant(UnknownProposalStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProposalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProposalStatus::ActionFailed => &"ACTION_FAILED",
+            ProposalStatus::Approved => &"APPROVED",
+            ProposalStatus::Expired => &"EXPIRED",
+            ProposalStatus::InProgress => &"IN_PROGRESS",
+            ProposalStatus::Rejected => &"REJECTED",
+            ProposalStatus::UnknownVariant(UnknownProposalStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProposalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTION_FAILED" => ProposalStatus::ActionFailed,
+            "APPROVED" => ProposalStatus::Approved,
+            "EXPIRED" => ProposalStatus::Expired,
+            "IN_PROGRESS" => ProposalStatus::InProgress,
+            "REJECTED" => ProposalStatus::Rejected,
+            _ => ProposalStatus::UnknownVariant(UnknownProposalStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProposalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTION_FAILED" => ProposalStatus::ActionFailed,
+            "APPROVED" => ProposalStatus::Approved,
+            "EXPIRED" => ProposalStatus::Expired,
+            "IN_PROGRESS" => ProposalStatus::InProgress,
+            "REJECTED" => ProposalStatus::Rejected,
+            _ => ProposalStatus::UnknownVariant(UnknownProposalStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProposalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProposalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProposalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Properties of a proposal.</p> <p>Applies only to Hyperledger Fabric.</p>
@@ -1082,7 +1883,7 @@ pub struct ProposalSummary {
     /// <p><p>The status of the proposal. Values are as follows:</p> <ul> <li> <p> <code>IN<em>PROGRESS</code> - The proposal is active and open for member voting.</p> </li> <li> <p> <code>APPROVED</code> - The proposal was approved with sufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified proposal actions are carried out.</p> </li> <li> <p> <code>REJECTED</code> - The proposal was rejected with insufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>EXPIRED</code> - Members did not cast the number of votes required to determine the proposal outcome before the proposal expired. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>ACTION</em>FAILED</code> - One or more of the specified <code>ProposalActions</code> in a proposal that was approved could not be completed because of an error.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProposalStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1103,6 +1904,210 @@ pub struct RemoveAction {
     /// <p>The unique identifier of the member to remove.</p>
     #[serde(rename = "MemberId")]
     pub member_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStateDBType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StateDBType {
+    CouchDB,
+    LevelDB,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStateDBType),
+}
+
+impl Default for StateDBType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StateDBType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StateDBType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StateDBType {
+    fn into(self) -> String {
+        match self {
+            StateDBType::CouchDB => "CouchDB".to_string(),
+            StateDBType::LevelDB => "LevelDB".to_string(),
+            StateDBType::UnknownVariant(UnknownStateDBType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StateDBType {
+    fn into(self) -> &'a str {
+        match self {
+            StateDBType::CouchDB => &"CouchDB",
+            StateDBType::LevelDB => &"LevelDB",
+            StateDBType::UnknownVariant(UnknownStateDBType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StateDBType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CouchDB" => StateDBType::CouchDB,
+            "LevelDB" => StateDBType::LevelDB,
+            _ => StateDBType::UnknownVariant(UnknownStateDBType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StateDBType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CouchDB" => StateDBType::CouchDB,
+            "LevelDB" => StateDBType::LevelDB,
+            _ => StateDBType::UnknownVariant(UnknownStateDBType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateDBType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StateDBType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StateDBType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThresholdComparator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThresholdComparator {
+    GreaterThan,
+    GreaterThanOrEqualTo,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThresholdComparator),
+}
+
+impl Default for ThresholdComparator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThresholdComparator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThresholdComparator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThresholdComparator {
+    fn into(self) -> String {
+        match self {
+            ThresholdComparator::GreaterThan => "GREATER_THAN".to_string(),
+            ThresholdComparator::GreaterThanOrEqualTo => "GREATER_THAN_OR_EQUAL_TO".to_string(),
+            ThresholdComparator::UnknownVariant(UnknownThresholdComparator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThresholdComparator {
+    fn into(self) -> &'a str {
+        match self {
+            ThresholdComparator::GreaterThan => &"GREATER_THAN",
+            ThresholdComparator::GreaterThanOrEqualTo => &"GREATER_THAN_OR_EQUAL_TO",
+            ThresholdComparator::UnknownVariant(UnknownThresholdComparator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ThresholdComparator {
+    fn from(name: &str) -> Self {
+        match name {
+            "GREATER_THAN" => ThresholdComparator::GreaterThan,
+            "GREATER_THAN_OR_EQUAL_TO" => ThresholdComparator::GreaterThanOrEqualTo,
+            _ => ThresholdComparator::UnknownVariant(UnknownThresholdComparator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThresholdComparator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GREATER_THAN" => ThresholdComparator::GreaterThan,
+            "GREATER_THAN_OR_EQUAL_TO" => ThresholdComparator::GreaterThanOrEqualTo,
+            _ => ThresholdComparator::UnknownVariant(UnknownThresholdComparator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThresholdComparator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ThresholdComparator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThresholdComparator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1158,7 +2163,7 @@ pub struct VoteOnProposalInput {
     pub proposal_id: String,
     /// <p> The value of the vote. </p>
     #[serde(rename = "Vote")]
-    pub vote: String,
+    pub vote: VoteValue,
     /// <p>The unique identifier of the member casting the vote. </p>
     #[serde(rename = "VoterMemberId")]
     pub voter_member_id: String,
@@ -1183,7 +2188,107 @@ pub struct VoteSummary {
     /// <p> The vote value, either <code>YES</code> or <code>NO</code>. </p>
     #[serde(rename = "Vote")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vote: Option<String>,
+    pub vote: Option<VoteValue>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVoteValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VoteValue {
+    No,
+    Yes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVoteValue),
+}
+
+impl Default for VoteValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VoteValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VoteValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VoteValue {
+    fn into(self) -> String {
+        match self {
+            VoteValue::No => "NO".to_string(),
+            VoteValue::Yes => "YES".to_string(),
+            VoteValue::UnknownVariant(UnknownVoteValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VoteValue {
+    fn into(self) -> &'a str {
+        match self {
+            VoteValue::No => &"NO",
+            VoteValue::Yes => &"YES",
+            VoteValue::UnknownVariant(UnknownVoteValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VoteValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO" => VoteValue::No,
+            "YES" => VoteValue::Yes,
+            _ => VoteValue::UnknownVariant(UnknownVoteValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VoteValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO" => VoteValue::No,
+            "YES" => VoteValue::Yes,
+            _ => VoteValue::UnknownVariant(UnknownVoteValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VoteValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VoteValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VoteValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The voting rules for the network to decide if a proposal is accepted </p> <p>Applies only to Hyperledger Fabric.</p>

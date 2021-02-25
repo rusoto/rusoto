@@ -66,7 +66,7 @@ impl AWSAccountIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -77,7 +77,7 @@ impl ActionNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -115,18 +115,21 @@ impl AddPermissionRequestSerializer {
             &format!("{}{}", prefix, "ActionName"),
             &obj.actions,
         );
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label.to_string());
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
 /// Serialize `AttributeNameList` contents to a `SignedRequest`.
 struct AttributeNameListSerializer;
 impl AttributeNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<QueueAttributeName>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -276,7 +279,10 @@ impl ChangeMessageVisibilityBatchRequestSerializer {
             &format!("{}{}", prefix, "ChangeMessageVisibilityBatchRequestEntry"),
             &obj.entries,
         );
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -301,10 +307,10 @@ impl ChangeMessageVisibilityBatchRequestEntrySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.to_string());
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle,
+            &obj.receipt_handle.to_string(),
         );
         if let Some(ref field_value) = obj.visibility_timeout {
             params.put(&format!("{}{}", prefix, "VisibilityTimeout"), &field_value);
@@ -455,10 +461,13 @@ impl ChangeMessageVisibilityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle,
+            &obj.receipt_handle.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "VisibilityTimeout"),
@@ -472,7 +481,7 @@ impl ChangeMessageVisibilityRequestSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQueueRequest {
     /// <p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateQueue</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> – The length of time, in seconds, for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 seconds (15 minutes). Default: 0. </p> </li> <li> <p> <code>MaximumMessageSize</code> – The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) to 262,144 bytes (256 KiB). Default: 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> – The length of time, in seconds, for which Amazon SQS retains a message. Valid values: An integer from 60 seconds (1 minute) to 1,209,600 seconds (14 days). Default: 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> – The queue's policy. A valid AWS policy. For more information about policy structure, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> – The length of time, in seconds, for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: An integer from 0 to 20 (seconds). Default: 0. </p> </li> <li> <p> <code>RedrivePolicy</code> – The string that includes the parameters for the dead-letter queue functionality of the source queue as a JSON object. For more information about the redrive policy and dead-letter queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">Using Amazon SQS Dead-Letter Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <ul> <li> <p> <code>deadLetterTargetArn</code> – The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded.</p> </li> <li> <p> <code>maxReceiveCount</code> – The number of times a message is delivered to the source queue before being moved to the dead-letter queue. When the <code>ReceiveCount</code> for a message exceeds the <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to the dead-letter-queue.</p> </li> </ul> <note> <p>The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead-letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> – The visibility timeout for the queue, in seconds. Valid values: An integer from 0 to 43,200 (12 hours). Default: 30. For more information about the visibility timeout, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms">Key Terms</a>. While the alias of the AWS-managed CMK for Amazon SQS is always <code>alias/aws/sqs</code>, the alias of a custom CMK can, for example, be <code>alias/<i>MyAlias</i> </code>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> <li> <p> <code>KmsDataKeyReusePeriodSeconds</code> – The length of time, in seconds, for which Amazon SQS can reuse a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys">data key</a> to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). Default: 300 (5 minutes). A shorter time period provides better security but results in more calls to KMS which might incur charges after Free Tier. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work">How Does the Data Key Reuse Period Work?</a>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> – Designates a queue as FIFO. Valid values are <code>true</code> and <code>false</code>. If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue. You can provide this attribute only during queue creation. You can't change it for an existing queue. When you set this attribute, you must also provide the <code>MessageGroupId</code> for your messages explicitly.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic">FIFO Queue Logic</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication. Valid values are <code>true</code> and <code>false</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing">Exactly-Once Processing</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. Note the following: </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>.</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul> <p> <b>Preview: High throughput for FIFO queues</b> </p> <p> <b>High throughput for Amazon SQS FIFO queues is in preview release and is subject to change.</b> This feature provides a high number of transactions per second (TPS) for messages in FIFO queues. For information on throughput quotas, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html">Quotas related to messages</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <p>This preview includes two new attributes:</p> <ul> <li> <p> <code>DeduplicationScope</code> – Specifies whether message deduplication occurs at the message group or queue level. Valid values are <code>messageGroup</code> and <code>queue</code>.</p> </li> <li> <p> <code>FifoThroughputLimit</code> – Specifies whether the FIFO queue throughput quota applies to the entire queue or per message group. Valid values are <code>perQueue</code> and <code>perMessageGroupId</code>. The <code>perMessageGroupId</code> value is allowed only when the value for <code>DeduplicationScope</code> is <code>messageGroup</code>.</p> </li> </ul> <p>To enable high throughput for FIFO queues, do the following:</p> <ul> <li> <p>Set <code>DeduplicationScope</code> to <code>messageGroup</code>.</p> </li> <li> <p>Set <code>FifoThroughputLimit</code> to <code>perMessageGroupId</code>.</p> </li> </ul> <p>If you set these attributes to anything other than the values shown for enabling high throughput, standard throughput is in effect and deduplication occurs as specified.</p> <p>This preview is available in the following AWS Regions:</p> <ul> <li> <p>US East (Ohio); us-east-2</p> </li> <li> <p>US East (N. Virginia); us-east-1</p> </li> <li> <p>US West (Oregon); us-west-2</p> </li> <li> <p>Europe (Ireland); eu-west-1</p> </li> </ul> <p>For more information about high throughput for FIFO queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html">Preview: High throughput for FIFO queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<QueueAttributeName, String>>,
     /// <p>The name of the new queue. The following limits apply to this name:</p> <ul> <li> <p>A queue name can have up to 80 characters.</p> </li> <li> <p>Valid values: alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p> </li> <li> <p>A FIFO queue name must end with the <code>.fifo</code> suffix.</p> </li> </ul> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_name: String,
     /// <p><p>Add cost allocation tags to the specified Amazon SQS queue. For an overview, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-tags.html">Tagging Your Amazon SQS Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <p>When you use queue tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a queue isn&#39;t recommended.</p> </li> <li> <p>Tags don&#39;t have any semantic meaning. Amazon SQS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-limits.html#limits-queues">Limits Related to Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <p>To be able to tag a queue on creation, you must have the <code>sqs:CreateQueue</code> and <code>sqs:TagQueue</code> permissions.</p> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant cross-account permissions to a role and a user name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>
@@ -495,7 +504,10 @@ impl CreateQueueRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
+        params.put(
+            &format!("{}{}", prefix, "QueueName"),
+            &obj.queue_name.to_string(),
+        );
         if let Some(ref field_value) = obj.tags {
             TagMapSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
@@ -553,7 +565,10 @@ impl DeleteMessageBatchRequestSerializer {
             &format!("{}{}", prefix, "DeleteMessageBatchRequestEntry"),
             &obj.entries,
         );
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -576,10 +591,10 @@ impl DeleteMessageBatchRequestEntrySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.to_string());
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle,
+            &obj.receipt_handle.to_string(),
         );
     }
 }
@@ -720,10 +735,13 @@ impl DeleteMessageRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ReceiptHandle"),
-            &obj.receipt_handle,
+            &obj.receipt_handle.to_string(),
         );
     }
 }
@@ -745,7 +763,10 @@ impl DeleteQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -754,7 +775,7 @@ impl DeleteQueueRequestSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueueAttributesRequest {
     /// <p>A list of attributes for which to retrieve information.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note> <p>The following attributes are supported:</p> <important> <p>The <code>ApproximateNumberOfMessagesDelayed</code>, <code>ApproximateNumberOfMessagesNotVisible</code>, and <code>ApproximateNumberOfMessagesVisible</code> metrics may not achieve consistency until at least 1 minute after the producers stop sending messages. This period is required for the queue metadata to reach eventual consistency. </p> </important> <ul> <li> <p> <code>All</code> – Returns all values. </p> </li> <li> <p> <code>ApproximateNumberOfMessages</code> – Returns the approximate number of messages available for retrieval from the queue.</p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> – Returns the approximate number of messages in the queue that are delayed and not available for reading immediately. This can happen when the queue is configured as a delay queue or when a message has been sent with a delay parameter.</p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> – Returns the approximate number of messages that are in flight. Messages are considered to be <i>in flight</i> if they have been sent to a client but have not yet been deleted or have not yet reached the end of their visibility window. </p> </li> <li> <p> <code>CreatedTimestamp</code> – Returns the time when the queue was created in seconds (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a>).</p> </li> <li> <p> <code>DelaySeconds</code> – Returns the default delay on the queue in seconds.</p> </li> <li> <p> <code>LastModifiedTimestamp</code> – Returns the time when the queue was last changed in seconds (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a>).</p> </li> <li> <p> <code>MaximumMessageSize</code> – Returns the limit of how many bytes a message can contain before Amazon SQS rejects it.</p> </li> <li> <p> <code>MessageRetentionPeriod</code> – Returns the length of time, in seconds, for which Amazon SQS retains a message.</p> </li> <li> <p> <code>Policy</code> – Returns the policy of the queue.</p> </li> <li> <p> <code>QueueArn</code> – Returns the Amazon resource name (ARN) of the queue.</p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> – Returns the length of time, in seconds, for which the <code>ReceiveMessage</code> action waits for a message to arrive. </p> </li> <li> <p> <code>RedrivePolicy</code> – The string that includes the parameters for the dead-letter queue functionality of the source queue as a JSON object. For more information about the redrive policy and dead-letter queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">Using Amazon SQS Dead-Letter Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <ul> <li> <p> <code>deadLetterTargetArn</code> – The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded.</p> </li> <li> <p> <code>maxReceiveCount</code> – The number of times a message is delivered to the source queue before being moved to the dead-letter queue. When the <code>ReceiveCount</code> for a message exceeds the <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to the dead-letter-queue.</p> </li> </ul> </li> <li> <p> <code>VisibilityTimeout</code> – Returns the visibility timeout for the queue. For more information about the visibility timeout, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – Returns the ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms">Key Terms</a>. </p> </li> <li> <p> <code>KmsDataKeyReusePeriodSeconds</code> – Returns the length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work">How Does the Data Key Reuse Period Work?</a>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> – Returns information about whether the queue is FIFO. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic">FIFO Queue Logic</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <p>To determine whether a queue is <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO</a>, you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p> </note> </li> <li> <p> <code>ContentBasedDeduplication</code> – Returns whether content-based deduplication is enabled for the queue. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing">Exactly-Once Processing</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. </p> </li> </ul> <p> <b>Preview: High throughput for FIFO queues</b> </p> <p> <b>High throughput for Amazon SQS FIFO queues is in preview release and is subject to change.</b> This feature provides a high number of transactions per second (TPS) for messages in FIFO queues. For information on throughput quotas, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html">Quotas related to messages</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <p>This preview includes two new attributes:</p> <ul> <li> <p> <code>DeduplicationScope</code> – Specifies whether message deduplication occurs at the message group or queue level. Valid values are <code>messageGroup</code> and <code>queue</code>.</p> </li> <li> <p> <code>FifoThroughputLimit</code> – Specifies whether the FIFO queue throughput quota applies to the entire queue or per message group. Valid values are <code>perQueue</code> and <code>perMessageGroupId</code>. The <code>perMessageGroupId</code> value is allowed only when the value for <code>DeduplicationScope</code> is <code>messageGroup</code>.</p> </li> </ul> <p>To enable high throughput for FIFO queues, do the following:</p> <ul> <li> <p>Set <code>DeduplicationScope</code> to <code>messageGroup</code>.</p> </li> <li> <p>Set <code>FifoThroughputLimit</code> to <code>perMessageGroupId</code>.</p> </li> </ul> <p>If you set these attributes to anything other than the values shown for enabling high throughput, standard throughput is in effect and deduplication occurs as specified.</p> <p>This preview is available in the following AWS Regions:</p> <ul> <li> <p>US East (Ohio); us-east-2</p> </li> <li> <p>US East (N. Virginia); us-east-1</p> </li> <li> <p>US West (Oregon); us-west-2</p> </li> <li> <p>Europe (Ireland); eu-west-1</p> </li> </ul> <p>For more information about high throughput for FIFO queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html">Preview: High throughput for FIFO queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
-    pub attribute_names: Option<Vec<String>>,
+    pub attribute_names: Option<Vec<QueueAttributeName>>,
     /// <p>The URL of the Amazon SQS queue whose attribute information is retrieved.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
 }
@@ -775,7 +796,10 @@ impl GetQueueAttributesRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -784,7 +808,7 @@ impl GetQueueAttributesRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetQueueAttributesResult {
     /// <p>A map of attributes to their respective values.</p>
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<QueueAttributeName, String>>,
 }
 
 #[allow(dead_code)]
@@ -832,11 +856,14 @@ impl GetQueueUrlRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
+        params.put(
+            &format!("{}{}", prefix, "QueueName"),
+            &obj.queue_name.to_string(),
+        );
         if let Some(ref field_value) = obj.queue_owner_aws_account_id {
             params.put(
                 &format!("{}{}", prefix, "QueueOwnerAWSAccountId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -894,9 +921,15 @@ impl ListDeadLetterSourceQueuesRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -953,7 +986,10 @@ impl ListQueueTagsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -1008,10 +1044,16 @@ impl ListQueuesRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.queue_name_prefix {
-            params.put(&format!("{}{}", prefix, "QueueNamePrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "QueueNamePrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1055,7 +1097,7 @@ impl ListQueuesResultDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Message {
     /// <p>A map of the attributes requested in <code> <a>ReceiveMessage</a> </code> to their respective values. Supported attributes:</p> <ul> <li> <p> <code>ApproximateReceiveCount</code> </p> </li> <li> <p> <code>ApproximateFirstReceiveTimestamp</code> </p> </li> <li> <p> <code>MessageDeduplicationId</code> </p> </li> <li> <p> <code>MessageGroupId</code> </p> </li> <li> <p> <code>SenderId</code> </p> </li> <li> <p> <code>SentTimestamp</code> </p> </li> <li> <p> <code>SequenceNumber</code> </p> </li> </ul> <p> <code>ApproximateFirstReceiveTimestamp</code> and <code>SentTimestamp</code> are each returned as an integer representing the <a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a> in milliseconds.</p>
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<MessageSystemAttributeName, String>>,
     /// <p>The message's contents (not URL-encoded).</p>
     pub body: Option<String>,
     /// <p>An MD5 digest of the non-URL-encoded message body string.</p>
@@ -1125,7 +1167,7 @@ impl MessageAttributeNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1205,7 +1247,10 @@ impl MessageAttributeValueSerializer {
                 ::std::str::from_utf8(&field_value).unwrap(),
             );
         }
-        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        params.put(
+            &format!("{}{}", prefix, "DataType"),
+            &obj.data_type.to_string(),
+        );
         if let Some(ref field_value) = obj.string_list_values {
             StringListSerializer::serialize(
                 params,
@@ -1214,7 +1259,10 @@ impl MessageAttributeValueSerializer {
             );
         }
         if let Some(ref field_value) = obj.string_value {
-            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StringValue"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1267,7 +1315,10 @@ impl MessageBodySystemAttributeMapSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &::std::collections::HashMap<String, MessageSystemAttributeValue>,
+        obj: &::std::collections::HashMap<
+            MessageSystemAttributeNameForSends,
+            MessageSystemAttributeValue,
+        >,
     ) {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
@@ -1316,7 +1367,8 @@ impl MessageSystemAttributeMapDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+    ) -> Result<::std::collections::HashMap<MessageSystemAttributeName, String>, XmlParseError>
+    {
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == "Attribute" {
@@ -1330,14 +1382,274 @@ impl MessageSystemAttributeMapDeserializer {
         Ok(obj)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageSystemAttributeName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageSystemAttributeName {
+    AwstraceHeader,
+    ApproximateFirstReceiveTimestamp,
+    ApproximateReceiveCount,
+    MessageDeduplicationId,
+    MessageGroupId,
+    SenderId,
+    SentTimestamp,
+    SequenceNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageSystemAttributeName),
+}
+
+impl Default for MessageSystemAttributeName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageSystemAttributeName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageSystemAttributeName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageSystemAttributeName {
+    fn into(self) -> String {
+        match self {
+            MessageSystemAttributeName::AwstraceHeader => "AWSTraceHeader".to_string(),
+            MessageSystemAttributeName::ApproximateFirstReceiveTimestamp => {
+                "ApproximateFirstReceiveTimestamp".to_string()
+            }
+            MessageSystemAttributeName::ApproximateReceiveCount => {
+                "ApproximateReceiveCount".to_string()
+            }
+            MessageSystemAttributeName::MessageDeduplicationId => {
+                "MessageDeduplicationId".to_string()
+            }
+            MessageSystemAttributeName::MessageGroupId => "MessageGroupId".to_string(),
+            MessageSystemAttributeName::SenderId => "SenderId".to_string(),
+            MessageSystemAttributeName::SentTimestamp => "SentTimestamp".to_string(),
+            MessageSystemAttributeName::SequenceNumber => "SequenceNumber".to_string(),
+            MessageSystemAttributeName::UnknownVariant(UnknownMessageSystemAttributeName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageSystemAttributeName {
+    fn into(self) -> &'a str {
+        match self {
+            MessageSystemAttributeName::AwstraceHeader => &"AWSTraceHeader",
+            MessageSystemAttributeName::ApproximateFirstReceiveTimestamp => {
+                &"ApproximateFirstReceiveTimestamp"
+            }
+            MessageSystemAttributeName::ApproximateReceiveCount => &"ApproximateReceiveCount",
+            MessageSystemAttributeName::MessageDeduplicationId => &"MessageDeduplicationId",
+            MessageSystemAttributeName::MessageGroupId => &"MessageGroupId",
+            MessageSystemAttributeName::SenderId => &"SenderId",
+            MessageSystemAttributeName::SentTimestamp => &"SentTimestamp",
+            MessageSystemAttributeName::SequenceNumber => &"SequenceNumber",
+            MessageSystemAttributeName::UnknownVariant(UnknownMessageSystemAttributeName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MessageSystemAttributeName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSTraceHeader" => MessageSystemAttributeName::AwstraceHeader,
+            "ApproximateFirstReceiveTimestamp" => {
+                MessageSystemAttributeName::ApproximateFirstReceiveTimestamp
+            }
+            "ApproximateReceiveCount" => MessageSystemAttributeName::ApproximateReceiveCount,
+            "MessageDeduplicationId" => MessageSystemAttributeName::MessageDeduplicationId,
+            "MessageGroupId" => MessageSystemAttributeName::MessageGroupId,
+            "SenderId" => MessageSystemAttributeName::SenderId,
+            "SentTimestamp" => MessageSystemAttributeName::SentTimestamp,
+            "SequenceNumber" => MessageSystemAttributeName::SequenceNumber,
+            _ => MessageSystemAttributeName::UnknownVariant(UnknownMessageSystemAttributeName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MessageSystemAttributeName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSTraceHeader" => MessageSystemAttributeName::AwstraceHeader,
+            "ApproximateFirstReceiveTimestamp" => {
+                MessageSystemAttributeName::ApproximateFirstReceiveTimestamp
+            }
+            "ApproximateReceiveCount" => MessageSystemAttributeName::ApproximateReceiveCount,
+            "MessageDeduplicationId" => MessageSystemAttributeName::MessageDeduplicationId,
+            "MessageGroupId" => MessageSystemAttributeName::MessageGroupId,
+            "SenderId" => MessageSystemAttributeName::SenderId,
+            "SentTimestamp" => MessageSystemAttributeName::SentTimestamp,
+            "SequenceNumber" => MessageSystemAttributeName::SequenceNumber,
+            _ => MessageSystemAttributeName::UnknownVariant(UnknownMessageSystemAttributeName {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageSystemAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MessageSystemAttributeName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MessageSystemAttributeName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct MessageSystemAttributeNameDeserializer;
 impl MessageSystemAttributeNameDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MessageSystemAttributeName, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageSystemAttributeNameForSends {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageSystemAttributeNameForSends {
+    AwstraceHeader,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageSystemAttributeNameForSends),
+}
+
+impl Default for MessageSystemAttributeNameForSends {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageSystemAttributeNameForSends {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageSystemAttributeNameForSends {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageSystemAttributeNameForSends {
+    fn into(self) -> String {
+        match self {
+            MessageSystemAttributeNameForSends::AwstraceHeader => "AWSTraceHeader".to_string(),
+            MessageSystemAttributeNameForSends::UnknownVariant(
+                UnknownMessageSystemAttributeNameForSends { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageSystemAttributeNameForSends {
+    fn into(self) -> &'a str {
+        match self {
+            MessageSystemAttributeNameForSends::AwstraceHeader => &"AWSTraceHeader",
+            MessageSystemAttributeNameForSends::UnknownVariant(
+                UnknownMessageSystemAttributeNameForSends { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for MessageSystemAttributeNameForSends {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSTraceHeader" => MessageSystemAttributeNameForSends::AwstraceHeader,
+            _ => MessageSystemAttributeNameForSends::UnknownVariant(
+                UnknownMessageSystemAttributeNameForSends {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for MessageSystemAttributeNameForSends {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSTraceHeader" => MessageSystemAttributeNameForSends::AwstraceHeader,
+            _ => MessageSystemAttributeNameForSends::UnknownVariant(
+                UnknownMessageSystemAttributeNameForSends { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageSystemAttributeNameForSends {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MessageSystemAttributeNameForSends {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MessageSystemAttributeNameForSends {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The user-specified message system attribute value. For string data types, the <code>Value</code> attribute has the same restrictions on the content as the message body. For more information, see <code> <a>SendMessage</a>.</code> </p> <p> <code>Name</code>, <code>type</code>, <code>value</code> and the message body must not be empty or null.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1376,7 +1688,10 @@ impl MessageSystemAttributeValueSerializer {
                 ::std::str::from_utf8(&field_value).unwrap(),
             );
         }
-        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        params.put(
+            &format!("{}{}", prefix, "DataType"),
+            &obj.data_type.to_string(),
+        );
         if let Some(ref field_value) = obj.string_list_values {
             StringListSerializer::serialize(
                 params,
@@ -1385,7 +1700,10 @@ impl MessageSystemAttributeValueSerializer {
             );
         }
         if let Some(ref field_value) = obj.string_value {
-            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StringValue"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1407,7 +1725,10 @@ impl PurgeQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -1418,7 +1739,7 @@ impl QueueAttributeMapDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+    ) -> Result<::std::collections::HashMap<QueueAttributeName, String>, XmlParseError> {
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == "Attribute" {
@@ -1439,7 +1760,7 @@ impl QueueAttributeMapSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &::std::collections::HashMap<String, String>,
+        obj: &::std::collections::HashMap<QueueAttributeName, String>,
     ) {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.{}", name, index + 1);
@@ -1449,12 +1770,235 @@ impl QueueAttributeMapSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueueAttributeName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueueAttributeName {
+    All,
+    ApproximateNumberOfMessages,
+    ApproximateNumberOfMessagesDelayed,
+    ApproximateNumberOfMessagesNotVisible,
+    ContentBasedDeduplication,
+    CreatedTimestamp,
+    DeduplicationScope,
+    DelaySeconds,
+    FifoQueue,
+    FifoThroughputLimit,
+    KmsDataKeyReusePeriodSeconds,
+    KmsMasterKeyId,
+    LastModifiedTimestamp,
+    MaximumMessageSize,
+    MessageRetentionPeriod,
+    Policy,
+    QueueArn,
+    ReceiveMessageWaitTimeSeconds,
+    RedrivePolicy,
+    VisibilityTimeout,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueueAttributeName),
+}
+
+impl Default for QueueAttributeName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueueAttributeName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueueAttributeName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueueAttributeName {
+    fn into(self) -> String {
+        match self {
+            QueueAttributeName::All => "All".to_string(),
+            QueueAttributeName::ApproximateNumberOfMessages => {
+                "ApproximateNumberOfMessages".to_string()
+            }
+            QueueAttributeName::ApproximateNumberOfMessagesDelayed => {
+                "ApproximateNumberOfMessagesDelayed".to_string()
+            }
+            QueueAttributeName::ApproximateNumberOfMessagesNotVisible => {
+                "ApproximateNumberOfMessagesNotVisible".to_string()
+            }
+            QueueAttributeName::ContentBasedDeduplication => {
+                "ContentBasedDeduplication".to_string()
+            }
+            QueueAttributeName::CreatedTimestamp => "CreatedTimestamp".to_string(),
+            QueueAttributeName::DeduplicationScope => "DeduplicationScope".to_string(),
+            QueueAttributeName::DelaySeconds => "DelaySeconds".to_string(),
+            QueueAttributeName::FifoQueue => "FifoQueue".to_string(),
+            QueueAttributeName::FifoThroughputLimit => "FifoThroughputLimit".to_string(),
+            QueueAttributeName::KmsDataKeyReusePeriodSeconds => {
+                "KmsDataKeyReusePeriodSeconds".to_string()
+            }
+            QueueAttributeName::KmsMasterKeyId => "KmsMasterKeyId".to_string(),
+            QueueAttributeName::LastModifiedTimestamp => "LastModifiedTimestamp".to_string(),
+            QueueAttributeName::MaximumMessageSize => "MaximumMessageSize".to_string(),
+            QueueAttributeName::MessageRetentionPeriod => "MessageRetentionPeriod".to_string(),
+            QueueAttributeName::Policy => "Policy".to_string(),
+            QueueAttributeName::QueueArn => "QueueArn".to_string(),
+            QueueAttributeName::ReceiveMessageWaitTimeSeconds => {
+                "ReceiveMessageWaitTimeSeconds".to_string()
+            }
+            QueueAttributeName::RedrivePolicy => "RedrivePolicy".to_string(),
+            QueueAttributeName::VisibilityTimeout => "VisibilityTimeout".to_string(),
+            QueueAttributeName::UnknownVariant(UnknownQueueAttributeName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueueAttributeName {
+    fn into(self) -> &'a str {
+        match self {
+            QueueAttributeName::All => &"All",
+            QueueAttributeName::ApproximateNumberOfMessages => &"ApproximateNumberOfMessages",
+            QueueAttributeName::ApproximateNumberOfMessagesDelayed => {
+                &"ApproximateNumberOfMessagesDelayed"
+            }
+            QueueAttributeName::ApproximateNumberOfMessagesNotVisible => {
+                &"ApproximateNumberOfMessagesNotVisible"
+            }
+            QueueAttributeName::ContentBasedDeduplication => &"ContentBasedDeduplication",
+            QueueAttributeName::CreatedTimestamp => &"CreatedTimestamp",
+            QueueAttributeName::DeduplicationScope => &"DeduplicationScope",
+            QueueAttributeName::DelaySeconds => &"DelaySeconds",
+            QueueAttributeName::FifoQueue => &"FifoQueue",
+            QueueAttributeName::FifoThroughputLimit => &"FifoThroughputLimit",
+            QueueAttributeName::KmsDataKeyReusePeriodSeconds => &"KmsDataKeyReusePeriodSeconds",
+            QueueAttributeName::KmsMasterKeyId => &"KmsMasterKeyId",
+            QueueAttributeName::LastModifiedTimestamp => &"LastModifiedTimestamp",
+            QueueAttributeName::MaximumMessageSize => &"MaximumMessageSize",
+            QueueAttributeName::MessageRetentionPeriod => &"MessageRetentionPeriod",
+            QueueAttributeName::Policy => &"Policy",
+            QueueAttributeName::QueueArn => &"QueueArn",
+            QueueAttributeName::ReceiveMessageWaitTimeSeconds => &"ReceiveMessageWaitTimeSeconds",
+            QueueAttributeName::RedrivePolicy => &"RedrivePolicy",
+            QueueAttributeName::VisibilityTimeout => &"VisibilityTimeout",
+            QueueAttributeName::UnknownVariant(UnknownQueueAttributeName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for QueueAttributeName {
+    fn from(name: &str) -> Self {
+        match name {
+            "All" => QueueAttributeName::All,
+            "ApproximateNumberOfMessages" => QueueAttributeName::ApproximateNumberOfMessages,
+            "ApproximateNumberOfMessagesDelayed" => {
+                QueueAttributeName::ApproximateNumberOfMessagesDelayed
+            }
+            "ApproximateNumberOfMessagesNotVisible" => {
+                QueueAttributeName::ApproximateNumberOfMessagesNotVisible
+            }
+            "ContentBasedDeduplication" => QueueAttributeName::ContentBasedDeduplication,
+            "CreatedTimestamp" => QueueAttributeName::CreatedTimestamp,
+            "DeduplicationScope" => QueueAttributeName::DeduplicationScope,
+            "DelaySeconds" => QueueAttributeName::DelaySeconds,
+            "FifoQueue" => QueueAttributeName::FifoQueue,
+            "FifoThroughputLimit" => QueueAttributeName::FifoThroughputLimit,
+            "KmsDataKeyReusePeriodSeconds" => QueueAttributeName::KmsDataKeyReusePeriodSeconds,
+            "KmsMasterKeyId" => QueueAttributeName::KmsMasterKeyId,
+            "LastModifiedTimestamp" => QueueAttributeName::LastModifiedTimestamp,
+            "MaximumMessageSize" => QueueAttributeName::MaximumMessageSize,
+            "MessageRetentionPeriod" => QueueAttributeName::MessageRetentionPeriod,
+            "Policy" => QueueAttributeName::Policy,
+            "QueueArn" => QueueAttributeName::QueueArn,
+            "ReceiveMessageWaitTimeSeconds" => QueueAttributeName::ReceiveMessageWaitTimeSeconds,
+            "RedrivePolicy" => QueueAttributeName::RedrivePolicy,
+            "VisibilityTimeout" => QueueAttributeName::VisibilityTimeout,
+            _ => QueueAttributeName::UnknownVariant(UnknownQueueAttributeName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueueAttributeName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All" => QueueAttributeName::All,
+            "ApproximateNumberOfMessages" => QueueAttributeName::ApproximateNumberOfMessages,
+            "ApproximateNumberOfMessagesDelayed" => {
+                QueueAttributeName::ApproximateNumberOfMessagesDelayed
+            }
+            "ApproximateNumberOfMessagesNotVisible" => {
+                QueueAttributeName::ApproximateNumberOfMessagesNotVisible
+            }
+            "ContentBasedDeduplication" => QueueAttributeName::ContentBasedDeduplication,
+            "CreatedTimestamp" => QueueAttributeName::CreatedTimestamp,
+            "DeduplicationScope" => QueueAttributeName::DeduplicationScope,
+            "DelaySeconds" => QueueAttributeName::DelaySeconds,
+            "FifoQueue" => QueueAttributeName::FifoQueue,
+            "FifoThroughputLimit" => QueueAttributeName::FifoThroughputLimit,
+            "KmsDataKeyReusePeriodSeconds" => QueueAttributeName::KmsDataKeyReusePeriodSeconds,
+            "KmsMasterKeyId" => QueueAttributeName::KmsMasterKeyId,
+            "LastModifiedTimestamp" => QueueAttributeName::LastModifiedTimestamp,
+            "MaximumMessageSize" => QueueAttributeName::MaximumMessageSize,
+            "MessageRetentionPeriod" => QueueAttributeName::MessageRetentionPeriod,
+            "Policy" => QueueAttributeName::Policy,
+            "QueueArn" => QueueAttributeName::QueueArn,
+            "ReceiveMessageWaitTimeSeconds" => QueueAttributeName::ReceiveMessageWaitTimeSeconds,
+            "RedrivePolicy" => QueueAttributeName::RedrivePolicy,
+            "VisibilityTimeout" => QueueAttributeName::VisibilityTimeout,
+            _ => QueueAttributeName::UnknownVariant(UnknownQueueAttributeName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueueAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for QueueAttributeName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for QueueAttributeName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct QueueAttributeNameDeserializer;
 impl QueueAttributeNameDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<QueueAttributeName, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -1490,7 +2034,7 @@ impl QueueUrlListDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReceiveMessageRequest {
     /// <p><p>A list of attributes that need to be returned along with each message. These attributes include:</p> <ul> <li> <p> <code>All</code> – Returns all values.</p> </li> <li> <p> <code>ApproximateFirstReceiveTimestamp</code> – Returns the time the message was first received from the queue (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>ApproximateReceiveCount</code> – Returns the number of times a message has been received across all queues but not deleted.</p> </li> <li> <p> <code>AWSTraceHeader</code> – Returns the AWS X-Ray trace header string. </p> </li> <li> <p> <code>SenderId</code> </p> <ul> <li> <p>For an IAM user, returns the IAM user ID, for example <code>ABCDEFGHI1JKLMNOPQ23R</code>.</p> </li> <li> <p>For an IAM role, returns the IAM role ID, for example <code>ABCDE1F2GH3I4JK5LMNOP:i-a123b456</code>.</p> </li> </ul> </li> <li> <p> <code>SentTimestamp</code> – Returns the time the message was sent to the queue (<a href="http://en.wikipedia.org/wiki/Unix_time">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>MessageDeduplicationId</code> – Returns the value provided by the producer that calls the <code> <a>SendMessage</a> </code> action.</p> </li> <li> <p> <code>MessageGroupId</code> – Returns the value provided by the producer that calls the <code> <a>SendMessage</a> </code> action. Messages with the same <code>MessageGroupId</code> are returned in sequence.</p> </li> <li> <p> <code>SequenceNumber</code> – Returns the value provided by Amazon SQS.</p> </li> </ul></p>
-    pub attribute_names: Option<Vec<String>>,
+    pub attribute_names: Option<Vec<QueueAttributeName>>,
     /// <p>The maximum number of messages to return. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values: 1 to 10. Default: 1.</p>
     pub max_number_of_messages: Option<i64>,
     /// <p>The name of the message attribute, where <i>N</i> is the index.</p> <ul> <li> <p>The name can contain alphanumeric characters and the underscore (<code>_</code>), hyphen (<code>-</code>), and period (<code>.</code>).</p> </li> <li> <p>The name is case-sensitive and must be unique among all attribute names for the message.</p> </li> <li> <p>The name must not start with AWS-reserved prefixes such as <code>AWS.</code> or <code>Amazon.</code> (or any casing variants).</p> </li> <li> <p>The name must not start or end with a period (<code>.</code>), and it should not have periods in succession (<code>..</code>).</p> </li> <li> <p>The name can be up to 256 characters long.</p> </li> </ul> <p>When using <code>ReceiveMessage</code>, you can send a list of attribute names to receive, or you can return all of the attributes by specifying <code>All</code> or <code>.*</code> in your request. You can also use all message attributes starting with a prefix, for example <code>bar.*</code>.</p>
@@ -1534,11 +2078,14 @@ impl ReceiveMessageRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
         if let Some(ref field_value) = obj.receive_request_attempt_id {
             params.put(
                 &format!("{}{}", prefix, "ReceiveRequestAttemptId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.visibility_timeout {
@@ -1598,8 +2145,11 @@ impl RemovePermissionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label.to_string());
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -1627,7 +2177,10 @@ impl SendMessageBatchRequestSerializer {
             &format!("{}{}", prefix, "SendMessageBatchRequestEntry"),
             &obj.entries,
         );
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -1648,8 +2201,12 @@ pub struct SendMessageBatchRequestEntry {
     /// <p><p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner (however, messages in different message groups might be processed out of order). To interleave multiple ordered streams within a single queue, use <code>MessageGroupId</code> values (for example, session data for multiple users). In this scenario, multiple consumers can process the queue, but the session data of each user is processed in a FIFO fashion.</p> <ul> <li> <p>You must associate a non-empty <code>MessageGroupId</code> with a message. If you don&#39;t provide a <code>MessageGroupId</code>, the action fails.</p> </li> <li> <p> <code>ReceiveMessage</code> might return messages with multiple <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are sorted by time sent. The caller can&#39;t specify a <code>MessageGroupId</code>.</p> </li> </ul> <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values: alphanumeric characters and punctuation <code>(!&quot;#$%&amp;&#39;()*+,-./:;&lt;=&gt;?@[]^_`{|}~)</code>.</p> <p>For best practices of using <code>MessageGroupId</code>, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/using-messagegroupid-property.html">Using the MessageGroupId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <important> <p> <code>MessageGroupId</code> is required for FIFO queues. You can&#39;t use it for Standard queues.</p> </important></p>
     pub message_group_id: Option<String>,
     /// <p><p>The message system attribute to send Each message system attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>.</p> <important> <ul> <li> <p>Currently, the only supported message system attribute is <code>AWSTraceHeader</code>. Its type must be <code>String</code> and its value must be a correctly formatted AWS X-Ray trace header string.</p> </li> <li> <p>The size of a message system attribute doesn&#39;t count towards the total size of a message.</p> </li> </ul> </important></p>
-    pub message_system_attributes:
-        Option<::std::collections::HashMap<String, MessageSystemAttributeValue>>,
+    pub message_system_attributes: Option<
+        ::std::collections::HashMap<
+            MessageSystemAttributeNameForSends,
+            MessageSystemAttributeValue,
+        >,
+    >,
 }
 
 /// Serialize `SendMessageBatchRequestEntry` contents to a `SignedRequest`.
@@ -1664,7 +2221,7 @@ impl SendMessageBatchRequestEntrySerializer {
         if let Some(ref field_value) = obj.delay_seconds {
             params.put(&format!("{}{}", prefix, "DelaySeconds"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.to_string());
         if let Some(ref field_value) = obj.message_attributes {
             MessageBodyAttributeMapSerializer::serialize(
                 params,
@@ -1672,15 +2229,21 @@ impl SendMessageBatchRequestEntrySerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
+        params.put(
+            &format!("{}{}", prefix, "MessageBody"),
+            &obj.message_body.to_string(),
+        );
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(
                 &format!("{}{}", prefix, "MessageDeduplicationId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MessageGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.message_system_attributes {
             MessageBodySystemAttributeMapSerializer::serialize(
@@ -1852,8 +2415,12 @@ pub struct SendMessageRequest {
     /// <p><p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner (however, messages in different message groups might be processed out of order). To interleave multiple ordered streams within a single queue, use <code>MessageGroupId</code> values (for example, session data for multiple users). In this scenario, multiple consumers can process the queue, but the session data of each user is processed in a FIFO fashion.</p> <ul> <li> <p>You must associate a non-empty <code>MessageGroupId</code> with a message. If you don&#39;t provide a <code>MessageGroupId</code>, the action fails.</p> </li> <li> <p> <code>ReceiveMessage</code> might return messages with multiple <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are sorted by time sent. The caller can&#39;t specify a <code>MessageGroupId</code>.</p> </li> </ul> <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values: alphanumeric characters and punctuation <code>(!&quot;#$%&amp;&#39;()*+,-./:;&lt;=&gt;?@[]^_`{|}~)</code>.</p> <p>For best practices of using <code>MessageGroupId</code>, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/using-messagegroupid-property.html">Using the MessageGroupId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <important> <p> <code>MessageGroupId</code> is required for FIFO queues. You can&#39;t use it for Standard queues.</p> </important></p>
     pub message_group_id: Option<String>,
     /// <p><p>The message system attribute to send. Each message system attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>.</p> <important> <ul> <li> <p>Currently, the only supported message system attribute is <code>AWSTraceHeader</code>. Its type must be <code>String</code> and its value must be a correctly formatted AWS X-Ray trace header string.</p> </li> <li> <p>The size of a message system attribute doesn&#39;t count towards the total size of a message.</p> </li> </ul> </important></p>
-    pub message_system_attributes:
-        Option<::std::collections::HashMap<String, MessageSystemAttributeValue>>,
+    pub message_system_attributes: Option<
+        ::std::collections::HashMap<
+            MessageSystemAttributeNameForSends,
+            MessageSystemAttributeValue,
+        >,
+    >,
     /// <p>The URL of the Amazon SQS queue to which a message is sent.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
 }
@@ -1877,15 +2444,21 @@ impl SendMessageRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
+        params.put(
+            &format!("{}{}", prefix, "MessageBody"),
+            &obj.message_body.to_string(),
+        );
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(
                 &format!("{}{}", prefix, "MessageDeduplicationId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MessageGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.message_system_attributes {
             MessageBodySystemAttributeMapSerializer::serialize(
@@ -1894,7 +2467,10 @@ impl SendMessageRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -1958,7 +2534,7 @@ impl SendMessageResultDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetQueueAttributesRequest {
     /// <p>A map of attributes to set.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetQueueAttributes</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> – The length of time, in seconds, for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 (15 minutes). Default: 0. </p> </li> <li> <p> <code>MaximumMessageSize</code> – The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) up to 262,144 bytes (256 KiB). Default: 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> – The length of time, in seconds, for which Amazon SQS retains a message. Valid values: An integer representing seconds, from 60 (1 minute) to 1,209,600 (14 days). Default: 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> – The queue's policy. A valid AWS policy. For more information about policy structure, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> – The length of time, in seconds, for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: An integer from 0 to 20 (seconds). Default: 0. </p> </li> <li> <p> <code>RedrivePolicy</code> – The string that includes the parameters for the dead-letter queue functionality of the source queue as a JSON object. For more information about the redrive policy and dead-letter queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">Using Amazon SQS Dead-Letter Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <ul> <li> <p> <code>deadLetterTargetArn</code> – The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded.</p> </li> <li> <p> <code>maxReceiveCount</code> – The number of times a message is delivered to the source queue before being moved to the dead-letter queue. When the <code>ReceiveCount</code> for a message exceeds the <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to the dead-letter-queue.</p> </li> </ul> <note> <p>The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead-letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> – The visibility timeout for the queue, in seconds. Valid values: An integer from 0 to 43,200 (12 hours). Default: 30. For more information about the visibility timeout, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms">Key Terms</a>. While the alias of the AWS-managed CMK for Amazon SQS is always <code>alias/aws/sqs</code>, the alias of a custom CMK can, for example, be <code>alias/<i>MyAlias</i> </code>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> <li> <p> <code>KmsDataKeyReusePeriodSeconds</code> – The length of time, in seconds, for which Amazon SQS can reuse a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys">data key</a> to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). Default: 300 (5 minutes). A shorter time period provides better security but results in more calls to KMS which might incur charges after Free Tier. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work">How Does the Data Key Reuse Period Work?</a>. </p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing">Exactly-Once Processing</a> in the <i>Amazon Simple Queue Service Developer Guide</i>. Note the following: </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>.</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul> <p> <b>Preview: High throughput for FIFO queues</b> </p> <p> <b>High throughput for Amazon SQS FIFO queues is in preview release and is subject to change.</b> This feature provides a high number of transactions per second (TPS) for messages in FIFO queues. For information on throughput quotas, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html">Quotas related to messages</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <p>This preview includes two new attributes:</p> <ul> <li> <p> <code>DeduplicationScope</code> – Specifies whether message deduplication occurs at the message group or queue level. Valid values are <code>messageGroup</code> and <code>queue</code>.</p> </li> <li> <p> <code>FifoThroughputLimit</code> – Specifies whether the FIFO queue throughput quota applies to the entire queue or per message group. Valid values are <code>perQueue</code> and <code>perMessageGroupId</code>. The <code>perMessageGroupId</code> value is allowed only when the value for <code>DeduplicationScope</code> is <code>messageGroup</code>.</p> </li> </ul> <p>To enable high throughput for FIFO queues, do the following:</p> <ul> <li> <p>Set <code>DeduplicationScope</code> to <code>messageGroup</code>.</p> </li> <li> <p>Set <code>FifoThroughputLimit</code> to <code>perMessageGroupId</code>.</p> </li> </ul> <p>If you set these attributes to anything other than the values shown for enabling high throughput, standard throughput is in effect and deduplication occurs as specified.</p> <p>This preview is available in the following AWS Regions:</p> <ul> <li> <p>US East (Ohio); us-east-2</p> </li> <li> <p>US East (N. Virginia); us-east-1</p> </li> <li> <p>US West (Oregon); us-west-2</p> </li> <li> <p>Europe (Ireland); eu-west-1</p> </li> </ul> <p>For more information about high throughput for FIFO queues, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html">Preview: High throughput for FIFO queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>
-    pub attributes: ::std::collections::HashMap<String, String>,
+    pub attributes: ::std::collections::HashMap<QueueAttributeName, String>,
     /// <p>The URL of the Amazon SQS queue whose attributes are set.</p> <p>Queue URLs and names are case-sensitive.</p>
     pub queue_url: String,
 }
@@ -1977,7 +2553,10 @@ impl SetQueueAttributesRequestSerializer {
             &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
     }
 }
 
@@ -2014,7 +2593,7 @@ impl StringListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2034,7 +2613,7 @@ impl TagKeyListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2095,7 +2674,10 @@ impl TagQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
         TagMapSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
     }
 }
@@ -2134,7 +2716,10 @@ impl UntagQueueRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        params.put(
+            &format!("{}{}", prefix, "QueueUrl"),
+            &obj.queue_url.to_string(),
+        );
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
     }
 }

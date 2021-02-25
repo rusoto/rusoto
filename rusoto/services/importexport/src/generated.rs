@@ -127,9 +127,12 @@ impl CancelJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id.to_string());
     }
 }
 
@@ -172,7 +175,7 @@ impl CarrierDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobInput {
     pub api_version: Option<String>,
-    pub job_type: String,
+    pub job_type: JobType,
     pub manifest: String,
     pub manifest_addendum: Option<String>,
     pub validate_only: bool,
@@ -188,12 +191,24 @@ impl CreateJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobType"), &obj.job_type);
-        params.put(&format!("{}{}", prefix, "Manifest"), &obj.manifest);
+        params.put(
+            &format!("{}{}", prefix, "JobType"),
+            &obj.job_type.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Manifest"),
+            &obj.manifest.to_string(),
+        );
         if let Some(ref field_value) = obj.manifest_addendum {
-            params.put(&format!("{}{}", prefix, "ManifestAddendum"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ManifestAddendum"),
+                &field_value.to_string(),
+            );
         }
         params.put(&format!("{}{}", prefix, "ValidateOnly"), &obj.validate_only);
     }
@@ -205,7 +220,7 @@ impl CreateJobInputSerializer {
 pub struct CreateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub job_id: Option<String>,
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
     pub signature: Option<String>,
     pub signature_file_contents: Option<String>,
     pub warning_message: Option<String>,
@@ -321,38 +336,65 @@ impl GetShippingLabelInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.city {
-            params.put(&format!("{}{}", prefix, "city"), &field_value);
+            params.put(&format!("{}{}", prefix, "city"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.company {
-            params.put(&format!("{}{}", prefix, "company"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "company"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.country {
-            params.put(&format!("{}{}", prefix, "country"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "country"),
+                &field_value.to_string(),
+            );
         }
         JobIdListSerializer::serialize(params, &format!("{}{}", prefix, "jobIds"), &obj.job_ids);
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "name"), &field_value);
+            params.put(&format!("{}{}", prefix, "name"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.phone_number {
-            params.put(&format!("{}{}", prefix, "phoneNumber"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "phoneNumber"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.postal_code {
-            params.put(&format!("{}{}", prefix, "postalCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "postalCode"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.state_or_province {
-            params.put(&format!("{}{}", prefix, "stateOrProvince"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "stateOrProvince"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.street_1 {
-            params.put(&format!("{}{}", prefix, "street1"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "street1"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.street_2 {
-            params.put(&format!("{}{}", prefix, "street2"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "street2"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.street_3 {
-            params.put(&format!("{}{}", prefix, "street3"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "street3"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -407,9 +449,12 @@ impl GetStatusInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id.to_string());
     }
 }
 
@@ -423,7 +468,7 @@ pub struct GetStatusOutput {
     pub current_manifest: Option<String>,
     pub error_count: Option<i64>,
     pub job_id: Option<String>,
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
     pub location_code: Option<String>,
     pub location_message: Option<String>,
     pub log_bucket: Option<String>,
@@ -549,7 +594,7 @@ pub struct Job {
     pub creation_date: Option<String>,
     pub is_canceled: Option<bool>,
     pub job_id: Option<String>,
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
 }
 
 #[allow(dead_code)]
@@ -596,8 +641,112 @@ impl JobIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+/// <p>Specifies whether the job to initiate is an import or export job.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobType {
+    Export,
+    Import,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobType),
+}
+
+impl Default for JobType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobType {
+    fn into(self) -> String {
+        match self {
+            JobType::Export => "Export".to_string(),
+            JobType::Import => "Import".to_string(),
+            JobType::UnknownVariant(UnknownJobType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobType {
+    fn into(self) -> &'a str {
+        match self {
+            JobType::Export => &"Export",
+            JobType::Import => &"Import",
+            JobType::UnknownVariant(UnknownJobType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Export" => JobType::Export,
+            "Import" => JobType::Import,
+            _ => JobType::UnknownVariant(UnknownJobType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Export" => JobType::Export,
+            "Import" => JobType::Import,
+            _ => JobType::UnknownVariant(UnknownJobType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for JobType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for JobType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -605,8 +754,11 @@ impl JobIdListSerializer {
 struct JobTypeDeserializer;
 impl JobTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<JobType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -646,10 +798,13 @@ impl ListJobsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_jobs {
             params.put(&format!("{}{}", prefix, "MaxJobs"), &field_value);
@@ -784,7 +939,7 @@ impl URLDeserializer {
 pub struct UpdateJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
-    pub job_type: String,
+    pub job_type: JobType,
     pub manifest: String,
     pub validate_only: bool,
 }
@@ -799,11 +954,20 @@ impl UpdateJobInputSerializer {
         }
 
         if let Some(ref field_value) = obj.api_version {
-            params.put(&format!("{}{}", prefix, "APIVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "APIVersion"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
-        params.put(&format!("{}{}", prefix, "JobType"), &obj.job_type);
-        params.put(&format!("{}{}", prefix, "Manifest"), &obj.manifest);
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id.to_string());
+        params.put(
+            &format!("{}{}", prefix, "JobType"),
+            &obj.job_type.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Manifest"),
+            &obj.manifest.to_string(),
+        );
         params.put(&format!("{}{}", prefix, "ValidateOnly"), &obj.validate_only);
     }
 }

@@ -33,7 +33,7 @@ pub struct CreateNotificationRuleRequest {
     pub client_request_token: Option<String>,
     /// <p>The level of detail to include in the notifications for this resource. BASIC will include only the contents of the event as it would appear in AWS CloudWatch. FULL will include any supplemental information provided by AWS CodeStar Notifications and/or the service for the resource for which the notification is created.</p>
     #[serde(rename = "DetailType")]
-    pub detail_type: String,
+    pub detail_type: DetailType,
     /// <p>A list of event types associated with this notification rule. For a list of allowed events, see <a>EventTypeSummary</a>.</p>
     #[serde(rename = "EventTypeIds")]
     pub event_type_ids: Vec<String>,
@@ -46,7 +46,7 @@ pub struct CreateNotificationRuleRequest {
     /// <p>The status of the notification rule. The default value is ENABLED. If the status is set to DISABLED, notifications aren't sent for the notification rule.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NotificationRuleStatus>,
     /// <p>A list of tags to apply to this notification rule. Key names cannot start with "aws". </p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -123,7 +123,7 @@ pub struct DescribeNotificationRuleResult {
     /// <p>The level of detail included in the notifications for this resource. BASIC will include only the contents of the event as it would appear in AWS CloudWatch. FULL will include any supplemental information provided by AWS CodeStar Notifications and/or the service for the resource for which the notification is created.</p>
     #[serde(rename = "DetailType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub detail_type: Option<String>,
+    pub detail_type: Option<DetailType>,
     /// <p>A list of the event types associated with the notification rule.</p>
     #[serde(rename = "EventTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -143,7 +143,7 @@ pub struct DescribeNotificationRuleResult {
     /// <p>The status of the notification rule. Valid statuses are on (sending notifications) or off (not sending notifications).</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NotificationRuleStatus>,
     /// <p>The tags associated with the notification rule.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -152,6 +152,106 @@ pub struct DescribeNotificationRuleResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<TargetSummary>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetailType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetailType {
+    Basic,
+    Full,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetailType),
+}
+
+impl Default for DetailType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetailType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetailType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetailType {
+    fn into(self) -> String {
+        match self {
+            DetailType::Basic => "BASIC".to_string(),
+            DetailType::Full => "FULL".to_string(),
+            DetailType::UnknownVariant(UnknownDetailType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetailType {
+    fn into(self) -> &'a str {
+        match self {
+            DetailType::Basic => &"BASIC",
+            DetailType::Full => &"FULL",
+            DetailType::UnknownVariant(UnknownDetailType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DetailType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BASIC" => DetailType::Basic,
+            "FULL" => DetailType::Full,
+            _ => DetailType::UnknownVariant(UnknownDetailType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetailType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BASIC" => DetailType::Basic,
+            "FULL" => DetailType::Full,
+            _ => DetailType::UnknownVariant(UnknownDetailType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetailType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DetailType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetailType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns information about an event that has triggered a notification rule.</p>
@@ -182,10 +282,115 @@ pub struct EventTypeSummary {
 pub struct ListEventTypesFilter {
     /// <p>The system-generated name of the filter type you want to filter by.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: ListEventTypesFilterName,
     /// <p>The name of the resource type (for example, pipeline) or service name (for example, CodePipeline) that you want to filter by.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListEventTypesFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListEventTypesFilterName {
+    ResourceType,
+    ServiceName,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListEventTypesFilterName),
+}
+
+impl Default for ListEventTypesFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListEventTypesFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListEventTypesFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListEventTypesFilterName {
+    fn into(self) -> String {
+        match self {
+            ListEventTypesFilterName::ResourceType => "RESOURCE_TYPE".to_string(),
+            ListEventTypesFilterName::ServiceName => "SERVICE_NAME".to_string(),
+            ListEventTypesFilterName::UnknownVariant(UnknownListEventTypesFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListEventTypesFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ListEventTypesFilterName::ResourceType => &"RESOURCE_TYPE",
+            ListEventTypesFilterName::ServiceName => &"SERVICE_NAME",
+            ListEventTypesFilterName::UnknownVariant(UnknownListEventTypesFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListEventTypesFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "RESOURCE_TYPE" => ListEventTypesFilterName::ResourceType,
+            "SERVICE_NAME" => ListEventTypesFilterName::ServiceName,
+            _ => ListEventTypesFilterName::UnknownVariant(UnknownListEventTypesFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListEventTypesFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RESOURCE_TYPE" => ListEventTypesFilterName::ResourceType,
+            "SERVICE_NAME" => ListEventTypesFilterName::ServiceName,
+            _ => ListEventTypesFilterName::UnknownVariant(UnknownListEventTypesFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListEventTypesFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListEventTypesFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListEventTypesFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -224,10 +429,129 @@ pub struct ListEventTypesResult {
 pub struct ListNotificationRulesFilter {
     /// <p>The name of the attribute you want to use to filter the returned notification rules.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: ListNotificationRulesFilterName,
     /// <p>The value of the attribute you want to use to filter the returned notification rules. For example, if you specify filtering by <i>RESOURCE</i> in Name, you might specify the ARN of a pipeline in AWS CodePipeline for the value.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListNotificationRulesFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListNotificationRulesFilterName {
+    CreatedBy,
+    EventTypeId,
+    Resource,
+    TargetAddress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListNotificationRulesFilterName),
+}
+
+impl Default for ListNotificationRulesFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListNotificationRulesFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListNotificationRulesFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListNotificationRulesFilterName {
+    fn into(self) -> String {
+        match self {
+            ListNotificationRulesFilterName::CreatedBy => "CREATED_BY".to_string(),
+            ListNotificationRulesFilterName::EventTypeId => "EVENT_TYPE_ID".to_string(),
+            ListNotificationRulesFilterName::Resource => "RESOURCE".to_string(),
+            ListNotificationRulesFilterName::TargetAddress => "TARGET_ADDRESS".to_string(),
+            ListNotificationRulesFilterName::UnknownVariant(
+                UnknownListNotificationRulesFilterName { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListNotificationRulesFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ListNotificationRulesFilterName::CreatedBy => &"CREATED_BY",
+            ListNotificationRulesFilterName::EventTypeId => &"EVENT_TYPE_ID",
+            ListNotificationRulesFilterName::Resource => &"RESOURCE",
+            ListNotificationRulesFilterName::TargetAddress => &"TARGET_ADDRESS",
+            ListNotificationRulesFilterName::UnknownVariant(
+                UnknownListNotificationRulesFilterName { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ListNotificationRulesFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED_BY" => ListNotificationRulesFilterName::CreatedBy,
+            "EVENT_TYPE_ID" => ListNotificationRulesFilterName::EventTypeId,
+            "RESOURCE" => ListNotificationRulesFilterName::Resource,
+            "TARGET_ADDRESS" => ListNotificationRulesFilterName::TargetAddress,
+            _ => ListNotificationRulesFilterName::UnknownVariant(
+                UnknownListNotificationRulesFilterName {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ListNotificationRulesFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED_BY" => ListNotificationRulesFilterName::CreatedBy,
+            "EVENT_TYPE_ID" => ListNotificationRulesFilterName::EventTypeId,
+            "RESOURCE" => ListNotificationRulesFilterName::Resource,
+            "TARGET_ADDRESS" => ListNotificationRulesFilterName::TargetAddress,
+            _ => ListNotificationRulesFilterName::UnknownVariant(
+                UnknownListNotificationRulesFilterName { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListNotificationRulesFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListNotificationRulesFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListNotificationRulesFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -283,10 +607,120 @@ pub struct ListTagsForResourceResult {
 pub struct ListTargetsFilter {
     /// <p>The name of the attribute you want to use to filter the returned targets.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: ListTargetsFilterName,
     /// <p>The value of the attribute you want to use to filter the returned targets. For example, if you specify <i>SNS</i> for the Target type, you could specify an Amazon Resource Name (ARN) for a topic as the value.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListTargetsFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListTargetsFilterName {
+    TargetAddress,
+    TargetStatus,
+    TargetType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListTargetsFilterName),
+}
+
+impl Default for ListTargetsFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListTargetsFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListTargetsFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListTargetsFilterName {
+    fn into(self) -> String {
+        match self {
+            ListTargetsFilterName::TargetAddress => "TARGET_ADDRESS".to_string(),
+            ListTargetsFilterName::TargetStatus => "TARGET_STATUS".to_string(),
+            ListTargetsFilterName::TargetType => "TARGET_TYPE".to_string(),
+            ListTargetsFilterName::UnknownVariant(UnknownListTargetsFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListTargetsFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ListTargetsFilterName::TargetAddress => &"TARGET_ADDRESS",
+            ListTargetsFilterName::TargetStatus => &"TARGET_STATUS",
+            ListTargetsFilterName::TargetType => &"TARGET_TYPE",
+            ListTargetsFilterName::UnknownVariant(UnknownListTargetsFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListTargetsFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "TARGET_ADDRESS" => ListTargetsFilterName::TargetAddress,
+            "TARGET_STATUS" => ListTargetsFilterName::TargetStatus,
+            "TARGET_TYPE" => ListTargetsFilterName::TargetType,
+            _ => ListTargetsFilterName::UnknownVariant(UnknownListTargetsFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListTargetsFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TARGET_ADDRESS" => ListTargetsFilterName::TargetAddress,
+            "TARGET_STATUS" => ListTargetsFilterName::TargetStatus,
+            "TARGET_TYPE" => ListTargetsFilterName::TargetType,
+            _ => ListTargetsFilterName::UnknownVariant(UnknownListTargetsFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListTargetsFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListTargetsFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListTargetsFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -317,6 +751,110 @@ pub struct ListTargetsResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<TargetSummary>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotificationRuleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotificationRuleStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotificationRuleStatus),
+}
+
+impl Default for NotificationRuleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotificationRuleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotificationRuleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotificationRuleStatus {
+    fn into(self) -> String {
+        match self {
+            NotificationRuleStatus::Disabled => "DISABLED".to_string(),
+            NotificationRuleStatus::Enabled => "ENABLED".to_string(),
+            NotificationRuleStatus::UnknownVariant(UnknownNotificationRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotificationRuleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NotificationRuleStatus::Disabled => &"DISABLED",
+            NotificationRuleStatus::Enabled => &"ENABLED",
+            NotificationRuleStatus::UnknownVariant(UnknownNotificationRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotificationRuleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => NotificationRuleStatus::Disabled,
+            "ENABLED" => NotificationRuleStatus::Enabled,
+            _ => NotificationRuleStatus::UnknownVariant(UnknownNotificationRuleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotificationRuleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => NotificationRuleStatus::Disabled,
+            "ENABLED" => NotificationRuleStatus::Enabled,
+            _ => NotificationRuleStatus::UnknownVariant(UnknownNotificationRuleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationRuleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotificationRuleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotificationRuleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a specified notification rule.</p>
@@ -390,6 +928,122 @@ pub struct Target {
     pub target_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetStatus {
+    Active,
+    Deactivated,
+    Inactive,
+    Pending,
+    Unreachable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetStatus),
+}
+
+impl Default for TargetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetStatus {
+    fn into(self) -> String {
+        match self {
+            TargetStatus::Active => "ACTIVE".to_string(),
+            TargetStatus::Deactivated => "DEACTIVATED".to_string(),
+            TargetStatus::Inactive => "INACTIVE".to_string(),
+            TargetStatus::Pending => "PENDING".to_string(),
+            TargetStatus::Unreachable => "UNREACHABLE".to_string(),
+            TargetStatus::UnknownVariant(UnknownTargetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TargetStatus::Active => &"ACTIVE",
+            TargetStatus::Deactivated => &"DEACTIVATED",
+            TargetStatus::Inactive => &"INACTIVE",
+            TargetStatus::Pending => &"PENDING",
+            TargetStatus::Unreachable => &"UNREACHABLE",
+            TargetStatus::UnknownVariant(UnknownTargetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => TargetStatus::Active,
+            "DEACTIVATED" => TargetStatus::Deactivated,
+            "INACTIVE" => TargetStatus::Inactive,
+            "PENDING" => TargetStatus::Pending,
+            "UNREACHABLE" => TargetStatus::Unreachable,
+            _ => TargetStatus::UnknownVariant(UnknownTargetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => TargetStatus::Active,
+            "DEACTIVATED" => TargetStatus::Deactivated,
+            "INACTIVE" => TargetStatus::Inactive,
+            "PENDING" => TargetStatus::Pending,
+            "UNREACHABLE" => TargetStatus::Unreachable,
+            _ => TargetStatus::UnknownVariant(UnknownTargetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TargetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the targets specified for a notification rule.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -401,7 +1055,7 @@ pub struct TargetSummary {
     /// <p>The status of the target.</p>
     #[serde(rename = "TargetStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_status: Option<String>,
+    pub target_status: Option<TargetStatus>,
     /// <p>The type of the target (for example, SNS).</p>
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -451,7 +1105,7 @@ pub struct UpdateNotificationRuleRequest {
     /// <p>The level of detail to include in the notifications for this resource. BASIC will include only the contents of the event as it would appear in AWS CloudWatch. FULL will include any supplemental information provided by AWS CodeStar Notifications and/or the service for the resource for which the notification is created.</p>
     #[serde(rename = "DetailType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub detail_type: Option<String>,
+    pub detail_type: Option<DetailType>,
     /// <p>A list of event types associated with this notification rule.</p>
     #[serde(rename = "EventTypeIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -463,7 +1117,7 @@ pub struct UpdateNotificationRuleRequest {
     /// <p>The status of the notification rule. Valid statuses include enabled (sending notifications) or disabled (not sending notifications).</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NotificationRuleStatus>,
     /// <p>The address and type of the targets to receive notifications from this notification rule.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]

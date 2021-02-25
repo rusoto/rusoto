@@ -88,10 +88,16 @@ impl AbortEnvironmentUpdateMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -104,28 +110,370 @@ impl AbortableOperationInProgressDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionHistoryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionHistoryStatus {
+    Completed,
+    Failed,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionHistoryStatus),
+}
+
+impl Default for ActionHistoryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionHistoryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionHistoryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionHistoryStatus {
+    fn into(self) -> String {
+        match self {
+            ActionHistoryStatus::Completed => "Completed".to_string(),
+            ActionHistoryStatus::Failed => "Failed".to_string(),
+            ActionHistoryStatus::Unknown => "Unknown".to_string(),
+            ActionHistoryStatus::UnknownVariant(UnknownActionHistoryStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionHistoryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ActionHistoryStatus::Completed => &"Completed",
+            ActionHistoryStatus::Failed => &"Failed",
+            ActionHistoryStatus::Unknown => &"Unknown",
+            ActionHistoryStatus::UnknownVariant(UnknownActionHistoryStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ActionHistoryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => ActionHistoryStatus::Completed,
+            "Failed" => ActionHistoryStatus::Failed,
+            "Unknown" => ActionHistoryStatus::Unknown,
+            _ => ActionHistoryStatus::UnknownVariant(UnknownActionHistoryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionHistoryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => ActionHistoryStatus::Completed,
+            "Failed" => ActionHistoryStatus::Failed,
+            "Unknown" => ActionHistoryStatus::Unknown,
+            _ => ActionHistoryStatus::UnknownVariant(UnknownActionHistoryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionHistoryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ActionHistoryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActionHistoryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ActionHistoryStatusDeserializer;
 impl ActionHistoryStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActionHistoryStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionStatus {
+    Pending,
+    Running,
+    Scheduled,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionStatus),
+}
+
+impl Default for ActionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionStatus {
+    fn into(self) -> String {
+        match self {
+            ActionStatus::Pending => "Pending".to_string(),
+            ActionStatus::Running => "Running".to_string(),
+            ActionStatus::Scheduled => "Scheduled".to_string(),
+            ActionStatus::Unknown => "Unknown".to_string(),
+            ActionStatus::UnknownVariant(UnknownActionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ActionStatus::Pending => &"Pending",
+            ActionStatus::Running => &"Running",
+            ActionStatus::Scheduled => &"Scheduled",
+            ActionStatus::Unknown => &"Unknown",
+            ActionStatus::UnknownVariant(UnknownActionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Pending" => ActionStatus::Pending,
+            "Running" => ActionStatus::Running,
+            "Scheduled" => ActionStatus::Scheduled,
+            "Unknown" => ActionStatus::Unknown,
+            _ => ActionStatus::UnknownVariant(UnknownActionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Pending" => ActionStatus::Pending,
+            "Running" => ActionStatus::Running,
+            "Scheduled" => ActionStatus::Scheduled,
+            "Unknown" => ActionStatus::Unknown,
+            _ => ActionStatus::UnknownVariant(UnknownActionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ActionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ActionStatusDeserializer;
 impl ActionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionType {
+    InstanceRefresh,
+    PlatformUpdate,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionType),
+}
+
+impl Default for ActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionType {
+    fn into(self) -> String {
+        match self {
+            ActionType::InstanceRefresh => "InstanceRefresh".to_string(),
+            ActionType::PlatformUpdate => "PlatformUpdate".to_string(),
+            ActionType::Unknown => "Unknown".to_string(),
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionType {
+    fn into(self) -> &'a str {
+        match self {
+            ActionType::InstanceRefresh => &"InstanceRefresh",
+            ActionType::PlatformUpdate => &"PlatformUpdate",
+            ActionType::Unknown => &"Unknown",
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "InstanceRefresh" => ActionType::InstanceRefresh,
+            "PlatformUpdate" => ActionType::PlatformUpdate,
+            "Unknown" => ActionType::Unknown,
+            _ => ActionType::UnknownVariant(UnknownActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InstanceRefresh" => ActionType::InstanceRefresh,
+            "PlatformUpdate" => ActionType::PlatformUpdate,
+            "Unknown" => ActionType::Unknown,
+            _ => ActionType::UnknownVariant(UnknownActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ActionTypeDeserializer;
 impl ActionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActionType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -370,7 +718,7 @@ impl ApplicationNamesListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -428,7 +776,10 @@ impl ApplicationResourceLifecycleConfigSerializer {
         }
 
         if let Some(ref field_value) = obj.service_role {
-            params.put(&format!("{}{}", prefix, "ServiceRole"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ServiceRole"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_lifecycle_config {
             ApplicationVersionLifecycleConfigSerializer::serialize(
@@ -511,7 +862,7 @@ pub struct ApplicationVersionDescription {
     /// <p>The storage location of the application version's source bundle in Amazon S3.</p>
     pub source_bundle: Option<S3Location>,
     /// <p><p>The processing status of the application version. Reflects the state of the application version during its creation. Many of the values are only applicable if you specified <code>True</code> for the <code>Process</code> parameter of the <code>CreateApplicationVersion</code> action. The following list describes the possible values.</p> <ul> <li> <p> <code>Unprocessed</code> – Application version wasn&#39;t pre-processed or validated. Elastic Beanstalk will validate configuration files during deployment of the application version to an environment.</p> </li> <li> <p> <code>Processing</code> – Elastic Beanstalk is currently processing the application version.</p> </li> <li> <p> <code>Building</code> – Application version is currently undergoing an AWS CodeBuild build.</p> </li> <li> <p> <code>Processed</code> – Elastic Beanstalk was successfully pre-processed and validated.</p> </li> <li> <p> <code>Failed</code> – Either the AWS CodeBuild build failed or configuration files didn&#39;t pass validation. This application version isn&#39;t usable.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<ApplicationVersionStatus>,
     /// <p>A unique identifier for the application version.</p>
     pub version_label: Option<String>,
 }
@@ -750,12 +1101,136 @@ impl ApplicationVersionLifecycleConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplicationVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApplicationVersionStatus {
+    Building,
+    Failed,
+    Processed,
+    Processing,
+    Unprocessed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplicationVersionStatus),
+}
+
+impl Default for ApplicationVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApplicationVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApplicationVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApplicationVersionStatus {
+    fn into(self) -> String {
+        match self {
+            ApplicationVersionStatus::Building => "Building".to_string(),
+            ApplicationVersionStatus::Failed => "Failed".to_string(),
+            ApplicationVersionStatus::Processed => "Processed".to_string(),
+            ApplicationVersionStatus::Processing => "Processing".to_string(),
+            ApplicationVersionStatus::Unprocessed => "Unprocessed".to_string(),
+            ApplicationVersionStatus::UnknownVariant(UnknownApplicationVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApplicationVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ApplicationVersionStatus::Building => &"Building",
+            ApplicationVersionStatus::Failed => &"Failed",
+            ApplicationVersionStatus::Processed => &"Processed",
+            ApplicationVersionStatus::Processing => &"Processing",
+            ApplicationVersionStatus::Unprocessed => &"Unprocessed",
+            ApplicationVersionStatus::UnknownVariant(UnknownApplicationVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApplicationVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Building" => ApplicationVersionStatus::Building,
+            "Failed" => ApplicationVersionStatus::Failed,
+            "Processed" => ApplicationVersionStatus::Processed,
+            "Processing" => ApplicationVersionStatus::Processing,
+            "Unprocessed" => ApplicationVersionStatus::Unprocessed,
+            _ => ApplicationVersionStatus::UnknownVariant(UnknownApplicationVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApplicationVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Building" => ApplicationVersionStatus::Building,
+            "Failed" => ApplicationVersionStatus::Failed,
+            "Processed" => ApplicationVersionStatus::Processed,
+            "Processing" => ApplicationVersionStatus::Processing,
+            "Unprocessed" => ApplicationVersionStatus::Unprocessed,
+            _ => ApplicationVersionStatus::UnknownVariant(UnknownApplicationVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ApplicationVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ApplicationVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ApplicationVersionStatusDeserializer;
 impl ApplicationVersionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ApplicationVersionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Request to execute a scheduled managed action immediately.</p>
@@ -779,12 +1254,21 @@ impl ApplyEnvironmentManagedActionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ActionId"), &obj.action_id);
+        params.put(
+            &format!("{}{}", prefix, "ActionId"),
+            &obj.action_id.to_string(),
+        );
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -798,7 +1282,7 @@ pub struct ApplyEnvironmentManagedActionResult {
     /// <p>The action ID of the managed action.</p>
     pub action_id: Option<String>,
     /// <p>The type of managed action.</p>
-    pub action_type: Option<String>,
+    pub action_type: Option<ActionType>,
     /// <p>The status of the managed action.</p>
     pub status: Option<String>,
 }
@@ -858,11 +1342,11 @@ impl AssociateEnvironmentOperationsRoleMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "EnvironmentName"),
-            &obj.environment_name,
+            &obj.environment_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "OperationsRole"),
-            &obj.operations_role,
+            &obj.operations_role.to_string(),
         );
     }
 }
@@ -991,7 +1475,7 @@ pub struct BuildConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>
     pub code_build_service_role: String,
     /// <p><p>Information about the compute resources the build project will use.</p> <ul> <li> <p> <code>BUILD<em>GENERAL1</em>SMALL: Use up to 3 GB memory and 2 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>LARGE: Use up to 15 GB memory and 8 vCPUs for builds</code> </p> </li> </ul></p>
-    pub compute_type: Option<String>,
+    pub compute_type: Option<ComputeType>,
     /// <p>The ID of the Docker image to use for this build project.</p>
     pub image: String,
     /// <p>How long in minutes, from 5 to 480 (8 hours), for AWS CodeBuild to wait until timing out any related build that does not get marked as completed. The default is 60 minutes.</p>
@@ -1008,16 +1492,22 @@ impl BuildConfigurationSerializer {
         }
 
         if let Some(ref field_value) = obj.artifact_name {
-            params.put(&format!("{}{}", prefix, "ArtifactName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ArtifactName"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "CodeBuildServiceRole"),
-            &obj.code_build_service_role,
+            &obj.code_build_service_role.to_string(),
         );
         if let Some(ref field_value) = obj.compute_type {
-            params.put(&format!("{}{}", prefix, "ComputeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ComputeType"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Image"), &obj.image);
+        params.put(&format!("{}{}", prefix, "Image"), &obj.image.to_string());
         if let Some(ref field_value) = obj.timeout_in_minutes {
             params.put(&format!("{}{}", prefix, "TimeoutInMinutes"), &field_value);
         }
@@ -1159,7 +1649,10 @@ impl CheckDNSAvailabilityMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "CNAMEPrefix"), &obj.cname_prefix);
+        params.put(
+            &format!("{}{}", prefix, "CNAMEPrefix"),
+            &obj.cname_prefix.to_string(),
+        );
     }
 }
 
@@ -1235,10 +1728,16 @@ impl ComposeEnvironmentsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.group_name {
-            params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_labels {
             VersionLabelsSerializer::serialize(
@@ -1250,12 +1749,237 @@ impl ComposeEnvironmentsMessageSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComputeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComputeType {
+    BuildGeneral1Large,
+    BuildGeneral1Medium,
+    BuildGeneral1Small,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComputeType),
+}
+
+impl Default for ComputeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComputeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComputeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComputeType {
+    fn into(self) -> String {
+        match self {
+            ComputeType::BuildGeneral1Large => "BUILD_GENERAL1_LARGE".to_string(),
+            ComputeType::BuildGeneral1Medium => "BUILD_GENERAL1_MEDIUM".to_string(),
+            ComputeType::BuildGeneral1Small => "BUILD_GENERAL1_SMALL".to_string(),
+            ComputeType::UnknownVariant(UnknownComputeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComputeType {
+    fn into(self) -> &'a str {
+        match self {
+            ComputeType::BuildGeneral1Large => &"BUILD_GENERAL1_LARGE",
+            ComputeType::BuildGeneral1Medium => &"BUILD_GENERAL1_MEDIUM",
+            ComputeType::BuildGeneral1Small => &"BUILD_GENERAL1_SMALL",
+            ComputeType::UnknownVariant(UnknownComputeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComputeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD_GENERAL1_LARGE" => ComputeType::BuildGeneral1Large,
+            "BUILD_GENERAL1_MEDIUM" => ComputeType::BuildGeneral1Medium,
+            "BUILD_GENERAL1_SMALL" => ComputeType::BuildGeneral1Small,
+            _ => ComputeType::UnknownVariant(UnknownComputeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComputeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD_GENERAL1_LARGE" => ComputeType::BuildGeneral1Large,
+            "BUILD_GENERAL1_MEDIUM" => ComputeType::BuildGeneral1Medium,
+            "BUILD_GENERAL1_SMALL" => ComputeType::BuildGeneral1Small,
+            _ => ComputeType::UnknownVariant(UnknownComputeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ComputeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComputeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationDeploymentStatus {
+    Deployed,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationDeploymentStatus),
+}
+
+impl Default for ConfigurationDeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationDeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationDeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationDeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            ConfigurationDeploymentStatus::Deployed => "deployed".to_string(),
+            ConfigurationDeploymentStatus::Failed => "failed".to_string(),
+            ConfigurationDeploymentStatus::Pending => "pending".to_string(),
+            ConfigurationDeploymentStatus::UnknownVariant(
+                UnknownConfigurationDeploymentStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationDeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationDeploymentStatus::Deployed => &"deployed",
+            ConfigurationDeploymentStatus::Failed => &"failed",
+            ConfigurationDeploymentStatus::Pending => &"pending",
+            ConfigurationDeploymentStatus::UnknownVariant(
+                UnknownConfigurationDeploymentStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationDeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "deployed" => ConfigurationDeploymentStatus::Deployed,
+            "failed" => ConfigurationDeploymentStatus::Failed,
+            "pending" => ConfigurationDeploymentStatus::Pending,
+            _ => ConfigurationDeploymentStatus::UnknownVariant(
+                UnknownConfigurationDeploymentStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ConfigurationDeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "deployed" => ConfigurationDeploymentStatus::Deployed,
+            "failed" => ConfigurationDeploymentStatus::Failed,
+            "pending" => ConfigurationDeploymentStatus::Pending,
+            _ => ConfigurationDeploymentStatus::UnknownVariant(
+                UnknownConfigurationDeploymentStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationDeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ConfigurationDeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConfigurationDeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ConfigurationDeploymentStatusDeserializer;
 impl ConfigurationDeploymentStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ConfigurationDeploymentStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -1291,7 +2015,7 @@ pub struct ConfigurationOptionDescription {
     /// <p>If specified, values for the configuration option are selected from this list.</p>
     pub value_options: Option<Vec<String>>,
     /// <p><p>An indication of which type of values this option has and whether it is allowable to select one or more than one of the possible values:</p> <ul> <li> <p> <code>Scalar</code> : Values for this option are a single selection from the possible values, or an unformatted string, or numeric value governed by the <code>MIN/MAX/Regex</code> constraints.</p> </li> <li> <p> <code>List</code> : Values for this option are multiple selections from the possible values.</p> </li> <li> <p> <code>Boolean</code> : Values for this option are either <code>true</code> or <code>false</code> .</p> </li> <li> <p> <code>Json</code> : Values for this option are a JSON representation of a <code>ConfigDocument</code>.</p> </li> </ul></p>
-    pub value_type: Option<String>,
+    pub value_type: Option<ConfigurationOptionValueType>,
 }
 
 #[allow(dead_code)]
@@ -1506,16 +2230,25 @@ impl ConfigurationOptionSettingSerializer {
         }
 
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_name {
-            params.put(&format!("{}{}", prefix, "OptionName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OptionName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_name {
-            params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -1568,12 +2301,128 @@ impl ConfigurationOptionValueDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationOptionValueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationOptionValueType {
+    List,
+    Scalar,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationOptionValueType),
+}
+
+impl Default for ConfigurationOptionValueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationOptionValueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationOptionValueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationOptionValueType {
+    fn into(self) -> String {
+        match self {
+            ConfigurationOptionValueType::List => "List".to_string(),
+            ConfigurationOptionValueType::Scalar => "Scalar".to_string(),
+            ConfigurationOptionValueType::UnknownVariant(UnknownConfigurationOptionValueType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationOptionValueType {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationOptionValueType::List => &"List",
+            ConfigurationOptionValueType::Scalar => &"Scalar",
+            ConfigurationOptionValueType::UnknownVariant(UnknownConfigurationOptionValueType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationOptionValueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "List" => ConfigurationOptionValueType::List,
+            "Scalar" => ConfigurationOptionValueType::Scalar,
+            _ => {
+                ConfigurationOptionValueType::UnknownVariant(UnknownConfigurationOptionValueType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ConfigurationOptionValueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "List" => ConfigurationOptionValueType::List,
+            "Scalar" => ConfigurationOptionValueType::Scalar,
+            _ => {
+                ConfigurationOptionValueType::UnknownVariant(UnknownConfigurationOptionValueType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationOptionValueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ConfigurationOptionValueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConfigurationOptionValueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ConfigurationOptionValueTypeDeserializer;
 impl ConfigurationOptionValueTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ConfigurationOptionValueType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Describes the settings for a specified configuration set.</p>
@@ -1636,7 +2485,7 @@ pub struct ConfigurationSettingsDescription {
     /// <p>The date (in UTC time) when this configuration set was last modified.</p>
     pub date_updated: Option<String>,
     /// <p><p> If this configuration set is associated with an environment, the <code>DeploymentStatus</code> parameter indicates the deployment status of this configuration set: </p> <ul> <li> <p> <code>null</code>: This configuration is not associated with a running environment.</p> </li> <li> <p> <code>pending</code>: This is a draft configuration that is not deployed to the associated environment but is in the process of deploying.</p> </li> <li> <p> <code>deployed</code>: This is the configuration that is currently deployed to the associated running environment.</p> </li> <li> <p> <code>failed</code>: This is a draft configuration that failed to successfully deploy.</p> </li> </ul></p>
-    pub deployment_status: Option<String>,
+    pub deployment_status: Option<ConfigurationDeploymentStatus>,
     /// <p>Describes this configuration set.</p>
     pub description: Option<String>,
     /// <p> If not <code>null</code>, the name of the environment for this configuration set. </p>
@@ -1869,10 +2718,13 @@ impl CreateApplicationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_lifecycle_config {
             ApplicationResourceLifecycleConfigSerializer::serialize(
@@ -1922,7 +2774,7 @@ impl CreateApplicationVersionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.auto_create_application {
             params.put(
@@ -1938,7 +2790,10 @@ impl CreateApplicationVersionMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.process {
             params.put(&format!("{}{}", prefix, "Process"), &field_value);
@@ -1960,7 +2815,10 @@ impl CreateApplicationVersionMessageSerializer {
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
-        params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
+        params.put(
+            &format!("{}{}", prefix, "VersionLabel"),
+            &obj.version_label.to_string(),
+        );
     }
 }
 
@@ -1999,13 +2857,19 @@ impl CreateConfigurationTemplateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2015,10 +2879,16 @@ impl CreateConfigurationTemplateMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SolutionStackName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.source_configuration {
             SourceConfigurationSerializer::serialize(
@@ -2030,7 +2900,10 @@ impl CreateConfigurationTemplateMessageSerializer {
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -2079,22 +2952,37 @@ impl CreateEnvironmentMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.cname_prefix {
-            params.put(&format!("{}{}", prefix, "CNAMEPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CNAMEPrefix"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.group_name {
-            params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operations_role {
-            params.put(&format!("{}{}", prefix, "OperationsRole"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OperationsRole"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2111,16 +2999,25 @@ impl CreateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SolutionStackName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tier {
             EnvironmentTierSerializer::serialize(
@@ -2130,7 +3027,10 @@ impl CreateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionLabel"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2163,7 +3063,10 @@ impl CreatePlatformVersionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2177,10 +3080,13 @@ impl CreatePlatformVersionRequestSerializer {
             &format!("{}{}", prefix, "PlatformDefinitionBundle"),
             &obj.platform_definition_bundle,
         );
-        params.put(&format!("{}{}", prefix, "PlatformName"), &obj.platform_name);
+        params.put(
+            &format!("{}{}", prefix, "PlatformName"),
+            &obj.platform_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "PlatformVersion"),
-            &obj.platform_version,
+            &obj.platform_version.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -2347,7 +3253,7 @@ impl DeleteApplicationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.terminate_env_by_force {
             params.put(
@@ -2381,12 +3287,15 @@ impl DeleteApplicationVersionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.delete_source_bundle {
             params.put(&format!("{}{}", prefix, "DeleteSourceBundle"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
+        params.put(
+            &format!("{}{}", prefix, "VersionLabel"),
+            &obj.version_label.to_string(),
+        );
     }
 }
 
@@ -2411,9 +3320,12 @@ impl DeleteConfigurationTemplateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -2438,11 +3350,11 @@ impl DeleteEnvironmentConfigurationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "EnvironmentName"),
-            &obj.environment_name,
+            &obj.environment_name.to_string(),
         );
     }
 }
@@ -2464,7 +3376,10 @@ impl DeletePlatformVersionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2616,13 +3531,19 @@ impl DescribeApplicationVersionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_labels {
             VersionLabelsListSerializer::serialize(
@@ -2689,10 +3610,16 @@ impl DescribeConfigurationOptionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.options {
             OptionsSpecifierListSerializer::serialize(
@@ -2702,13 +3629,22 @@ impl DescribeConfigurationOptionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SolutionStackName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2736,13 +3672,19 @@ impl DescribeConfigurationSettingsMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2752,7 +3694,7 @@ impl DescribeConfigurationSettingsMessageSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentHealthRequest {
     /// <p>Specify the response elements to return. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns the name of the environment.</p>
-    pub attribute_names: Option<Vec<String>>,
+    pub attribute_names: Option<Vec<EnvironmentHealthAttribute>>,
     /// <p>Specify the environment by ID.</p> <p>You must specify either this or an EnvironmentName, or both.</p>
     pub environment_id: Option<String>,
     /// <p>Specify the environment by name.</p> <p>You must specify either this or an EnvironmentName, or both.</p>
@@ -2776,10 +3718,16 @@ impl DescribeEnvironmentHealthRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2803,7 +3751,7 @@ pub struct DescribeEnvironmentHealthResult {
     /// <p>The date and time that the health information was retrieved.</p>
     pub refreshed_at: Option<String>,
     /// <p>The environment's operational status. <code>Ready</code>, <code>Launching</code>, <code>Updating</code>, <code>Terminating</code>, or <code>Terminated</code>.</p>
-    pub status: Option<String>,
+    pub status: Option<EnvironmentHealth>,
 }
 
 #[allow(dead_code)]
@@ -2894,16 +3842,25 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2958,7 +3915,7 @@ pub struct DescribeEnvironmentManagedActionsRequest {
     /// <p>The name of the target environment.</p>
     pub environment_name: Option<String>,
     /// <p>To show only actions with a particular status, specify a status.</p>
-    pub status: Option<String>,
+    pub status: Option<ActionStatus>,
 }
 
 /// Serialize `DescribeEnvironmentManagedActionsRequest` contents to a `SignedRequest`.
@@ -2971,13 +3928,19 @@ impl DescribeEnvironmentManagedActionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.status {
-            params.put(&format!("{}{}", prefix, "Status"), &field_value);
+            params.put(&format!("{}{}", prefix, "Status"), &field_value.to_string());
         }
     }
 }
@@ -3035,10 +3998,16 @@ impl DescribeEnvironmentResourcesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3075,7 +4044,10 @@ impl DescribeEnvironmentsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_ids {
             EnvironmentIdListSerializer::serialize(
@@ -3104,10 +4076,16 @@ impl DescribeEnvironmentsMessageSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionLabel"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3133,7 +4111,7 @@ pub struct DescribeEventsMessage {
     /// <p>If specified, AWS Elastic Beanstalk restricts the described events to include only those associated with this request ID.</p>
     pub request_id: Option<String>,
     /// <p>If specified, limits the events returned from this call to include only those with the specified severity or higher.</p>
-    pub severity: Option<String>,
+    pub severity: Option<EventSeverity>,
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those that occur on or after this time.</p>
     pub start_time: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those that are associated with this environment configuration.</p>
@@ -3152,40 +4130,67 @@ impl DescribeEventsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.request_id {
-            params.put(&format!("{}{}", prefix, "RequestId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RequestId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.severity {
-            params.put(&format!("{}{}", prefix, "Severity"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Severity"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionLabel"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3195,7 +4200,7 @@ impl DescribeEventsMessageSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesHealthRequest {
     /// <p>Specifies the response elements you wish to receive. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns a list of instances.</p>
-    pub attribute_names: Option<Vec<String>>,
+    pub attribute_names: Option<Vec<InstancesHealthAttribute>>,
     /// <p>Specify the AWS Elastic Beanstalk environment by ID.</p>
     pub environment_id: Option<String>,
     /// <p>Specify the AWS Elastic Beanstalk environment by name.</p>
@@ -3221,13 +4226,22 @@ impl DescribeInstancesHealthRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3297,7 +4311,10 @@ impl DescribePlatformVersionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3367,7 +4384,7 @@ impl DisassociateEnvironmentOperationsRoleMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "EnvironmentName"),
-            &obj.environment_name,
+            &obj.environment_name.to_string(),
         );
     }
 }
@@ -3423,9 +4440,9 @@ pub struct EnvironmentDescription {
     /// <p>The name of this environment.</p>
     pub environment_name: Option<String>,
     /// <p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironment</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>
-    pub health: Option<String>,
+    pub health: Option<EnvironmentHealth>,
     /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
-    pub health_status: Option<String>,
+    pub health_status: Option<EnvironmentHealthStatus>,
     /// <p>The Amazon Resource Name (ARN) of the environment's operations role. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
     pub operations_role: Option<String>,
     /// <p>The ARN of the platform version.</p>
@@ -3435,7 +4452,7 @@ pub struct EnvironmentDescription {
     /// <p> The name of the <code>SolutionStack</code> deployed with this environment. </p>
     pub solution_stack_name: Option<String>,
     /// <p><p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<EnvironmentStatus>,
     /// <p>The name of the configuration template used to originally launch this environment.</p>
     pub template_name: Option<String>,
     /// <p>Describes the current tier of this environment.</p>
@@ -3625,23 +4642,422 @@ impl EnvironmentDescriptionsMessageDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentHealth {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentHealth {
+    Green,
+    Grey,
+    Red,
+    Yellow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentHealth),
+}
+
+impl Default for EnvironmentHealth {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentHealth {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentHealth {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentHealth {
+    fn into(self) -> String {
+        match self {
+            EnvironmentHealth::Green => "Green".to_string(),
+            EnvironmentHealth::Grey => "Grey".to_string(),
+            EnvironmentHealth::Red => "Red".to_string(),
+            EnvironmentHealth::Yellow => "Yellow".to_string(),
+            EnvironmentHealth::UnknownVariant(UnknownEnvironmentHealth { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentHealth {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentHealth::Green => &"Green",
+            EnvironmentHealth::Grey => &"Grey",
+            EnvironmentHealth::Red => &"Red",
+            EnvironmentHealth::Yellow => &"Yellow",
+            EnvironmentHealth::UnknownVariant(UnknownEnvironmentHealth { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnvironmentHealth {
+    fn from(name: &str) -> Self {
+        match name {
+            "Green" => EnvironmentHealth::Green,
+            "Grey" => EnvironmentHealth::Grey,
+            "Red" => EnvironmentHealth::Red,
+            "Yellow" => EnvironmentHealth::Yellow,
+            _ => EnvironmentHealth::UnknownVariant(UnknownEnvironmentHealth {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentHealth {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Green" => EnvironmentHealth::Green,
+            "Grey" => EnvironmentHealth::Grey,
+            "Red" => EnvironmentHealth::Red,
+            "Yellow" => EnvironmentHealth::Yellow,
+            _ => EnvironmentHealth::UnknownVariant(UnknownEnvironmentHealth { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentHealth {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EnvironmentHealth {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EnvironmentHealth {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EnvironmentHealthDeserializer;
 impl EnvironmentHealthDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnvironmentHealth, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentHealthAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentHealthAttribute {
+    All,
+    ApplicationMetrics,
+    Causes,
+    Color,
+    HealthStatus,
+    InstancesHealth,
+    RefreshedAt,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentHealthAttribute),
+}
+
+impl Default for EnvironmentHealthAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentHealthAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentHealthAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentHealthAttribute {
+    fn into(self) -> String {
+        match self {
+            EnvironmentHealthAttribute::All => "All".to_string(),
+            EnvironmentHealthAttribute::ApplicationMetrics => "ApplicationMetrics".to_string(),
+            EnvironmentHealthAttribute::Causes => "Causes".to_string(),
+            EnvironmentHealthAttribute::Color => "Color".to_string(),
+            EnvironmentHealthAttribute::HealthStatus => "HealthStatus".to_string(),
+            EnvironmentHealthAttribute::InstancesHealth => "InstancesHealth".to_string(),
+            EnvironmentHealthAttribute::RefreshedAt => "RefreshedAt".to_string(),
+            EnvironmentHealthAttribute::Status => "Status".to_string(),
+            EnvironmentHealthAttribute::UnknownVariant(UnknownEnvironmentHealthAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentHealthAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentHealthAttribute::All => &"All",
+            EnvironmentHealthAttribute::ApplicationMetrics => &"ApplicationMetrics",
+            EnvironmentHealthAttribute::Causes => &"Causes",
+            EnvironmentHealthAttribute::Color => &"Color",
+            EnvironmentHealthAttribute::HealthStatus => &"HealthStatus",
+            EnvironmentHealthAttribute::InstancesHealth => &"InstancesHealth",
+            EnvironmentHealthAttribute::RefreshedAt => &"RefreshedAt",
+            EnvironmentHealthAttribute::Status => &"Status",
+            EnvironmentHealthAttribute::UnknownVariant(UnknownEnvironmentHealthAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EnvironmentHealthAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "All" => EnvironmentHealthAttribute::All,
+            "ApplicationMetrics" => EnvironmentHealthAttribute::ApplicationMetrics,
+            "Causes" => EnvironmentHealthAttribute::Causes,
+            "Color" => EnvironmentHealthAttribute::Color,
+            "HealthStatus" => EnvironmentHealthAttribute::HealthStatus,
+            "InstancesHealth" => EnvironmentHealthAttribute::InstancesHealth,
+            "RefreshedAt" => EnvironmentHealthAttribute::RefreshedAt,
+            "Status" => EnvironmentHealthAttribute::Status,
+            _ => EnvironmentHealthAttribute::UnknownVariant(UnknownEnvironmentHealthAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentHealthAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All" => EnvironmentHealthAttribute::All,
+            "ApplicationMetrics" => EnvironmentHealthAttribute::ApplicationMetrics,
+            "Causes" => EnvironmentHealthAttribute::Causes,
+            "Color" => EnvironmentHealthAttribute::Color,
+            "HealthStatus" => EnvironmentHealthAttribute::HealthStatus,
+            "InstancesHealth" => EnvironmentHealthAttribute::InstancesHealth,
+            "RefreshedAt" => EnvironmentHealthAttribute::RefreshedAt,
+            "Status" => EnvironmentHealthAttribute::Status,
+            _ => EnvironmentHealthAttribute::UnknownVariant(UnknownEnvironmentHealthAttribute {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentHealthAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EnvironmentHealthAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EnvironmentHealthAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
 /// Serialize `EnvironmentHealthAttributes` contents to a `SignedRequest`.
 struct EnvironmentHealthAttributesSerializer;
 impl EnvironmentHealthAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<EnvironmentHealthAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentHealthStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentHealthStatus {
+    Degraded,
+    Info,
+    NoData,
+    Ok,
+    Pending,
+    Severe,
+    Suspended,
+    Unknown,
+    Warning,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentHealthStatus),
+}
+
+impl Default for EnvironmentHealthStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentHealthStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentHealthStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentHealthStatus {
+    fn into(self) -> String {
+        match self {
+            EnvironmentHealthStatus::Degraded => "Degraded".to_string(),
+            EnvironmentHealthStatus::Info => "Info".to_string(),
+            EnvironmentHealthStatus::NoData => "NoData".to_string(),
+            EnvironmentHealthStatus::Ok => "Ok".to_string(),
+            EnvironmentHealthStatus::Pending => "Pending".to_string(),
+            EnvironmentHealthStatus::Severe => "Severe".to_string(),
+            EnvironmentHealthStatus::Suspended => "Suspended".to_string(),
+            EnvironmentHealthStatus::Unknown => "Unknown".to_string(),
+            EnvironmentHealthStatus::Warning => "Warning".to_string(),
+            EnvironmentHealthStatus::UnknownVariant(UnknownEnvironmentHealthStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentHealthStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentHealthStatus::Degraded => &"Degraded",
+            EnvironmentHealthStatus::Info => &"Info",
+            EnvironmentHealthStatus::NoData => &"NoData",
+            EnvironmentHealthStatus::Ok => &"Ok",
+            EnvironmentHealthStatus::Pending => &"Pending",
+            EnvironmentHealthStatus::Severe => &"Severe",
+            EnvironmentHealthStatus::Suspended => &"Suspended",
+            EnvironmentHealthStatus::Unknown => &"Unknown",
+            EnvironmentHealthStatus::Warning => &"Warning",
+            EnvironmentHealthStatus::UnknownVariant(UnknownEnvironmentHealthStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EnvironmentHealthStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Degraded" => EnvironmentHealthStatus::Degraded,
+            "Info" => EnvironmentHealthStatus::Info,
+            "NoData" => EnvironmentHealthStatus::NoData,
+            "Ok" => EnvironmentHealthStatus::Ok,
+            "Pending" => EnvironmentHealthStatus::Pending,
+            "Severe" => EnvironmentHealthStatus::Severe,
+            "Suspended" => EnvironmentHealthStatus::Suspended,
+            "Unknown" => EnvironmentHealthStatus::Unknown,
+            "Warning" => EnvironmentHealthStatus::Warning,
+            _ => EnvironmentHealthStatus::UnknownVariant(UnknownEnvironmentHealthStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentHealthStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Degraded" => EnvironmentHealthStatus::Degraded,
+            "Info" => EnvironmentHealthStatus::Info,
+            "NoData" => EnvironmentHealthStatus::NoData,
+            "Ok" => EnvironmentHealthStatus::Ok,
+            "Pending" => EnvironmentHealthStatus::Pending,
+            "Severe" => EnvironmentHealthStatus::Severe,
+            "Suspended" => EnvironmentHealthStatus::Suspended,
+            "Unknown" => EnvironmentHealthStatus::Unknown,
+            "Warning" => EnvironmentHealthStatus::Warning,
+            _ => EnvironmentHealthStatus::UnknownVariant(UnknownEnvironmentHealthStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentHealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EnvironmentHealthStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EnvironmentHealthStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -3649,8 +5065,11 @@ impl EnvironmentHealthAttributesSerializer {
 struct EnvironmentHealthStatusDeserializer;
 impl EnvironmentHealthStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnvironmentHealthStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3668,7 +5087,7 @@ impl EnvironmentIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3680,7 +5099,7 @@ pub struct EnvironmentInfoDescription {
     /// <p>The Amazon EC2 Instance ID for this information.</p>
     pub ec_2_instance_id: Option<String>,
     /// <p>The type of information retrieved.</p>
-    pub info_type: Option<String>,
+    pub info_type: Option<EnvironmentInfoType>,
     /// <p>The retrieved information. Currently contains a presigned Amazon S3 URL. The files are deleted after 15 minutes.</p> <p>Anyone in possession of this URL can access the files before they are deleted. Make the URL available only to trusted parties.</p>
     pub message: Option<String>,
     /// <p>The time stamp when this information was retrieved.</p>
@@ -3747,12 +5166,122 @@ impl EnvironmentInfoDescriptionListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentInfoType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentInfoType {
+    Bundle,
+    Tail,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentInfoType),
+}
+
+impl Default for EnvironmentInfoType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentInfoType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentInfoType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentInfoType {
+    fn into(self) -> String {
+        match self {
+            EnvironmentInfoType::Bundle => "bundle".to_string(),
+            EnvironmentInfoType::Tail => "tail".to_string(),
+            EnvironmentInfoType::UnknownVariant(UnknownEnvironmentInfoType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentInfoType {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentInfoType::Bundle => &"bundle",
+            EnvironmentInfoType::Tail => &"tail",
+            EnvironmentInfoType::UnknownVariant(UnknownEnvironmentInfoType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnvironmentInfoType {
+    fn from(name: &str) -> Self {
+        match name {
+            "bundle" => EnvironmentInfoType::Bundle,
+            "tail" => EnvironmentInfoType::Tail,
+            _ => EnvironmentInfoType::UnknownVariant(UnknownEnvironmentInfoType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentInfoType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "bundle" => EnvironmentInfoType::Bundle,
+            "tail" => EnvironmentInfoType::Tail,
+            _ => EnvironmentInfoType::UnknownVariant(UnknownEnvironmentInfoType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentInfoType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EnvironmentInfoType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EnvironmentInfoType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EnvironmentInfoTypeDeserializer;
 impl EnvironmentInfoTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnvironmentInfoType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A link to another environment, defined in the environment's manifest. Links provide connection information in system properties that can be used to connect to another environment in the same group. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html">Environment Manifest (env.yaml)</a> for details.</p>
@@ -3821,7 +5350,7 @@ impl EnvironmentNamesListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3984,12 +5513,152 @@ impl EnvironmentResourcesDescriptionDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentStatus {
+    Aborting,
+    Launching,
+    LinkingFrom,
+    LinkingTo,
+    Ready,
+    Terminated,
+    Terminating,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentStatus),
+}
+
+impl Default for EnvironmentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentStatus {
+    fn into(self) -> String {
+        match self {
+            EnvironmentStatus::Aborting => "Aborting".to_string(),
+            EnvironmentStatus::Launching => "Launching".to_string(),
+            EnvironmentStatus::LinkingFrom => "LinkingFrom".to_string(),
+            EnvironmentStatus::LinkingTo => "LinkingTo".to_string(),
+            EnvironmentStatus::Ready => "Ready".to_string(),
+            EnvironmentStatus::Terminated => "Terminated".to_string(),
+            EnvironmentStatus::Terminating => "Terminating".to_string(),
+            EnvironmentStatus::Updating => "Updating".to_string(),
+            EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentStatus::Aborting => &"Aborting",
+            EnvironmentStatus::Launching => &"Launching",
+            EnvironmentStatus::LinkingFrom => &"LinkingFrom",
+            EnvironmentStatus::LinkingTo => &"LinkingTo",
+            EnvironmentStatus::Ready => &"Ready",
+            EnvironmentStatus::Terminated => &"Terminated",
+            EnvironmentStatus::Terminating => &"Terminating",
+            EnvironmentStatus::Updating => &"Updating",
+            EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnvironmentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Aborting" => EnvironmentStatus::Aborting,
+            "Launching" => EnvironmentStatus::Launching,
+            "LinkingFrom" => EnvironmentStatus::LinkingFrom,
+            "LinkingTo" => EnvironmentStatus::LinkingTo,
+            "Ready" => EnvironmentStatus::Ready,
+            "Terminated" => EnvironmentStatus::Terminated,
+            "Terminating" => EnvironmentStatus::Terminating,
+            "Updating" => EnvironmentStatus::Updating,
+            _ => EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Aborting" => EnvironmentStatus::Aborting,
+            "Launching" => EnvironmentStatus::Launching,
+            "LinkingFrom" => EnvironmentStatus::LinkingFrom,
+            "LinkingTo" => EnvironmentStatus::LinkingTo,
+            "Ready" => EnvironmentStatus::Ready,
+            "Terminated" => EnvironmentStatus::Terminated,
+            "Terminating" => EnvironmentStatus::Terminating,
+            "Updating" => EnvironmentStatus::Updating,
+            _ => EnvironmentStatus::UnknownVariant(UnknownEnvironmentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EnvironmentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EnvironmentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EnvironmentStatusDeserializer;
 impl EnvironmentStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnvironmentStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Describes the properties of an environment tier</p>
@@ -4041,13 +5710,16 @@ impl EnvironmentTierSerializer {
         }
 
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+            params.put(&format!("{}{}", prefix, "Name"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.version {
-            params.put(&format!("{}{}", prefix, "Version"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Version"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4077,7 +5749,7 @@ pub struct EventDescription {
     /// <p>The web service request ID for the activity of this event.</p>
     pub request_id: Option<String>,
     /// <p>The severity level of this event.</p>
-    pub severity: Option<String>,
+    pub severity: Option<EventSeverity>,
     /// <p>The name of the configuration associated with this event.</p>
     pub template_name: Option<String>,
     /// <p>The release label for the application version associated with this event.</p>
@@ -4204,20 +5876,277 @@ impl EventMessageDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventSeverity {
+    Debug,
+    Error,
+    Fatal,
+    Info,
+    Trace,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventSeverity),
+}
+
+impl Default for EventSeverity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventSeverity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventSeverity {
+    fn into(self) -> String {
+        match self {
+            EventSeverity::Debug => "DEBUG".to_string(),
+            EventSeverity::Error => "ERROR".to_string(),
+            EventSeverity::Fatal => "FATAL".to_string(),
+            EventSeverity::Info => "INFO".to_string(),
+            EventSeverity::Trace => "TRACE".to_string(),
+            EventSeverity::Warn => "WARN".to_string(),
+            EventSeverity::UnknownVariant(UnknownEventSeverity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventSeverity {
+    fn into(self) -> &'a str {
+        match self {
+            EventSeverity::Debug => &"DEBUG",
+            EventSeverity::Error => &"ERROR",
+            EventSeverity::Fatal => &"FATAL",
+            EventSeverity::Info => &"INFO",
+            EventSeverity::Trace => &"TRACE",
+            EventSeverity::Warn => &"WARN",
+            EventSeverity::UnknownVariant(UnknownEventSeverity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventSeverity {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEBUG" => EventSeverity::Debug,
+            "ERROR" => EventSeverity::Error,
+            "FATAL" => EventSeverity::Fatal,
+            "INFO" => EventSeverity::Info,
+            "TRACE" => EventSeverity::Trace,
+            "WARN" => EventSeverity::Warn,
+            _ => EventSeverity::UnknownVariant(UnknownEventSeverity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventSeverity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEBUG" => EventSeverity::Debug,
+            "ERROR" => EventSeverity::Error,
+            "FATAL" => EventSeverity::Fatal,
+            "INFO" => EventSeverity::Info,
+            "TRACE" => EventSeverity::Trace,
+            "WARN" => EventSeverity::Warn,
+            _ => EventSeverity::UnknownVariant(UnknownEventSeverity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EventSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EventSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EventSeverityDeserializer;
 impl EventSeverityDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EventSeverity, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailureType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailureType {
+    CancellationFailed,
+    InternalFailure,
+    InvalidEnvironmentState,
+    PermissionsError,
+    RollbackFailed,
+    RollbackSuccessful,
+    UpdateCancelled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailureType),
+}
+
+impl Default for FailureType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailureType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailureType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailureType {
+    fn into(self) -> String {
+        match self {
+            FailureType::CancellationFailed => "CancellationFailed".to_string(),
+            FailureType::InternalFailure => "InternalFailure".to_string(),
+            FailureType::InvalidEnvironmentState => "InvalidEnvironmentState".to_string(),
+            FailureType::PermissionsError => "PermissionsError".to_string(),
+            FailureType::RollbackFailed => "RollbackFailed".to_string(),
+            FailureType::RollbackSuccessful => "RollbackSuccessful".to_string(),
+            FailureType::UpdateCancelled => "UpdateCancelled".to_string(),
+            FailureType::UnknownVariant(UnknownFailureType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailureType {
+    fn into(self) -> &'a str {
+        match self {
+            FailureType::CancellationFailed => &"CancellationFailed",
+            FailureType::InternalFailure => &"InternalFailure",
+            FailureType::InvalidEnvironmentState => &"InvalidEnvironmentState",
+            FailureType::PermissionsError => &"PermissionsError",
+            FailureType::RollbackFailed => &"RollbackFailed",
+            FailureType::RollbackSuccessful => &"RollbackSuccessful",
+            FailureType::UpdateCancelled => &"UpdateCancelled",
+            FailureType::UnknownVariant(UnknownFailureType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FailureType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CancellationFailed" => FailureType::CancellationFailed,
+            "InternalFailure" => FailureType::InternalFailure,
+            "InvalidEnvironmentState" => FailureType::InvalidEnvironmentState,
+            "PermissionsError" => FailureType::PermissionsError,
+            "RollbackFailed" => FailureType::RollbackFailed,
+            "RollbackSuccessful" => FailureType::RollbackSuccessful,
+            "UpdateCancelled" => FailureType::UpdateCancelled,
+            _ => FailureType::UnknownVariant(UnknownFailureType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FailureType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CancellationFailed" => FailureType::CancellationFailed,
+            "InternalFailure" => FailureType::InternalFailure,
+            "InvalidEnvironmentState" => FailureType::InvalidEnvironmentState,
+            "PermissionsError" => FailureType::PermissionsError,
+            "RollbackFailed" => FailureType::RollbackFailed,
+            "RollbackSuccessful" => FailureType::RollbackSuccessful,
+            "UpdateCancelled" => FailureType::UpdateCancelled,
+            _ => FailureType::UnknownVariant(UnknownFailureType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for FailureType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FailureType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct FailureTypeDeserializer;
 impl FailureTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FailureType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -4373,13 +6302,164 @@ impl InstanceListDeserializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstancesHealthAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstancesHealthAttribute {
+    All,
+    ApplicationMetrics,
+    AvailabilityZone,
+    Causes,
+    Color,
+    Deployment,
+    HealthStatus,
+    InstanceType,
+    LaunchedAt,
+    RefreshedAt,
+    System,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstancesHealthAttribute),
+}
+
+impl Default for InstancesHealthAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstancesHealthAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstancesHealthAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstancesHealthAttribute {
+    fn into(self) -> String {
+        match self {
+            InstancesHealthAttribute::All => "All".to_string(),
+            InstancesHealthAttribute::ApplicationMetrics => "ApplicationMetrics".to_string(),
+            InstancesHealthAttribute::AvailabilityZone => "AvailabilityZone".to_string(),
+            InstancesHealthAttribute::Causes => "Causes".to_string(),
+            InstancesHealthAttribute::Color => "Color".to_string(),
+            InstancesHealthAttribute::Deployment => "Deployment".to_string(),
+            InstancesHealthAttribute::HealthStatus => "HealthStatus".to_string(),
+            InstancesHealthAttribute::InstanceType => "InstanceType".to_string(),
+            InstancesHealthAttribute::LaunchedAt => "LaunchedAt".to_string(),
+            InstancesHealthAttribute::RefreshedAt => "RefreshedAt".to_string(),
+            InstancesHealthAttribute::System => "System".to_string(),
+            InstancesHealthAttribute::UnknownVariant(UnknownInstancesHealthAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstancesHealthAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            InstancesHealthAttribute::All => &"All",
+            InstancesHealthAttribute::ApplicationMetrics => &"ApplicationMetrics",
+            InstancesHealthAttribute::AvailabilityZone => &"AvailabilityZone",
+            InstancesHealthAttribute::Causes => &"Causes",
+            InstancesHealthAttribute::Color => &"Color",
+            InstancesHealthAttribute::Deployment => &"Deployment",
+            InstancesHealthAttribute::HealthStatus => &"HealthStatus",
+            InstancesHealthAttribute::InstanceType => &"InstanceType",
+            InstancesHealthAttribute::LaunchedAt => &"LaunchedAt",
+            InstancesHealthAttribute::RefreshedAt => &"RefreshedAt",
+            InstancesHealthAttribute::System => &"System",
+            InstancesHealthAttribute::UnknownVariant(UnknownInstancesHealthAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstancesHealthAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "All" => InstancesHealthAttribute::All,
+            "ApplicationMetrics" => InstancesHealthAttribute::ApplicationMetrics,
+            "AvailabilityZone" => InstancesHealthAttribute::AvailabilityZone,
+            "Causes" => InstancesHealthAttribute::Causes,
+            "Color" => InstancesHealthAttribute::Color,
+            "Deployment" => InstancesHealthAttribute::Deployment,
+            "HealthStatus" => InstancesHealthAttribute::HealthStatus,
+            "InstanceType" => InstancesHealthAttribute::InstanceType,
+            "LaunchedAt" => InstancesHealthAttribute::LaunchedAt,
+            "RefreshedAt" => InstancesHealthAttribute::RefreshedAt,
+            "System" => InstancesHealthAttribute::System,
+            _ => InstancesHealthAttribute::UnknownVariant(UnknownInstancesHealthAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstancesHealthAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All" => InstancesHealthAttribute::All,
+            "ApplicationMetrics" => InstancesHealthAttribute::ApplicationMetrics,
+            "AvailabilityZone" => InstancesHealthAttribute::AvailabilityZone,
+            "Causes" => InstancesHealthAttribute::Causes,
+            "Color" => InstancesHealthAttribute::Color,
+            "Deployment" => InstancesHealthAttribute::Deployment,
+            "HealthStatus" => InstancesHealthAttribute::HealthStatus,
+            "InstanceType" => InstancesHealthAttribute::InstanceType,
+            "LaunchedAt" => InstancesHealthAttribute::LaunchedAt,
+            "RefreshedAt" => InstancesHealthAttribute::RefreshedAt,
+            "System" => InstancesHealthAttribute::System,
+            _ => InstancesHealthAttribute::UnknownVariant(UnknownInstancesHealthAttribute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstancesHealthAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InstancesHealthAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstancesHealthAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// Serialize `InstancesHealthAttributes` contents to a `SignedRequest`.
 struct InstancesHealthAttributesSerializer;
 impl InstancesHealthAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<InstancesHealthAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4631,7 +6711,10 @@ impl ListPlatformBranchesRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4707,7 +6790,10 @@ impl ListPlatformVersionsRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4768,7 +6854,10 @@ impl ListTagsForResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.to_string(),
+        );
     }
 }
 
@@ -4957,9 +7046,9 @@ pub struct ManagedAction {
     /// <p>A unique identifier for the managed action.</p>
     pub action_id: Option<String>,
     /// <p>The type of managed action.</p>
-    pub action_type: Option<String>,
+    pub action_type: Option<ActionType>,
     /// <p>The status of the managed action. If the action is <code>Scheduled</code>, you can apply it immediately with <a>ApplyEnvironmentManagedAction</a>.</p>
-    pub status: Option<String>,
+    pub status: Option<ActionStatus>,
     /// <p>The start time of the maintenance window in which the managed action will execute.</p>
     pub window_start_time: Option<String>,
 }
@@ -5009,17 +7098,17 @@ pub struct ManagedActionHistoryItem {
     /// <p>A unique identifier for the managed action.</p>
     pub action_id: Option<String>,
     /// <p>The type of the managed action.</p>
-    pub action_type: Option<String>,
+    pub action_type: Option<ActionType>,
     /// <p>The date and time that the action started executing.</p>
     pub executed_time: Option<String>,
     /// <p>If the action failed, a description of the failure.</p>
     pub failure_description: Option<String>,
     /// <p>If the action failed, the type of failure.</p>
-    pub failure_type: Option<String>,
+    pub failure_type: Option<FailureType>,
     /// <p>The date and time that the action finished executing.</p>
     pub finished_time: Option<String>,
     /// <p>The status of the action.</p>
-    pub status: Option<String>,
+    pub status: Option<ActionHistoryStatus>,
 }
 
 #[allow(dead_code)]
@@ -5387,13 +7476,22 @@ impl OptionSpecificationSerializer {
         }
 
         if let Some(ref field_value) = obj.namespace {
-            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_name {
-            params.put(&format!("{}{}", prefix, "OptionName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OptionName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_name {
-            params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5546,7 +7644,7 @@ pub struct PlatformDescription {
     /// <p>The AWS account ID of the person who created the platform version.</p>
     pub platform_owner: Option<String>,
     /// <p>The status of the platform version.</p>
-    pub platform_status: Option<String>,
+    pub platform_status: Option<PlatformStatus>,
     /// <p>The version of the platform version.</p>
     pub platform_version: Option<String>,
     /// <p>The programming languages supported by the platform version.</p>
@@ -5714,10 +7812,13 @@ impl PlatformFilterSerializer {
         }
 
         if let Some(ref field_value) = obj.operator {
-            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Operator"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.values {
             PlatformFilterValueListSerializer::serialize(
@@ -5735,7 +7836,7 @@ impl PlatformFilterValueListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5881,12 +7982,133 @@ impl PlatformProgrammingLanguagesDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatformStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlatformStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatformStatus),
+}
+
+impl Default for PlatformStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlatformStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlatformStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlatformStatus {
+    fn into(self) -> String {
+        match self {
+            PlatformStatus::Creating => "Creating".to_string(),
+            PlatformStatus::Deleted => "Deleted".to_string(),
+            PlatformStatus::Deleting => "Deleting".to_string(),
+            PlatformStatus::Failed => "Failed".to_string(),
+            PlatformStatus::Ready => "Ready".to_string(),
+            PlatformStatus::UnknownVariant(UnknownPlatformStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlatformStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PlatformStatus::Creating => &"Creating",
+            PlatformStatus::Deleted => &"Deleted",
+            PlatformStatus::Deleting => &"Deleting",
+            PlatformStatus::Failed => &"Failed",
+            PlatformStatus::Ready => &"Ready",
+            PlatformStatus::UnknownVariant(UnknownPlatformStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlatformStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Creating" => PlatformStatus::Creating,
+            "Deleted" => PlatformStatus::Deleted,
+            "Deleting" => PlatformStatus::Deleting,
+            "Failed" => PlatformStatus::Failed,
+            "Ready" => PlatformStatus::Ready,
+            _ => PlatformStatus::UnknownVariant(UnknownPlatformStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlatformStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Creating" => PlatformStatus::Creating,
+            "Deleted" => PlatformStatus::Deleted,
+            "Deleting" => PlatformStatus::Deleting,
+            "Failed" => PlatformStatus::Failed,
+            "Ready" => PlatformStatus::Ready,
+            _ => PlatformStatus::UnknownVariant(UnknownPlatformStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PlatformStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PlatformStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PlatformStatusDeserializer;
 impl PlatformStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PlatformStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Summary information about a platform version.</p>
@@ -5910,7 +8132,7 @@ pub struct PlatformSummary {
     /// <p>The AWS account ID of the person who created the platform version.</p>
     pub platform_owner: Option<String>,
     /// <p>The status of the platform version. You can create an environment from the platform version once it is ready.</p>
-    pub platform_status: Option<String>,
+    pub platform_status: Option<PlatformStatus>,
     /// <p>The version string of the platform version.</p>
     pub platform_version: Option<String>,
     /// <p>The additions associated with the platform version.</p>
@@ -6099,10 +8321,16 @@ impl RebuildEnvironmentMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6148,7 +8376,7 @@ pub struct RequestEnvironmentInfoMessage {
     /// <p>The name of the environment of the requested data.</p> <p>If no such environment is found, <code>RequestEnvironmentInfo</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_name: Option<String>,
     /// <p>The type of information to request.</p>
-    pub info_type: String,
+    pub info_type: EnvironmentInfoType,
 }
 
 /// Serialize `RequestEnvironmentInfoMessage` contents to a `SignedRequest`.
@@ -6161,12 +8389,21 @@ impl RequestEnvironmentInfoMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "InfoType"), &obj.info_type);
+        params.put(
+            &format!("{}{}", prefix, "InfoType"),
+            &obj.info_type.to_string(),
+        );
     }
 }
 
@@ -6350,10 +8587,16 @@ impl RestartAppServerMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6367,7 +8610,7 @@ pub struct RetrieveEnvironmentInfoMessage {
     /// <p>The name of the data's environment.</p> <p> If no such environment is found, returns an <code>InvalidParameterValue</code> error. </p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_name: Option<String>,
     /// <p>The type of information to retrieve.</p>
-    pub info_type: String,
+    pub info_type: EnvironmentInfoType,
 }
 
 /// Serialize `RetrieveEnvironmentInfoMessage` contents to a `SignedRequest`.
@@ -6380,12 +8623,21 @@ impl RetrieveEnvironmentInfoMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "InfoType"), &obj.info_type);
+        params.put(
+            &format!("{}{}", prefix, "InfoType"),
+            &obj.info_type.to_string(),
+        );
     }
 }
 
@@ -6485,10 +8737,13 @@ impl S3LocationSerializer {
         }
 
         if let Some(ref field_value) = obj.s3_bucket {
-            params.put(&format!("{}{}", prefix, "S3Bucket"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "S3Bucket"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.s3_key {
-            params.put(&format!("{}{}", prefix, "S3Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "S3Key"), &field_value.to_string());
         }
     }
 }
@@ -6523,10 +8778,16 @@ impl SearchFilterSerializer {
         }
 
         if let Some(ref field_value) = obj.attribute {
-            params.put(&format!("{}{}", prefix, "Attribute"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Attribute"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operator {
-            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Operator"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.values {
             SearchFilterValuesSerializer::serialize(
@@ -6544,7 +8805,7 @@ impl SearchFilterValuesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6721,9 +8982,9 @@ pub struct SourceBuildInformation {
     /// <p><p>The location of the source code, as a formatted string, depending on the value of <code>SourceRepository</code> </p> <ul> <li> <p>For <code>CodeCommit</code>, the format is the repository name and commit ID, separated by a forward slash. For example, <code>my-git-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p> </li> <li> <p>For <code>S3</code>, the format is the S3 bucket name and object key, separated by a forward slash. For example, <code>my-s3-bucket/Folders/my-source-file</code>.</p> </li> </ul></p>
     pub source_location: String,
     /// <p><p>Location where the repository is stored.</p> <ul> <li> <p> <code>CodeCommit</code> </p> </li> <li> <p> <code>S3</code> </p> </li> </ul></p>
-    pub source_repository: String,
+    pub source_repository: SourceRepository,
     /// <p><p>The type of repository.</p> <ul> <li> <p> <code>Git</code> </p> </li> <li> <p> <code>Zip</code> </p> </li> </ul></p>
-    pub source_type: String,
+    pub source_type: SourceType,
 }
 
 #[allow(dead_code)]
@@ -6765,13 +9026,16 @@ impl SourceBuildInformationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SourceLocation"),
-            &obj.source_location,
+            &obj.source_location.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "SourceRepository"),
-            &obj.source_repository,
+            &obj.source_repository.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "SourceType"), &obj.source_type);
+        params.put(
+            &format!("{}{}", prefix, "SourceType"),
+            &obj.source_type.to_string(),
+        );
     }
 }
 
@@ -6795,10 +9059,16 @@ impl SourceConfigurationSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6811,20 +9081,236 @@ impl SourceLocationDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceRepository {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceRepository {
+    CodeCommit,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceRepository),
+}
+
+impl Default for SourceRepository {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceRepository {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceRepository {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceRepository {
+    fn into(self) -> String {
+        match self {
+            SourceRepository::CodeCommit => "CodeCommit".to_string(),
+            SourceRepository::S3 => "S3".to_string(),
+            SourceRepository::UnknownVariant(UnknownSourceRepository { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceRepository {
+    fn into(self) -> &'a str {
+        match self {
+            SourceRepository::CodeCommit => &"CodeCommit",
+            SourceRepository::S3 => &"S3",
+            SourceRepository::UnknownVariant(UnknownSourceRepository { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SourceRepository {
+    fn from(name: &str) -> Self {
+        match name {
+            "CodeCommit" => SourceRepository::CodeCommit,
+            "S3" => SourceRepository::S3,
+            _ => SourceRepository::UnknownVariant(UnknownSourceRepository {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceRepository {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CodeCommit" => SourceRepository::CodeCommit,
+            "S3" => SourceRepository::S3,
+            _ => SourceRepository::UnknownVariant(UnknownSourceRepository { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceRepository {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SourceRepository {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SourceRepository {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SourceRepositoryDeserializer;
 impl SourceRepositoryDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SourceRepository, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Git,
+    Zip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Git => "Git".to_string(),
+            SourceType::Zip => "Zip".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Git => &"Git",
+            SourceType::Zip => &"Zip",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Git" => SourceType::Git,
+            "Zip" => SourceType::Zip,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Git" => SourceType::Git,
+            "Zip" => SourceType::Zip,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SourceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Represents the percentage of requests over the last 10 seconds that resulted in each type of status code response. For more information, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">Status Code Definitions</a>.</p>
@@ -6967,25 +9453,25 @@ impl SwapEnvironmentCNAMEsMessageSerializer {
         if let Some(ref field_value) = obj.destination_environment_id {
             params.put(
                 &format!("{}{}", prefix, "DestinationEnvironmentId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.destination_environment_name {
             params.put(
                 &format!("{}{}", prefix, "DestinationEnvironmentName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_environment_id {
             params.put(
                 &format!("{}{}", prefix, "SourceEnvironmentId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.source_environment_name {
             params.put(
                 &format!("{}{}", prefix, "SourceEnvironmentName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -7069,10 +9555,10 @@ impl TagSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -7092,7 +9578,7 @@ impl TagKeyListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7171,10 +9657,16 @@ impl TerminateEnvironmentMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.force_terminate {
             params.put(&format!("{}{}", prefix, "ForceTerminate"), &field_value);
@@ -7267,10 +9759,13 @@ impl UpdateApplicationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7295,7 +9790,7 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         ApplicationResourceLifecycleConfigSerializer::serialize(
             params,
@@ -7328,12 +9823,18 @@ impl UpdateApplicationVersionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "VersionLabel"), &obj.version_label);
+        params.put(
+            &format!("{}{}", prefix, "VersionLabel"),
+            &obj.version_label.to_string(),
+        );
     }
 }
 
@@ -7364,10 +9865,13 @@ impl UpdateConfigurationTemplateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -7383,7 +9887,10 @@ impl UpdateConfigurationTemplateMessageSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -7435,19 +9942,34 @@ impl UpdateEnvironmentMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.application_name {
-            params.put(&format!("{}{}", prefix, "ApplicationName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplicationName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_id {
-            params.put(&format!("{}{}", prefix, "EnvironmentId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.group_name {
-            params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -7464,13 +9986,22 @@ impl UpdateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.platform_arn {
-            params.put(&format!("{}{}", prefix, "PlatformArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlatformArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.solution_stack_name {
-            params.put(&format!("{}{}", prefix, "SolutionStackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SolutionStackName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tier {
             EnvironmentTierSerializer::serialize(
@@ -7480,7 +10011,10 @@ impl UpdateEnvironmentMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.version_label {
-            params.put(&format!("{}{}", prefix, "VersionLabel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionLabel"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7505,7 +10039,10 @@ impl UpdateTagsForResourceMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.to_string(),
+        );
         if let Some(ref field_value) = obj.tags_to_add {
             TagListSerializer::serialize(
                 params,
@@ -7556,10 +10093,13 @@ impl ValidateConfigurationSettingsMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ApplicationName"),
-            &obj.application_name,
+            &obj.application_name.to_string(),
         );
         if let Some(ref field_value) = obj.environment_name {
-            params.put(&format!("{}{}", prefix, "EnvironmentName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "EnvironmentName"),
+                &field_value.to_string(),
+            );
         }
         ConfigurationOptionSettingsListSerializer::serialize(
             params,
@@ -7567,7 +10107,10 @@ impl ValidateConfigurationSettingsMessageSerializer {
             &obj.option_settings,
         );
         if let Some(ref field_value) = obj.template_name {
-            params.put(&format!("{}{}", prefix, "TemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7583,7 +10126,7 @@ pub struct ValidationMessage {
     /// <p>The name of the option.</p>
     pub option_name: Option<String>,
     /// <p><p>An indication of the severity of this message:</p> <ul> <li> <p> <code>error</code>: This message indicates that this is not a valid setting for an option.</p> </li> <li> <p> <code>warning</code>: This message is providing information you should take into account.</p> </li> </ul></p>
-    pub severity: Option<String>,
+    pub severity: Option<ValidationSeverity>,
 }
 
 #[allow(dead_code)]
@@ -7650,12 +10193,122 @@ impl ValidationMessagesListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidationSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidationSeverity {
+    Error,
+    Warning,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidationSeverity),
+}
+
+impl Default for ValidationSeverity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidationSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidationSeverity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidationSeverity {
+    fn into(self) -> String {
+        match self {
+            ValidationSeverity::Error => "error".to_string(),
+            ValidationSeverity::Warning => "warning".to_string(),
+            ValidationSeverity::UnknownVariant(UnknownValidationSeverity { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidationSeverity {
+    fn into(self) -> &'a str {
+        match self {
+            ValidationSeverity::Error => &"error",
+            ValidationSeverity::Warning => &"warning",
+            ValidationSeverity::UnknownVariant(UnknownValidationSeverity { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ValidationSeverity {
+    fn from(name: &str) -> Self {
+        match name {
+            "error" => ValidationSeverity::Error,
+            "warning" => ValidationSeverity::Warning,
+            _ => ValidationSeverity::UnknownVariant(UnknownValidationSeverity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidationSeverity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "error" => ValidationSeverity::Error,
+            "warning" => ValidationSeverity::Warning,
+            _ => ValidationSeverity::UnknownVariant(UnknownValidationSeverity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ValidationSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ValidationSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ValidationSeverityDeserializer;
 impl ValidationSeverityDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ValidationSeverity, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -7673,7 +10326,7 @@ impl VersionLabelsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7703,7 +10356,7 @@ impl VersionLabelsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }

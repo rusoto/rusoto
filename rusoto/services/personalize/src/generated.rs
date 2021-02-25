@@ -657,7 +657,7 @@ pub struct CreateSolutionVersionRequest {
     /// <p><p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution&#39;s training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a>native-recipe-hrnn-coldstart</a> recipe.</p> </important></p>
     #[serde(rename = "trainingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub training_mode: Option<String>,
+    pub training_mode: Option<TrainingMode>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1779,7 +1779,7 @@ pub struct ListRecipesRequest {
     /// <p>The default is <code>SERVICE</code>.</p>
     #[serde(rename = "recipeProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub recipe_provider: Option<String>,
+    pub recipe_provider: Option<RecipeProvider>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1921,6 +1921,102 @@ pub struct Recipe {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecipeProvider {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecipeProvider {
+    Service,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecipeProvider),
+}
+
+impl Default for RecipeProvider {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecipeProvider {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecipeProvider {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecipeProvider {
+    fn into(self) -> String {
+        match self {
+            RecipeProvider::Service => "SERVICE".to_string(),
+            RecipeProvider::UnknownVariant(UnknownRecipeProvider { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecipeProvider {
+    fn into(self) -> &'a str {
+        match self {
+            RecipeProvider::Service => &"SERVICE",
+            RecipeProvider::UnknownVariant(UnknownRecipeProvider { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecipeProvider {
+    fn from(name: &str) -> Self {
+        match name {
+            "SERVICE" => RecipeProvider::Service,
+            _ => RecipeProvider::UnknownVariant(UnknownRecipeProvider {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecipeProvider {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SERVICE" => RecipeProvider::Service,
+            _ => RecipeProvider::UnknownVariant(UnknownRecipeProvider { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecipeProvider {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecipeProvider {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RecipeProvider {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a summary of the properties of a recipe. For a complete listing, call the <a>DescribeRecipe</a> API.</p>
@@ -2129,7 +2225,7 @@ pub struct SolutionVersion {
     /// <p><p>The scope of training used to create the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution&#39;s training data, while the <code>UPDATE</code> option processes only the training data that has changed since the creation of the last solution version. Choose <code>UPDATE</code> when you want to start recommending items added to the dataset without retraining the model.</p> <important> <p>The <code>UPDATE</code> option can only be used after you&#39;ve created a solution version with the <code>FULL</code> option and the training solution uses the <a>native-recipe-hrnn-coldstart</a>.</p> </important></p>
     #[serde(rename = "trainingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub training_mode: Option<String>,
+    pub training_mode: Option<TrainingMode>,
     /// <p>If hyperparameter optimization was performed, contains the hyperparameter values of the best performing model.</p>
     #[serde(rename = "tunedHPOParams")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2160,6 +2256,106 @@ pub struct SolutionVersionSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingMode {
+    Full,
+    Update,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingMode),
+}
+
+impl Default for TrainingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingMode {
+    fn into(self) -> String {
+        match self {
+            TrainingMode::Full => "FULL".to_string(),
+            TrainingMode::Update => "UPDATE".to_string(),
+            TrainingMode::UnknownVariant(UnknownTrainingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingMode {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingMode::Full => &"FULL",
+            TrainingMode::Update => &"UPDATE",
+            TrainingMode::UnknownVariant(UnknownTrainingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrainingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL" => TrainingMode::Full,
+            "UPDATE" => TrainingMode::Update,
+            _ => TrainingMode::UnknownVariant(UnknownTrainingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrainingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL" => TrainingMode::Full,
+            "UPDATE" => TrainingMode::Update,
+            _ => TrainingMode::UnknownVariant(UnknownTrainingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrainingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>If hyperparameter optimization (HPO) was performed, contains the hyperparameter values of the best performing model.</p>

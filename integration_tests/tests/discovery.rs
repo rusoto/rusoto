@@ -7,7 +7,8 @@ extern crate rusoto_discovery;
 
 use rusoto_core::{Region, RusotoError};
 use rusoto_discovery::{
-    DescribeTagsRequest, Discovery, DiscoveryClient, ListConfigurationsRequest,
+    ConfigurationItemType, DescribeTagsRequest, Discovery, DiscoveryClient,
+    ListConfigurationsRequest,
 };
 
 use std::str;
@@ -44,7 +45,7 @@ async fn should_list_configurations() {
 
     let client = DiscoveryClient::new(Region::UsWest2);
     let request = ListConfigurationsRequest {
-        configuration_type: "SERVER".to_owned(),
+        configuration_type: ConfigurationItemType::Server,
         ..Default::default()
     };
 

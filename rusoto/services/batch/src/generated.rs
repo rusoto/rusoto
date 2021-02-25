@@ -25,6 +25,111 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArrayJobDependency {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArrayJobDependency {
+    NToN,
+    Sequential,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArrayJobDependency),
+}
+
+impl Default for ArrayJobDependency {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArrayJobDependency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArrayJobDependency {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArrayJobDependency {
+    fn into(self) -> String {
+        match self {
+            ArrayJobDependency::NToN => "N_TO_N".to_string(),
+            ArrayJobDependency::Sequential => "SEQUENTIAL".to_string(),
+            ArrayJobDependency::UnknownVariant(UnknownArrayJobDependency { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArrayJobDependency {
+    fn into(self) -> &'a str {
+        match self {
+            ArrayJobDependency::NToN => &"N_TO_N",
+            ArrayJobDependency::Sequential => &"SEQUENTIAL",
+            ArrayJobDependency::UnknownVariant(UnknownArrayJobDependency { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ArrayJobDependency {
+    fn from(name: &str) -> Self {
+        match name {
+            "N_TO_N" => ArrayJobDependency::NToN,
+            "SEQUENTIAL" => ArrayJobDependency::Sequential,
+            _ => ArrayJobDependency::UnknownVariant(UnknownArrayJobDependency {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArrayJobDependency {
+    fn from(name: String) -> Self {
+        match &*name {
+            "N_TO_N" => ArrayJobDependency::NToN,
+            "SEQUENTIAL" => ArrayJobDependency::Sequential,
+            _ => ArrayJobDependency::UnknownVariant(UnknownArrayJobDependency { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArrayJobDependency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArrayJobDependency {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArrayJobDependency {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing an AWS Batch array job.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -65,6 +170,106 @@ pub struct ArrayPropertiesSummary {
     #[serde(rename = "size")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssignPublicIp {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssignPublicIp {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssignPublicIp),
+}
+
+impl Default for AssignPublicIp {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssignPublicIp {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssignPublicIp {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssignPublicIp {
+    fn into(self) -> String {
+        match self {
+            AssignPublicIp::Disabled => "DISABLED".to_string(),
+            AssignPublicIp::Enabled => "ENABLED".to_string(),
+            AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssignPublicIp {
+    fn into(self) -> &'a str {
+        match self {
+            AssignPublicIp::Disabled => &"DISABLED",
+            AssignPublicIp::Enabled => &"ENABLED",
+            AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssignPublicIp {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => AssignPublicIp::Disabled,
+            "ENABLED" => AssignPublicIp::Enabled,
+            _ => AssignPublicIp::UnknownVariant(UnknownAssignPublicIp {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssignPublicIp {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => AssignPublicIp::Disabled,
+            "ENABLED" => AssignPublicIp::Enabled,
+            _ => AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignPublicIp {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssignPublicIp {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssignPublicIp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing the details of a container that's part of a job attempt.</p>
@@ -119,6 +324,546 @@ pub struct AttemptDetail {
     pub stopped_at: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCEState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CEState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCEState),
+}
+
+impl Default for CEState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CEState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CEState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CEState {
+    fn into(self) -> String {
+        match self {
+            CEState::Disabled => "DISABLED".to_string(),
+            CEState::Enabled => "ENABLED".to_string(),
+            CEState::UnknownVariant(UnknownCEState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CEState {
+    fn into(self) -> &'a str {
+        match self {
+            CEState::Disabled => &"DISABLED",
+            CEState::Enabled => &"ENABLED",
+            CEState::UnknownVariant(UnknownCEState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CEState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => CEState::Disabled,
+            "ENABLED" => CEState::Enabled,
+            _ => CEState::UnknownVariant(UnknownCEState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CEState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => CEState::Disabled,
+            "ENABLED" => CEState::Enabled,
+            _ => CEState::UnknownVariant(UnknownCEState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CEState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CEState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CEState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCEStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CEStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    Invalid,
+    Updating,
+    Valid,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCEStatus),
+}
+
+impl Default for CEStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CEStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CEStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CEStatus {
+    fn into(self) -> String {
+        match self {
+            CEStatus::Creating => "CREATING".to_string(),
+            CEStatus::Deleted => "DELETED".to_string(),
+            CEStatus::Deleting => "DELETING".to_string(),
+            CEStatus::Invalid => "INVALID".to_string(),
+            CEStatus::Updating => "UPDATING".to_string(),
+            CEStatus::Valid => "VALID".to_string(),
+            CEStatus::UnknownVariant(UnknownCEStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CEStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CEStatus::Creating => &"CREATING",
+            CEStatus::Deleted => &"DELETED",
+            CEStatus::Deleting => &"DELETING",
+            CEStatus::Invalid => &"INVALID",
+            CEStatus::Updating => &"UPDATING",
+            CEStatus::Valid => &"VALID",
+            CEStatus::UnknownVariant(UnknownCEStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CEStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => CEStatus::Creating,
+            "DELETED" => CEStatus::Deleted,
+            "DELETING" => CEStatus::Deleting,
+            "INVALID" => CEStatus::Invalid,
+            "UPDATING" => CEStatus::Updating,
+            "VALID" => CEStatus::Valid,
+            _ => CEStatus::UnknownVariant(UnknownCEStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CEStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => CEStatus::Creating,
+            "DELETED" => CEStatus::Deleted,
+            "DELETING" => CEStatus::Deleting,
+            "INVALID" => CEStatus::Invalid,
+            "UPDATING" => CEStatus::Updating,
+            "VALID" => CEStatus::Valid,
+            _ => CEStatus::UnknownVariant(UnknownCEStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CEStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CEStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CEStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCEType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CEType {
+    Managed,
+    Unmanaged,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCEType),
+}
+
+impl Default for CEType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CEType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CEType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CEType {
+    fn into(self) -> String {
+        match self {
+            CEType::Managed => "MANAGED".to_string(),
+            CEType::Unmanaged => "UNMANAGED".to_string(),
+            CEType::UnknownVariant(UnknownCEType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CEType {
+    fn into(self) -> &'a str {
+        match self {
+            CEType::Managed => &"MANAGED",
+            CEType::Unmanaged => &"UNMANAGED",
+            CEType::UnknownVariant(UnknownCEType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CEType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MANAGED" => CEType::Managed,
+            "UNMANAGED" => CEType::Unmanaged,
+            _ => CEType::UnknownVariant(UnknownCEType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CEType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MANAGED" => CEType::Managed,
+            "UNMANAGED" => CEType::Unmanaged,
+            _ => CEType::UnknownVariant(UnknownCEType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CEType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CEType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CEType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCRAllocationStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CRAllocationStrategy {
+    BestFit,
+    BestFitProgressive,
+    SpotCapacityOptimized,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCRAllocationStrategy),
+}
+
+impl Default for CRAllocationStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CRAllocationStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CRAllocationStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CRAllocationStrategy {
+    fn into(self) -> String {
+        match self {
+            CRAllocationStrategy::BestFit => "BEST_FIT".to_string(),
+            CRAllocationStrategy::BestFitProgressive => "BEST_FIT_PROGRESSIVE".to_string(),
+            CRAllocationStrategy::SpotCapacityOptimized => "SPOT_CAPACITY_OPTIMIZED".to_string(),
+            CRAllocationStrategy::UnknownVariant(UnknownCRAllocationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CRAllocationStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            CRAllocationStrategy::BestFit => &"BEST_FIT",
+            CRAllocationStrategy::BestFitProgressive => &"BEST_FIT_PROGRESSIVE",
+            CRAllocationStrategy::SpotCapacityOptimized => &"SPOT_CAPACITY_OPTIMIZED",
+            CRAllocationStrategy::UnknownVariant(UnknownCRAllocationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CRAllocationStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEST_FIT" => CRAllocationStrategy::BestFit,
+            "BEST_FIT_PROGRESSIVE" => CRAllocationStrategy::BestFitProgressive,
+            "SPOT_CAPACITY_OPTIMIZED" => CRAllocationStrategy::SpotCapacityOptimized,
+            _ => CRAllocationStrategy::UnknownVariant(UnknownCRAllocationStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CRAllocationStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEST_FIT" => CRAllocationStrategy::BestFit,
+            "BEST_FIT_PROGRESSIVE" => CRAllocationStrategy::BestFitProgressive,
+            "SPOT_CAPACITY_OPTIMIZED" => CRAllocationStrategy::SpotCapacityOptimized,
+            _ => CRAllocationStrategy::UnknownVariant(UnknownCRAllocationStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CRAllocationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CRAllocationStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CRAllocationStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCRType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CRType {
+    Ec2,
+    Fargate,
+    FargateSpot,
+    Spot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCRType),
+}
+
+impl Default for CRType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CRType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CRType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CRType {
+    fn into(self) -> String {
+        match self {
+            CRType::Ec2 => "EC2".to_string(),
+            CRType::Fargate => "FARGATE".to_string(),
+            CRType::FargateSpot => "FARGATE_SPOT".to_string(),
+            CRType::Spot => "SPOT".to_string(),
+            CRType::UnknownVariant(UnknownCRType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CRType {
+    fn into(self) -> &'a str {
+        match self {
+            CRType::Ec2 => &"EC2",
+            CRType::Fargate => &"FARGATE",
+            CRType::FargateSpot => &"FARGATE_SPOT",
+            CRType::Spot => &"SPOT",
+            CRType::UnknownVariant(UnknownCRType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CRType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => CRType::Ec2,
+            "FARGATE" => CRType::Fargate,
+            "FARGATE_SPOT" => CRType::FargateSpot,
+            "SPOT" => CRType::Spot,
+            _ => CRType::UnknownVariant(UnknownCRType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CRType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => CRType::Ec2,
+            "FARGATE" => CRType::Fargate,
+            "FARGATE_SPOT" => CRType::FargateSpot,
+            "SPOT" => CRType::Spot,
+            _ => CRType::UnknownVariant(UnknownCRType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CRType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CRType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CRType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the parameters for <code>CancelJob</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -159,11 +904,11 @@ pub struct ComputeEnvironmentDetail {
     /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>.</p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler doesn't attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state don't scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CEState>,
     /// <p>The current status of the compute environment (for example, <code>CREATING</code> or <code>VALID</code>).</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CEStatus>,
     /// <p>A short, human-readable string to provide additional details about the current status of the compute environment.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -175,7 +920,7 @@ pub struct ComputeEnvironmentDetail {
     /// <p>The type of the compute environment: <code>MANAGED</code> or <code>UNMANAGED</code>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<CEType>,
 }
 
 /// <p><p>The order in which compute environments are tried for job placement within a queue. Compute environments are tried in ascending order. For example, if two compute environments are associated with a job queue, the compute environment with a lower order integer value is tried for job placement first. Compute environments must be in the <code>VALID</code> state before you can associate them with a job queue. All of the compute environments must be either EC2 (<code>EC2</code> or <code>SPOT</code>) or Fargate (<code>FARGATE</code> or <code>FARGATE_SPOT</code>); EC2 and Fargate compute environments can&#39;t be mixed.</p> <note> <p>All compute environments that are associated with a job queue must share the same architecture. AWS Batch doesn&#39;t support mixing compute environment architecture types in a single job queue.</p> </note></p>
@@ -195,7 +940,7 @@ pub struct ComputeResource {
     /// <p>The allocation strategy to use for the compute resource if not enough instances of the best fitting instance type can be allocated. This might be because of availability of the instance type in the Region or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html">Amazon EC2 service limits</a>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/allocation-strategies.html">Allocation Strategies</a> in the <i>AWS Batch User Guide</i>.</p> <note> <p>This parameter isn't applicable to jobs running on Fargate resources, and shouldn't be specified.</p> </note> <dl> <dt>BEST_FIT (default)</dt> <dd> <p>AWS Batch selects an instance type that best fits the needs of the jobs with a preference for the lowest-cost instance type. If additional instances of the selected instance type aren't available, AWS Batch will wait for the additional instances to be available. If there are not enough instances available, or if the user is hitting <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html">Amazon EC2 service limits</a> then additional jobs aren't run until currently running jobs have completed. This allocation strategy keeps costs lower but can limit scaling. If you are using Spot Fleets with <code>BEST_FIT</code> then the Spot Fleet IAM Role must be specified.</p> </dd> <dt>BEST_FIT_PROGRESSIVE</dt> <dd> <p>AWS Batch will select additional instance types that are large enough to meet the requirements of the jobs in the queue, with a preference for instance types with a lower cost per unit vCPU. If additional instances of the previously selected instance types aren't available, AWS Batch will select new instance types.</p> </dd> <dt>SPOT_CAPACITY_OPTIMIZED</dt> <dd> <p>AWS Batch will select one or more instance types that are large enough to meet the requirements of the jobs in the queue, with a preference for instance types that are less likely to be interrupted. This allocation strategy is only available for Spot Instance compute resources.</p> </dd> </dl> <p>With both <code>BEST_FIT_PROGRESSIVE</code> and <code>SPOT_CAPACITY_OPTIMIZED</code> strategies, AWS Batch might need to go above <code>maxvCpus</code> to meet your capacity requirements. In this event, AWS Batch never exceeds <code>maxvCpus</code> by more than a single instance.</p>
     #[serde(rename = "allocationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocation_strategy: Option<String>,
+    pub allocation_strategy: Option<CRAllocationStrategy>,
     /// <p><p>The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. If you leave this field empty, the default value is 100% of the On-Demand price.</p> <note> <p>This parameter isn&#39;t applicable to jobs running on Fargate resources, and shouldn&#39;t be specified.</p> </note></p>
     #[serde(rename = "bidPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,7 +997,7 @@ pub struct ComputeResource {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of compute environment: <code>EC2</code>, <code>SPOT</code>, <code>FARGATE</code>, or <code>FARGATE_SPOT</code>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <i>AWS Batch User Guide</i>.</p> <p> If you choose <code>SPOT</code>, you must also specify an Amazon EC2 Spot Fleet role with the <code>spotIamFleetRole</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html">Amazon EC2 Spot Fleet role</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: CRType,
 }
 
 /// <p>An object representing the attributes of a compute environment that can be updated. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <i>AWS Batch User Guide</i>.</p>
@@ -521,14 +1266,14 @@ pub struct CreateComputeEnvironmentRequest {
     /// <p>The state of the compute environment. If the state is <code>ENABLED</code>, then the compute environment accepts jobs from a queue and can scale out automatically based on queues.</p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler doesn't attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state don't scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CEState>,
     /// <p>The tags that you apply to the compute environment to help you categorize and organize your resources. Each tag consists of a key and an optional value. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a> in <i>AWS General Reference</i>.</p> <p>These tags can be updated or removed using the <a href="https://docs.aws.amazon.com/batch/latest/APIReference/API_TagResource.html">TagResource</a> and <a href="https://docs.aws.amazon.com/batch/latest/APIReference/API_UntagResource.html">UntagResource</a> API operations. These tags don't propagate to the underlying compute resources.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of the compute environment: <code>MANAGED</code> or <code>UNMANAGED</code>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: CEType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -560,7 +1305,7 @@ pub struct CreateJobQueueRequest {
     /// <p>The state of the job queue. If the job queue state is <code>ENABLED</code>, it is able to accept jobs. If the job queue state is <code>DISABLED</code>, new jobs can't be added to the queue, but jobs already in the queue can finish.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<JQState>,
     /// <p>The tags that you apply to the job queue to help you categorize and organize your resources. Each tag consists of a key and an optional value. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/using-tags.html">Tagging your AWS Batch resources</a> in <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -748,7 +1493,116 @@ pub struct Device {
     /// <p>The explicit permissions to provide to the container for the device. By default, the container has permissions for <code>read</code>, <code>write</code>, and <code>mknod</code> for the device.</p>
     #[serde(rename = "permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
+    pub permissions: Option<Vec<DeviceCgroupPermission>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceCgroupPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceCgroupPermission {
+    Mknod,
+    Read,
+    Write,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceCgroupPermission),
+}
+
+impl Default for DeviceCgroupPermission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceCgroupPermission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceCgroupPermission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceCgroupPermission {
+    fn into(self) -> String {
+        match self {
+            DeviceCgroupPermission::Mknod => "MKNOD".to_string(),
+            DeviceCgroupPermission::Read => "READ".to_string(),
+            DeviceCgroupPermission::Write => "WRITE".to_string(),
+            DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceCgroupPermission {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceCgroupPermission::Mknod => &"MKNOD",
+            DeviceCgroupPermission::Read => &"READ",
+            DeviceCgroupPermission::Write => &"WRITE",
+            DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeviceCgroupPermission {
+    fn from(name: &str) -> Self {
+        match name {
+            "MKNOD" => DeviceCgroupPermission::Mknod,
+            "READ" => DeviceCgroupPermission::Read,
+            "WRITE" => DeviceCgroupPermission::Write,
+            _ => DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceCgroupPermission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MKNOD" => DeviceCgroupPermission::Mknod,
+            "READ" => DeviceCgroupPermission::Read,
+            "WRITE" => DeviceCgroupPermission::Write,
+            _ => DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceCgroupPermission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeviceCgroupPermission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeviceCgroupPermission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Provides information used to select Amazon Machine Images (AMIs) for instances in the compute environment. If the <code>Ec2Configuration</code> isn&#39;t specified, the default is <code>ECS_AL1</code>.</p> <note> <p>This object isn&#39;t applicable to jobs running on Fargate resources.</p> </note></p>
@@ -768,7 +1622,7 @@ pub struct Ec2Configuration {
 pub struct EvaluateOnExit {
     /// <p>Specifies the action to take if all of the specified conditions (<code>onStatusReason</code>, <code>onReason</code>, and <code>onExitCode</code>) are met. The values are not case sensitive.</p>
     #[serde(rename = "action")]
-    pub action: String,
+    pub action: RetryAction,
     /// <p>Contains a glob pattern to match against the decimal representation of the <code>ExitCode</code> returned for a job. The patten can be up to 512 characters long, can contain only numbers, and can optionally end with an asterisk (*) so that only the start of the string needs to be an exact match.</p>
     #[serde(rename = "onExitCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -801,6 +1655,227 @@ pub struct Host {
     pub source_path: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJQState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JQState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJQState),
+}
+
+impl Default for JQState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JQState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JQState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JQState {
+    fn into(self) -> String {
+        match self {
+            JQState::Disabled => "DISABLED".to_string(),
+            JQState::Enabled => "ENABLED".to_string(),
+            JQState::UnknownVariant(UnknownJQState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JQState {
+    fn into(self) -> &'a str {
+        match self {
+            JQState::Disabled => &"DISABLED",
+            JQState::Enabled => &"ENABLED",
+            JQState::UnknownVariant(UnknownJQState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JQState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => JQState::Disabled,
+            "ENABLED" => JQState::Enabled,
+            _ => JQState::UnknownVariant(UnknownJQState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JQState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => JQState::Disabled,
+            "ENABLED" => JQState::Enabled,
+            _ => JQState::UnknownVariant(UnknownJQState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JQState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JQState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JQState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJQStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JQStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    Invalid,
+    Updating,
+    Valid,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJQStatus),
+}
+
+impl Default for JQStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JQStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JQStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JQStatus {
+    fn into(self) -> String {
+        match self {
+            JQStatus::Creating => "CREATING".to_string(),
+            JQStatus::Deleted => "DELETED".to_string(),
+            JQStatus::Deleting => "DELETING".to_string(),
+            JQStatus::Invalid => "INVALID".to_string(),
+            JQStatus::Updating => "UPDATING".to_string(),
+            JQStatus::Valid => "VALID".to_string(),
+            JQStatus::UnknownVariant(UnknownJQStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JQStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JQStatus::Creating => &"CREATING",
+            JQStatus::Deleted => &"DELETED",
+            JQStatus::Deleting => &"DELETING",
+            JQStatus::Invalid => &"INVALID",
+            JQStatus::Updating => &"UPDATING",
+            JQStatus::Valid => &"VALID",
+            JQStatus::UnknownVariant(UnknownJQStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JQStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => JQStatus::Creating,
+            "DELETED" => JQStatus::Deleted,
+            "DELETING" => JQStatus::Deleting,
+            "INVALID" => JQStatus::Invalid,
+            "UPDATING" => JQStatus::Updating,
+            "VALID" => JQStatus::Valid,
+            _ => JQStatus::UnknownVariant(UnknownJQStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JQStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => JQStatus::Creating,
+            "DELETED" => JQStatus::Deleted,
+            "DELETING" => JQStatus::Deleting,
+            "INVALID" => JQStatus::Invalid,
+            "UPDATING" => JQStatus::Updating,
+            "VALID" => JQStatus::Valid,
+            _ => JQStatus::UnknownVariant(UnknownJQStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JQStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JQStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JQStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing an AWS Batch job definition.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -826,7 +1901,7 @@ pub struct JobDefinition {
     /// <p>The platform capabilities required by the job definition. If no value is specified, it defaults to <code>EC2</code>. Jobs run on Fargate resources specify <code>FARGATE</code>.</p>
     #[serde(rename = "platformCapabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_capabilities: Option<Vec<String>>,
+    pub platform_capabilities: Option<Vec<PlatformCapability>>,
     /// <p>Specifies whether to propagate the tags from the job or job definition to the corresponding Amazon ECS task. If no value is specified, the tags aren't propagated. Tags can only be propagated to the tasks during task creation. For tags with the same name, job tags are given priority over job definitions tags. If the total number of combined tags from the job and job definition is over 50, the job is moved to the <code>FAILED</code> state.</p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -855,6 +1930,111 @@ pub struct JobDefinition {
     pub type_: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobDefinitionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobDefinitionType {
+    Container,
+    Multinode,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobDefinitionType),
+}
+
+impl Default for JobDefinitionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobDefinitionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobDefinitionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobDefinitionType {
+    fn into(self) -> String {
+        match self {
+            JobDefinitionType::Container => "container".to_string(),
+            JobDefinitionType::Multinode => "multinode".to_string(),
+            JobDefinitionType::UnknownVariant(UnknownJobDefinitionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobDefinitionType {
+    fn into(self) -> &'a str {
+        match self {
+            JobDefinitionType::Container => &"container",
+            JobDefinitionType::Multinode => &"multinode",
+            JobDefinitionType::UnknownVariant(UnknownJobDefinitionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for JobDefinitionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "container" => JobDefinitionType::Container,
+            "multinode" => JobDefinitionType::Multinode,
+            _ => JobDefinitionType::UnknownVariant(UnknownJobDefinitionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobDefinitionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "container" => JobDefinitionType::Container,
+            "multinode" => JobDefinitionType::Multinode,
+            _ => JobDefinitionType::UnknownVariant(UnknownJobDefinitionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobDefinitionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobDefinitionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for JobDefinitionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing an AWS Batch job dependency.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobDependency {
@@ -865,7 +2045,7 @@ pub struct JobDependency {
     /// <p>The type of the job dependency.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ArrayJobDependency>,
 }
 
 /// <p>An object representing an AWS Batch job.</p>
@@ -923,7 +2103,7 @@ pub struct JobDetail {
     /// <p>The platform capabilities required by the job definition. If no value is specified, it defaults to <code>EC2</code>. Jobs run on Fargate resources specify <code>FARGATE</code>.</p>
     #[serde(rename = "platformCapabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_capabilities: Option<Vec<String>>,
+    pub platform_capabilities: Option<Vec<PlatformCapability>>,
     /// <p>Specifies whether to propagate the tags from the job or job definition to the corresponding Amazon ECS task. If no value is specified, the tags are not propagated. Tags can only be propagated to the tasks during task creation. For tags with the same name, job tags are given priority over job definitions tags. If the total number of combined tags from the job and job definition is over 50, the job is moved to the <code>FAILED</code> state.</p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -937,7 +2117,7 @@ pub struct JobDetail {
     pub started_at: Option<i64>,
     /// <p><p>The current status for the job.</p> <note> <p>If your jobs don&#39;t progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in RUNNABLE Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: JobStatus,
     /// <p>A short, human-readable string to provide additional details about the current status of the job.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -974,11 +2154,11 @@ pub struct JobQueueDetail {
     pub priority: i64,
     /// <p>Describes the ability of the queue to accept new jobs. If the job queue state is <code>ENABLED</code>, it's able to accept jobs. If the job queue state is <code>DISABLED</code>, new jobs can't be added to the queue, but jobs already in the queue can finish.</p>
     #[serde(rename = "state")]
-    pub state: String,
+    pub state: JQState,
     /// <p>The status of the job queue (for example, <code>CREATING</code> or <code>VALID</code>).</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JQStatus>,
     /// <p>A short, human-readable string to provide additional details about the current status of the job queue.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -987,6 +2167,131 @@ pub struct JobQueueDetail {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Failed,
+    Pending,
+    Runnable,
+    Running,
+    Starting,
+    Submitted,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Failed => "FAILED".to_string(),
+            JobStatus::Pending => "PENDING".to_string(),
+            JobStatus::Runnable => "RUNNABLE".to_string(),
+            JobStatus::Running => "RUNNING".to_string(),
+            JobStatus::Starting => "STARTING".to_string(),
+            JobStatus::Submitted => "SUBMITTED".to_string(),
+            JobStatus::Succeeded => "SUCCEEDED".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Failed => &"FAILED",
+            JobStatus::Pending => &"PENDING",
+            JobStatus::Runnable => &"RUNNABLE",
+            JobStatus::Running => &"RUNNING",
+            JobStatus::Starting => &"STARTING",
+            JobStatus::Submitted => &"SUBMITTED",
+            JobStatus::Succeeded => &"SUCCEEDED",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => JobStatus::Failed,
+            "PENDING" => JobStatus::Pending,
+            "RUNNABLE" => JobStatus::Runnable,
+            "RUNNING" => JobStatus::Running,
+            "STARTING" => JobStatus::Starting,
+            "SUBMITTED" => JobStatus::Submitted,
+            "SUCCEEDED" => JobStatus::Succeeded,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => JobStatus::Failed,
+            "PENDING" => JobStatus::Pending,
+            "RUNNABLE" => JobStatus::Runnable,
+            "RUNNING" => JobStatus::Running,
+            "STARTING" => JobStatus::Starting,
+            "SUBMITTED" => JobStatus::Submitted,
+            "SUCCEEDED" => JobStatus::Succeeded,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing summary details of a job.</p>
@@ -1026,7 +2331,7 @@ pub struct JobSummary {
     /// <p>The current status for the job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JobStatus>,
     /// <p>A short, human-readable string to provide additional details about the current status of the job.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1120,7 +2425,7 @@ pub struct ListJobsRequest {
     /// <p>The job status used to filter jobs in the specified queue. If you don't specify a status, only <code>RUNNING</code> jobs are returned.</p>
     #[serde(rename = "jobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The maximum number of results returned by <code>ListJobs</code> in paginated output. When this parameter is used, <code>ListJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter isn't used, then <code>ListJobs</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1169,7 +2474,7 @@ pub struct ListTagsForResourceResponse {
 pub struct LogConfiguration {
     /// <p>The log driver to use for the container. The valid values listed for this parameter are log drivers that the Amazon ECS container agent can communicate with by default.</p> <p>The supported log drivers are <code>awslogs</code>, <code>fluentd</code>, <code>gelf</code>, <code>json-file</code>, <code>journald</code>, <code>logentries</code>, <code>syslog</code>, and <code>splunk</code>.</p> <note> <p>Jobs running on Fargate resources are restricted to the <code>awslogs</code> and <code>splunk</code> log drivers.</p> </note> <dl> <dt>awslogs</dt> <dd> <p>Specifies the Amazon CloudWatch Logs logging driver. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/using_awslogs.html">Using the awslogs Log Driver</a> in the <i>AWS Batch User Guide</i> and <a href="https://docs.docker.com/config/containers/logging/awslogs/">Amazon CloudWatch Logs logging driver</a> in the Docker documentation.</p> </dd> <dt>fluentd</dt> <dd> <p>Specifies the Fluentd logging driver. For more information, including usage and options, see <a href="https://docs.docker.com/config/containers/logging/fluentd/">Fluentd logging driver</a> in the Docker documentation.</p> </dd> <dt>gelf</dt> <dd> <p>Specifies the Graylog Extended Format (GELF) logging driver. For more information, including usage and options, see <a href="https://docs.docker.com/config/containers/logging/gelf/">Graylog Extended Format logging driver</a> in the Docker documentation.</p> </dd> <dt>journald</dt> <dd> <p>Specifies the journald logging driver. For more information, including usage and options, see <a href="https://docs.docker.com/config/containers/logging/journald/">Journald logging driver</a> in the Docker documentation.</p> </dd> <dt>json-file</dt> <dd> <p>Specifies the JSON file logging driver. For more information, including usage and options, see <a href="https://docs.docker.com/config/containers/logging/json-file/">JSON File logging driver</a> in the Docker documentation.</p> </dd> <dt>splunk</dt> <dd> <p>Specifies the Splunk logging driver. For more information, including usage and options, see <a href="https://docs.docker.com/config/containers/logging/splunk/">Splunk logging driver</a> in the Docker documentation.</p> </dd> <dt>syslog</dt> <dd> <p>Specifies the syslog logging driver. For more information, including usage and options, see <a href="https://docs.docker.com/config/containers/logging/syslog/">Syslog logging driver</a> in the Docker documentation.</p> </dd> </dl> <note> <p>If you have a custom driver that'sn't listed earlier that you want to work with the Amazon ECS container agent, you can fork the Amazon ECS container agent project that's <a href="https://github.com/aws/amazon-ecs-agent">available on GitHub</a> and customize it to work with that driver. We encourage you to submit pull requests for changes that you want to have included. However, Amazon Web Services doesn't currently support running modified copies of this software.</p> </note> <p>This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log into your container instance and run the following command: <code>sudo docker version | grep "Server API version"</code> </p>
     #[serde(rename = "logDriver")]
-    pub log_driver: String,
+    pub log_driver: LogDriver,
     /// <p>The configuration options to send to the log driver. This parameter requires version 1.19 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log into your container instance and run the following command: <code>sudo docker version | grep "Server API version"</code> </p>
     #[serde(rename = "options")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1178,6 +2483,131 @@ pub struct LogConfiguration {
     #[serde(rename = "secretOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_options: Option<Vec<Secret>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogDriver {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogDriver {
+    Awslogs,
+    Fluentd,
+    Gelf,
+    Journald,
+    JsonFile,
+    Splunk,
+    Syslog,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogDriver),
+}
+
+impl Default for LogDriver {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogDriver {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogDriver {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogDriver {
+    fn into(self) -> String {
+        match self {
+            LogDriver::Awslogs => "awslogs".to_string(),
+            LogDriver::Fluentd => "fluentd".to_string(),
+            LogDriver::Gelf => "gelf".to_string(),
+            LogDriver::Journald => "journald".to_string(),
+            LogDriver::JsonFile => "json-file".to_string(),
+            LogDriver::Splunk => "splunk".to_string(),
+            LogDriver::Syslog => "syslog".to_string(),
+            LogDriver::UnknownVariant(UnknownLogDriver { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogDriver {
+    fn into(self) -> &'a str {
+        match self {
+            LogDriver::Awslogs => &"awslogs",
+            LogDriver::Fluentd => &"fluentd",
+            LogDriver::Gelf => &"gelf",
+            LogDriver::Journald => &"journald",
+            LogDriver::JsonFile => &"json-file",
+            LogDriver::Splunk => &"splunk",
+            LogDriver::Syslog => &"syslog",
+            LogDriver::UnknownVariant(UnknownLogDriver { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogDriver {
+    fn from(name: &str) -> Self {
+        match name {
+            "awslogs" => LogDriver::Awslogs,
+            "fluentd" => LogDriver::Fluentd,
+            "gelf" => LogDriver::Gelf,
+            "journald" => LogDriver::Journald,
+            "json-file" => LogDriver::JsonFile,
+            "splunk" => LogDriver::Splunk,
+            "syslog" => LogDriver::Syslog,
+            _ => LogDriver::UnknownVariant(UnknownLogDriver {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogDriver {
+    fn from(name: String) -> Self {
+        match &*name {
+            "awslogs" => LogDriver::Awslogs,
+            "fluentd" => LogDriver::Fluentd,
+            "gelf" => LogDriver::Gelf,
+            "journald" => LogDriver::Journald,
+            "json-file" => LogDriver::JsonFile,
+            "splunk" => LogDriver::Splunk,
+            "syslog" => LogDriver::Syslog,
+            _ => LogDriver::UnknownVariant(UnknownLogDriver { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogDriver {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogDriver {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogDriver {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details on a Docker volume mount point that's used in a job's container properties. This parameter maps to <code>Volumes</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.19/#create-a-container">Create a container</a> section of the Docker Remote API and the <code>--volume</code> option to docker run.</p>
@@ -1203,7 +2633,7 @@ pub struct NetworkConfiguration {
     /// <p>Indicates whether the job should have a public IP address. For a job running on Fargate resources in a private subnet to send outbound traffic to the internet (for example, in order to pull container images), the private subnet requires a NAT gateway be attached to route requests to the internet. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Amazon ECS task networking</a>. The default value is "DISABLED".</p>
     #[serde(rename = "assignPublicIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assign_public_ip: Option<String>,
+    pub assign_public_ip: Option<AssignPublicIp>,
 }
 
 /// <p>An object representing the elastic network interface for a multi-node parallel job node.</p>
@@ -1309,6 +2739,110 @@ pub struct NodeRangeProperty {
     pub target_nodes: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatformCapability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlatformCapability {
+    Ec2,
+    Fargate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatformCapability),
+}
+
+impl Default for PlatformCapability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlatformCapability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlatformCapability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlatformCapability {
+    fn into(self) -> String {
+        match self {
+            PlatformCapability::Ec2 => "EC2".to_string(),
+            PlatformCapability::Fargate => "FARGATE".to_string(),
+            PlatformCapability::UnknownVariant(UnknownPlatformCapability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlatformCapability {
+    fn into(self) -> &'a str {
+        match self {
+            PlatformCapability::Ec2 => &"EC2",
+            PlatformCapability::Fargate => &"FARGATE",
+            PlatformCapability::UnknownVariant(UnknownPlatformCapability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PlatformCapability {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => PlatformCapability::Ec2,
+            "FARGATE" => PlatformCapability::Fargate,
+            _ => PlatformCapability::UnknownVariant(UnknownPlatformCapability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlatformCapability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => PlatformCapability::Ec2,
+            "FARGATE" => PlatformCapability::Fargate,
+            _ => PlatformCapability::UnknownVariant(UnknownPlatformCapability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformCapability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlatformCapability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlatformCapability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the parameters for <code>RegisterJobDefinition</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1331,7 +2865,7 @@ pub struct RegisterJobDefinitionRequest {
     /// <p>The platform capabilities required by the job definition. If no value is specified, it defaults to <code>EC2</code>. To run the job on Fargate resources, specify <code>FARGATE</code>.</p>
     #[serde(rename = "platformCapabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_capabilities: Option<Vec<String>>,
+    pub platform_capabilities: Option<Vec<PlatformCapability>>,
     /// <p>Specifies whether to propagate the tags from the job or job definition to the corresponding Amazon ECS task. If no value is specified, the tags are not propagated. Tags can only be propagated to the tasks during task creation. For tags with the same name, job tags are given priority over job definitions tags. If the total number of combined tags from the job and job definition is over 50, the job is moved to the <code>FAILED</code> state.</p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1350,7 +2884,7 @@ pub struct RegisterJobDefinitionRequest {
     pub timeout: Option<JobTimeout>,
     /// <p><p>The type of job definition. For more information about multi-node parallel jobs, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/multi-node-job-def.html">Creating a multi-node parallel job definition</a> in the <i>AWS Batch User Guide</i>.</p> <note> <p>If the job is run on Fargate resources, then <code>multinode</code> isn&#39;t supported.</p> </note></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: JobDefinitionType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1372,10 +2906,215 @@ pub struct RegisterJobDefinitionResponse {
 pub struct ResourceRequirement {
     /// <p>The type of resource to assign to a container. The supported resources include <code>GPU</code>, <code>MEMORY</code>, and <code>VCPU</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ResourceType,
     /// <p><p>The quantity of the specified resource to reserve for the container. The values vary based on the <code>type</code> specified.</p> <dl> <dt>type=&quot;GPU&quot;</dt> <dd> <p>The number of physical GPUs to reserve for the container. The number of GPUs reserved for all containers in a job shouldn&#39;t exceed the number of available GPUs on the compute resource that the job is launched on.</p> <note> <p>GPUs are not available for jobs running on Fargate resources.</p> </note> </dd> <dt>type=&quot;MEMORY&quot;</dt> <dd> <p>For jobs running on EC2 resources, the hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--memory</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. You must specify at least 4 MiB of memory for a job. This is required but can be specified in several places for multi-node parallel (MNP) jobs. It must be specified for each node at least once. This parameter maps to <code>Memory</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--memory</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p> <note> <p>If you&#39;re trying to maximize your resource utilization by providing your jobs as much memory as possible for a particular instance type, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/memory-management.html">Memory Management</a> in the <i>AWS Batch User Guide</i>.</p> </note> <p>For jobs running on Fargate resources, then <code>value</code> is the hard limit (in MiB), and must match one of the supported values and the <code>VCPU</code> values must be one of the values supported for that memory value.</p> <dl> <dt>value = 512</dt> <dd> <p> <code>VCPU</code> = 0.25</p> </dd> <dt>value = 1024</dt> <dd> <p> <code>VCPU</code> = 0.25 or 0.5</p> </dd> <dt>value = 2048</dt> <dd> <p> <code>VCPU</code> = 0.25, 0.5, or 1</p> </dd> <dt>value = 3072</dt> <dd> <p> <code>VCPU</code> = 0.5, or 1</p> </dd> <dt>value = 4096</dt> <dd> <p> <code>VCPU</code> = 0.5, 1, or 2</p> </dd> <dt>value = 5120, 6144, or 7168</dt> <dd> <p> <code>VCPU</code> = 1 or 2</p> </dd> <dt>value = 8192</dt> <dd> <p> <code>VCPU</code> = 1, 2, or 4</p> </dd> <dt>value = 9216, 10240, 11264, 12288, 13312, 14336, 15360, or 16384</dt> <dd> <p> <code>VCPU</code> = 2 or 4</p> </dd> <dt>value = 17408, 18432, 19456, 20480, 21504, 22528, 23552, 24576, 25600, 26624, 27648, 28672, 29696, or 30720</dt> <dd> <p> <code>VCPU</code> = 4</p> </dd> </dl> </dd> <dt>type=&quot;VCPU&quot;</dt> <dd> <p>The number of vCPUs reserved for the container. This parameter maps to <code>CpuShares</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--cpu-shares</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. Each vCPU is equivalent to 1,024 CPU shares. For EC2 resources, you must specify at least one vCPU. This is required but can be specified in several places; it must be specified for each node at least once.</p> <p>For jobs running on Fargate resources, then <code>value</code> must match one of the supported values and the <code>MEMORY</code> values must be one of the values supported for that VCPU value. The supported values are 0.25, 0.5, 1, 2, and 4</p> <dl> <dt>value = 0.25</dt> <dd> <p> <code>MEMORY</code> = 512, 1024, or 2048</p> </dd> <dt>value = 0.5</dt> <dd> <p> <code>MEMORY</code> = 1024, 2048, 3072, or 4096</p> </dd> <dt>value = 1</dt> <dd> <p> <code>MEMORY</code> = 2048, 3072, 4096, 5120, 6144, 7168, or 8192</p> </dd> <dt>value = 2</dt> <dd> <p> <code>MEMORY</code> = 4096, 5120, 6144, 7168, 8192, 9216, 10240, 11264, 12288, 13312, 14336, 15360, or 16384</p> </dd> <dt>value = 4</dt> <dd> <p> <code>MEMORY</code> = 8192, 9216, 10240, 11264, 12288, 13312, 14336, 15360, 16384, 17408, 18432, 19456, 20480, 21504, 22528, 23552, 24576, 25600, 26624, 27648, 28672, 29696, or 30720</p> </dd> </dl> </dd> </dl></p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Gpu,
+    Memory,
+    Vcpu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Gpu => "GPU".to_string(),
+            ResourceType::Memory => "MEMORY".to_string(),
+            ResourceType::Vcpu => "VCPU".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Gpu => &"GPU",
+            ResourceType::Memory => &"MEMORY",
+            ResourceType::Vcpu => &"VCPU",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GPU" => ResourceType::Gpu,
+            "MEMORY" => ResourceType::Memory,
+            "VCPU" => ResourceType::Vcpu,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GPU" => ResourceType::Gpu,
+            "MEMORY" => ResourceType::Memory,
+            "VCPU" => ResourceType::Vcpu,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRetryAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RetryAction {
+    Exit,
+    Retry,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRetryAction),
+}
+
+impl Default for RetryAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RetryAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RetryAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RetryAction {
+    fn into(self) -> String {
+        match self {
+            RetryAction::Exit => "EXIT".to_string(),
+            RetryAction::Retry => "RETRY".to_string(),
+            RetryAction::UnknownVariant(UnknownRetryAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RetryAction {
+    fn into(self) -> &'a str {
+        match self {
+            RetryAction::Exit => &"EXIT",
+            RetryAction::Retry => &"RETRY",
+            RetryAction::UnknownVariant(UnknownRetryAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RetryAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXIT" => RetryAction::Exit,
+            "RETRY" => RetryAction::Retry,
+            _ => RetryAction::UnknownVariant(UnknownRetryAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RetryAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXIT" => RetryAction::Exit,
+            "RETRY" => RetryAction::Retry,
+            _ => RetryAction::UnknownVariant(UnknownRetryAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RetryAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RetryAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RetryAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The retry strategy associated with a job. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/job_retries.html">Automated job retries</a> in the <i>AWS Batch User Guide</i>.</p>
@@ -1561,7 +3300,7 @@ pub struct UpdateComputeEnvironmentRequest {
     /// <p>The state of the compute environment. Compute environments in the <code>ENABLED</code> state can accept jobs from a queue and scale in or out automatically based on the workload demand of its associated queues.</p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler doesn't attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state don't scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CEState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1595,7 +3334,7 @@ pub struct UpdateJobQueueRequest {
     /// <p>Describes the queue's ability to accept new jobs. If the job queue state is <code>ENABLED</code>, it is able to accept jobs. If the job queue state is <code>DISABLED</code>, new jobs cannot be added to the queue, but jobs already in the queue can finish.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<JQState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

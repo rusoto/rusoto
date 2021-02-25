@@ -59,7 +59,7 @@ pub struct AddTagsInput {
     pub resource_id: String,
     /// <p>The type of the ML object to tag. </p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: TaggableResourceType,
     /// <p>The key-value pairs to use to create tags. If you specify a key without specifying a value, Amazon ML creates a tag with the specified key and a value of null.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
@@ -76,7 +76,105 @@ pub struct AddTagsOutput {
     /// <p>The type of the ML object that was tagged.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<TaggableResourceType>,
+}
+
+/// <p><p>The function used to train an <code>MLModel</code>. Training choices supported by Amazon ML include the following:</p> <ul> <li> <code>SGD</code> - Stochastic Gradient Descent.</li> <li> <code>RandomForest</code> - Random forest of decision trees.</li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Algorithm {
+    Sgd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlgorithm),
+}
+
+impl Default for Algorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Algorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Algorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Algorithm {
+    fn into(self) -> String {
+        match self {
+            Algorithm::Sgd => "sgd".to_string(),
+            Algorithm::UnknownVariant(UnknownAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Algorithm {
+    fn into(self) -> &'a str {
+        match self {
+            Algorithm::Sgd => &"sgd",
+            Algorithm::UnknownVariant(UnknownAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Algorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "sgd" => Algorithm::Sgd,
+            _ => Algorithm::UnknownVariant(UnknownAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Algorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "sgd" => Algorithm::Sgd,
+            _ => Algorithm::UnknownVariant(UnknownAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Algorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Algorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Algorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Represents the output of a <code>GetBatchPrediction</code> operation.</p> <p> The content consists of the detailed metadata, the status, and the data file information of a <code>Batch Prediction</code>.</p>
@@ -138,10 +236,151 @@ pub struct BatchPrediction {
     /// <p><p>The status of the <code>BatchPrediction</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate predictions for a batch of observations.</li> <li> <code>INPROGRESS</code> - The process is underway.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
     #[serde(rename = "TotalRecordCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_record_count: Option<i64>,
+}
+
+/// <p><p>A list of the variables to use in searching or filtering <code>BatchPrediction</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBatchPredictionFilterVariable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BatchPredictionFilterVariable {
+    CreatedAt,
+    DataSourceId,
+    DataURI,
+    Iamuser,
+    LastUpdatedAt,
+    MlmodelId,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBatchPredictionFilterVariable),
+}
+
+impl Default for BatchPredictionFilterVariable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BatchPredictionFilterVariable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BatchPredictionFilterVariable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BatchPredictionFilterVariable {
+    fn into(self) -> String {
+        match self {
+            BatchPredictionFilterVariable::CreatedAt => "CreatedAt".to_string(),
+            BatchPredictionFilterVariable::DataSourceId => "DataSourceId".to_string(),
+            BatchPredictionFilterVariable::DataURI => "DataURI".to_string(),
+            BatchPredictionFilterVariable::Iamuser => "IAMUser".to_string(),
+            BatchPredictionFilterVariable::LastUpdatedAt => "LastUpdatedAt".to_string(),
+            BatchPredictionFilterVariable::MlmodelId => "MLModelId".to_string(),
+            BatchPredictionFilterVariable::Name => "Name".to_string(),
+            BatchPredictionFilterVariable::Status => "Status".to_string(),
+            BatchPredictionFilterVariable::UnknownVariant(
+                UnknownBatchPredictionFilterVariable { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BatchPredictionFilterVariable {
+    fn into(self) -> &'a str {
+        match self {
+            BatchPredictionFilterVariable::CreatedAt => &"CreatedAt",
+            BatchPredictionFilterVariable::DataSourceId => &"DataSourceId",
+            BatchPredictionFilterVariable::DataURI => &"DataURI",
+            BatchPredictionFilterVariable::Iamuser => &"IAMUser",
+            BatchPredictionFilterVariable::LastUpdatedAt => &"LastUpdatedAt",
+            BatchPredictionFilterVariable::MlmodelId => &"MLModelId",
+            BatchPredictionFilterVariable::Name => &"Name",
+            BatchPredictionFilterVariable::Status => &"Status",
+            BatchPredictionFilterVariable::UnknownVariant(
+                UnknownBatchPredictionFilterVariable { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for BatchPredictionFilterVariable {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreatedAt" => BatchPredictionFilterVariable::CreatedAt,
+            "DataSourceId" => BatchPredictionFilterVariable::DataSourceId,
+            "DataURI" => BatchPredictionFilterVariable::DataURI,
+            "IAMUser" => BatchPredictionFilterVariable::Iamuser,
+            "LastUpdatedAt" => BatchPredictionFilterVariable::LastUpdatedAt,
+            "MLModelId" => BatchPredictionFilterVariable::MlmodelId,
+            "Name" => BatchPredictionFilterVariable::Name,
+            "Status" => BatchPredictionFilterVariable::Status,
+            _ => BatchPredictionFilterVariable::UnknownVariant(
+                UnknownBatchPredictionFilterVariable {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for BatchPredictionFilterVariable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreatedAt" => BatchPredictionFilterVariable::CreatedAt,
+            "DataSourceId" => BatchPredictionFilterVariable::DataSourceId,
+            "DataURI" => BatchPredictionFilterVariable::DataURI,
+            "IAMUser" => BatchPredictionFilterVariable::Iamuser,
+            "LastUpdatedAt" => BatchPredictionFilterVariable::LastUpdatedAt,
+            "MLModelId" => BatchPredictionFilterVariable::MlmodelId,
+            "Name" => BatchPredictionFilterVariable::Name,
+            "Status" => BatchPredictionFilterVariable::Status,
+            _ => BatchPredictionFilterVariable::UnknownVariant(
+                UnknownBatchPredictionFilterVariable { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchPredictionFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BatchPredictionFilterVariable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BatchPredictionFilterVariable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -308,7 +547,7 @@ pub struct CreateMLModelInput {
     pub ml_model_name: Option<String>,
     /// <p>The category of supervised learning that this <code>MLModel</code> will address. Choose from the following types:</p> <ul> <li>Choose <code>REGRESSION</code> if the <code>MLModel</code> will be used to predict a numeric value.</li> <li>Choose <code>BINARY</code> if the <code>MLModel</code> result has two possible values.</li> <li>Choose <code>MULTICLASS</code> if the <code>MLModel</code> result has a limited number of values. </li> </ul> <p> For more information, see the <a href="http://docs.aws.amazon.com/machine-learning/latest/dg">Amazon Machine Learning Developer Guide</a>.</p>
     #[serde(rename = "MLModelType")]
-    pub ml_model_type: String,
+    pub ml_model_type: MLModelType,
     /// <p><p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li> <p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model&#39;s ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160329T131121-0700&quot;&gt;strongly recommend that you shuffle your data.&lt;?oxy<em>insert</em>end&gt;</p> </li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX<em>DOUBLE</code>. The default is to not use L1 normalization. This parameter can&#39;t be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX</em>DOUBLE</code>. The default is to not use L2 normalization. This parameter can&#39;t be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -427,7 +666,134 @@ pub struct DataSource {
     /// <p><p>The current status of the <code>DataSource</code>. This element can have one of the following values: </p> <ul> <li>PENDING - Amazon Machine Learning (Amazon ML) submitted a request to create a <code>DataSource</code>.</li> <li>INPROGRESS - The creation process is underway.</li> <li>FAILED - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li>COMPLETED - The creation process completed successfully.</li> <li>DELETED - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
+}
+
+/// <p><p>A list of the variables to use in searching or filtering <code>DataSource</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul> <note><title>Note</title> <p>The variable names should match the variable names in the <code>DataSource</code>.</p> </note></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceFilterVariable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceFilterVariable {
+    CreatedAt,
+    DataLocationS3,
+    Iamuser,
+    LastUpdatedAt,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceFilterVariable),
+}
+
+impl Default for DataSourceFilterVariable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceFilterVariable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceFilterVariable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceFilterVariable {
+    fn into(self) -> String {
+        match self {
+            DataSourceFilterVariable::CreatedAt => "CreatedAt".to_string(),
+            DataSourceFilterVariable::DataLocationS3 => "DataLocationS3".to_string(),
+            DataSourceFilterVariable::Iamuser => "IAMUser".to_string(),
+            DataSourceFilterVariable::LastUpdatedAt => "LastUpdatedAt".to_string(),
+            DataSourceFilterVariable::Name => "Name".to_string(),
+            DataSourceFilterVariable::Status => "Status".to_string(),
+            DataSourceFilterVariable::UnknownVariant(UnknownDataSourceFilterVariable {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceFilterVariable {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceFilterVariable::CreatedAt => &"CreatedAt",
+            DataSourceFilterVariable::DataLocationS3 => &"DataLocationS3",
+            DataSourceFilterVariable::Iamuser => &"IAMUser",
+            DataSourceFilterVariable::LastUpdatedAt => &"LastUpdatedAt",
+            DataSourceFilterVariable::Name => &"Name",
+            DataSourceFilterVariable::Status => &"Status",
+            DataSourceFilterVariable::UnknownVariant(UnknownDataSourceFilterVariable {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSourceFilterVariable {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreatedAt" => DataSourceFilterVariable::CreatedAt,
+            "DataLocationS3" => DataSourceFilterVariable::DataLocationS3,
+            "IAMUser" => DataSourceFilterVariable::Iamuser,
+            "LastUpdatedAt" => DataSourceFilterVariable::LastUpdatedAt,
+            "Name" => DataSourceFilterVariable::Name,
+            "Status" => DataSourceFilterVariable::Status,
+            _ => DataSourceFilterVariable::UnknownVariant(UnknownDataSourceFilterVariable {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceFilterVariable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreatedAt" => DataSourceFilterVariable::CreatedAt,
+            "DataLocationS3" => DataSourceFilterVariable::DataLocationS3,
+            "IAMUser" => DataSourceFilterVariable::Iamuser,
+            "LastUpdatedAt" => DataSourceFilterVariable::LastUpdatedAt,
+            "Name" => DataSourceFilterVariable::Name,
+            "Status" => DataSourceFilterVariable::Status,
+            _ => DataSourceFilterVariable::UnknownVariant(UnknownDataSourceFilterVariable { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSourceFilterVariable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DataSourceFilterVariable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -532,7 +898,7 @@ pub struct DeleteTagsInput {
     pub resource_id: String,
     /// <p>The type of the tagged ML object.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: TaggableResourceType,
     /// <p>One or more tags to delete.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
@@ -549,7 +915,7 @@ pub struct DeleteTagsOutput {
     /// <p>The type of the ML object from which tags were deleted.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<TaggableResourceType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -562,7 +928,7 @@ pub struct DescribeBatchPredictionsInput {
     /// <p><p>Use one of the following variables to filter a list of <code>BatchPrediction</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of the <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_variable: Option<String>,
+    pub filter_variable: Option<BatchPredictionFilterVariable>,
     /// <p>The greater than or equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>
     #[serde(rename = "GE")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -598,7 +964,7 @@ pub struct DescribeBatchPredictionsInput {
     /// <p>A two-value parameter that determines the sequence of the resulting list of <code>MLModel</code>s.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 /// <p>Represents the output of a <code>DescribeBatchPredictions</code> operation. The content is essentially a list of <code>BatchPrediction</code>s.</p>
@@ -625,7 +991,7 @@ pub struct DescribeDataSourcesInput {
     /// <p><p>Use one of the following variables to filter a list of <code>DataSource</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation dates.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> statuses.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_variable: Option<String>,
+    pub filter_variable: Option<DataSourceFilterVariable>,
     /// <p>The greater than or equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>
     #[serde(rename = "GE")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -661,7 +1027,7 @@ pub struct DescribeDataSourcesInput {
     /// <p>A two-value parameter that determines the sequence of the resulting list of <code>DataSource</code>.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 /// <p>Represents the query results from a <a>DescribeDataSources</a> operation. The content is essentially a list of <code>DataSource</code>.</p>
@@ -688,7 +1054,7 @@ pub struct DescribeEvaluationsInput {
     /// <p><p>Use one of the following variable to filter a list of <code>Evaluation</code> objects:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an <code>Evaluation</code>.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in <code>Evaluation</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in <code>Evaluation</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_variable: Option<String>,
+    pub filter_variable: Option<EvaluationFilterVariable>,
     /// <p>The greater than or equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>
     #[serde(rename = "GE")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -724,7 +1090,7 @@ pub struct DescribeEvaluationsInput {
     /// <p>A two-value parameter that determines the sequence of the resulting list of <code>Evaluation</code>.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 /// <p>Represents the query results from a <code>DescribeEvaluations</code> operation. The content is essentially a list of <code>Evaluation</code>.</p>
@@ -751,7 +1117,7 @@ pub struct DescribeMLModelsInput {
     /// <p><p>Use one of the following variables to filter a list of <code>MLModel</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>MLModel</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>MLModel</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>MLModel</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>MLModel</code> creation.</li> <li> <code>TrainingDataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used to train one or more <code>MLModel</code>.</li> <li> <code>RealtimeEndpointStatus</code> - Sets the search criteria to the <code>MLModel</code> real-time endpoint status.</li> <li> <code>MLModelType</code> - Sets the search criteria to <code>MLModel</code> type: binary, regression, or multi-class.</li> <li> <code>Algorithm</code> - Sets the search criteria to the algorithm that the <code>MLModel</code> uses.</li> <li> <code>TrainingDataURI</code> - Sets the search criteria to the data file(s) used in training a <code>MLModel</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_variable: Option<String>,
+    pub filter_variable: Option<MLModelFilterVariable>,
     /// <p>The greater than or equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>
     #[serde(rename = "GE")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -787,7 +1153,7 @@ pub struct DescribeMLModelsInput {
     /// <p>A two-value parameter that determines the sequence of the resulting list of <code>MLModel</code>.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 /// <p>Represents the output of a <code>DescribeMLModels</code> operation. The content is essentially a list of <code>MLModel</code>.</p>
@@ -812,7 +1178,7 @@ pub struct DescribeTagsInput {
     pub resource_id: String,
     /// <p>The type of the ML object.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: TaggableResourceType,
 }
 
 /// <p>Amazon ML returns the following elements. </p>
@@ -826,11 +1192,236 @@ pub struct DescribeTagsOutput {
     /// <p>The type of the tagged ML object.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<TaggableResourceType>,
     /// <p>A list of tags associated with the ML object.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Contains the key values of <code>DetailsMap</code>: <code>PredictiveModelType</code> - Indicates the type of the <code>MLModel</code>. <code>Algorithm</code> - Indicates the algorithm that was used for the <code>MLModel</code>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetailsAttributes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetailsAttributes {
+    Algorithm,
+    PredictiveModelType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetailsAttributes),
+}
+
+impl Default for DetailsAttributes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetailsAttributes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetailsAttributes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetailsAttributes {
+    fn into(self) -> String {
+        match self {
+            DetailsAttributes::Algorithm => "Algorithm".to_string(),
+            DetailsAttributes::PredictiveModelType => "PredictiveModelType".to_string(),
+            DetailsAttributes::UnknownVariant(UnknownDetailsAttributes { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetailsAttributes {
+    fn into(self) -> &'a str {
+        match self {
+            DetailsAttributes::Algorithm => &"Algorithm",
+            DetailsAttributes::PredictiveModelType => &"PredictiveModelType",
+            DetailsAttributes::UnknownVariant(UnknownDetailsAttributes { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DetailsAttributes {
+    fn from(name: &str) -> Self {
+        match name {
+            "Algorithm" => DetailsAttributes::Algorithm,
+            "PredictiveModelType" => DetailsAttributes::PredictiveModelType,
+            _ => DetailsAttributes::UnknownVariant(UnknownDetailsAttributes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetailsAttributes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Algorithm" => DetailsAttributes::Algorithm,
+            "PredictiveModelType" => DetailsAttributes::PredictiveModelType,
+            _ => DetailsAttributes::UnknownVariant(UnknownDetailsAttributes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetailsAttributes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DetailsAttributes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetailsAttributes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p><p>Object status with the following possible values:</p> <ul> <li><code>PENDING</code></li> <li><code>INPROGRESS</code></li> <li><code>FAILED</code></li> <li><code>COMPLETED</code></li> <li><code>DELETED</code></li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityStatus {
+    Completed,
+    Deleted,
+    Failed,
+    Inprogress,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityStatus),
+}
+
+impl Default for EntityStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityStatus {
+    fn into(self) -> String {
+        match self {
+            EntityStatus::Completed => "COMPLETED".to_string(),
+            EntityStatus::Deleted => "DELETED".to_string(),
+            EntityStatus::Failed => "FAILED".to_string(),
+            EntityStatus::Inprogress => "INPROGRESS".to_string(),
+            EntityStatus::Pending => "PENDING".to_string(),
+            EntityStatus::UnknownVariant(UnknownEntityStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EntityStatus::Completed => &"COMPLETED",
+            EntityStatus::Deleted => &"DELETED",
+            EntityStatus::Failed => &"FAILED",
+            EntityStatus::Inprogress => &"INPROGRESS",
+            EntityStatus::Pending => &"PENDING",
+            EntityStatus::UnknownVariant(UnknownEntityStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => EntityStatus::Completed,
+            "DELETED" => EntityStatus::Deleted,
+            "FAILED" => EntityStatus::Failed,
+            "INPROGRESS" => EntityStatus::Inprogress,
+            "PENDING" => EntityStatus::Pending,
+            _ => EntityStatus::UnknownVariant(UnknownEntityStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => EntityStatus::Completed,
+            "DELETED" => EntityStatus::Deleted,
+            "FAILED" => EntityStatus::Failed,
+            "INPROGRESS" => EntityStatus::Inprogress,
+            "PENDING" => EntityStatus::Pending,
+            _ => EntityStatus::UnknownVariant(UnknownEntityStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EntityStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Represents the output of <code>GetEvaluation</code> operation. </p> <p>The content consists of the detailed metadata and data file information and the current status of the <code>Evaluation</code>.</p>
@@ -889,7 +1480,144 @@ pub struct Evaluation {
     /// <p><p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
+}
+
+/// <p><p>A list of the variables to use in searching or filtering <code>Evaluation</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an evaluation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>Predictor</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in evaluation.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in evaluation. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEvaluationFilterVariable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EvaluationFilterVariable {
+    CreatedAt,
+    DataSourceId,
+    DataURI,
+    Iamuser,
+    LastUpdatedAt,
+    MlmodelId,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEvaluationFilterVariable),
+}
+
+impl Default for EvaluationFilterVariable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EvaluationFilterVariable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EvaluationFilterVariable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EvaluationFilterVariable {
+    fn into(self) -> String {
+        match self {
+            EvaluationFilterVariable::CreatedAt => "CreatedAt".to_string(),
+            EvaluationFilterVariable::DataSourceId => "DataSourceId".to_string(),
+            EvaluationFilterVariable::DataURI => "DataURI".to_string(),
+            EvaluationFilterVariable::Iamuser => "IAMUser".to_string(),
+            EvaluationFilterVariable::LastUpdatedAt => "LastUpdatedAt".to_string(),
+            EvaluationFilterVariable::MlmodelId => "MLModelId".to_string(),
+            EvaluationFilterVariable::Name => "Name".to_string(),
+            EvaluationFilterVariable::Status => "Status".to_string(),
+            EvaluationFilterVariable::UnknownVariant(UnknownEvaluationFilterVariable {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EvaluationFilterVariable {
+    fn into(self) -> &'a str {
+        match self {
+            EvaluationFilterVariable::CreatedAt => &"CreatedAt",
+            EvaluationFilterVariable::DataSourceId => &"DataSourceId",
+            EvaluationFilterVariable::DataURI => &"DataURI",
+            EvaluationFilterVariable::Iamuser => &"IAMUser",
+            EvaluationFilterVariable::LastUpdatedAt => &"LastUpdatedAt",
+            EvaluationFilterVariable::MlmodelId => &"MLModelId",
+            EvaluationFilterVariable::Name => &"Name",
+            EvaluationFilterVariable::Status => &"Status",
+            EvaluationFilterVariable::UnknownVariant(UnknownEvaluationFilterVariable {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EvaluationFilterVariable {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreatedAt" => EvaluationFilterVariable::CreatedAt,
+            "DataSourceId" => EvaluationFilterVariable::DataSourceId,
+            "DataURI" => EvaluationFilterVariable::DataURI,
+            "IAMUser" => EvaluationFilterVariable::Iamuser,
+            "LastUpdatedAt" => EvaluationFilterVariable::LastUpdatedAt,
+            "MLModelId" => EvaluationFilterVariable::MlmodelId,
+            "Name" => EvaluationFilterVariable::Name,
+            "Status" => EvaluationFilterVariable::Status,
+            _ => EvaluationFilterVariable::UnknownVariant(UnknownEvaluationFilterVariable {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EvaluationFilterVariable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreatedAt" => EvaluationFilterVariable::CreatedAt,
+            "DataSourceId" => EvaluationFilterVariable::DataSourceId,
+            "DataURI" => EvaluationFilterVariable::DataURI,
+            "IAMUser" => EvaluationFilterVariable::Iamuser,
+            "LastUpdatedAt" => EvaluationFilterVariable::LastUpdatedAt,
+            "MLModelId" => EvaluationFilterVariable::MlmodelId,
+            "Name" => EvaluationFilterVariable::Name,
+            "Status" => EvaluationFilterVariable::Status,
+            _ => EvaluationFilterVariable::UnknownVariant(UnknownEvaluationFilterVariable { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EvaluationFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EvaluationFilterVariable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EvaluationFilterVariable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -967,7 +1695,7 @@ pub struct GetBatchPredictionOutput {
     /// <p><p>The status of the <code>BatchPrediction</code>, which can be one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate batch predictions.</li> <li> <code>INPROGRESS</code> - The batch predictions are in progress.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
     /// <p>The number of total records that Amazon Machine Learning saw while processing the <code>BatchPrediction</code>.</p>
     #[serde(rename = "TotalRecordCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1066,7 +1794,7 @@ pub struct GetDataSourceOutput {
     /// <p><p>The current status of the <code>DataSource</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon ML submitted a request to create a <code>DataSource</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1140,7 +1868,7 @@ pub struct GetEvaluationOutput {
     /// <p><p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Language (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1198,7 +1926,7 @@ pub struct GetMLModelOutput {
     /// <p><p>Identifies the <code>MLModel</code> category. The following are the available types: </p> <ul> <li>REGRESSION -- Produces a numeric result. For example, &quot;What price should a house be listed at?&quot;</li> <li>BINARY -- Produces one of two possible results. For example, &quot;Is this an e-commerce website?&quot;</li> <li>MULTICLASS -- Produces one of several possible results. For example, &quot;Is this a HIGH, LOW or MEDIUM risk trade?&quot;</li> </ul></p>
     #[serde(rename = "MLModelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ml_model_type: Option<String>,
+    pub ml_model_type: Option<MLModelType>,
     /// <p>A description of the most recent details about accessing the <code>MLModel</code>.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1233,7 +1961,7 @@ pub struct GetMLModelOutput {
     /// <p><p>The current status of the <code>MLModel</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to describe a <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The request is processing.</li> <li> <code>FAILED</code> - The request did not run to completion. The ML model isn&#39;t usable.</li> <li> <code>COMPLETED</code> - The request completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn&#39;t usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
     /// <p>The ID of the training <code>DataSource</code>.</p>
     #[serde(rename = "TrainingDataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1251,7 +1979,7 @@ pub struct MLModel {
     /// <p><p>The algorithm used to train the <code>MLModel</code>. The following algorithm is supported:</p> <ul> <li> <code>SGD</code> -- Stochastic gradient descent. The goal of <code>SGD</code> is to minimize the gradient of the loss function. </li> </ul></p>
     #[serde(rename = "Algorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub algorithm: Option<String>,
+    pub algorithm: Option<Algorithm>,
     #[serde(rename = "ComputeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_time: Option<i64>,
@@ -1285,7 +2013,7 @@ pub struct MLModel {
     /// <p><p>Identifies the <code>MLModel</code> category. The following are the available types:</p> <ul> <li> <code>REGRESSION</code> - Produces a numeric result. For example, &quot;What price should a house be listed at?&quot;</li> <li> <code>BINARY</code> - Produces one of two possible results. For example, &quot;Is this a child-friendly web site?&quot;.</li> <li> <code>MULTICLASS</code> - Produces one of several possible results. For example, &quot;Is this a HIGH-, LOW-, or MEDIUM&lt;?oxy<em>delete author=&quot;annbech&quot; timestamp=&quot;20160328T175050-0700&quot; content=&quot; &quot;&gt;&lt;?oxy</em>insert<em>start author=&quot;annbech&quot; timestamp=&quot;20160328T175050-0700&quot;&gt;-&lt;?oxy</em>insert_end&gt;risk trade?&quot;.</li> </ul></p>
     #[serde(rename = "MLModelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ml_model_type: Option<String>,
+    pub ml_model_type: Option<MLModelType>,
     /// <p>A description of the most recent details about accessing the <code>MLModel</code>.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1310,7 +2038,7 @@ pub struct MLModel {
     /// <p><p>The current status of an <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to create an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create an <code>MLModel</code> didn&#39;t run to completion. The model isn&#39;t usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn&#39;t usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EntityStatus>,
     /// <p>The ID of the training <code>DataSource</code>. The <code>CreateMLModel</code> operation uses the <code>TrainingDataSourceId</code>.</p>
     #[serde(rename = "TrainingDataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1319,6 +2047,256 @@ pub struct MLModel {
     #[serde(rename = "TrainingParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMLModelFilterVariable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MLModelFilterVariable {
+    Algorithm,
+    CreatedAt,
+    Iamuser,
+    LastUpdatedAt,
+    MlmodelType,
+    Name,
+    RealtimeEndpointStatus,
+    Status,
+    TrainingDataSourceId,
+    TrainingDataURI,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMLModelFilterVariable),
+}
+
+impl Default for MLModelFilterVariable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MLModelFilterVariable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MLModelFilterVariable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MLModelFilterVariable {
+    fn into(self) -> String {
+        match self {
+            MLModelFilterVariable::Algorithm => "Algorithm".to_string(),
+            MLModelFilterVariable::CreatedAt => "CreatedAt".to_string(),
+            MLModelFilterVariable::Iamuser => "IAMUser".to_string(),
+            MLModelFilterVariable::LastUpdatedAt => "LastUpdatedAt".to_string(),
+            MLModelFilterVariable::MlmodelType => "MLModelType".to_string(),
+            MLModelFilterVariable::Name => "Name".to_string(),
+            MLModelFilterVariable::RealtimeEndpointStatus => "RealtimeEndpointStatus".to_string(),
+            MLModelFilterVariable::Status => "Status".to_string(),
+            MLModelFilterVariable::TrainingDataSourceId => "TrainingDataSourceId".to_string(),
+            MLModelFilterVariable::TrainingDataURI => "TrainingDataURI".to_string(),
+            MLModelFilterVariable::UnknownVariant(UnknownMLModelFilterVariable {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MLModelFilterVariable {
+    fn into(self) -> &'a str {
+        match self {
+            MLModelFilterVariable::Algorithm => &"Algorithm",
+            MLModelFilterVariable::CreatedAt => &"CreatedAt",
+            MLModelFilterVariable::Iamuser => &"IAMUser",
+            MLModelFilterVariable::LastUpdatedAt => &"LastUpdatedAt",
+            MLModelFilterVariable::MlmodelType => &"MLModelType",
+            MLModelFilterVariable::Name => &"Name",
+            MLModelFilterVariable::RealtimeEndpointStatus => &"RealtimeEndpointStatus",
+            MLModelFilterVariable::Status => &"Status",
+            MLModelFilterVariable::TrainingDataSourceId => &"TrainingDataSourceId",
+            MLModelFilterVariable::TrainingDataURI => &"TrainingDataURI",
+            MLModelFilterVariable::UnknownVariant(UnknownMLModelFilterVariable {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MLModelFilterVariable {
+    fn from(name: &str) -> Self {
+        match name {
+            "Algorithm" => MLModelFilterVariable::Algorithm,
+            "CreatedAt" => MLModelFilterVariable::CreatedAt,
+            "IAMUser" => MLModelFilterVariable::Iamuser,
+            "LastUpdatedAt" => MLModelFilterVariable::LastUpdatedAt,
+            "MLModelType" => MLModelFilterVariable::MlmodelType,
+            "Name" => MLModelFilterVariable::Name,
+            "RealtimeEndpointStatus" => MLModelFilterVariable::RealtimeEndpointStatus,
+            "Status" => MLModelFilterVariable::Status,
+            "TrainingDataSourceId" => MLModelFilterVariable::TrainingDataSourceId,
+            "TrainingDataURI" => MLModelFilterVariable::TrainingDataURI,
+            _ => MLModelFilterVariable::UnknownVariant(UnknownMLModelFilterVariable {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MLModelFilterVariable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Algorithm" => MLModelFilterVariable::Algorithm,
+            "CreatedAt" => MLModelFilterVariable::CreatedAt,
+            "IAMUser" => MLModelFilterVariable::Iamuser,
+            "LastUpdatedAt" => MLModelFilterVariable::LastUpdatedAt,
+            "MLModelType" => MLModelFilterVariable::MlmodelType,
+            "Name" => MLModelFilterVariable::Name,
+            "RealtimeEndpointStatus" => MLModelFilterVariable::RealtimeEndpointStatus,
+            "Status" => MLModelFilterVariable::Status,
+            "TrainingDataSourceId" => MLModelFilterVariable::TrainingDataSourceId,
+            "TrainingDataURI" => MLModelFilterVariable::TrainingDataURI,
+            _ => MLModelFilterVariable::UnknownVariant(UnknownMLModelFilterVariable { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MLModelFilterVariable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MLModelFilterVariable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MLModelFilterVariable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMLModelType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MLModelType {
+    Binary,
+    Multiclass,
+    Regression,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMLModelType),
+}
+
+impl Default for MLModelType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MLModelType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MLModelType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MLModelType {
+    fn into(self) -> String {
+        match self {
+            MLModelType::Binary => "BINARY".to_string(),
+            MLModelType::Multiclass => "MULTICLASS".to_string(),
+            MLModelType::Regression => "REGRESSION".to_string(),
+            MLModelType::UnknownVariant(UnknownMLModelType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MLModelType {
+    fn into(self) -> &'a str {
+        match self {
+            MLModelType::Binary => &"BINARY",
+            MLModelType::Multiclass => &"MULTICLASS",
+            MLModelType::Regression => &"REGRESSION",
+            MLModelType::UnknownVariant(UnknownMLModelType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MLModelType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BINARY" => MLModelType::Binary,
+            "MULTICLASS" => MLModelType::Multiclass,
+            "REGRESSION" => MLModelType::Regression,
+            _ => MLModelType::UnknownVariant(UnknownMLModelType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MLModelType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BINARY" => MLModelType::Binary,
+            "MULTICLASS" => MLModelType::Multiclass,
+            "REGRESSION" => MLModelType::Regression,
+            _ => MLModelType::UnknownVariant(UnknownMLModelType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MLModelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MLModelType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MLModelType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Measurements of how well the <code>MLModel</code> performed on known observations. One of the following metrics is returned, based on the type of the <code>MLModel</code>: </p> <ul> <li> <p>BinaryAUC: The binary <code>MLModel</code> uses the Area Under the Curve (AUC) technique to measure performance. </p> </li> <li> <p>RegressionRMSE: The regression <code>MLModel</code> uses the Root Mean Square Error (RMSE) technique to measure performance. RMSE measures the difference between predicted and actual values for a single variable.</p> </li> <li> <p>MulticlassAvgFScore: The multiclass <code>MLModel</code> uses the F1 score technique to measure performance. </p> </li> </ul> <p> For more information about performance metrics, please see the <a href="http://docs.aws.amazon.com/machine-learning/latest/dg">Amazon Machine Learning Developer Guide</a>. </p>
@@ -1356,7 +2334,7 @@ pub struct PredictOutput {
 pub struct Prediction {
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub details: Option<::std::collections::HashMap<String, String>>,
+    pub details: Option<::std::collections::HashMap<DetailsAttributes, String>>,
     /// <p>The prediction label for either a <code>BINARY</code> or <code>MULTICLASS</code> <code>MLModel</code>.</p>
     #[serde(rename = "predictedLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1472,7 +2450,7 @@ pub struct RealtimeEndpointInfo {
     /// <p><p> The current status of the real-time endpoint for the <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>NONE</code> - Endpoint does not exist or was previously deleted.</li> <li> <code>READY</code> - Endpoint is ready to be used for real-time predictions.</li> <li> <code>UPDATING</code> - Updating/creating the endpoint. </li> </ul></p>
     #[serde(rename = "EndpointStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub endpoint_status: Option<String>,
+    pub endpoint_status: Option<RealtimeEndpointStatus>,
     /// <p><p>The URI that specifies where to send real-time prediction requests for the <code>MLModel</code>.</p> <note><title>Note</title> <p>The application must wait until the real-time endpoint is ready before using this URI.</p> </note></p>
     #[serde(rename = "EndpointUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1481,6 +2459,121 @@ pub struct RealtimeEndpointInfo {
     #[serde(rename = "PeakRequestsPerSecond")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub peak_requests_per_second: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRealtimeEndpointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RealtimeEndpointStatus {
+    Failed,
+    None,
+    Ready,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRealtimeEndpointStatus),
+}
+
+impl Default for RealtimeEndpointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RealtimeEndpointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RealtimeEndpointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RealtimeEndpointStatus {
+    fn into(self) -> String {
+        match self {
+            RealtimeEndpointStatus::Failed => "FAILED".to_string(),
+            RealtimeEndpointStatus::None => "NONE".to_string(),
+            RealtimeEndpointStatus::Ready => "READY".to_string(),
+            RealtimeEndpointStatus::Updating => "UPDATING".to_string(),
+            RealtimeEndpointStatus::UnknownVariant(UnknownRealtimeEndpointStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RealtimeEndpointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RealtimeEndpointStatus::Failed => &"FAILED",
+            RealtimeEndpointStatus::None => &"NONE",
+            RealtimeEndpointStatus::Ready => &"READY",
+            RealtimeEndpointStatus::Updating => &"UPDATING",
+            RealtimeEndpointStatus::UnknownVariant(UnknownRealtimeEndpointStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RealtimeEndpointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => RealtimeEndpointStatus::Failed,
+            "NONE" => RealtimeEndpointStatus::None,
+            "READY" => RealtimeEndpointStatus::Ready,
+            "UPDATING" => RealtimeEndpointStatus::Updating,
+            _ => RealtimeEndpointStatus::UnknownVariant(UnknownRealtimeEndpointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RealtimeEndpointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => RealtimeEndpointStatus::Failed,
+            "NONE" => RealtimeEndpointStatus::None,
+            "READY" => RealtimeEndpointStatus::Ready,
+            "UPDATING" => RealtimeEndpointStatus::Updating,
+            _ => RealtimeEndpointStatus::UnknownVariant(UnknownRealtimeEndpointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RealtimeEndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RealtimeEndpointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RealtimeEndpointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>
@@ -1569,6 +2662,109 @@ pub struct S3DataSpec {
     pub data_schema_location_s3: Option<String>,
 }
 
+/// <p><p>The sort order specified in a listing condition. Possible values include the following:</p> <ul> <li> <code>asc</code> - Present the information in ascending order (from A-Z).</li> <li> <code>dsc</code> - Present the information in descending order (from Z-A).</li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Asc,
+    Dsc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Asc => "asc".to_string(),
+            SortOrder::Dsc => "dsc".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Asc => &"asc",
+            SortOrder::Dsc => &"dsc",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "asc" => SortOrder::Asc,
+            "dsc" => SortOrder::Dsc,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "asc" => SortOrder::Asc,
+            "dsc" => SortOrder::Dsc,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A custom key-value pair associated with an ML object, such as an ML model.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
@@ -1580,6 +2776,120 @@ pub struct Tag {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaggableResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaggableResourceType {
+    BatchPrediction,
+    DataSource,
+    Evaluation,
+    Mlmodel,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaggableResourceType),
+}
+
+impl Default for TaggableResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaggableResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaggableResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaggableResourceType {
+    fn into(self) -> String {
+        match self {
+            TaggableResourceType::BatchPrediction => "BatchPrediction".to_string(),
+            TaggableResourceType::DataSource => "DataSource".to_string(),
+            TaggableResourceType::Evaluation => "Evaluation".to_string(),
+            TaggableResourceType::Mlmodel => "MLModel".to_string(),
+            TaggableResourceType::UnknownVariant(UnknownTaggableResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaggableResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            TaggableResourceType::BatchPrediction => &"BatchPrediction",
+            TaggableResourceType::DataSource => &"DataSource",
+            TaggableResourceType::Evaluation => &"Evaluation",
+            TaggableResourceType::Mlmodel => &"MLModel",
+            TaggableResourceType::UnknownVariant(UnknownTaggableResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaggableResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BatchPrediction" => TaggableResourceType::BatchPrediction,
+            "DataSource" => TaggableResourceType::DataSource,
+            "Evaluation" => TaggableResourceType::Evaluation,
+            "MLModel" => TaggableResourceType::Mlmodel,
+            _ => TaggableResourceType::UnknownVariant(UnknownTaggableResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaggableResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BatchPrediction" => TaggableResourceType::BatchPrediction,
+            "DataSource" => TaggableResourceType::DataSource,
+            "Evaluation" => TaggableResourceType::Evaluation,
+            "MLModel" => TaggableResourceType::Mlmodel,
+            _ => TaggableResourceType::UnknownVariant(UnknownTaggableResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaggableResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaggableResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TaggableResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

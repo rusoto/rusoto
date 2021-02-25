@@ -73,7 +73,7 @@ impl AccountDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountGateResult {
     /// <p><p>The status of the account gate function.</p> <ul> <li> <p> <code>SUCCEEDED</code>: The account gate function has determined that the account and Region passes any requirements for a stack set operation to occur. AWS CloudFormation proceeds with the stack operation in that account and Region. </p> </li> <li> <p> <code>FAILED</code>: The account gate function has determined that the account and Region does not meet the requirements for a stack set operation to occur. AWS CloudFormation cancels the stack set operation in that account and Region, and sets the stack set operation result status for that account and Region to <code>FAILED</code>. </p> </li> <li> <p> <code>SKIPPED</code>: AWS CloudFormation has skipped calling the account gate function for this account and Region, for one of the following reasons:</p> <ul> <li> <p>An account gate function has not been specified for the account and Region. AWS CloudFormation proceeds with the stack set operation in this account and Region.</p> </li> <li> <p>The <code>AWSCloudFormationStackSetExecutionRole</code> of the stack set adminstration account lacks permissions to invoke the function. AWS CloudFormation proceeds with the stack set operation in this account and Region.</p> </li> <li> <p>Either no action is necessary, or no action is possible, on the stack. AWS CloudFormation skips the stack set operation in this account and Region.</p> </li> </ul> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<AccountGateStatus>,
     /// <p>The reason for the account gate status assigned to this account and Region for the stack set operation.</p>
     pub status_reason: Option<String>,
 }
@@ -103,12 +103,127 @@ impl AccountGateResultDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountGateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountGateStatus {
+    Failed,
+    Skipped,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountGateStatus),
+}
+
+impl Default for AccountGateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountGateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountGateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountGateStatus {
+    fn into(self) -> String {
+        match self {
+            AccountGateStatus::Failed => "FAILED".to_string(),
+            AccountGateStatus::Skipped => "SKIPPED".to_string(),
+            AccountGateStatus::Succeeded => "SUCCEEDED".to_string(),
+            AccountGateStatus::UnknownVariant(UnknownAccountGateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountGateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AccountGateStatus::Failed => &"FAILED",
+            AccountGateStatus::Skipped => &"SKIPPED",
+            AccountGateStatus::Succeeded => &"SUCCEEDED",
+            AccountGateStatus::UnknownVariant(UnknownAccountGateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AccountGateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => AccountGateStatus::Failed,
+            "SKIPPED" => AccountGateStatus::Skipped,
+            "SUCCEEDED" => AccountGateStatus::Succeeded,
+            _ => AccountGateStatus::UnknownVariant(UnknownAccountGateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountGateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => AccountGateStatus::Failed,
+            "SKIPPED" => AccountGateStatus::Skipped,
+            "SUCCEEDED" => AccountGateStatus::Succeeded,
+            _ => AccountGateStatus::UnknownVariant(UnknownAccountGateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountGateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AccountGateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AccountGateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AccountGateStatusDeserializer;
 impl AccountGateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccountGateStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -194,7 +309,7 @@ impl AccountListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -331,9 +446,15 @@ impl CancelUpdateStackInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -344,7 +465,7 @@ impl CapabilitiesDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<Capability>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(CapabilityDeserializer::deserialize("member", stack)?);
@@ -359,10 +480,10 @@ impl CapabilitiesDeserializer {
 /// Serialize `Capabilities` contents to a `SignedRequest`.
 struct CapabilitiesSerializer;
 impl CapabilitiesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Capability>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -375,12 +496,123 @@ impl CapabilitiesReasonDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Capability {
+    CapabilityAutoExpand,
+    CapabilityIam,
+    CapabilityNamedIam,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapability),
+}
+
+impl Default for Capability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Capability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Capability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Capability {
+    fn into(self) -> String {
+        match self {
+            Capability::CapabilityAutoExpand => "CAPABILITY_AUTO_EXPAND".to_string(),
+            Capability::CapabilityIam => "CAPABILITY_IAM".to_string(),
+            Capability::CapabilityNamedIam => "CAPABILITY_NAMED_IAM".to_string(),
+            Capability::UnknownVariant(UnknownCapability { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Capability {
+    fn into(self) -> &'a str {
+        match self {
+            Capability::CapabilityAutoExpand => &"CAPABILITY_AUTO_EXPAND",
+            Capability::CapabilityIam => &"CAPABILITY_IAM",
+            Capability::CapabilityNamedIam => &"CAPABILITY_NAMED_IAM",
+            Capability::UnknownVariant(UnknownCapability { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Capability {
+    fn from(name: &str) -> Self {
+        match name {
+            "CAPABILITY_AUTO_EXPAND" => Capability::CapabilityAutoExpand,
+            "CAPABILITY_IAM" => Capability::CapabilityIam,
+            "CAPABILITY_NAMED_IAM" => Capability::CapabilityNamedIam,
+            _ => Capability::UnknownVariant(UnknownCapability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Capability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CAPABILITY_AUTO_EXPAND" => Capability::CapabilityAutoExpand,
+            "CAPABILITY_IAM" => Capability::CapabilityIam,
+            "CAPABILITY_NAMED_IAM" => Capability::CapabilityNamedIam,
+            _ => Capability::UnknownVariant(UnknownCapability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Capability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Capability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Capability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CapabilityDeserializer;
 impl CapabilityDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Capability, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -398,7 +630,7 @@ pub struct Change {
     /// <p>A <code>ResourceChange</code> structure that describes the resource and action that AWS CloudFormation will perform.</p>
     pub resource_change: Option<ResourceChange>,
     /// <p>The type of entity that AWS CloudFormation changes. Currently, the only entity type is <code>Resource</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<ChangeType>,
 }
 
 #[allow(dead_code)]
@@ -423,12 +655,133 @@ impl ChangeDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeAction {
+    Add,
+    Dynamic,
+    Import,
+    Modify,
+    Remove,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeAction),
+}
+
+impl Default for ChangeAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeAction {
+    fn into(self) -> String {
+        match self {
+            ChangeAction::Add => "Add".to_string(),
+            ChangeAction::Dynamic => "Dynamic".to_string(),
+            ChangeAction::Import => "Import".to_string(),
+            ChangeAction::Modify => "Modify".to_string(),
+            ChangeAction::Remove => "Remove".to_string(),
+            ChangeAction::UnknownVariant(UnknownChangeAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeAction {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeAction::Add => &"Add",
+            ChangeAction::Dynamic => &"Dynamic",
+            ChangeAction::Import => &"Import",
+            ChangeAction::Modify => &"Modify",
+            ChangeAction::Remove => &"Remove",
+            ChangeAction::UnknownVariant(UnknownChangeAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "Add" => ChangeAction::Add,
+            "Dynamic" => ChangeAction::Dynamic,
+            "Import" => ChangeAction::Import,
+            "Modify" => ChangeAction::Modify,
+            "Remove" => ChangeAction::Remove,
+            _ => ChangeAction::UnknownVariant(UnknownChangeAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Add" => ChangeAction::Add,
+            "Dynamic" => ChangeAction::Dynamic,
+            "Import" => ChangeAction::Import,
+            "Modify" => ChangeAction::Modify,
+            "Remove" => ChangeAction::Remove,
+            _ => ChangeAction::UnknownVariant(UnknownChangeAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ChangeActionDeserializer;
 impl ChangeActionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangeAction, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -447,12 +800,148 @@ impl ChangeSetNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeSetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeSetStatus {
+    CreateComplete,
+    CreateInProgress,
+    CreatePending,
+    DeleteComplete,
+    DeleteFailed,
+    DeleteInProgress,
+    DeletePending,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeSetStatus),
+}
+
+impl Default for ChangeSetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeSetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeSetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeSetStatus {
+    fn into(self) -> String {
+        match self {
+            ChangeSetStatus::CreateComplete => "CREATE_COMPLETE".to_string(),
+            ChangeSetStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            ChangeSetStatus::CreatePending => "CREATE_PENDING".to_string(),
+            ChangeSetStatus::DeleteComplete => "DELETE_COMPLETE".to_string(),
+            ChangeSetStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            ChangeSetStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            ChangeSetStatus::DeletePending => "DELETE_PENDING".to_string(),
+            ChangeSetStatus::Failed => "FAILED".to_string(),
+            ChangeSetStatus::UnknownVariant(UnknownChangeSetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeSetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeSetStatus::CreateComplete => &"CREATE_COMPLETE",
+            ChangeSetStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            ChangeSetStatus::CreatePending => &"CREATE_PENDING",
+            ChangeSetStatus::DeleteComplete => &"DELETE_COMPLETE",
+            ChangeSetStatus::DeleteFailed => &"DELETE_FAILED",
+            ChangeSetStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            ChangeSetStatus::DeletePending => &"DELETE_PENDING",
+            ChangeSetStatus::Failed => &"FAILED",
+            ChangeSetStatus::UnknownVariant(UnknownChangeSetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeSetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_COMPLETE" => ChangeSetStatus::CreateComplete,
+            "CREATE_IN_PROGRESS" => ChangeSetStatus::CreateInProgress,
+            "CREATE_PENDING" => ChangeSetStatus::CreatePending,
+            "DELETE_COMPLETE" => ChangeSetStatus::DeleteComplete,
+            "DELETE_FAILED" => ChangeSetStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => ChangeSetStatus::DeleteInProgress,
+            "DELETE_PENDING" => ChangeSetStatus::DeletePending,
+            "FAILED" => ChangeSetStatus::Failed,
+            _ => ChangeSetStatus::UnknownVariant(UnknownChangeSetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeSetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_COMPLETE" => ChangeSetStatus::CreateComplete,
+            "CREATE_IN_PROGRESS" => ChangeSetStatus::CreateInProgress,
+            "CREATE_PENDING" => ChangeSetStatus::CreatePending,
+            "DELETE_COMPLETE" => ChangeSetStatus::DeleteComplete,
+            "DELETE_FAILED" => ChangeSetStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => ChangeSetStatus::DeleteInProgress,
+            "DELETE_PENDING" => ChangeSetStatus::DeletePending,
+            "FAILED" => ChangeSetStatus::Failed,
+            _ => ChangeSetStatus::UnknownVariant(UnknownChangeSetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeSetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeSetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeSetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ChangeSetStatusDeserializer;
 impl ChangeSetStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangeSetStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -494,7 +983,7 @@ pub struct ChangeSetSummary {
     /// <p>Descriptive information about the change set.</p>
     pub description: Option<String>,
     /// <p>If the change set execution status is <code>AVAILABLE</code>, you can execute the change set. If you can’t execute the change set, the status indicates why. For example, a change set might be in an <code>UNAVAILABLE</code> state because AWS CloudFormation is still creating it or in an <code>OBSOLETE</code> state because the stack was already updated.</p>
-    pub execution_status: Option<String>,
+    pub execution_status: Option<ExecutionStatus>,
     /// <p>Specifies the current setting of <code>IncludeNestedStacks</code> for the change set.</p>
     pub include_nested_stacks: Option<bool>,
     /// <p>The parent change set ID.</p>
@@ -506,7 +995,7 @@ pub struct ChangeSetSummary {
     /// <p>The name of the stack with which the change set is associated.</p>
     pub stack_name: Option<String>,
     /// <p>The state of the change set, such as <code>CREATE_IN_PROGRESS</code>, <code>CREATE_COMPLETE</code>, or <code>FAILED</code>.</p>
-    pub status: Option<String>,
+    pub status: Option<ChangeSetStatus>,
     /// <p>A description of the change set's status. For example, if your change set is in the <code>FAILED</code> state, AWS CloudFormation shows the error message.</p>
     pub status_reason: Option<String>,
 }
@@ -586,20 +1075,349 @@ impl ChangeSetSummaryDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeSetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeSetType {
+    Create,
+    Import,
+    Update,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeSetType),
+}
+
+impl Default for ChangeSetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeSetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeSetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeSetType {
+    fn into(self) -> String {
+        match self {
+            ChangeSetType::Create => "CREATE".to_string(),
+            ChangeSetType::Import => "IMPORT".to_string(),
+            ChangeSetType::Update => "UPDATE".to_string(),
+            ChangeSetType::UnknownVariant(UnknownChangeSetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeSetType {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeSetType::Create => &"CREATE",
+            ChangeSetType::Import => &"IMPORT",
+            ChangeSetType::Update => &"UPDATE",
+            ChangeSetType::UnknownVariant(UnknownChangeSetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeSetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE" => ChangeSetType::Create,
+            "IMPORT" => ChangeSetType::Import,
+            "UPDATE" => ChangeSetType::Update,
+            _ => ChangeSetType::UnknownVariant(UnknownChangeSetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeSetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE" => ChangeSetType::Create,
+            "IMPORT" => ChangeSetType::Import,
+            "UPDATE" => ChangeSetType::Update,
+            _ => ChangeSetType::UnknownVariant(UnknownChangeSetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeSetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeSetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeSetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeSource {
+    Automatic,
+    DirectModification,
+    ParameterReference,
+    ResourceAttribute,
+    ResourceReference,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeSource),
+}
+
+impl Default for ChangeSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeSource {
+    fn into(self) -> String {
+        match self {
+            ChangeSource::Automatic => "Automatic".to_string(),
+            ChangeSource::DirectModification => "DirectModification".to_string(),
+            ChangeSource::ParameterReference => "ParameterReference".to_string(),
+            ChangeSource::ResourceAttribute => "ResourceAttribute".to_string(),
+            ChangeSource::ResourceReference => "ResourceReference".to_string(),
+            ChangeSource::UnknownVariant(UnknownChangeSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeSource {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeSource::Automatic => &"Automatic",
+            ChangeSource::DirectModification => &"DirectModification",
+            ChangeSource::ParameterReference => &"ParameterReference",
+            ChangeSource::ResourceAttribute => &"ResourceAttribute",
+            ChangeSource::ResourceReference => &"ResourceReference",
+            ChangeSource::UnknownVariant(UnknownChangeSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "Automatic" => ChangeSource::Automatic,
+            "DirectModification" => ChangeSource::DirectModification,
+            "ParameterReference" => ChangeSource::ParameterReference,
+            "ResourceAttribute" => ChangeSource::ResourceAttribute,
+            "ResourceReference" => ChangeSource::ResourceReference,
+            _ => ChangeSource::UnknownVariant(UnknownChangeSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Automatic" => ChangeSource::Automatic,
+            "DirectModification" => ChangeSource::DirectModification,
+            "ParameterReference" => ChangeSource::ParameterReference,
+            "ResourceAttribute" => ChangeSource::ResourceAttribute,
+            "ResourceReference" => ChangeSource::ResourceReference,
+            _ => ChangeSource::UnknownVariant(UnknownChangeSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ChangeSourceDeserializer;
 impl ChangeSourceDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangeSource, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeType {
+    Resource,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeType),
+}
+
+impl Default for ChangeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeType {
+    fn into(self) -> String {
+        match self {
+            ChangeType::Resource => "Resource".to_string(),
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeType {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeType::Resource => &"Resource",
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Resource" => ChangeType::Resource,
+            _ => ChangeType::UnknownVariant(UnknownChangeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Resource" => ChangeType::Resource,
+            _ => ChangeType::UnknownVariant(UnknownChangeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ChangeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangeType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -652,7 +1470,10 @@ impl ContinueUpdateRollbackInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resources_to_skip {
             ResourcesToSkipSerializer::serialize(
@@ -662,9 +1483,15 @@ impl ContinueUpdateRollbackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -695,11 +1522,11 @@ impl ContinueUpdateRollbackOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChangeSetInput {
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <note> <p>This capacity does not apply to creating change sets, and specifying it when creating change sets has no effect.</p> <p>If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create or update the stack directly from the template using the <a>CreateStack</a> or <a>UpdateStack</a> action, and specifying this capability.</p> </note> <p>For more information on macros, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>The name of the change set. The name must be unique among all change sets that are associated with the specified stack.</p> <p>A change set name can contain only alphanumeric, case sensitive characters and hyphens. It must start with an alphabetic character and cannot exceed 128 characters.</p>
     pub change_set_name: String,
     /// <p>The type of change set operation. To create a change set for a new stack, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code>. To create a change set for an import operation, specify <code>IMPORT</code>.</p> <p>If you create a change set for a new stack, AWS Cloudformation creates a stack with a unique stack ID, but no template or resources. The stack will be in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html#d0e11995"> <code>REVIEW_IN_PROGRESS</code> </a> state until you execute the change set.</p> <p>By default, AWS CloudFormation specifies <code>UPDATE</code>. You can't use the <code>UPDATE</code> type to create a change set for a new stack or the <code>CREATE</code> type to create a change set for an existing stack.</p>
-    pub change_set_type: Option<String>,
+    pub change_set_type: Option<ChangeSetType>,
     /// <p>A unique identifier for this <code>CreateChangeSet</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create another change set with the same name. You might retry <code>CreateChangeSet</code> requests to ensure that AWS CloudFormation successfully received them.</p>
     pub client_token: Option<String>,
     /// <p>A description to help you identify this change set.</p>
@@ -748,16 +1575,25 @@ impl CreateChangeSetInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name,
+            &obj.change_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.change_set_type {
-            params.put(&format!("{}{}", prefix, "ChangeSetType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ChangeSetType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.client_token {
-            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.include_nested_stacks {
             params.put(
@@ -794,7 +1630,10 @@ impl CreateChangeSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.rollback_configuration {
             RollbackConfigurationSerializer::serialize(
@@ -803,15 +1642,24 @@ impl CreateChangeSetInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.use_previous_template {
             params.put(
@@ -859,7 +1707,7 @@ impl CreateChangeSetOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackInput {
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to create the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually creating the stack. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>If you want to create a stack from a stack template that contains macros <i>and</i> nested stacks, you must create the stack directly from the template using this capability.</p> <important> <p>You should only create stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>A unique identifier for this <code>CreateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create a stack with the same name. You might retry <code>CreateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
     /// <p>Set to <code>true</code> to disable rollback of the stack if stack creation failed. You can specify either <code>DisableRollback</code> or <code>OnFailure</code>, but not both.</p> <p>Default: <code>false</code> </p>
@@ -869,7 +1717,7 @@ pub struct CreateStackInput {
     /// <p>The Simple Notification Service (SNS) topic ARNs to publish stack related events. You can find your SNS topic ARNs using the SNS console or your Command Line Interface (CLI).</p>
     pub notification_ar_ns: Option<Vec<String>>,
     /// <p>Determines what action will be taken if stack creation fails. This must be one of: DO_NOTHING, ROLLBACK, or DELETE. You can specify either <code>OnFailure</code> or <code>DisableRollback</code>, but not both.</p> <p>Default: <code>ROLLBACK</code> </p>
-    pub on_failure: Option<String>,
+    pub on_failure: Option<OnFailure>,
     /// <p>A list of <code>Parameter</code> structures that specify input parameters for the stack. For more information, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html">Parameter</a> data type.</p>
     pub parameters: Option<Vec<Parameter>>,
     /// <p>The template resource types that you have permissions to work with for this create stack action, such as <code>AWS::EC2::Instance</code>, <code>AWS::EC2::*</code>, or <code>Custom::MyCustomInstance</code>. Use the following syntax to describe template resource types: <code>AWS::*</code> (for all AWS resource), <code>Custom::*</code> (for all custom resources), <code>Custom::<i>logical_ID</i> </code> (for a specific custom resource), <code>AWS::<i>service_name</i>::*</code> (for all resources of a particular AWS service), and <code>AWS::<i>service_name</i>::<i>resource_logical_ID</i> </code> (for a specific AWS resource).</p> <p>If the list of resource types doesn't include a resource that you're creating, the stack creation fails. By default, AWS CloudFormation grants permissions to all resource types. AWS Identity and Access Management (IAM) uses this parameter for AWS CloudFormation-specific condition keys in IAM policies. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html">Controlling Access with AWS Identity and Access Management</a>.</p>
@@ -911,7 +1759,10 @@ impl CreateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.disable_rollback {
             params.put(&format!("{}{}", prefix, "DisableRollback"), &field_value);
@@ -930,7 +1781,10 @@ impl CreateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.on_failure {
-            params.put(&format!("{}{}", prefix, "OnFailure"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OnFailure"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.parameters {
             ParametersSerializer::serialize(
@@ -947,7 +1801,10 @@ impl CreateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.rollback_configuration {
             RollbackConfigurationSerializer::serialize(
@@ -956,21 +1813,36 @@ impl CreateStackInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
         if let Some(ref field_value) = obj.stack_policy_body {
-            params.put(&format!("{}{}", prefix, "StackPolicyBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackPolicyBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_policy_url {
-            params.put(&format!("{}{}", prefix, "StackPolicyURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackPolicyURL"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.timeout_in_minutes {
             params.put(&format!("{}{}", prefix, "TimeoutInMinutes"), &field_value);
@@ -1021,7 +1893,10 @@ impl CreateStackInstancesInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.operation_id {
-            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OperationId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -1040,7 +1915,7 @@ impl CreateStackInstancesInputSerializer {
         RegionListSerializer::serialize(params, &format!("{}{}", prefix, "Regions"), &obj.regions);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -1113,7 +1988,7 @@ pub struct CreateStackSetInput {
     /// <p>Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to the target organization or organizational unit (OU). Specify only if <code>PermissionModel</code> is <code>SERVICE_MANAGED</code>.</p>
     pub auto_deployment: Option<AutoDeployment>,
     /// <p><p>In some cases, you must explicitly acknowledge that your stack set template contains certain capabilities in order for AWS CloudFormation to create the stack set and related stack instances.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stack sets, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some templates contain macros. If your stack template contains one or more macros, and you choose to create a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> <note> <p>Stack sets do not currently support macros in stack templates. (This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.) Even if you specify this capability, if you include a macro in your template the stack set operation will fail.</p> </note> </li> </ul></p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>A unique identifier for this <code>CreateStackSet</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create another stack set with the same name. You might retry <code>CreateStackSet</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>If you don't specify an operation ID, the SDK generates one automatically. </p>
     pub client_request_token: Option<String>,
     /// <p>A description of the stack set. You can use the description to identify the stack set's purpose or other important information.</p>
@@ -1123,7 +1998,7 @@ pub struct CreateStackSetInput {
     /// <p>The input parameters for the stack set template. </p>
     pub parameters: Option<Vec<Parameter>>,
     /// <p><p>Describes how the IAM roles required for stack set operations are created. By default, <code>SELF-MANAGED</code> is specified.</p> <ul> <li> <p>With <code>self-managed</code> permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html">Grant Self-Managed Stack Set Permissions</a>.</p> </li> <li> <p>With <code>service-managed</code> permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-service-managed.html">Grant Service-Managed Stack Set Permissions</a>.</p> </li> </ul></p>
-    pub permission_model: Option<String>,
+    pub permission_model: Option<PermissionModels>,
     /// <p><p>The name to associate with the stack set. The name must be unique in the Region where you create your stack set.</p> <note> <p>A stack name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphabetic character and can&#39;t be longer than 128 characters.</p> </note></p>
     pub stack_set_name: String,
     /// <p>The key-value pairs to associate with this stack set and the stacks created from it. AWS CloudFormation also propagates these tags to supported resources that are created in the stacks. A maximum number of 50 tags can be specified.</p> <p>If you specify tags as part of a <code>CreateStackSet</code> action, AWS CloudFormation checks to see if you have the required IAM permission to tag resources. If you don't, the entire <code>CreateStackSet</code> action fails with an <code>access denied</code> error, and the stack set is not created.</p>
@@ -1146,7 +2021,7 @@ impl CreateStackSetInputSerializer {
         if let Some(ref field_value) = obj.administration_role_arn {
             params.put(
                 &format!("{}{}", prefix, "AdministrationRoleARN"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auto_deployment {
@@ -1164,13 +2039,22 @@ impl CreateStackSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.execution_role_name {
-            params.put(&format!("{}{}", prefix, "ExecutionRoleName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ExecutionRoleName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.parameters {
             ParametersSerializer::serialize(
@@ -1180,20 +2064,29 @@ impl CreateStackSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.permission_model {
-            params.put(&format!("{}{}", prefix, "PermissionModel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PermissionModel"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1254,10 +2147,13 @@ impl DeleteChangeSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name,
+            &obj.change_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1308,7 +2204,10 @@ impl DeleteStackInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.retain_resources {
             RetainResourcesSerializer::serialize(
@@ -1318,9 +2217,15 @@ impl DeleteStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -1367,7 +2272,10 @@ impl DeleteStackInstancesInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.operation_id {
-            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OperationId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -1380,7 +2288,7 @@ impl DeleteStackInstancesInputSerializer {
         params.put(&format!("{}{}", prefix, "RetainStacks"), &obj.retain_stacks);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -1436,7 +2344,7 @@ impl DeleteStackSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -1537,12 +2445,121 @@ impl DeploymentTargetsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeprecatedStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeprecatedStatus {
+    Deprecated,
+    Live,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeprecatedStatus),
+}
+
+impl Default for DeprecatedStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeprecatedStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeprecatedStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeprecatedStatus {
+    fn into(self) -> String {
+        match self {
+            DeprecatedStatus::Deprecated => "DEPRECATED".to_string(),
+            DeprecatedStatus::Live => "LIVE".to_string(),
+            DeprecatedStatus::UnknownVariant(UnknownDeprecatedStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeprecatedStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeprecatedStatus::Deprecated => &"DEPRECATED",
+            DeprecatedStatus::Live => &"LIVE",
+            DeprecatedStatus::UnknownVariant(UnknownDeprecatedStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeprecatedStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPRECATED" => DeprecatedStatus::Deprecated,
+            "LIVE" => DeprecatedStatus::Live,
+            _ => DeprecatedStatus::UnknownVariant(UnknownDeprecatedStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeprecatedStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPRECATED" => DeprecatedStatus::Deprecated,
+            "LIVE" => DeprecatedStatus::Live,
+            _ => DeprecatedStatus::UnknownVariant(UnknownDeprecatedStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeprecatedStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for DeprecatedStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DeprecatedStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct DeprecatedStatusDeserializer;
 impl DeprecatedStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeprecatedStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -1551,7 +2568,7 @@ pub struct DeregisterTypeInput {
     /// <p>The Amazon Resource Name (ARN) of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub arn: Option<String>,
     /// <p>The kind of type.</p> <p>Currently the only valid value is <code>RESOURCE</code>.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The name of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub type_name: Option<String>,
     /// <p>The ID of a specific version of the type. The version ID is the value at the end of the Amazon Resource Name (ARN) assigned to the type version when it is registered.</p>
@@ -1568,16 +2585,22 @@ impl DeregisterTypeInputSerializer {
         }
 
         if let Some(ref field_value) = obj.arn {
-            params.put(&format!("{}{}", prefix, "Arn"), &field_value);
+            params.put(&format!("{}{}", prefix, "Arn"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_name {
-            params.put(&format!("{}{}", prefix, "TypeName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TypeName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_id {
-            params.put(&format!("{}{}", prefix, "VersionId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1621,7 +2644,10 @@ impl DescribeAccountLimitsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1688,13 +2714,19 @@ impl DescribeChangeSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name,
+            &obj.change_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1704,7 +2736,7 @@ impl DescribeChangeSetInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeChangeSetOutput {
     /// <p>If you execute the change set, the list of capabilities that were explicitly acknowledged when the change set was created.</p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>The ARN of the change set.</p>
     pub change_set_id: Option<String>,
     /// <p>The name of the change set.</p>
@@ -1716,7 +2748,7 @@ pub struct DescribeChangeSetOutput {
     /// <p>Information about the change set.</p>
     pub description: Option<String>,
     /// <p>If the change set execution status is <code>AVAILABLE</code>, you can execute the change set. If you can’t execute the change set, the status indicates why. For example, a change set might be in an <code>UNAVAILABLE</code> state because AWS CloudFormation is still creating it or in an <code>OBSOLETE</code> state because the stack was already updated.</p>
-    pub execution_status: Option<String>,
+    pub execution_status: Option<ExecutionStatus>,
     /// <p>Verifies if <code>IncludeNestedStacks</code> is set to <code>True</code>.</p>
     pub include_nested_stacks: Option<bool>,
     /// <p>If the output exceeds 1 MB, a string that identifies the next page of changes. If there is no additional page, this value is null.</p>
@@ -1736,7 +2768,7 @@ pub struct DescribeChangeSetOutput {
     /// <p>The name of the stack that is associated with the change set.</p>
     pub stack_name: Option<String>,
     /// <p>The current status of the change set, such as <code>CREATE_IN_PROGRESS</code>, <code>CREATE_COMPLETE</code>, or <code>FAILED</code>.</p>
-    pub status: Option<String>,
+    pub status: Option<ChangeSetStatus>,
     /// <p>A description of the change set's status. For example, if your attempt to create a change set failed, AWS CloudFormation shows the error message.</p>
     pub status_reason: Option<String>,
     /// <p>If you execute the change set, the tags that will be associated with the stack.</p>
@@ -1879,7 +2911,7 @@ impl DescribeStackDriftDetectionStatusInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackDriftDetectionId"),
-            &obj.stack_drift_detection_id,
+            &obj.stack_drift_detection_id.to_string(),
         );
     }
 }
@@ -1888,7 +2920,7 @@ impl DescribeStackDriftDetectionStatusInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeStackDriftDetectionStatusOutput {
     /// <p><p>The status of the stack drift detection operation.</p> <ul> <li> <p> <code>DETECTION<em>COMPLETE</code>: The stack drift detection operation has successfully completed for all resources in the stack that support drift detection. (Resources that do not currently support stack detection remain unchecked.)</p> <p>If you specified logical resource IDs for AWS CloudFormation to use as a filter for the stack drift detection operation, only the resources with those logical IDs are checked for drift.</p> </li> <li> <p> <code>DETECTION</em>FAILED</code>: The stack drift detection operation has failed for at least one resource in the stack. Results will be available for resources on which AWS CloudFormation successfully completed drift detection.</p> </li> <li> <p> <code>DETECTION<em>IN</em>PROGRESS</code>: The stack drift detection operation is currently in progress.</p> </li> </ul></p>
-    pub detection_status: String,
+    pub detection_status: StackDriftDetectionStatus,
     /// <p>The reason the stack drift detection operation has its current status.</p>
     pub detection_status_reason: Option<String>,
     /// <p>Total number of stack resources that have drifted. This is NULL until the drift detection operation reaches a status of <code>DETECTION_COMPLETE</code>. This value will be 0 for stacks whose drift status is <code>IN_SYNC</code>.</p>
@@ -1896,7 +2928,7 @@ pub struct DescribeStackDriftDetectionStatusOutput {
     /// <p>The ID of the drift detection results of this operation. </p> <p>AWS CloudFormation generates new results, with a new drift detection ID, each time this operation is run. However, the number of reports AWS CloudFormation retains for any given stack, and for how long, may vary.</p>
     pub stack_drift_detection_id: String,
     /// <p><p>Status of the stack&#39;s actual configuration compared to its expected configuration. </p> <ul> <li> <p> <code>DRIFTED</code>: The stack differs from its expected template configuration. A stack is considered to have drifted if one or more of its resources have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the stack differs from its expected template configuration.</p> </li> <li> <p> <code>IN</em>SYNC</code>: The stack&#39;s actual configuration matches its expected template configuration.</p> </li> <li> <p> <code>UNKNOWN</code>: This value is reserved for future use.</p> </li> </ul></p>
-    pub stack_drift_status: Option<String>,
+    pub stack_drift_status: Option<StackDriftStatus>,
     /// <p>The ID of the stack.</p>
     pub stack_id: String,
     /// <p>Time at which the stack drift detection operation was initiated.</p>
@@ -1982,10 +3014,16 @@ impl DescribeStackEventsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2051,15 +3089,15 @@ impl DescribeStackInstanceInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackInstanceAccount"),
-            &obj.stack_instance_account,
+            &obj.stack_instance_account.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "StackInstanceRegion"),
-            &obj.stack_instance_region,
+            &obj.stack_instance_region.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -2107,7 +3145,7 @@ pub struct DescribeStackResourceDriftsInput {
     /// <p>The name of the stack for which you want drift information.</p>
     pub stack_name: String,
     /// <p><p>The resource drift status values to use as filters for the resource drift results returned.</p> <ul> <li> <p> <code>DELETED</code>: The resource differs from its expected template configuration in that the resource has been deleted.</p> </li> <li> <p> <code>MODIFIED</code>: One or more resource properties differ from their expected template values.</p> </li> <li> <p> <code>IN<em>SYNC</code>: The resources&#39;s actual configuration matches its expected template configuration.</p> </li> <li> <p> <code>NOT</em>CHECKED</code>: AWS CloudFormation does not currently return this value.</p> </li> </ul></p>
-    pub stack_resource_drift_status_filters: Option<Vec<String>>,
+    pub stack_resource_drift_status_filters: Option<Vec<StackResourceDriftStatus>>,
 }
 
 /// Serialize `DescribeStackResourceDriftsInput` contents to a `SignedRequest`.
@@ -2123,9 +3161,15 @@ impl DescribeStackResourceDriftsInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
         if let Some(ref field_value) = obj.stack_resource_drift_status_filters {
             StackResourceDriftStatusFiltersSerializer::serialize(
                 params,
@@ -2198,9 +3242,12 @@ impl DescribeStackResourceInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogicalResourceId"),
-            &obj.logical_resource_id,
+            &obj.logical_resource_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -2261,13 +3308,22 @@ impl DescribeStackResourcesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.logical_resource_id {
-            params.put(&format!("{}{}", prefix, "LogicalResourceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "LogicalResourceId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.physical_resource_id {
-            params.put(&format!("{}{}", prefix, "PhysicalResourceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PhysicalResourceId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2323,7 +3379,7 @@ impl DescribeStackSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -2346,10 +3402,13 @@ impl DescribeStackSetOperationInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "OperationId"), &obj.operation_id);
+        params.put(
+            &format!("{}{}", prefix, "OperationId"),
+            &obj.operation_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -2433,10 +3492,16 @@ impl DescribeStacksInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2481,7 +3546,7 @@ pub struct DescribeTypeInput {
     /// <p>The Amazon Resource Name (ARN) of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub arn: Option<String>,
     /// <p>The kind of type. </p> <p>Currently the only valid value is <code>RESOURCE</code>.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The name of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub type_name: Option<String>,
     /// <p>The ID of a specific version of the type. The version ID is the value at the end of the Amazon Resource Name (ARN) assigned to the type version when it is registered.</p> <p>If you specify a <code>VersionId</code>, <code>DescribeType</code> returns information about that specific type version. Otherwise, it returns information about the default type version.</p>
@@ -2498,16 +3563,22 @@ impl DescribeTypeInputSerializer {
         }
 
         if let Some(ref field_value) = obj.arn {
-            params.put(&format!("{}{}", prefix, "Arn"), &field_value);
+            params.put(&format!("{}{}", prefix, "Arn"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_name {
-            params.put(&format!("{}{}", prefix, "TypeName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TypeName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_id {
-            params.put(&format!("{}{}", prefix, "VersionId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2520,7 +3591,7 @@ pub struct DescribeTypeOutput {
     /// <p>The ID of the default version of the type. The default version is used when the type version is not specified.</p> <p>To set the default version of a type, use <code> <a>SetTypeDefaultVersion</a> </code>. </p>
     pub default_version_id: Option<String>,
     /// <p><p>The deprecation status of the type.</p> <p>Valid values include:</p> <ul> <li> <p> <code>LIVE</code>: The type is registered and can be used in CloudFormation operations, dependent on its provisioning behavior and visibility scope.</p> </li> <li> <p> <code>DEPRECATED</code>: The type has been deregistered and can no longer be used in CloudFormation operations. </p> </li> </ul></p>
-    pub deprecated_status: Option<String>,
+    pub deprecated_status: Option<DeprecatedStatus>,
     /// <p>The description of the registered type.</p>
     pub description: Option<String>,
     /// <p>The URL of a page providing detailed documentation for this type.</p>
@@ -2534,7 +3605,7 @@ pub struct DescribeTypeOutput {
     /// <p>Contains logging configuration information for a type.</p>
     pub logging_config: Option<LoggingConfig>,
     /// <p><p>The provisioning behavior of the type. AWS CloudFormation determines the provisioning type during registration, based on the types of handlers in the schema handler package submitted.</p> <p>Valid values include:</p> <ul> <li> <p> <code>FULLY<em>MUTABLE</code>: The type includes an update handler to process updates to the type during stack update operations.</p> </li> <li> <p> <code>IMMUTABLE</code>: The type does not include an update handler, so the type cannot be updated and must instead be replaced during stack update operations.</p> </li> <li> <p> <code>NON</em>PROVISIONABLE</code>: The type does not include all of the following handlers, and therefore cannot actually be provisioned.</p> <ul> <li> <p>create</p> </li> <li> <p>read</p> </li> <li> <p>delete</p> </li> </ul> </li> </ul></p>
-    pub provisioning_type: Option<String>,
+    pub provisioning_type: Option<ProvisioningType>,
     /// <p>The schema that defines the type.</p> <p>For more information on type schemas, see <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-schema.html">Resource Provider Schema</a> in the <i>CloudFormation CLI User Guide</i>.</p>
     pub schema: Option<String>,
     /// <p>The URL of the source code for the type.</p>
@@ -2542,11 +3613,11 @@ pub struct DescribeTypeOutput {
     /// <p>When the specified type version was registered.</p>
     pub time_created: Option<String>,
     /// <p>The kind of type. </p> <p>Currently the only valid value is <code>RESOURCE</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The name of the registered type.</p>
     pub type_name: Option<String>,
     /// <p><p>The scope at which the type is visible and usable in CloudFormation operations.</p> <p>Valid values include:</p> <ul> <li> <p> <code>PRIVATE</code>: The type is only visible and usable within the account in which it is registered. Currently, AWS CloudFormation marks any types you register as <code>PRIVATE</code>.</p> </li> <li> <p> <code>PUBLIC</code>: The type is publically visible and usable within any Amazon account.</p> </li> </ul></p>
-    pub visibility: Option<String>,
+    pub visibility: Option<Visibility>,
 }
 
 #[allow(dead_code)]
@@ -2657,7 +3728,7 @@ impl DescribeTypeRegistrationInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "RegistrationToken"),
-            &obj.registration_token,
+            &obj.registration_token.to_string(),
         );
     }
 }
@@ -2668,7 +3739,7 @@ pub struct DescribeTypeRegistrationOutput {
     /// <p>The description of the type registration request.</p>
     pub description: Option<String>,
     /// <p>The current status of the type registration request.</p>
-    pub progress_status: Option<String>,
+    pub progress_status: Option<RegistrationStatus>,
     /// <p>The Amazon Resource Name (ARN) of the type being registered.</p> <p>For registration requests with a <code>ProgressStatus</code> of other than <code>COMPLETE</code>, this will be <code>null</code>.</p>
     pub type_arn: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of this specific version of the type being registered.</p> <p>For registration requests with a <code>ProgressStatus</code> of other than <code>COMPLETE</code>, this will be <code>null</code>.</p>
@@ -2745,7 +3816,10 @@ impl DetectStackDriftInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -2798,9 +3872,12 @@ impl DetectStackResourceDriftInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogicalResourceId"),
-            &obj.logical_resource_id,
+            &obj.logical_resource_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -2857,7 +3934,10 @@ impl DetectStackSetDriftInputSerializer {
         }
 
         if let Some(ref field_value) = obj.operation_id {
-            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OperationId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -2868,7 +3948,7 @@ impl DetectStackSetDriftInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -2906,12 +3986,123 @@ impl DetectStackSetDriftOutputDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDifferenceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DifferenceType {
+    Add,
+    NotEqual,
+    Remove,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDifferenceType),
+}
+
+impl Default for DifferenceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DifferenceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DifferenceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DifferenceType {
+    fn into(self) -> String {
+        match self {
+            DifferenceType::Add => "ADD".to_string(),
+            DifferenceType::NotEqual => "NOT_EQUAL".to_string(),
+            DifferenceType::Remove => "REMOVE".to_string(),
+            DifferenceType::UnknownVariant(UnknownDifferenceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DifferenceType {
+    fn into(self) -> &'a str {
+        match self {
+            DifferenceType::Add => &"ADD",
+            DifferenceType::NotEqual => &"NOT_EQUAL",
+            DifferenceType::Remove => &"REMOVE",
+            DifferenceType::UnknownVariant(UnknownDifferenceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DifferenceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADD" => DifferenceType::Add,
+            "NOT_EQUAL" => DifferenceType::NotEqual,
+            "REMOVE" => DifferenceType::Remove,
+            _ => DifferenceType::UnknownVariant(UnknownDifferenceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DifferenceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADD" => DifferenceType::Add,
+            "NOT_EQUAL" => DifferenceType::NotEqual,
+            "REMOVE" => DifferenceType::Remove,
+            _ => DifferenceType::UnknownVariant(UnknownDifferenceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DifferenceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for DifferenceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DifferenceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct DifferenceTypeDeserializer;
 impl DifferenceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DifferenceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -2967,10 +4158,16 @@ impl EstimateTemplateCostInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3006,12 +4203,118 @@ impl EstimateTemplateCostOutputDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEvaluationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EvaluationType {
+    Dynamic,
+    Static,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEvaluationType),
+}
+
+impl Default for EvaluationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EvaluationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EvaluationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EvaluationType {
+    fn into(self) -> String {
+        match self {
+            EvaluationType::Dynamic => "Dynamic".to_string(),
+            EvaluationType::Static => "Static".to_string(),
+            EvaluationType::UnknownVariant(UnknownEvaluationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EvaluationType {
+    fn into(self) -> &'a str {
+        match self {
+            EvaluationType::Dynamic => &"Dynamic",
+            EvaluationType::Static => &"Static",
+            EvaluationType::UnknownVariant(UnknownEvaluationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EvaluationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Dynamic" => EvaluationType::Dynamic,
+            "Static" => EvaluationType::Static,
+            _ => EvaluationType::UnknownVariant(UnknownEvaluationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EvaluationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Dynamic" => EvaluationType::Dynamic,
+            "Static" => EvaluationType::Static,
+            _ => EvaluationType::UnknownVariant(UnknownEvaluationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EvaluationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EvaluationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EvaluationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EvaluationTypeDeserializer;
 impl EvaluationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EvaluationType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3045,13 +4348,19 @@ impl ExecuteChangeSetInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ChangeSetName"),
-            &obj.change_set_name,
+            &obj.change_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3086,12 +4395,138 @@ impl ExecutionRoleNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExecutionStatus {
+    Available,
+    ExecuteComplete,
+    ExecuteFailed,
+    ExecuteInProgress,
+    Obsolete,
+    Unavailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExecutionStatus),
+}
+
+impl Default for ExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            ExecutionStatus::Available => "AVAILABLE".to_string(),
+            ExecutionStatus::ExecuteComplete => "EXECUTE_COMPLETE".to_string(),
+            ExecutionStatus::ExecuteFailed => "EXECUTE_FAILED".to_string(),
+            ExecutionStatus::ExecuteInProgress => "EXECUTE_IN_PROGRESS".to_string(),
+            ExecutionStatus::Obsolete => "OBSOLETE".to_string(),
+            ExecutionStatus::Unavailable => "UNAVAILABLE".to_string(),
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExecutionStatus::Available => &"AVAILABLE",
+            ExecutionStatus::ExecuteComplete => &"EXECUTE_COMPLETE",
+            ExecutionStatus::ExecuteFailed => &"EXECUTE_FAILED",
+            ExecutionStatus::ExecuteInProgress => &"EXECUTE_IN_PROGRESS",
+            ExecutionStatus::Obsolete => &"OBSOLETE",
+            ExecutionStatus::Unavailable => &"UNAVAILABLE",
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ExecutionStatus::Available,
+            "EXECUTE_COMPLETE" => ExecutionStatus::ExecuteComplete,
+            "EXECUTE_FAILED" => ExecutionStatus::ExecuteFailed,
+            "EXECUTE_IN_PROGRESS" => ExecutionStatus::ExecuteInProgress,
+            "OBSOLETE" => ExecutionStatus::Obsolete,
+            "UNAVAILABLE" => ExecutionStatus::Unavailable,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ExecutionStatus::Available,
+            "EXECUTE_COMPLETE" => ExecutionStatus::ExecuteComplete,
+            "EXECUTE_FAILED" => ExecutionStatus::ExecuteFailed,
+            "EXECUTE_IN_PROGRESS" => ExecutionStatus::ExecuteInProgress,
+            "OBSOLETE" => ExecutionStatus::Obsolete,
+            "UNAVAILABLE" => ExecutionStatus::Unavailable,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ExecutionStatusDeserializer;
 impl ExecutionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExecutionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The <code>Export</code> structure describes the exported output values for a stack.</p>
@@ -3204,7 +4639,10 @@ impl GetStackPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -3247,7 +4685,7 @@ pub struct GetTemplateInput {
     /// <p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>
     pub stack_name: Option<String>,
     /// <p>For templates that include transforms, the stage of the template that AWS CloudFormation returns. To get the user-submitted template, specify <code>Original</code>. To get the template after AWS CloudFormation has processed all transforms, specify <code>Processed</code>. </p> <p>If the template doesn't include transforms, <code>Original</code> and <code>Processed</code> return the same template. By default, AWS CloudFormation specifies <code>Original</code>. </p>
-    pub template_stage: Option<String>,
+    pub template_stage: Option<TemplateStage>,
 }
 
 /// Serialize `GetTemplateInput` contents to a `SignedRequest`.
@@ -3260,13 +4698,22 @@ impl GetTemplateInputSerializer {
         }
 
         if let Some(ref field_value) = obj.change_set_name {
-            params.put(&format!("{}{}", prefix, "ChangeSetName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ChangeSetName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_stage {
-            params.put(&format!("{}{}", prefix, "TemplateStage"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateStage"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3276,7 +4723,7 @@ impl GetTemplateInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateOutput {
     /// <p>The stage of the template that you can retrieve. For stacks, the <code>Original</code> and <code>Processed</code> templates are always available. For change sets, the <code>Original</code> template is always available. After AWS CloudFormation finishes creating the change set, the <code>Processed</code> template becomes available.</p>
-    pub stages_available: Option<Vec<String>>,
+    pub stages_available: Option<Vec<TemplateStage>>,
     /// <p>Structure containing the template body. (For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html">Template Anatomy</a> in the AWS CloudFormation User Guide.)</p> <p>AWS CloudFormation returns the same template that was used when the stack was created.</p>
     pub template_body: Option<String>,
 }
@@ -3332,16 +4779,28 @@ impl GetTemplateSummaryInputSerializer {
         }
 
         if let Some(ref field_value) = obj.stack_name {
-            params.put(&format!("{}{}", prefix, "StackName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_set_name {
-            params.put(&format!("{}{}", prefix, "StackSetName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackSetName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3351,7 +4810,7 @@ impl GetTemplateSummaryInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateSummaryOutput {
     /// <p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>The list of resources that generated the values in the <code>Capabilities</code> response element.</p>
     pub capabilities_reason: Option<String>,
     /// <p>A list of the transforms that are declared in the template.</p>
@@ -3435,6 +4894,173 @@ impl GetTemplateSummaryOutputDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHandlerErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HandlerErrorCode {
+    AccessDenied,
+    AlreadyExists,
+    GeneralServiceException,
+    InternalFailure,
+    InvalidCredentials,
+    InvalidRequest,
+    NetworkFailure,
+    NotFound,
+    NotStabilized,
+    NotUpdatable,
+    ResourceConflict,
+    ServiceInternalError,
+    ServiceLimitExceeded,
+    Throttling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHandlerErrorCode),
+}
+
+impl Default for HandlerErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HandlerErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HandlerErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HandlerErrorCode {
+    fn into(self) -> String {
+        match self {
+            HandlerErrorCode::AccessDenied => "AccessDenied".to_string(),
+            HandlerErrorCode::AlreadyExists => "AlreadyExists".to_string(),
+            HandlerErrorCode::GeneralServiceException => "GeneralServiceException".to_string(),
+            HandlerErrorCode::InternalFailure => "InternalFailure".to_string(),
+            HandlerErrorCode::InvalidCredentials => "InvalidCredentials".to_string(),
+            HandlerErrorCode::InvalidRequest => "InvalidRequest".to_string(),
+            HandlerErrorCode::NetworkFailure => "NetworkFailure".to_string(),
+            HandlerErrorCode::NotFound => "NotFound".to_string(),
+            HandlerErrorCode::NotStabilized => "NotStabilized".to_string(),
+            HandlerErrorCode::NotUpdatable => "NotUpdatable".to_string(),
+            HandlerErrorCode::ResourceConflict => "ResourceConflict".to_string(),
+            HandlerErrorCode::ServiceInternalError => "ServiceInternalError".to_string(),
+            HandlerErrorCode::ServiceLimitExceeded => "ServiceLimitExceeded".to_string(),
+            HandlerErrorCode::Throttling => "Throttling".to_string(),
+            HandlerErrorCode::UnknownVariant(UnknownHandlerErrorCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HandlerErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            HandlerErrorCode::AccessDenied => &"AccessDenied",
+            HandlerErrorCode::AlreadyExists => &"AlreadyExists",
+            HandlerErrorCode::GeneralServiceException => &"GeneralServiceException",
+            HandlerErrorCode::InternalFailure => &"InternalFailure",
+            HandlerErrorCode::InvalidCredentials => &"InvalidCredentials",
+            HandlerErrorCode::InvalidRequest => &"InvalidRequest",
+            HandlerErrorCode::NetworkFailure => &"NetworkFailure",
+            HandlerErrorCode::NotFound => &"NotFound",
+            HandlerErrorCode::NotStabilized => &"NotStabilized",
+            HandlerErrorCode::NotUpdatable => &"NotUpdatable",
+            HandlerErrorCode::ResourceConflict => &"ResourceConflict",
+            HandlerErrorCode::ServiceInternalError => &"ServiceInternalError",
+            HandlerErrorCode::ServiceLimitExceeded => &"ServiceLimitExceeded",
+            HandlerErrorCode::Throttling => &"Throttling",
+            HandlerErrorCode::UnknownVariant(UnknownHandlerErrorCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HandlerErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => HandlerErrorCode::AccessDenied,
+            "AlreadyExists" => HandlerErrorCode::AlreadyExists,
+            "GeneralServiceException" => HandlerErrorCode::GeneralServiceException,
+            "InternalFailure" => HandlerErrorCode::InternalFailure,
+            "InvalidCredentials" => HandlerErrorCode::InvalidCredentials,
+            "InvalidRequest" => HandlerErrorCode::InvalidRequest,
+            "NetworkFailure" => HandlerErrorCode::NetworkFailure,
+            "NotFound" => HandlerErrorCode::NotFound,
+            "NotStabilized" => HandlerErrorCode::NotStabilized,
+            "NotUpdatable" => HandlerErrorCode::NotUpdatable,
+            "ResourceConflict" => HandlerErrorCode::ResourceConflict,
+            "ServiceInternalError" => HandlerErrorCode::ServiceInternalError,
+            "ServiceLimitExceeded" => HandlerErrorCode::ServiceLimitExceeded,
+            "Throttling" => HandlerErrorCode::Throttling,
+            _ => HandlerErrorCode::UnknownVariant(UnknownHandlerErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HandlerErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => HandlerErrorCode::AccessDenied,
+            "AlreadyExists" => HandlerErrorCode::AlreadyExists,
+            "GeneralServiceException" => HandlerErrorCode::GeneralServiceException,
+            "InternalFailure" => HandlerErrorCode::InternalFailure,
+            "InvalidCredentials" => HandlerErrorCode::InvalidCredentials,
+            "InvalidRequest" => HandlerErrorCode::InvalidRequest,
+            "NetworkFailure" => HandlerErrorCode::NetworkFailure,
+            "NotFound" => HandlerErrorCode::NotFound,
+            "NotStabilized" => HandlerErrorCode::NotStabilized,
+            "NotUpdatable" => HandlerErrorCode::NotUpdatable,
+            "ResourceConflict" => HandlerErrorCode::ResourceConflict,
+            "ServiceInternalError" => HandlerErrorCode::ServiceInternalError,
+            "ServiceLimitExceeded" => HandlerErrorCode::ServiceLimitExceeded,
+            "Throttling" => HandlerErrorCode::Throttling,
+            _ => HandlerErrorCode::UnknownVariant(UnknownHandlerErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandlerErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HandlerErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HandlerErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ImportsDeserializer;
 impl ImportsDeserializer {
@@ -3537,9 +5163,15 @@ impl ListChangeSetsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -3594,7 +5226,10 @@ impl ListExportsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3650,9 +5285,15 @@ impl ListImportsInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ExportName"), &obj.export_name);
+        params.put(
+            &format!("{}{}", prefix, "ExportName"),
+            &obj.export_name.to_string(),
+        );
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3727,23 +5368,26 @@ impl ListStackInstancesInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_instance_account {
             params.put(
                 &format!("{}{}", prefix, "StackInstanceAccount"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.stack_instance_region {
             params.put(
                 &format!("{}{}", prefix, "StackInstanceRegion"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -3806,9 +5450,15 @@ impl ListStackResourcesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -3880,12 +5530,18 @@ impl ListStackSetOperationResultsInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "OperationId"), &obj.operation_id);
+        params.put(
+            &format!("{}{}", prefix, "OperationId"),
+            &obj.operation_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -3955,11 +5611,14 @@ impl ListStackSetOperationsInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -4013,7 +5672,7 @@ pub struct ListStackSetsInput {
     /// <p>If the previous paginated request didn't return all of the remaining results, the response object's <code>NextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListStackSets</code> again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, the previous response object's <code>NextToken</code> parameter is set to <code>null</code>.</p>
     pub next_token: Option<String>,
     /// <p>The status of the stack sets that you want to get summary information about.</p>
-    pub status: Option<String>,
+    pub status: Option<StackSetStatus>,
 }
 
 /// Serialize `ListStackSetsInput` contents to a `SignedRequest`.
@@ -4029,10 +5688,13 @@ impl ListStackSetsInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.status {
-            params.put(&format!("{}{}", prefix, "Status"), &field_value);
+            params.put(&format!("{}{}", prefix, "Status"), &field_value.to_string());
         }
     }
 }
@@ -4077,7 +5739,7 @@ pub struct ListStacksInput {
     /// <p>A string that identifies the next page of stacks that you want to retrieve.</p>
     pub next_token: Option<String>,
     /// <p>Stack status to use as a filter. Specify one or more stack status codes to list only stacks with the specified status codes. For a complete list of stack status codes, see the <code>StackStatus</code> parameter of the <a>Stack</a> data type.</p>
-    pub stack_status_filter: Option<Vec<String>>,
+    pub stack_status_filter: Option<Vec<StackStatus>>,
 }
 
 /// Serialize `ListStacksInput` contents to a `SignedRequest`.
@@ -4090,7 +5752,10 @@ impl ListStacksInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_status_filter {
             StackStatusFilterSerializer::serialize(
@@ -4144,9 +5809,9 @@ pub struct ListTypeRegistrationsInput {
     /// <p>If the previous paginated request didn't return all of the remaining results, the response object's <code>NextToken</code> parameter value is set to a token. To retrieve the next set of results, call this action again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, the previous response object's <code>NextToken</code> parameter is set to <code>null</code>.</p>
     pub next_token: Option<String>,
     /// <p>The current status of the type registration request.</p> <p>The default is <code>IN_PROGRESS</code>.</p>
-    pub registration_status_filter: Option<String>,
+    pub registration_status_filter: Option<RegistrationStatus>,
     /// <p>The kind of type.</p> <p>Currently the only valid value is <code>RESOURCE</code>.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The Amazon Resource Name (ARN) of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub type_arn: Option<String>,
     /// <p>The name of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
@@ -4166,22 +5831,31 @@ impl ListTypeRegistrationsInputSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.registration_status_filter {
             params.put(
                 &format!("{}{}", prefix, "RegistrationStatusFilter"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_arn {
-            params.put(&format!("{}{}", prefix, "TypeArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TypeArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.type_name {
-            params.put(&format!("{}{}", prefix, "TypeName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TypeName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4233,13 +5907,13 @@ pub struct ListTypeVersionsInput {
     /// <p>The Amazon Resource Name (ARN) of the type for which you want version summary information.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub arn: Option<String>,
     /// <p>The deprecation status of the type versions that you want to get summary information about.</p> <p>Valid values include:</p> <ul> <li> <p> <code>LIVE</code>: The type version is registered and can be used in CloudFormation operations, dependent on its provisioning behavior and visibility scope.</p> </li> <li> <p> <code>DEPRECATED</code>: The type version has been deregistered and can no longer be used in CloudFormation operations. </p> </li> </ul> <p>The default is <code>LIVE</code>.</p>
-    pub deprecated_status: Option<String>,
+    pub deprecated_status: Option<DeprecatedStatus>,
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
     /// <p>If the previous paginated request didn't return all of the remaining results, the response object's <code>NextToken</code> parameter value is set to a token. To retrieve the next set of results, call this action again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, the previous response object's <code>NextToken</code> parameter is set to <code>null</code>.</p>
     pub next_token: Option<String>,
     /// <p>The kind of the type.</p> <p>Currently the only valid value is <code>RESOURCE</code>.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The name of the type for which you want version summary information.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub type_name: Option<String>,
 }
@@ -4254,22 +5928,31 @@ impl ListTypeVersionsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.arn {
-            params.put(&format!("{}{}", prefix, "Arn"), &field_value);
+            params.put(&format!("{}{}", prefix, "Arn"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.deprecated_status {
-            params.put(&format!("{}{}", prefix, "DeprecatedStatus"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DeprecatedStatus"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_results {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_name {
-            params.put(&format!("{}{}", prefix, "TypeName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TypeName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4314,17 +5997,17 @@ impl ListTypeVersionsOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypesInput {
     /// <p><p>The deprecation status of the types that you want to get summary information about.</p> <p>Valid values include:</p> <ul> <li> <p> <code>LIVE</code>: The type is registered for use in CloudFormation operations.</p> </li> <li> <p> <code>DEPRECATED</code>: The type has been deregistered and can no longer be used in CloudFormation operations. </p> </li> </ul></p>
-    pub deprecated_status: Option<String>,
+    pub deprecated_status: Option<DeprecatedStatus>,
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
     /// <p>If the previous paginated request didn't return all of the remaining results, the response object's <code>NextToken</code> parameter value is set to a token. To retrieve the next set of results, call this action again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, the previous response object's <code>NextToken</code> parameter is set to <code>null</code>.</p>
     pub next_token: Option<String>,
     /// <p><p>The provisioning behavior of the type. AWS CloudFormation determines the provisioning type during registration, based on the types of handlers in the schema handler package submitted.</p> <p>Valid values include:</p> <ul> <li> <p> <code>FULLY<em>MUTABLE</code>: The type includes an update handler to process updates to the type during stack update operations.</p> </li> <li> <p> <code>IMMUTABLE</code>: The type does not include an update handler, so the type cannot be updated and must instead be replaced during stack update operations.</p> </li> <li> <p> <code>NON</em>PROVISIONABLE</code>: The type does not include create, read, and delete handlers, and therefore cannot actually be provisioned.</p> </li> </ul></p>
-    pub provisioning_type: Option<String>,
+    pub provisioning_type: Option<ProvisioningType>,
     /// <p>The type of extension.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The scope at which the type is visible and usable in CloudFormation operations.</p> <p>Valid values include:</p> <ul> <li> <p> <code>PRIVATE</code>: The type is only visible and usable within the account in which it is registered. Currently, AWS CloudFormation marks any types you create as <code>PRIVATE</code>.</p> </li> <li> <p> <code>PUBLIC</code>: The type is publically visible and usable within any Amazon account.</p> </li> </ul> <p>The default is <code>PRIVATE</code>.</p>
-    pub visibility: Option<String>,
+    pub visibility: Option<Visibility>,
 }
 
 /// Serialize `ListTypesInput` contents to a `SignedRequest`.
@@ -4337,22 +6020,34 @@ impl ListTypesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.deprecated_status {
-            params.put(&format!("{}{}", prefix, "DeprecatedStatus"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DeprecatedStatus"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_results {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.provisioning_type {
-            params.put(&format!("{}{}", prefix, "ProvisioningType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ProvisioningType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.visibility {
-            params.put(&format!("{}{}", prefix, "Visibility"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Visibility"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4444,9 +6139,12 @@ impl LoggingConfigSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogGroupName"),
-            &obj.log_group_name,
+            &obj.log_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "LogRoleArn"), &obj.log_role_arn);
+        params.put(
+            &format!("{}{}", prefix, "LogRoleArn"),
+            &obj.log_role_arn.to_string(),
+        );
     }
 }
 
@@ -4491,7 +6189,7 @@ impl LogicalResourceIdsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4615,8 +6313,227 @@ impl NotificationARNsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOnFailure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OnFailure {
+    Delete,
+    DoNothing,
+    Rollback,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOnFailure),
+}
+
+impl Default for OnFailure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OnFailure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OnFailure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OnFailure {
+    fn into(self) -> String {
+        match self {
+            OnFailure::Delete => "DELETE".to_string(),
+            OnFailure::DoNothing => "DO_NOTHING".to_string(),
+            OnFailure::Rollback => "ROLLBACK".to_string(),
+            OnFailure::UnknownVariant(UnknownOnFailure { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OnFailure {
+    fn into(self) -> &'a str {
+        match self {
+            OnFailure::Delete => &"DELETE",
+            OnFailure::DoNothing => &"DO_NOTHING",
+            OnFailure::Rollback => &"ROLLBACK",
+            OnFailure::UnknownVariant(UnknownOnFailure { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OnFailure {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => OnFailure::Delete,
+            "DO_NOTHING" => OnFailure::DoNothing,
+            "ROLLBACK" => OnFailure::Rollback,
+            _ => OnFailure::UnknownVariant(UnknownOnFailure {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OnFailure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => OnFailure::Delete,
+            "DO_NOTHING" => OnFailure::DoNothing,
+            "ROLLBACK" => OnFailure::Rollback,
+            _ => OnFailure::UnknownVariant(UnknownOnFailure { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OnFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OnFailure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OnFailure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationStatus {
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationStatus),
+}
+
+impl Default for OperationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationStatus {
+    fn into(self) -> String {
+        match self {
+            OperationStatus::Failed => "FAILED".to_string(),
+            OperationStatus::InProgress => "IN_PROGRESS".to_string(),
+            OperationStatus::Pending => "PENDING".to_string(),
+            OperationStatus::Success => "SUCCESS".to_string(),
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OperationStatus::Failed => &"FAILED",
+            OperationStatus::InProgress => &"IN_PROGRESS",
+            OperationStatus::Pending => &"PENDING",
+            OperationStatus::Success => &"SUCCESS",
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => OperationStatus::Failed,
+            "IN_PROGRESS" => OperationStatus::InProgress,
+            "PENDING" => OperationStatus::Pending,
+            "SUCCESS" => OperationStatus::Success,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => OperationStatus::Failed,
+            "IN_PROGRESS" => OperationStatus::InProgress,
+            "PENDING" => OperationStatus::Pending,
+            "SUCCESS" => OperationStatus::Success,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OperationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OperationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -4663,7 +6580,7 @@ impl OrganizationalUnitIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4810,13 +6727,22 @@ impl ParameterSerializer {
         }
 
         if let Some(ref field_value) = obj.parameter_key {
-            params.put(&format!("{}{}", prefix, "ParameterKey"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterKey"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.parameter_value {
-            params.put(&format!("{}{}", prefix, "ParameterValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resolved_value {
-            params.put(&format!("{}{}", prefix, "ResolvedValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResolvedValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.use_previous_value {
             params.put(&format!("{}{}", prefix, "UsePreviousValue"), &field_value);
@@ -4993,12 +6919,121 @@ impl ParametersSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermissionModels {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PermissionModels {
+    SelfManaged,
+    ServiceManaged,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermissionModels),
+}
+
+impl Default for PermissionModels {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PermissionModels {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PermissionModels {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PermissionModels {
+    fn into(self) -> String {
+        match self {
+            PermissionModels::SelfManaged => "SELF_MANAGED".to_string(),
+            PermissionModels::ServiceManaged => "SERVICE_MANAGED".to_string(),
+            PermissionModels::UnknownVariant(UnknownPermissionModels { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PermissionModels {
+    fn into(self) -> &'a str {
+        match self {
+            PermissionModels::SelfManaged => &"SELF_MANAGED",
+            PermissionModels::ServiceManaged => &"SERVICE_MANAGED",
+            PermissionModels::UnknownVariant(UnknownPermissionModels { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PermissionModels {
+    fn from(name: &str) -> Self {
+        match name {
+            "SELF_MANAGED" => PermissionModels::SelfManaged,
+            "SERVICE_MANAGED" => PermissionModels::ServiceManaged,
+            _ => PermissionModels::UnknownVariant(UnknownPermissionModels {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PermissionModels {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SELF_MANAGED" => PermissionModels::SelfManaged,
+            "SERVICE_MANAGED" => PermissionModels::ServiceManaged,
+            _ => PermissionModels::UnknownVariant(UnknownPermissionModels { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PermissionModels {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PermissionModels {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PermissionModels {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PermissionModelsDeserializer;
 impl PermissionModelsDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PermissionModels, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -5082,7 +7117,7 @@ pub struct PropertyDifference {
     /// <p>The actual property value of the resource property.</p>
     pub actual_value: String,
     /// <p><p>The type of property difference.</p> <ul> <li> <p> <code>ADD</code>: A value has been added to a resource property that is an array or list data type.</p> </li> <li> <p> <code>REMOVE</code>: The property has been removed from the current resource configuration.</p> </li> <li> <p> <code>NOT_EQUAL</code>: The current property value differs from its expected value (as defined in the stack template and any values specified as template parameters).</p> </li> </ul></p>
-    pub difference_type: String,
+    pub difference_type: DifferenceType,
     /// <p>The expected property value of the resource property, as defined in the stack template and any values specified as template parameters.</p>
     pub expected_value: String,
     /// <p>The fully-qualified path to the resource property.</p>
@@ -5165,12 +7200,127 @@ impl PropertyValueDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProvisioningType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProvisioningType {
+    FullyMutable,
+    Immutable,
+    NonProvisionable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProvisioningType),
+}
+
+impl Default for ProvisioningType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProvisioningType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProvisioningType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProvisioningType {
+    fn into(self) -> String {
+        match self {
+            ProvisioningType::FullyMutable => "FULLY_MUTABLE".to_string(),
+            ProvisioningType::Immutable => "IMMUTABLE".to_string(),
+            ProvisioningType::NonProvisionable => "NON_PROVISIONABLE".to_string(),
+            ProvisioningType::UnknownVariant(UnknownProvisioningType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProvisioningType {
+    fn into(self) -> &'a str {
+        match self {
+            ProvisioningType::FullyMutable => &"FULLY_MUTABLE",
+            ProvisioningType::Immutable => &"IMMUTABLE",
+            ProvisioningType::NonProvisionable => &"NON_PROVISIONABLE",
+            ProvisioningType::UnknownVariant(UnknownProvisioningType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ProvisioningType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULLY_MUTABLE" => ProvisioningType::FullyMutable,
+            "IMMUTABLE" => ProvisioningType::Immutable,
+            "NON_PROVISIONABLE" => ProvisioningType::NonProvisionable,
+            _ => ProvisioningType::UnknownVariant(UnknownProvisioningType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProvisioningType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULLY_MUTABLE" => ProvisioningType::FullyMutable,
+            "IMMUTABLE" => ProvisioningType::Immutable,
+            "NON_PROVISIONABLE" => ProvisioningType::NonProvisionable,
+            _ => ProvisioningType::UnknownVariant(UnknownProvisioningType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProvisioningType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ProvisioningType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ProvisioningType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ProvisioningTypeDeserializer;
 impl ProvisioningTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ProvisioningType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -5189,11 +7339,11 @@ pub struct RecordHandlerProgressInput {
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
     pub client_request_token: Option<String>,
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
-    pub current_operation_status: Option<String>,
+    pub current_operation_status: Option<OperationStatus>,
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
-    pub error_code: Option<String>,
+    pub error_code: Option<HandlerErrorCode>,
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
-    pub operation_status: String,
+    pub operation_status: OperationStatus,
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
     pub resource_model: Option<String>,
     /// <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>.</p>
@@ -5209,28 +7359,43 @@ impl RecordHandlerProgressInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "BearerToken"), &obj.bearer_token);
+        params.put(
+            &format!("{}{}", prefix, "BearerToken"),
+            &obj.bearer_token.to_string(),
+        );
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.current_operation_status {
             params.put(
                 &format!("{}{}", prefix, "CurrentOperationStatus"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.error_code {
-            params.put(&format!("{}{}", prefix, "ErrorCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ErrorCode"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "OperationStatus"),
-            &obj.operation_status,
+            &obj.operation_status.to_string(),
         );
         if let Some(ref field_value) = obj.resource_model {
-            params.put(&format!("{}{}", prefix, "ResourceModel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceModel"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.status_message {
-            params.put(&format!("{}{}", prefix, "StatusMessage"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StatusMessage"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5289,7 +7454,7 @@ impl RegionListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5306,7 +7471,7 @@ pub struct RegisterTypeInput {
     /// <p><p>A url to the S3 bucket containing the schema handler package that contains the schema, event handlers, and associated files for the type you want to register.</p> <p>For information on generating a schema handler package for the type you want to register, see <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-cli-submit.html">submit</a> in the <i>CloudFormation CLI User Guide</i>.</p> <note> <p>The user registering the resource provider type must be able to access the the schema handler package in the S3 bucket. That is, the user needs to have <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> permissions for the schema handler package. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazons3.html">Actions, Resources, and Condition Keys for Amazon S3</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </note></p>
     pub schema_handler_package: String,
     /// <p>The kind of type.</p> <p>Currently, the only valid value is <code>RESOURCE</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p><p>The name of the type being registered.</p> <p>We recommend that type names adhere to the following pattern: <i>company<em>or</em>organization</i>::<i>service</i>::<i>type</i>.</p> <note> <p>The following organization namespaces are reserved and cannot be used in your resource type names:</p> <ul> <li> <p> <code>Alexa</code> </p> </li> <li> <p> <code>AMZN</code> </p> </li> <li> <p> <code>Amazon</code> </p> </li> <li> <p> <code>AWS</code> </p> </li> <li> <p> <code>Custom</code> </p> </li> <li> <p> <code>Dev</code> </p> </li> </ul> </note></p>
     pub type_name: String,
 }
@@ -5321,10 +7486,16 @@ impl RegisterTypeInputSerializer {
         }
 
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.execution_role_arn {
-            params.put(&format!("{}{}", prefix, "ExecutionRoleArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ExecutionRoleArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.logging_config {
             LoggingConfigSerializer::serialize(
@@ -5335,12 +7506,15 @@ impl RegisterTypeInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "SchemaHandlerPackage"),
-            &obj.schema_handler_package,
+            &obj.schema_handler_package.to_string(),
         );
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
-        params.put(&format!("{}{}", prefix, "TypeName"), &obj.type_name);
+        params.put(
+            &format!("{}{}", prefix, "TypeName"),
+            &obj.type_name.to_string(),
+        );
     }
 }
 
@@ -5373,12 +7547,127 @@ impl RegisterTypeOutputDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegistrationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegistrationStatus {
+    Complete,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegistrationStatus),
+}
+
+impl Default for RegistrationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegistrationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegistrationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegistrationStatus {
+    fn into(self) -> String {
+        match self {
+            RegistrationStatus::Complete => "COMPLETE".to_string(),
+            RegistrationStatus::Failed => "FAILED".to_string(),
+            RegistrationStatus::InProgress => "IN_PROGRESS".to_string(),
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegistrationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RegistrationStatus::Complete => &"COMPLETE",
+            RegistrationStatus::Failed => &"FAILED",
+            RegistrationStatus::InProgress => &"IN_PROGRESS",
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RegistrationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => RegistrationStatus::Complete,
+            "FAILED" => RegistrationStatus::Failed,
+            "IN_PROGRESS" => RegistrationStatus::InProgress,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegistrationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => RegistrationStatus::Complete,
+            "FAILED" => RegistrationStatus::Failed,
+            "IN_PROGRESS" => RegistrationStatus::InProgress,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RegistrationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RegistrationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct RegistrationStatusDeserializer;
 impl RegistrationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RegistrationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -5407,36 +7696,498 @@ impl RegistrationTokenListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegistryType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegistryType {
+    Module,
+    Resource,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegistryType),
+}
+
+impl Default for RegistryType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegistryType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegistryType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegistryType {
+    fn into(self) -> String {
+        match self {
+            RegistryType::Module => "MODULE".to_string(),
+            RegistryType::Resource => "RESOURCE".to_string(),
+            RegistryType::UnknownVariant(UnknownRegistryType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegistryType {
+    fn into(self) -> &'a str {
+        match self {
+            RegistryType::Module => &"MODULE",
+            RegistryType::Resource => &"RESOURCE",
+            RegistryType::UnknownVariant(UnknownRegistryType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RegistryType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MODULE" => RegistryType::Module,
+            "RESOURCE" => RegistryType::Resource,
+            _ => RegistryType::UnknownVariant(UnknownRegistryType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegistryType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MODULE" => RegistryType::Module,
+            "RESOURCE" => RegistryType::Resource,
+            _ => RegistryType::UnknownVariant(UnknownRegistryType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RegistryType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RegistryType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct RegistryTypeDeserializer;
 impl RegistryTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RegistryType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplacement {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Replacement {
+    Conditional,
+    False,
+    True,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplacement),
+}
+
+impl Default for Replacement {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Replacement {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Replacement {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Replacement {
+    fn into(self) -> String {
+        match self {
+            Replacement::Conditional => "Conditional".to_string(),
+            Replacement::False => "False".to_string(),
+            Replacement::True => "True".to_string(),
+            Replacement::UnknownVariant(UnknownReplacement { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Replacement {
+    fn into(self) -> &'a str {
+        match self {
+            Replacement::Conditional => &"Conditional",
+            Replacement::False => &"False",
+            Replacement::True => &"True",
+            Replacement::UnknownVariant(UnknownReplacement { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Replacement {
+    fn from(name: &str) -> Self {
+        match name {
+            "Conditional" => Replacement::Conditional,
+            "False" => Replacement::False,
+            "True" => Replacement::True,
+            _ => Replacement::UnknownVariant(UnknownReplacement {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Replacement {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Conditional" => Replacement::Conditional,
+            "False" => Replacement::False,
+            "True" => Replacement::True,
+            _ => Replacement::UnknownVariant(UnknownReplacement { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Replacement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Replacement {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Replacement {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReplacementDeserializer;
 impl ReplacementDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Replacement, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequiresRecreation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequiresRecreation {
+    Always,
+    Conditionally,
+    Never,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequiresRecreation),
+}
+
+impl Default for RequiresRecreation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequiresRecreation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequiresRecreation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequiresRecreation {
+    fn into(self) -> String {
+        match self {
+            RequiresRecreation::Always => "Always".to_string(),
+            RequiresRecreation::Conditionally => "Conditionally".to_string(),
+            RequiresRecreation::Never => "Never".to_string(),
+            RequiresRecreation::UnknownVariant(UnknownRequiresRecreation { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequiresRecreation {
+    fn into(self) -> &'a str {
+        match self {
+            RequiresRecreation::Always => &"Always",
+            RequiresRecreation::Conditionally => &"Conditionally",
+            RequiresRecreation::Never => &"Never",
+            RequiresRecreation::UnknownVariant(UnknownRequiresRecreation { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RequiresRecreation {
+    fn from(name: &str) -> Self {
+        match name {
+            "Always" => RequiresRecreation::Always,
+            "Conditionally" => RequiresRecreation::Conditionally,
+            "Never" => RequiresRecreation::Never,
+            _ => RequiresRecreation::UnknownVariant(UnknownRequiresRecreation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RequiresRecreation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Always" => RequiresRecreation::Always,
+            "Conditionally" => RequiresRecreation::Conditionally,
+            "Never" => RequiresRecreation::Never,
+            _ => RequiresRecreation::UnknownVariant(UnknownRequiresRecreation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequiresRecreation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RequiresRecreation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RequiresRecreation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct RequiresRecreationDeserializer;
 impl RequiresRecreationDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RequiresRecreation, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceAttribute {
+    CreationPolicy,
+    DeletionPolicy,
+    Metadata,
+    Properties,
+    Tags,
+    UpdatePolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceAttribute),
+}
+
+impl Default for ResourceAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceAttribute {
+    fn into(self) -> String {
+        match self {
+            ResourceAttribute::CreationPolicy => "CreationPolicy".to_string(),
+            ResourceAttribute::DeletionPolicy => "DeletionPolicy".to_string(),
+            ResourceAttribute::Metadata => "Metadata".to_string(),
+            ResourceAttribute::Properties => "Properties".to_string(),
+            ResourceAttribute::Tags => "Tags".to_string(),
+            ResourceAttribute::UpdatePolicy => "UpdatePolicy".to_string(),
+            ResourceAttribute::UnknownVariant(UnknownResourceAttribute { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceAttribute::CreationPolicy => &"CreationPolicy",
+            ResourceAttribute::DeletionPolicy => &"DeletionPolicy",
+            ResourceAttribute::Metadata => &"Metadata",
+            ResourceAttribute::Properties => &"Properties",
+            ResourceAttribute::Tags => &"Tags",
+            ResourceAttribute::UpdatePolicy => &"UpdatePolicy",
+            ResourceAttribute::UnknownVariant(UnknownResourceAttribute { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationPolicy" => ResourceAttribute::CreationPolicy,
+            "DeletionPolicy" => ResourceAttribute::DeletionPolicy,
+            "Metadata" => ResourceAttribute::Metadata,
+            "Properties" => ResourceAttribute::Properties,
+            "Tags" => ResourceAttribute::Tags,
+            "UpdatePolicy" => ResourceAttribute::UpdatePolicy,
+            _ => ResourceAttribute::UnknownVariant(UnknownResourceAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationPolicy" => ResourceAttribute::CreationPolicy,
+            "DeletionPolicy" => ResourceAttribute::DeletionPolicy,
+            "Metadata" => ResourceAttribute::Metadata,
+            "Properties" => ResourceAttribute::Properties,
+            "Tags" => ResourceAttribute::Tags,
+            "UpdatePolicy" => ResourceAttribute::UpdatePolicy,
+            _ => ResourceAttribute::UnknownVariant(UnknownResourceAttribute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ResourceAttributeDeserializer;
 impl ResourceAttributeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceAttribute, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The <code>ResourceChange</code> structure describes the resource and the action that AWS CloudFormation will perform on it if you execute this change set.</p>
@@ -5444,7 +8195,7 @@ impl ResourceAttributeDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceChange {
     /// <p>The action that AWS CloudFormation takes on the resource, such as <code>Add</code> (adds a new resource), <code>Modify</code> (changes a resource), <code>Remove</code> (deletes a resource), <code>Import</code> (imports a resource), or <code>Dynamic</code> (exact action for the resource cannot be determined).</p>
-    pub action: Option<String>,
+    pub action: Option<ChangeAction>,
     /// <p>The change set ID of the nested change set.</p>
     pub change_set_id: Option<String>,
     /// <p>For the <code>Modify</code> action, a list of <code>ResourceChangeDetail</code> structures that describes the changes that AWS CloudFormation will make to the resource. </p>
@@ -5456,11 +8207,11 @@ pub struct ResourceChange {
     /// <p>The resource's physical ID (resource name). Resources that you are adding don't have physical IDs because they haven't been created.</p>
     pub physical_resource_id: Option<String>,
     /// <p>For the <code>Modify</code> action, indicates whether AWS CloudFormation will replace the resource by creating a new one and deleting the old one. This value depends on the value of the <code>RequiresRecreation</code> property in the <code>ResourceTargetDefinition</code> structure. For example, if the <code>RequiresRecreation</code> field is <code>Always</code> and the <code>Evaluation</code> field is <code>Static</code>, <code>Replacement</code> is <code>True</code>. If the <code>RequiresRecreation</code> field is <code>Always</code> and the <code>Evaluation</code> field is <code>Dynamic</code>, <code>Replacement</code> is <code>Conditionally</code>.</p> <p>If you have multiple changes with different <code>RequiresRecreation</code> values, the <code>Replacement</code> value depends on the change with the most impact. A <code>RequiresRecreation</code> value of <code>Always</code> has the most impact, followed by <code>Conditionally</code>, and then <code>Never</code>.</p>
-    pub replacement: Option<String>,
+    pub replacement: Option<Replacement>,
     /// <p>The type of AWS CloudFormation resource, such as <code>AWS::S3::Bucket</code>.</p>
     pub resource_type: Option<String>,
     /// <p>For the <code>Modify</code> action, indicates which resource attribute is triggering this update, such as a change in the resource attribute's <code>Metadata</code>, <code>Properties</code>, or <code>Tags</code>.</p>
-    pub scope: Option<Vec<String>>,
+    pub scope: Option<Vec<ResourceAttribute>>,
 }
 
 #[allow(dead_code)]
@@ -5529,9 +8280,9 @@ pub struct ResourceChangeDetail {
     /// <p>The identity of the entity that triggered this change. This entity is a member of the group that is specified by the <code>ChangeSource</code> field. For example, if you modified the value of the <code>KeyPairName</code> parameter, the <code>CausingEntity</code> is the name of the parameter (<code>KeyPairName</code>).</p> <p>If the <code>ChangeSource</code> value is <code>DirectModification</code>, no value is given for <code>CausingEntity</code>.</p>
     pub causing_entity: Option<String>,
     /// <p><p>The group to which the <code>CausingEntity</code> value belongs. There are five entity groups:</p> <ul> <li> <p> <code>ResourceReference</code> entities are <code>Ref</code> intrinsic functions that refer to resources in the template, such as <code>{ &quot;Ref&quot; : &quot;MyEC2InstanceResource&quot; }</code>.</p> </li> <li> <p> <code>ParameterReference</code> entities are <code>Ref</code> intrinsic functions that get template parameter values, such as <code>{ &quot;Ref&quot; : &quot;MyPasswordParameter&quot; }</code>.</p> </li> <li> <p> <code>ResourceAttribute</code> entities are <code>Fn::GetAtt</code> intrinsic functions that get resource attribute values, such as <code>{ &quot;Fn::GetAtt&quot; : [ &quot;MyEC2InstanceResource&quot;, &quot;PublicDnsName&quot; ] }</code>.</p> </li> <li> <p> <code>DirectModification</code> entities are changes that are made directly to the template.</p> </li> <li> <p> <code>Automatic</code> entities are <code>AWS::CloudFormation::Stack</code> resource types, which are also known as nested stacks. If you made no changes to the <code>AWS::CloudFormation::Stack</code> resource, AWS CloudFormation sets the <code>ChangeSource</code> to <code>Automatic</code> because the nested stack&#39;s template might have changed. Changes to a nested stack&#39;s template aren&#39;t visible to AWS CloudFormation until you run an update on the parent stack.</p> </li> </ul></p>
-    pub change_source: Option<String>,
+    pub change_source: Option<ChangeSource>,
     /// <p>Indicates whether AWS CloudFormation can determine the target value, and whether the target value will change before you execute a change set.</p> <p>For <code>Static</code> evaluations, AWS CloudFormation can determine that the target value will change, and its value. For example, if you directly modify the <code>InstanceType</code> property of an EC2 instance, AWS CloudFormation knows that this property value will change, and its value, so this is a <code>Static</code> evaluation.</p> <p>For <code>Dynamic</code> evaluations, cannot determine the target value because it depends on the result of an intrinsic function, such as a <code>Ref</code> or <code>Fn::GetAtt</code> intrinsic function, when the stack is updated. For example, if your template includes a reference to a resource that is conditionally recreated, the value of the reference (the physical ID of the resource) might change, depending on if the resource is recreated. If the resource is recreated, it will have a new physical ID, so all references to that resource will also be updated.</p>
-    pub evaluation: Option<String>,
+    pub evaluation: Option<EvaluationType>,
     /// <p>A <code>ResourceTargetDefinition</code> structure that describes the field that AWS CloudFormation will change and whether the resource will be recreated.</p>
     pub target: Option<ResourceTargetDefinition>,
 }
@@ -5722,12 +8473,294 @@ impl ResourcePropertiesDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceSignalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceSignalStatus {
+    Failure,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceSignalStatus),
+}
+
+impl Default for ResourceSignalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceSignalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceSignalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceSignalStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceSignalStatus::Failure => "FAILURE".to_string(),
+            ResourceSignalStatus::Success => "SUCCESS".to_string(),
+            ResourceSignalStatus::UnknownVariant(UnknownResourceSignalStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceSignalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceSignalStatus::Failure => &"FAILURE",
+            ResourceSignalStatus::Success => &"SUCCESS",
+            ResourceSignalStatus::UnknownVariant(UnknownResourceSignalStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceSignalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILURE" => ResourceSignalStatus::Failure,
+            "SUCCESS" => ResourceSignalStatus::Success,
+            _ => ResourceSignalStatus::UnknownVariant(UnknownResourceSignalStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceSignalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILURE" => ResourceSignalStatus::Failure,
+            "SUCCESS" => ResourceSignalStatus::Success,
+            _ => ResourceSignalStatus::UnknownVariant(UnknownResourceSignalStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceSignalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceSignalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceSignalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceStatus {
+    CreateComplete,
+    CreateFailed,
+    CreateInProgress,
+    DeleteComplete,
+    DeleteFailed,
+    DeleteInProgress,
+    DeleteSkipped,
+    ImportComplete,
+    ImportFailed,
+    ImportInProgress,
+    ImportRollbackComplete,
+    ImportRollbackFailed,
+    ImportRollbackInProgress,
+    UpdateComplete,
+    UpdateFailed,
+    UpdateInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceStatus),
+}
+
+impl Default for ResourceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceStatus::CreateComplete => "CREATE_COMPLETE".to_string(),
+            ResourceStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            ResourceStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            ResourceStatus::DeleteComplete => "DELETE_COMPLETE".to_string(),
+            ResourceStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            ResourceStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            ResourceStatus::DeleteSkipped => "DELETE_SKIPPED".to_string(),
+            ResourceStatus::ImportComplete => "IMPORT_COMPLETE".to_string(),
+            ResourceStatus::ImportFailed => "IMPORT_FAILED".to_string(),
+            ResourceStatus::ImportInProgress => "IMPORT_IN_PROGRESS".to_string(),
+            ResourceStatus::ImportRollbackComplete => "IMPORT_ROLLBACK_COMPLETE".to_string(),
+            ResourceStatus::ImportRollbackFailed => "IMPORT_ROLLBACK_FAILED".to_string(),
+            ResourceStatus::ImportRollbackInProgress => "IMPORT_ROLLBACK_IN_PROGRESS".to_string(),
+            ResourceStatus::UpdateComplete => "UPDATE_COMPLETE".to_string(),
+            ResourceStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            ResourceStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            ResourceStatus::UnknownVariant(UnknownResourceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceStatus::CreateComplete => &"CREATE_COMPLETE",
+            ResourceStatus::CreateFailed => &"CREATE_FAILED",
+            ResourceStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            ResourceStatus::DeleteComplete => &"DELETE_COMPLETE",
+            ResourceStatus::DeleteFailed => &"DELETE_FAILED",
+            ResourceStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            ResourceStatus::DeleteSkipped => &"DELETE_SKIPPED",
+            ResourceStatus::ImportComplete => &"IMPORT_COMPLETE",
+            ResourceStatus::ImportFailed => &"IMPORT_FAILED",
+            ResourceStatus::ImportInProgress => &"IMPORT_IN_PROGRESS",
+            ResourceStatus::ImportRollbackComplete => &"IMPORT_ROLLBACK_COMPLETE",
+            ResourceStatus::ImportRollbackFailed => &"IMPORT_ROLLBACK_FAILED",
+            ResourceStatus::ImportRollbackInProgress => &"IMPORT_ROLLBACK_IN_PROGRESS",
+            ResourceStatus::UpdateComplete => &"UPDATE_COMPLETE",
+            ResourceStatus::UpdateFailed => &"UPDATE_FAILED",
+            ResourceStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            ResourceStatus::UnknownVariant(UnknownResourceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_COMPLETE" => ResourceStatus::CreateComplete,
+            "CREATE_FAILED" => ResourceStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => ResourceStatus::CreateInProgress,
+            "DELETE_COMPLETE" => ResourceStatus::DeleteComplete,
+            "DELETE_FAILED" => ResourceStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => ResourceStatus::DeleteInProgress,
+            "DELETE_SKIPPED" => ResourceStatus::DeleteSkipped,
+            "IMPORT_COMPLETE" => ResourceStatus::ImportComplete,
+            "IMPORT_FAILED" => ResourceStatus::ImportFailed,
+            "IMPORT_IN_PROGRESS" => ResourceStatus::ImportInProgress,
+            "IMPORT_ROLLBACK_COMPLETE" => ResourceStatus::ImportRollbackComplete,
+            "IMPORT_ROLLBACK_FAILED" => ResourceStatus::ImportRollbackFailed,
+            "IMPORT_ROLLBACK_IN_PROGRESS" => ResourceStatus::ImportRollbackInProgress,
+            "UPDATE_COMPLETE" => ResourceStatus::UpdateComplete,
+            "UPDATE_FAILED" => ResourceStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => ResourceStatus::UpdateInProgress,
+            _ => ResourceStatus::UnknownVariant(UnknownResourceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_COMPLETE" => ResourceStatus::CreateComplete,
+            "CREATE_FAILED" => ResourceStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => ResourceStatus::CreateInProgress,
+            "DELETE_COMPLETE" => ResourceStatus::DeleteComplete,
+            "DELETE_FAILED" => ResourceStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => ResourceStatus::DeleteInProgress,
+            "DELETE_SKIPPED" => ResourceStatus::DeleteSkipped,
+            "IMPORT_COMPLETE" => ResourceStatus::ImportComplete,
+            "IMPORT_FAILED" => ResourceStatus::ImportFailed,
+            "IMPORT_IN_PROGRESS" => ResourceStatus::ImportInProgress,
+            "IMPORT_ROLLBACK_COMPLETE" => ResourceStatus::ImportRollbackComplete,
+            "IMPORT_ROLLBACK_FAILED" => ResourceStatus::ImportRollbackFailed,
+            "IMPORT_ROLLBACK_IN_PROGRESS" => ResourceStatus::ImportRollbackInProgress,
+            "UPDATE_COMPLETE" => ResourceStatus::UpdateComplete,
+            "UPDATE_FAILED" => ResourceStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => ResourceStatus::UpdateInProgress,
+            _ => ResourceStatus::UnknownVariant(UnknownResourceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ResourceStatusDeserializer;
 impl ResourceStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -5743,11 +8776,11 @@ impl ResourceStatusReasonDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceTargetDefinition {
     /// <p>Indicates which resource attribute is triggering this update, such as a change in the resource attribute's <code>Metadata</code>, <code>Properties</code>, or <code>Tags</code>.</p>
-    pub attribute: Option<String>,
+    pub attribute: Option<ResourceAttribute>,
     /// <p>If the <code>Attribute</code> value is <code>Properties</code>, the name of the property. For all other attributes, the value is null.</p>
     pub name: Option<String>,
     /// <p>If the <code>Attribute</code> value is <code>Properties</code>, indicates whether a change to this property causes the resource to be recreated. The value can be <code>Never</code>, <code>Always</code>, or <code>Conditionally</code>. To determine the conditions for a <code>Conditionally</code> recreation, see the update behavior for that <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">property</a> in the AWS CloudFormation User Guide.</p>
-    pub requires_recreation: Option<String>,
+    pub requires_recreation: Option<RequiresRecreation>,
 }
 
 #[allow(dead_code)]
@@ -5809,14 +8842,17 @@ impl ResourceToImportSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogicalResourceId"),
-            &obj.logical_resource_id,
+            &obj.logical_resource_id.to_string(),
         );
         ResourceIdentifierPropertiesSerializer::serialize(
             params,
             &format!("{}{}", prefix, "ResourceIdentifier"),
             &obj.resource_identifier,
         );
-        params.put(&format!("{}{}", prefix, "ResourceType"), &obj.resource_type);
+        params.put(
+            &format!("{}{}", prefix, "ResourceType"),
+            &obj.resource_type.to_string(),
+        );
     }
 }
 
@@ -5853,7 +8889,7 @@ impl ResourceTypesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5875,7 +8911,7 @@ impl ResourcesToSkipSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5886,7 +8922,7 @@ impl RetainResourcesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6031,8 +9067,8 @@ impl RollbackTriggerSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
-        params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
+        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn.to_string());
+        params.put(&format!("{}{}", prefix, "Type"), &obj.type_.to_string());
     }
 }
 
@@ -6073,7 +9109,7 @@ impl ScopeDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<ResourceAttribute>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(ResourceAttributeDeserializer::deserialize("member", stack)?);
@@ -6105,12 +9141,21 @@ impl SetStackPolicyInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
         if let Some(ref field_value) = obj.stack_policy_body {
-            params.put(&format!("{}{}", prefix, "StackPolicyBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackPolicyBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_policy_url {
-            params.put(&format!("{}{}", prefix, "StackPolicyURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackPolicyURL"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6121,7 +9166,7 @@ pub struct SetTypeDefaultVersionInput {
     /// <p>The Amazon Resource Name (ARN) of the type for which you want version summary information.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub arn: Option<String>,
     /// <p>The kind of type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The name of the type.</p> <p>Conditional: You must specify either <code>TypeName</code> and <code>Type</code>, or <code>Arn</code>.</p>
     pub type_name: Option<String>,
     /// <p>The ID of a specific version of the type. The version ID is the value at the end of the Amazon Resource Name (ARN) assigned to the type version when it is registered.</p>
@@ -6138,16 +9183,22 @@ impl SetTypeDefaultVersionInputSerializer {
         }
 
         if let Some(ref field_value) = obj.arn {
-            params.put(&format!("{}{}", prefix, "Arn"), &field_value);
+            params.put(&format!("{}{}", prefix, "Arn"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.type_name {
-            params.put(&format!("{}{}", prefix, "TypeName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TypeName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version_id {
-            params.put(&format!("{}{}", prefix, "VersionId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VersionId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6182,7 +9233,7 @@ pub struct SignalResourceInput {
     /// <p>The stack name or unique stack ID that includes the resource that you want to signal.</p>
     pub stack_name: String,
     /// <p>The status of the signal, which is either success or failure. A failure signal causes AWS CloudFormation to immediately fail the stack creation or update.</p>
-    pub status: String,
+    pub status: ResourceSignalStatus,
     /// <p>A unique ID of the signal. When you signal Amazon EC2 instances or Auto Scaling groups, specify the instance ID that you are signaling as the unique ID. If you send multiple signals to a single resource (such as signaling a wait condition), each signal requires a different unique ID.</p>
     pub unique_id: String,
 }
@@ -6198,11 +9249,17 @@ impl SignalResourceInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LogicalResourceId"),
-            &obj.logical_resource_id,
+            &obj.logical_resource_id.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
-        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
-        params.put(&format!("{}{}", prefix, "UniqueId"), &obj.unique_id);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status.to_string());
+        params.put(
+            &format!("{}{}", prefix, "UniqueId"),
+            &obj.unique_id.to_string(),
+        );
     }
 }
 
@@ -6211,7 +9268,7 @@ impl SignalResourceInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Stack {
     /// <p>The capabilities allowed in the stack.</p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>The unique ID of the change set.</p>
     pub change_set_id: Option<String>,
     /// <p>The time at which the stack was created.</p>
@@ -6247,7 +9304,7 @@ pub struct Stack {
     /// <p>The name associated with the stack.</p>
     pub stack_name: String,
     /// <p>Current status of the stack.</p>
-    pub stack_status: String,
+    pub stack_status: StackStatus,
     /// <p>Success/failure message associated with the stack status.</p>
     pub stack_status_reason: Option<String>,
     /// <p>A list of <code>Tag</code>s that specify information about the stack.</p>
@@ -6382,12 +9439,129 @@ impl StackDriftDetectionIdDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackDriftDetectionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackDriftDetectionStatus {
+    DetectionComplete,
+    DetectionFailed,
+    DetectionInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackDriftDetectionStatus),
+}
+
+impl Default for StackDriftDetectionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackDriftDetectionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackDriftDetectionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackDriftDetectionStatus {
+    fn into(self) -> String {
+        match self {
+            StackDriftDetectionStatus::DetectionComplete => "DETECTION_COMPLETE".to_string(),
+            StackDriftDetectionStatus::DetectionFailed => "DETECTION_FAILED".to_string(),
+            StackDriftDetectionStatus::DetectionInProgress => "DETECTION_IN_PROGRESS".to_string(),
+            StackDriftDetectionStatus::UnknownVariant(UnknownStackDriftDetectionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackDriftDetectionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackDriftDetectionStatus::DetectionComplete => &"DETECTION_COMPLETE",
+            StackDriftDetectionStatus::DetectionFailed => &"DETECTION_FAILED",
+            StackDriftDetectionStatus::DetectionInProgress => &"DETECTION_IN_PROGRESS",
+            StackDriftDetectionStatus::UnknownVariant(UnknownStackDriftDetectionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackDriftDetectionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DETECTION_COMPLETE" => StackDriftDetectionStatus::DetectionComplete,
+            "DETECTION_FAILED" => StackDriftDetectionStatus::DetectionFailed,
+            "DETECTION_IN_PROGRESS" => StackDriftDetectionStatus::DetectionInProgress,
+            _ => StackDriftDetectionStatus::UnknownVariant(UnknownStackDriftDetectionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackDriftDetectionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DETECTION_COMPLETE" => StackDriftDetectionStatus::DetectionComplete,
+            "DETECTION_FAILED" => StackDriftDetectionStatus::DetectionFailed,
+            "DETECTION_IN_PROGRESS" => StackDriftDetectionStatus::DetectionInProgress,
+            _ => {
+                StackDriftDetectionStatus::UnknownVariant(UnknownStackDriftDetectionStatus { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackDriftDetectionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackDriftDetectionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackDriftDetectionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackDriftDetectionStatusDeserializer;
 impl StackDriftDetectionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackDriftDetectionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6405,7 +9579,7 @@ pub struct StackDriftInformation {
     /// <p>Most recent time when a drift detection operation was initiated on the stack, or any of its individual resources that support drift detection.</p>
     pub last_check_timestamp: Option<String>,
     /// <p><p>Status of the stack&#39;s actual configuration compared to its expected template configuration. </p> <ul> <li> <p> <code>DRIFTED</code>: The stack differs from its expected template configuration. A stack is considered to have drifted if one or more of its resources have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the stack differs from its expected template configuration.</p> </li> <li> <p> <code>IN</em>SYNC</code>: The stack&#39;s actual configuration matches its expected template configuration.</p> </li> <li> <p> <code>UNKNOWN</code>: This value is reserved for future use.</p> </li> </ul></p>
-    pub stack_drift_status: String,
+    pub stack_drift_status: StackDriftStatus,
 }
 
 #[allow(dead_code)]
@@ -6441,7 +9615,7 @@ pub struct StackDriftInformationSummary {
     /// <p>Most recent time when a drift detection operation was initiated on the stack, or any of its individual resources that support drift detection.</p>
     pub last_check_timestamp: Option<String>,
     /// <p><p>Status of the stack&#39;s actual configuration compared to its expected template configuration. </p> <ul> <li> <p> <code>DRIFTED</code>: The stack differs from its expected template configuration. A stack is considered to have drifted if one or more of its resources have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the stack differs from its expected template configuration.</p> </li> <li> <p> <code>IN</em>SYNC</code>: The stack&#39;s actual configuration matches its expected template configuration.</p> </li> <li> <p> <code>UNKNOWN</code>: This value is reserved for future use.</p> </li> </ul></p>
-    pub stack_drift_status: String,
+    pub stack_drift_status: StackDriftStatus,
 }
 
 #[allow(dead_code)]
@@ -6474,12 +9648,132 @@ impl StackDriftInformationSummaryDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackDriftStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackDriftStatus {
+    Drifted,
+    InSync,
+    NotChecked,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackDriftStatus),
+}
+
+impl Default for StackDriftStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackDriftStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackDriftStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackDriftStatus {
+    fn into(self) -> String {
+        match self {
+            StackDriftStatus::Drifted => "DRIFTED".to_string(),
+            StackDriftStatus::InSync => "IN_SYNC".to_string(),
+            StackDriftStatus::NotChecked => "NOT_CHECKED".to_string(),
+            StackDriftStatus::Unknown => "UNKNOWN".to_string(),
+            StackDriftStatus::UnknownVariant(UnknownStackDriftStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackDriftStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackDriftStatus::Drifted => &"DRIFTED",
+            StackDriftStatus::InSync => &"IN_SYNC",
+            StackDriftStatus::NotChecked => &"NOT_CHECKED",
+            StackDriftStatus::Unknown => &"UNKNOWN",
+            StackDriftStatus::UnknownVariant(UnknownStackDriftStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StackDriftStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DRIFTED" => StackDriftStatus::Drifted,
+            "IN_SYNC" => StackDriftStatus::InSync,
+            "NOT_CHECKED" => StackDriftStatus::NotChecked,
+            "UNKNOWN" => StackDriftStatus::Unknown,
+            _ => StackDriftStatus::UnknownVariant(UnknownStackDriftStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackDriftStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DRIFTED" => StackDriftStatus::Drifted,
+            "IN_SYNC" => StackDriftStatus::InSync,
+            "NOT_CHECKED" => StackDriftStatus::NotChecked,
+            "UNKNOWN" => StackDriftStatus::Unknown,
+            _ => StackDriftStatus::UnknownVariant(UnknownStackDriftStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackDriftStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackDriftStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackDriftStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackDriftStatusDeserializer;
 impl StackDriftStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackDriftStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The StackEvent data type.</p>
@@ -6497,7 +9791,7 @@ pub struct StackEvent {
     /// <p>BLOB of the properties used to create the resource.</p>
     pub resource_properties: Option<String>,
     /// <p>Current status of the resource.</p>
-    pub resource_status: Option<String>,
+    pub resource_status: Option<ResourceStatus>,
     /// <p>Success/failure message associated with the resource.</p>
     pub resource_status_reason: Option<String>,
     /// <p>Type of resource. (For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>
@@ -6614,7 +9908,7 @@ pub struct StackInstance {
     /// <p>[<code>Self-managed</code> permissions] The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
     /// <p><p>Status of the stack instance&#39;s actual configuration compared to the expected template and parameter configuration of the stack set to which it belongs. </p> <ul> <li> <p> <code>DRIFTED</code>: The stack differs from the expected template and parameter configuration of the stack set to which it belongs. A stack instance is considered to have drifted if one or more of the resources in the associated stack have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the stack instance differs from its expected stack set configuration.</p> </li> <li> <p> <code>IN</em>SYNC</code>: The stack instance&#39;s actual configuration matches its expected stack set configuration.</p> </li> <li> <p> <code>UNKNOWN</code>: This value is reserved for future use.</p> </li> </ul></p>
-    pub drift_status: Option<String>,
+    pub drift_status: Option<StackDriftStatus>,
     /// <p>Most recent time when CloudFormation performed a drift detection operation on the stack instance. This value will be <code>NULL</code> for any stack instance on which drift detection has not yet been performed.</p>
     pub last_drift_check_timestamp: Option<String>,
     /// <p>[<code>Service-managed</code> permissions] The organization root ID or organizational unit (OU) IDs that you specified for <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html">DeploymentTargets</a>.</p>
@@ -6630,7 +9924,7 @@ pub struct StackInstance {
     /// <p>The name or unique ID of the stack set that the stack instance is associated with.</p>
     pub stack_set_id: Option<String>,
     /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<StackInstanceStatus>,
     /// <p>The explanation for the specific status code that is assigned to this stack instance.</p>
     pub status_reason: Option<String>,
 }
@@ -6709,7 +10003,7 @@ impl StackInstanceDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackInstanceComprehensiveStatus {
     /// <ul> <li> <p> <code>CANCELLED</code>: The operation in the specified account and Region has been cancelled. This is either because a user has stopped the stack set operation, or because the failure tolerance of the stack set operation has been exceeded.</p> </li> <li> <p> <code>FAILED</code>: The operation in the specified account and Region failed. If the stack set operation fails in enough accounts within a Region, the failure tolerance for the stack set operation as a whole might be exceeded.</p> </li> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>PENDING</code>: The operation in the specified account and Region has yet to start.</p> </li> <li> <p> <code>RUNNING</code>: The operation in the specified account and Region is currently in progress.</p> </li> <li> <p> <code>SUCCEEDED</code>: The operation in the specified account and Region completed successfully.</p> </li> </ul>
-    pub detailed_status: Option<String>,
+    pub detailed_status: Option<StackInstanceDetailedStatus>,
 }
 
 #[allow(dead_code)]
@@ -6739,12 +10033,144 @@ impl StackInstanceComprehensiveStatusDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackInstanceDetailedStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackInstanceDetailedStatus {
+    Cancelled,
+    Failed,
+    Inoperable,
+    Pending,
+    Running,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackInstanceDetailedStatus),
+}
+
+impl Default for StackInstanceDetailedStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackInstanceDetailedStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackInstanceDetailedStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackInstanceDetailedStatus {
+    fn into(self) -> String {
+        match self {
+            StackInstanceDetailedStatus::Cancelled => "CANCELLED".to_string(),
+            StackInstanceDetailedStatus::Failed => "FAILED".to_string(),
+            StackInstanceDetailedStatus::Inoperable => "INOPERABLE".to_string(),
+            StackInstanceDetailedStatus::Pending => "PENDING".to_string(),
+            StackInstanceDetailedStatus::Running => "RUNNING".to_string(),
+            StackInstanceDetailedStatus::Succeeded => "SUCCEEDED".to_string(),
+            StackInstanceDetailedStatus::UnknownVariant(UnknownStackInstanceDetailedStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackInstanceDetailedStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackInstanceDetailedStatus::Cancelled => &"CANCELLED",
+            StackInstanceDetailedStatus::Failed => &"FAILED",
+            StackInstanceDetailedStatus::Inoperable => &"INOPERABLE",
+            StackInstanceDetailedStatus::Pending => &"PENDING",
+            StackInstanceDetailedStatus::Running => &"RUNNING",
+            StackInstanceDetailedStatus::Succeeded => &"SUCCEEDED",
+            StackInstanceDetailedStatus::UnknownVariant(UnknownStackInstanceDetailedStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackInstanceDetailedStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => StackInstanceDetailedStatus::Cancelled,
+            "FAILED" => StackInstanceDetailedStatus::Failed,
+            "INOPERABLE" => StackInstanceDetailedStatus::Inoperable,
+            "PENDING" => StackInstanceDetailedStatus::Pending,
+            "RUNNING" => StackInstanceDetailedStatus::Running,
+            "SUCCEEDED" => StackInstanceDetailedStatus::Succeeded,
+            _ => StackInstanceDetailedStatus::UnknownVariant(UnknownStackInstanceDetailedStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackInstanceDetailedStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => StackInstanceDetailedStatus::Cancelled,
+            "FAILED" => StackInstanceDetailedStatus::Failed,
+            "INOPERABLE" => StackInstanceDetailedStatus::Inoperable,
+            "PENDING" => StackInstanceDetailedStatus::Pending,
+            "RUNNING" => StackInstanceDetailedStatus::Running,
+            "SUCCEEDED" => StackInstanceDetailedStatus::Succeeded,
+            _ => StackInstanceDetailedStatus::UnknownVariant(UnknownStackInstanceDetailedStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackInstanceDetailedStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackInstanceDetailedStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackInstanceDetailedStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackInstanceDetailedStatusDeserializer;
 impl StackInstanceDetailedStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackInstanceDetailedStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The status that stack instances are filtered by.</p>
@@ -6752,7 +10178,7 @@ impl StackInstanceDetailedStatusDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StackInstanceFilter {
     /// <p>The type of filter to apply.</p>
-    pub name: Option<String>,
+    pub name: Option<StackInstanceFilterName>,
     /// <p>The status to filter by.</p>
     pub values: Option<String>,
 }
@@ -6767,11 +10193,112 @@ impl StackInstanceFilterSerializer {
         }
 
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+            params.put(&format!("{}{}", prefix, "Name"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.values {
-            params.put(&format!("{}{}", prefix, "Values"), &field_value);
+            params.put(&format!("{}{}", prefix, "Values"), &field_value.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackInstanceFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackInstanceFilterName {
+    DetailedStatus,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackInstanceFilterName),
+}
+
+impl Default for StackInstanceFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackInstanceFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackInstanceFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackInstanceFilterName {
+    fn into(self) -> String {
+        match self {
+            StackInstanceFilterName::DetailedStatus => "DETAILED_STATUS".to_string(),
+            StackInstanceFilterName::UnknownVariant(UnknownStackInstanceFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackInstanceFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            StackInstanceFilterName::DetailedStatus => &"DETAILED_STATUS",
+            StackInstanceFilterName::UnknownVariant(UnknownStackInstanceFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackInstanceFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "DETAILED_STATUS" => StackInstanceFilterName::DetailedStatus,
+            _ => StackInstanceFilterName::UnknownVariant(UnknownStackInstanceFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackInstanceFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DETAILED_STATUS" => StackInstanceFilterName::DetailedStatus,
+            _ => StackInstanceFilterName::UnknownVariant(UnknownStackInstanceFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackInstanceFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackInstanceFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackInstanceFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -6786,12 +10313,126 @@ impl StackInstanceFiltersSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackInstanceStatus {
+    Current,
+    Inoperable,
+    Outdated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackInstanceStatus),
+}
+
+impl Default for StackInstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackInstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackInstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackInstanceStatus {
+    fn into(self) -> String {
+        match self {
+            StackInstanceStatus::Current => "CURRENT".to_string(),
+            StackInstanceStatus::Inoperable => "INOPERABLE".to_string(),
+            StackInstanceStatus::Outdated => "OUTDATED".to_string(),
+            StackInstanceStatus::UnknownVariant(UnknownStackInstanceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackInstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackInstanceStatus::Current => &"CURRENT",
+            StackInstanceStatus::Inoperable => &"INOPERABLE",
+            StackInstanceStatus::Outdated => &"OUTDATED",
+            StackInstanceStatus::UnknownVariant(UnknownStackInstanceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StackInstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CURRENT" => StackInstanceStatus::Current,
+            "INOPERABLE" => StackInstanceStatus::Inoperable,
+            "OUTDATED" => StackInstanceStatus::Outdated,
+            _ => StackInstanceStatus::UnknownVariant(UnknownStackInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackInstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CURRENT" => StackInstanceStatus::Current,
+            "INOPERABLE" => StackInstanceStatus::Inoperable,
+            "OUTDATED" => StackInstanceStatus::Outdated,
+            _ => StackInstanceStatus::UnknownVariant(UnknownStackInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackInstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackInstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackInstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackInstanceStatusDeserializer;
 impl StackInstanceStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackInstanceStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6821,7 +10462,7 @@ pub struct StackInstanceSummary {
     /// <p>[<code>Self-managed</code> permissions] The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
     /// <p><p>Status of the stack instance&#39;s actual configuration compared to the expected template and parameter configuration of the stack set to which it belongs. </p> <ul> <li> <p> <code>DRIFTED</code>: The stack differs from the expected template and parameter configuration of the stack set to which it belongs. A stack instance is considered to have drifted if one or more of the resources in the associated stack have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the stack instance differs from its expected stack set configuration.</p> </li> <li> <p> <code>IN</em>SYNC</code>: The stack instance&#39;s actual configuration matches its expected stack set configuration.</p> </li> <li> <p> <code>UNKNOWN</code>: This value is reserved for future use.</p> </li> </ul></p>
-    pub drift_status: Option<String>,
+    pub drift_status: Option<StackDriftStatus>,
     /// <p>Most recent time when CloudFormation performed a drift detection operation on the stack instance. This value will be <code>NULL</code> for any stack instance on which drift detection has not yet been performed.</p>
     pub last_drift_check_timestamp: Option<String>,
     /// <p>[<code>Service-managed</code> permissions] The organization root ID or organizational unit (OU) IDs that you specified for <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html">DeploymentTargets</a>.</p>
@@ -6835,7 +10476,7 @@ pub struct StackInstanceSummary {
     /// <p>The name or unique ID of the stack set that the stack instance is associated with.</p>
     pub stack_set_id: Option<String>,
     /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<StackInstanceStatus>,
     /// <p>The explanation for the specific status code assigned to this stack instance.</p>
     pub status_reason: Option<String>,
 }
@@ -6935,7 +10576,7 @@ pub struct StackResource {
     /// <p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p>
     pub physical_resource_id: Option<String>,
     /// <p>Current status of the resource.</p>
-    pub resource_status: String,
+    pub resource_status: ResourceStatus,
     /// <p>Success/failure message associated with the resource.</p>
     pub resource_status_reason: Option<String>,
     /// <p>Type of resource. (For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>
@@ -7032,7 +10673,7 @@ pub struct StackResourceDetail {
     /// <p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p>
     pub physical_resource_id: Option<String>,
     /// <p>Current status of the resource.</p>
-    pub resource_status: String,
+    pub resource_status: ResourceStatus,
     /// <p>Success/failure message associated with the resource.</p>
     pub resource_status_reason: Option<String>,
     /// <p>Type of resource. ((For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>
@@ -7135,7 +10776,7 @@ pub struct StackResourceDrift {
     /// <p>The ID of the stack.</p>
     pub stack_id: String,
     /// <p><p>Status of the resource&#39;s actual configuration compared to its expected configuration</p> <ul> <li> <p> <code>DELETED</code>: The resource differs from its expected template configuration because the resource has been deleted.</p> </li> <li> <p> <code>MODIFIED</code>: One or more resource properties differ from their expected values (as defined in the stack template and any values specified as template parameters).</p> </li> <li> <p> <code>IN<em>SYNC</code>: The resources&#39;s actual configuration matches its expected template configuration.</p> </li> <li> <p> <code>NOT</em>CHECKED</code>: AWS CloudFormation does not currently return this value.</p> </li> </ul></p>
-    pub stack_resource_drift_status: String,
+    pub stack_resource_drift_status: StackResourceDriftStatus,
     /// <p>Time at which AWS CloudFormation performed drift detection on the stack resource.</p>
     pub timestamp: String,
 }
@@ -7219,7 +10860,7 @@ pub struct StackResourceDriftInformation {
     /// <p>When AWS CloudFormation last checked if the resource had drifted from its expected configuration.</p>
     pub last_check_timestamp: Option<String>,
     /// <p><p>Status of the resource&#39;s actual configuration compared to its expected configuration</p> <ul> <li> <p> <code>DELETED</code>: The resource differs from its expected configuration in that it has been deleted.</p> </li> <li> <p> <code>MODIFIED</code>: The resource differs from its expected configuration.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the resource differs from its expected configuration.</p> <p>Any resources that do not currently support drift detection have a status of <code>NOT</em>CHECKED</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>. </p> </li> <li> <p> <code>IN_SYNC</code>: The resources&#39;s actual configuration matches its expected configuration.</p> </li> </ul></p>
-    pub stack_resource_drift_status: String,
+    pub stack_resource_drift_status: StackResourceDriftStatus,
 }
 
 #[allow(dead_code)]
@@ -7262,7 +10903,7 @@ pub struct StackResourceDriftInformationSummary {
     /// <p>When AWS CloudFormation last checked if the resource had drifted from its expected configuration.</p>
     pub last_check_timestamp: Option<String>,
     /// <p><p>Status of the resource&#39;s actual configuration compared to its expected configuration</p> <ul> <li> <p> <code>DELETED</code>: The resource differs from its expected configuration in that it has been deleted.</p> </li> <li> <p> <code>MODIFIED</code>: The resource differs from its expected configuration.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked if the resource differs from its expected configuration.</p> <p>Any resources that do not currently support drift detection have a status of <code>NOT</em>CHECKED</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>. If you performed an <a>ContinueUpdateRollback</a> operation on a stack, any resources included in <code>ResourcesToSkip</code> will also have a status of <code>NOT<em>CHECKED</code>. For more information on skipping resources during rollback operations, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-continueupdaterollback.html">Continue Rolling Back an Update</a> in the AWS CloudFormation User Guide.</p> </li> <li> <p> <code>IN</em>SYNC</code>: The resources&#39;s actual configuration matches its expected configuration.</p> </li> </ul></p>
-    pub stack_resource_drift_status: String,
+    pub stack_resource_drift_status: StackResourceDriftStatus,
 }
 
 #[allow(dead_code)]
@@ -7298,22 +10939,142 @@ impl StackResourceDriftInformationSummaryDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackResourceDriftStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackResourceDriftStatus {
+    Deleted,
+    InSync,
+    Modified,
+    NotChecked,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackResourceDriftStatus),
+}
+
+impl Default for StackResourceDriftStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackResourceDriftStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackResourceDriftStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackResourceDriftStatus {
+    fn into(self) -> String {
+        match self {
+            StackResourceDriftStatus::Deleted => "DELETED".to_string(),
+            StackResourceDriftStatus::InSync => "IN_SYNC".to_string(),
+            StackResourceDriftStatus::Modified => "MODIFIED".to_string(),
+            StackResourceDriftStatus::NotChecked => "NOT_CHECKED".to_string(),
+            StackResourceDriftStatus::UnknownVariant(UnknownStackResourceDriftStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackResourceDriftStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackResourceDriftStatus::Deleted => &"DELETED",
+            StackResourceDriftStatus::InSync => &"IN_SYNC",
+            StackResourceDriftStatus::Modified => &"MODIFIED",
+            StackResourceDriftStatus::NotChecked => &"NOT_CHECKED",
+            StackResourceDriftStatus::UnknownVariant(UnknownStackResourceDriftStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackResourceDriftStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED" => StackResourceDriftStatus::Deleted,
+            "IN_SYNC" => StackResourceDriftStatus::InSync,
+            "MODIFIED" => StackResourceDriftStatus::Modified,
+            "NOT_CHECKED" => StackResourceDriftStatus::NotChecked,
+            _ => StackResourceDriftStatus::UnknownVariant(UnknownStackResourceDriftStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackResourceDriftStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED" => StackResourceDriftStatus::Deleted,
+            "IN_SYNC" => StackResourceDriftStatus::InSync,
+            "MODIFIED" => StackResourceDriftStatus::Modified,
+            "NOT_CHECKED" => StackResourceDriftStatus::NotChecked,
+            _ => StackResourceDriftStatus::UnknownVariant(UnknownStackResourceDriftStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackResourceDriftStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackResourceDriftStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackResourceDriftStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackResourceDriftStatusDeserializer;
 impl StackResourceDriftStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackResourceDriftStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
 /// Serialize `StackResourceDriftStatusFilters` contents to a `SignedRequest`.
 struct StackResourceDriftStatusFiltersSerializer;
 impl StackResourceDriftStatusFiltersSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<StackResourceDriftStatus>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7373,7 +11134,7 @@ pub struct StackResourceSummary {
     /// <p>The name or unique identifier that corresponds to a physical instance ID of the resource.</p>
     pub physical_resource_id: Option<String>,
     /// <p>Current status of the resource.</p>
-    pub resource_status: String,
+    pub resource_status: ResourceStatus,
     /// <p>Success/failure message associated with the resource.</p>
     pub resource_status_reason: Option<String>,
     /// <p>Type of resource. (For more information, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>
@@ -7464,7 +11225,7 @@ pub struct StackSet {
     /// <p>[<code>Service-managed</code> permissions] Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).</p>
     pub auto_deployment: Option<AutoDeployment>,
     /// <p>The capabilities that are allowed in the stack set. Some stack set templates might include resources that can affect permissions in your AWS account—for example, by creating new AWS Identity and Access Management (IAM) users. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates.</a> </p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>A description of the stack set that you specify when the stack set is created or updated.</p>
     pub description: Option<String>,
     /// <p>The name of the IAM execution role used to create or update the stack set. </p> <p>Use customized execution roles to control which stack resources users and groups can include in their stack sets. </p>
@@ -7474,7 +11235,7 @@ pub struct StackSet {
     /// <p>A list of input parameters for a stack set.</p>
     pub parameters: Option<Vec<Parameter>>,
     /// <p><p>Describes how the IAM roles required for stack set operations are created.</p> <ul> <li> <p>With <code>self-managed</code> permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html">Grant Self-Managed Stack Set Permissions</a>.</p> </li> <li> <p>With <code>service-managed</code> permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-service-managed.html">Grant Service-Managed Stack Set Permissions</a>.</p> </li> </ul></p>
-    pub permission_model: Option<String>,
+    pub permission_model: Option<PermissionModels>,
     /// <p>The Amazon Resource Number (ARN) of the stack set.</p>
     pub stack_set_arn: Option<String>,
     /// <p>Detailed information about the drift status of the stack set.</p> <p>For stack sets, contains information about the last <i>completed</i> drift operation performed on the stack set. Information about drift operations currently in progress is not included.</p>
@@ -7484,7 +11245,7 @@ pub struct StackSet {
     /// <p>The name that's associated with the stack set.</p>
     pub stack_set_name: Option<String>,
     /// <p>The status of the stack set.</p>
-    pub status: Option<String>,
+    pub status: Option<StackSetStatus>,
     /// <p>A list of tags that specify information about the stack set. A maximum number of 50 tags can be specified.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The structure that contains the body of the template that was used to create or update the stack set.</p>
@@ -7601,9 +11362,9 @@ impl StackSetARNDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetDriftDetectionDetails {
     /// <p><p>The status of the stack set drift detection operation.</p> <ul> <li> <p> <code>COMPLETED</code>: The drift detection operation completed without failing on any stack instances.</p> </li> <li> <p> <code>FAILED</code>: The drift detection operation exceeded the specified failure tolerance. </p> </li> <li> <p> <code>PARTIAL<em>SUCCESS</code>: The drift detection operation completed without exceeding the failure tolerance for the operation.</p> </li> <li> <p> <code>IN</em>PROGRESS</code>: The drift detection operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the drift detection operation.</p> </li> </ul></p>
-    pub drift_detection_status: Option<String>,
+    pub drift_detection_status: Option<StackSetDriftDetectionStatus>,
     /// <p><p>Status of the stack set&#39;s actual configuration compared to its expected template and parameter configuration. A stack set is considered to have drifted if one or more of its stack instances have drifted from their expected template and parameter configuration.</p> <ul> <li> <p> <code>DRIFTED</code>: One or more of the stack instances belonging to the stack set stack differs from the expected template and parameter configuration. A stack instance is considered to have drifted if one or more of the resources in the associated stack have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked the stack set for drift.</p> </li> <li> <p> <code>IN</em>SYNC</code>: All of the stack instances belonging to the stack set stack match from the expected template and parameter configuration.</p> </li> </ul></p>
-    pub drift_status: Option<String>,
+    pub drift_status: Option<StackSetDriftStatus>,
     /// <p>The number of stack instances that have drifted from the expected template and parameter configuration of the stack set. A stack instance is considered to have drifted if one or more of the resources in the associated stack do not match their expected configuration.</p>
     pub drifted_stack_instances_count: Option<i64>,
     /// <p>The number of stack instances for which the drift detection operation failed.</p>
@@ -7692,20 +11453,266 @@ impl StackSetDriftDetectionDetailsDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackSetDriftDetectionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackSetDriftDetectionStatus {
+    Completed,
+    Failed,
+    InProgress,
+    PartialSuccess,
+    Stopped,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackSetDriftDetectionStatus),
+}
+
+impl Default for StackSetDriftDetectionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackSetDriftDetectionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackSetDriftDetectionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackSetDriftDetectionStatus {
+    fn into(self) -> String {
+        match self {
+            StackSetDriftDetectionStatus::Completed => "COMPLETED".to_string(),
+            StackSetDriftDetectionStatus::Failed => "FAILED".to_string(),
+            StackSetDriftDetectionStatus::InProgress => "IN_PROGRESS".to_string(),
+            StackSetDriftDetectionStatus::PartialSuccess => "PARTIAL_SUCCESS".to_string(),
+            StackSetDriftDetectionStatus::Stopped => "STOPPED".to_string(),
+            StackSetDriftDetectionStatus::UnknownVariant(UnknownStackSetDriftDetectionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackSetDriftDetectionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackSetDriftDetectionStatus::Completed => &"COMPLETED",
+            StackSetDriftDetectionStatus::Failed => &"FAILED",
+            StackSetDriftDetectionStatus::InProgress => &"IN_PROGRESS",
+            StackSetDriftDetectionStatus::PartialSuccess => &"PARTIAL_SUCCESS",
+            StackSetDriftDetectionStatus::Stopped => &"STOPPED",
+            StackSetDriftDetectionStatus::UnknownVariant(UnknownStackSetDriftDetectionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackSetDriftDetectionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => StackSetDriftDetectionStatus::Completed,
+            "FAILED" => StackSetDriftDetectionStatus::Failed,
+            "IN_PROGRESS" => StackSetDriftDetectionStatus::InProgress,
+            "PARTIAL_SUCCESS" => StackSetDriftDetectionStatus::PartialSuccess,
+            "STOPPED" => StackSetDriftDetectionStatus::Stopped,
+            _ => {
+                StackSetDriftDetectionStatus::UnknownVariant(UnknownStackSetDriftDetectionStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for StackSetDriftDetectionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => StackSetDriftDetectionStatus::Completed,
+            "FAILED" => StackSetDriftDetectionStatus::Failed,
+            "IN_PROGRESS" => StackSetDriftDetectionStatus::InProgress,
+            "PARTIAL_SUCCESS" => StackSetDriftDetectionStatus::PartialSuccess,
+            "STOPPED" => StackSetDriftDetectionStatus::Stopped,
+            _ => {
+                StackSetDriftDetectionStatus::UnknownVariant(UnknownStackSetDriftDetectionStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackSetDriftDetectionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackSetDriftDetectionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackSetDriftDetectionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackSetDriftDetectionStatusDeserializer;
 impl StackSetDriftDetectionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackSetDriftDetectionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackSetDriftStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackSetDriftStatus {
+    Drifted,
+    InSync,
+    NotChecked,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackSetDriftStatus),
+}
+
+impl Default for StackSetDriftStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackSetDriftStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackSetDriftStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackSetDriftStatus {
+    fn into(self) -> String {
+        match self {
+            StackSetDriftStatus::Drifted => "DRIFTED".to_string(),
+            StackSetDriftStatus::InSync => "IN_SYNC".to_string(),
+            StackSetDriftStatus::NotChecked => "NOT_CHECKED".to_string(),
+            StackSetDriftStatus::UnknownVariant(UnknownStackSetDriftStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackSetDriftStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackSetDriftStatus::Drifted => &"DRIFTED",
+            StackSetDriftStatus::InSync => &"IN_SYNC",
+            StackSetDriftStatus::NotChecked => &"NOT_CHECKED",
+            StackSetDriftStatus::UnknownVariant(UnknownStackSetDriftStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StackSetDriftStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DRIFTED" => StackSetDriftStatus::Drifted,
+            "IN_SYNC" => StackSetDriftStatus::InSync,
+            "NOT_CHECKED" => StackSetDriftStatus::NotChecked,
+            _ => StackSetDriftStatus::UnknownVariant(UnknownStackSetDriftStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackSetDriftStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DRIFTED" => StackSetDriftStatus::Drifted,
+            "IN_SYNC" => StackSetDriftStatus::InSync,
+            "NOT_CHECKED" => StackSetDriftStatus::NotChecked,
+            _ => StackSetDriftStatus::UnknownVariant(UnknownStackSetDriftStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackSetDriftStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackSetDriftStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackSetDriftStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackSetDriftStatusDeserializer;
 impl StackSetDriftStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackSetDriftStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -7729,7 +11736,7 @@ impl StackSetNameDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetOperation {
     /// <p>The type of stack set operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack set instances that are associated with the specified stack set. Update operations affect both the stack set itself, as well as <i>all</i> associated stack set instances.</p>
-    pub action: Option<String>,
+    pub action: Option<StackSetOperationAction>,
     /// <p>The Amazon Resource Number (ARN) of the IAM role used to perform this stack set operation. </p> <p>Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p>
     pub administration_role_arn: Option<String>,
     /// <p>The time at which the operation was initiated. Note that the creation times for the stack set operation might differ from the creation time of the individual stacks themselves. This is because AWS CloudFormation needs to perform preparatory work for the operation, such as dispatching the work to the requested Regions, before actually creating the first stacks.</p>
@@ -7751,7 +11758,7 @@ pub struct StackSetOperation {
     /// <p>The ID of the stack set.</p>
     pub stack_set_id: Option<String>,
     /// <p><p>The status of the operation. </p> <ul> <li> <p> <code>FAILED</code>: The operation exceeded the specified failure tolerance. The failure tolerance value that you&#39;ve set for an operation is applied for each Region during stack create and update operations. If the number of failed stacks within a Region exceeds the failure tolerance, the status of the operation in the Region is set to <code>FAILED</code>. This in turn sets the status of the operation as a whole to <code>FAILED</code>, and AWS CloudFormation cancels the operation in any remaining Regions.</p> </li> <li> <p> <code>QUEUED</code>: [<code>Service-managed</code> permissions] For automatic deployments that require a sequence of operations, the operation is queued to be performed. For more information, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-status-codes">stack set operation status codes</a> in the AWS CloudFormation User Guide.</p> </li> <li> <p> <code>RUNNING</code>: The operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the operation.</p> </li> <li> <p> <code>STOPPING</code>: The operation is in the process of stopping, at user request. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation completed creating or updating all the specified stacks without exceeding the failure tolerance for the operation.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<StackSetOperationStatus>,
 }
 
 #[allow(dead_code)]
@@ -7838,12 +11845,132 @@ impl StackSetOperationDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackSetOperationAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackSetOperationAction {
+    Create,
+    Delete,
+    DetectDrift,
+    Update,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackSetOperationAction),
+}
+
+impl Default for StackSetOperationAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackSetOperationAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackSetOperationAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackSetOperationAction {
+    fn into(self) -> String {
+        match self {
+            StackSetOperationAction::Create => "CREATE".to_string(),
+            StackSetOperationAction::Delete => "DELETE".to_string(),
+            StackSetOperationAction::DetectDrift => "DETECT_DRIFT".to_string(),
+            StackSetOperationAction::Update => "UPDATE".to_string(),
+            StackSetOperationAction::UnknownVariant(UnknownStackSetOperationAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackSetOperationAction {
+    fn into(self) -> &'a str {
+        match self {
+            StackSetOperationAction::Create => &"CREATE",
+            StackSetOperationAction::Delete => &"DELETE",
+            StackSetOperationAction::DetectDrift => &"DETECT_DRIFT",
+            StackSetOperationAction::Update => &"UPDATE",
+            StackSetOperationAction::UnknownVariant(UnknownStackSetOperationAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackSetOperationAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE" => StackSetOperationAction::Create,
+            "DELETE" => StackSetOperationAction::Delete,
+            "DETECT_DRIFT" => StackSetOperationAction::DetectDrift,
+            "UPDATE" => StackSetOperationAction::Update,
+            _ => StackSetOperationAction::UnknownVariant(UnknownStackSetOperationAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackSetOperationAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE" => StackSetOperationAction::Create,
+            "DELETE" => StackSetOperationAction::Delete,
+            "DETECT_DRIFT" => StackSetOperationAction::DetectDrift,
+            "UPDATE" => StackSetOperationAction::Update,
+            _ => StackSetOperationAction::UnknownVariant(UnknownStackSetOperationAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackSetOperationAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackSetOperationAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackSetOperationAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackSetOperationActionDeserializer;
 impl StackSetOperationActionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackSetOperationAction, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The user-specified preferences for how AWS CloudFormation performs a stack set operation. </p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a>.</p>
@@ -7957,12 +12084,140 @@ impl StackSetOperationPreferencesSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackSetOperationResultStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackSetOperationResultStatus {
+    Cancelled,
+    Failed,
+    Pending,
+    Running,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackSetOperationResultStatus),
+}
+
+impl Default for StackSetOperationResultStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackSetOperationResultStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackSetOperationResultStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackSetOperationResultStatus {
+    fn into(self) -> String {
+        match self {
+            StackSetOperationResultStatus::Cancelled => "CANCELLED".to_string(),
+            StackSetOperationResultStatus::Failed => "FAILED".to_string(),
+            StackSetOperationResultStatus::Pending => "PENDING".to_string(),
+            StackSetOperationResultStatus::Running => "RUNNING".to_string(),
+            StackSetOperationResultStatus::Succeeded => "SUCCEEDED".to_string(),
+            StackSetOperationResultStatus::UnknownVariant(
+                UnknownStackSetOperationResultStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackSetOperationResultStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackSetOperationResultStatus::Cancelled => &"CANCELLED",
+            StackSetOperationResultStatus::Failed => &"FAILED",
+            StackSetOperationResultStatus::Pending => &"PENDING",
+            StackSetOperationResultStatus::Running => &"RUNNING",
+            StackSetOperationResultStatus::Succeeded => &"SUCCEEDED",
+            StackSetOperationResultStatus::UnknownVariant(
+                UnknownStackSetOperationResultStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for StackSetOperationResultStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => StackSetOperationResultStatus::Cancelled,
+            "FAILED" => StackSetOperationResultStatus::Failed,
+            "PENDING" => StackSetOperationResultStatus::Pending,
+            "RUNNING" => StackSetOperationResultStatus::Running,
+            "SUCCEEDED" => StackSetOperationResultStatus::Succeeded,
+            _ => StackSetOperationResultStatus::UnknownVariant(
+                UnknownStackSetOperationResultStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for StackSetOperationResultStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => StackSetOperationResultStatus::Cancelled,
+            "FAILED" => StackSetOperationResultStatus::Failed,
+            "PENDING" => StackSetOperationResultStatus::Pending,
+            "RUNNING" => StackSetOperationResultStatus::Running,
+            "SUCCEEDED" => StackSetOperationResultStatus::Succeeded,
+            _ => StackSetOperationResultStatus::UnknownVariant(
+                UnknownStackSetOperationResultStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackSetOperationResultStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackSetOperationResultStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackSetOperationResultStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackSetOperationResultStatusDeserializer;
 impl StackSetOperationResultStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackSetOperationResultStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -7998,7 +12253,7 @@ pub struct StackSetOperationResultSummary {
     /// <p>The name of the AWS Region for this operation result.</p>
     pub region: Option<String>,
     /// <p><p>The result status of the stack set operation for the given account in the given Region.</p> <ul> <li> <p> <code>CANCELLED</code>: The operation in the specified account and Region has been cancelled. This is either because a user has stopped the stack set operation, or because the failure tolerance of the stack set operation has been exceeded.</p> </li> <li> <p> <code>FAILED</code>: The operation in the specified account and Region failed. </p> <p>If the stack set operation fails in enough accounts within a Region, the failure tolerance for the stack set operation as a whole might be exceeded. </p> </li> <li> <p> <code>RUNNING</code>: The operation in the specified account and Region is currently in progress.</p> </li> <li> <p> <code>PENDING</code>: The operation in the specified account and Region has yet to start. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation in the specified account and Region completed successfully.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<StackSetOperationResultStatus>,
     /// <p>The reason for the assigned result status.</p>
     pub status_reason: Option<String>,
 }
@@ -8051,12 +12306,142 @@ impl StackSetOperationResultSummaryDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackSetOperationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackSetOperationStatus {
+    Failed,
+    Queued,
+    Running,
+    Stopped,
+    Stopping,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackSetOperationStatus),
+}
+
+impl Default for StackSetOperationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackSetOperationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackSetOperationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackSetOperationStatus {
+    fn into(self) -> String {
+        match self {
+            StackSetOperationStatus::Failed => "FAILED".to_string(),
+            StackSetOperationStatus::Queued => "QUEUED".to_string(),
+            StackSetOperationStatus::Running => "RUNNING".to_string(),
+            StackSetOperationStatus::Stopped => "STOPPED".to_string(),
+            StackSetOperationStatus::Stopping => "STOPPING".to_string(),
+            StackSetOperationStatus::Succeeded => "SUCCEEDED".to_string(),
+            StackSetOperationStatus::UnknownVariant(UnknownStackSetOperationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackSetOperationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackSetOperationStatus::Failed => &"FAILED",
+            StackSetOperationStatus::Queued => &"QUEUED",
+            StackSetOperationStatus::Running => &"RUNNING",
+            StackSetOperationStatus::Stopped => &"STOPPED",
+            StackSetOperationStatus::Stopping => &"STOPPING",
+            StackSetOperationStatus::Succeeded => &"SUCCEEDED",
+            StackSetOperationStatus::UnknownVariant(UnknownStackSetOperationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackSetOperationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => StackSetOperationStatus::Failed,
+            "QUEUED" => StackSetOperationStatus::Queued,
+            "RUNNING" => StackSetOperationStatus::Running,
+            "STOPPED" => StackSetOperationStatus::Stopped,
+            "STOPPING" => StackSetOperationStatus::Stopping,
+            "SUCCEEDED" => StackSetOperationStatus::Succeeded,
+            _ => StackSetOperationStatus::UnknownVariant(UnknownStackSetOperationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackSetOperationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => StackSetOperationStatus::Failed,
+            "QUEUED" => StackSetOperationStatus::Queued,
+            "RUNNING" => StackSetOperationStatus::Running,
+            "STOPPED" => StackSetOperationStatus::Stopped,
+            "STOPPING" => StackSetOperationStatus::Stopping,
+            "SUCCEEDED" => StackSetOperationStatus::Succeeded,
+            _ => StackSetOperationStatus::UnknownVariant(UnknownStackSetOperationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackSetOperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackSetOperationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackSetOperationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackSetOperationStatusDeserializer;
 impl StackSetOperationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackSetOperationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8084,7 +12469,7 @@ impl StackSetOperationSummariesDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StackSetOperationSummary {
     /// <p>The type of operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack instances that are associated with the specified stack set. Update operations affect both the stack set itself as well as <i>all</i> associated stack set instances.</p>
-    pub action: Option<String>,
+    pub action: Option<StackSetOperationAction>,
     /// <p>The time at which the operation was initiated. Note that the creation times for the stack set operation might differ from the creation time of the individual stacks themselves. This is because AWS CloudFormation needs to perform preparatory work for the operation, such as dispatching the work to the requested Regions, before actually creating the first stacks.</p>
     pub creation_timestamp: Option<String>,
     /// <p>The time at which the stack set operation ended, across all accounts and Regions specified. Note that this doesn't necessarily mean that the stack set operation was successful, or even attempted, in each account or Region.</p>
@@ -8092,7 +12477,7 @@ pub struct StackSetOperationSummary {
     /// <p>The unique ID of the stack set operation.</p>
     pub operation_id: Option<String>,
     /// <p><p>The overall status of the operation.</p> <ul> <li> <p> <code>FAILED</code>: The operation exceeded the specified failure tolerance. The failure tolerance value that you&#39;ve set for an operation is applied for each Region during stack create and update operations. If the number of failed stacks within a Region exceeds the failure tolerance, the status of the operation in the Region is set to <code>FAILED</code>. This in turn sets the status of the operation as a whole to <code>FAILED</code>, and AWS CloudFormation cancels the operation in any remaining Regions.</p> </li> <li> <p> <code>QUEUED</code>: [<code>Service-managed</code> permissions] For automatic deployments that require a sequence of operations, the operation is queued to be performed. For more information, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-status-codes">stack set operation status codes</a> in the AWS CloudFormation User Guide.</p> </li> <li> <p> <code>RUNNING</code>: The operation is currently being performed.</p> </li> <li> <p> <code>STOPPED</code>: The user has cancelled the operation.</p> </li> <li> <p> <code>STOPPING</code>: The operation is in the process of stopping, at user request. </p> </li> <li> <p> <code>SUCCEEDED</code>: The operation completed creating or updating all the specified stacks without exceeding the failure tolerance for the operation.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<StackSetOperationStatus>,
 }
 
 #[allow(dead_code)]
@@ -8141,12 +12526,118 @@ impl StackSetOperationSummaryDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackSetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackSetStatus {
+    Active,
+    Deleted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackSetStatus),
+}
+
+impl Default for StackSetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackSetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackSetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackSetStatus {
+    fn into(self) -> String {
+        match self {
+            StackSetStatus::Active => "ACTIVE".to_string(),
+            StackSetStatus::Deleted => "DELETED".to_string(),
+            StackSetStatus::UnknownVariant(UnknownStackSetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackSetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackSetStatus::Active => &"ACTIVE",
+            StackSetStatus::Deleted => &"DELETED",
+            StackSetStatus::UnknownVariant(UnknownStackSetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackSetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => StackSetStatus::Active,
+            "DELETED" => StackSetStatus::Deleted,
+            _ => StackSetStatus::UnknownVariant(UnknownStackSetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackSetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => StackSetStatus::Active,
+            "DELETED" => StackSetStatus::Deleted,
+            _ => StackSetStatus::UnknownVariant(UnknownStackSetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackSetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackSetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackSetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackSetStatusDeserializer;
 impl StackSetStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackSetStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8176,17 +12667,17 @@ pub struct StackSetSummary {
     /// <p>A description of the stack set that you specify when the stack set is created or updated.</p>
     pub description: Option<String>,
     /// <p><p>Status of the stack set&#39;s actual configuration compared to its expected template and parameter configuration. A stack set is considered to have drifted if one or more of its stack instances have drifted from their expected template and parameter configuration.</p> <ul> <li> <p> <code>DRIFTED</code>: One or more of the stack instances belonging to the stack set stack differs from the expected template and parameter configuration. A stack instance is considered to have drifted if one or more of the resources in the associated stack have drifted.</p> </li> <li> <p> <code>NOT<em>CHECKED</code>: AWS CloudFormation has not checked the stack set for drift.</p> </li> <li> <p> <code>IN</em>SYNC</code>: All of the stack instances belonging to the stack set stack match from the expected template and parameter configuration.</p> </li> <li> <p> <code>UNKNOWN</code>: This value is reserved for future use.</p> </li> </ul></p>
-    pub drift_status: Option<String>,
+    pub drift_status: Option<StackDriftStatus>,
     /// <p>Most recent time when CloudFormation performed a drift detection operation on the stack set. This value will be <code>NULL</code> for any stack set on which drift detection has not yet been performed.</p>
     pub last_drift_check_timestamp: Option<String>,
     /// <p><p>Describes how the IAM roles required for stack set operations are created.</p> <ul> <li> <p>With <code>self-managed</code> permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html">Grant Self-Managed Stack Set Permissions</a>.</p> </li> <li> <p>With <code>service-managed</code> permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-service-managed.html">Grant Service-Managed Stack Set Permissions</a>.</p> </li> </ul></p>
-    pub permission_model: Option<String>,
+    pub permission_model: Option<PermissionModels>,
     /// <p>The ID of the stack set.</p>
     pub stack_set_id: Option<String>,
     /// <p>The name of the stack set.</p>
     pub stack_set_name: Option<String>,
     /// <p>The status of the stack set.</p>
-    pub status: Option<String>,
+    pub status: Option<StackSetStatus>,
 }
 
 #[allow(dead_code)]
@@ -8246,22 +12737,238 @@ impl StackSetSummaryDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackStatus {
+    CreateComplete,
+    CreateFailed,
+    CreateInProgress,
+    DeleteComplete,
+    DeleteFailed,
+    DeleteInProgress,
+    ImportComplete,
+    ImportInProgress,
+    ImportRollbackComplete,
+    ImportRollbackFailed,
+    ImportRollbackInProgress,
+    ReviewInProgress,
+    RollbackComplete,
+    RollbackFailed,
+    RollbackInProgress,
+    UpdateComplete,
+    UpdateCompleteCleanupInProgress,
+    UpdateInProgress,
+    UpdateRollbackComplete,
+    UpdateRollbackCompleteCleanupInProgress,
+    UpdateRollbackFailed,
+    UpdateRollbackInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackStatus),
+}
+
+impl Default for StackStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackStatus {
+    fn into(self) -> String {
+        match self {
+            StackStatus::CreateComplete => "CREATE_COMPLETE".to_string(),
+            StackStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            StackStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            StackStatus::DeleteComplete => "DELETE_COMPLETE".to_string(),
+            StackStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            StackStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            StackStatus::ImportComplete => "IMPORT_COMPLETE".to_string(),
+            StackStatus::ImportInProgress => "IMPORT_IN_PROGRESS".to_string(),
+            StackStatus::ImportRollbackComplete => "IMPORT_ROLLBACK_COMPLETE".to_string(),
+            StackStatus::ImportRollbackFailed => "IMPORT_ROLLBACK_FAILED".to_string(),
+            StackStatus::ImportRollbackInProgress => "IMPORT_ROLLBACK_IN_PROGRESS".to_string(),
+            StackStatus::ReviewInProgress => "REVIEW_IN_PROGRESS".to_string(),
+            StackStatus::RollbackComplete => "ROLLBACK_COMPLETE".to_string(),
+            StackStatus::RollbackFailed => "ROLLBACK_FAILED".to_string(),
+            StackStatus::RollbackInProgress => "ROLLBACK_IN_PROGRESS".to_string(),
+            StackStatus::UpdateComplete => "UPDATE_COMPLETE".to_string(),
+            StackStatus::UpdateCompleteCleanupInProgress => {
+                "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS".to_string()
+            }
+            StackStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            StackStatus::UpdateRollbackComplete => "UPDATE_ROLLBACK_COMPLETE".to_string(),
+            StackStatus::UpdateRollbackCompleteCleanupInProgress => {
+                "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS".to_string()
+            }
+            StackStatus::UpdateRollbackFailed => "UPDATE_ROLLBACK_FAILED".to_string(),
+            StackStatus::UpdateRollbackInProgress => "UPDATE_ROLLBACK_IN_PROGRESS".to_string(),
+            StackStatus::UnknownVariant(UnknownStackStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StackStatus::CreateComplete => &"CREATE_COMPLETE",
+            StackStatus::CreateFailed => &"CREATE_FAILED",
+            StackStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            StackStatus::DeleteComplete => &"DELETE_COMPLETE",
+            StackStatus::DeleteFailed => &"DELETE_FAILED",
+            StackStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            StackStatus::ImportComplete => &"IMPORT_COMPLETE",
+            StackStatus::ImportInProgress => &"IMPORT_IN_PROGRESS",
+            StackStatus::ImportRollbackComplete => &"IMPORT_ROLLBACK_COMPLETE",
+            StackStatus::ImportRollbackFailed => &"IMPORT_ROLLBACK_FAILED",
+            StackStatus::ImportRollbackInProgress => &"IMPORT_ROLLBACK_IN_PROGRESS",
+            StackStatus::ReviewInProgress => &"REVIEW_IN_PROGRESS",
+            StackStatus::RollbackComplete => &"ROLLBACK_COMPLETE",
+            StackStatus::RollbackFailed => &"ROLLBACK_FAILED",
+            StackStatus::RollbackInProgress => &"ROLLBACK_IN_PROGRESS",
+            StackStatus::UpdateComplete => &"UPDATE_COMPLETE",
+            StackStatus::UpdateCompleteCleanupInProgress => &"UPDATE_COMPLETE_CLEANUP_IN_PROGRESS",
+            StackStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            StackStatus::UpdateRollbackComplete => &"UPDATE_ROLLBACK_COMPLETE",
+            StackStatus::UpdateRollbackCompleteCleanupInProgress => {
+                &"UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS"
+            }
+            StackStatus::UpdateRollbackFailed => &"UPDATE_ROLLBACK_FAILED",
+            StackStatus::UpdateRollbackInProgress => &"UPDATE_ROLLBACK_IN_PROGRESS",
+            StackStatus::UnknownVariant(UnknownStackStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StackStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_COMPLETE" => StackStatus::CreateComplete,
+            "CREATE_FAILED" => StackStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => StackStatus::CreateInProgress,
+            "DELETE_COMPLETE" => StackStatus::DeleteComplete,
+            "DELETE_FAILED" => StackStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => StackStatus::DeleteInProgress,
+            "IMPORT_COMPLETE" => StackStatus::ImportComplete,
+            "IMPORT_IN_PROGRESS" => StackStatus::ImportInProgress,
+            "IMPORT_ROLLBACK_COMPLETE" => StackStatus::ImportRollbackComplete,
+            "IMPORT_ROLLBACK_FAILED" => StackStatus::ImportRollbackFailed,
+            "IMPORT_ROLLBACK_IN_PROGRESS" => StackStatus::ImportRollbackInProgress,
+            "REVIEW_IN_PROGRESS" => StackStatus::ReviewInProgress,
+            "ROLLBACK_COMPLETE" => StackStatus::RollbackComplete,
+            "ROLLBACK_FAILED" => StackStatus::RollbackFailed,
+            "ROLLBACK_IN_PROGRESS" => StackStatus::RollbackInProgress,
+            "UPDATE_COMPLETE" => StackStatus::UpdateComplete,
+            "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS" => StackStatus::UpdateCompleteCleanupInProgress,
+            "UPDATE_IN_PROGRESS" => StackStatus::UpdateInProgress,
+            "UPDATE_ROLLBACK_COMPLETE" => StackStatus::UpdateRollbackComplete,
+            "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS" => {
+                StackStatus::UpdateRollbackCompleteCleanupInProgress
+            }
+            "UPDATE_ROLLBACK_FAILED" => StackStatus::UpdateRollbackFailed,
+            "UPDATE_ROLLBACK_IN_PROGRESS" => StackStatus::UpdateRollbackInProgress,
+            _ => StackStatus::UnknownVariant(UnknownStackStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_COMPLETE" => StackStatus::CreateComplete,
+            "CREATE_FAILED" => StackStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => StackStatus::CreateInProgress,
+            "DELETE_COMPLETE" => StackStatus::DeleteComplete,
+            "DELETE_FAILED" => StackStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => StackStatus::DeleteInProgress,
+            "IMPORT_COMPLETE" => StackStatus::ImportComplete,
+            "IMPORT_IN_PROGRESS" => StackStatus::ImportInProgress,
+            "IMPORT_ROLLBACK_COMPLETE" => StackStatus::ImportRollbackComplete,
+            "IMPORT_ROLLBACK_FAILED" => StackStatus::ImportRollbackFailed,
+            "IMPORT_ROLLBACK_IN_PROGRESS" => StackStatus::ImportRollbackInProgress,
+            "REVIEW_IN_PROGRESS" => StackStatus::ReviewInProgress,
+            "ROLLBACK_COMPLETE" => StackStatus::RollbackComplete,
+            "ROLLBACK_FAILED" => StackStatus::RollbackFailed,
+            "ROLLBACK_IN_PROGRESS" => StackStatus::RollbackInProgress,
+            "UPDATE_COMPLETE" => StackStatus::UpdateComplete,
+            "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS" => StackStatus::UpdateCompleteCleanupInProgress,
+            "UPDATE_IN_PROGRESS" => StackStatus::UpdateInProgress,
+            "UPDATE_ROLLBACK_COMPLETE" => StackStatus::UpdateRollbackComplete,
+            "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS" => {
+                StackStatus::UpdateRollbackCompleteCleanupInProgress
+            }
+            "UPDATE_ROLLBACK_FAILED" => StackStatus::UpdateRollbackFailed,
+            "UPDATE_ROLLBACK_IN_PROGRESS" => StackStatus::UpdateRollbackInProgress,
+            _ => StackStatus::UnknownVariant(UnknownStackStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StackStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StackStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StackStatusDeserializer;
 impl StackStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
 /// Serialize `StackStatusFilter` contents to a `SignedRequest`.
 struct StackStatusFilterSerializer;
 impl StackStatusFilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<StackStatus>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -8313,7 +13020,7 @@ pub struct StackSummary {
     /// <p>The name associated with the stack.</p>
     pub stack_name: String,
     /// <p>The current status of the stack.</p>
-    pub stack_status: String,
+    pub stack_status: StackStatus,
     /// <p>Success/Failure message associated with the stack status.</p>
     pub stack_status_reason: Option<String>,
     /// <p>The template description of the template used to create the stack.</p>
@@ -8411,7 +13118,7 @@ impl StageListDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<TemplateStage>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(TemplateStageDeserializer::deserialize("member", stack)?);
@@ -8440,10 +13147,13 @@ impl StopStackSetOperationInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "OperationId"), &obj.operation_id);
+        params.put(
+            &format!("{}{}", prefix, "OperationId"),
+            &obj.operation_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -8509,8 +13219,8 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -8643,12 +13353,118 @@ impl TemplateParametersDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTemplateStage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TemplateStage {
+    Original,
+    Processed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTemplateStage),
+}
+
+impl Default for TemplateStage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TemplateStage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TemplateStage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TemplateStage {
+    fn into(self) -> String {
+        match self {
+            TemplateStage::Original => "Original".to_string(),
+            TemplateStage::Processed => "Processed".to_string(),
+            TemplateStage::UnknownVariant(UnknownTemplateStage { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TemplateStage {
+    fn into(self) -> &'a str {
+        match self {
+            TemplateStage::Original => &"Original",
+            TemplateStage::Processed => &"Processed",
+            TemplateStage::UnknownVariant(UnknownTemplateStage { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TemplateStage {
+    fn from(name: &str) -> Self {
+        match name {
+            "Original" => TemplateStage::Original,
+            "Processed" => TemplateStage::Processed,
+            _ => TemplateStage::UnknownVariant(UnknownTemplateStage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TemplateStage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Original" => TemplateStage::Original,
+            "Processed" => TemplateStage::Processed,
+            _ => TemplateStage::UnknownVariant(UnknownTemplateStage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TemplateStage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TemplateStage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TemplateStage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TemplateStageDeserializer;
 impl TemplateStageDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TemplateStage, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8770,7 +13586,7 @@ pub struct TypeSummary {
     /// <p>When the current default version of the type was registered.</p>
     pub last_updated: Option<String>,
     /// <p>The kind of type.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The Amazon Resource Name (ARN) of the type.</p>
     pub type_arn: Option<String>,
     /// <p>The name of the type.</p>
@@ -8857,7 +13673,7 @@ pub struct TypeVersionSummary {
     /// <p>When the version was registered.</p>
     pub time_created: Option<String>,
     /// <p>The kind of type.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RegistryType>,
     /// <p>The name of the type.</p>
     pub type_name: Option<String>,
     /// <p>The ID of a specific version of the type. The version ID is the value at the end of the Amazon Resource Name (ARN) assigned to the type version when it is registered.</p>
@@ -8912,7 +13728,7 @@ impl TypeVersionSummaryDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackInput {
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to update the stack.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some template contain macros. Macros perform custom processing on templates; this can include simple actions like find-and-replace operations, all the way to extensive transformations of entire templates. Because of this, users typically create a change set from the processed template, so that they can review the changes resulting from the macros before actually updating the stack. If your stack template contains one or more macros, and you choose to update a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.</p> <p>If you want to update a stack from a stack template that contains macros <i>and</i> nested stacks, you must update the stack directly from the template using this capability.</p> <important> <p>You should only update stacks directly from a stack template that contains macros if you know what processing the macro performs.</p> <p>Each macro relies on an underlying Lambda service function for processing stack templates. Be aware that the Lambda function owner can update the function operation without AWS CloudFormation being notified.</p> </important> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> </li> </ul></p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>A unique identifier for this <code>UpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to update a stack with the same name. You might retry <code>UpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>All events triggered by a given stack operation are assigned the same client request token, which you can use to track operations. For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p> <p>In the console, stack operations display the client request token on the Events tab. Stack operations that are initiated from the console use the token format <i>Console-StackOperation-ID</i>, which helps you easily identify the stack operation . For example, if you create a stack using the console, each stack event would be assigned the same token in the following format: <code>Console-CreateStack-7f59c3cf-00d2-40c7-b2ff-e75db0987002</code>. </p>
     pub client_request_token: Option<String>,
     /// <p>Amazon Simple Notification Service topic Amazon Resource Names (ARNs) that AWS CloudFormation associates with the stack. Specify an empty list to remove all notification topics.</p>
@@ -8962,7 +13778,10 @@ impl UpdateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.client_request_token {
-            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientRequestToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.notification_ar_ns {
             NotificationARNsSerializer::serialize(
@@ -8986,7 +13805,10 @@ impl UpdateStackInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.rollback_configuration {
             RollbackConfigurationSerializer::serialize(
@@ -8995,33 +13817,48 @@ impl UpdateStackInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
         if let Some(ref field_value) = obj.stack_policy_body {
-            params.put(&format!("{}{}", prefix, "StackPolicyBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackPolicyBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stack_policy_during_update_body {
             params.put(
                 &format!("{}{}", prefix, "StackPolicyDuringUpdateBody"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.stack_policy_during_update_url {
             params.put(
                 &format!("{}{}", prefix, "StackPolicyDuringUpdateURL"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.stack_policy_url {
-            params.put(&format!("{}{}", prefix, "StackPolicyURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StackPolicyURL"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.use_previous_template {
             params.put(
@@ -9075,7 +13912,10 @@ impl UpdateStackInstancesInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.operation_id {
-            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OperationId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -9094,7 +13934,7 @@ impl UpdateStackInstancesInputSerializer {
         RegionListSerializer::serialize(params, &format!("{}{}", prefix, "Regions"), &obj.regions);
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
     }
 }
@@ -9169,7 +14009,7 @@ pub struct UpdateStackSetInput {
     /// <p>[<code>Service-managed</code> permissions] Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).</p> <p>If you specify <code>AutoDeployment</code>, do not specify <code>DeploymentTargets</code> or <code>Regions</code>.</p>
     pub auto_deployment: Option<AutoDeployment>,
     /// <p><p>In some cases, you must explicitly acknowledge that your stack template contains certain capabilities in order for AWS CloudFormation to update the stack set and its associated stack instances.</p> <ul> <li> <p> <code>CAPABILITY<em>IAM</code> and <code>CAPABILITY</em>NAMED<em>IAM</code> </p> <p>Some stack templates might include resources that can affect permissions in your AWS account; for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks sets, you must explicitly acknowledge this by specifying one of these capabilities.</p> <p>The following IAM resources require you to specify either the <code>CAPABILITY</em>IAM</code> or <code>CAPABILITY<em>NAMED</em>IAM</code> capability.</p> <ul> <li> <p>If you have IAM resources, you can specify either capability. </p> </li> <li> <p>If you have IAM resources with custom names, you <i>must</i> specify <code>CAPABILITY<em>NAMED</em>IAM</code>. </p> </li> <li> <p>If you don&#39;t specify either of these capabilities, AWS CloudFormation returns an <code>InsufficientCapabilities</code> error.</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html"> AWS::IAM::AccessKey</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html"> AWS::IAM::Group</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html"> AWS::IAM::InstanceProfile</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html"> AWS::IAM::Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html"> AWS::IAM::Role</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html"> AWS::IAM::User</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html"> AWS::IAM::UserToGroupAddition</a> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p> </li> <li> <p> <code>CAPABILITY<em>AUTO</em>EXPAND</code> </p> <p>Some templates contain macros. If your stack template contains one or more macros, and you choose to update a stack directly from the processed template, without first reviewing the resulting changes in a change set, you must acknowledge this capability. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html">Using AWS CloudFormation Macros to Perform Custom Processing on Templates</a>.</p> <important> <p>Stack sets do not currently support macros in stack templates. (This includes the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/create-reusable-transform-function-snippets-and-add-to-your-template-with-aws-include-transform.html">AWS::Include</a> and <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html">AWS::Serverless</a> transforms, which are macros hosted by AWS CloudFormation.) Even if you specify this capability, if you include a macro in your template the stack set operation will fail.</p> </important> </li> </ul></p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>[<code>Service-managed</code> permissions] The AWS Organizations accounts in which to update associated stack instances.</p> <p>To update all the stack instances associated with this stack set, do not specify <code>DeploymentTargets</code> or <code>Regions</code>.</p> <p>If the stack set update includes changes to the template (that is, if <code>TemplateBody</code> or <code>TemplateURL</code> is specified), or the <code>Parameters</code>, AWS CloudFormation marks all stack instances with a status of <code>OUTDATED</code> prior to updating the stack instances in the specified accounts and Regions. If the stack set update does not include changes to the template or parameters, AWS CloudFormation updates the stack instances in the specified accounts and Regions, while leaving all other stack instances with their existing stack instance status.</p>
     pub deployment_targets: Option<DeploymentTargets>,
     /// <p>A brief description of updates that you are making.</p>
@@ -9183,7 +14023,7 @@ pub struct UpdateStackSetInput {
     /// <p>A list of input parameters for the stack set template. </p>
     pub parameters: Option<Vec<Parameter>>,
     /// <p><p>Describes how the IAM roles required for stack set operations are created. You cannot modify <code>PermissionModel</code> if there are stack instances associated with your stack set.</p> <ul> <li> <p>With <code>self-managed</code> permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html">Grant Self-Managed Stack Set Permissions</a>.</p> </li> <li> <p>With <code>service-managed</code> permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-service-managed.html">Grant Service-Managed Stack Set Permissions</a>.</p> </li> </ul></p>
-    pub permission_model: Option<String>,
+    pub permission_model: Option<PermissionModels>,
     /// <p>The Regions in which to update associated stack instances. If you specify Regions, you must also specify accounts in which to update stack set instances.</p> <p>To update <i>all</i> the stack instances associated with this stack set, do not specify the <code>Accounts</code> or <code>Regions</code> properties.</p> <p>If the stack set update includes changes to the template (that is, if the <code>TemplateBody</code> or <code>TemplateURL</code> properties are specified), or the <code>Parameters</code> property, AWS CloudFormation marks all stack instances with a status of <code>OUTDATED</code> prior to updating the stack instances in the specified accounts and Regions. If the stack set update does not include changes to the template or parameters, AWS CloudFormation updates the stack instances in the specified accounts and Regions, while leaving all other stack instances with their existing stack instance status. </p>
     pub regions: Option<Vec<String>>,
     /// <p>The name or unique ID of the stack set that you want to update.</p>
@@ -9217,7 +14057,7 @@ impl UpdateStackSetInputSerializer {
         if let Some(ref field_value) = obj.administration_role_arn {
             params.put(
                 &format!("{}{}", prefix, "AdministrationRoleARN"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.auto_deployment {
@@ -9242,13 +14082,22 @@ impl UpdateStackSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.execution_role_name {
-            params.put(&format!("{}{}", prefix, "ExecutionRoleName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ExecutionRoleName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operation_id {
-            params.put(&format!("{}{}", prefix, "OperationId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OperationId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.operation_preferences {
             StackSetOperationPreferencesSerializer::serialize(
@@ -9265,7 +14114,10 @@ impl UpdateStackSetInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.permission_model {
-            params.put(&format!("{}{}", prefix, "PermissionModel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PermissionModel"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.regions {
             RegionListSerializer::serialize(
@@ -9276,16 +14128,22 @@ impl UpdateStackSetInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "StackSetName"),
-            &obj.stack_set_name,
+            &obj.stack_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.use_previous_template {
             params.put(
@@ -9347,7 +14205,10 @@ impl UpdateTerminationProtectionInputSerializer {
             &format!("{}{}", prefix, "EnableTerminationProtection"),
             &obj.enable_termination_protection,
         );
-        params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.to_string(),
+        );
     }
 }
 
@@ -9417,10 +14278,16 @@ impl ValidateTemplateInputSerializer {
         }
 
         if let Some(ref field_value) = obj.template_body {
-            params.put(&format!("{}{}", prefix, "TemplateBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateBody"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.template_url {
-            params.put(&format!("{}{}", prefix, "TemplateURL"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateURL"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -9430,7 +14297,7 @@ impl ValidateTemplateInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ValidateTemplateOutput {
     /// <p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>The list of resources that generated the values in the <code>Capabilities</code> response element.</p>
     pub capabilities_reason: Option<String>,
     /// <p>A list of the transforms that are declared in the template.</p>
@@ -9498,12 +14365,118 @@ impl VersionDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVisibility {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Visibility {
+    Private,
+    Public,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVisibility),
+}
+
+impl Default for Visibility {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Visibility {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Visibility {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Visibility {
+    fn into(self) -> String {
+        match self {
+            Visibility::Private => "PRIVATE".to_string(),
+            Visibility::Public => "PUBLIC".to_string(),
+            Visibility::UnknownVariant(UnknownVisibility { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Visibility {
+    fn into(self) -> &'a str {
+        match self {
+            Visibility::Private => &"PRIVATE",
+            Visibility::Public => &"PUBLIC",
+            Visibility::UnknownVariant(UnknownVisibility { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Visibility {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRIVATE" => Visibility::Private,
+            "PUBLIC" => Visibility::Public,
+            _ => Visibility::UnknownVariant(UnknownVisibility {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Visibility {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRIVATE" => Visibility::Private,
+            "PUBLIC" => Visibility::Public,
+            _ => Visibility::UnknownVariant(UnknownVisibility { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Visibility {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Visibility {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Visibility {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct VisibilityDeserializer;
 impl VisibilityDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Visibility, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// Errors returned by CancelUpdateStack

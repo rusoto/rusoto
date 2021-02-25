@@ -25,6 +25,540 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Aac Coding Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacCodingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacCodingMode {
+    AdReceiverMix,
+    CodingMode10,
+    CodingMode11,
+    CodingMode20,
+    CodingMode51,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacCodingMode),
+}
+
+impl Default for AacCodingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacCodingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacCodingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacCodingMode {
+    fn into(self) -> String {
+        match self {
+            AacCodingMode::AdReceiverMix => "AD_RECEIVER_MIX".to_string(),
+            AacCodingMode::CodingMode10 => "CODING_MODE_1_0".to_string(),
+            AacCodingMode::CodingMode11 => "CODING_MODE_1_1".to_string(),
+            AacCodingMode::CodingMode20 => "CODING_MODE_2_0".to_string(),
+            AacCodingMode::CodingMode51 => "CODING_MODE_5_1".to_string(),
+            AacCodingMode::UnknownVariant(UnknownAacCodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacCodingMode {
+    fn into(self) -> &'a str {
+        match self {
+            AacCodingMode::AdReceiverMix => &"AD_RECEIVER_MIX",
+            AacCodingMode::CodingMode10 => &"CODING_MODE_1_0",
+            AacCodingMode::CodingMode11 => &"CODING_MODE_1_1",
+            AacCodingMode::CodingMode20 => &"CODING_MODE_2_0",
+            AacCodingMode::CodingMode51 => &"CODING_MODE_5_1",
+            AacCodingMode::UnknownVariant(UnknownAacCodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AacCodingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AD_RECEIVER_MIX" => AacCodingMode::AdReceiverMix,
+            "CODING_MODE_1_0" => AacCodingMode::CodingMode10,
+            "CODING_MODE_1_1" => AacCodingMode::CodingMode11,
+            "CODING_MODE_2_0" => AacCodingMode::CodingMode20,
+            "CODING_MODE_5_1" => AacCodingMode::CodingMode51,
+            _ => AacCodingMode::UnknownVariant(UnknownAacCodingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacCodingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AD_RECEIVER_MIX" => AacCodingMode::AdReceiverMix,
+            "CODING_MODE_1_0" => AacCodingMode::CodingMode10,
+            "CODING_MODE_1_1" => AacCodingMode::CodingMode11,
+            "CODING_MODE_2_0" => AacCodingMode::CodingMode20,
+            "CODING_MODE_5_1" => AacCodingMode::CodingMode51,
+            _ => AacCodingMode::UnknownVariant(UnknownAacCodingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacCodingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacCodingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacCodingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Aac Input Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacInputType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacInputType {
+    BroadcasterMixedAd,
+    Normal,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacInputType),
+}
+
+impl Default for AacInputType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacInputType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacInputType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacInputType {
+    fn into(self) -> String {
+        match self {
+            AacInputType::BroadcasterMixedAd => "BROADCASTER_MIXED_AD".to_string(),
+            AacInputType::Normal => "NORMAL".to_string(),
+            AacInputType::UnknownVariant(UnknownAacInputType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacInputType {
+    fn into(self) -> &'a str {
+        match self {
+            AacInputType::BroadcasterMixedAd => &"BROADCASTER_MIXED_AD",
+            AacInputType::Normal => &"NORMAL",
+            AacInputType::UnknownVariant(UnknownAacInputType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AacInputType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BROADCASTER_MIXED_AD" => AacInputType::BroadcasterMixedAd,
+            "NORMAL" => AacInputType::Normal,
+            _ => AacInputType::UnknownVariant(UnknownAacInputType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacInputType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BROADCASTER_MIXED_AD" => AacInputType::BroadcasterMixedAd,
+            "NORMAL" => AacInputType::Normal,
+            _ => AacInputType::UnknownVariant(UnknownAacInputType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacInputType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacInputType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacInputType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Aac Profile</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacProfile {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacProfile {
+    Hev1,
+    Hev2,
+    Lc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacProfile),
+}
+
+impl Default for AacProfile {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacProfile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacProfile {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacProfile {
+    fn into(self) -> String {
+        match self {
+            AacProfile::Hev1 => "HEV1".to_string(),
+            AacProfile::Hev2 => "HEV2".to_string(),
+            AacProfile::Lc => "LC".to_string(),
+            AacProfile::UnknownVariant(UnknownAacProfile { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacProfile {
+    fn into(self) -> &'a str {
+        match self {
+            AacProfile::Hev1 => &"HEV1",
+            AacProfile::Hev2 => &"HEV2",
+            AacProfile::Lc => &"LC",
+            AacProfile::UnknownVariant(UnknownAacProfile { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AacProfile {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEV1" => AacProfile::Hev1,
+            "HEV2" => AacProfile::Hev2,
+            "LC" => AacProfile::Lc,
+            _ => AacProfile::UnknownVariant(UnknownAacProfile {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacProfile {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEV1" => AacProfile::Hev1,
+            "HEV2" => AacProfile::Hev2,
+            "LC" => AacProfile::Lc,
+            _ => AacProfile::UnknownVariant(UnknownAacProfile { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacProfile {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacProfile {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacProfile {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Aac Rate Control Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacRateControlMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacRateControlMode {
+    Cbr,
+    Vbr,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacRateControlMode),
+}
+
+impl Default for AacRateControlMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacRateControlMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacRateControlMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacRateControlMode {
+    fn into(self) -> String {
+        match self {
+            AacRateControlMode::Cbr => "CBR".to_string(),
+            AacRateControlMode::Vbr => "VBR".to_string(),
+            AacRateControlMode::UnknownVariant(UnknownAacRateControlMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacRateControlMode {
+    fn into(self) -> &'a str {
+        match self {
+            AacRateControlMode::Cbr => &"CBR",
+            AacRateControlMode::Vbr => &"VBR",
+            AacRateControlMode::UnknownVariant(UnknownAacRateControlMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AacRateControlMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CBR" => AacRateControlMode::Cbr,
+            "VBR" => AacRateControlMode::Vbr,
+            _ => AacRateControlMode::UnknownVariant(UnknownAacRateControlMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacRateControlMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CBR" => AacRateControlMode::Cbr,
+            "VBR" => AacRateControlMode::Vbr,
+            _ => AacRateControlMode::UnknownVariant(UnknownAacRateControlMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacRateControlMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacRateControlMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacRateControlMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Aac Raw Format</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacRawFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacRawFormat {
+    LatmLoas,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacRawFormat),
+}
+
+impl Default for AacRawFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacRawFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacRawFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacRawFormat {
+    fn into(self) -> String {
+        match self {
+            AacRawFormat::LatmLoas => "LATM_LOAS".to_string(),
+            AacRawFormat::None => "NONE".to_string(),
+            AacRawFormat::UnknownVariant(UnknownAacRawFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacRawFormat {
+    fn into(self) -> &'a str {
+        match self {
+            AacRawFormat::LatmLoas => &"LATM_LOAS",
+            AacRawFormat::None => &"NONE",
+            AacRawFormat::UnknownVariant(UnknownAacRawFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AacRawFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "LATM_LOAS" => AacRawFormat::LatmLoas,
+            "NONE" => AacRawFormat::None,
+            _ => AacRawFormat::UnknownVariant(UnknownAacRawFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacRawFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LATM_LOAS" => AacRawFormat::LatmLoas,
+            "NONE" => AacRawFormat::None,
+            _ => AacRawFormat::UnknownVariant(UnknownAacRawFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacRawFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacRawFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacRawFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Aac Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AacSettings {
@@ -35,25 +569,25 @@ pub struct AacSettings {
     /// <p>Mono, Stereo, or 5.1 channel layout. Valid values depend on rate control mode and profile. The adReceiverMix setting receives a stereo description plus control track and emits a mono AAC encode of the description track, with control data emitted in the PES header as per ETSI TS 101 154 Annex E.</p>
     #[serde(rename = "CodingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub coding_mode: Option<String>,
+    pub coding_mode: Option<AacCodingMode>,
     /// <p>Set to &quot;broadcasterMixedAd&quot; when input contains pre-mixed main audio + AD (narration) as a stereo pair.  The Audio Type field (audioType) will be set to 3, which signals to downstream systems that this stream contains &quot;broadcaster mixed AD&quot;. Note that the input received by the encoder must contain pre-mixed audio; the encoder does not perform the mixing. The values in audioTypeControl and audioType (in AudioDescription) are ignored when set to broadcasterMixedAd.</p>
     ///
     /// <p>Leave set to &quot;normal&quot; when input does not contain pre-mixed audio + AD.</p>
     #[serde(rename = "InputType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_type: Option<String>,
+    pub input_type: Option<AacInputType>,
     /// <p>AAC Profile.</p>
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub profile: Option<String>,
+    pub profile: Option<AacProfile>,
     /// <p>Rate Control Mode.</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rate_control_mode: Option<String>,
+    pub rate_control_mode: Option<AacRateControlMode>,
     /// <p>Sets LATM / LOAS AAC output for raw containers.</p>
     #[serde(rename = "RawFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub raw_format: Option<String>,
+    pub raw_format: Option<AacRawFormat>,
     /// <p>Sample rate in Hz. Valid values depend on rate control mode and profile.</p>
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -61,11 +595,783 @@ pub struct AacSettings {
     /// <p>Use MPEG-2 AAC audio instead of MPEG-4 AAC audio for raw or MPEG-2 Transport Stream containers.</p>
     #[serde(rename = "Spec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub spec: Option<String>,
+    pub spec: Option<AacSpec>,
     /// <p>VBR Quality Level - Only used if rateControlMode is VBR.</p>
     #[serde(rename = "VbrQuality")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vbr_quality: Option<String>,
+    pub vbr_quality: Option<AacVbrQuality>,
+}
+
+/// <p>Aac Spec</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacSpec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacSpec {
+    Mpeg2,
+    Mpeg4,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacSpec),
+}
+
+impl Default for AacSpec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacSpec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacSpec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacSpec {
+    fn into(self) -> String {
+        match self {
+            AacSpec::Mpeg2 => "MPEG2".to_string(),
+            AacSpec::Mpeg4 => "MPEG4".to_string(),
+            AacSpec::UnknownVariant(UnknownAacSpec { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacSpec {
+    fn into(self) -> &'a str {
+        match self {
+            AacSpec::Mpeg2 => &"MPEG2",
+            AacSpec::Mpeg4 => &"MPEG4",
+            AacSpec::UnknownVariant(UnknownAacSpec { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AacSpec {
+    fn from(name: &str) -> Self {
+        match name {
+            "MPEG2" => AacSpec::Mpeg2,
+            "MPEG4" => AacSpec::Mpeg4,
+            _ => AacSpec::UnknownVariant(UnknownAacSpec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacSpec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MPEG2" => AacSpec::Mpeg2,
+            "MPEG4" => AacSpec::Mpeg4,
+            _ => AacSpec::UnknownVariant(UnknownAacSpec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacSpec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacSpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacSpec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Aac Vbr Quality</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAacVbrQuality {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AacVbrQuality {
+    High,
+    Low,
+    MediumHigh,
+    MediumLow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAacVbrQuality),
+}
+
+impl Default for AacVbrQuality {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AacVbrQuality {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AacVbrQuality {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AacVbrQuality {
+    fn into(self) -> String {
+        match self {
+            AacVbrQuality::High => "HIGH".to_string(),
+            AacVbrQuality::Low => "LOW".to_string(),
+            AacVbrQuality::MediumHigh => "MEDIUM_HIGH".to_string(),
+            AacVbrQuality::MediumLow => "MEDIUM_LOW".to_string(),
+            AacVbrQuality::UnknownVariant(UnknownAacVbrQuality { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AacVbrQuality {
+    fn into(self) -> &'a str {
+        match self {
+            AacVbrQuality::High => &"HIGH",
+            AacVbrQuality::Low => &"LOW",
+            AacVbrQuality::MediumHigh => &"MEDIUM_HIGH",
+            AacVbrQuality::MediumLow => &"MEDIUM_LOW",
+            AacVbrQuality::UnknownVariant(UnknownAacVbrQuality { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AacVbrQuality {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => AacVbrQuality::High,
+            "LOW" => AacVbrQuality::Low,
+            "MEDIUM_HIGH" => AacVbrQuality::MediumHigh,
+            "MEDIUM_LOW" => AacVbrQuality::MediumLow,
+            _ => AacVbrQuality::UnknownVariant(UnknownAacVbrQuality {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AacVbrQuality {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => AacVbrQuality::High,
+            "LOW" => AacVbrQuality::Low,
+            "MEDIUM_HIGH" => AacVbrQuality::MediumHigh,
+            "MEDIUM_LOW" => AacVbrQuality::MediumLow,
+            _ => AacVbrQuality::UnknownVariant(UnknownAacVbrQuality { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AacVbrQuality {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AacVbrQuality {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AacVbrQuality {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Ac3 Bitstream Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAc3BitstreamMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Ac3BitstreamMode {
+    Commentary,
+    CompleteMain,
+    Dialogue,
+    Emergency,
+    HearingImpaired,
+    MusicAndEffects,
+    VisuallyImpaired,
+    VoiceOver,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAc3BitstreamMode),
+}
+
+impl Default for Ac3BitstreamMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Ac3BitstreamMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Ac3BitstreamMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Ac3BitstreamMode {
+    fn into(self) -> String {
+        match self {
+            Ac3BitstreamMode::Commentary => "COMMENTARY".to_string(),
+            Ac3BitstreamMode::CompleteMain => "COMPLETE_MAIN".to_string(),
+            Ac3BitstreamMode::Dialogue => "DIALOGUE".to_string(),
+            Ac3BitstreamMode::Emergency => "EMERGENCY".to_string(),
+            Ac3BitstreamMode::HearingImpaired => "HEARING_IMPAIRED".to_string(),
+            Ac3BitstreamMode::MusicAndEffects => "MUSIC_AND_EFFECTS".to_string(),
+            Ac3BitstreamMode::VisuallyImpaired => "VISUALLY_IMPAIRED".to_string(),
+            Ac3BitstreamMode::VoiceOver => "VOICE_OVER".to_string(),
+            Ac3BitstreamMode::UnknownVariant(UnknownAc3BitstreamMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Ac3BitstreamMode {
+    fn into(self) -> &'a str {
+        match self {
+            Ac3BitstreamMode::Commentary => &"COMMENTARY",
+            Ac3BitstreamMode::CompleteMain => &"COMPLETE_MAIN",
+            Ac3BitstreamMode::Dialogue => &"DIALOGUE",
+            Ac3BitstreamMode::Emergency => &"EMERGENCY",
+            Ac3BitstreamMode::HearingImpaired => &"HEARING_IMPAIRED",
+            Ac3BitstreamMode::MusicAndEffects => &"MUSIC_AND_EFFECTS",
+            Ac3BitstreamMode::VisuallyImpaired => &"VISUALLY_IMPAIRED",
+            Ac3BitstreamMode::VoiceOver => &"VOICE_OVER",
+            Ac3BitstreamMode::UnknownVariant(UnknownAc3BitstreamMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Ac3BitstreamMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMMENTARY" => Ac3BitstreamMode::Commentary,
+            "COMPLETE_MAIN" => Ac3BitstreamMode::CompleteMain,
+            "DIALOGUE" => Ac3BitstreamMode::Dialogue,
+            "EMERGENCY" => Ac3BitstreamMode::Emergency,
+            "HEARING_IMPAIRED" => Ac3BitstreamMode::HearingImpaired,
+            "MUSIC_AND_EFFECTS" => Ac3BitstreamMode::MusicAndEffects,
+            "VISUALLY_IMPAIRED" => Ac3BitstreamMode::VisuallyImpaired,
+            "VOICE_OVER" => Ac3BitstreamMode::VoiceOver,
+            _ => Ac3BitstreamMode::UnknownVariant(UnknownAc3BitstreamMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Ac3BitstreamMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMMENTARY" => Ac3BitstreamMode::Commentary,
+            "COMPLETE_MAIN" => Ac3BitstreamMode::CompleteMain,
+            "DIALOGUE" => Ac3BitstreamMode::Dialogue,
+            "EMERGENCY" => Ac3BitstreamMode::Emergency,
+            "HEARING_IMPAIRED" => Ac3BitstreamMode::HearingImpaired,
+            "MUSIC_AND_EFFECTS" => Ac3BitstreamMode::MusicAndEffects,
+            "VISUALLY_IMPAIRED" => Ac3BitstreamMode::VisuallyImpaired,
+            "VOICE_OVER" => Ac3BitstreamMode::VoiceOver,
+            _ => Ac3BitstreamMode::UnknownVariant(UnknownAc3BitstreamMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Ac3BitstreamMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Ac3BitstreamMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Ac3BitstreamMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Ac3 Coding Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAc3CodingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Ac3CodingMode {
+    CodingMode10,
+    CodingMode11,
+    CodingMode20,
+    CodingMode32Lfe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAc3CodingMode),
+}
+
+impl Default for Ac3CodingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Ac3CodingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Ac3CodingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Ac3CodingMode {
+    fn into(self) -> String {
+        match self {
+            Ac3CodingMode::CodingMode10 => "CODING_MODE_1_0".to_string(),
+            Ac3CodingMode::CodingMode11 => "CODING_MODE_1_1".to_string(),
+            Ac3CodingMode::CodingMode20 => "CODING_MODE_2_0".to_string(),
+            Ac3CodingMode::CodingMode32Lfe => "CODING_MODE_3_2_LFE".to_string(),
+            Ac3CodingMode::UnknownVariant(UnknownAc3CodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Ac3CodingMode {
+    fn into(self) -> &'a str {
+        match self {
+            Ac3CodingMode::CodingMode10 => &"CODING_MODE_1_0",
+            Ac3CodingMode::CodingMode11 => &"CODING_MODE_1_1",
+            Ac3CodingMode::CodingMode20 => &"CODING_MODE_2_0",
+            Ac3CodingMode::CodingMode32Lfe => &"CODING_MODE_3_2_LFE",
+            Ac3CodingMode::UnknownVariant(UnknownAc3CodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Ac3CodingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODING_MODE_1_0" => Ac3CodingMode::CodingMode10,
+            "CODING_MODE_1_1" => Ac3CodingMode::CodingMode11,
+            "CODING_MODE_2_0" => Ac3CodingMode::CodingMode20,
+            "CODING_MODE_3_2_LFE" => Ac3CodingMode::CodingMode32Lfe,
+            _ => Ac3CodingMode::UnknownVariant(UnknownAc3CodingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Ac3CodingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODING_MODE_1_0" => Ac3CodingMode::CodingMode10,
+            "CODING_MODE_1_1" => Ac3CodingMode::CodingMode11,
+            "CODING_MODE_2_0" => Ac3CodingMode::CodingMode20,
+            "CODING_MODE_3_2_LFE" => Ac3CodingMode::CodingMode32Lfe,
+            _ => Ac3CodingMode::UnknownVariant(UnknownAc3CodingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Ac3CodingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Ac3CodingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Ac3CodingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Ac3 Drc Profile</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAc3DrcProfile {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Ac3DrcProfile {
+    FilmStandard,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAc3DrcProfile),
+}
+
+impl Default for Ac3DrcProfile {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Ac3DrcProfile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Ac3DrcProfile {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Ac3DrcProfile {
+    fn into(self) -> String {
+        match self {
+            Ac3DrcProfile::FilmStandard => "FILM_STANDARD".to_string(),
+            Ac3DrcProfile::None => "NONE".to_string(),
+            Ac3DrcProfile::UnknownVariant(UnknownAc3DrcProfile { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Ac3DrcProfile {
+    fn into(self) -> &'a str {
+        match self {
+            Ac3DrcProfile::FilmStandard => &"FILM_STANDARD",
+            Ac3DrcProfile::None => &"NONE",
+            Ac3DrcProfile::UnknownVariant(UnknownAc3DrcProfile { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Ac3DrcProfile {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILM_STANDARD" => Ac3DrcProfile::FilmStandard,
+            "NONE" => Ac3DrcProfile::None,
+            _ => Ac3DrcProfile::UnknownVariant(UnknownAc3DrcProfile {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Ac3DrcProfile {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILM_STANDARD" => Ac3DrcProfile::FilmStandard,
+            "NONE" => Ac3DrcProfile::None,
+            _ => Ac3DrcProfile::UnknownVariant(UnknownAc3DrcProfile { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Ac3DrcProfile {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Ac3DrcProfile {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Ac3DrcProfile {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Ac3 Lfe Filter</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAc3LfeFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Ac3LfeFilter {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAc3LfeFilter),
+}
+
+impl Default for Ac3LfeFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Ac3LfeFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Ac3LfeFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Ac3LfeFilter {
+    fn into(self) -> String {
+        match self {
+            Ac3LfeFilter::Disabled => "DISABLED".to_string(),
+            Ac3LfeFilter::Enabled => "ENABLED".to_string(),
+            Ac3LfeFilter::UnknownVariant(UnknownAc3LfeFilter { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Ac3LfeFilter {
+    fn into(self) -> &'a str {
+        match self {
+            Ac3LfeFilter::Disabled => &"DISABLED",
+            Ac3LfeFilter::Enabled => &"ENABLED",
+            Ac3LfeFilter::UnknownVariant(UnknownAc3LfeFilter { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Ac3LfeFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Ac3LfeFilter::Disabled,
+            "ENABLED" => Ac3LfeFilter::Enabled,
+            _ => Ac3LfeFilter::UnknownVariant(UnknownAc3LfeFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Ac3LfeFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Ac3LfeFilter::Disabled,
+            "ENABLED" => Ac3LfeFilter::Enabled,
+            _ => Ac3LfeFilter::UnknownVariant(UnknownAc3LfeFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Ac3LfeFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Ac3LfeFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Ac3LfeFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Ac3 Metadata Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAc3MetadataControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Ac3MetadataControl {
+    FollowInput,
+    UseConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAc3MetadataControl),
+}
+
+impl Default for Ac3MetadataControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Ac3MetadataControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Ac3MetadataControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Ac3MetadataControl {
+    fn into(self) -> String {
+        match self {
+            Ac3MetadataControl::FollowInput => "FOLLOW_INPUT".to_string(),
+            Ac3MetadataControl::UseConfigured => "USE_CONFIGURED".to_string(),
+            Ac3MetadataControl::UnknownVariant(UnknownAc3MetadataControl { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Ac3MetadataControl {
+    fn into(self) -> &'a str {
+        match self {
+            Ac3MetadataControl::FollowInput => &"FOLLOW_INPUT",
+            Ac3MetadataControl::UseConfigured => &"USE_CONFIGURED",
+            Ac3MetadataControl::UnknownVariant(UnknownAc3MetadataControl { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Ac3MetadataControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW_INPUT" => Ac3MetadataControl::FollowInput,
+            "USE_CONFIGURED" => Ac3MetadataControl::UseConfigured,
+            _ => Ac3MetadataControl::UnknownVariant(UnknownAc3MetadataControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Ac3MetadataControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW_INPUT" => Ac3MetadataControl::FollowInput,
+            "USE_CONFIGURED" => Ac3MetadataControl::UseConfigured,
+            _ => Ac3MetadataControl::UnknownVariant(UnknownAc3MetadataControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Ac3MetadataControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Ac3MetadataControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Ac3MetadataControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Ac3 Settings</p>
@@ -78,11 +1384,11 @@ pub struct Ac3Settings {
     /// <p>Specifies the bitstream mode (bsmod) for the emitted AC-3 stream. See ATSC A/52-2012 for background on these values.</p>
     #[serde(rename = "BitstreamMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bitstream_mode: Option<String>,
+    pub bitstream_mode: Option<Ac3BitstreamMode>,
     /// <p>Dolby Digital coding mode. Determines number of channels.</p>
     #[serde(rename = "CodingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub coding_mode: Option<String>,
+    pub coding_mode: Option<Ac3CodingMode>,
     /// <p>Sets the dialnorm for the output. If excluded and input audio is Dolby Digital, dialnorm will be passed through.</p>
     #[serde(rename = "Dialnorm")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,15 +1396,113 @@ pub struct Ac3Settings {
     /// <p>If set to filmStandard, adds dynamic range compression signaling to the output bitstream as defined in the Dolby Digital specification.</p>
     #[serde(rename = "DrcProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub drc_profile: Option<String>,
+    pub drc_profile: Option<Ac3DrcProfile>,
     /// <p>When set to enabled, applies a 120Hz lowpass filter to the LFE channel prior to encoding. Only valid in codingMode32Lfe mode.</p>
     #[serde(rename = "LfeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lfe_filter: Option<String>,
+    pub lfe_filter: Option<Ac3LfeFilter>,
     /// <p>When set to &quot;followInput&quot;, encoder metadata will be sourced from the DD, DD+, or DolbyE decoder that supplied this audio data. If audio was not supplied from one of these streams, then the static metadata settings will be used.</p>
     #[serde(rename = "MetadataControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metadata_control: Option<String>,
+    pub metadata_control: Option<Ac3MetadataControl>,
+}
+
+/// <p>The HTTP Accept header. Indicates the requested type fothe thumbnail.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAcceptHeader {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AcceptHeader {
+    ImageJpeg,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAcceptHeader),
+}
+
+impl Default for AcceptHeader {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AcceptHeader {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AcceptHeader {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AcceptHeader {
+    fn into(self) -> String {
+        match self {
+            AcceptHeader::ImageJpeg => "image/jpeg".to_string(),
+            AcceptHeader::UnknownVariant(UnknownAcceptHeader { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AcceptHeader {
+    fn into(self) -> &'a str {
+        match self {
+            AcceptHeader::ImageJpeg => &"image/jpeg",
+            AcceptHeader::UnknownVariant(UnknownAcceptHeader { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AcceptHeader {
+    fn from(name: &str) -> Self {
+        match name {
+            "image/jpeg" => AcceptHeader::ImageJpeg,
+            _ => AcceptHeader::UnknownVariant(UnknownAcceptHeader {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AcceptHeader {
+    fn from(name: String) -> Self {
+        match &*name {
+            "image/jpeg" => AcceptHeader::ImageJpeg,
+            _ => AcceptHeader::UnknownVariant(UnknownAcceptHeader { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AcceptHeader {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AcceptHeader {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AcceptHeader {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Placeholder documentation for AcceptInputDeviceTransferRequest</p>
@@ -114,6 +1518,113 @@ pub struct AcceptInputDeviceTransferRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInputDeviceTransferResponse {}
+
+/// <p>Afd Signaling</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAfdSignaling {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AfdSignaling {
+    Auto,
+    Fixed,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAfdSignaling),
+}
+
+impl Default for AfdSignaling {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AfdSignaling {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AfdSignaling {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AfdSignaling {
+    fn into(self) -> String {
+        match self {
+            AfdSignaling::Auto => "AUTO".to_string(),
+            AfdSignaling::Fixed => "FIXED".to_string(),
+            AfdSignaling::None => "NONE".to_string(),
+            AfdSignaling::UnknownVariant(UnknownAfdSignaling { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AfdSignaling {
+    fn into(self) -> &'a str {
+        match self {
+            AfdSignaling::Auto => &"AUTO",
+            AfdSignaling::Fixed => &"FIXED",
+            AfdSignaling::None => &"NONE",
+            AfdSignaling::UnknownVariant(UnknownAfdSignaling { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AfdSignaling {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => AfdSignaling::Auto,
+            "FIXED" => AfdSignaling::Fixed,
+            "NONE" => AfdSignaling::None,
+            _ => AfdSignaling::UnknownVariant(UnknownAfdSignaling {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AfdSignaling {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => AfdSignaling::Auto,
+            "FIXED" => AfdSignaling::Fixed,
+            "NONE" => AfdSignaling::None,
+            _ => AfdSignaling::UnknownVariant(UnknownAfdSignaling { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AfdSignaling {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AfdSignaling {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AfdSignaling {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Ancillary Source Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -218,14 +1729,14 @@ pub struct AudioDescription {
     /// <p>Applies only if audioTypeControl is useConfigured. The values for audioType are defined in ISO-IEC 13818-1.</p>
     #[serde(rename = "AudioType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audio_type: Option<String>,
+    pub audio_type: Option<AudioType>,
     /// <p>Determines how audio type is determined.
     /// followInput: If the input contains an ISO 639 audioType, then that value is passed through to the output. If the input contains no ISO 639 audioType, the value in Audio Type is included in the output.
     /// useConfigured: The value in Audio Type is included in the output.
     /// Note that this field and audioType are both ignored if inputType is broadcasterMixedAd.</p>
     #[serde(rename = "AudioTypeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audio_type_control: Option<String>,
+    pub audio_type_control: Option<AudioDescriptionAudioTypeControl>,
     /// <p>Audio codec settings.</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,7 +1748,7 @@ pub struct AudioDescription {
     /// <p>Choosing followInput will cause the ISO 639 language code of the output to follow the ISO 639 language code of the input. The languageCode will be used when useConfigured is set, or when followInput is selected but there is no ISO 639 language code specified by the input.</p>
     #[serde(rename = "LanguageCodeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code_control: Option<String>,
+    pub language_code_control: Option<AudioDescriptionLanguageCodeControl>,
     /// <p>The name of this AudioDescription. Outputs will use this name to uniquely identify this AudioDescription.  Description names should be unique within this Live Event.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -251,6 +1762,226 @@ pub struct AudioDescription {
     pub stream_name: Option<String>,
 }
 
+/// <p>Audio Description Audio Type Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioDescriptionAudioTypeControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioDescriptionAudioTypeControl {
+    FollowInput,
+    UseConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioDescriptionAudioTypeControl),
+}
+
+impl Default for AudioDescriptionAudioTypeControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioDescriptionAudioTypeControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioDescriptionAudioTypeControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioDescriptionAudioTypeControl {
+    fn into(self) -> String {
+        match self {
+            AudioDescriptionAudioTypeControl::FollowInput => "FOLLOW_INPUT".to_string(),
+            AudioDescriptionAudioTypeControl::UseConfigured => "USE_CONFIGURED".to_string(),
+            AudioDescriptionAudioTypeControl::UnknownVariant(
+                UnknownAudioDescriptionAudioTypeControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioDescriptionAudioTypeControl {
+    fn into(self) -> &'a str {
+        match self {
+            AudioDescriptionAudioTypeControl::FollowInput => &"FOLLOW_INPUT",
+            AudioDescriptionAudioTypeControl::UseConfigured => &"USE_CONFIGURED",
+            AudioDescriptionAudioTypeControl::UnknownVariant(
+                UnknownAudioDescriptionAudioTypeControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioDescriptionAudioTypeControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW_INPUT" => AudioDescriptionAudioTypeControl::FollowInput,
+            "USE_CONFIGURED" => AudioDescriptionAudioTypeControl::UseConfigured,
+            _ => AudioDescriptionAudioTypeControl::UnknownVariant(
+                UnknownAudioDescriptionAudioTypeControl {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AudioDescriptionAudioTypeControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW_INPUT" => AudioDescriptionAudioTypeControl::FollowInput,
+            "USE_CONFIGURED" => AudioDescriptionAudioTypeControl::UseConfigured,
+            _ => AudioDescriptionAudioTypeControl::UnknownVariant(
+                UnknownAudioDescriptionAudioTypeControl { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioDescriptionAudioTypeControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioDescriptionAudioTypeControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioDescriptionAudioTypeControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Audio Description Language Code Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioDescriptionLanguageCodeControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioDescriptionLanguageCodeControl {
+    FollowInput,
+    UseConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioDescriptionLanguageCodeControl),
+}
+
+impl Default for AudioDescriptionLanguageCodeControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioDescriptionLanguageCodeControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioDescriptionLanguageCodeControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioDescriptionLanguageCodeControl {
+    fn into(self) -> String {
+        match self {
+            AudioDescriptionLanguageCodeControl::FollowInput => "FOLLOW_INPUT".to_string(),
+            AudioDescriptionLanguageCodeControl::UseConfigured => "USE_CONFIGURED".to_string(),
+            AudioDescriptionLanguageCodeControl::UnknownVariant(
+                UnknownAudioDescriptionLanguageCodeControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioDescriptionLanguageCodeControl {
+    fn into(self) -> &'a str {
+        match self {
+            AudioDescriptionLanguageCodeControl::FollowInput => &"FOLLOW_INPUT",
+            AudioDescriptionLanguageCodeControl::UseConfigured => &"USE_CONFIGURED",
+            AudioDescriptionLanguageCodeControl::UnknownVariant(
+                UnknownAudioDescriptionLanguageCodeControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioDescriptionLanguageCodeControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW_INPUT" => AudioDescriptionLanguageCodeControl::FollowInput,
+            "USE_CONFIGURED" => AudioDescriptionLanguageCodeControl::UseConfigured,
+            _ => AudioDescriptionLanguageCodeControl::UnknownVariant(
+                UnknownAudioDescriptionLanguageCodeControl {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AudioDescriptionLanguageCodeControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW_INPUT" => AudioDescriptionLanguageCodeControl::FollowInput,
+            "USE_CONFIGURED" => AudioDescriptionLanguageCodeControl::UseConfigured,
+            _ => AudioDescriptionLanguageCodeControl::UnknownVariant(
+                UnknownAudioDescriptionLanguageCodeControl { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioDescriptionLanguageCodeControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioDescriptionLanguageCodeControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioDescriptionLanguageCodeControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Audio Language Selection</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioLanguageSelection {
@@ -260,7 +1991,332 @@ pub struct AudioLanguageSelection {
     /// <p>When set to &quot;strict&quot;, the transport stream demux strictly identifies audio streams by their language descriptor. If a PMT update occurs such that an audio stream matching the initially selected language is no longer present then mute will be encoded until the language returns. If &quot;loose&quot;, then on a PMT update the demux will choose another audio stream in the program with the same stream type if it can&#39;t find one with the same language.</p>
     #[serde(rename = "LanguageSelectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_selection_policy: Option<String>,
+    pub language_selection_policy: Option<AudioLanguageSelectionPolicy>,
+}
+
+/// <p>Audio Language Selection Policy</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioLanguageSelectionPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioLanguageSelectionPolicy {
+    Loose,
+    Strict,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioLanguageSelectionPolicy),
+}
+
+impl Default for AudioLanguageSelectionPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioLanguageSelectionPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioLanguageSelectionPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioLanguageSelectionPolicy {
+    fn into(self) -> String {
+        match self {
+            AudioLanguageSelectionPolicy::Loose => "LOOSE".to_string(),
+            AudioLanguageSelectionPolicy::Strict => "STRICT".to_string(),
+            AudioLanguageSelectionPolicy::UnknownVariant(UnknownAudioLanguageSelectionPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioLanguageSelectionPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            AudioLanguageSelectionPolicy::Loose => &"LOOSE",
+            AudioLanguageSelectionPolicy::Strict => &"STRICT",
+            AudioLanguageSelectionPolicy::UnknownVariant(UnknownAudioLanguageSelectionPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioLanguageSelectionPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "LOOSE" => AudioLanguageSelectionPolicy::Loose,
+            "STRICT" => AudioLanguageSelectionPolicy::Strict,
+            _ => {
+                AudioLanguageSelectionPolicy::UnknownVariant(UnknownAudioLanguageSelectionPolicy {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for AudioLanguageSelectionPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LOOSE" => AudioLanguageSelectionPolicy::Loose,
+            "STRICT" => AudioLanguageSelectionPolicy::Strict,
+            _ => {
+                AudioLanguageSelectionPolicy::UnknownVariant(UnknownAudioLanguageSelectionPolicy {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioLanguageSelectionPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioLanguageSelectionPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioLanguageSelectionPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Audio Normalization Algorithm</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioNormalizationAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioNormalizationAlgorithm {
+    Itu17701,
+    Itu17702,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioNormalizationAlgorithm),
+}
+
+impl Default for AudioNormalizationAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioNormalizationAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioNormalizationAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioNormalizationAlgorithm {
+    fn into(self) -> String {
+        match self {
+            AudioNormalizationAlgorithm::Itu17701 => "ITU_1770_1".to_string(),
+            AudioNormalizationAlgorithm::Itu17702 => "ITU_1770_2".to_string(),
+            AudioNormalizationAlgorithm::UnknownVariant(UnknownAudioNormalizationAlgorithm {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioNormalizationAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            AudioNormalizationAlgorithm::Itu17701 => &"ITU_1770_1",
+            AudioNormalizationAlgorithm::Itu17702 => &"ITU_1770_2",
+            AudioNormalizationAlgorithm::UnknownVariant(UnknownAudioNormalizationAlgorithm {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioNormalizationAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "ITU_1770_1" => AudioNormalizationAlgorithm::Itu17701,
+            "ITU_1770_2" => AudioNormalizationAlgorithm::Itu17702,
+            _ => AudioNormalizationAlgorithm::UnknownVariant(UnknownAudioNormalizationAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AudioNormalizationAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ITU_1770_1" => AudioNormalizationAlgorithm::Itu17701,
+            "ITU_1770_2" => AudioNormalizationAlgorithm::Itu17702,
+            _ => AudioNormalizationAlgorithm::UnknownVariant(UnknownAudioNormalizationAlgorithm {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioNormalizationAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioNormalizationAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioNormalizationAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Audio Normalization Algorithm Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioNormalizationAlgorithmControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioNormalizationAlgorithmControl {
+    CorrectAudio,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioNormalizationAlgorithmControl),
+}
+
+impl Default for AudioNormalizationAlgorithmControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioNormalizationAlgorithmControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioNormalizationAlgorithmControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioNormalizationAlgorithmControl {
+    fn into(self) -> String {
+        match self {
+            AudioNormalizationAlgorithmControl::CorrectAudio => "CORRECT_AUDIO".to_string(),
+            AudioNormalizationAlgorithmControl::UnknownVariant(
+                UnknownAudioNormalizationAlgorithmControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioNormalizationAlgorithmControl {
+    fn into(self) -> &'a str {
+        match self {
+            AudioNormalizationAlgorithmControl::CorrectAudio => &"CORRECT_AUDIO",
+            AudioNormalizationAlgorithmControl::UnknownVariant(
+                UnknownAudioNormalizationAlgorithmControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioNormalizationAlgorithmControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "CORRECT_AUDIO" => AudioNormalizationAlgorithmControl::CorrectAudio,
+            _ => AudioNormalizationAlgorithmControl::UnknownVariant(
+                UnknownAudioNormalizationAlgorithmControl {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AudioNormalizationAlgorithmControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CORRECT_AUDIO" => AudioNormalizationAlgorithmControl::CorrectAudio,
+            _ => AudioNormalizationAlgorithmControl::UnknownVariant(
+                UnknownAudioNormalizationAlgorithmControl { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioNormalizationAlgorithmControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioNormalizationAlgorithmControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioNormalizationAlgorithmControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Audio Normalization Settings</p>
@@ -269,15 +2325,121 @@ pub struct AudioNormalizationSettings {
     /// <p>Audio normalization algorithm to use. itu17701 conforms to the CALM Act specification, itu17702 conforms to the EBU R-128 specification.</p>
     #[serde(rename = "Algorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub algorithm: Option<String>,
+    pub algorithm: Option<AudioNormalizationAlgorithm>,
     /// <p>When set to correctAudio the output audio is corrected using the chosen algorithm. If set to measureOnly, the audio will be measured but not adjusted.</p>
     #[serde(rename = "AlgorithmControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub algorithm_control: Option<String>,
+    pub algorithm_control: Option<AudioNormalizationAlgorithmControl>,
     /// <p>Target LKFS(loudness) to adjust volume to. If no value is entered, a default value will be used according to the chosen algorithm.  The CALM Act (1770-1) recommends a target of -24 LKFS. The EBU R-128 specification (1770-2) recommends a target of -23 LKFS.</p>
     #[serde(rename = "TargetLkfs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_lkfs: Option<f64>,
+}
+
+/// <p>Audio Only Hls Segment Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioOnlyHlsSegmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioOnlyHlsSegmentType {
+    Aac,
+    Fmp4,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioOnlyHlsSegmentType),
+}
+
+impl Default for AudioOnlyHlsSegmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioOnlyHlsSegmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioOnlyHlsSegmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioOnlyHlsSegmentType {
+    fn into(self) -> String {
+        match self {
+            AudioOnlyHlsSegmentType::Aac => "AAC".to_string(),
+            AudioOnlyHlsSegmentType::Fmp4 => "FMP4".to_string(),
+            AudioOnlyHlsSegmentType::UnknownVariant(UnknownAudioOnlyHlsSegmentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioOnlyHlsSegmentType {
+    fn into(self) -> &'a str {
+        match self {
+            AudioOnlyHlsSegmentType::Aac => &"AAC",
+            AudioOnlyHlsSegmentType::Fmp4 => &"FMP4",
+            AudioOnlyHlsSegmentType::UnknownVariant(UnknownAudioOnlyHlsSegmentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioOnlyHlsSegmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AAC" => AudioOnlyHlsSegmentType::Aac,
+            "FMP4" => AudioOnlyHlsSegmentType::Fmp4,
+            _ => AudioOnlyHlsSegmentType::UnknownVariant(UnknownAudioOnlyHlsSegmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AudioOnlyHlsSegmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AAC" => AudioOnlyHlsSegmentType::Aac,
+            "FMP4" => AudioOnlyHlsSegmentType::Fmp4,
+            _ => AudioOnlyHlsSegmentType::UnknownVariant(UnknownAudioOnlyHlsSegmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioOnlyHlsSegmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioOnlyHlsSegmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioOnlyHlsSegmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Audio Only Hls Settings</p>
@@ -308,11 +2470,143 @@ pub struct AudioOnlyHlsSettings {
     /// Alternate rendition that the client will not try to play back by default. Represented as an EXT-X-MEDIA in the HLS manifest with DEFAULT=NO, AUTOSELECT=NO</p>
     #[serde(rename = "AudioTrackType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audio_track_type: Option<String>,
+    pub audio_track_type: Option<AudioOnlyHlsTrackType>,
     /// <p>Specifies the segment type.</p>
     #[serde(rename = "SegmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segment_type: Option<String>,
+    pub segment_type: Option<AudioOnlyHlsSegmentType>,
+}
+
+/// <p>Audio Only Hls Track Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioOnlyHlsTrackType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioOnlyHlsTrackType {
+    AlternateAudioAutoSelect,
+    AlternateAudioAutoSelectDefault,
+    AlternateAudioNotAutoSelect,
+    AudioOnlyVariantStream,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioOnlyHlsTrackType),
+}
+
+impl Default for AudioOnlyHlsTrackType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioOnlyHlsTrackType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioOnlyHlsTrackType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioOnlyHlsTrackType {
+    fn into(self) -> String {
+        match self {
+            AudioOnlyHlsTrackType::AlternateAudioAutoSelect => {
+                "ALTERNATE_AUDIO_AUTO_SELECT".to_string()
+            }
+            AudioOnlyHlsTrackType::AlternateAudioAutoSelectDefault => {
+                "ALTERNATE_AUDIO_AUTO_SELECT_DEFAULT".to_string()
+            }
+            AudioOnlyHlsTrackType::AlternateAudioNotAutoSelect => {
+                "ALTERNATE_AUDIO_NOT_AUTO_SELECT".to_string()
+            }
+            AudioOnlyHlsTrackType::AudioOnlyVariantStream => {
+                "AUDIO_ONLY_VARIANT_STREAM".to_string()
+            }
+            AudioOnlyHlsTrackType::UnknownVariant(UnknownAudioOnlyHlsTrackType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioOnlyHlsTrackType {
+    fn into(self) -> &'a str {
+        match self {
+            AudioOnlyHlsTrackType::AlternateAudioAutoSelect => &"ALTERNATE_AUDIO_AUTO_SELECT",
+            AudioOnlyHlsTrackType::AlternateAudioAutoSelectDefault => {
+                &"ALTERNATE_AUDIO_AUTO_SELECT_DEFAULT"
+            }
+            AudioOnlyHlsTrackType::AlternateAudioNotAutoSelect => {
+                &"ALTERNATE_AUDIO_NOT_AUTO_SELECT"
+            }
+            AudioOnlyHlsTrackType::AudioOnlyVariantStream => &"AUDIO_ONLY_VARIANT_STREAM",
+            AudioOnlyHlsTrackType::UnknownVariant(UnknownAudioOnlyHlsTrackType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioOnlyHlsTrackType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALTERNATE_AUDIO_AUTO_SELECT" => AudioOnlyHlsTrackType::AlternateAudioAutoSelect,
+            "ALTERNATE_AUDIO_AUTO_SELECT_DEFAULT" => {
+                AudioOnlyHlsTrackType::AlternateAudioAutoSelectDefault
+            }
+            "ALTERNATE_AUDIO_NOT_AUTO_SELECT" => AudioOnlyHlsTrackType::AlternateAudioNotAutoSelect,
+            "AUDIO_ONLY_VARIANT_STREAM" => AudioOnlyHlsTrackType::AudioOnlyVariantStream,
+            _ => AudioOnlyHlsTrackType::UnknownVariant(UnknownAudioOnlyHlsTrackType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AudioOnlyHlsTrackType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALTERNATE_AUDIO_AUTO_SELECT" => AudioOnlyHlsTrackType::AlternateAudioAutoSelect,
+            "ALTERNATE_AUDIO_AUTO_SELECT_DEFAULT" => {
+                AudioOnlyHlsTrackType::AlternateAudioAutoSelectDefault
+            }
+            "ALTERNATE_AUDIO_NOT_AUTO_SELECT" => AudioOnlyHlsTrackType::AlternateAudioNotAutoSelect,
+            "AUDIO_ONLY_VARIANT_STREAM" => AudioOnlyHlsTrackType::AudioOnlyVariantStream,
+            _ => AudioOnlyHlsTrackType::UnknownVariant(UnknownAudioOnlyHlsTrackType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioOnlyHlsTrackType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioOnlyHlsTrackType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioOnlyHlsTrackType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Audio Pid Selection</p>
@@ -377,6 +2671,224 @@ pub struct AudioTrackSelection {
     pub tracks: Vec<AudioTrack>,
 }
 
+/// <p>Audio Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAudioType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AudioType {
+    CleanEffects,
+    HearingImpaired,
+    Undefined,
+    VisualImpairedCommentary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAudioType),
+}
+
+impl Default for AudioType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AudioType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AudioType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AudioType {
+    fn into(self) -> String {
+        match self {
+            AudioType::CleanEffects => "CLEAN_EFFECTS".to_string(),
+            AudioType::HearingImpaired => "HEARING_IMPAIRED".to_string(),
+            AudioType::Undefined => "UNDEFINED".to_string(),
+            AudioType::VisualImpairedCommentary => "VISUAL_IMPAIRED_COMMENTARY".to_string(),
+            AudioType::UnknownVariant(UnknownAudioType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AudioType {
+    fn into(self) -> &'a str {
+        match self {
+            AudioType::CleanEffects => &"CLEAN_EFFECTS",
+            AudioType::HearingImpaired => &"HEARING_IMPAIRED",
+            AudioType::Undefined => &"UNDEFINED",
+            AudioType::VisualImpairedCommentary => &"VISUAL_IMPAIRED_COMMENTARY",
+            AudioType::UnknownVariant(UnknownAudioType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AudioType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLEAN_EFFECTS" => AudioType::CleanEffects,
+            "HEARING_IMPAIRED" => AudioType::HearingImpaired,
+            "UNDEFINED" => AudioType::Undefined,
+            "VISUAL_IMPAIRED_COMMENTARY" => AudioType::VisualImpairedCommentary,
+            _ => AudioType::UnknownVariant(UnknownAudioType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AudioType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLEAN_EFFECTS" => AudioType::CleanEffects,
+            "HEARING_IMPAIRED" => AudioType::HearingImpaired,
+            "UNDEFINED" => AudioType::Undefined,
+            "VISUAL_IMPAIRED_COMMENTARY" => AudioType::VisualImpairedCommentary,
+            _ => AudioType::UnknownVariant(UnknownAudioType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AudioType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AudioType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AudioType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Authentication Scheme</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthenticationScheme {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthenticationScheme {
+    Akamai,
+    Common,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthenticationScheme),
+}
+
+impl Default for AuthenticationScheme {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthenticationScheme {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthenticationScheme {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthenticationScheme {
+    fn into(self) -> String {
+        match self {
+            AuthenticationScheme::Akamai => "AKAMAI".to_string(),
+            AuthenticationScheme::Common => "COMMON".to_string(),
+            AuthenticationScheme::UnknownVariant(UnknownAuthenticationScheme {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthenticationScheme {
+    fn into(self) -> &'a str {
+        match self {
+            AuthenticationScheme::Akamai => &"AKAMAI",
+            AuthenticationScheme::Common => &"COMMON",
+            AuthenticationScheme::UnknownVariant(UnknownAuthenticationScheme {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthenticationScheme {
+    fn from(name: &str) -> Self {
+        match name {
+            "AKAMAI" => AuthenticationScheme::Akamai,
+            "COMMON" => AuthenticationScheme::Common,
+            _ => AuthenticationScheme::UnknownVariant(UnknownAuthenticationScheme {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthenticationScheme {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AKAMAI" => AuthenticationScheme::Akamai,
+            "COMMON" => AuthenticationScheme::Common,
+            _ => AuthenticationScheme::UnknownVariant(UnknownAuthenticationScheme { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticationScheme {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthenticationScheme {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthenticationScheme {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The settings for Automatic Input Failover.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutomaticInputFailoverSettings {
@@ -391,7 +2903,7 @@ pub struct AutomaticInputFailoverSettings {
     /// <p>Input preference when deciding which input to make active when a previously failed input has recovered.</p>
     #[serde(rename = "InputPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_preference: Option<String>,
+    pub input_preference: Option<InputPreference>,
     /// <p>The input ID of the secondary input in the automatic input failover pair.</p>
     #[serde(rename = "SecondaryInputId")]
     pub secondary_input_id: String,
@@ -407,7 +2919,113 @@ pub struct AvailBlanking {
     /// <p>When set to enabled, causes video, audio and captions to be blanked when insertion metadata is added.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<AvailBlankingState>,
+}
+
+/// <p>Avail Blanking State</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAvailBlankingState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AvailBlankingState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAvailBlankingState),
+}
+
+impl Default for AvailBlankingState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AvailBlankingState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AvailBlankingState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AvailBlankingState {
+    fn into(self) -> String {
+        match self {
+            AvailBlankingState::Disabled => "DISABLED".to_string(),
+            AvailBlankingState::Enabled => "ENABLED".to_string(),
+            AvailBlankingState::UnknownVariant(UnknownAvailBlankingState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AvailBlankingState {
+    fn into(self) -> &'a str {
+        match self {
+            AvailBlankingState::Disabled => &"DISABLED",
+            AvailBlankingState::Enabled => &"ENABLED",
+            AvailBlankingState::UnknownVariant(UnknownAvailBlankingState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AvailBlankingState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => AvailBlankingState::Disabled,
+            "ENABLED" => AvailBlankingState::Enabled,
+            _ => AvailBlankingState::UnknownVariant(UnknownAvailBlankingState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AvailBlankingState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => AvailBlankingState::Disabled,
+            "ENABLED" => AvailBlankingState::Enabled,
+            _ => AvailBlankingState::UnknownVariant(UnknownAvailBlankingState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AvailBlankingState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AvailBlankingState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AvailBlankingState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Avail Configuration</p>
@@ -639,7 +3257,7 @@ pub struct BlackoutSlate {
     /// <p>Setting to enabled causes the encoder to blackout the video, audio, and captions, and raise the &quot;Network Blackout Image&quot; slate when an SCTE104/35 Network End Segmentation Descriptor is encountered. The blackout will be lifted when the Network Start Segmentation Descriptor is encountered. The Network End and Network Start descriptors must contain a network ID that matches the value entered in &quot;Network ID&quot;.</p>
     #[serde(rename = "NetworkEndBlackout")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub network_end_blackout: Option<String>,
+    pub network_end_blackout: Option<BlackoutSlateNetworkEndBlackout>,
     /// <p>Path to local file to use as Network End Blackout image. Image will be scaled to fill the entire output raster.</p>
     #[serde(rename = "NetworkEndBlackoutImage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -651,7 +3269,441 @@ pub struct BlackoutSlate {
     /// <p>When set to enabled, causes video, audio and captions to be blanked when indicated by program metadata.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<BlackoutSlateState>,
+}
+
+/// <p>Blackout Slate Network End Blackout</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBlackoutSlateNetworkEndBlackout {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BlackoutSlateNetworkEndBlackout {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBlackoutSlateNetworkEndBlackout),
+}
+
+impl Default for BlackoutSlateNetworkEndBlackout {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BlackoutSlateNetworkEndBlackout {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BlackoutSlateNetworkEndBlackout {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BlackoutSlateNetworkEndBlackout {
+    fn into(self) -> String {
+        match self {
+            BlackoutSlateNetworkEndBlackout::Disabled => "DISABLED".to_string(),
+            BlackoutSlateNetworkEndBlackout::Enabled => "ENABLED".to_string(),
+            BlackoutSlateNetworkEndBlackout::UnknownVariant(
+                UnknownBlackoutSlateNetworkEndBlackout { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BlackoutSlateNetworkEndBlackout {
+    fn into(self) -> &'a str {
+        match self {
+            BlackoutSlateNetworkEndBlackout::Disabled => &"DISABLED",
+            BlackoutSlateNetworkEndBlackout::Enabled => &"ENABLED",
+            BlackoutSlateNetworkEndBlackout::UnknownVariant(
+                UnknownBlackoutSlateNetworkEndBlackout { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for BlackoutSlateNetworkEndBlackout {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => BlackoutSlateNetworkEndBlackout::Disabled,
+            "ENABLED" => BlackoutSlateNetworkEndBlackout::Enabled,
+            _ => BlackoutSlateNetworkEndBlackout::UnknownVariant(
+                UnknownBlackoutSlateNetworkEndBlackout {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for BlackoutSlateNetworkEndBlackout {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => BlackoutSlateNetworkEndBlackout::Disabled,
+            "ENABLED" => BlackoutSlateNetworkEndBlackout::Enabled,
+            _ => BlackoutSlateNetworkEndBlackout::UnknownVariant(
+                UnknownBlackoutSlateNetworkEndBlackout { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlackoutSlateNetworkEndBlackout {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BlackoutSlateNetworkEndBlackout {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BlackoutSlateNetworkEndBlackout {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Blackout Slate State</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBlackoutSlateState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BlackoutSlateState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBlackoutSlateState),
+}
+
+impl Default for BlackoutSlateState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BlackoutSlateState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BlackoutSlateState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BlackoutSlateState {
+    fn into(self) -> String {
+        match self {
+            BlackoutSlateState::Disabled => "DISABLED".to_string(),
+            BlackoutSlateState::Enabled => "ENABLED".to_string(),
+            BlackoutSlateState::UnknownVariant(UnknownBlackoutSlateState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BlackoutSlateState {
+    fn into(self) -> &'a str {
+        match self {
+            BlackoutSlateState::Disabled => &"DISABLED",
+            BlackoutSlateState::Enabled => &"ENABLED",
+            BlackoutSlateState::UnknownVariant(UnknownBlackoutSlateState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BlackoutSlateState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => BlackoutSlateState::Disabled,
+            "ENABLED" => BlackoutSlateState::Enabled,
+            _ => BlackoutSlateState::UnknownVariant(UnknownBlackoutSlateState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BlackoutSlateState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => BlackoutSlateState::Disabled,
+            "ENABLED" => BlackoutSlateState::Enabled,
+            _ => BlackoutSlateState::UnknownVariant(UnknownBlackoutSlateState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlackoutSlateState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BlackoutSlateState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BlackoutSlateState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Burn In Alignment</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBurnInAlignment {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BurnInAlignment {
+    Centered,
+    Left,
+    Smart,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBurnInAlignment),
+}
+
+impl Default for BurnInAlignment {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BurnInAlignment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BurnInAlignment {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BurnInAlignment {
+    fn into(self) -> String {
+        match self {
+            BurnInAlignment::Centered => "CENTERED".to_string(),
+            BurnInAlignment::Left => "LEFT".to_string(),
+            BurnInAlignment::Smart => "SMART".to_string(),
+            BurnInAlignment::UnknownVariant(UnknownBurnInAlignment { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BurnInAlignment {
+    fn into(self) -> &'a str {
+        match self {
+            BurnInAlignment::Centered => &"CENTERED",
+            BurnInAlignment::Left => &"LEFT",
+            BurnInAlignment::Smart => &"SMART",
+            BurnInAlignment::UnknownVariant(UnknownBurnInAlignment { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BurnInAlignment {
+    fn from(name: &str) -> Self {
+        match name {
+            "CENTERED" => BurnInAlignment::Centered,
+            "LEFT" => BurnInAlignment::Left,
+            "SMART" => BurnInAlignment::Smart,
+            _ => BurnInAlignment::UnknownVariant(UnknownBurnInAlignment {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BurnInAlignment {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CENTERED" => BurnInAlignment::Centered,
+            "LEFT" => BurnInAlignment::Left,
+            "SMART" => BurnInAlignment::Smart,
+            _ => BurnInAlignment::UnknownVariant(UnknownBurnInAlignment { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BurnInAlignment {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BurnInAlignment {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BurnInAlignment {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Burn In Background Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBurnInBackgroundColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BurnInBackgroundColor {
+    Black,
+    None,
+    White,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBurnInBackgroundColor),
+}
+
+impl Default for BurnInBackgroundColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BurnInBackgroundColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BurnInBackgroundColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BurnInBackgroundColor {
+    fn into(self) -> String {
+        match self {
+            BurnInBackgroundColor::Black => "BLACK".to_string(),
+            BurnInBackgroundColor::None => "NONE".to_string(),
+            BurnInBackgroundColor::White => "WHITE".to_string(),
+            BurnInBackgroundColor::UnknownVariant(UnknownBurnInBackgroundColor {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BurnInBackgroundColor {
+    fn into(self) -> &'a str {
+        match self {
+            BurnInBackgroundColor::Black => &"BLACK",
+            BurnInBackgroundColor::None => &"NONE",
+            BurnInBackgroundColor::White => &"WHITE",
+            BurnInBackgroundColor::UnknownVariant(UnknownBurnInBackgroundColor {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BurnInBackgroundColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => BurnInBackgroundColor::Black,
+            "NONE" => BurnInBackgroundColor::None,
+            "WHITE" => BurnInBackgroundColor::White,
+            _ => BurnInBackgroundColor::UnknownVariant(UnknownBurnInBackgroundColor {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BurnInBackgroundColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => BurnInBackgroundColor::Black,
+            "NONE" => BurnInBackgroundColor::None,
+            "WHITE" => BurnInBackgroundColor::White,
+            _ => BurnInBackgroundColor::UnknownVariant(UnknownBurnInBackgroundColor { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BurnInBackgroundColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BurnInBackgroundColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BurnInBackgroundColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Burn In Destination Settings</p>
@@ -660,11 +3712,11 @@ pub struct BurnInDestinationSettings {
     /// <p>If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting &quot;smart&quot; justification will left-justify live subtitles and center-justify pre-recorded subtitles.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "Alignment")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub alignment: Option<String>,
+    pub alignment: Option<BurnInAlignment>,
     /// <p>Specifies the color of the rectangle behind the captions.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "BackgroundColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub background_color: Option<String>,
+    pub background_color: Option<BurnInBackgroundColor>,
     /// <p>Specifies the opacity of the background rectangle. 255 is opaque; 0 is transparent. Leaving this parameter out is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "BackgroundOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -676,7 +3728,7 @@ pub struct BurnInDestinationSettings {
     /// <p>Specifies the color of the burned-in captions.  This option is not valid for source captions that are STL, 608/embedded or teletext.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub font_color: Option<String>,
+    pub font_color: Option<BurnInFontColor>,
     /// <p>Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -692,7 +3744,7 @@ pub struct BurnInDestinationSettings {
     /// <p>Specifies font outline color. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub outline_color: Option<String>,
+    pub outline_color: Option<BurnInOutlineColor>,
     /// <p>Specifies font outline size in pixels. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -700,7 +3752,7 @@ pub struct BurnInDestinationSettings {
     /// <p>Specifies the color of the shadow cast by the captions.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "ShadowColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shadow_color: Option<String>,
+    pub shadow_color: Option<BurnInShadowColor>,
     /// <p>Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Leaving this parameter out is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "ShadowOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -716,7 +3768,7 @@ pub struct BurnInDestinationSettings {
     /// <p>Controls whether a fixed grid size will be used to generate the output subtitles bitmap. Only applicable for Teletext inputs and DVB-Sub/Burn-in outputs.</p>
     #[serde(rename = "TeletextGridControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teletext_grid_control: Option<String>,
+    pub teletext_grid_control: Option<BurnInTeletextGridControl>,
     /// <p>Specifies the horizontal position of the caption relative to the left side of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the left of the output. If no explicit xPosition is provided, the horizontal caption position will be determined by the alignment parameter.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "XPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -725,6 +3777,473 @@ pub struct BurnInDestinationSettings {
     #[serde(rename = "YPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub y_position: Option<i64>,
+}
+
+/// <p>Burn In Font Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBurnInFontColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BurnInFontColor {
+    Black,
+    Blue,
+    Green,
+    Red,
+    White,
+    Yellow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBurnInFontColor),
+}
+
+impl Default for BurnInFontColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BurnInFontColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BurnInFontColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BurnInFontColor {
+    fn into(self) -> String {
+        match self {
+            BurnInFontColor::Black => "BLACK".to_string(),
+            BurnInFontColor::Blue => "BLUE".to_string(),
+            BurnInFontColor::Green => "GREEN".to_string(),
+            BurnInFontColor::Red => "RED".to_string(),
+            BurnInFontColor::White => "WHITE".to_string(),
+            BurnInFontColor::Yellow => "YELLOW".to_string(),
+            BurnInFontColor::UnknownVariant(UnknownBurnInFontColor { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BurnInFontColor {
+    fn into(self) -> &'a str {
+        match self {
+            BurnInFontColor::Black => &"BLACK",
+            BurnInFontColor::Blue => &"BLUE",
+            BurnInFontColor::Green => &"GREEN",
+            BurnInFontColor::Red => &"RED",
+            BurnInFontColor::White => &"WHITE",
+            BurnInFontColor::Yellow => &"YELLOW",
+            BurnInFontColor::UnknownVariant(UnknownBurnInFontColor { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BurnInFontColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => BurnInFontColor::Black,
+            "BLUE" => BurnInFontColor::Blue,
+            "GREEN" => BurnInFontColor::Green,
+            "RED" => BurnInFontColor::Red,
+            "WHITE" => BurnInFontColor::White,
+            "YELLOW" => BurnInFontColor::Yellow,
+            _ => BurnInFontColor::UnknownVariant(UnknownBurnInFontColor {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BurnInFontColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => BurnInFontColor::Black,
+            "BLUE" => BurnInFontColor::Blue,
+            "GREEN" => BurnInFontColor::Green,
+            "RED" => BurnInFontColor::Red,
+            "WHITE" => BurnInFontColor::White,
+            "YELLOW" => BurnInFontColor::Yellow,
+            _ => BurnInFontColor::UnknownVariant(UnknownBurnInFontColor { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BurnInFontColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BurnInFontColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BurnInFontColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Burn In Outline Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBurnInOutlineColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BurnInOutlineColor {
+    Black,
+    Blue,
+    Green,
+    Red,
+    White,
+    Yellow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBurnInOutlineColor),
+}
+
+impl Default for BurnInOutlineColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BurnInOutlineColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BurnInOutlineColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BurnInOutlineColor {
+    fn into(self) -> String {
+        match self {
+            BurnInOutlineColor::Black => "BLACK".to_string(),
+            BurnInOutlineColor::Blue => "BLUE".to_string(),
+            BurnInOutlineColor::Green => "GREEN".to_string(),
+            BurnInOutlineColor::Red => "RED".to_string(),
+            BurnInOutlineColor::White => "WHITE".to_string(),
+            BurnInOutlineColor::Yellow => "YELLOW".to_string(),
+            BurnInOutlineColor::UnknownVariant(UnknownBurnInOutlineColor { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BurnInOutlineColor {
+    fn into(self) -> &'a str {
+        match self {
+            BurnInOutlineColor::Black => &"BLACK",
+            BurnInOutlineColor::Blue => &"BLUE",
+            BurnInOutlineColor::Green => &"GREEN",
+            BurnInOutlineColor::Red => &"RED",
+            BurnInOutlineColor::White => &"WHITE",
+            BurnInOutlineColor::Yellow => &"YELLOW",
+            BurnInOutlineColor::UnknownVariant(UnknownBurnInOutlineColor { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BurnInOutlineColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => BurnInOutlineColor::Black,
+            "BLUE" => BurnInOutlineColor::Blue,
+            "GREEN" => BurnInOutlineColor::Green,
+            "RED" => BurnInOutlineColor::Red,
+            "WHITE" => BurnInOutlineColor::White,
+            "YELLOW" => BurnInOutlineColor::Yellow,
+            _ => BurnInOutlineColor::UnknownVariant(UnknownBurnInOutlineColor {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BurnInOutlineColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => BurnInOutlineColor::Black,
+            "BLUE" => BurnInOutlineColor::Blue,
+            "GREEN" => BurnInOutlineColor::Green,
+            "RED" => BurnInOutlineColor::Red,
+            "WHITE" => BurnInOutlineColor::White,
+            "YELLOW" => BurnInOutlineColor::Yellow,
+            _ => BurnInOutlineColor::UnknownVariant(UnknownBurnInOutlineColor { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BurnInOutlineColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BurnInOutlineColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BurnInOutlineColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Burn In Shadow Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBurnInShadowColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BurnInShadowColor {
+    Black,
+    None,
+    White,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBurnInShadowColor),
+}
+
+impl Default for BurnInShadowColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BurnInShadowColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BurnInShadowColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BurnInShadowColor {
+    fn into(self) -> String {
+        match self {
+            BurnInShadowColor::Black => "BLACK".to_string(),
+            BurnInShadowColor::None => "NONE".to_string(),
+            BurnInShadowColor::White => "WHITE".to_string(),
+            BurnInShadowColor::UnknownVariant(UnknownBurnInShadowColor { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BurnInShadowColor {
+    fn into(self) -> &'a str {
+        match self {
+            BurnInShadowColor::Black => &"BLACK",
+            BurnInShadowColor::None => &"NONE",
+            BurnInShadowColor::White => &"WHITE",
+            BurnInShadowColor::UnknownVariant(UnknownBurnInShadowColor { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BurnInShadowColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => BurnInShadowColor::Black,
+            "NONE" => BurnInShadowColor::None,
+            "WHITE" => BurnInShadowColor::White,
+            _ => BurnInShadowColor::UnknownVariant(UnknownBurnInShadowColor {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BurnInShadowColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => BurnInShadowColor::Black,
+            "NONE" => BurnInShadowColor::None,
+            "WHITE" => BurnInShadowColor::White,
+            _ => BurnInShadowColor::UnknownVariant(UnknownBurnInShadowColor { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BurnInShadowColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BurnInShadowColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BurnInShadowColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Burn In Teletext Grid Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBurnInTeletextGridControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BurnInTeletextGridControl {
+    Fixed,
+    Scaled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBurnInTeletextGridControl),
+}
+
+impl Default for BurnInTeletextGridControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BurnInTeletextGridControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BurnInTeletextGridControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BurnInTeletextGridControl {
+    fn into(self) -> String {
+        match self {
+            BurnInTeletextGridControl::Fixed => "FIXED".to_string(),
+            BurnInTeletextGridControl::Scaled => "SCALED".to_string(),
+            BurnInTeletextGridControl::UnknownVariant(UnknownBurnInTeletextGridControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BurnInTeletextGridControl {
+    fn into(self) -> &'a str {
+        match self {
+            BurnInTeletextGridControl::Fixed => &"FIXED",
+            BurnInTeletextGridControl::Scaled => &"SCALED",
+            BurnInTeletextGridControl::UnknownVariant(UnknownBurnInTeletextGridControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BurnInTeletextGridControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "FIXED" => BurnInTeletextGridControl::Fixed,
+            "SCALED" => BurnInTeletextGridControl::Scaled,
+            _ => BurnInTeletextGridControl::UnknownVariant(UnknownBurnInTeletextGridControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BurnInTeletextGridControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FIXED" => BurnInTeletextGridControl::Fixed,
+            "SCALED" => BurnInTeletextGridControl::Scaled,
+            _ => {
+                BurnInTeletextGridControl::UnknownVariant(UnknownBurnInTeletextGridControl { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for BurnInTeletextGridControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BurnInTeletextGridControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BurnInTeletextGridControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Placeholder documentation for CancelInputDeviceTransferRequest</p>
@@ -864,13 +4383,129 @@ pub struct CaptionSelectorSettings {
     pub teletext_source_settings: Option<TeletextSourceSettings>,
 }
 
+/// <p>Maximum CDI input resolution; SD is 480i and 576i up to 30 frames-per-second (fps), HD is 720p up to 60 fps / 1080i up to 30 fps, FHD is 1080p up to 60 fps, UHD is 2160p up to 60 fps</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCdiInputResolution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CdiInputResolution {
+    Fhd,
+    Hd,
+    Sd,
+    Uhd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCdiInputResolution),
+}
+
+impl Default for CdiInputResolution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CdiInputResolution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CdiInputResolution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CdiInputResolution {
+    fn into(self) -> String {
+        match self {
+            CdiInputResolution::Fhd => "FHD".to_string(),
+            CdiInputResolution::Hd => "HD".to_string(),
+            CdiInputResolution::Sd => "SD".to_string(),
+            CdiInputResolution::Uhd => "UHD".to_string(),
+            CdiInputResolution::UnknownVariant(UnknownCdiInputResolution { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CdiInputResolution {
+    fn into(self) -> &'a str {
+        match self {
+            CdiInputResolution::Fhd => &"FHD",
+            CdiInputResolution::Hd => &"HD",
+            CdiInputResolution::Sd => &"SD",
+            CdiInputResolution::Uhd => &"UHD",
+            CdiInputResolution::UnknownVariant(UnknownCdiInputResolution { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CdiInputResolution {
+    fn from(name: &str) -> Self {
+        match name {
+            "FHD" => CdiInputResolution::Fhd,
+            "HD" => CdiInputResolution::Hd,
+            "SD" => CdiInputResolution::Sd,
+            "UHD" => CdiInputResolution::Uhd,
+            _ => CdiInputResolution::UnknownVariant(UnknownCdiInputResolution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CdiInputResolution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FHD" => CdiInputResolution::Fhd,
+            "HD" => CdiInputResolution::Hd,
+            "SD" => CdiInputResolution::Sd,
+            "UHD" => CdiInputResolution::Uhd,
+            _ => CdiInputResolution::UnknownVariant(UnknownCdiInputResolution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CdiInputResolution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CdiInputResolution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CdiInputResolution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Placeholder documentation for CdiInputSpecification</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CdiInputSpecification {
     /// <p>Maximum CDI input resolution</p>
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolution: Option<String>,
+    pub resolution: Option<CdiInputResolution>,
 }
 
 /// <p>Placeholder documentation for Channel</p>
@@ -888,7 +4523,7 @@ pub struct Channel {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -917,7 +4552,7 @@ pub struct Channel {
     /// <p>The log level being written to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel. (user-mutable)</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -936,11 +4571,113 @@ pub struct Channel {
     pub role_arn: Option<String>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ChannelState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>A standard channel has two encoding pipelines and a single pipeline channel only has one.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelClass {
+    SinglePipeline,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelClass),
+}
+
+impl Default for ChannelClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelClass {
+    fn into(self) -> String {
+        match self {
+            ChannelClass::SinglePipeline => "SINGLE_PIPELINE".to_string(),
+            ChannelClass::Standard => "STANDARD".to_string(),
+            ChannelClass::UnknownVariant(UnknownChannelClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelClass {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelClass::SinglePipeline => &"SINGLE_PIPELINE",
+            ChannelClass::Standard => &"STANDARD",
+            ChannelClass::UnknownVariant(UnknownChannelClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "SINGLE_PIPELINE" => ChannelClass::SinglePipeline,
+            "STANDARD" => ChannelClass::Standard,
+            _ => ChannelClass::UnknownVariant(UnknownChannelClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SINGLE_PIPELINE" => ChannelClass::SinglePipeline,
+            "STANDARD" => ChannelClass::Standard,
+            _ => ChannelClass::UnknownVariant(UnknownChannelClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Placeholder documentation for ChannelEgressEndpoint</p>
@@ -951,6 +4688,154 @@ pub struct ChannelEgressEndpoint {
     #[serde(rename = "SourceIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ip: Option<String>,
+}
+
+/// <p>Placeholder documentation for ChannelState</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelState {
+    CreateFailed,
+    Creating,
+    Deleted,
+    Deleting,
+    Idle,
+    Recovering,
+    Running,
+    Starting,
+    Stopping,
+    UpdateFailed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelState),
+}
+
+impl Default for ChannelState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelState {
+    fn into(self) -> String {
+        match self {
+            ChannelState::CreateFailed => "CREATE_FAILED".to_string(),
+            ChannelState::Creating => "CREATING".to_string(),
+            ChannelState::Deleted => "DELETED".to_string(),
+            ChannelState::Deleting => "DELETING".to_string(),
+            ChannelState::Idle => "IDLE".to_string(),
+            ChannelState::Recovering => "RECOVERING".to_string(),
+            ChannelState::Running => "RUNNING".to_string(),
+            ChannelState::Starting => "STARTING".to_string(),
+            ChannelState::Stopping => "STOPPING".to_string(),
+            ChannelState::UpdateFailed => "UPDATE_FAILED".to_string(),
+            ChannelState::Updating => "UPDATING".to_string(),
+            ChannelState::UnknownVariant(UnknownChannelState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelState {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelState::CreateFailed => &"CREATE_FAILED",
+            ChannelState::Creating => &"CREATING",
+            ChannelState::Deleted => &"DELETED",
+            ChannelState::Deleting => &"DELETING",
+            ChannelState::Idle => &"IDLE",
+            ChannelState::Recovering => &"RECOVERING",
+            ChannelState::Running => &"RUNNING",
+            ChannelState::Starting => &"STARTING",
+            ChannelState::Stopping => &"STOPPING",
+            ChannelState::UpdateFailed => &"UPDATE_FAILED",
+            ChannelState::Updating => &"UPDATING",
+            ChannelState::UnknownVariant(UnknownChannelState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => ChannelState::CreateFailed,
+            "CREATING" => ChannelState::Creating,
+            "DELETED" => ChannelState::Deleted,
+            "DELETING" => ChannelState::Deleting,
+            "IDLE" => ChannelState::Idle,
+            "RECOVERING" => ChannelState::Recovering,
+            "RUNNING" => ChannelState::Running,
+            "STARTING" => ChannelState::Starting,
+            "STOPPING" => ChannelState::Stopping,
+            "UPDATE_FAILED" => ChannelState::UpdateFailed,
+            "UPDATING" => ChannelState::Updating,
+            _ => ChannelState::UnknownVariant(UnknownChannelState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => ChannelState::CreateFailed,
+            "CREATING" => ChannelState::Creating,
+            "DELETED" => ChannelState::Deleted,
+            "DELETING" => ChannelState::Deleting,
+            "IDLE" => ChannelState::Idle,
+            "RECOVERING" => ChannelState::Recovering,
+            "RUNNING" => ChannelState::Running,
+            "STARTING" => ChannelState::Starting,
+            "STOPPING" => ChannelState::Stopping,
+            "UPDATE_FAILED" => ChannelState::UpdateFailed,
+            "UPDATING" => ChannelState::Updating,
+            _ => ChannelState::UnknownVariant(UnknownChannelState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChannelState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Placeholder documentation for ChannelSummary</p>
@@ -968,7 +4853,7 @@ pub struct ChannelSummary {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -994,7 +4879,7 @@ pub struct ChannelSummary {
     /// <p>The log level being written to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel. (user-mutable)</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1009,7 +4894,7 @@ pub struct ChannelSummary {
     pub role_arn: Option<String>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ChannelState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1019,6 +4904,105 @@ pub struct ChannelSummary {
 /// <p>Passthrough applies no color space conversion to the output</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColorSpacePassthroughSettings {}
+
+/// <p>Specifies the media type of the thumbnail.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentType {
+    ImageJpeg,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentType),
+}
+
+impl Default for ContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        match self {
+            ContentType::ImageJpeg => "image/jpeg".to_string(),
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentType {
+    fn into(self) -> &'a str {
+        match self {
+            ContentType::ImageJpeg => &"image/jpeg",
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "image/jpeg" => ContentType::ImageJpeg,
+            _ => ContentType::UnknownVariant(UnknownContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "image/jpeg" => ContentType::ImageJpeg,
+            _ => ContentType::UnknownVariant(UnknownContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>A request to create a channel</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1031,7 +5015,7 @@ pub struct CreateChannelRequest {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     #[serde(rename = "Destinations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<OutputDestination>>,
@@ -1049,7 +5033,7 @@ pub struct CreateChannelRequest {
     /// <p>The log level to write to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>Name of channel.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1125,7 +5109,7 @@ pub struct CreateInputRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InputType>,
     #[serde(rename = "Vpc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc: Option<InputVpcRequest>,
@@ -1260,7 +5244,7 @@ pub struct DeleteChannelResponse {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -1289,7 +5273,7 @@ pub struct DeleteChannelResponse {
     /// <p>The log level being written to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel. (user-mutable)</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1308,7 +5292,7 @@ pub struct DeleteChannelResponse {
     pub role_arn: Option<String>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ChannelState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1429,7 +5413,7 @@ pub struct DeleteMultiplexResponse {
     /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MultiplexState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1468,7 +5452,7 @@ pub struct DeleteReservationResponse {
     /// <p>Units for duration, e.g. &#39;MONTHS&#39;</p>
     #[serde(rename = "DurationUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_units: Option<String>,
+    pub duration_units: Option<OfferingDurationUnits>,
     /// <p>Reservation UTC end date and time in ISO-8601 format, e.g. &#39;2019-03-01T00:00:00&#39;</p>
     #[serde(rename = "End")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1492,7 +5476,7 @@ pub struct DeleteReservationResponse {
     /// <p>Offering type, e.g. &#39;NO_UPFRONT&#39;</p>
     #[serde(rename = "OfferingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_type: Option<String>,
+    pub offering_type: Option<OfferingType>,
     /// <p>AWS region, e.g. &#39;us-west-2&#39;</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1512,7 +5496,7 @@ pub struct DeleteReservationResponse {
     /// <p>Current state of reservation, e.g. &#39;ACTIVE&#39;</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReservationState>,
     /// <p>A collection of key-value pairs</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1572,7 +5556,7 @@ pub struct DescribeChannelResponse {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -1601,7 +5585,7 @@ pub struct DescribeChannelResponse {
     /// <p>The log level being written to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel. (user-mutable)</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1620,7 +5604,7 @@ pub struct DescribeChannelResponse {
     pub role_arn: Option<String>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ChannelState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1647,15 +5631,15 @@ pub struct DescribeInputDeviceResponse {
     /// <p>The state of the connection between the input device and AWS.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<InputDeviceConnectionState>,
     /// <p>The status of the action to synchronize the device configuration. If you change the configuration of the input device (for example, the maximum bitrate), MediaLive sends the new data to the device. The device might not update itself immediately. SYNCED means the device has updated its configuration. SYNCING means that it has not updated its configuration.</p>
     #[serde(rename = "DeviceSettingsSyncState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_settings_sync_state: Option<String>,
+    pub device_settings_sync_state: Option<DeviceSettingsSyncState>,
     /// <p>The status of software on the input device.</p>
     #[serde(rename = "DeviceUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_update_status: Option<String>,
+    pub device_update_status: Option<DeviceUpdateStatus>,
     /// <p>Settings that describe an input device that is type HD.</p>
     #[serde(rename = "HdDeviceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1683,7 +5667,7 @@ pub struct DescribeInputDeviceResponse {
     /// <p>The type of the input device.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InputDeviceType>,
     /// <p>Settings that describe an input device that is type UHD.</p>
     #[serde(rename = "UhdDeviceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1696,7 +5680,7 @@ pub struct DescribeInputDeviceResponse {
 pub struct DescribeInputDeviceThumbnailRequest {
     /// <p>The HTTP Accept header. Indicates the requested type for the thumbnail.</p>
     #[serde(rename = "Accept")]
-    pub accept: String,
+    pub accept: AcceptHeader,
     /// <p>The unique ID of this input device. For example, hd-123456789abcdef.</p>
     #[serde(rename = "InputDeviceId")]
     pub input_device_id: String,
@@ -1710,7 +5694,7 @@ pub struct DescribeInputDeviceThumbnailResponse {
     /// <p>The length of the content.</p>
     pub content_length: Option<i64>,
     /// <p>Specifies the media type of the thumbnail.</p>
-    pub content_type: Option<String>,
+    pub content_type: Option<ContentType>,
     /// <p>The unique, cacheable version of this thumbnail.</p>
     pub e_tag: Option<String>,
     /// <p>The date and time the thumbnail was last updated at the device.</p>
@@ -1750,7 +5734,7 @@ pub struct DescribeInputResponse {
     /// SINGLE</em>PIPELINE - You can connect only one source to this input. If the ChannelClass is also  SINGLE_PIPELINE, this value is valid. If the ChannelClass is STANDARD, this value is not valid because the channel requires two sources in the input.</p>
     #[serde(rename = "InputClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_class: Option<String>,
+    pub input_class: Option<InputClass>,
     /// <p>Settings for the input devices.</p>
     #[serde(rename = "InputDevices")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1759,7 +5743,7 @@ pub struct DescribeInputResponse {
     /// during input switch actions. Presently, this functionality only works with MP4_FILE inputs.</p>
     #[serde(rename = "InputSourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_source_type: Option<String>,
+    pub input_source_type: Option<InputSourceType>,
     /// <p>A list of MediaConnect Flows for this input.</p>
     #[serde(rename = "MediaConnectFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1782,14 +5766,14 @@ pub struct DescribeInputResponse {
     pub sources: Option<Vec<InputSource>>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InputState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InputType>,
 }
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupRequest</p>
@@ -1820,7 +5804,7 @@ pub struct DescribeInputSecurityGroupResponse {
     /// <p>The current state of the Input Security Group.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InputSecurityGroupState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1917,7 +5901,7 @@ pub struct DescribeMultiplexResponse {
     /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MultiplexState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1952,7 +5936,7 @@ pub struct DescribeOfferingResponse {
     /// <p>Units for duration, e.g. &#39;MONTHS&#39;</p>
     #[serde(rename = "DurationUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_units: Option<String>,
+    pub duration_units: Option<OfferingDurationUnits>,
     /// <p>One-time charge for each reserved resource, e.g. &#39;0.0&#39; for a NO_UPFRONT offering</p>
     #[serde(rename = "FixedPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1968,7 +5952,7 @@ pub struct DescribeOfferingResponse {
     /// <p>Offering type, e.g. &#39;NO_UPFRONT&#39;</p>
     #[serde(rename = "OfferingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_type: Option<String>,
+    pub offering_type: Option<OfferingType>,
     /// <p>AWS region, e.g. &#39;us-west-2&#39;</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2015,7 +5999,7 @@ pub struct DescribeReservationResponse {
     /// <p>Units for duration, e.g. &#39;MONTHS&#39;</p>
     #[serde(rename = "DurationUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_units: Option<String>,
+    pub duration_units: Option<OfferingDurationUnits>,
     /// <p>Reservation UTC end date and time in ISO-8601 format, e.g. &#39;2019-03-01T00:00:00&#39;</p>
     #[serde(rename = "End")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2039,7 +6023,7 @@ pub struct DescribeReservationResponse {
     /// <p>Offering type, e.g. &#39;NO_UPFRONT&#39;</p>
     #[serde(rename = "OfferingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_type: Option<String>,
+    pub offering_type: Option<OfferingType>,
     /// <p>AWS region, e.g. &#39;us-west-2&#39;</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2059,7 +6043,7 @@ pub struct DescribeReservationResponse {
     /// <p>Current state of reservation, e.g. &#39;ACTIVE&#39;</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReservationState>,
     /// <p>A collection of key-value pairs</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2099,6 +6083,220 @@ pub struct DescribeScheduleResponse {
     pub schedule_actions: Option<Vec<ScheduleAction>>,
 }
 
+/// <p>The status of the action to synchronize the device configuration. If you change the configuration of the input device (for example, the maximum bitrate), MediaLive sends the new data to the device. The device might not update itself immediately. SYNCED means the device has updated its configuration. SYNCING means that it has not updated its configuration.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceSettingsSyncState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceSettingsSyncState {
+    Synced,
+    Syncing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceSettingsSyncState),
+}
+
+impl Default for DeviceSettingsSyncState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceSettingsSyncState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceSettingsSyncState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceSettingsSyncState {
+    fn into(self) -> String {
+        match self {
+            DeviceSettingsSyncState::Synced => "SYNCED".to_string(),
+            DeviceSettingsSyncState::Syncing => "SYNCING".to_string(),
+            DeviceSettingsSyncState::UnknownVariant(UnknownDeviceSettingsSyncState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceSettingsSyncState {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceSettingsSyncState::Synced => &"SYNCED",
+            DeviceSettingsSyncState::Syncing => &"SYNCING",
+            DeviceSettingsSyncState::UnknownVariant(UnknownDeviceSettingsSyncState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeviceSettingsSyncState {
+    fn from(name: &str) -> Self {
+        match name {
+            "SYNCED" => DeviceSettingsSyncState::Synced,
+            "SYNCING" => DeviceSettingsSyncState::Syncing,
+            _ => DeviceSettingsSyncState::UnknownVariant(UnknownDeviceSettingsSyncState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceSettingsSyncState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SYNCED" => DeviceSettingsSyncState::Synced,
+            "SYNCING" => DeviceSettingsSyncState::Syncing,
+            _ => DeviceSettingsSyncState::UnknownVariant(UnknownDeviceSettingsSyncState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceSettingsSyncState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeviceSettingsSyncState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeviceSettingsSyncState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The status of software on the input device.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceUpdateStatus {
+    NotUpToDate,
+    UpToDate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceUpdateStatus),
+}
+
+impl Default for DeviceUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            DeviceUpdateStatus::NotUpToDate => "NOT_UP_TO_DATE".to_string(),
+            DeviceUpdateStatus::UpToDate => "UP_TO_DATE".to_string(),
+            DeviceUpdateStatus::UnknownVariant(UnknownDeviceUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceUpdateStatus::NotUpToDate => &"NOT_UP_TO_DATE",
+            DeviceUpdateStatus::UpToDate => &"UP_TO_DATE",
+            DeviceUpdateStatus::UnknownVariant(UnknownDeviceUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeviceUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_UP_TO_DATE" => DeviceUpdateStatus::NotUpToDate,
+            "UP_TO_DATE" => DeviceUpdateStatus::UpToDate,
+            _ => DeviceUpdateStatus::UnknownVariant(UnknownDeviceUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_UP_TO_DATE" => DeviceUpdateStatus::NotUpToDate,
+            "UP_TO_DATE" => DeviceUpdateStatus::UpToDate,
+            _ => DeviceUpdateStatus::UnknownVariant(UnknownDeviceUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeviceUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeviceUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>DVB Network Information Table (NIT)</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbNitSettings {
@@ -2114,13 +6312,125 @@ pub struct DvbNitSettings {
     pub rep_interval: Option<i64>,
 }
 
+/// <p>Dvb Sdt Output Sdt</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSdtOutputSdt {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSdtOutputSdt {
+    SdtFollow,
+    SdtFollowIfPresent,
+    SdtManual,
+    SdtNone,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSdtOutputSdt),
+}
+
+impl Default for DvbSdtOutputSdt {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSdtOutputSdt {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSdtOutputSdt {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSdtOutputSdt {
+    fn into(self) -> String {
+        match self {
+            DvbSdtOutputSdt::SdtFollow => "SDT_FOLLOW".to_string(),
+            DvbSdtOutputSdt::SdtFollowIfPresent => "SDT_FOLLOW_IF_PRESENT".to_string(),
+            DvbSdtOutputSdt::SdtManual => "SDT_MANUAL".to_string(),
+            DvbSdtOutputSdt::SdtNone => "SDT_NONE".to_string(),
+            DvbSdtOutputSdt::UnknownVariant(UnknownDvbSdtOutputSdt { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSdtOutputSdt {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSdtOutputSdt::SdtFollow => &"SDT_FOLLOW",
+            DvbSdtOutputSdt::SdtFollowIfPresent => &"SDT_FOLLOW_IF_PRESENT",
+            DvbSdtOutputSdt::SdtManual => &"SDT_MANUAL",
+            DvbSdtOutputSdt::SdtNone => &"SDT_NONE",
+            DvbSdtOutputSdt::UnknownVariant(UnknownDvbSdtOutputSdt { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSdtOutputSdt {
+    fn from(name: &str) -> Self {
+        match name {
+            "SDT_FOLLOW" => DvbSdtOutputSdt::SdtFollow,
+            "SDT_FOLLOW_IF_PRESENT" => DvbSdtOutputSdt::SdtFollowIfPresent,
+            "SDT_MANUAL" => DvbSdtOutputSdt::SdtManual,
+            "SDT_NONE" => DvbSdtOutputSdt::SdtNone,
+            _ => DvbSdtOutputSdt::UnknownVariant(UnknownDvbSdtOutputSdt {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DvbSdtOutputSdt {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SDT_FOLLOW" => DvbSdtOutputSdt::SdtFollow,
+            "SDT_FOLLOW_IF_PRESENT" => DvbSdtOutputSdt::SdtFollowIfPresent,
+            "SDT_MANUAL" => DvbSdtOutputSdt::SdtManual,
+            "SDT_NONE" => DvbSdtOutputSdt::SdtNone,
+            _ => DvbSdtOutputSdt::UnknownVariant(UnknownDvbSdtOutputSdt { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSdtOutputSdt {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSdtOutputSdt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSdtOutputSdt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>DVB Service Description Table (SDT)</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSdtSettings {
     /// <p>Selects method of inserting SDT information into output stream. The sdtFollow setting copies SDT information from input stream to output stream. The sdtFollowIfPresent setting copies SDT information from input stream to output stream if SDT information is present in the input, otherwise it will fall back on the user-defined values. The sdtManual setting means user will enter the SDT information. The sdtNone setting means output stream will not contain SDT information.</p>
     #[serde(rename = "OutputSdt")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_sdt: Option<String>,
+    pub output_sdt: Option<DvbSdtOutputSdt>,
     /// <p>The number of milliseconds between instances of this table in the output transport stream.</p>
     #[serde(rename = "RepInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2135,17 +6445,503 @@ pub struct DvbSdtSettings {
     pub service_provider_name: Option<String>,
 }
 
+/// <p>Dvb Sub Destination Alignment</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSubDestinationAlignment {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSubDestinationAlignment {
+    Centered,
+    Left,
+    Smart,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSubDestinationAlignment),
+}
+
+impl Default for DvbSubDestinationAlignment {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSubDestinationAlignment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSubDestinationAlignment {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSubDestinationAlignment {
+    fn into(self) -> String {
+        match self {
+            DvbSubDestinationAlignment::Centered => "CENTERED".to_string(),
+            DvbSubDestinationAlignment::Left => "LEFT".to_string(),
+            DvbSubDestinationAlignment::Smart => "SMART".to_string(),
+            DvbSubDestinationAlignment::UnknownVariant(UnknownDvbSubDestinationAlignment {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSubDestinationAlignment {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSubDestinationAlignment::Centered => &"CENTERED",
+            DvbSubDestinationAlignment::Left => &"LEFT",
+            DvbSubDestinationAlignment::Smart => &"SMART",
+            DvbSubDestinationAlignment::UnknownVariant(UnknownDvbSubDestinationAlignment {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSubDestinationAlignment {
+    fn from(name: &str) -> Self {
+        match name {
+            "CENTERED" => DvbSubDestinationAlignment::Centered,
+            "LEFT" => DvbSubDestinationAlignment::Left,
+            "SMART" => DvbSubDestinationAlignment::Smart,
+            _ => DvbSubDestinationAlignment::UnknownVariant(UnknownDvbSubDestinationAlignment {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DvbSubDestinationAlignment {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CENTERED" => DvbSubDestinationAlignment::Centered,
+            "LEFT" => DvbSubDestinationAlignment::Left,
+            "SMART" => DvbSubDestinationAlignment::Smart,
+            _ => DvbSubDestinationAlignment::UnknownVariant(UnknownDvbSubDestinationAlignment {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSubDestinationAlignment {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSubDestinationAlignment {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSubDestinationAlignment {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Dvb Sub Destination Background Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSubDestinationBackgroundColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSubDestinationBackgroundColor {
+    Black,
+    None,
+    White,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSubDestinationBackgroundColor),
+}
+
+impl Default for DvbSubDestinationBackgroundColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSubDestinationBackgroundColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSubDestinationBackgroundColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSubDestinationBackgroundColor {
+    fn into(self) -> String {
+        match self {
+            DvbSubDestinationBackgroundColor::Black => "BLACK".to_string(),
+            DvbSubDestinationBackgroundColor::None => "NONE".to_string(),
+            DvbSubDestinationBackgroundColor::White => "WHITE".to_string(),
+            DvbSubDestinationBackgroundColor::UnknownVariant(
+                UnknownDvbSubDestinationBackgroundColor { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSubDestinationBackgroundColor {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSubDestinationBackgroundColor::Black => &"BLACK",
+            DvbSubDestinationBackgroundColor::None => &"NONE",
+            DvbSubDestinationBackgroundColor::White => &"WHITE",
+            DvbSubDestinationBackgroundColor::UnknownVariant(
+                UnknownDvbSubDestinationBackgroundColor { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSubDestinationBackgroundColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => DvbSubDestinationBackgroundColor::Black,
+            "NONE" => DvbSubDestinationBackgroundColor::None,
+            "WHITE" => DvbSubDestinationBackgroundColor::White,
+            _ => DvbSubDestinationBackgroundColor::UnknownVariant(
+                UnknownDvbSubDestinationBackgroundColor {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DvbSubDestinationBackgroundColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => DvbSubDestinationBackgroundColor::Black,
+            "NONE" => DvbSubDestinationBackgroundColor::None,
+            "WHITE" => DvbSubDestinationBackgroundColor::White,
+            _ => DvbSubDestinationBackgroundColor::UnknownVariant(
+                UnknownDvbSubDestinationBackgroundColor { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSubDestinationBackgroundColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSubDestinationBackgroundColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSubDestinationBackgroundColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Dvb Sub Destination Font Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSubDestinationFontColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSubDestinationFontColor {
+    Black,
+    Blue,
+    Green,
+    Red,
+    White,
+    Yellow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSubDestinationFontColor),
+}
+
+impl Default for DvbSubDestinationFontColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSubDestinationFontColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSubDestinationFontColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSubDestinationFontColor {
+    fn into(self) -> String {
+        match self {
+            DvbSubDestinationFontColor::Black => "BLACK".to_string(),
+            DvbSubDestinationFontColor::Blue => "BLUE".to_string(),
+            DvbSubDestinationFontColor::Green => "GREEN".to_string(),
+            DvbSubDestinationFontColor::Red => "RED".to_string(),
+            DvbSubDestinationFontColor::White => "WHITE".to_string(),
+            DvbSubDestinationFontColor::Yellow => "YELLOW".to_string(),
+            DvbSubDestinationFontColor::UnknownVariant(UnknownDvbSubDestinationFontColor {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSubDestinationFontColor {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSubDestinationFontColor::Black => &"BLACK",
+            DvbSubDestinationFontColor::Blue => &"BLUE",
+            DvbSubDestinationFontColor::Green => &"GREEN",
+            DvbSubDestinationFontColor::Red => &"RED",
+            DvbSubDestinationFontColor::White => &"WHITE",
+            DvbSubDestinationFontColor::Yellow => &"YELLOW",
+            DvbSubDestinationFontColor::UnknownVariant(UnknownDvbSubDestinationFontColor {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSubDestinationFontColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => DvbSubDestinationFontColor::Black,
+            "BLUE" => DvbSubDestinationFontColor::Blue,
+            "GREEN" => DvbSubDestinationFontColor::Green,
+            "RED" => DvbSubDestinationFontColor::Red,
+            "WHITE" => DvbSubDestinationFontColor::White,
+            "YELLOW" => DvbSubDestinationFontColor::Yellow,
+            _ => DvbSubDestinationFontColor::UnknownVariant(UnknownDvbSubDestinationFontColor {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DvbSubDestinationFontColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => DvbSubDestinationFontColor::Black,
+            "BLUE" => DvbSubDestinationFontColor::Blue,
+            "GREEN" => DvbSubDestinationFontColor::Green,
+            "RED" => DvbSubDestinationFontColor::Red,
+            "WHITE" => DvbSubDestinationFontColor::White,
+            "YELLOW" => DvbSubDestinationFontColor::Yellow,
+            _ => DvbSubDestinationFontColor::UnknownVariant(UnknownDvbSubDestinationFontColor {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSubDestinationFontColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSubDestinationFontColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSubDestinationFontColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Dvb Sub Destination Outline Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSubDestinationOutlineColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSubDestinationOutlineColor {
+    Black,
+    Blue,
+    Green,
+    Red,
+    White,
+    Yellow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSubDestinationOutlineColor),
+}
+
+impl Default for DvbSubDestinationOutlineColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSubDestinationOutlineColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSubDestinationOutlineColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSubDestinationOutlineColor {
+    fn into(self) -> String {
+        match self {
+            DvbSubDestinationOutlineColor::Black => "BLACK".to_string(),
+            DvbSubDestinationOutlineColor::Blue => "BLUE".to_string(),
+            DvbSubDestinationOutlineColor::Green => "GREEN".to_string(),
+            DvbSubDestinationOutlineColor::Red => "RED".to_string(),
+            DvbSubDestinationOutlineColor::White => "WHITE".to_string(),
+            DvbSubDestinationOutlineColor::Yellow => "YELLOW".to_string(),
+            DvbSubDestinationOutlineColor::UnknownVariant(
+                UnknownDvbSubDestinationOutlineColor { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSubDestinationOutlineColor {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSubDestinationOutlineColor::Black => &"BLACK",
+            DvbSubDestinationOutlineColor::Blue => &"BLUE",
+            DvbSubDestinationOutlineColor::Green => &"GREEN",
+            DvbSubDestinationOutlineColor::Red => &"RED",
+            DvbSubDestinationOutlineColor::White => &"WHITE",
+            DvbSubDestinationOutlineColor::Yellow => &"YELLOW",
+            DvbSubDestinationOutlineColor::UnknownVariant(
+                UnknownDvbSubDestinationOutlineColor { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSubDestinationOutlineColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => DvbSubDestinationOutlineColor::Black,
+            "BLUE" => DvbSubDestinationOutlineColor::Blue,
+            "GREEN" => DvbSubDestinationOutlineColor::Green,
+            "RED" => DvbSubDestinationOutlineColor::Red,
+            "WHITE" => DvbSubDestinationOutlineColor::White,
+            "YELLOW" => DvbSubDestinationOutlineColor::Yellow,
+            _ => DvbSubDestinationOutlineColor::UnknownVariant(
+                UnknownDvbSubDestinationOutlineColor {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DvbSubDestinationOutlineColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => DvbSubDestinationOutlineColor::Black,
+            "BLUE" => DvbSubDestinationOutlineColor::Blue,
+            "GREEN" => DvbSubDestinationOutlineColor::Green,
+            "RED" => DvbSubDestinationOutlineColor::Red,
+            "WHITE" => DvbSubDestinationOutlineColor::White,
+            "YELLOW" => DvbSubDestinationOutlineColor::Yellow,
+            _ => DvbSubDestinationOutlineColor::UnknownVariant(
+                UnknownDvbSubDestinationOutlineColor { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSubDestinationOutlineColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSubDestinationOutlineColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSubDestinationOutlineColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Dvb Sub Destination Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSubDestinationSettings {
     /// <p>If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting &quot;smart&quot; justification will left-justify live subtitles and center-justify pre-recorded subtitles.  This option is not valid for source captions that are STL or 608/embedded.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "Alignment")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub alignment: Option<String>,
+    pub alignment: Option<DvbSubDestinationAlignment>,
     /// <p>Specifies the color of the rectangle behind the captions.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "BackgroundColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub background_color: Option<String>,
+    pub background_color: Option<DvbSubDestinationBackgroundColor>,
     /// <p>Specifies the opacity of the background rectangle. 255 is opaque; 0 is transparent. Leaving this parameter blank is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "BackgroundOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2157,7 +6953,7 @@ pub struct DvbSubDestinationSettings {
     /// <p>Specifies the color of the burned-in captions.  This option is not valid for source captions that are STL, 608/embedded or teletext.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub font_color: Option<String>,
+    pub font_color: Option<DvbSubDestinationFontColor>,
     /// <p>Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2173,7 +6969,7 @@ pub struct DvbSubDestinationSettings {
     /// <p>Specifies font outline color. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub outline_color: Option<String>,
+    pub outline_color: Option<DvbSubDestinationOutlineColor>,
     /// <p>Specifies font outline size in pixels. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2181,7 +6977,7 @@ pub struct DvbSubDestinationSettings {
     /// <p>Specifies the color of the shadow cast by the captions.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "ShadowColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shadow_color: Option<String>,
+    pub shadow_color: Option<DvbSubDestinationShadowColor>,
     /// <p>Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Leaving this parameter blank is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "ShadowOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2197,7 +6993,7 @@ pub struct DvbSubDestinationSettings {
     /// <p>Controls whether a fixed grid size will be used to generate the output subtitles bitmap. Only applicable for Teletext inputs and DVB-Sub/Burn-in outputs.</p>
     #[serde(rename = "TeletextGridControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teletext_grid_control: Option<String>,
+    pub teletext_grid_control: Option<DvbSubDestinationTeletextGridControl>,
     /// <p>Specifies the horizontal position of the caption relative to the left side of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the left of the output. If no explicit xPosition is provided, the horizontal caption position will be determined by the alignment parameter.  This option is not valid for source captions that are STL, 608/embedded or teletext. These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "XPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2206,6 +7002,233 @@ pub struct DvbSubDestinationSettings {
     #[serde(rename = "YPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub y_position: Option<i64>,
+}
+
+/// <p>Dvb Sub Destination Shadow Color</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSubDestinationShadowColor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSubDestinationShadowColor {
+    Black,
+    None,
+    White,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSubDestinationShadowColor),
+}
+
+impl Default for DvbSubDestinationShadowColor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSubDestinationShadowColor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSubDestinationShadowColor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSubDestinationShadowColor {
+    fn into(self) -> String {
+        match self {
+            DvbSubDestinationShadowColor::Black => "BLACK".to_string(),
+            DvbSubDestinationShadowColor::None => "NONE".to_string(),
+            DvbSubDestinationShadowColor::White => "WHITE".to_string(),
+            DvbSubDestinationShadowColor::UnknownVariant(UnknownDvbSubDestinationShadowColor {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSubDestinationShadowColor {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSubDestinationShadowColor::Black => &"BLACK",
+            DvbSubDestinationShadowColor::None => &"NONE",
+            DvbSubDestinationShadowColor::White => &"WHITE",
+            DvbSubDestinationShadowColor::UnknownVariant(UnknownDvbSubDestinationShadowColor {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSubDestinationShadowColor {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACK" => DvbSubDestinationShadowColor::Black,
+            "NONE" => DvbSubDestinationShadowColor::None,
+            "WHITE" => DvbSubDestinationShadowColor::White,
+            _ => {
+                DvbSubDestinationShadowColor::UnknownVariant(UnknownDvbSubDestinationShadowColor {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for DvbSubDestinationShadowColor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACK" => DvbSubDestinationShadowColor::Black,
+            "NONE" => DvbSubDestinationShadowColor::None,
+            "WHITE" => DvbSubDestinationShadowColor::White,
+            _ => {
+                DvbSubDestinationShadowColor::UnknownVariant(UnknownDvbSubDestinationShadowColor {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSubDestinationShadowColor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSubDestinationShadowColor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSubDestinationShadowColor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Dvb Sub Destination Teletext Grid Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDvbSubDestinationTeletextGridControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DvbSubDestinationTeletextGridControl {
+    Fixed,
+    Scaled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDvbSubDestinationTeletextGridControl),
+}
+
+impl Default for DvbSubDestinationTeletextGridControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DvbSubDestinationTeletextGridControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DvbSubDestinationTeletextGridControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DvbSubDestinationTeletextGridControl {
+    fn into(self) -> String {
+        match self {
+            DvbSubDestinationTeletextGridControl::Fixed => "FIXED".to_string(),
+            DvbSubDestinationTeletextGridControl::Scaled => "SCALED".to_string(),
+            DvbSubDestinationTeletextGridControl::UnknownVariant(
+                UnknownDvbSubDestinationTeletextGridControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DvbSubDestinationTeletextGridControl {
+    fn into(self) -> &'a str {
+        match self {
+            DvbSubDestinationTeletextGridControl::Fixed => &"FIXED",
+            DvbSubDestinationTeletextGridControl::Scaled => &"SCALED",
+            DvbSubDestinationTeletextGridControl::UnknownVariant(
+                UnknownDvbSubDestinationTeletextGridControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DvbSubDestinationTeletextGridControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "FIXED" => DvbSubDestinationTeletextGridControl::Fixed,
+            "SCALED" => DvbSubDestinationTeletextGridControl::Scaled,
+            _ => DvbSubDestinationTeletextGridControl::UnknownVariant(
+                UnknownDvbSubDestinationTeletextGridControl {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DvbSubDestinationTeletextGridControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FIXED" => DvbSubDestinationTeletextGridControl::Fixed,
+            "SCALED" => DvbSubDestinationTeletextGridControl::Scaled,
+            _ => DvbSubDestinationTeletextGridControl::UnknownVariant(
+                UnknownDvbSubDestinationTeletextGridControl { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DvbSubDestinationTeletextGridControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DvbSubDestinationTeletextGridControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DvbSubDestinationTeletextGridControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Dvb Sub Source Settings</p>
@@ -2226,13 +7249,1215 @@ pub struct DvbTdtSettings {
     pub rep_interval: Option<i64>,
 }
 
+/// <p>Eac3 Attenuation Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3AttenuationControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3AttenuationControl {
+    Attenuate3Db,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3AttenuationControl),
+}
+
+impl Default for Eac3AttenuationControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3AttenuationControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3AttenuationControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3AttenuationControl {
+    fn into(self) -> String {
+        match self {
+            Eac3AttenuationControl::Attenuate3Db => "ATTENUATE_3_DB".to_string(),
+            Eac3AttenuationControl::None => "NONE".to_string(),
+            Eac3AttenuationControl::UnknownVariant(UnknownEac3AttenuationControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3AttenuationControl {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3AttenuationControl::Attenuate3Db => &"ATTENUATE_3_DB",
+            Eac3AttenuationControl::None => &"NONE",
+            Eac3AttenuationControl::UnknownVariant(UnknownEac3AttenuationControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3AttenuationControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATTENUATE_3_DB" => Eac3AttenuationControl::Attenuate3Db,
+            "NONE" => Eac3AttenuationControl::None,
+            _ => Eac3AttenuationControl::UnknownVariant(UnknownEac3AttenuationControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3AttenuationControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATTENUATE_3_DB" => Eac3AttenuationControl::Attenuate3Db,
+            "NONE" => Eac3AttenuationControl::None,
+            _ => Eac3AttenuationControl::UnknownVariant(UnknownEac3AttenuationControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3AttenuationControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3AttenuationControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3AttenuationControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Bitstream Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3BitstreamMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3BitstreamMode {
+    Commentary,
+    CompleteMain,
+    Emergency,
+    HearingImpaired,
+    VisuallyImpaired,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3BitstreamMode),
+}
+
+impl Default for Eac3BitstreamMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3BitstreamMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3BitstreamMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3BitstreamMode {
+    fn into(self) -> String {
+        match self {
+            Eac3BitstreamMode::Commentary => "COMMENTARY".to_string(),
+            Eac3BitstreamMode::CompleteMain => "COMPLETE_MAIN".to_string(),
+            Eac3BitstreamMode::Emergency => "EMERGENCY".to_string(),
+            Eac3BitstreamMode::HearingImpaired => "HEARING_IMPAIRED".to_string(),
+            Eac3BitstreamMode::VisuallyImpaired => "VISUALLY_IMPAIRED".to_string(),
+            Eac3BitstreamMode::UnknownVariant(UnknownEac3BitstreamMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3BitstreamMode {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3BitstreamMode::Commentary => &"COMMENTARY",
+            Eac3BitstreamMode::CompleteMain => &"COMPLETE_MAIN",
+            Eac3BitstreamMode::Emergency => &"EMERGENCY",
+            Eac3BitstreamMode::HearingImpaired => &"HEARING_IMPAIRED",
+            Eac3BitstreamMode::VisuallyImpaired => &"VISUALLY_IMPAIRED",
+            Eac3BitstreamMode::UnknownVariant(UnknownEac3BitstreamMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Eac3BitstreamMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMMENTARY" => Eac3BitstreamMode::Commentary,
+            "COMPLETE_MAIN" => Eac3BitstreamMode::CompleteMain,
+            "EMERGENCY" => Eac3BitstreamMode::Emergency,
+            "HEARING_IMPAIRED" => Eac3BitstreamMode::HearingImpaired,
+            "VISUALLY_IMPAIRED" => Eac3BitstreamMode::VisuallyImpaired,
+            _ => Eac3BitstreamMode::UnknownVariant(UnknownEac3BitstreamMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3BitstreamMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMMENTARY" => Eac3BitstreamMode::Commentary,
+            "COMPLETE_MAIN" => Eac3BitstreamMode::CompleteMain,
+            "EMERGENCY" => Eac3BitstreamMode::Emergency,
+            "HEARING_IMPAIRED" => Eac3BitstreamMode::HearingImpaired,
+            "VISUALLY_IMPAIRED" => Eac3BitstreamMode::VisuallyImpaired,
+            _ => Eac3BitstreamMode::UnknownVariant(UnknownEac3BitstreamMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3BitstreamMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3BitstreamMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3BitstreamMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Coding Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3CodingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3CodingMode {
+    CodingMode10,
+    CodingMode20,
+    CodingMode32,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3CodingMode),
+}
+
+impl Default for Eac3CodingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3CodingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3CodingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3CodingMode {
+    fn into(self) -> String {
+        match self {
+            Eac3CodingMode::CodingMode10 => "CODING_MODE_1_0".to_string(),
+            Eac3CodingMode::CodingMode20 => "CODING_MODE_2_0".to_string(),
+            Eac3CodingMode::CodingMode32 => "CODING_MODE_3_2".to_string(),
+            Eac3CodingMode::UnknownVariant(UnknownEac3CodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3CodingMode {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3CodingMode::CodingMode10 => &"CODING_MODE_1_0",
+            Eac3CodingMode::CodingMode20 => &"CODING_MODE_2_0",
+            Eac3CodingMode::CodingMode32 => &"CODING_MODE_3_2",
+            Eac3CodingMode::UnknownVariant(UnknownEac3CodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3CodingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODING_MODE_1_0" => Eac3CodingMode::CodingMode10,
+            "CODING_MODE_2_0" => Eac3CodingMode::CodingMode20,
+            "CODING_MODE_3_2" => Eac3CodingMode::CodingMode32,
+            _ => Eac3CodingMode::UnknownVariant(UnknownEac3CodingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3CodingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODING_MODE_1_0" => Eac3CodingMode::CodingMode10,
+            "CODING_MODE_2_0" => Eac3CodingMode::CodingMode20,
+            "CODING_MODE_3_2" => Eac3CodingMode::CodingMode32,
+            _ => Eac3CodingMode::UnknownVariant(UnknownEac3CodingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3CodingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3CodingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3CodingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Dc Filter</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3DcFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3DcFilter {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3DcFilter),
+}
+
+impl Default for Eac3DcFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3DcFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3DcFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3DcFilter {
+    fn into(self) -> String {
+        match self {
+            Eac3DcFilter::Disabled => "DISABLED".to_string(),
+            Eac3DcFilter::Enabled => "ENABLED".to_string(),
+            Eac3DcFilter::UnknownVariant(UnknownEac3DcFilter { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3DcFilter {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3DcFilter::Disabled => &"DISABLED",
+            Eac3DcFilter::Enabled => &"ENABLED",
+            Eac3DcFilter::UnknownVariant(UnknownEac3DcFilter { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3DcFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Eac3DcFilter::Disabled,
+            "ENABLED" => Eac3DcFilter::Enabled,
+            _ => Eac3DcFilter::UnknownVariant(UnknownEac3DcFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3DcFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Eac3DcFilter::Disabled,
+            "ENABLED" => Eac3DcFilter::Enabled,
+            _ => Eac3DcFilter::UnknownVariant(UnknownEac3DcFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3DcFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3DcFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3DcFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Drc Line</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3DrcLine {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3DrcLine {
+    FilmLight,
+    FilmStandard,
+    MusicLight,
+    MusicStandard,
+    None,
+    Speech,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3DrcLine),
+}
+
+impl Default for Eac3DrcLine {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3DrcLine {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3DrcLine {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3DrcLine {
+    fn into(self) -> String {
+        match self {
+            Eac3DrcLine::FilmLight => "FILM_LIGHT".to_string(),
+            Eac3DrcLine::FilmStandard => "FILM_STANDARD".to_string(),
+            Eac3DrcLine::MusicLight => "MUSIC_LIGHT".to_string(),
+            Eac3DrcLine::MusicStandard => "MUSIC_STANDARD".to_string(),
+            Eac3DrcLine::None => "NONE".to_string(),
+            Eac3DrcLine::Speech => "SPEECH".to_string(),
+            Eac3DrcLine::UnknownVariant(UnknownEac3DrcLine { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3DrcLine {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3DrcLine::FilmLight => &"FILM_LIGHT",
+            Eac3DrcLine::FilmStandard => &"FILM_STANDARD",
+            Eac3DrcLine::MusicLight => &"MUSIC_LIGHT",
+            Eac3DrcLine::MusicStandard => &"MUSIC_STANDARD",
+            Eac3DrcLine::None => &"NONE",
+            Eac3DrcLine::Speech => &"SPEECH",
+            Eac3DrcLine::UnknownVariant(UnknownEac3DrcLine { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3DrcLine {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILM_LIGHT" => Eac3DrcLine::FilmLight,
+            "FILM_STANDARD" => Eac3DrcLine::FilmStandard,
+            "MUSIC_LIGHT" => Eac3DrcLine::MusicLight,
+            "MUSIC_STANDARD" => Eac3DrcLine::MusicStandard,
+            "NONE" => Eac3DrcLine::None,
+            "SPEECH" => Eac3DrcLine::Speech,
+            _ => Eac3DrcLine::UnknownVariant(UnknownEac3DrcLine {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3DrcLine {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILM_LIGHT" => Eac3DrcLine::FilmLight,
+            "FILM_STANDARD" => Eac3DrcLine::FilmStandard,
+            "MUSIC_LIGHT" => Eac3DrcLine::MusicLight,
+            "MUSIC_STANDARD" => Eac3DrcLine::MusicStandard,
+            "NONE" => Eac3DrcLine::None,
+            "SPEECH" => Eac3DrcLine::Speech,
+            _ => Eac3DrcLine::UnknownVariant(UnknownEac3DrcLine { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3DrcLine {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3DrcLine {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3DrcLine {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Drc Rf</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3DrcRf {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3DrcRf {
+    FilmLight,
+    FilmStandard,
+    MusicLight,
+    MusicStandard,
+    None,
+    Speech,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3DrcRf),
+}
+
+impl Default for Eac3DrcRf {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3DrcRf {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3DrcRf {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3DrcRf {
+    fn into(self) -> String {
+        match self {
+            Eac3DrcRf::FilmLight => "FILM_LIGHT".to_string(),
+            Eac3DrcRf::FilmStandard => "FILM_STANDARD".to_string(),
+            Eac3DrcRf::MusicLight => "MUSIC_LIGHT".to_string(),
+            Eac3DrcRf::MusicStandard => "MUSIC_STANDARD".to_string(),
+            Eac3DrcRf::None => "NONE".to_string(),
+            Eac3DrcRf::Speech => "SPEECH".to_string(),
+            Eac3DrcRf::UnknownVariant(UnknownEac3DrcRf { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3DrcRf {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3DrcRf::FilmLight => &"FILM_LIGHT",
+            Eac3DrcRf::FilmStandard => &"FILM_STANDARD",
+            Eac3DrcRf::MusicLight => &"MUSIC_LIGHT",
+            Eac3DrcRf::MusicStandard => &"MUSIC_STANDARD",
+            Eac3DrcRf::None => &"NONE",
+            Eac3DrcRf::Speech => &"SPEECH",
+            Eac3DrcRf::UnknownVariant(UnknownEac3DrcRf { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3DrcRf {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILM_LIGHT" => Eac3DrcRf::FilmLight,
+            "FILM_STANDARD" => Eac3DrcRf::FilmStandard,
+            "MUSIC_LIGHT" => Eac3DrcRf::MusicLight,
+            "MUSIC_STANDARD" => Eac3DrcRf::MusicStandard,
+            "NONE" => Eac3DrcRf::None,
+            "SPEECH" => Eac3DrcRf::Speech,
+            _ => Eac3DrcRf::UnknownVariant(UnknownEac3DrcRf {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3DrcRf {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILM_LIGHT" => Eac3DrcRf::FilmLight,
+            "FILM_STANDARD" => Eac3DrcRf::FilmStandard,
+            "MUSIC_LIGHT" => Eac3DrcRf::MusicLight,
+            "MUSIC_STANDARD" => Eac3DrcRf::MusicStandard,
+            "NONE" => Eac3DrcRf::None,
+            "SPEECH" => Eac3DrcRf::Speech,
+            _ => Eac3DrcRf::UnknownVariant(UnknownEac3DrcRf { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3DrcRf {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3DrcRf {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3DrcRf {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Lfe Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3LfeControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3LfeControl {
+    Lfe,
+    NoLfe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3LfeControl),
+}
+
+impl Default for Eac3LfeControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3LfeControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3LfeControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3LfeControl {
+    fn into(self) -> String {
+        match self {
+            Eac3LfeControl::Lfe => "LFE".to_string(),
+            Eac3LfeControl::NoLfe => "NO_LFE".to_string(),
+            Eac3LfeControl::UnknownVariant(UnknownEac3LfeControl { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3LfeControl {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3LfeControl::Lfe => &"LFE",
+            Eac3LfeControl::NoLfe => &"NO_LFE",
+            Eac3LfeControl::UnknownVariant(UnknownEac3LfeControl { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3LfeControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "LFE" => Eac3LfeControl::Lfe,
+            "NO_LFE" => Eac3LfeControl::NoLfe,
+            _ => Eac3LfeControl::UnknownVariant(UnknownEac3LfeControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3LfeControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LFE" => Eac3LfeControl::Lfe,
+            "NO_LFE" => Eac3LfeControl::NoLfe,
+            _ => Eac3LfeControl::UnknownVariant(UnknownEac3LfeControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3LfeControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3LfeControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3LfeControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Lfe Filter</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3LfeFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3LfeFilter {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3LfeFilter),
+}
+
+impl Default for Eac3LfeFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3LfeFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3LfeFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3LfeFilter {
+    fn into(self) -> String {
+        match self {
+            Eac3LfeFilter::Disabled => "DISABLED".to_string(),
+            Eac3LfeFilter::Enabled => "ENABLED".to_string(),
+            Eac3LfeFilter::UnknownVariant(UnknownEac3LfeFilter { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3LfeFilter {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3LfeFilter::Disabled => &"DISABLED",
+            Eac3LfeFilter::Enabled => &"ENABLED",
+            Eac3LfeFilter::UnknownVariant(UnknownEac3LfeFilter { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3LfeFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Eac3LfeFilter::Disabled,
+            "ENABLED" => Eac3LfeFilter::Enabled,
+            _ => Eac3LfeFilter::UnknownVariant(UnknownEac3LfeFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3LfeFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Eac3LfeFilter::Disabled,
+            "ENABLED" => Eac3LfeFilter::Enabled,
+            _ => Eac3LfeFilter::UnknownVariant(UnknownEac3LfeFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3LfeFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3LfeFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3LfeFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Metadata Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3MetadataControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3MetadataControl {
+    FollowInput,
+    UseConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3MetadataControl),
+}
+
+impl Default for Eac3MetadataControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3MetadataControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3MetadataControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3MetadataControl {
+    fn into(self) -> String {
+        match self {
+            Eac3MetadataControl::FollowInput => "FOLLOW_INPUT".to_string(),
+            Eac3MetadataControl::UseConfigured => "USE_CONFIGURED".to_string(),
+            Eac3MetadataControl::UnknownVariant(UnknownEac3MetadataControl { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3MetadataControl {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3MetadataControl::FollowInput => &"FOLLOW_INPUT",
+            Eac3MetadataControl::UseConfigured => &"USE_CONFIGURED",
+            Eac3MetadataControl::UnknownVariant(UnknownEac3MetadataControl { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Eac3MetadataControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW_INPUT" => Eac3MetadataControl::FollowInput,
+            "USE_CONFIGURED" => Eac3MetadataControl::UseConfigured,
+            _ => Eac3MetadataControl::UnknownVariant(UnknownEac3MetadataControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3MetadataControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW_INPUT" => Eac3MetadataControl::FollowInput,
+            "USE_CONFIGURED" => Eac3MetadataControl::UseConfigured,
+            _ => Eac3MetadataControl::UnknownVariant(UnknownEac3MetadataControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3MetadataControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3MetadataControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3MetadataControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Passthrough Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3PassthroughControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3PassthroughControl {
+    NoPassthrough,
+    WhenPossible,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3PassthroughControl),
+}
+
+impl Default for Eac3PassthroughControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3PassthroughControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3PassthroughControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3PassthroughControl {
+    fn into(self) -> String {
+        match self {
+            Eac3PassthroughControl::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            Eac3PassthroughControl::WhenPossible => "WHEN_POSSIBLE".to_string(),
+            Eac3PassthroughControl::UnknownVariant(UnknownEac3PassthroughControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3PassthroughControl {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3PassthroughControl::NoPassthrough => &"NO_PASSTHROUGH",
+            Eac3PassthroughControl::WhenPossible => &"WHEN_POSSIBLE",
+            Eac3PassthroughControl::UnknownVariant(UnknownEac3PassthroughControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Eac3PassthroughControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => Eac3PassthroughControl::NoPassthrough,
+            "WHEN_POSSIBLE" => Eac3PassthroughControl::WhenPossible,
+            _ => Eac3PassthroughControl::UnknownVariant(UnknownEac3PassthroughControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3PassthroughControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => Eac3PassthroughControl::NoPassthrough,
+            "WHEN_POSSIBLE" => Eac3PassthroughControl::WhenPossible,
+            _ => Eac3PassthroughControl::UnknownVariant(UnknownEac3PassthroughControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3PassthroughControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3PassthroughControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3PassthroughControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Phase Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3PhaseControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3PhaseControl {
+    NoShift,
+    Shift90Degrees,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3PhaseControl),
+}
+
+impl Default for Eac3PhaseControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3PhaseControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3PhaseControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3PhaseControl {
+    fn into(self) -> String {
+        match self {
+            Eac3PhaseControl::NoShift => "NO_SHIFT".to_string(),
+            Eac3PhaseControl::Shift90Degrees => "SHIFT_90_DEGREES".to_string(),
+            Eac3PhaseControl::UnknownVariant(UnknownEac3PhaseControl { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3PhaseControl {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3PhaseControl::NoShift => &"NO_SHIFT",
+            Eac3PhaseControl::Shift90Degrees => &"SHIFT_90_DEGREES",
+            Eac3PhaseControl::UnknownVariant(UnknownEac3PhaseControl { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Eac3PhaseControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_SHIFT" => Eac3PhaseControl::NoShift,
+            "SHIFT_90_DEGREES" => Eac3PhaseControl::Shift90Degrees,
+            _ => Eac3PhaseControl::UnknownVariant(UnknownEac3PhaseControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3PhaseControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_SHIFT" => Eac3PhaseControl::NoShift,
+            "SHIFT_90_DEGREES" => Eac3PhaseControl::Shift90Degrees,
+            _ => Eac3PhaseControl::UnknownVariant(UnknownEac3PhaseControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3PhaseControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3PhaseControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3PhaseControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Eac3 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Eac3Settings {
     /// <p>When set to attenuate3Db, applies a 3 dB attenuation to the surround channels. Only used for 3/2 coding mode.</p>
     #[serde(rename = "AttenuationControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attenuation_control: Option<String>,
+    pub attenuation_control: Option<Eac3AttenuationControl>,
     /// <p>Average bitrate in bits/second. Valid bitrates depend on the coding mode.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2240,15 +8465,15 @@ pub struct Eac3Settings {
     /// <p>Specifies the bitstream mode (bsmod) for the emitted E-AC-3 stream. See ATSC A/52-2012 (Annex E) for background on these values.</p>
     #[serde(rename = "BitstreamMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bitstream_mode: Option<String>,
+    pub bitstream_mode: Option<Eac3BitstreamMode>,
     /// <p>Dolby Digital Plus coding mode. Determines number of channels.</p>
     #[serde(rename = "CodingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub coding_mode: Option<String>,
+    pub coding_mode: Option<Eac3CodingMode>,
     /// <p>When set to enabled, activates a DC highpass filter for all input channels.</p>
     #[serde(rename = "DcFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dc_filter: Option<String>,
+    pub dc_filter: Option<Eac3DcFilter>,
     /// <p>Sets the dialnorm for the output. If blank and input audio is Dolby Digital Plus, dialnorm will be passed through.</p>
     #[serde(rename = "Dialnorm")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2256,19 +8481,19 @@ pub struct Eac3Settings {
     /// <p>Sets the Dolby dynamic range compression profile.</p>
     #[serde(rename = "DrcLine")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub drc_line: Option<String>,
+    pub drc_line: Option<Eac3DrcLine>,
     /// <p>Sets the profile for heavy Dolby dynamic range compression, ensures that the instantaneous signal peaks do not exceed specified levels.</p>
     #[serde(rename = "DrcRf")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub drc_rf: Option<String>,
+    pub drc_rf: Option<Eac3DrcRf>,
     /// <p>When encoding 3/2 audio, setting to lfe enables the LFE channel</p>
     #[serde(rename = "LfeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lfe_control: Option<String>,
+    pub lfe_control: Option<Eac3LfeControl>,
     /// <p>When set to enabled, applies a 120Hz lowpass filter to the LFE channel prior to encoding. Only valid with codingMode32 coding mode.</p>
     #[serde(rename = "LfeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lfe_filter: Option<String>,
+    pub lfe_filter: Option<Eac3LfeFilter>,
     /// <p>Left only/Right only center mix level. Only used for 3/2 coding mode.</p>
     #[serde(rename = "LoRoCenterMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2288,27 +8513,365 @@ pub struct Eac3Settings {
     /// <p>When set to followInput, encoder metadata will be sourced from the DD, DD+, or DolbyE decoder that supplied this audio data. If audio was not supplied from one of these streams, then the static metadata settings will be used.</p>
     #[serde(rename = "MetadataControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metadata_control: Option<String>,
+    pub metadata_control: Option<Eac3MetadataControl>,
     /// <p>When set to whenPossible, input DD+ audio will be passed through if it is present on the input. This detection is dynamic over the life of the transcode. Inputs that alternate between DD+ and non-DD+ content will have a consistent DD+ output as the system alternates between passthrough and encoding.</p>
     #[serde(rename = "PassthroughControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_control: Option<String>,
+    pub passthrough_control: Option<Eac3PassthroughControl>,
     /// <p>When set to shift90Degrees, applies a 90-degree phase shift to the surround channels. Only used for 3/2 coding mode.</p>
     #[serde(rename = "PhaseControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phase_control: Option<String>,
+    pub phase_control: Option<Eac3PhaseControl>,
     /// <p>Stereo downmix preference. Only used for 3/2 coding mode.</p>
     #[serde(rename = "StereoDownmix")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stereo_downmix: Option<String>,
+    pub stereo_downmix: Option<Eac3StereoDownmix>,
     /// <p>When encoding 3/2 audio, sets whether an extra center back surround channel is matrix encoded into the left and right surround channels.</p>
     #[serde(rename = "SurroundExMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub surround_ex_mode: Option<String>,
+    pub surround_ex_mode: Option<Eac3SurroundExMode>,
     /// <p>When encoding 2/0 audio, sets whether Dolby Surround is matrix encoded into the two channels.</p>
     #[serde(rename = "SurroundMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub surround_mode: Option<String>,
+    pub surround_mode: Option<Eac3SurroundMode>,
+}
+
+/// <p>Eac3 Stereo Downmix</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3StereoDownmix {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3StereoDownmix {
+    Dpl2,
+    LoRo,
+    LtRt,
+    NotIndicated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3StereoDownmix),
+}
+
+impl Default for Eac3StereoDownmix {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3StereoDownmix {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3StereoDownmix {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3StereoDownmix {
+    fn into(self) -> String {
+        match self {
+            Eac3StereoDownmix::Dpl2 => "DPL2".to_string(),
+            Eac3StereoDownmix::LoRo => "LO_RO".to_string(),
+            Eac3StereoDownmix::LtRt => "LT_RT".to_string(),
+            Eac3StereoDownmix::NotIndicated => "NOT_INDICATED".to_string(),
+            Eac3StereoDownmix::UnknownVariant(UnknownEac3StereoDownmix { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3StereoDownmix {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3StereoDownmix::Dpl2 => &"DPL2",
+            Eac3StereoDownmix::LoRo => &"LO_RO",
+            Eac3StereoDownmix::LtRt => &"LT_RT",
+            Eac3StereoDownmix::NotIndicated => &"NOT_INDICATED",
+            Eac3StereoDownmix::UnknownVariant(UnknownEac3StereoDownmix { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Eac3StereoDownmix {
+    fn from(name: &str) -> Self {
+        match name {
+            "DPL2" => Eac3StereoDownmix::Dpl2,
+            "LO_RO" => Eac3StereoDownmix::LoRo,
+            "LT_RT" => Eac3StereoDownmix::LtRt,
+            "NOT_INDICATED" => Eac3StereoDownmix::NotIndicated,
+            _ => Eac3StereoDownmix::UnknownVariant(UnknownEac3StereoDownmix {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3StereoDownmix {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DPL2" => Eac3StereoDownmix::Dpl2,
+            "LO_RO" => Eac3StereoDownmix::LoRo,
+            "LT_RT" => Eac3StereoDownmix::LtRt,
+            "NOT_INDICATED" => Eac3StereoDownmix::NotIndicated,
+            _ => Eac3StereoDownmix::UnknownVariant(UnknownEac3StereoDownmix { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3StereoDownmix {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3StereoDownmix {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3StereoDownmix {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Surround Ex Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3SurroundExMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3SurroundExMode {
+    Disabled,
+    Enabled,
+    NotIndicated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3SurroundExMode),
+}
+
+impl Default for Eac3SurroundExMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3SurroundExMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3SurroundExMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3SurroundExMode {
+    fn into(self) -> String {
+        match self {
+            Eac3SurroundExMode::Disabled => "DISABLED".to_string(),
+            Eac3SurroundExMode::Enabled => "ENABLED".to_string(),
+            Eac3SurroundExMode::NotIndicated => "NOT_INDICATED".to_string(),
+            Eac3SurroundExMode::UnknownVariant(UnknownEac3SurroundExMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3SurroundExMode {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3SurroundExMode::Disabled => &"DISABLED",
+            Eac3SurroundExMode::Enabled => &"ENABLED",
+            Eac3SurroundExMode::NotIndicated => &"NOT_INDICATED",
+            Eac3SurroundExMode::UnknownVariant(UnknownEac3SurroundExMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Eac3SurroundExMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Eac3SurroundExMode::Disabled,
+            "ENABLED" => Eac3SurroundExMode::Enabled,
+            "NOT_INDICATED" => Eac3SurroundExMode::NotIndicated,
+            _ => Eac3SurroundExMode::UnknownVariant(UnknownEac3SurroundExMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3SurroundExMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Eac3SurroundExMode::Disabled,
+            "ENABLED" => Eac3SurroundExMode::Enabled,
+            "NOT_INDICATED" => Eac3SurroundExMode::NotIndicated,
+            _ => Eac3SurroundExMode::UnknownVariant(UnknownEac3SurroundExMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3SurroundExMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3SurroundExMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3SurroundExMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Eac3 Surround Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEac3SurroundMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Eac3SurroundMode {
+    Disabled,
+    Enabled,
+    NotIndicated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEac3SurroundMode),
+}
+
+impl Default for Eac3SurroundMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Eac3SurroundMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Eac3SurroundMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Eac3SurroundMode {
+    fn into(self) -> String {
+        match self {
+            Eac3SurroundMode::Disabled => "DISABLED".to_string(),
+            Eac3SurroundMode::Enabled => "ENABLED".to_string(),
+            Eac3SurroundMode::NotIndicated => "NOT_INDICATED".to_string(),
+            Eac3SurroundMode::UnknownVariant(UnknownEac3SurroundMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Eac3SurroundMode {
+    fn into(self) -> &'a str {
+        match self {
+            Eac3SurroundMode::Disabled => &"DISABLED",
+            Eac3SurroundMode::Enabled => &"ENABLED",
+            Eac3SurroundMode::NotIndicated => &"NOT_INDICATED",
+            Eac3SurroundMode::UnknownVariant(UnknownEac3SurroundMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Eac3SurroundMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Eac3SurroundMode::Disabled,
+            "ENABLED" => Eac3SurroundMode::Enabled,
+            "NOT_INDICATED" => Eac3SurroundMode::NotIndicated,
+            _ => Eac3SurroundMode::UnknownVariant(UnknownEac3SurroundMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Eac3SurroundMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Eac3SurroundMode::Disabled,
+            "ENABLED" => Eac3SurroundMode::Enabled,
+            "NOT_INDICATED" => Eac3SurroundMode::NotIndicated,
+            _ => Eac3SurroundMode::UnknownVariant(UnknownEac3SurroundMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Eac3SurroundMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Eac3SurroundMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Eac3SurroundMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Ebu Tt DDestination Settings</p>
@@ -2322,7 +8885,7 @@ pub struct EbuTtDDestinationSettings {
     /// </ul>
     #[serde(rename = "FillLineGap")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fill_line_gap: Option<String>,
+    pub fill_line_gap: Option<EbuTtDFillLineGapControl>,
     /// <p>Specifies the font family to include in the font data attached to the EBU-TT captions. Valid only if styleControl is set to include. If you leave this field empty, the font family is set to &quot;monospaced&quot;. (If styleControl is set to exclude, the font family is always set to &quot;monospaced&quot;.)</p>
     ///
     /// <p>You specify only the font family. All other style information (color, bold, position and so on) is copied from the input captions. The size is always set to 100% to allow the downstream player to choose the size.</p>
@@ -2342,7 +8905,329 @@ pub struct EbuTtDDestinationSettings {
     /// </ul>
     #[serde(rename = "StyleControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub style_control: Option<String>,
+    pub style_control: Option<EbuTtDDestinationStyleControl>,
+}
+
+/// <p>Ebu Tt DDestination Style Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEbuTtDDestinationStyleControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EbuTtDDestinationStyleControl {
+    Exclude,
+    Include,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEbuTtDDestinationStyleControl),
+}
+
+impl Default for EbuTtDDestinationStyleControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EbuTtDDestinationStyleControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EbuTtDDestinationStyleControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EbuTtDDestinationStyleControl {
+    fn into(self) -> String {
+        match self {
+            EbuTtDDestinationStyleControl::Exclude => "EXCLUDE".to_string(),
+            EbuTtDDestinationStyleControl::Include => "INCLUDE".to_string(),
+            EbuTtDDestinationStyleControl::UnknownVariant(
+                UnknownEbuTtDDestinationStyleControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EbuTtDDestinationStyleControl {
+    fn into(self) -> &'a str {
+        match self {
+            EbuTtDDestinationStyleControl::Exclude => &"EXCLUDE",
+            EbuTtDDestinationStyleControl::Include => &"INCLUDE",
+            EbuTtDDestinationStyleControl::UnknownVariant(
+                UnknownEbuTtDDestinationStyleControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for EbuTtDDestinationStyleControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUDE" => EbuTtDDestinationStyleControl::Exclude,
+            "INCLUDE" => EbuTtDDestinationStyleControl::Include,
+            _ => EbuTtDDestinationStyleControl::UnknownVariant(
+                UnknownEbuTtDDestinationStyleControl {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for EbuTtDDestinationStyleControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUDE" => EbuTtDDestinationStyleControl::Exclude,
+            "INCLUDE" => EbuTtDDestinationStyleControl::Include,
+            _ => EbuTtDDestinationStyleControl::UnknownVariant(
+                UnknownEbuTtDDestinationStyleControl { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EbuTtDDestinationStyleControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EbuTtDDestinationStyleControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EbuTtDDestinationStyleControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Ebu Tt DFill Line Gap Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEbuTtDFillLineGapControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EbuTtDFillLineGapControl {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEbuTtDFillLineGapControl),
+}
+
+impl Default for EbuTtDFillLineGapControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EbuTtDFillLineGapControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EbuTtDFillLineGapControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EbuTtDFillLineGapControl {
+    fn into(self) -> String {
+        match self {
+            EbuTtDFillLineGapControl::Disabled => "DISABLED".to_string(),
+            EbuTtDFillLineGapControl::Enabled => "ENABLED".to_string(),
+            EbuTtDFillLineGapControl::UnknownVariant(UnknownEbuTtDFillLineGapControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EbuTtDFillLineGapControl {
+    fn into(self) -> &'a str {
+        match self {
+            EbuTtDFillLineGapControl::Disabled => &"DISABLED",
+            EbuTtDFillLineGapControl::Enabled => &"ENABLED",
+            EbuTtDFillLineGapControl::UnknownVariant(UnknownEbuTtDFillLineGapControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EbuTtDFillLineGapControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => EbuTtDFillLineGapControl::Disabled,
+            "ENABLED" => EbuTtDFillLineGapControl::Enabled,
+            _ => EbuTtDFillLineGapControl::UnknownVariant(UnknownEbuTtDFillLineGapControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EbuTtDFillLineGapControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => EbuTtDFillLineGapControl::Disabled,
+            "ENABLED" => EbuTtDFillLineGapControl::Enabled,
+            _ => EbuTtDFillLineGapControl::UnknownVariant(UnknownEbuTtDFillLineGapControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EbuTtDFillLineGapControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EbuTtDFillLineGapControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EbuTtDFillLineGapControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Embedded Convert608 To708</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEmbeddedConvert608To708 {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EmbeddedConvert608To708 {
+    Disabled,
+    Upconvert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEmbeddedConvert608To708),
+}
+
+impl Default for EmbeddedConvert608To708 {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EmbeddedConvert608To708 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EmbeddedConvert608To708 {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EmbeddedConvert608To708 {
+    fn into(self) -> String {
+        match self {
+            EmbeddedConvert608To708::Disabled => "DISABLED".to_string(),
+            EmbeddedConvert608To708::Upconvert => "UPCONVERT".to_string(),
+            EmbeddedConvert608To708::UnknownVariant(UnknownEmbeddedConvert608To708 {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EmbeddedConvert608To708 {
+    fn into(self) -> &'a str {
+        match self {
+            EmbeddedConvert608To708::Disabled => &"DISABLED",
+            EmbeddedConvert608To708::Upconvert => &"UPCONVERT",
+            EmbeddedConvert608To708::UnknownVariant(UnknownEmbeddedConvert608To708 {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EmbeddedConvert608To708 {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => EmbeddedConvert608To708::Disabled,
+            "UPCONVERT" => EmbeddedConvert608To708::Upconvert,
+            _ => EmbeddedConvert608To708::UnknownVariant(UnknownEmbeddedConvert608To708 {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EmbeddedConvert608To708 {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => EmbeddedConvert608To708::Disabled,
+            "UPCONVERT" => EmbeddedConvert608To708::Upconvert,
+            _ => EmbeddedConvert608To708::UnknownVariant(UnknownEmbeddedConvert608To708 { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmbeddedConvert608To708 {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EmbeddedConvert608To708 {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EmbeddedConvert608To708 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Embedded Destination Settings</p>
@@ -2353,17 +9238,123 @@ pub struct EmbeddedDestinationSettings {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedPlusScte20DestinationSettings {}
 
+/// <p>Embedded Scte20 Detection</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEmbeddedScte20Detection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EmbeddedScte20Detection {
+    Auto,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEmbeddedScte20Detection),
+}
+
+impl Default for EmbeddedScte20Detection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EmbeddedScte20Detection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EmbeddedScte20Detection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EmbeddedScte20Detection {
+    fn into(self) -> String {
+        match self {
+            EmbeddedScte20Detection::Auto => "AUTO".to_string(),
+            EmbeddedScte20Detection::Off => "OFF".to_string(),
+            EmbeddedScte20Detection::UnknownVariant(UnknownEmbeddedScte20Detection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EmbeddedScte20Detection {
+    fn into(self) -> &'a str {
+        match self {
+            EmbeddedScte20Detection::Auto => &"AUTO",
+            EmbeddedScte20Detection::Off => &"OFF",
+            EmbeddedScte20Detection::UnknownVariant(UnknownEmbeddedScte20Detection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EmbeddedScte20Detection {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => EmbeddedScte20Detection::Auto,
+            "OFF" => EmbeddedScte20Detection::Off,
+            _ => EmbeddedScte20Detection::UnknownVariant(UnknownEmbeddedScte20Detection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EmbeddedScte20Detection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => EmbeddedScte20Detection::Auto,
+            "OFF" => EmbeddedScte20Detection::Off,
+            _ => EmbeddedScte20Detection::UnknownVariant(UnknownEmbeddedScte20Detection { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmbeddedScte20Detection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EmbeddedScte20Detection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EmbeddedScte20Detection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Embedded Source Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedSourceSettings {
     /// <p>If upconvert, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
     #[serde(rename = "Convert608To708")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub convert_608_to_708: Option<String>,
+    pub convert_608_to_708: Option<EmbeddedConvert608To708>,
     /// <p>Set to &quot;auto&quot; to handle streams with intermittent and/or non-aligned SCTE-20 and Embedded captions.</p>
     #[serde(rename = "Scte20Detection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scte_20_detection: Option<String>,
+    pub scte_20_detection: Option<EmbeddedScte20Detection>,
     /// <p>Specifies the 608/708 channel number within the video track from which to extract captions. Unused for passthrough.</p>
     #[serde(rename = "Source608ChannelNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2449,7 +9440,223 @@ pub struct FeatureActivations {
     /// If you disable the feature on an existing schedule, make sure that you first delete all input prepare actions from the schedule.</p>
     #[serde(rename = "InputPrepareScheduleActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_prepare_schedule_actions: Option<String>,
+    pub input_prepare_schedule_actions: Option<FeatureActivationsInputPrepareScheduleActions>,
+}
+
+/// <p>Feature Activations Input Prepare Schedule Actions</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeatureActivationsInputPrepareScheduleActions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeatureActivationsInputPrepareScheduleActions {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeatureActivationsInputPrepareScheduleActions),
+}
+
+impl Default for FeatureActivationsInputPrepareScheduleActions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeatureActivationsInputPrepareScheduleActions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeatureActivationsInputPrepareScheduleActions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeatureActivationsInputPrepareScheduleActions {
+    fn into(self) -> String {
+        match self {
+            FeatureActivationsInputPrepareScheduleActions::Disabled => "DISABLED".to_string(),
+            FeatureActivationsInputPrepareScheduleActions::Enabled => "ENABLED".to_string(),
+            FeatureActivationsInputPrepareScheduleActions::UnknownVariant(
+                UnknownFeatureActivationsInputPrepareScheduleActions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeatureActivationsInputPrepareScheduleActions {
+    fn into(self) -> &'a str {
+        match self {
+            FeatureActivationsInputPrepareScheduleActions::Disabled => &"DISABLED",
+            FeatureActivationsInputPrepareScheduleActions::Enabled => &"ENABLED",
+            FeatureActivationsInputPrepareScheduleActions::UnknownVariant(
+                UnknownFeatureActivationsInputPrepareScheduleActions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for FeatureActivationsInputPrepareScheduleActions {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => FeatureActivationsInputPrepareScheduleActions::Disabled,
+            "ENABLED" => FeatureActivationsInputPrepareScheduleActions::Enabled,
+            _ => FeatureActivationsInputPrepareScheduleActions::UnknownVariant(
+                UnknownFeatureActivationsInputPrepareScheduleActions {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for FeatureActivationsInputPrepareScheduleActions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => FeatureActivationsInputPrepareScheduleActions::Disabled,
+            "ENABLED" => FeatureActivationsInputPrepareScheduleActions::Enabled,
+            _ => FeatureActivationsInputPrepareScheduleActions::UnknownVariant(
+                UnknownFeatureActivationsInputPrepareScheduleActions { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeatureActivationsInputPrepareScheduleActions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeatureActivationsInputPrepareScheduleActions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeatureActivationsInputPrepareScheduleActions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Fec Output Include Fec</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFecOutputIncludeFec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FecOutputIncludeFec {
+    Column,
+    ColumnAndRow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFecOutputIncludeFec),
+}
+
+impl Default for FecOutputIncludeFec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FecOutputIncludeFec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FecOutputIncludeFec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FecOutputIncludeFec {
+    fn into(self) -> String {
+        match self {
+            FecOutputIncludeFec::Column => "COLUMN".to_string(),
+            FecOutputIncludeFec::ColumnAndRow => "COLUMN_AND_ROW".to_string(),
+            FecOutputIncludeFec::UnknownVariant(UnknownFecOutputIncludeFec { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FecOutputIncludeFec {
+    fn into(self) -> &'a str {
+        match self {
+            FecOutputIncludeFec::Column => &"COLUMN",
+            FecOutputIncludeFec::ColumnAndRow => &"COLUMN_AND_ROW",
+            FecOutputIncludeFec::UnknownVariant(UnknownFecOutputIncludeFec { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FecOutputIncludeFec {
+    fn from(name: &str) -> Self {
+        match name {
+            "COLUMN" => FecOutputIncludeFec::Column,
+            "COLUMN_AND_ROW" => FecOutputIncludeFec::ColumnAndRow,
+            _ => FecOutputIncludeFec::UnknownVariant(UnknownFecOutputIncludeFec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FecOutputIncludeFec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COLUMN" => FecOutputIncludeFec::Column,
+            "COLUMN_AND_ROW" => FecOutputIncludeFec::ColumnAndRow,
+            _ => FecOutputIncludeFec::UnknownVariant(UnknownFecOutputIncludeFec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FecOutputIncludeFec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FecOutputIncludeFec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FecOutputIncludeFec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Fec Output Settings</p>
@@ -2462,11 +9669,158 @@ pub struct FecOutputSettings {
     /// <p>Enables column only or column and row based FEC</p>
     #[serde(rename = "IncludeFec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include_fec: Option<String>,
+    pub include_fec: Option<FecOutputIncludeFec>,
     /// <p>Parameter L from SMPTE 2022-1. The width of the FEC protection matrix.  Must be between 1 and 20, inclusive. If only Column FEC is used, then larger values increase robustness.  If Row FEC is used, then this is the number of transport stream packets per row error correction packet, and the value must be between 4 and 20, inclusive, if includeFec is columnAndRow. If includeFec is column, this value must be 1 to 20, inclusive.</p>
     #[serde(rename = "RowLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_length: Option<i64>,
+}
+
+/// <p>Fixed Afd</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFixedAfd {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FixedAfd {
+    Afd0000,
+    Afd0010,
+    Afd0011,
+    Afd0100,
+    Afd1000,
+    Afd1001,
+    Afd1010,
+    Afd1011,
+    Afd1101,
+    Afd1110,
+    Afd1111,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFixedAfd),
+}
+
+impl Default for FixedAfd {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FixedAfd {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FixedAfd {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FixedAfd {
+    fn into(self) -> String {
+        match self {
+            FixedAfd::Afd0000 => "AFD_0000".to_string(),
+            FixedAfd::Afd0010 => "AFD_0010".to_string(),
+            FixedAfd::Afd0011 => "AFD_0011".to_string(),
+            FixedAfd::Afd0100 => "AFD_0100".to_string(),
+            FixedAfd::Afd1000 => "AFD_1000".to_string(),
+            FixedAfd::Afd1001 => "AFD_1001".to_string(),
+            FixedAfd::Afd1010 => "AFD_1010".to_string(),
+            FixedAfd::Afd1011 => "AFD_1011".to_string(),
+            FixedAfd::Afd1101 => "AFD_1101".to_string(),
+            FixedAfd::Afd1110 => "AFD_1110".to_string(),
+            FixedAfd::Afd1111 => "AFD_1111".to_string(),
+            FixedAfd::UnknownVariant(UnknownFixedAfd { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FixedAfd {
+    fn into(self) -> &'a str {
+        match self {
+            FixedAfd::Afd0000 => &"AFD_0000",
+            FixedAfd::Afd0010 => &"AFD_0010",
+            FixedAfd::Afd0011 => &"AFD_0011",
+            FixedAfd::Afd0100 => &"AFD_0100",
+            FixedAfd::Afd1000 => &"AFD_1000",
+            FixedAfd::Afd1001 => &"AFD_1001",
+            FixedAfd::Afd1010 => &"AFD_1010",
+            FixedAfd::Afd1011 => &"AFD_1011",
+            FixedAfd::Afd1101 => &"AFD_1101",
+            FixedAfd::Afd1110 => &"AFD_1110",
+            FixedAfd::Afd1111 => &"AFD_1111",
+            FixedAfd::UnknownVariant(UnknownFixedAfd { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FixedAfd {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFD_0000" => FixedAfd::Afd0000,
+            "AFD_0010" => FixedAfd::Afd0010,
+            "AFD_0011" => FixedAfd::Afd0011,
+            "AFD_0100" => FixedAfd::Afd0100,
+            "AFD_1000" => FixedAfd::Afd1000,
+            "AFD_1001" => FixedAfd::Afd1001,
+            "AFD_1010" => FixedAfd::Afd1010,
+            "AFD_1011" => FixedAfd::Afd1011,
+            "AFD_1101" => FixedAfd::Afd1101,
+            "AFD_1110" => FixedAfd::Afd1110,
+            "AFD_1111" => FixedAfd::Afd1111,
+            _ => FixedAfd::UnknownVariant(UnknownFixedAfd {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FixedAfd {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFD_0000" => FixedAfd::Afd0000,
+            "AFD_0010" => FixedAfd::Afd0010,
+            "AFD_0011" => FixedAfd::Afd0011,
+            "AFD_0100" => FixedAfd::Afd0100,
+            "AFD_1000" => FixedAfd::Afd1000,
+            "AFD_1001" => FixedAfd::Afd1001,
+            "AFD_1010" => FixedAfd::Afd1010,
+            "AFD_1011" => FixedAfd::Afd1011,
+            "AFD_1101" => FixedAfd::Afd1101,
+            "AFD_1110" => FixedAfd::Afd1110,
+            "AFD_1111" => FixedAfd::Afd1111,
+            _ => FixedAfd::UnknownVariant(UnknownFixedAfd { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FixedAfd {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FixedAfd {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FixedAfd {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Start time for the action.</p>
@@ -2487,11 +9841,225 @@ pub struct Fmp4HlsSettings {
     /// <p>If set to passthrough, Nielsen inaudible tones for media tracking will be detected in the input audio and an equivalent ID3 tag will be inserted in the output.</p>
     #[serde(rename = "NielsenId3Behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nielsen_id_3_behavior: Option<String>,
+    pub nielsen_id_3_behavior: Option<Fmp4NielsenId3Behavior>,
     /// <p>When set to passthrough, timed metadata is passed through from input to output.</p>
     #[serde(rename = "TimedMetadataBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timed_metadata_behavior: Option<String>,
+    pub timed_metadata_behavior: Option<Fmp4TimedMetadataBehavior>,
+}
+
+/// <p>Fmp4 Nielsen Id3 Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFmp4NielsenId3Behavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Fmp4NielsenId3Behavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFmp4NielsenId3Behavior),
+}
+
+impl Default for Fmp4NielsenId3Behavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Fmp4NielsenId3Behavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Fmp4NielsenId3Behavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Fmp4NielsenId3Behavior {
+    fn into(self) -> String {
+        match self {
+            Fmp4NielsenId3Behavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            Fmp4NielsenId3Behavior::Passthrough => "PASSTHROUGH".to_string(),
+            Fmp4NielsenId3Behavior::UnknownVariant(UnknownFmp4NielsenId3Behavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Fmp4NielsenId3Behavior {
+    fn into(self) -> &'a str {
+        match self {
+            Fmp4NielsenId3Behavior::NoPassthrough => &"NO_PASSTHROUGH",
+            Fmp4NielsenId3Behavior::Passthrough => &"PASSTHROUGH",
+            Fmp4NielsenId3Behavior::UnknownVariant(UnknownFmp4NielsenId3Behavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Fmp4NielsenId3Behavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => Fmp4NielsenId3Behavior::NoPassthrough,
+            "PASSTHROUGH" => Fmp4NielsenId3Behavior::Passthrough,
+            _ => Fmp4NielsenId3Behavior::UnknownVariant(UnknownFmp4NielsenId3Behavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Fmp4NielsenId3Behavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => Fmp4NielsenId3Behavior::NoPassthrough,
+            "PASSTHROUGH" => Fmp4NielsenId3Behavior::Passthrough,
+            _ => Fmp4NielsenId3Behavior::UnknownVariant(UnknownFmp4NielsenId3Behavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Fmp4NielsenId3Behavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Fmp4NielsenId3Behavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Fmp4NielsenId3Behavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Fmp4 Timed Metadata Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFmp4TimedMetadataBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Fmp4TimedMetadataBehavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFmp4TimedMetadataBehavior),
+}
+
+impl Default for Fmp4TimedMetadataBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Fmp4TimedMetadataBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Fmp4TimedMetadataBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Fmp4TimedMetadataBehavior {
+    fn into(self) -> String {
+        match self {
+            Fmp4TimedMetadataBehavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            Fmp4TimedMetadataBehavior::Passthrough => "PASSTHROUGH".to_string(),
+            Fmp4TimedMetadataBehavior::UnknownVariant(UnknownFmp4TimedMetadataBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Fmp4TimedMetadataBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            Fmp4TimedMetadataBehavior::NoPassthrough => &"NO_PASSTHROUGH",
+            Fmp4TimedMetadataBehavior::Passthrough => &"PASSTHROUGH",
+            Fmp4TimedMetadataBehavior::UnknownVariant(UnknownFmp4TimedMetadataBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Fmp4TimedMetadataBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => Fmp4TimedMetadataBehavior::NoPassthrough,
+            "PASSTHROUGH" => Fmp4TimedMetadataBehavior::Passthrough,
+            _ => Fmp4TimedMetadataBehavior::UnknownVariant(UnknownFmp4TimedMetadataBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Fmp4TimedMetadataBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => Fmp4TimedMetadataBehavior::NoPassthrough,
+            "PASSTHROUGH" => Fmp4TimedMetadataBehavior::Passthrough,
+            _ => {
+                Fmp4TimedMetadataBehavior::UnknownVariant(UnknownFmp4TimedMetadataBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for Fmp4TimedMetadataBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Fmp4TimedMetadataBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Fmp4TimedMetadataBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings to specify if an action follows another.</p>
@@ -2499,10 +10067,112 @@ pub struct Fmp4HlsSettings {
 pub struct FollowModeScheduleActionStartSettings {
     /// <p>Identifies whether this action starts relative to the start or relative to the end of the reference action.</p>
     #[serde(rename = "FollowPoint")]
-    pub follow_point: String,
+    pub follow_point: FollowPoint,
     /// <p>The action name of another action that this one refers to.</p>
     #[serde(rename = "ReferenceActionName")]
     pub reference_action_name: String,
+}
+
+/// <p>Follow reference point.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFollowPoint {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FollowPoint {
+    End,
+    Start,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFollowPoint),
+}
+
+impl Default for FollowPoint {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FollowPoint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FollowPoint {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FollowPoint {
+    fn into(self) -> String {
+        match self {
+            FollowPoint::End => "END".to_string(),
+            FollowPoint::Start => "START".to_string(),
+            FollowPoint::UnknownVariant(UnknownFollowPoint { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FollowPoint {
+    fn into(self) -> &'a str {
+        match self {
+            FollowPoint::End => &"END",
+            FollowPoint::Start => &"START",
+            FollowPoint::UnknownVariant(UnknownFollowPoint { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FollowPoint {
+    fn from(name: &str) -> Self {
+        match name {
+            "END" => FollowPoint::End,
+            "START" => FollowPoint::Start,
+            _ => FollowPoint::UnknownVariant(UnknownFollowPoint {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FollowPoint {
+    fn from(name: String) -> Self {
+        match &*name {
+            "END" => FollowPoint::End,
+            "START" => FollowPoint::Start,
+            _ => FollowPoint::UnknownVariant(UnknownFollowPoint { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FollowPoint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FollowPoint {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FollowPoint {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Frame Capture Group Settings</p>
@@ -2511,6 +10181,112 @@ pub struct FrameCaptureGroupSettings {
     /// <p>The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling-) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling-). The final file names consist of the prefix from the destination field (for example, &quot;curling-&quot;) + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curling-low.00001.jpg</p>
     #[serde(rename = "Destination")]
     pub destination: OutputLocationRef,
+}
+
+/// <p>Frame Capture Interval Unit</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFrameCaptureIntervalUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FrameCaptureIntervalUnit {
+    Milliseconds,
+    Seconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFrameCaptureIntervalUnit),
+}
+
+impl Default for FrameCaptureIntervalUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FrameCaptureIntervalUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FrameCaptureIntervalUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FrameCaptureIntervalUnit {
+    fn into(self) -> String {
+        match self {
+            FrameCaptureIntervalUnit::Milliseconds => "MILLISECONDS".to_string(),
+            FrameCaptureIntervalUnit::Seconds => "SECONDS".to_string(),
+            FrameCaptureIntervalUnit::UnknownVariant(UnknownFrameCaptureIntervalUnit {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FrameCaptureIntervalUnit {
+    fn into(self) -> &'a str {
+        match self {
+            FrameCaptureIntervalUnit::Milliseconds => &"MILLISECONDS",
+            FrameCaptureIntervalUnit::Seconds => &"SECONDS",
+            FrameCaptureIntervalUnit::UnknownVariant(UnknownFrameCaptureIntervalUnit {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FrameCaptureIntervalUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "MILLISECONDS" => FrameCaptureIntervalUnit::Milliseconds,
+            "SECONDS" => FrameCaptureIntervalUnit::Seconds,
+            _ => FrameCaptureIntervalUnit::UnknownVariant(UnknownFrameCaptureIntervalUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FrameCaptureIntervalUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MILLISECONDS" => FrameCaptureIntervalUnit::Milliseconds,
+            "SECONDS" => FrameCaptureIntervalUnit::Seconds,
+            _ => FrameCaptureIntervalUnit::UnknownVariant(UnknownFrameCaptureIntervalUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FrameCaptureIntervalUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FrameCaptureIntervalUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FrameCaptureIntervalUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Frame Capture Output Settings</p>
@@ -2531,7 +10307,7 @@ pub struct FrameCaptureSettings {
     /// <p>Unit for the frame capture interval.</p>
     #[serde(rename = "CaptureIntervalUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub capture_interval_units: Option<String>,
+    pub capture_interval_units: Option<FrameCaptureIntervalUnit>,
 }
 
 /// <p>Global Configuration</p>
@@ -2544,7 +10320,7 @@ pub struct GlobalConfiguration {
     /// <p>Indicates the action to take when the current input completes (e.g. end-of-file). When switchAndLoopInputs is configured the encoder will restart at the beginning of the first input.  When &quot;none&quot; is configured the encoder will transcode either black, a solid color, or a user specified slate images per the &quot;Input Loss Behavior&quot; configuration until the next input switch occurs (which is controlled through the Channel Schedule API).</p>
     #[serde(rename = "InputEndAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_end_action: Option<String>,
+    pub input_end_action: Option<GlobalConfigurationInputEndAction>,
     /// <p>Settings for system actions when input is lost.</p>
     #[serde(rename = "InputLossBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2555,15 +10331,689 @@ pub struct GlobalConfiguration {
     /// EPOCH</em>LOCKING - MediaLive will attempt to synchronize the output of each pipeline to the Unix epoch.</p>
     #[serde(rename = "OutputLockingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_locking_mode: Option<String>,
+    pub output_locking_mode: Option<GlobalConfigurationOutputLockingMode>,
     /// <p>Indicates whether the rate of frames emitted by the Live encoder should be paced by its system clock (which optionally may be locked to another source via NTP) or should be locked to the clock of the source that is providing the input stream.</p>
     #[serde(rename = "OutputTimingSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_timing_source: Option<String>,
+    pub output_timing_source: Option<GlobalConfigurationOutputTimingSource>,
     /// <p>Adjusts video input buffer for streams with very low video framerates. This is commonly set to enabled for music channels with less than one video frame per second.</p>
     #[serde(rename = "SupportLowFramerateInputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub support_low_framerate_inputs: Option<String>,
+    pub support_low_framerate_inputs: Option<GlobalConfigurationLowFramerateInputs>,
+}
+
+/// <p>Global Configuration Input End Action</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalConfigurationInputEndAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalConfigurationInputEndAction {
+    None,
+    SwitchAndLoopInputs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalConfigurationInputEndAction),
+}
+
+impl Default for GlobalConfigurationInputEndAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalConfigurationInputEndAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalConfigurationInputEndAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalConfigurationInputEndAction {
+    fn into(self) -> String {
+        match self {
+            GlobalConfigurationInputEndAction::None => "NONE".to_string(),
+            GlobalConfigurationInputEndAction::SwitchAndLoopInputs => {
+                "SWITCH_AND_LOOP_INPUTS".to_string()
+            }
+            GlobalConfigurationInputEndAction::UnknownVariant(
+                UnknownGlobalConfigurationInputEndAction { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalConfigurationInputEndAction {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalConfigurationInputEndAction::None => &"NONE",
+            GlobalConfigurationInputEndAction::SwitchAndLoopInputs => &"SWITCH_AND_LOOP_INPUTS",
+            GlobalConfigurationInputEndAction::UnknownVariant(
+                UnknownGlobalConfigurationInputEndAction { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for GlobalConfigurationInputEndAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => GlobalConfigurationInputEndAction::None,
+            "SWITCH_AND_LOOP_INPUTS" => GlobalConfigurationInputEndAction::SwitchAndLoopInputs,
+            _ => GlobalConfigurationInputEndAction::UnknownVariant(
+                UnknownGlobalConfigurationInputEndAction {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for GlobalConfigurationInputEndAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => GlobalConfigurationInputEndAction::None,
+            "SWITCH_AND_LOOP_INPUTS" => GlobalConfigurationInputEndAction::SwitchAndLoopInputs,
+            _ => GlobalConfigurationInputEndAction::UnknownVariant(
+                UnknownGlobalConfigurationInputEndAction { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalConfigurationInputEndAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GlobalConfigurationInputEndAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GlobalConfigurationInputEndAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Global Configuration Low Framerate Inputs</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalConfigurationLowFramerateInputs {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalConfigurationLowFramerateInputs {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalConfigurationLowFramerateInputs),
+}
+
+impl Default for GlobalConfigurationLowFramerateInputs {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalConfigurationLowFramerateInputs {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalConfigurationLowFramerateInputs {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalConfigurationLowFramerateInputs {
+    fn into(self) -> String {
+        match self {
+            GlobalConfigurationLowFramerateInputs::Disabled => "DISABLED".to_string(),
+            GlobalConfigurationLowFramerateInputs::Enabled => "ENABLED".to_string(),
+            GlobalConfigurationLowFramerateInputs::UnknownVariant(
+                UnknownGlobalConfigurationLowFramerateInputs { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalConfigurationLowFramerateInputs {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalConfigurationLowFramerateInputs::Disabled => &"DISABLED",
+            GlobalConfigurationLowFramerateInputs::Enabled => &"ENABLED",
+            GlobalConfigurationLowFramerateInputs::UnknownVariant(
+                UnknownGlobalConfigurationLowFramerateInputs { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for GlobalConfigurationLowFramerateInputs {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => GlobalConfigurationLowFramerateInputs::Disabled,
+            "ENABLED" => GlobalConfigurationLowFramerateInputs::Enabled,
+            _ => GlobalConfigurationLowFramerateInputs::UnknownVariant(
+                UnknownGlobalConfigurationLowFramerateInputs {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for GlobalConfigurationLowFramerateInputs {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => GlobalConfigurationLowFramerateInputs::Disabled,
+            "ENABLED" => GlobalConfigurationLowFramerateInputs::Enabled,
+            _ => GlobalConfigurationLowFramerateInputs::UnknownVariant(
+                UnknownGlobalConfigurationLowFramerateInputs { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalConfigurationLowFramerateInputs {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GlobalConfigurationLowFramerateInputs {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GlobalConfigurationLowFramerateInputs {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Global Configuration Output Locking Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalConfigurationOutputLockingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalConfigurationOutputLockingMode {
+    EpochLocking,
+    PipelineLocking,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalConfigurationOutputLockingMode),
+}
+
+impl Default for GlobalConfigurationOutputLockingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalConfigurationOutputLockingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalConfigurationOutputLockingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalConfigurationOutputLockingMode {
+    fn into(self) -> String {
+        match self {
+            GlobalConfigurationOutputLockingMode::EpochLocking => "EPOCH_LOCKING".to_string(),
+            GlobalConfigurationOutputLockingMode::PipelineLocking => "PIPELINE_LOCKING".to_string(),
+            GlobalConfigurationOutputLockingMode::UnknownVariant(
+                UnknownGlobalConfigurationOutputLockingMode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalConfigurationOutputLockingMode {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalConfigurationOutputLockingMode::EpochLocking => &"EPOCH_LOCKING",
+            GlobalConfigurationOutputLockingMode::PipelineLocking => &"PIPELINE_LOCKING",
+            GlobalConfigurationOutputLockingMode::UnknownVariant(
+                UnknownGlobalConfigurationOutputLockingMode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for GlobalConfigurationOutputLockingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "EPOCH_LOCKING" => GlobalConfigurationOutputLockingMode::EpochLocking,
+            "PIPELINE_LOCKING" => GlobalConfigurationOutputLockingMode::PipelineLocking,
+            _ => GlobalConfigurationOutputLockingMode::UnknownVariant(
+                UnknownGlobalConfigurationOutputLockingMode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for GlobalConfigurationOutputLockingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EPOCH_LOCKING" => GlobalConfigurationOutputLockingMode::EpochLocking,
+            "PIPELINE_LOCKING" => GlobalConfigurationOutputLockingMode::PipelineLocking,
+            _ => GlobalConfigurationOutputLockingMode::UnknownVariant(
+                UnknownGlobalConfigurationOutputLockingMode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalConfigurationOutputLockingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GlobalConfigurationOutputLockingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GlobalConfigurationOutputLockingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Global Configuration Output Timing Source</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalConfigurationOutputTimingSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalConfigurationOutputTimingSource {
+    InputClock,
+    SystemClock,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalConfigurationOutputTimingSource),
+}
+
+impl Default for GlobalConfigurationOutputTimingSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalConfigurationOutputTimingSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalConfigurationOutputTimingSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalConfigurationOutputTimingSource {
+    fn into(self) -> String {
+        match self {
+            GlobalConfigurationOutputTimingSource::InputClock => "INPUT_CLOCK".to_string(),
+            GlobalConfigurationOutputTimingSource::SystemClock => "SYSTEM_CLOCK".to_string(),
+            GlobalConfigurationOutputTimingSource::UnknownVariant(
+                UnknownGlobalConfigurationOutputTimingSource { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalConfigurationOutputTimingSource {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalConfigurationOutputTimingSource::InputClock => &"INPUT_CLOCK",
+            GlobalConfigurationOutputTimingSource::SystemClock => &"SYSTEM_CLOCK",
+            GlobalConfigurationOutputTimingSource::UnknownVariant(
+                UnknownGlobalConfigurationOutputTimingSource { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for GlobalConfigurationOutputTimingSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "INPUT_CLOCK" => GlobalConfigurationOutputTimingSource::InputClock,
+            "SYSTEM_CLOCK" => GlobalConfigurationOutputTimingSource::SystemClock,
+            _ => GlobalConfigurationOutputTimingSource::UnknownVariant(
+                UnknownGlobalConfigurationOutputTimingSource {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for GlobalConfigurationOutputTimingSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INPUT_CLOCK" => GlobalConfigurationOutputTimingSource::InputClock,
+            "SYSTEM_CLOCK" => GlobalConfigurationOutputTimingSource::SystemClock,
+            _ => GlobalConfigurationOutputTimingSource::UnknownVariant(
+                UnknownGlobalConfigurationOutputTimingSource { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalConfigurationOutputTimingSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GlobalConfigurationOutputTimingSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GlobalConfigurationOutputTimingSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Adaptive Quantization</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264AdaptiveQuantization {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264AdaptiveQuantization {
+    High,
+    Higher,
+    Low,
+    Max,
+    Medium,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264AdaptiveQuantization),
+}
+
+impl Default for H264AdaptiveQuantization {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264AdaptiveQuantization {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264AdaptiveQuantization {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264AdaptiveQuantization {
+    fn into(self) -> String {
+        match self {
+            H264AdaptiveQuantization::High => "HIGH".to_string(),
+            H264AdaptiveQuantization::Higher => "HIGHER".to_string(),
+            H264AdaptiveQuantization::Low => "LOW".to_string(),
+            H264AdaptiveQuantization::Max => "MAX".to_string(),
+            H264AdaptiveQuantization::Medium => "MEDIUM".to_string(),
+            H264AdaptiveQuantization::Off => "OFF".to_string(),
+            H264AdaptiveQuantization::UnknownVariant(UnknownH264AdaptiveQuantization {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264AdaptiveQuantization {
+    fn into(self) -> &'a str {
+        match self {
+            H264AdaptiveQuantization::High => &"HIGH",
+            H264AdaptiveQuantization::Higher => &"HIGHER",
+            H264AdaptiveQuantization::Low => &"LOW",
+            H264AdaptiveQuantization::Max => &"MAX",
+            H264AdaptiveQuantization::Medium => &"MEDIUM",
+            H264AdaptiveQuantization::Off => &"OFF",
+            H264AdaptiveQuantization::UnknownVariant(UnknownH264AdaptiveQuantization {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264AdaptiveQuantization {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => H264AdaptiveQuantization::High,
+            "HIGHER" => H264AdaptiveQuantization::Higher,
+            "LOW" => H264AdaptiveQuantization::Low,
+            "MAX" => H264AdaptiveQuantization::Max,
+            "MEDIUM" => H264AdaptiveQuantization::Medium,
+            "OFF" => H264AdaptiveQuantization::Off,
+            _ => H264AdaptiveQuantization::UnknownVariant(UnknownH264AdaptiveQuantization {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264AdaptiveQuantization {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => H264AdaptiveQuantization::High,
+            "HIGHER" => H264AdaptiveQuantization::Higher,
+            "LOW" => H264AdaptiveQuantization::Low,
+            "MAX" => H264AdaptiveQuantization::Max,
+            "MEDIUM" => H264AdaptiveQuantization::Medium,
+            "OFF" => H264AdaptiveQuantization::Off,
+            _ => H264AdaptiveQuantization::UnknownVariant(UnknownH264AdaptiveQuantization { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264AdaptiveQuantization {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264AdaptiveQuantization {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264AdaptiveQuantization {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Color Metadata</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264ColorMetadata {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264ColorMetadata {
+    Ignore,
+    Insert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264ColorMetadata),
+}
+
+impl Default for H264ColorMetadata {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264ColorMetadata {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264ColorMetadata {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264ColorMetadata {
+    fn into(self) -> String {
+        match self {
+            H264ColorMetadata::Ignore => "IGNORE".to_string(),
+            H264ColorMetadata::Insert => "INSERT".to_string(),
+            H264ColorMetadata::UnknownVariant(UnknownH264ColorMetadata { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264ColorMetadata {
+    fn into(self) -> &'a str {
+        match self {
+            H264ColorMetadata::Ignore => &"IGNORE",
+            H264ColorMetadata::Insert => &"INSERT",
+            H264ColorMetadata::UnknownVariant(UnknownH264ColorMetadata { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264ColorMetadata {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => H264ColorMetadata::Ignore,
+            "INSERT" => H264ColorMetadata::Insert,
+            _ => H264ColorMetadata::UnknownVariant(UnknownH264ColorMetadata {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264ColorMetadata {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => H264ColorMetadata::Ignore,
+            "INSERT" => H264ColorMetadata::Insert,
+            _ => H264ColorMetadata::UnknownVariant(UnknownH264ColorMetadata { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264ColorMetadata {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264ColorMetadata {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264ColorMetadata {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>H264 Color Space Settings</p>
@@ -2580,6 +11030,112 @@ pub struct H264ColorSpaceSettings {
     pub rec_709_settings: Option<Rec709Settings>,
 }
 
+/// <p>H264 Entropy Encoding</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264EntropyEncoding {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264EntropyEncoding {
+    Cabac,
+    Cavlc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264EntropyEncoding),
+}
+
+impl Default for H264EntropyEncoding {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264EntropyEncoding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264EntropyEncoding {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264EntropyEncoding {
+    fn into(self) -> String {
+        match self {
+            H264EntropyEncoding::Cabac => "CABAC".to_string(),
+            H264EntropyEncoding::Cavlc => "CAVLC".to_string(),
+            H264EntropyEncoding::UnknownVariant(UnknownH264EntropyEncoding { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264EntropyEncoding {
+    fn into(self) -> &'a str {
+        match self {
+            H264EntropyEncoding::Cabac => &"CABAC",
+            H264EntropyEncoding::Cavlc => &"CAVLC",
+            H264EntropyEncoding::UnknownVariant(UnknownH264EntropyEncoding { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264EntropyEncoding {
+    fn from(name: &str) -> Self {
+        match name {
+            "CABAC" => H264EntropyEncoding::Cabac,
+            "CAVLC" => H264EntropyEncoding::Cavlc,
+            _ => H264EntropyEncoding::UnknownVariant(UnknownH264EntropyEncoding {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264EntropyEncoding {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CABAC" => H264EntropyEncoding::Cabac,
+            "CAVLC" => H264EntropyEncoding::Cavlc,
+            _ => H264EntropyEncoding::UnknownVariant(UnknownH264EntropyEncoding { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264EntropyEncoding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264EntropyEncoding {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264EntropyEncoding {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>H264 Filter Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264FilterSettings {
@@ -2588,17 +11144,1485 @@ pub struct H264FilterSettings {
     pub temporal_filter_settings: Option<TemporalFilterSettings>,
 }
 
+/// <p>H264 Flicker Aq</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264FlickerAq {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264FlickerAq {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264FlickerAq),
+}
+
+impl Default for H264FlickerAq {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264FlickerAq {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264FlickerAq {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264FlickerAq {
+    fn into(self) -> String {
+        match self {
+            H264FlickerAq::Disabled => "DISABLED".to_string(),
+            H264FlickerAq::Enabled => "ENABLED".to_string(),
+            H264FlickerAq::UnknownVariant(UnknownH264FlickerAq { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264FlickerAq {
+    fn into(self) -> &'a str {
+        match self {
+            H264FlickerAq::Disabled => &"DISABLED",
+            H264FlickerAq::Enabled => &"ENABLED",
+            H264FlickerAq::UnknownVariant(UnknownH264FlickerAq { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264FlickerAq {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264FlickerAq::Disabled,
+            "ENABLED" => H264FlickerAq::Enabled,
+            _ => H264FlickerAq::UnknownVariant(UnknownH264FlickerAq {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264FlickerAq {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264FlickerAq::Disabled,
+            "ENABLED" => H264FlickerAq::Enabled,
+            _ => H264FlickerAq::UnknownVariant(UnknownH264FlickerAq { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264FlickerAq {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264FlickerAq {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264FlickerAq {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Force Field Pictures</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264ForceFieldPictures {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264ForceFieldPictures {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264ForceFieldPictures),
+}
+
+impl Default for H264ForceFieldPictures {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264ForceFieldPictures {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264ForceFieldPictures {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264ForceFieldPictures {
+    fn into(self) -> String {
+        match self {
+            H264ForceFieldPictures::Disabled => "DISABLED".to_string(),
+            H264ForceFieldPictures::Enabled => "ENABLED".to_string(),
+            H264ForceFieldPictures::UnknownVariant(UnknownH264ForceFieldPictures {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264ForceFieldPictures {
+    fn into(self) -> &'a str {
+        match self {
+            H264ForceFieldPictures::Disabled => &"DISABLED",
+            H264ForceFieldPictures::Enabled => &"ENABLED",
+            H264ForceFieldPictures::UnknownVariant(UnknownH264ForceFieldPictures {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264ForceFieldPictures {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264ForceFieldPictures::Disabled,
+            "ENABLED" => H264ForceFieldPictures::Enabled,
+            _ => H264ForceFieldPictures::UnknownVariant(UnknownH264ForceFieldPictures {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264ForceFieldPictures {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264ForceFieldPictures::Disabled,
+            "ENABLED" => H264ForceFieldPictures::Enabled,
+            _ => H264ForceFieldPictures::UnknownVariant(UnknownH264ForceFieldPictures { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264ForceFieldPictures {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264ForceFieldPictures {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264ForceFieldPictures {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Framerate Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264FramerateControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264FramerateControl {
+    InitializeFromSource,
+    Specified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264FramerateControl),
+}
+
+impl Default for H264FramerateControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264FramerateControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264FramerateControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264FramerateControl {
+    fn into(self) -> String {
+        match self {
+            H264FramerateControl::InitializeFromSource => "INITIALIZE_FROM_SOURCE".to_string(),
+            H264FramerateControl::Specified => "SPECIFIED".to_string(),
+            H264FramerateControl::UnknownVariant(UnknownH264FramerateControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264FramerateControl {
+    fn into(self) -> &'a str {
+        match self {
+            H264FramerateControl::InitializeFromSource => &"INITIALIZE_FROM_SOURCE",
+            H264FramerateControl::Specified => &"SPECIFIED",
+            H264FramerateControl::UnknownVariant(UnknownH264FramerateControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264FramerateControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "INITIALIZE_FROM_SOURCE" => H264FramerateControl::InitializeFromSource,
+            "SPECIFIED" => H264FramerateControl::Specified,
+            _ => H264FramerateControl::UnknownVariant(UnknownH264FramerateControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264FramerateControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INITIALIZE_FROM_SOURCE" => H264FramerateControl::InitializeFromSource,
+            "SPECIFIED" => H264FramerateControl::Specified,
+            _ => H264FramerateControl::UnknownVariant(UnknownH264FramerateControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264FramerateControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264FramerateControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264FramerateControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Gop BReference</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264GopBReference {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264GopBReference {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264GopBReference),
+}
+
+impl Default for H264GopBReference {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264GopBReference {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264GopBReference {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264GopBReference {
+    fn into(self) -> String {
+        match self {
+            H264GopBReference::Disabled => "DISABLED".to_string(),
+            H264GopBReference::Enabled => "ENABLED".to_string(),
+            H264GopBReference::UnknownVariant(UnknownH264GopBReference { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264GopBReference {
+    fn into(self) -> &'a str {
+        match self {
+            H264GopBReference::Disabled => &"DISABLED",
+            H264GopBReference::Enabled => &"ENABLED",
+            H264GopBReference::UnknownVariant(UnknownH264GopBReference { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264GopBReference {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264GopBReference::Disabled,
+            "ENABLED" => H264GopBReference::Enabled,
+            _ => H264GopBReference::UnknownVariant(UnknownH264GopBReference {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264GopBReference {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264GopBReference::Disabled,
+            "ENABLED" => H264GopBReference::Enabled,
+            _ => H264GopBReference::UnknownVariant(UnknownH264GopBReference { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264GopBReference {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264GopBReference {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264GopBReference {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Gop Size Units</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264GopSizeUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264GopSizeUnits {
+    Frames,
+    Seconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264GopSizeUnits),
+}
+
+impl Default for H264GopSizeUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264GopSizeUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264GopSizeUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264GopSizeUnits {
+    fn into(self) -> String {
+        match self {
+            H264GopSizeUnits::Frames => "FRAMES".to_string(),
+            H264GopSizeUnits::Seconds => "SECONDS".to_string(),
+            H264GopSizeUnits::UnknownVariant(UnknownH264GopSizeUnits { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264GopSizeUnits {
+    fn into(self) -> &'a str {
+        match self {
+            H264GopSizeUnits::Frames => &"FRAMES",
+            H264GopSizeUnits::Seconds => &"SECONDS",
+            H264GopSizeUnits::UnknownVariant(UnknownH264GopSizeUnits { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264GopSizeUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "FRAMES" => H264GopSizeUnits::Frames,
+            "SECONDS" => H264GopSizeUnits::Seconds,
+            _ => H264GopSizeUnits::UnknownVariant(UnknownH264GopSizeUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264GopSizeUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FRAMES" => H264GopSizeUnits::Frames,
+            "SECONDS" => H264GopSizeUnits::Seconds,
+            _ => H264GopSizeUnits::UnknownVariant(UnknownH264GopSizeUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264GopSizeUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264GopSizeUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264GopSizeUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Level</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264Level {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264Level {
+    H264Level1,
+    H264Level11,
+    H264Level12,
+    H264Level13,
+    H264Level2,
+    H264Level21,
+    H264Level22,
+    H264Level3,
+    H264Level31,
+    H264Level32,
+    H264Level4,
+    H264Level41,
+    H264Level42,
+    H264Level5,
+    H264Level51,
+    H264Level52,
+    H264LevelAuto,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264Level),
+}
+
+impl Default for H264Level {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264Level {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264Level {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264Level {
+    fn into(self) -> String {
+        match self {
+            H264Level::H264Level1 => "H264_LEVEL_1".to_string(),
+            H264Level::H264Level11 => "H264_LEVEL_1_1".to_string(),
+            H264Level::H264Level12 => "H264_LEVEL_1_2".to_string(),
+            H264Level::H264Level13 => "H264_LEVEL_1_3".to_string(),
+            H264Level::H264Level2 => "H264_LEVEL_2".to_string(),
+            H264Level::H264Level21 => "H264_LEVEL_2_1".to_string(),
+            H264Level::H264Level22 => "H264_LEVEL_2_2".to_string(),
+            H264Level::H264Level3 => "H264_LEVEL_3".to_string(),
+            H264Level::H264Level31 => "H264_LEVEL_3_1".to_string(),
+            H264Level::H264Level32 => "H264_LEVEL_3_2".to_string(),
+            H264Level::H264Level4 => "H264_LEVEL_4".to_string(),
+            H264Level::H264Level41 => "H264_LEVEL_4_1".to_string(),
+            H264Level::H264Level42 => "H264_LEVEL_4_2".to_string(),
+            H264Level::H264Level5 => "H264_LEVEL_5".to_string(),
+            H264Level::H264Level51 => "H264_LEVEL_5_1".to_string(),
+            H264Level::H264Level52 => "H264_LEVEL_5_2".to_string(),
+            H264Level::H264LevelAuto => "H264_LEVEL_AUTO".to_string(),
+            H264Level::UnknownVariant(UnknownH264Level { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264Level {
+    fn into(self) -> &'a str {
+        match self {
+            H264Level::H264Level1 => &"H264_LEVEL_1",
+            H264Level::H264Level11 => &"H264_LEVEL_1_1",
+            H264Level::H264Level12 => &"H264_LEVEL_1_2",
+            H264Level::H264Level13 => &"H264_LEVEL_1_3",
+            H264Level::H264Level2 => &"H264_LEVEL_2",
+            H264Level::H264Level21 => &"H264_LEVEL_2_1",
+            H264Level::H264Level22 => &"H264_LEVEL_2_2",
+            H264Level::H264Level3 => &"H264_LEVEL_3",
+            H264Level::H264Level31 => &"H264_LEVEL_3_1",
+            H264Level::H264Level32 => &"H264_LEVEL_3_2",
+            H264Level::H264Level4 => &"H264_LEVEL_4",
+            H264Level::H264Level41 => &"H264_LEVEL_4_1",
+            H264Level::H264Level42 => &"H264_LEVEL_4_2",
+            H264Level::H264Level5 => &"H264_LEVEL_5",
+            H264Level::H264Level51 => &"H264_LEVEL_5_1",
+            H264Level::H264Level52 => &"H264_LEVEL_5_2",
+            H264Level::H264LevelAuto => &"H264_LEVEL_AUTO",
+            H264Level::UnknownVariant(UnknownH264Level { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264Level {
+    fn from(name: &str) -> Self {
+        match name {
+            "H264_LEVEL_1" => H264Level::H264Level1,
+            "H264_LEVEL_1_1" => H264Level::H264Level11,
+            "H264_LEVEL_1_2" => H264Level::H264Level12,
+            "H264_LEVEL_1_3" => H264Level::H264Level13,
+            "H264_LEVEL_2" => H264Level::H264Level2,
+            "H264_LEVEL_2_1" => H264Level::H264Level21,
+            "H264_LEVEL_2_2" => H264Level::H264Level22,
+            "H264_LEVEL_3" => H264Level::H264Level3,
+            "H264_LEVEL_3_1" => H264Level::H264Level31,
+            "H264_LEVEL_3_2" => H264Level::H264Level32,
+            "H264_LEVEL_4" => H264Level::H264Level4,
+            "H264_LEVEL_4_1" => H264Level::H264Level41,
+            "H264_LEVEL_4_2" => H264Level::H264Level42,
+            "H264_LEVEL_5" => H264Level::H264Level5,
+            "H264_LEVEL_5_1" => H264Level::H264Level51,
+            "H264_LEVEL_5_2" => H264Level::H264Level52,
+            "H264_LEVEL_AUTO" => H264Level::H264LevelAuto,
+            _ => H264Level::UnknownVariant(UnknownH264Level {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264Level {
+    fn from(name: String) -> Self {
+        match &*name {
+            "H264_LEVEL_1" => H264Level::H264Level1,
+            "H264_LEVEL_1_1" => H264Level::H264Level11,
+            "H264_LEVEL_1_2" => H264Level::H264Level12,
+            "H264_LEVEL_1_3" => H264Level::H264Level13,
+            "H264_LEVEL_2" => H264Level::H264Level2,
+            "H264_LEVEL_2_1" => H264Level::H264Level21,
+            "H264_LEVEL_2_2" => H264Level::H264Level22,
+            "H264_LEVEL_3" => H264Level::H264Level3,
+            "H264_LEVEL_3_1" => H264Level::H264Level31,
+            "H264_LEVEL_3_2" => H264Level::H264Level32,
+            "H264_LEVEL_4" => H264Level::H264Level4,
+            "H264_LEVEL_4_1" => H264Level::H264Level41,
+            "H264_LEVEL_4_2" => H264Level::H264Level42,
+            "H264_LEVEL_5" => H264Level::H264Level5,
+            "H264_LEVEL_5_1" => H264Level::H264Level51,
+            "H264_LEVEL_5_2" => H264Level::H264Level52,
+            "H264_LEVEL_AUTO" => H264Level::H264LevelAuto,
+            _ => H264Level::UnknownVariant(UnknownH264Level { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264Level {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264Level {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264Level {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Look Ahead Rate Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264LookAheadRateControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264LookAheadRateControl {
+    High,
+    Low,
+    Medium,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264LookAheadRateControl),
+}
+
+impl Default for H264LookAheadRateControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264LookAheadRateControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264LookAheadRateControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264LookAheadRateControl {
+    fn into(self) -> String {
+        match self {
+            H264LookAheadRateControl::High => "HIGH".to_string(),
+            H264LookAheadRateControl::Low => "LOW".to_string(),
+            H264LookAheadRateControl::Medium => "MEDIUM".to_string(),
+            H264LookAheadRateControl::UnknownVariant(UnknownH264LookAheadRateControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264LookAheadRateControl {
+    fn into(self) -> &'a str {
+        match self {
+            H264LookAheadRateControl::High => &"HIGH",
+            H264LookAheadRateControl::Low => &"LOW",
+            H264LookAheadRateControl::Medium => &"MEDIUM",
+            H264LookAheadRateControl::UnknownVariant(UnknownH264LookAheadRateControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264LookAheadRateControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => H264LookAheadRateControl::High,
+            "LOW" => H264LookAheadRateControl::Low,
+            "MEDIUM" => H264LookAheadRateControl::Medium,
+            _ => H264LookAheadRateControl::UnknownVariant(UnknownH264LookAheadRateControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264LookAheadRateControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => H264LookAheadRateControl::High,
+            "LOW" => H264LookAheadRateControl::Low,
+            "MEDIUM" => H264LookAheadRateControl::Medium,
+            _ => H264LookAheadRateControl::UnknownVariant(UnknownH264LookAheadRateControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264LookAheadRateControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264LookAheadRateControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264LookAheadRateControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Par Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264ParControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264ParControl {
+    InitializeFromSource,
+    Specified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264ParControl),
+}
+
+impl Default for H264ParControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264ParControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264ParControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264ParControl {
+    fn into(self) -> String {
+        match self {
+            H264ParControl::InitializeFromSource => "INITIALIZE_FROM_SOURCE".to_string(),
+            H264ParControl::Specified => "SPECIFIED".to_string(),
+            H264ParControl::UnknownVariant(UnknownH264ParControl { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264ParControl {
+    fn into(self) -> &'a str {
+        match self {
+            H264ParControl::InitializeFromSource => &"INITIALIZE_FROM_SOURCE",
+            H264ParControl::Specified => &"SPECIFIED",
+            H264ParControl::UnknownVariant(UnknownH264ParControl { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264ParControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "INITIALIZE_FROM_SOURCE" => H264ParControl::InitializeFromSource,
+            "SPECIFIED" => H264ParControl::Specified,
+            _ => H264ParControl::UnknownVariant(UnknownH264ParControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264ParControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INITIALIZE_FROM_SOURCE" => H264ParControl::InitializeFromSource,
+            "SPECIFIED" => H264ParControl::Specified,
+            _ => H264ParControl::UnknownVariant(UnknownH264ParControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264ParControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264ParControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264ParControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Profile</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264Profile {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264Profile {
+    Baseline,
+    High,
+    High10Bit,
+    High422,
+    High42210Bit,
+    Main,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264Profile),
+}
+
+impl Default for H264Profile {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264Profile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264Profile {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264Profile {
+    fn into(self) -> String {
+        match self {
+            H264Profile::Baseline => "BASELINE".to_string(),
+            H264Profile::High => "HIGH".to_string(),
+            H264Profile::High10Bit => "HIGH_10BIT".to_string(),
+            H264Profile::High422 => "HIGH_422".to_string(),
+            H264Profile::High42210Bit => "HIGH_422_10BIT".to_string(),
+            H264Profile::Main => "MAIN".to_string(),
+            H264Profile::UnknownVariant(UnknownH264Profile { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264Profile {
+    fn into(self) -> &'a str {
+        match self {
+            H264Profile::Baseline => &"BASELINE",
+            H264Profile::High => &"HIGH",
+            H264Profile::High10Bit => &"HIGH_10BIT",
+            H264Profile::High422 => &"HIGH_422",
+            H264Profile::High42210Bit => &"HIGH_422_10BIT",
+            H264Profile::Main => &"MAIN",
+            H264Profile::UnknownVariant(UnknownH264Profile { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264Profile {
+    fn from(name: &str) -> Self {
+        match name {
+            "BASELINE" => H264Profile::Baseline,
+            "HIGH" => H264Profile::High,
+            "HIGH_10BIT" => H264Profile::High10Bit,
+            "HIGH_422" => H264Profile::High422,
+            "HIGH_422_10BIT" => H264Profile::High42210Bit,
+            "MAIN" => H264Profile::Main,
+            _ => H264Profile::UnknownVariant(UnknownH264Profile {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264Profile {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BASELINE" => H264Profile::Baseline,
+            "HIGH" => H264Profile::High,
+            "HIGH_10BIT" => H264Profile::High10Bit,
+            "HIGH_422" => H264Profile::High422,
+            "HIGH_422_10BIT" => H264Profile::High42210Bit,
+            "MAIN" => H264Profile::Main,
+            _ => H264Profile::UnknownVariant(UnknownH264Profile { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264Profile {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264Profile {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264Profile {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Quality Level</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264QualityLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264QualityLevel {
+    EnhancedQuality,
+    StandardQuality,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264QualityLevel),
+}
+
+impl Default for H264QualityLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264QualityLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264QualityLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264QualityLevel {
+    fn into(self) -> String {
+        match self {
+            H264QualityLevel::EnhancedQuality => "ENHANCED_QUALITY".to_string(),
+            H264QualityLevel::StandardQuality => "STANDARD_QUALITY".to_string(),
+            H264QualityLevel::UnknownVariant(UnknownH264QualityLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264QualityLevel {
+    fn into(self) -> &'a str {
+        match self {
+            H264QualityLevel::EnhancedQuality => &"ENHANCED_QUALITY",
+            H264QualityLevel::StandardQuality => &"STANDARD_QUALITY",
+            H264QualityLevel::UnknownVariant(UnknownH264QualityLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264QualityLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENHANCED_QUALITY" => H264QualityLevel::EnhancedQuality,
+            "STANDARD_QUALITY" => H264QualityLevel::StandardQuality,
+            _ => H264QualityLevel::UnknownVariant(UnknownH264QualityLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264QualityLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENHANCED_QUALITY" => H264QualityLevel::EnhancedQuality,
+            "STANDARD_QUALITY" => H264QualityLevel::StandardQuality,
+            _ => H264QualityLevel::UnknownVariant(UnknownH264QualityLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264QualityLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264QualityLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264QualityLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Rate Control Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264RateControlMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264RateControlMode {
+    Cbr,
+    Multiplex,
+    Qvbr,
+    Vbr,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264RateControlMode),
+}
+
+impl Default for H264RateControlMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264RateControlMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264RateControlMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264RateControlMode {
+    fn into(self) -> String {
+        match self {
+            H264RateControlMode::Cbr => "CBR".to_string(),
+            H264RateControlMode::Multiplex => "MULTIPLEX".to_string(),
+            H264RateControlMode::Qvbr => "QVBR".to_string(),
+            H264RateControlMode::Vbr => "VBR".to_string(),
+            H264RateControlMode::UnknownVariant(UnknownH264RateControlMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264RateControlMode {
+    fn into(self) -> &'a str {
+        match self {
+            H264RateControlMode::Cbr => &"CBR",
+            H264RateControlMode::Multiplex => &"MULTIPLEX",
+            H264RateControlMode::Qvbr => &"QVBR",
+            H264RateControlMode::Vbr => &"VBR",
+            H264RateControlMode::UnknownVariant(UnknownH264RateControlMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264RateControlMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CBR" => H264RateControlMode::Cbr,
+            "MULTIPLEX" => H264RateControlMode::Multiplex,
+            "QVBR" => H264RateControlMode::Qvbr,
+            "VBR" => H264RateControlMode::Vbr,
+            _ => H264RateControlMode::UnknownVariant(UnknownH264RateControlMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264RateControlMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CBR" => H264RateControlMode::Cbr,
+            "MULTIPLEX" => H264RateControlMode::Multiplex,
+            "QVBR" => H264RateControlMode::Qvbr,
+            "VBR" => H264RateControlMode::Vbr,
+            _ => H264RateControlMode::UnknownVariant(UnknownH264RateControlMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264RateControlMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264RateControlMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264RateControlMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Scan Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264ScanType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264ScanType {
+    Interlaced,
+    Progressive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264ScanType),
+}
+
+impl Default for H264ScanType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264ScanType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264ScanType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264ScanType {
+    fn into(self) -> String {
+        match self {
+            H264ScanType::Interlaced => "INTERLACED".to_string(),
+            H264ScanType::Progressive => "PROGRESSIVE".to_string(),
+            H264ScanType::UnknownVariant(UnknownH264ScanType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264ScanType {
+    fn into(self) -> &'a str {
+        match self {
+            H264ScanType::Interlaced => &"INTERLACED",
+            H264ScanType::Progressive => &"PROGRESSIVE",
+            H264ScanType::UnknownVariant(UnknownH264ScanType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264ScanType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERLACED" => H264ScanType::Interlaced,
+            "PROGRESSIVE" => H264ScanType::Progressive,
+            _ => H264ScanType::UnknownVariant(UnknownH264ScanType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264ScanType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERLACED" => H264ScanType::Interlaced,
+            "PROGRESSIVE" => H264ScanType::Progressive,
+            _ => H264ScanType::UnknownVariant(UnknownH264ScanType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264ScanType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264ScanType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264ScanType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Scene Change Detect</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264SceneChangeDetect {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264SceneChangeDetect {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264SceneChangeDetect),
+}
+
+impl Default for H264SceneChangeDetect {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264SceneChangeDetect {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264SceneChangeDetect {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264SceneChangeDetect {
+    fn into(self) -> String {
+        match self {
+            H264SceneChangeDetect::Disabled => "DISABLED".to_string(),
+            H264SceneChangeDetect::Enabled => "ENABLED".to_string(),
+            H264SceneChangeDetect::UnknownVariant(UnknownH264SceneChangeDetect {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264SceneChangeDetect {
+    fn into(self) -> &'a str {
+        match self {
+            H264SceneChangeDetect::Disabled => &"DISABLED",
+            H264SceneChangeDetect::Enabled => &"ENABLED",
+            H264SceneChangeDetect::UnknownVariant(UnknownH264SceneChangeDetect {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264SceneChangeDetect {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264SceneChangeDetect::Disabled,
+            "ENABLED" => H264SceneChangeDetect::Enabled,
+            _ => H264SceneChangeDetect::UnknownVariant(UnknownH264SceneChangeDetect {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264SceneChangeDetect {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264SceneChangeDetect::Disabled,
+            "ENABLED" => H264SceneChangeDetect::Enabled,
+            _ => H264SceneChangeDetect::UnknownVariant(UnknownH264SceneChangeDetect { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264SceneChangeDetect {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264SceneChangeDetect {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264SceneChangeDetect {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>H264 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264Settings {
     /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub adaptive_quantization: Option<String>,
+    pub adaptive_quantization: Option<H264AdaptiveQuantization>,
     /// <p>Indicates that AFD values will be written into the output stream.  If afdSignaling is &quot;auto&quot;, the system will try to preserve the input AFD value (in cases where multiple AFD values are valid). If set to &quot;fixed&quot;, the AFD value will be the value configured in the fixedAfd parameter.</p>
     #[serde(rename = "AfdSignaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub afd_signaling: Option<String>,
+    pub afd_signaling: Option<AfdSignaling>,
     /// <p>Average bitrate in bits/second. Required when the rate control mode is VBR or CBR. Not used for QVBR. In an MS Smooth output group, each output must have a unique value when its bitrate is rounded down to the nearest multiple of 1000.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2614,7 +12638,7 @@ pub struct H264Settings {
     /// <p>Includes colorspace metadata in the output.</p>
     #[serde(rename = "ColorMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color_metadata: Option<String>,
+    pub color_metadata: Option<H264ColorMetadata>,
     /// <p>Color Space settings</p>
     #[serde(rename = "ColorSpaceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2622,7 +12646,7 @@ pub struct H264Settings {
     /// <p>Entropy encoding mode.  Use cabac (must be in Main or High profile) or cavlc.</p>
     #[serde(rename = "EntropyEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub entropy_encoding: Option<String>,
+    pub entropy_encoding: Option<H264EntropyEncoding>,
     /// <p>Optional filters that you can apply to an encode.</p>
     #[serde(rename = "FilterSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2630,21 +12654,21 @@ pub struct H264Settings {
     /// <p>Four bit AFD value to write on all frames of video in the output stream. Only valid when afdSignaling is set to &#39;Fixed&#39;.</p>
     #[serde(rename = "FixedAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fixed_afd: Option<String>,
+    pub fixed_afd: Option<FixedAfd>,
     /// <p>If set to enabled, adjust quantization within each frame to reduce flicker or &#39;pop&#39; on I-frames.</p>
     #[serde(rename = "FlickerAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub flicker_aq: Option<String>,
+    pub flicker_aq: Option<H264FlickerAq>,
     /// <p>This setting applies only when scan type is &quot;interlaced.&quot; It controls whether coding is performed on a field basis or on a frame basis. (When the video is progressive, the coding is always performed on a frame basis.)
     /// enabled: Force MediaLive to code on a field basis, so that odd and even sets of fields are coded separately.
     /// disabled: Code the two sets of fields separately (on a field basis) or together (on a frame basis using PAFF), depending on what is most appropriate for the content.</p>
     #[serde(rename = "ForceFieldPictures")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub force_field_pictures: Option<String>,
+    pub force_field_pictures: Option<H264ForceFieldPictures>,
     /// <p>This field indicates how the output video frame rate is specified.  If &quot;specified&quot; is selected then the output video frame rate is determined by framerateNumerator and framerateDenominator, else if &quot;initializeFromSource&quot; is selected then the output video frame rate will be set equal to the input video frame rate of the first input.</p>
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub framerate_control: Option<String>,
+    pub framerate_control: Option<H264FramerateControl>,
     /// <p>Framerate denominator.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2656,7 +12680,7 @@ pub struct H264Settings {
     /// <p>Documentation update needed</p>
     #[serde(rename = "GopBReference")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gop_b_reference: Option<String>,
+    pub gop_b_reference: Option<H264GopBReference>,
     /// <p>Frequency of closed GOPs. In streaming applications, it is recommended that this be set to 1 so a decoder joining mid-stream will receive an IDR frame as quickly as possible. Setting this value to 0 will break output segmenting.</p>
     #[serde(rename = "GopClosedCadence")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2674,15 +12698,15 @@ pub struct H264Settings {
     /// <p>Indicates if the gopSize is specified in frames or seconds. If seconds the system will convert the gopSize into a frame count at run time.</p>
     #[serde(rename = "GopSizeUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gop_size_units: Option<String>,
+    pub gop_size_units: Option<H264GopSizeUnits>,
     /// <p>H.264 Level.</p>
     #[serde(rename = "Level")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub level: Option<String>,
+    pub level: Option<H264Level>,
     /// <p>Amount of lookahead. A value of low can decrease latency and memory usage, while high can produce better quality for certain content.</p>
     #[serde(rename = "LookAheadRateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub look_ahead_rate_control: Option<String>,
+    pub look_ahead_rate_control: Option<H264LookAheadRateControl>,
     /// <p>For QVBR: See the tooltip for Quality level</p>
     ///
     /// <p>For VBR: Set the maximum bitrate in order to accommodate expected spikes in the complexity of the video.</p>
@@ -2700,7 +12724,7 @@ pub struct H264Settings {
     /// <p>This field indicates how the output pixel aspect ratio is specified.  If &quot;specified&quot; is selected then the output video pixel aspect ratio is determined by parNumerator and parDenominator, else if &quot;initializeFromSource&quot; is selected then the output pixsel aspect ratio will be set equal to the input video pixel aspect ratio of the first input.</p>
     #[serde(rename = "ParControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub par_control: Option<String>,
+    pub par_control: Option<H264ParControl>,
     /// <p>Pixel Aspect Ratio denominator.</p>
     #[serde(rename = "ParDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2712,13 +12736,13 @@ pub struct H264Settings {
     /// <p>H.264 Profile.</p>
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub profile: Option<String>,
+    pub profile: Option<H264Profile>,
     /// <p>Leave as STANDARD<em>QUALITY or choose a different value (which might result in additional costs to run the channel).
     /// - ENHANCED</em>QUALITY: Produces a slightly better video quality without an increase in the bitrate. Has an effect only when the Rate control mode is QVBR or CBR. If this channel is in a MediaLive multiplex, the value must be ENHANCED<em>QUALITY.
     /// - STANDARD</em>QUALITY: Valid for any Rate control mode.</p>
     #[serde(rename = "QualityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality_level: Option<String>,
+    pub quality_level: Option<H264QualityLevel>,
     /// <p>Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. Set values for the QVBR quality level field and Max bitrate field that suit your most important viewing devices. Recommended values are:
     /// - Primary screen: Quality level: 8 to 10. Max bitrate: 4M
     /// - PC or tablet: Quality level: 7. Max bitrate: 1.5M to 3M
@@ -2742,11 +12766,11 @@ pub struct H264Settings {
     /// by the properties within the Multiplex Program.</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rate_control_mode: Option<String>,
+    pub rate_control_mode: Option<H264RateControlMode>,
     /// <p>Sets the scan type of the output to progressive or top-field-first interlaced.</p>
     #[serde(rename = "ScanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scan_type: Option<String>,
+    pub scan_type: Option<H264ScanType>,
     /// <p>Scene change detection.</p>
     ///
     /// <ul>
@@ -2755,7 +12779,7 @@ pub struct H264Settings {
     /// </ul>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scene_change_detect: Option<String>,
+    pub scene_change_detect: Option<H264SceneChangeDetect>,
     /// <p>Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures.
     /// This field is optional; when no value is specified the encoder will choose the number of slices based on encode resolution.</p>
     #[serde(rename = "Slices")]
@@ -2768,25 +12792,889 @@ pub struct H264Settings {
     /// <p>If set to enabled, adjust quantization within each frame based on spatial variation of content complexity.</p>
     #[serde(rename = "SpatialAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub spatial_aq: Option<String>,
+    pub spatial_aq: Option<H264SpatialAq>,
     /// <p>If set to fixed, use gopNumBFrames B-frames per sub-GOP. If set to dynamic, optimize the number of B-frames used for each sub-GOP to improve visual quality.</p>
     #[serde(rename = "SubgopLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subgop_length: Option<String>,
+    pub subgop_length: Option<H264SubGopLength>,
     /// <p>Produces a bitstream compliant with SMPTE RP-2027.</p>
     #[serde(rename = "Syntax")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub syntax: Option<String>,
+    pub syntax: Option<H264Syntax>,
     /// <p>If set to enabled, adjust quantization within each frame based on temporal variation of content complexity.</p>
     #[serde(rename = "TemporalAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub temporal_aq: Option<String>,
+    pub temporal_aq: Option<H264TemporalAq>,
     /// <p>Determines how timecodes should be inserted into the video elementary stream.
     /// - &#39;disabled&#39;: Do not include timecodes
     /// - &#39;picTimingSei&#39;: Pass through picture timing SEI messages from the source specified in Timecode Config</p>
     #[serde(rename = "TimecodeInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timecode_insertion: Option<String>,
+    pub timecode_insertion: Option<H264TimecodeInsertionBehavior>,
+}
+
+/// <p>H264 Spatial Aq</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264SpatialAq {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264SpatialAq {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264SpatialAq),
+}
+
+impl Default for H264SpatialAq {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264SpatialAq {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264SpatialAq {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264SpatialAq {
+    fn into(self) -> String {
+        match self {
+            H264SpatialAq::Disabled => "DISABLED".to_string(),
+            H264SpatialAq::Enabled => "ENABLED".to_string(),
+            H264SpatialAq::UnknownVariant(UnknownH264SpatialAq { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264SpatialAq {
+    fn into(self) -> &'a str {
+        match self {
+            H264SpatialAq::Disabled => &"DISABLED",
+            H264SpatialAq::Enabled => &"ENABLED",
+            H264SpatialAq::UnknownVariant(UnknownH264SpatialAq { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264SpatialAq {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264SpatialAq::Disabled,
+            "ENABLED" => H264SpatialAq::Enabled,
+            _ => H264SpatialAq::UnknownVariant(UnknownH264SpatialAq {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264SpatialAq {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264SpatialAq::Disabled,
+            "ENABLED" => H264SpatialAq::Enabled,
+            _ => H264SpatialAq::UnknownVariant(UnknownH264SpatialAq { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264SpatialAq {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264SpatialAq {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264SpatialAq {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Sub Gop Length</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264SubGopLength {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264SubGopLength {
+    Dynamic,
+    Fixed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264SubGopLength),
+}
+
+impl Default for H264SubGopLength {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264SubGopLength {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264SubGopLength {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264SubGopLength {
+    fn into(self) -> String {
+        match self {
+            H264SubGopLength::Dynamic => "DYNAMIC".to_string(),
+            H264SubGopLength::Fixed => "FIXED".to_string(),
+            H264SubGopLength::UnknownVariant(UnknownH264SubGopLength { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264SubGopLength {
+    fn into(self) -> &'a str {
+        match self {
+            H264SubGopLength::Dynamic => &"DYNAMIC",
+            H264SubGopLength::Fixed => &"FIXED",
+            H264SubGopLength::UnknownVariant(UnknownH264SubGopLength { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H264SubGopLength {
+    fn from(name: &str) -> Self {
+        match name {
+            "DYNAMIC" => H264SubGopLength::Dynamic,
+            "FIXED" => H264SubGopLength::Fixed,
+            _ => H264SubGopLength::UnknownVariant(UnknownH264SubGopLength {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264SubGopLength {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DYNAMIC" => H264SubGopLength::Dynamic,
+            "FIXED" => H264SubGopLength::Fixed,
+            _ => H264SubGopLength::UnknownVariant(UnknownH264SubGopLength { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264SubGopLength {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264SubGopLength {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264SubGopLength {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Syntax</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264Syntax {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264Syntax {
+    Default,
+    Rp2027,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264Syntax),
+}
+
+impl Default for H264Syntax {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264Syntax {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264Syntax {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264Syntax {
+    fn into(self) -> String {
+        match self {
+            H264Syntax::Default => "DEFAULT".to_string(),
+            H264Syntax::Rp2027 => "RP2027".to_string(),
+            H264Syntax::UnknownVariant(UnknownH264Syntax { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264Syntax {
+    fn into(self) -> &'a str {
+        match self {
+            H264Syntax::Default => &"DEFAULT",
+            H264Syntax::Rp2027 => &"RP2027",
+            H264Syntax::UnknownVariant(UnknownH264Syntax { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264Syntax {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => H264Syntax::Default,
+            "RP2027" => H264Syntax::Rp2027,
+            _ => H264Syntax::UnknownVariant(UnknownH264Syntax {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264Syntax {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => H264Syntax::Default,
+            "RP2027" => H264Syntax::Rp2027,
+            _ => H264Syntax::UnknownVariant(UnknownH264Syntax { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264Syntax {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264Syntax {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264Syntax {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Temporal Aq</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264TemporalAq {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264TemporalAq {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264TemporalAq),
+}
+
+impl Default for H264TemporalAq {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264TemporalAq {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264TemporalAq {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264TemporalAq {
+    fn into(self) -> String {
+        match self {
+            H264TemporalAq::Disabled => "DISABLED".to_string(),
+            H264TemporalAq::Enabled => "ENABLED".to_string(),
+            H264TemporalAq::UnknownVariant(UnknownH264TemporalAq { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264TemporalAq {
+    fn into(self) -> &'a str {
+        match self {
+            H264TemporalAq::Disabled => &"DISABLED",
+            H264TemporalAq::Enabled => &"ENABLED",
+            H264TemporalAq::UnknownVariant(UnknownH264TemporalAq { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H264TemporalAq {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264TemporalAq::Disabled,
+            "ENABLED" => H264TemporalAq::Enabled,
+            _ => H264TemporalAq::UnknownVariant(UnknownH264TemporalAq {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H264TemporalAq {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264TemporalAq::Disabled,
+            "ENABLED" => H264TemporalAq::Enabled,
+            _ => H264TemporalAq::UnknownVariant(UnknownH264TemporalAq { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264TemporalAq {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264TemporalAq {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264TemporalAq {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H264 Timecode Insertion Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH264TimecodeInsertionBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H264TimecodeInsertionBehavior {
+    Disabled,
+    PicTimingSei,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH264TimecodeInsertionBehavior),
+}
+
+impl Default for H264TimecodeInsertionBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H264TimecodeInsertionBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H264TimecodeInsertionBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H264TimecodeInsertionBehavior {
+    fn into(self) -> String {
+        match self {
+            H264TimecodeInsertionBehavior::Disabled => "DISABLED".to_string(),
+            H264TimecodeInsertionBehavior::PicTimingSei => "PIC_TIMING_SEI".to_string(),
+            H264TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH264TimecodeInsertionBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H264TimecodeInsertionBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            H264TimecodeInsertionBehavior::Disabled => &"DISABLED",
+            H264TimecodeInsertionBehavior::PicTimingSei => &"PIC_TIMING_SEI",
+            H264TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH264TimecodeInsertionBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for H264TimecodeInsertionBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H264TimecodeInsertionBehavior::Disabled,
+            "PIC_TIMING_SEI" => H264TimecodeInsertionBehavior::PicTimingSei,
+            _ => H264TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH264TimecodeInsertionBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for H264TimecodeInsertionBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H264TimecodeInsertionBehavior::Disabled,
+            "PIC_TIMING_SEI" => H264TimecodeInsertionBehavior::PicTimingSei,
+            _ => H264TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH264TimecodeInsertionBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H264TimecodeInsertionBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H264TimecodeInsertionBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H264TimecodeInsertionBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Adaptive Quantization</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265AdaptiveQuantization {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265AdaptiveQuantization {
+    High,
+    Higher,
+    Low,
+    Max,
+    Medium,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265AdaptiveQuantization),
+}
+
+impl Default for H265AdaptiveQuantization {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265AdaptiveQuantization {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265AdaptiveQuantization {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265AdaptiveQuantization {
+    fn into(self) -> String {
+        match self {
+            H265AdaptiveQuantization::High => "HIGH".to_string(),
+            H265AdaptiveQuantization::Higher => "HIGHER".to_string(),
+            H265AdaptiveQuantization::Low => "LOW".to_string(),
+            H265AdaptiveQuantization::Max => "MAX".to_string(),
+            H265AdaptiveQuantization::Medium => "MEDIUM".to_string(),
+            H265AdaptiveQuantization::Off => "OFF".to_string(),
+            H265AdaptiveQuantization::UnknownVariant(UnknownH265AdaptiveQuantization {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265AdaptiveQuantization {
+    fn into(self) -> &'a str {
+        match self {
+            H265AdaptiveQuantization::High => &"HIGH",
+            H265AdaptiveQuantization::Higher => &"HIGHER",
+            H265AdaptiveQuantization::Low => &"LOW",
+            H265AdaptiveQuantization::Max => &"MAX",
+            H265AdaptiveQuantization::Medium => &"MEDIUM",
+            H265AdaptiveQuantization::Off => &"OFF",
+            H265AdaptiveQuantization::UnknownVariant(UnknownH265AdaptiveQuantization {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265AdaptiveQuantization {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => H265AdaptiveQuantization::High,
+            "HIGHER" => H265AdaptiveQuantization::Higher,
+            "LOW" => H265AdaptiveQuantization::Low,
+            "MAX" => H265AdaptiveQuantization::Max,
+            "MEDIUM" => H265AdaptiveQuantization::Medium,
+            "OFF" => H265AdaptiveQuantization::Off,
+            _ => H265AdaptiveQuantization::UnknownVariant(UnknownH265AdaptiveQuantization {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265AdaptiveQuantization {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => H265AdaptiveQuantization::High,
+            "HIGHER" => H265AdaptiveQuantization::Higher,
+            "LOW" => H265AdaptiveQuantization::Low,
+            "MAX" => H265AdaptiveQuantization::Max,
+            "MEDIUM" => H265AdaptiveQuantization::Medium,
+            "OFF" => H265AdaptiveQuantization::Off,
+            _ => H265AdaptiveQuantization::UnknownVariant(UnknownH265AdaptiveQuantization { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265AdaptiveQuantization {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265AdaptiveQuantization {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265AdaptiveQuantization {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Alternative Transfer Function</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265AlternativeTransferFunction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265AlternativeTransferFunction {
+    Insert,
+    Omit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265AlternativeTransferFunction),
+}
+
+impl Default for H265AlternativeTransferFunction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265AlternativeTransferFunction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265AlternativeTransferFunction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265AlternativeTransferFunction {
+    fn into(self) -> String {
+        match self {
+            H265AlternativeTransferFunction::Insert => "INSERT".to_string(),
+            H265AlternativeTransferFunction::Omit => "OMIT".to_string(),
+            H265AlternativeTransferFunction::UnknownVariant(
+                UnknownH265AlternativeTransferFunction { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265AlternativeTransferFunction {
+    fn into(self) -> &'a str {
+        match self {
+            H265AlternativeTransferFunction::Insert => &"INSERT",
+            H265AlternativeTransferFunction::Omit => &"OMIT",
+            H265AlternativeTransferFunction::UnknownVariant(
+                UnknownH265AlternativeTransferFunction { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for H265AlternativeTransferFunction {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSERT" => H265AlternativeTransferFunction::Insert,
+            "OMIT" => H265AlternativeTransferFunction::Omit,
+            _ => H265AlternativeTransferFunction::UnknownVariant(
+                UnknownH265AlternativeTransferFunction {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for H265AlternativeTransferFunction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSERT" => H265AlternativeTransferFunction::Insert,
+            "OMIT" => H265AlternativeTransferFunction::Omit,
+            _ => H265AlternativeTransferFunction::UnknownVariant(
+                UnknownH265AlternativeTransferFunction { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265AlternativeTransferFunction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265AlternativeTransferFunction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265AlternativeTransferFunction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Color Metadata</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265ColorMetadata {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265ColorMetadata {
+    Ignore,
+    Insert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265ColorMetadata),
+}
+
+impl Default for H265ColorMetadata {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265ColorMetadata {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265ColorMetadata {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265ColorMetadata {
+    fn into(self) -> String {
+        match self {
+            H265ColorMetadata::Ignore => "IGNORE".to_string(),
+            H265ColorMetadata::Insert => "INSERT".to_string(),
+            H265ColorMetadata::UnknownVariant(UnknownH265ColorMetadata { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265ColorMetadata {
+    fn into(self) -> &'a str {
+        match self {
+            H265ColorMetadata::Ignore => &"IGNORE",
+            H265ColorMetadata::Insert => &"INSERT",
+            H265ColorMetadata::UnknownVariant(UnknownH265ColorMetadata { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H265ColorMetadata {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => H265ColorMetadata::Ignore,
+            "INSERT" => H265ColorMetadata::Insert,
+            _ => H265ColorMetadata::UnknownVariant(UnknownH265ColorMetadata {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265ColorMetadata {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => H265ColorMetadata::Ignore,
+            "INSERT" => H265ColorMetadata::Insert,
+            _ => H265ColorMetadata::UnknownVariant(UnknownH265ColorMetadata { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265ColorMetadata {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265ColorMetadata {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265ColorMetadata {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>H265 Color Space Settings</p>
@@ -2814,21 +13702,923 @@ pub struct H265FilterSettings {
     pub temporal_filter_settings: Option<TemporalFilterSettings>,
 }
 
+/// <p>H265 Flicker Aq</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265FlickerAq {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265FlickerAq {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265FlickerAq),
+}
+
+impl Default for H265FlickerAq {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265FlickerAq {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265FlickerAq {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265FlickerAq {
+    fn into(self) -> String {
+        match self {
+            H265FlickerAq::Disabled => "DISABLED".to_string(),
+            H265FlickerAq::Enabled => "ENABLED".to_string(),
+            H265FlickerAq::UnknownVariant(UnknownH265FlickerAq { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265FlickerAq {
+    fn into(self) -> &'a str {
+        match self {
+            H265FlickerAq::Disabled => &"DISABLED",
+            H265FlickerAq::Enabled => &"ENABLED",
+            H265FlickerAq::UnknownVariant(UnknownH265FlickerAq { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265FlickerAq {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H265FlickerAq::Disabled,
+            "ENABLED" => H265FlickerAq::Enabled,
+            _ => H265FlickerAq::UnknownVariant(UnknownH265FlickerAq {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265FlickerAq {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H265FlickerAq::Disabled,
+            "ENABLED" => H265FlickerAq::Enabled,
+            _ => H265FlickerAq::UnknownVariant(UnknownH265FlickerAq { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265FlickerAq {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265FlickerAq {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265FlickerAq {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Gop Size Units</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265GopSizeUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265GopSizeUnits {
+    Frames,
+    Seconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265GopSizeUnits),
+}
+
+impl Default for H265GopSizeUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265GopSizeUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265GopSizeUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265GopSizeUnits {
+    fn into(self) -> String {
+        match self {
+            H265GopSizeUnits::Frames => "FRAMES".to_string(),
+            H265GopSizeUnits::Seconds => "SECONDS".to_string(),
+            H265GopSizeUnits::UnknownVariant(UnknownH265GopSizeUnits { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265GopSizeUnits {
+    fn into(self) -> &'a str {
+        match self {
+            H265GopSizeUnits::Frames => &"FRAMES",
+            H265GopSizeUnits::Seconds => &"SECONDS",
+            H265GopSizeUnits::UnknownVariant(UnknownH265GopSizeUnits { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H265GopSizeUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "FRAMES" => H265GopSizeUnits::Frames,
+            "SECONDS" => H265GopSizeUnits::Seconds,
+            _ => H265GopSizeUnits::UnknownVariant(UnknownH265GopSizeUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265GopSizeUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FRAMES" => H265GopSizeUnits::Frames,
+            "SECONDS" => H265GopSizeUnits::Seconds,
+            _ => H265GopSizeUnits::UnknownVariant(UnknownH265GopSizeUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265GopSizeUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265GopSizeUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265GopSizeUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Level</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265Level {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265Level {
+    H265Level1,
+    H265Level2,
+    H265Level21,
+    H265Level3,
+    H265Level31,
+    H265Level4,
+    H265Level41,
+    H265Level5,
+    H265Level51,
+    H265Level52,
+    H265Level6,
+    H265Level61,
+    H265Level62,
+    H265LevelAuto,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265Level),
+}
+
+impl Default for H265Level {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265Level {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265Level {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265Level {
+    fn into(self) -> String {
+        match self {
+            H265Level::H265Level1 => "H265_LEVEL_1".to_string(),
+            H265Level::H265Level2 => "H265_LEVEL_2".to_string(),
+            H265Level::H265Level21 => "H265_LEVEL_2_1".to_string(),
+            H265Level::H265Level3 => "H265_LEVEL_3".to_string(),
+            H265Level::H265Level31 => "H265_LEVEL_3_1".to_string(),
+            H265Level::H265Level4 => "H265_LEVEL_4".to_string(),
+            H265Level::H265Level41 => "H265_LEVEL_4_1".to_string(),
+            H265Level::H265Level5 => "H265_LEVEL_5".to_string(),
+            H265Level::H265Level51 => "H265_LEVEL_5_1".to_string(),
+            H265Level::H265Level52 => "H265_LEVEL_5_2".to_string(),
+            H265Level::H265Level6 => "H265_LEVEL_6".to_string(),
+            H265Level::H265Level61 => "H265_LEVEL_6_1".to_string(),
+            H265Level::H265Level62 => "H265_LEVEL_6_2".to_string(),
+            H265Level::H265LevelAuto => "H265_LEVEL_AUTO".to_string(),
+            H265Level::UnknownVariant(UnknownH265Level { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265Level {
+    fn into(self) -> &'a str {
+        match self {
+            H265Level::H265Level1 => &"H265_LEVEL_1",
+            H265Level::H265Level2 => &"H265_LEVEL_2",
+            H265Level::H265Level21 => &"H265_LEVEL_2_1",
+            H265Level::H265Level3 => &"H265_LEVEL_3",
+            H265Level::H265Level31 => &"H265_LEVEL_3_1",
+            H265Level::H265Level4 => &"H265_LEVEL_4",
+            H265Level::H265Level41 => &"H265_LEVEL_4_1",
+            H265Level::H265Level5 => &"H265_LEVEL_5",
+            H265Level::H265Level51 => &"H265_LEVEL_5_1",
+            H265Level::H265Level52 => &"H265_LEVEL_5_2",
+            H265Level::H265Level6 => &"H265_LEVEL_6",
+            H265Level::H265Level61 => &"H265_LEVEL_6_1",
+            H265Level::H265Level62 => &"H265_LEVEL_6_2",
+            H265Level::H265LevelAuto => &"H265_LEVEL_AUTO",
+            H265Level::UnknownVariant(UnknownH265Level { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265Level {
+    fn from(name: &str) -> Self {
+        match name {
+            "H265_LEVEL_1" => H265Level::H265Level1,
+            "H265_LEVEL_2" => H265Level::H265Level2,
+            "H265_LEVEL_2_1" => H265Level::H265Level21,
+            "H265_LEVEL_3" => H265Level::H265Level3,
+            "H265_LEVEL_3_1" => H265Level::H265Level31,
+            "H265_LEVEL_4" => H265Level::H265Level4,
+            "H265_LEVEL_4_1" => H265Level::H265Level41,
+            "H265_LEVEL_5" => H265Level::H265Level5,
+            "H265_LEVEL_5_1" => H265Level::H265Level51,
+            "H265_LEVEL_5_2" => H265Level::H265Level52,
+            "H265_LEVEL_6" => H265Level::H265Level6,
+            "H265_LEVEL_6_1" => H265Level::H265Level61,
+            "H265_LEVEL_6_2" => H265Level::H265Level62,
+            "H265_LEVEL_AUTO" => H265Level::H265LevelAuto,
+            _ => H265Level::UnknownVariant(UnknownH265Level {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265Level {
+    fn from(name: String) -> Self {
+        match &*name {
+            "H265_LEVEL_1" => H265Level::H265Level1,
+            "H265_LEVEL_2" => H265Level::H265Level2,
+            "H265_LEVEL_2_1" => H265Level::H265Level21,
+            "H265_LEVEL_3" => H265Level::H265Level3,
+            "H265_LEVEL_3_1" => H265Level::H265Level31,
+            "H265_LEVEL_4" => H265Level::H265Level4,
+            "H265_LEVEL_4_1" => H265Level::H265Level41,
+            "H265_LEVEL_5" => H265Level::H265Level5,
+            "H265_LEVEL_5_1" => H265Level::H265Level51,
+            "H265_LEVEL_5_2" => H265Level::H265Level52,
+            "H265_LEVEL_6" => H265Level::H265Level6,
+            "H265_LEVEL_6_1" => H265Level::H265Level61,
+            "H265_LEVEL_6_2" => H265Level::H265Level62,
+            "H265_LEVEL_AUTO" => H265Level::H265LevelAuto,
+            _ => H265Level::UnknownVariant(UnknownH265Level { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265Level {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265Level {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265Level {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Look Ahead Rate Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265LookAheadRateControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265LookAheadRateControl {
+    High,
+    Low,
+    Medium,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265LookAheadRateControl),
+}
+
+impl Default for H265LookAheadRateControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265LookAheadRateControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265LookAheadRateControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265LookAheadRateControl {
+    fn into(self) -> String {
+        match self {
+            H265LookAheadRateControl::High => "HIGH".to_string(),
+            H265LookAheadRateControl::Low => "LOW".to_string(),
+            H265LookAheadRateControl::Medium => "MEDIUM".to_string(),
+            H265LookAheadRateControl::UnknownVariant(UnknownH265LookAheadRateControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265LookAheadRateControl {
+    fn into(self) -> &'a str {
+        match self {
+            H265LookAheadRateControl::High => &"HIGH",
+            H265LookAheadRateControl::Low => &"LOW",
+            H265LookAheadRateControl::Medium => &"MEDIUM",
+            H265LookAheadRateControl::UnknownVariant(UnknownH265LookAheadRateControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265LookAheadRateControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => H265LookAheadRateControl::High,
+            "LOW" => H265LookAheadRateControl::Low,
+            "MEDIUM" => H265LookAheadRateControl::Medium,
+            _ => H265LookAheadRateControl::UnknownVariant(UnknownH265LookAheadRateControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265LookAheadRateControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => H265LookAheadRateControl::High,
+            "LOW" => H265LookAheadRateControl::Low,
+            "MEDIUM" => H265LookAheadRateControl::Medium,
+            _ => H265LookAheadRateControl::UnknownVariant(UnknownH265LookAheadRateControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265LookAheadRateControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265LookAheadRateControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265LookAheadRateControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Profile</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265Profile {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265Profile {
+    Main,
+    Main10Bit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265Profile),
+}
+
+impl Default for H265Profile {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265Profile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265Profile {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265Profile {
+    fn into(self) -> String {
+        match self {
+            H265Profile::Main => "MAIN".to_string(),
+            H265Profile::Main10Bit => "MAIN_10BIT".to_string(),
+            H265Profile::UnknownVariant(UnknownH265Profile { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265Profile {
+    fn into(self) -> &'a str {
+        match self {
+            H265Profile::Main => &"MAIN",
+            H265Profile::Main10Bit => &"MAIN_10BIT",
+            H265Profile::UnknownVariant(UnknownH265Profile { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265Profile {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAIN" => H265Profile::Main,
+            "MAIN_10BIT" => H265Profile::Main10Bit,
+            _ => H265Profile::UnknownVariant(UnknownH265Profile {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265Profile {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAIN" => H265Profile::Main,
+            "MAIN_10BIT" => H265Profile::Main10Bit,
+            _ => H265Profile::UnknownVariant(UnknownH265Profile { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265Profile {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265Profile {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265Profile {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Rate Control Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265RateControlMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265RateControlMode {
+    Cbr,
+    Multiplex,
+    Qvbr,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265RateControlMode),
+}
+
+impl Default for H265RateControlMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265RateControlMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265RateControlMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265RateControlMode {
+    fn into(self) -> String {
+        match self {
+            H265RateControlMode::Cbr => "CBR".to_string(),
+            H265RateControlMode::Multiplex => "MULTIPLEX".to_string(),
+            H265RateControlMode::Qvbr => "QVBR".to_string(),
+            H265RateControlMode::UnknownVariant(UnknownH265RateControlMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265RateControlMode {
+    fn into(self) -> &'a str {
+        match self {
+            H265RateControlMode::Cbr => &"CBR",
+            H265RateControlMode::Multiplex => &"MULTIPLEX",
+            H265RateControlMode::Qvbr => &"QVBR",
+            H265RateControlMode::UnknownVariant(UnknownH265RateControlMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for H265RateControlMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CBR" => H265RateControlMode::Cbr,
+            "MULTIPLEX" => H265RateControlMode::Multiplex,
+            "QVBR" => H265RateControlMode::Qvbr,
+            _ => H265RateControlMode::UnknownVariant(UnknownH265RateControlMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265RateControlMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CBR" => H265RateControlMode::Cbr,
+            "MULTIPLEX" => H265RateControlMode::Multiplex,
+            "QVBR" => H265RateControlMode::Qvbr,
+            _ => H265RateControlMode::UnknownVariant(UnknownH265RateControlMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265RateControlMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265RateControlMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265RateControlMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Scan Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265ScanType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265ScanType {
+    Interlaced,
+    Progressive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265ScanType),
+}
+
+impl Default for H265ScanType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265ScanType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265ScanType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265ScanType {
+    fn into(self) -> String {
+        match self {
+            H265ScanType::Interlaced => "INTERLACED".to_string(),
+            H265ScanType::Progressive => "PROGRESSIVE".to_string(),
+            H265ScanType::UnknownVariant(UnknownH265ScanType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265ScanType {
+    fn into(self) -> &'a str {
+        match self {
+            H265ScanType::Interlaced => &"INTERLACED",
+            H265ScanType::Progressive => &"PROGRESSIVE",
+            H265ScanType::UnknownVariant(UnknownH265ScanType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265ScanType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERLACED" => H265ScanType::Interlaced,
+            "PROGRESSIVE" => H265ScanType::Progressive,
+            _ => H265ScanType::UnknownVariant(UnknownH265ScanType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265ScanType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERLACED" => H265ScanType::Interlaced,
+            "PROGRESSIVE" => H265ScanType::Progressive,
+            _ => H265ScanType::UnknownVariant(UnknownH265ScanType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265ScanType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265ScanType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265ScanType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Scene Change Detect</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265SceneChangeDetect {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265SceneChangeDetect {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265SceneChangeDetect),
+}
+
+impl Default for H265SceneChangeDetect {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265SceneChangeDetect {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265SceneChangeDetect {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265SceneChangeDetect {
+    fn into(self) -> String {
+        match self {
+            H265SceneChangeDetect::Disabled => "DISABLED".to_string(),
+            H265SceneChangeDetect::Enabled => "ENABLED".to_string(),
+            H265SceneChangeDetect::UnknownVariant(UnknownH265SceneChangeDetect {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265SceneChangeDetect {
+    fn into(self) -> &'a str {
+        match self {
+            H265SceneChangeDetect::Disabled => &"DISABLED",
+            H265SceneChangeDetect::Enabled => &"ENABLED",
+            H265SceneChangeDetect::UnknownVariant(UnknownH265SceneChangeDetect {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265SceneChangeDetect {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H265SceneChangeDetect::Disabled,
+            "ENABLED" => H265SceneChangeDetect::Enabled,
+            _ => H265SceneChangeDetect::UnknownVariant(UnknownH265SceneChangeDetect {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265SceneChangeDetect {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H265SceneChangeDetect::Disabled,
+            "ENABLED" => H265SceneChangeDetect::Enabled,
+            _ => H265SceneChangeDetect::UnknownVariant(UnknownH265SceneChangeDetect { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265SceneChangeDetect {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265SceneChangeDetect {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265SceneChangeDetect {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>H265 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H265Settings {
     /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub adaptive_quantization: Option<String>,
+    pub adaptive_quantization: Option<H265AdaptiveQuantization>,
     /// <p>Indicates that AFD values will be written into the output stream.  If afdSignaling is &quot;auto&quot;, the system will try to preserve the input AFD value (in cases where multiple AFD values are valid). If set to &quot;fixed&quot;, the AFD value will be the value configured in the fixedAfd parameter.</p>
     #[serde(rename = "AfdSignaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub afd_signaling: Option<String>,
+    pub afd_signaling: Option<AfdSignaling>,
     /// <p>Whether or not EML should insert an Alternative Transfer Function SEI message to support backwards compatibility with non-HDR decoders and displays.</p>
     #[serde(rename = "AlternativeTransferFunction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub alternative_transfer_function: Option<String>,
+    pub alternative_transfer_function: Option<H265AlternativeTransferFunction>,
     /// <p>Average bitrate in bits/second. Required when the rate control mode is VBR or CBR. Not used for QVBR. In an MS Smooth output group, each output must have a unique value when its bitrate is rounded down to the nearest multiple of 1000.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2840,7 +14630,7 @@ pub struct H265Settings {
     /// <p>Includes colorspace metadata in the output.</p>
     #[serde(rename = "ColorMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color_metadata: Option<String>,
+    pub color_metadata: Option<H265ColorMetadata>,
     /// <p>Color Space settings</p>
     #[serde(rename = "ColorSpaceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2852,11 +14642,11 @@ pub struct H265Settings {
     /// <p>Four bit AFD value to write on all frames of video in the output stream. Only valid when afdSignaling is set to &#39;Fixed&#39;.</p>
     #[serde(rename = "FixedAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fixed_afd: Option<String>,
+    pub fixed_afd: Option<FixedAfd>,
     /// <p>If set to enabled, adjust quantization within each frame to reduce flicker or &#39;pop&#39; on I-frames.</p>
     #[serde(rename = "FlickerAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub flicker_aq: Option<String>,
+    pub flicker_aq: Option<H265FlickerAq>,
     /// <p>Framerate denominator.</p>
     #[serde(rename = "FramerateDenominator")]
     pub framerate_denominator: i64,
@@ -2876,15 +14666,15 @@ pub struct H265Settings {
     /// <p>Indicates if the gopSize is specified in frames or seconds. If seconds the system will convert the gopSize into a frame count at run time.</p>
     #[serde(rename = "GopSizeUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gop_size_units: Option<String>,
+    pub gop_size_units: Option<H265GopSizeUnits>,
     /// <p>H.265 Level.</p>
     #[serde(rename = "Level")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub level: Option<String>,
+    pub level: Option<H265Level>,
     /// <p>Amount of lookahead. A value of low can decrease latency and memory usage, while high can produce better quality for certain content.</p>
     #[serde(rename = "LookAheadRateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub look_ahead_rate_control: Option<String>,
+    pub look_ahead_rate_control: Option<H265LookAheadRateControl>,
     /// <p>For QVBR: See the tooltip for Quality level</p>
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2904,7 +14694,7 @@ pub struct H265Settings {
     /// <p>H.265 Profile.</p>
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub profile: Option<String>,
+    pub profile: Option<H265Profile>,
     /// <p>Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. Set values for the QVBR quality level field and Max bitrate field that suit your most important viewing devices. Recommended values are:
     /// - Primary screen: Quality level: 8 to 10. Max bitrate: 4M
     /// - PC or tablet: Quality level: 7. Max bitrate: 1.5M to 3M
@@ -2925,15 +14715,15 @@ pub struct H265Settings {
     /// by the properties within the Multiplex Program.</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rate_control_mode: Option<String>,
+    pub rate_control_mode: Option<H265RateControlMode>,
     /// <p>Sets the scan type of the output to progressive or top-field-first interlaced.</p>
     #[serde(rename = "ScanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scan_type: Option<String>,
+    pub scan_type: Option<H265ScanType>,
     /// <p>Scene change detection.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scene_change_detect: Option<String>,
+    pub scene_change_detect: Option<H265SceneChangeDetect>,
     /// <p>Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures.
     /// This field is optional; when no value is specified the encoder will choose the number of slices based on encode resolution.</p>
     #[serde(rename = "Slices")]
@@ -2942,13 +14732,225 @@ pub struct H265Settings {
     /// <p>H.265 Tier.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<H265Tier>,
     /// <p>Determines how timecodes should be inserted into the video elementary stream.
     /// - &#39;disabled&#39;: Do not include timecodes
     /// - &#39;picTimingSei&#39;: Pass through picture timing SEI messages from the source specified in Timecode Config</p>
     #[serde(rename = "TimecodeInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timecode_insertion: Option<String>,
+    pub timecode_insertion: Option<H265TimecodeInsertionBehavior>,
+}
+
+/// <p>H265 Tier</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265Tier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265Tier {
+    High,
+    Main,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265Tier),
+}
+
+impl Default for H265Tier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265Tier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265Tier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265Tier {
+    fn into(self) -> String {
+        match self {
+            H265Tier::High => "HIGH".to_string(),
+            H265Tier::Main => "MAIN".to_string(),
+            H265Tier::UnknownVariant(UnknownH265Tier { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265Tier {
+    fn into(self) -> &'a str {
+        match self {
+            H265Tier::High => &"HIGH",
+            H265Tier::Main => &"MAIN",
+            H265Tier::UnknownVariant(UnknownH265Tier { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for H265Tier {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => H265Tier::High,
+            "MAIN" => H265Tier::Main,
+            _ => H265Tier::UnknownVariant(UnknownH265Tier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for H265Tier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => H265Tier::High,
+            "MAIN" => H265Tier::Main,
+            _ => H265Tier::UnknownVariant(UnknownH265Tier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265Tier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265Tier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265Tier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>H265 Timecode Insertion Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownH265TimecodeInsertionBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum H265TimecodeInsertionBehavior {
+    Disabled,
+    PicTimingSei,
+    #[doc(hidden)]
+    UnknownVariant(UnknownH265TimecodeInsertionBehavior),
+}
+
+impl Default for H265TimecodeInsertionBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for H265TimecodeInsertionBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for H265TimecodeInsertionBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for H265TimecodeInsertionBehavior {
+    fn into(self) -> String {
+        match self {
+            H265TimecodeInsertionBehavior::Disabled => "DISABLED".to_string(),
+            H265TimecodeInsertionBehavior::PicTimingSei => "PIC_TIMING_SEI".to_string(),
+            H265TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH265TimecodeInsertionBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a H265TimecodeInsertionBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            H265TimecodeInsertionBehavior::Disabled => &"DISABLED",
+            H265TimecodeInsertionBehavior::PicTimingSei => &"PIC_TIMING_SEI",
+            H265TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH265TimecodeInsertionBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for H265TimecodeInsertionBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => H265TimecodeInsertionBehavior::Disabled,
+            "PIC_TIMING_SEI" => H265TimecodeInsertionBehavior::PicTimingSei,
+            _ => H265TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH265TimecodeInsertionBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for H265TimecodeInsertionBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => H265TimecodeInsertionBehavior::Disabled,
+            "PIC_TIMING_SEI" => H265TimecodeInsertionBehavior::PicTimingSei,
+            _ => H265TimecodeInsertionBehavior::UnknownVariant(
+                UnknownH265TimecodeInsertionBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for H265TimecodeInsertionBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for H265TimecodeInsertionBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for H265TimecodeInsertionBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Hdr10 Settings</p>
@@ -2968,6 +14970,221 @@ pub struct Hdr10Settings {
     pub max_fall: Option<i64>,
 }
 
+/// <p>Hls Ad Markers</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsAdMarkers {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsAdMarkers {
+    Adobe,
+    Elemental,
+    ElementalScte35,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsAdMarkers),
+}
+
+impl Default for HlsAdMarkers {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsAdMarkers {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsAdMarkers {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsAdMarkers {
+    fn into(self) -> String {
+        match self {
+            HlsAdMarkers::Adobe => "ADOBE".to_string(),
+            HlsAdMarkers::Elemental => "ELEMENTAL".to_string(),
+            HlsAdMarkers::ElementalScte35 => "ELEMENTAL_SCTE35".to_string(),
+            HlsAdMarkers::UnknownVariant(UnknownHlsAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsAdMarkers {
+    fn into(self) -> &'a str {
+        match self {
+            HlsAdMarkers::Adobe => &"ADOBE",
+            HlsAdMarkers::Elemental => &"ELEMENTAL",
+            HlsAdMarkers::ElementalScte35 => &"ELEMENTAL_SCTE35",
+            HlsAdMarkers::UnknownVariant(UnknownHlsAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsAdMarkers {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADOBE" => HlsAdMarkers::Adobe,
+            "ELEMENTAL" => HlsAdMarkers::Elemental,
+            "ELEMENTAL_SCTE35" => HlsAdMarkers::ElementalScte35,
+            _ => HlsAdMarkers::UnknownVariant(UnknownHlsAdMarkers {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsAdMarkers {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADOBE" => HlsAdMarkers::Adobe,
+            "ELEMENTAL" => HlsAdMarkers::Elemental,
+            "ELEMENTAL_SCTE35" => HlsAdMarkers::ElementalScte35,
+            _ => HlsAdMarkers::UnknownVariant(UnknownHlsAdMarkers { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsAdMarkers {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsAdMarkers {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsAdMarkers {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Akamai Http Transfer Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsAkamaiHttpTransferMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsAkamaiHttpTransferMode {
+    Chunked,
+    NonChunked,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsAkamaiHttpTransferMode),
+}
+
+impl Default for HlsAkamaiHttpTransferMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsAkamaiHttpTransferMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsAkamaiHttpTransferMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsAkamaiHttpTransferMode {
+    fn into(self) -> String {
+        match self {
+            HlsAkamaiHttpTransferMode::Chunked => "CHUNKED".to_string(),
+            HlsAkamaiHttpTransferMode::NonChunked => "NON_CHUNKED".to_string(),
+            HlsAkamaiHttpTransferMode::UnknownVariant(UnknownHlsAkamaiHttpTransferMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsAkamaiHttpTransferMode {
+    fn into(self) -> &'a str {
+        match self {
+            HlsAkamaiHttpTransferMode::Chunked => &"CHUNKED",
+            HlsAkamaiHttpTransferMode::NonChunked => &"NON_CHUNKED",
+            HlsAkamaiHttpTransferMode::UnknownVariant(UnknownHlsAkamaiHttpTransferMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsAkamaiHttpTransferMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHUNKED" => HlsAkamaiHttpTransferMode::Chunked,
+            "NON_CHUNKED" => HlsAkamaiHttpTransferMode::NonChunked,
+            _ => HlsAkamaiHttpTransferMode::UnknownVariant(UnknownHlsAkamaiHttpTransferMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsAkamaiHttpTransferMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHUNKED" => HlsAkamaiHttpTransferMode::Chunked,
+            "NON_CHUNKED" => HlsAkamaiHttpTransferMode::NonChunked,
+            _ => {
+                HlsAkamaiHttpTransferMode::UnknownVariant(UnknownHlsAkamaiHttpTransferMode { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsAkamaiHttpTransferMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsAkamaiHttpTransferMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsAkamaiHttpTransferMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Hls Akamai Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsAkamaiSettings {
@@ -2982,7 +15199,7 @@ pub struct HlsAkamaiSettings {
     /// <p>Specify whether or not to use chunked transfer encoding to Akamai. User should contact Akamai to enable this feature.</p>
     #[serde(rename = "HttpTransferMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub http_transfer_mode: Option<String>,
+    pub http_transfer_mode: Option<HlsAkamaiHttpTransferMode>,
     /// <p>Number of retry attempts that will be made before the Live Event is put into an error state.</p>
     #[serde(rename = "NumRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3022,6 +15239,119 @@ pub struct HlsBasicPutSettings {
     pub restart_delay: Option<i64>,
 }
 
+/// <p>Hls Caption Language Setting</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsCaptionLanguageSetting {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsCaptionLanguageSetting {
+    Insert,
+    None,
+    Omit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsCaptionLanguageSetting),
+}
+
+impl Default for HlsCaptionLanguageSetting {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsCaptionLanguageSetting {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsCaptionLanguageSetting {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsCaptionLanguageSetting {
+    fn into(self) -> String {
+        match self {
+            HlsCaptionLanguageSetting::Insert => "INSERT".to_string(),
+            HlsCaptionLanguageSetting::None => "NONE".to_string(),
+            HlsCaptionLanguageSetting::Omit => "OMIT".to_string(),
+            HlsCaptionLanguageSetting::UnknownVariant(UnknownHlsCaptionLanguageSetting {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsCaptionLanguageSetting {
+    fn into(self) -> &'a str {
+        match self {
+            HlsCaptionLanguageSetting::Insert => &"INSERT",
+            HlsCaptionLanguageSetting::None => &"NONE",
+            HlsCaptionLanguageSetting::Omit => &"OMIT",
+            HlsCaptionLanguageSetting::UnknownVariant(UnknownHlsCaptionLanguageSetting {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsCaptionLanguageSetting {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSERT" => HlsCaptionLanguageSetting::Insert,
+            "NONE" => HlsCaptionLanguageSetting::None,
+            "OMIT" => HlsCaptionLanguageSetting::Omit,
+            _ => HlsCaptionLanguageSetting::UnknownVariant(UnknownHlsCaptionLanguageSetting {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsCaptionLanguageSetting {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSERT" => HlsCaptionLanguageSetting::Insert,
+            "NONE" => HlsCaptionLanguageSetting::None,
+            "OMIT" => HlsCaptionLanguageSetting::Omit,
+            _ => {
+                HlsCaptionLanguageSetting::UnknownVariant(UnknownHlsCaptionLanguageSetting { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsCaptionLanguageSetting {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsCaptionLanguageSetting {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsCaptionLanguageSetting {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Hls Cdn Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsCdnSettings {
@@ -3039,13 +15369,539 @@ pub struct HlsCdnSettings {
     pub hls_webdav_settings: Option<HlsWebdavSettings>,
 }
 
+/// <p>Hls Client Cache</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsClientCache {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsClientCache {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsClientCache),
+}
+
+impl Default for HlsClientCache {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsClientCache {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsClientCache {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsClientCache {
+    fn into(self) -> String {
+        match self {
+            HlsClientCache::Disabled => "DISABLED".to_string(),
+            HlsClientCache::Enabled => "ENABLED".to_string(),
+            HlsClientCache::UnknownVariant(UnknownHlsClientCache { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsClientCache {
+    fn into(self) -> &'a str {
+        match self {
+            HlsClientCache::Disabled => &"DISABLED",
+            HlsClientCache::Enabled => &"ENABLED",
+            HlsClientCache::UnknownVariant(UnknownHlsClientCache { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsClientCache {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => HlsClientCache::Disabled,
+            "ENABLED" => HlsClientCache::Enabled,
+            _ => HlsClientCache::UnknownVariant(UnknownHlsClientCache {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsClientCache {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => HlsClientCache::Disabled,
+            "ENABLED" => HlsClientCache::Enabled,
+            _ => HlsClientCache::UnknownVariant(UnknownHlsClientCache { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsClientCache {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsClientCache {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsClientCache {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Codec Specification</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsCodecSpecification {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsCodecSpecification {
+    Rfc4281,
+    Rfc6381,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsCodecSpecification),
+}
+
+impl Default for HlsCodecSpecification {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsCodecSpecification {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsCodecSpecification {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsCodecSpecification {
+    fn into(self) -> String {
+        match self {
+            HlsCodecSpecification::Rfc4281 => "RFC_4281".to_string(),
+            HlsCodecSpecification::Rfc6381 => "RFC_6381".to_string(),
+            HlsCodecSpecification::UnknownVariant(UnknownHlsCodecSpecification {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsCodecSpecification {
+    fn into(self) -> &'a str {
+        match self {
+            HlsCodecSpecification::Rfc4281 => &"RFC_4281",
+            HlsCodecSpecification::Rfc6381 => &"RFC_6381",
+            HlsCodecSpecification::UnknownVariant(UnknownHlsCodecSpecification {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsCodecSpecification {
+    fn from(name: &str) -> Self {
+        match name {
+            "RFC_4281" => HlsCodecSpecification::Rfc4281,
+            "RFC_6381" => HlsCodecSpecification::Rfc6381,
+            _ => HlsCodecSpecification::UnknownVariant(UnknownHlsCodecSpecification {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsCodecSpecification {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RFC_4281" => HlsCodecSpecification::Rfc4281,
+            "RFC_6381" => HlsCodecSpecification::Rfc6381,
+            _ => HlsCodecSpecification::UnknownVariant(UnknownHlsCodecSpecification { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsCodecSpecification {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsCodecSpecification {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsCodecSpecification {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Directory Structure</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsDirectoryStructure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsDirectoryStructure {
+    SingleDirectory,
+    SubdirectoryPerStream,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsDirectoryStructure),
+}
+
+impl Default for HlsDirectoryStructure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsDirectoryStructure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsDirectoryStructure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsDirectoryStructure {
+    fn into(self) -> String {
+        match self {
+            HlsDirectoryStructure::SingleDirectory => "SINGLE_DIRECTORY".to_string(),
+            HlsDirectoryStructure::SubdirectoryPerStream => "SUBDIRECTORY_PER_STREAM".to_string(),
+            HlsDirectoryStructure::UnknownVariant(UnknownHlsDirectoryStructure {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsDirectoryStructure {
+    fn into(self) -> &'a str {
+        match self {
+            HlsDirectoryStructure::SingleDirectory => &"SINGLE_DIRECTORY",
+            HlsDirectoryStructure::SubdirectoryPerStream => &"SUBDIRECTORY_PER_STREAM",
+            HlsDirectoryStructure::UnknownVariant(UnknownHlsDirectoryStructure {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsDirectoryStructure {
+    fn from(name: &str) -> Self {
+        match name {
+            "SINGLE_DIRECTORY" => HlsDirectoryStructure::SingleDirectory,
+            "SUBDIRECTORY_PER_STREAM" => HlsDirectoryStructure::SubdirectoryPerStream,
+            _ => HlsDirectoryStructure::UnknownVariant(UnknownHlsDirectoryStructure {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsDirectoryStructure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SINGLE_DIRECTORY" => HlsDirectoryStructure::SingleDirectory,
+            "SUBDIRECTORY_PER_STREAM" => HlsDirectoryStructure::SubdirectoryPerStream,
+            _ => HlsDirectoryStructure::UnknownVariant(UnknownHlsDirectoryStructure { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsDirectoryStructure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsDirectoryStructure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsDirectoryStructure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Discontinuity Tags</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsDiscontinuityTags {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsDiscontinuityTags {
+    Insert,
+    NeverInsert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsDiscontinuityTags),
+}
+
+impl Default for HlsDiscontinuityTags {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsDiscontinuityTags {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsDiscontinuityTags {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsDiscontinuityTags {
+    fn into(self) -> String {
+        match self {
+            HlsDiscontinuityTags::Insert => "INSERT".to_string(),
+            HlsDiscontinuityTags::NeverInsert => "NEVER_INSERT".to_string(),
+            HlsDiscontinuityTags::UnknownVariant(UnknownHlsDiscontinuityTags {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsDiscontinuityTags {
+    fn into(self) -> &'a str {
+        match self {
+            HlsDiscontinuityTags::Insert => &"INSERT",
+            HlsDiscontinuityTags::NeverInsert => &"NEVER_INSERT",
+            HlsDiscontinuityTags::UnknownVariant(UnknownHlsDiscontinuityTags {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsDiscontinuityTags {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSERT" => HlsDiscontinuityTags::Insert,
+            "NEVER_INSERT" => HlsDiscontinuityTags::NeverInsert,
+            _ => HlsDiscontinuityTags::UnknownVariant(UnknownHlsDiscontinuityTags {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsDiscontinuityTags {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSERT" => HlsDiscontinuityTags::Insert,
+            "NEVER_INSERT" => HlsDiscontinuityTags::NeverInsert,
+            _ => HlsDiscontinuityTags::UnknownVariant(UnknownHlsDiscontinuityTags { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsDiscontinuityTags {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsDiscontinuityTags {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsDiscontinuityTags {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Encryption Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsEncryptionType {
+    Aes128,
+    SampleAes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsEncryptionType),
+}
+
+impl Default for HlsEncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsEncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsEncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsEncryptionType {
+    fn into(self) -> String {
+        match self {
+            HlsEncryptionType::Aes128 => "AES128".to_string(),
+            HlsEncryptionType::SampleAes => "SAMPLE_AES".to_string(),
+            HlsEncryptionType::UnknownVariant(UnknownHlsEncryptionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsEncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            HlsEncryptionType::Aes128 => &"AES128",
+            HlsEncryptionType::SampleAes => &"SAMPLE_AES",
+            HlsEncryptionType::UnknownVariant(UnknownHlsEncryptionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HlsEncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES128" => HlsEncryptionType::Aes128,
+            "SAMPLE_AES" => HlsEncryptionType::SampleAes,
+            _ => HlsEncryptionType::UnknownVariant(UnknownHlsEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsEncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES128" => HlsEncryptionType::Aes128,
+            "SAMPLE_AES" => HlsEncryptionType::SampleAes,
+            _ => HlsEncryptionType::UnknownVariant(UnknownHlsEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsEncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsEncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsEncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Hls Group Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsGroupSettings {
     /// <p>Choose one or more ad marker types to pass SCTE35 signals through to this group of Apple HLS outputs.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_markers: Option<Vec<String>>,
+    pub ad_markers: Option<Vec<HlsAdMarkers>>,
     /// <p>A partial URI prefix that will be prepended to each output in the media .m3u8 file. Can be used if base manifest is delivered from a different URL than the main .m3u8 file.</p>
     #[serde(rename = "BaseUrlContent")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3076,15 +15932,15 @@ pub struct HlsGroupSettings {
     /// omit: Omit any CLOSED-CAPTIONS line from the manifest.</p>
     #[serde(rename = "CaptionLanguageSetting")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub caption_language_setting: Option<String>,
+    pub caption_language_setting: Option<HlsCaptionLanguageSetting>,
     /// <p>When set to &quot;disabled&quot;, sets the #EXT-X-ALLOW-CACHE:no tag in the manifest, which prevents clients from saving media segments for later replay.</p>
     #[serde(rename = "ClientCache")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub client_cache: Option<String>,
+    pub client_cache: Option<HlsClientCache>,
     /// <p>Specification to use (RFC-6381 or the default RFC-4281) during m3u8 playlist generation.</p>
     #[serde(rename = "CodecSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub codec_specification: Option<String>,
+    pub codec_specification: Option<HlsCodecSpecification>,
     /// <p>For use with encryptionType. This is a 128-bit, 16-byte hex value represented by a 32-character text string. If ivSource is set to &quot;explicit&quot; then this parameter is required and is used as the IV for encryption.</p>
     #[serde(rename = "ConstantIv")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3095,17 +15951,17 @@ pub struct HlsGroupSettings {
     /// <p>Place segments in subdirectories.</p>
     #[serde(rename = "DirectoryStructure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub directory_structure: Option<String>,
+    pub directory_structure: Option<HlsDirectoryStructure>,
     /// <p>Specifies whether to insert EXT-X-DISCONTINUITY tags in the HLS child manifests for this output group.
     /// Typically, choose Insert because these tags are required in the manifest (according to the HLS specification) and serve an important purpose.
     /// Choose Never Insert only if the downstream system is doing real-time failover (without using the MediaLive automatic failover feature) and only if that downstream system has advised you to exclude the tags.</p>
     #[serde(rename = "DiscontinuityTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub discontinuity_tags: Option<String>,
+    pub discontinuity_tags: Option<HlsDiscontinuityTags>,
     /// <p>Encrypts the segments with the given encryption scheme.  Exclude this parameter if no encryption is desired.</p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<HlsEncryptionType>,
     /// <p>Parameters that control interactions with the CDN.</p>
     #[serde(rename = "HlsCdnSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3113,19 +15969,19 @@ pub struct HlsGroupSettings {
     /// <p>State of HLS ID3 Segment Tagging</p>
     #[serde(rename = "HlsId3SegmentTagging")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hls_id_3_segment_tagging: Option<String>,
+    pub hls_id_3_segment_tagging: Option<HlsId3SegmentTaggingState>,
     /// <p>DISABLED: Do not create an I-frame-only manifest, but do create the master and media manifests (according to the Output Selection field).</p>
     ///
     /// <p>STANDARD: Create an I-frame-only manifest for each output that contains video, as well as the other manifests (according to the Output Selection field). The I-frame manifest contains a #EXT-X-I-FRAMES-ONLY tag to indicate it is I-frame only, and one or more #EXT-X-BYTERANGE entries identifying the I-frame position. For example, #EXT-X-BYTERANGE:160364@1461888&quot;</p>
     #[serde(rename = "IFrameOnlyPlaylists")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub i_frame_only_playlists: Option<String>,
+    pub i_frame_only_playlists: Option<IFrameOnlyPlaylistType>,
     /// <p>Specifies whether to include the final (incomplete) segment in the media output when the pipeline stops producing output because of a channel stop, a channel pause or a loss of input to the pipeline.
     /// Auto means that MediaLive decides whether to include the final segment, depending on the channel class and the types of output groups.
     /// Suppress means to never include the incomplete segment. We recommend you choose Auto and let MediaLive control the behavior.</p>
     #[serde(rename = "IncompleteSegmentBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incomplete_segment_behavior: Option<String>,
+    pub incomplete_segment_behavior: Option<HlsIncompleteSegmentBehavior>,
     /// <p>Applies only if Mode field is LIVE.</p>
     ///
     /// <p>Specifies the maximum number of segments in the media manifest file. After this maximum, older segments are removed from the media manifest. This number must be smaller than the number in the Keep Segments field.</p>
@@ -3135,15 +15991,15 @@ pub struct HlsGroupSettings {
     /// <p>Parameter that control output group behavior on input loss.</p>
     #[serde(rename = "InputLossAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_loss_action: Option<String>,
+    pub input_loss_action: Option<InputLossActionForHlsOut>,
     /// <p>For use with encryptionType. The IV (Initialization Vector) is a 128-bit number used in conjunction with the key for encrypting blocks. If set to &quot;include&quot;, IV is listed in the manifest, otherwise the IV is not in the manifest.</p>
     #[serde(rename = "IvInManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub iv_in_manifest: Option<String>,
+    pub iv_in_manifest: Option<HlsIvInManifest>,
     /// <p>For use with encryptionType. The IV (Initialization Vector) is a 128-bit number used in conjunction with the key for encrypting blocks. If this setting is &quot;followsSegmentNumber&quot;, it will cause the IV to change every segment (to match the segment number). If this is set to &quot;explicit&quot;, you must enter a constantIv value.</p>
     #[serde(rename = "IvSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub iv_source: Option<String>,
+    pub iv_source: Option<HlsIvSource>,
     /// <p>Applies only if Mode field is LIVE.</p>
     ///
     /// <p>Specifies the number of media segments to retain in the destination directory. This number should be bigger than indexNSegments (Num segments). We recommend (value = (2 x indexNsegments) + 1).</p>
@@ -3167,11 +16023,11 @@ pub struct HlsGroupSettings {
     /// <p>When set to gzip, compresses HLS playlist.</p>
     #[serde(rename = "ManifestCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub manifest_compression: Option<String>,
+    pub manifest_compression: Option<HlsManifestCompression>,
     /// <p>Indicates whether the output manifest should use floating point or integer values for segment duration.</p>
     #[serde(rename = "ManifestDurationFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub manifest_duration_format: Option<String>,
+    pub manifest_duration_format: Option<HlsManifestDurationFormat>,
     /// <p>When set, minimumSegmentLength is enforced by looking ahead and back within the specified range for a nearby avail and extending the segment size if needed.</p>
     #[serde(rename = "MinSegmentLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3181,7 +16037,7 @@ pub struct HlsGroupSettings {
     /// <p>VOD mode uses HLS EXT-X-PLAYLIST-TYPE of EVENT while the channel is running, converting it to a &quot;VOD&quot; type manifest on completion of the stream.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<HlsMode>,
     /// <p>MANIFESTS<em>AND</em>SEGMENTS: Generates manifests (master manifest, if applicable, and media manifests) for this output group.</p>
     ///
     /// <p>VARIANT<em>MANIFESTS</em>AND_SEGMENTS: Generates media manifests for this output group, but not a master manifest.</p>
@@ -3189,11 +16045,11 @@ pub struct HlsGroupSettings {
     /// <p>SEGMENTS_ONLY: Does not generate any manifests for this output group.</p>
     #[serde(rename = "OutputSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_selection: Option<String>,
+    pub output_selection: Option<HlsOutputSelection>,
     /// <p>Includes or excludes EXT-X-PROGRAM-DATE-TIME tag in .m3u8 manifest files. The value is calculated as follows: either the program date and time are initialized using the input timecode source, or the time is initialized using the input timecode source and the date is initialized using the timestampOffset.</p>
     #[serde(rename = "ProgramDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub program_date_time: Option<String>,
+    pub program_date_time: Option<HlsProgramDateTime>,
     /// <p>Period of insertion of EXT-X-PROGRAM-DATE-TIME entry, in seconds.</p>
     #[serde(rename = "ProgramDateTimePeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3205,7 +16061,7 @@ pub struct HlsGroupSettings {
     /// <p>For an HLS output group with MediaPackage as the destination, the DISABLED behavior is always followed. MediaPackage regenerates the manifests it serves to players so a redundant manifest from MediaLive is irrelevant.</p>
     #[serde(rename = "RedundantManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub redundant_manifest: Option<String>,
+    pub redundant_manifest: Option<HlsRedundantManifest>,
     /// <p>Length of MPEG-2 Transport Stream segments to create (in seconds). Note that segments will end on the next keyframe after this number of seconds, so actual segment length may be longer.</p>
     #[serde(rename = "SegmentLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3213,7 +16069,7 @@ pub struct HlsGroupSettings {
     /// <p>useInputSegmentation has been deprecated. The configured segment size is always used.</p>
     #[serde(rename = "SegmentationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segmentation_mode: Option<String>,
+    pub segmentation_mode: Option<HlsSegmentationMode>,
     /// <p>Number of segments to write to a subdirectory before starting a new one. directoryStructure must be subdirectoryPerStream for this setting to have an effect.</p>
     #[serde(rename = "SegmentsPerSubdirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3221,11 +16077,11 @@ pub struct HlsGroupSettings {
     /// <p>Include or exclude RESOLUTION attribute for video in EXT-X-STREAM-INF tag of variant manifest.</p>
     #[serde(rename = "StreamInfResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_inf_resolution: Option<String>,
+    pub stream_inf_resolution: Option<HlsStreamInfResolution>,
     /// <p>Indicates ID3 frame that has the timecode.</p>
     #[serde(rename = "TimedMetadataId3Frame")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timed_metadata_id_3_frame: Option<String>,
+    pub timed_metadata_id_3_frame: Option<HlsTimedMetadataId3Frame>,
     /// <p>Timed Metadata interval in seconds.</p>
     #[serde(rename = "TimedMetadataId3Period")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3239,7 +16095,113 @@ pub struct HlsGroupSettings {
     /// <p>SINGLE_FILE: Applies only if Mode field is VOD. Emit the program as a single .ts media file. The media manifest includes #EXT-X-BYTERANGE tags to index segments for playback. A typical use for this value is when sending the output to AWS Elemental MediaConvert, which can accept only a single media file. Playback while the channel is running is not guaranteed due to HTTP server caching.</p>
     #[serde(rename = "TsFileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ts_file_mode: Option<String>,
+    pub ts_file_mode: Option<HlsTsFileMode>,
+}
+
+/// <p>Hls H265 Packaging Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsH265PackagingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsH265PackagingType {
+    Hev1,
+    Hvc1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsH265PackagingType),
+}
+
+impl Default for HlsH265PackagingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsH265PackagingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsH265PackagingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsH265PackagingType {
+    fn into(self) -> String {
+        match self {
+            HlsH265PackagingType::Hev1 => "HEV1".to_string(),
+            HlsH265PackagingType::Hvc1 => "HVC1".to_string(),
+            HlsH265PackagingType::UnknownVariant(UnknownHlsH265PackagingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsH265PackagingType {
+    fn into(self) -> &'a str {
+        match self {
+            HlsH265PackagingType::Hev1 => &"HEV1",
+            HlsH265PackagingType::Hvc1 => &"HVC1",
+            HlsH265PackagingType::UnknownVariant(UnknownHlsH265PackagingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsH265PackagingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEV1" => HlsH265PackagingType::Hev1,
+            "HVC1" => HlsH265PackagingType::Hvc1,
+            _ => HlsH265PackagingType::UnknownVariant(UnknownHlsH265PackagingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsH265PackagingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEV1" => HlsH265PackagingType::Hev1,
+            "HVC1" => HlsH265PackagingType::Hvc1,
+            _ => HlsH265PackagingType::UnknownVariant(UnknownHlsH265PackagingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsH265PackagingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsH265PackagingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsH265PackagingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings for the action to insert a user-defined ID3 tag in each HLS segment</p>
@@ -3248,6 +16210,226 @@ pub struct HlsId3SegmentTaggingScheduleActionSettings {
     /// <p>ID3 tag to insert into each segment. Supports special keyword identifiers to substitute in segment-related values.\nSupported keyword identifiers: https://docs.aws.amazon.com/medialive/latest/ug/variable-data-identifiers.html</p>
     #[serde(rename = "Tag")]
     pub tag: String,
+}
+
+/// <p>State of HLS ID3 Segment Tagging</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsId3SegmentTaggingState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsId3SegmentTaggingState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsId3SegmentTaggingState),
+}
+
+impl Default for HlsId3SegmentTaggingState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsId3SegmentTaggingState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsId3SegmentTaggingState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsId3SegmentTaggingState {
+    fn into(self) -> String {
+        match self {
+            HlsId3SegmentTaggingState::Disabled => "DISABLED".to_string(),
+            HlsId3SegmentTaggingState::Enabled => "ENABLED".to_string(),
+            HlsId3SegmentTaggingState::UnknownVariant(UnknownHlsId3SegmentTaggingState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsId3SegmentTaggingState {
+    fn into(self) -> &'a str {
+        match self {
+            HlsId3SegmentTaggingState::Disabled => &"DISABLED",
+            HlsId3SegmentTaggingState::Enabled => &"ENABLED",
+            HlsId3SegmentTaggingState::UnknownVariant(UnknownHlsId3SegmentTaggingState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsId3SegmentTaggingState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => HlsId3SegmentTaggingState::Disabled,
+            "ENABLED" => HlsId3SegmentTaggingState::Enabled,
+            _ => HlsId3SegmentTaggingState::UnknownVariant(UnknownHlsId3SegmentTaggingState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsId3SegmentTaggingState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => HlsId3SegmentTaggingState::Disabled,
+            "ENABLED" => HlsId3SegmentTaggingState::Enabled,
+            _ => {
+                HlsId3SegmentTaggingState::UnknownVariant(UnknownHlsId3SegmentTaggingState { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsId3SegmentTaggingState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsId3SegmentTaggingState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsId3SegmentTaggingState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Incomplete Segment Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsIncompleteSegmentBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsIncompleteSegmentBehavior {
+    Auto,
+    Suppress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsIncompleteSegmentBehavior),
+}
+
+impl Default for HlsIncompleteSegmentBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsIncompleteSegmentBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsIncompleteSegmentBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsIncompleteSegmentBehavior {
+    fn into(self) -> String {
+        match self {
+            HlsIncompleteSegmentBehavior::Auto => "AUTO".to_string(),
+            HlsIncompleteSegmentBehavior::Suppress => "SUPPRESS".to_string(),
+            HlsIncompleteSegmentBehavior::UnknownVariant(UnknownHlsIncompleteSegmentBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsIncompleteSegmentBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            HlsIncompleteSegmentBehavior::Auto => &"AUTO",
+            HlsIncompleteSegmentBehavior::Suppress => &"SUPPRESS",
+            HlsIncompleteSegmentBehavior::UnknownVariant(UnknownHlsIncompleteSegmentBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsIncompleteSegmentBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => HlsIncompleteSegmentBehavior::Auto,
+            "SUPPRESS" => HlsIncompleteSegmentBehavior::Suppress,
+            _ => {
+                HlsIncompleteSegmentBehavior::UnknownVariant(UnknownHlsIncompleteSegmentBehavior {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for HlsIncompleteSegmentBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => HlsIncompleteSegmentBehavior::Auto,
+            "SUPPRESS" => HlsIncompleteSegmentBehavior::Suppress,
+            _ => {
+                HlsIncompleteSegmentBehavior::UnknownVariant(UnknownHlsIncompleteSegmentBehavior {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsIncompleteSegmentBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsIncompleteSegmentBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsIncompleteSegmentBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Hls Input Settings</p>
@@ -3271,6 +16453,424 @@ pub struct HlsInputSettings {
     pub retry_interval: Option<i64>,
 }
 
+/// <p>Hls Iv In Manifest</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsIvInManifest {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsIvInManifest {
+    Exclude,
+    Include,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsIvInManifest),
+}
+
+impl Default for HlsIvInManifest {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsIvInManifest {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsIvInManifest {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsIvInManifest {
+    fn into(self) -> String {
+        match self {
+            HlsIvInManifest::Exclude => "EXCLUDE".to_string(),
+            HlsIvInManifest::Include => "INCLUDE".to_string(),
+            HlsIvInManifest::UnknownVariant(UnknownHlsIvInManifest { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsIvInManifest {
+    fn into(self) -> &'a str {
+        match self {
+            HlsIvInManifest::Exclude => &"EXCLUDE",
+            HlsIvInManifest::Include => &"INCLUDE",
+            HlsIvInManifest::UnknownVariant(UnknownHlsIvInManifest { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsIvInManifest {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUDE" => HlsIvInManifest::Exclude,
+            "INCLUDE" => HlsIvInManifest::Include,
+            _ => HlsIvInManifest::UnknownVariant(UnknownHlsIvInManifest {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsIvInManifest {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUDE" => HlsIvInManifest::Exclude,
+            "INCLUDE" => HlsIvInManifest::Include,
+            _ => HlsIvInManifest::UnknownVariant(UnknownHlsIvInManifest { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsIvInManifest {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsIvInManifest {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsIvInManifest {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Iv Source</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsIvSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsIvSource {
+    Explicit,
+    FollowsSegmentNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsIvSource),
+}
+
+impl Default for HlsIvSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsIvSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsIvSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsIvSource {
+    fn into(self) -> String {
+        match self {
+            HlsIvSource::Explicit => "EXPLICIT".to_string(),
+            HlsIvSource::FollowsSegmentNumber => "FOLLOWS_SEGMENT_NUMBER".to_string(),
+            HlsIvSource::UnknownVariant(UnknownHlsIvSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsIvSource {
+    fn into(self) -> &'a str {
+        match self {
+            HlsIvSource::Explicit => &"EXPLICIT",
+            HlsIvSource::FollowsSegmentNumber => &"FOLLOWS_SEGMENT_NUMBER",
+            HlsIvSource::UnknownVariant(UnknownHlsIvSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsIvSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPLICIT" => HlsIvSource::Explicit,
+            "FOLLOWS_SEGMENT_NUMBER" => HlsIvSource::FollowsSegmentNumber,
+            _ => HlsIvSource::UnknownVariant(UnknownHlsIvSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsIvSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPLICIT" => HlsIvSource::Explicit,
+            "FOLLOWS_SEGMENT_NUMBER" => HlsIvSource::FollowsSegmentNumber,
+            _ => HlsIvSource::UnknownVariant(UnknownHlsIvSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsIvSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsIvSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsIvSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Manifest Compression</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsManifestCompression {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsManifestCompression {
+    Gzip,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsManifestCompression),
+}
+
+impl Default for HlsManifestCompression {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsManifestCompression {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsManifestCompression {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsManifestCompression {
+    fn into(self) -> String {
+        match self {
+            HlsManifestCompression::Gzip => "GZIP".to_string(),
+            HlsManifestCompression::None => "NONE".to_string(),
+            HlsManifestCompression::UnknownVariant(UnknownHlsManifestCompression {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsManifestCompression {
+    fn into(self) -> &'a str {
+        match self {
+            HlsManifestCompression::Gzip => &"GZIP",
+            HlsManifestCompression::None => &"NONE",
+            HlsManifestCompression::UnknownVariant(UnknownHlsManifestCompression {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsManifestCompression {
+    fn from(name: &str) -> Self {
+        match name {
+            "GZIP" => HlsManifestCompression::Gzip,
+            "NONE" => HlsManifestCompression::None,
+            _ => HlsManifestCompression::UnknownVariant(UnknownHlsManifestCompression {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsManifestCompression {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GZIP" => HlsManifestCompression::Gzip,
+            "NONE" => HlsManifestCompression::None,
+            _ => HlsManifestCompression::UnknownVariant(UnknownHlsManifestCompression { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsManifestCompression {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsManifestCompression {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsManifestCompression {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Manifest Duration Format</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsManifestDurationFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsManifestDurationFormat {
+    FloatingPoint,
+    Integer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsManifestDurationFormat),
+}
+
+impl Default for HlsManifestDurationFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsManifestDurationFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsManifestDurationFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsManifestDurationFormat {
+    fn into(self) -> String {
+        match self {
+            HlsManifestDurationFormat::FloatingPoint => "FLOATING_POINT".to_string(),
+            HlsManifestDurationFormat::Integer => "INTEGER".to_string(),
+            HlsManifestDurationFormat::UnknownVariant(UnknownHlsManifestDurationFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsManifestDurationFormat {
+    fn into(self) -> &'a str {
+        match self {
+            HlsManifestDurationFormat::FloatingPoint => &"FLOATING_POINT",
+            HlsManifestDurationFormat::Integer => &"INTEGER",
+            HlsManifestDurationFormat::UnknownVariant(UnknownHlsManifestDurationFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsManifestDurationFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "FLOATING_POINT" => HlsManifestDurationFormat::FloatingPoint,
+            "INTEGER" => HlsManifestDurationFormat::Integer,
+            _ => HlsManifestDurationFormat::UnknownVariant(UnknownHlsManifestDurationFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsManifestDurationFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FLOATING_POINT" => HlsManifestDurationFormat::FloatingPoint,
+            "INTEGER" => HlsManifestDurationFormat::Integer,
+            _ => {
+                HlsManifestDurationFormat::UnknownVariant(UnknownHlsManifestDurationFormat { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsManifestDurationFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsManifestDurationFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsManifestDurationFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Hls Media Store Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsMediaStoreSettings {
@@ -3285,7 +16885,7 @@ pub struct HlsMediaStoreSettings {
     /// <p>When set to temporal, output files are stored in non-persistent memory for faster reading and writing.</p>
     #[serde(rename = "MediaStoreStorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub media_store_storage_class: Option<String>,
+    pub media_store_storage_class: Option<HlsMediaStoreStorageClass>,
     /// <p>Number of retry attempts that will be made before the Live Event is put into an error state.</p>
     #[serde(rename = "NumRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3296,6 +16896,324 @@ pub struct HlsMediaStoreSettings {
     pub restart_delay: Option<i64>,
 }
 
+/// <p>Hls Media Store Storage Class</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsMediaStoreStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsMediaStoreStorageClass {
+    Temporal,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsMediaStoreStorageClass),
+}
+
+impl Default for HlsMediaStoreStorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsMediaStoreStorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsMediaStoreStorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsMediaStoreStorageClass {
+    fn into(self) -> String {
+        match self {
+            HlsMediaStoreStorageClass::Temporal => "TEMPORAL".to_string(),
+            HlsMediaStoreStorageClass::UnknownVariant(UnknownHlsMediaStoreStorageClass {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsMediaStoreStorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            HlsMediaStoreStorageClass::Temporal => &"TEMPORAL",
+            HlsMediaStoreStorageClass::UnknownVariant(UnknownHlsMediaStoreStorageClass {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsMediaStoreStorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "TEMPORAL" => HlsMediaStoreStorageClass::Temporal,
+            _ => HlsMediaStoreStorageClass::UnknownVariant(UnknownHlsMediaStoreStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsMediaStoreStorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TEMPORAL" => HlsMediaStoreStorageClass::Temporal,
+            _ => {
+                HlsMediaStoreStorageClass::UnknownVariant(UnknownHlsMediaStoreStorageClass { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsMediaStoreStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsMediaStoreStorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsMediaStoreStorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsMode {
+    Live,
+    Vod,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsMode),
+}
+
+impl Default for HlsMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsMode {
+    fn into(self) -> String {
+        match self {
+            HlsMode::Live => "LIVE".to_string(),
+            HlsMode::Vod => "VOD".to_string(),
+            HlsMode::UnknownVariant(UnknownHlsMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsMode {
+    fn into(self) -> &'a str {
+        match self {
+            HlsMode::Live => &"LIVE",
+            HlsMode::Vod => &"VOD",
+            HlsMode::UnknownVariant(UnknownHlsMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "LIVE" => HlsMode::Live,
+            "VOD" => HlsMode::Vod,
+            _ => HlsMode::UnknownVariant(UnknownHlsMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LIVE" => HlsMode::Live,
+            "VOD" => HlsMode::Vod,
+            _ => HlsMode::UnknownVariant(UnknownHlsMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Output Selection</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsOutputSelection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsOutputSelection {
+    ManifestsAndSegments,
+    SegmentsOnly,
+    VariantManifestsAndSegments,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsOutputSelection),
+}
+
+impl Default for HlsOutputSelection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsOutputSelection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsOutputSelection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsOutputSelection {
+    fn into(self) -> String {
+        match self {
+            HlsOutputSelection::ManifestsAndSegments => "MANIFESTS_AND_SEGMENTS".to_string(),
+            HlsOutputSelection::SegmentsOnly => "SEGMENTS_ONLY".to_string(),
+            HlsOutputSelection::VariantManifestsAndSegments => {
+                "VARIANT_MANIFESTS_AND_SEGMENTS".to_string()
+            }
+            HlsOutputSelection::UnknownVariant(UnknownHlsOutputSelection { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsOutputSelection {
+    fn into(self) -> &'a str {
+        match self {
+            HlsOutputSelection::ManifestsAndSegments => &"MANIFESTS_AND_SEGMENTS",
+            HlsOutputSelection::SegmentsOnly => &"SEGMENTS_ONLY",
+            HlsOutputSelection::VariantManifestsAndSegments => &"VARIANT_MANIFESTS_AND_SEGMENTS",
+            HlsOutputSelection::UnknownVariant(UnknownHlsOutputSelection { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HlsOutputSelection {
+    fn from(name: &str) -> Self {
+        match name {
+            "MANIFESTS_AND_SEGMENTS" => HlsOutputSelection::ManifestsAndSegments,
+            "SEGMENTS_ONLY" => HlsOutputSelection::SegmentsOnly,
+            "VARIANT_MANIFESTS_AND_SEGMENTS" => HlsOutputSelection::VariantManifestsAndSegments,
+            _ => HlsOutputSelection::UnknownVariant(UnknownHlsOutputSelection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsOutputSelection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MANIFESTS_AND_SEGMENTS" => HlsOutputSelection::ManifestsAndSegments,
+            "SEGMENTS_ONLY" => HlsOutputSelection::SegmentsOnly,
+            "VARIANT_MANIFESTS_AND_SEGMENTS" => HlsOutputSelection::VariantManifestsAndSegments,
+            _ => HlsOutputSelection::UnknownVariant(UnknownHlsOutputSelection { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsOutputSelection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsOutputSelection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsOutputSelection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Hls Output Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsOutputSettings {
@@ -3303,7 +17221,7 @@ pub struct HlsOutputSettings {
     /// Specifies whether MP4 segments should be packaged as HEV1 or HVC1.</p>
     #[serde(rename = "H265PackagingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub h265_packaging_type: Option<String>,
+    pub h265_packaging_type: Option<HlsH265PackagingType>,
     /// <p>Settings regarding the underlying stream. These settings are different for audio-only outputs.</p>
     #[serde(rename = "HlsSettings")]
     pub hls_settings: HlsSettings,
@@ -3315,6 +17233,324 @@ pub struct HlsOutputSettings {
     #[serde(rename = "SegmentModifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_modifier: Option<String>,
+}
+
+/// <p>Hls Program Date Time</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsProgramDateTime {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsProgramDateTime {
+    Exclude,
+    Include,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsProgramDateTime),
+}
+
+impl Default for HlsProgramDateTime {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsProgramDateTime {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsProgramDateTime {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsProgramDateTime {
+    fn into(self) -> String {
+        match self {
+            HlsProgramDateTime::Exclude => "EXCLUDE".to_string(),
+            HlsProgramDateTime::Include => "INCLUDE".to_string(),
+            HlsProgramDateTime::UnknownVariant(UnknownHlsProgramDateTime { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsProgramDateTime {
+    fn into(self) -> &'a str {
+        match self {
+            HlsProgramDateTime::Exclude => &"EXCLUDE",
+            HlsProgramDateTime::Include => &"INCLUDE",
+            HlsProgramDateTime::UnknownVariant(UnknownHlsProgramDateTime { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HlsProgramDateTime {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUDE" => HlsProgramDateTime::Exclude,
+            "INCLUDE" => HlsProgramDateTime::Include,
+            _ => HlsProgramDateTime::UnknownVariant(UnknownHlsProgramDateTime {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsProgramDateTime {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUDE" => HlsProgramDateTime::Exclude,
+            "INCLUDE" => HlsProgramDateTime::Include,
+            _ => HlsProgramDateTime::UnknownVariant(UnknownHlsProgramDateTime { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsProgramDateTime {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsProgramDateTime {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsProgramDateTime {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Redundant Manifest</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsRedundantManifest {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsRedundantManifest {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsRedundantManifest),
+}
+
+impl Default for HlsRedundantManifest {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsRedundantManifest {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsRedundantManifest {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsRedundantManifest {
+    fn into(self) -> String {
+        match self {
+            HlsRedundantManifest::Disabled => "DISABLED".to_string(),
+            HlsRedundantManifest::Enabled => "ENABLED".to_string(),
+            HlsRedundantManifest::UnknownVariant(UnknownHlsRedundantManifest {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsRedundantManifest {
+    fn into(self) -> &'a str {
+        match self {
+            HlsRedundantManifest::Disabled => &"DISABLED",
+            HlsRedundantManifest::Enabled => &"ENABLED",
+            HlsRedundantManifest::UnknownVariant(UnknownHlsRedundantManifest {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsRedundantManifest {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => HlsRedundantManifest::Disabled,
+            "ENABLED" => HlsRedundantManifest::Enabled,
+            _ => HlsRedundantManifest::UnknownVariant(UnknownHlsRedundantManifest {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsRedundantManifest {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => HlsRedundantManifest::Disabled,
+            "ENABLED" => HlsRedundantManifest::Enabled,
+            _ => HlsRedundantManifest::UnknownVariant(UnknownHlsRedundantManifest { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsRedundantManifest {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsRedundantManifest {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsRedundantManifest {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Segmentation Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsSegmentationMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsSegmentationMode {
+    UseInputSegmentation,
+    UseSegmentDuration,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsSegmentationMode),
+}
+
+impl Default for HlsSegmentationMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsSegmentationMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsSegmentationMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsSegmentationMode {
+    fn into(self) -> String {
+        match self {
+            HlsSegmentationMode::UseInputSegmentation => "USE_INPUT_SEGMENTATION".to_string(),
+            HlsSegmentationMode::UseSegmentDuration => "USE_SEGMENT_DURATION".to_string(),
+            HlsSegmentationMode::UnknownVariant(UnknownHlsSegmentationMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsSegmentationMode {
+    fn into(self) -> &'a str {
+        match self {
+            HlsSegmentationMode::UseInputSegmentation => &"USE_INPUT_SEGMENTATION",
+            HlsSegmentationMode::UseSegmentDuration => &"USE_SEGMENT_DURATION",
+            HlsSegmentationMode::UnknownVariant(UnknownHlsSegmentationMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HlsSegmentationMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "USE_INPUT_SEGMENTATION" => HlsSegmentationMode::UseInputSegmentation,
+            "USE_SEGMENT_DURATION" => HlsSegmentationMode::UseSegmentDuration,
+            _ => HlsSegmentationMode::UnknownVariant(UnknownHlsSegmentationMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsSegmentationMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "USE_INPUT_SEGMENTATION" => HlsSegmentationMode::UseInputSegmentation,
+            "USE_SEGMENT_DURATION" => HlsSegmentationMode::UseSegmentDuration,
+            _ => HlsSegmentationMode::UnknownVariant(UnknownHlsSegmentationMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsSegmentationMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsSegmentationMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsSegmentationMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Hls Settings</p>
@@ -3331,12 +17567,439 @@ pub struct HlsSettings {
     pub standard_hls_settings: Option<StandardHlsSettings>,
 }
 
+/// <p>Hls Stream Inf Resolution</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsStreamInfResolution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsStreamInfResolution {
+    Exclude,
+    Include,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsStreamInfResolution),
+}
+
+impl Default for HlsStreamInfResolution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsStreamInfResolution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsStreamInfResolution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsStreamInfResolution {
+    fn into(self) -> String {
+        match self {
+            HlsStreamInfResolution::Exclude => "EXCLUDE".to_string(),
+            HlsStreamInfResolution::Include => "INCLUDE".to_string(),
+            HlsStreamInfResolution::UnknownVariant(UnknownHlsStreamInfResolution {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsStreamInfResolution {
+    fn into(self) -> &'a str {
+        match self {
+            HlsStreamInfResolution::Exclude => &"EXCLUDE",
+            HlsStreamInfResolution::Include => &"INCLUDE",
+            HlsStreamInfResolution::UnknownVariant(UnknownHlsStreamInfResolution {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsStreamInfResolution {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUDE" => HlsStreamInfResolution::Exclude,
+            "INCLUDE" => HlsStreamInfResolution::Include,
+            _ => HlsStreamInfResolution::UnknownVariant(UnknownHlsStreamInfResolution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsStreamInfResolution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUDE" => HlsStreamInfResolution::Exclude,
+            "INCLUDE" => HlsStreamInfResolution::Include,
+            _ => HlsStreamInfResolution::UnknownVariant(UnknownHlsStreamInfResolution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsStreamInfResolution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsStreamInfResolution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsStreamInfResolution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Timed Metadata Id3 Frame</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsTimedMetadataId3Frame {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsTimedMetadataId3Frame {
+    None,
+    Priv,
+    Tdrl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsTimedMetadataId3Frame),
+}
+
+impl Default for HlsTimedMetadataId3Frame {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsTimedMetadataId3Frame {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsTimedMetadataId3Frame {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsTimedMetadataId3Frame {
+    fn into(self) -> String {
+        match self {
+            HlsTimedMetadataId3Frame::None => "NONE".to_string(),
+            HlsTimedMetadataId3Frame::Priv => "PRIV".to_string(),
+            HlsTimedMetadataId3Frame::Tdrl => "TDRL".to_string(),
+            HlsTimedMetadataId3Frame::UnknownVariant(UnknownHlsTimedMetadataId3Frame {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsTimedMetadataId3Frame {
+    fn into(self) -> &'a str {
+        match self {
+            HlsTimedMetadataId3Frame::None => &"NONE",
+            HlsTimedMetadataId3Frame::Priv => &"PRIV",
+            HlsTimedMetadataId3Frame::Tdrl => &"TDRL",
+            HlsTimedMetadataId3Frame::UnknownVariant(UnknownHlsTimedMetadataId3Frame {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsTimedMetadataId3Frame {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => HlsTimedMetadataId3Frame::None,
+            "PRIV" => HlsTimedMetadataId3Frame::Priv,
+            "TDRL" => HlsTimedMetadataId3Frame::Tdrl,
+            _ => HlsTimedMetadataId3Frame::UnknownVariant(UnknownHlsTimedMetadataId3Frame {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsTimedMetadataId3Frame {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => HlsTimedMetadataId3Frame::None,
+            "PRIV" => HlsTimedMetadataId3Frame::Priv,
+            "TDRL" => HlsTimedMetadataId3Frame::Tdrl,
+            _ => HlsTimedMetadataId3Frame::UnknownVariant(UnknownHlsTimedMetadataId3Frame { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsTimedMetadataId3Frame {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsTimedMetadataId3Frame {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsTimedMetadataId3Frame {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings for the action to emit HLS metadata</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsTimedMetadataScheduleActionSettings {
     /// <p>Base64 string formatted according to the ID3 specification: http://id3.org/id3v2.4.0-structure</p>
     #[serde(rename = "Id3")]
     pub id_3: String,
+}
+
+/// <p>Hls Ts File Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsTsFileMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsTsFileMode {
+    SegmentedFiles,
+    SingleFile,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsTsFileMode),
+}
+
+impl Default for HlsTsFileMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsTsFileMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsTsFileMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsTsFileMode {
+    fn into(self) -> String {
+        match self {
+            HlsTsFileMode::SegmentedFiles => "SEGMENTED_FILES".to_string(),
+            HlsTsFileMode::SingleFile => "SINGLE_FILE".to_string(),
+            HlsTsFileMode::UnknownVariant(UnknownHlsTsFileMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsTsFileMode {
+    fn into(self) -> &'a str {
+        match self {
+            HlsTsFileMode::SegmentedFiles => &"SEGMENTED_FILES",
+            HlsTsFileMode::SingleFile => &"SINGLE_FILE",
+            HlsTsFileMode::UnknownVariant(UnknownHlsTsFileMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsTsFileMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "SEGMENTED_FILES" => HlsTsFileMode::SegmentedFiles,
+            "SINGLE_FILE" => HlsTsFileMode::SingleFile,
+            _ => HlsTsFileMode::UnknownVariant(UnknownHlsTsFileMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsTsFileMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SEGMENTED_FILES" => HlsTsFileMode::SegmentedFiles,
+            "SINGLE_FILE" => HlsTsFileMode::SingleFile,
+            _ => HlsTsFileMode::UnknownVariant(UnknownHlsTsFileMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsTsFileMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsTsFileMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsTsFileMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Hls Webdav Http Transfer Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHlsWebdavHttpTransferMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HlsWebdavHttpTransferMode {
+    Chunked,
+    NonChunked,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHlsWebdavHttpTransferMode),
+}
+
+impl Default for HlsWebdavHttpTransferMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HlsWebdavHttpTransferMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HlsWebdavHttpTransferMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HlsWebdavHttpTransferMode {
+    fn into(self) -> String {
+        match self {
+            HlsWebdavHttpTransferMode::Chunked => "CHUNKED".to_string(),
+            HlsWebdavHttpTransferMode::NonChunked => "NON_CHUNKED".to_string(),
+            HlsWebdavHttpTransferMode::UnknownVariant(UnknownHlsWebdavHttpTransferMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HlsWebdavHttpTransferMode {
+    fn into(self) -> &'a str {
+        match self {
+            HlsWebdavHttpTransferMode::Chunked => &"CHUNKED",
+            HlsWebdavHttpTransferMode::NonChunked => &"NON_CHUNKED",
+            HlsWebdavHttpTransferMode::UnknownVariant(UnknownHlsWebdavHttpTransferMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HlsWebdavHttpTransferMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHUNKED" => HlsWebdavHttpTransferMode::Chunked,
+            "NON_CHUNKED" => HlsWebdavHttpTransferMode::NonChunked,
+            _ => HlsWebdavHttpTransferMode::UnknownVariant(UnknownHlsWebdavHttpTransferMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HlsWebdavHttpTransferMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHUNKED" => HlsWebdavHttpTransferMode::Chunked,
+            "NON_CHUNKED" => HlsWebdavHttpTransferMode::NonChunked,
+            _ => {
+                HlsWebdavHttpTransferMode::UnknownVariant(UnknownHlsWebdavHttpTransferMode { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HlsWebdavHttpTransferMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HlsWebdavHttpTransferMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HlsWebdavHttpTransferMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Hls Webdav Settings</p>
@@ -3353,7 +18016,7 @@ pub struct HlsWebdavSettings {
     /// <p>Specify whether or not to use chunked transfer encoding to WebDAV.</p>
     #[serde(rename = "HttpTransferMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub http_transfer_mode: Option<String>,
+    pub http_transfer_mode: Option<HlsWebdavHttpTransferMode>,
     /// <p>Number of retry attempts that will be made before the Live Event is put into an error state.</p>
     #[serde(rename = "NumRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3362,6 +18025,112 @@ pub struct HlsWebdavSettings {
     #[serde(rename = "RestartDelay")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restart_delay: Option<i64>,
+}
+
+/// <p>When set to &quot;standard&quot;, an I-Frame only playlist will be written out for each video output in the output group. This I-Frame only playlist will contain byte range offsets pointing to the I-frame(s) in each segment.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIFrameOnlyPlaylistType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IFrameOnlyPlaylistType {
+    Disabled,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIFrameOnlyPlaylistType),
+}
+
+impl Default for IFrameOnlyPlaylistType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IFrameOnlyPlaylistType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IFrameOnlyPlaylistType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IFrameOnlyPlaylistType {
+    fn into(self) -> String {
+        match self {
+            IFrameOnlyPlaylistType::Disabled => "DISABLED".to_string(),
+            IFrameOnlyPlaylistType::Standard => "STANDARD".to_string(),
+            IFrameOnlyPlaylistType::UnknownVariant(UnknownIFrameOnlyPlaylistType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IFrameOnlyPlaylistType {
+    fn into(self) -> &'a str {
+        match self {
+            IFrameOnlyPlaylistType::Disabled => &"DISABLED",
+            IFrameOnlyPlaylistType::Standard => &"STANDARD",
+            IFrameOnlyPlaylistType::UnknownVariant(UnknownIFrameOnlyPlaylistType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IFrameOnlyPlaylistType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => IFrameOnlyPlaylistType::Disabled,
+            "STANDARD" => IFrameOnlyPlaylistType::Standard,
+            _ => IFrameOnlyPlaylistType::UnknownVariant(UnknownIFrameOnlyPlaylistType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IFrameOnlyPlaylistType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => IFrameOnlyPlaylistType::Disabled,
+            "STANDARD" => IFrameOnlyPlaylistType::Standard,
+            _ => IFrameOnlyPlaylistType::UnknownVariant(UnknownIFrameOnlyPlaylistType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IFrameOnlyPlaylistType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IFrameOnlyPlaylistType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IFrameOnlyPlaylistType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings to configure an action so that it occurs as soon as possible.</p>
@@ -3392,7 +18161,7 @@ pub struct Input {
     /// SINGLE</em>PIPELINE - You can connect only one source to this input. If the ChannelClass is also  SINGLE_PIPELINE, this value is valid. If the ChannelClass is STANDARD, this value is not valid because the channel requires two sources in the input.</p>
     #[serde(rename = "InputClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_class: Option<String>,
+    pub input_class: Option<InputClass>,
     /// <p>Settings for the input devices.</p>
     #[serde(rename = "InputDevices")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3401,7 +18170,7 @@ pub struct Input {
     /// during input switch actions. Presently, this functionality only works with MP4_FILE inputs.</p>
     #[serde(rename = "InputSourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_source_type: Option<String>,
+    pub input_source_type: Option<InputSourceType>,
     /// <p>A list of MediaConnect Flows for this input.</p>
     #[serde(rename = "MediaConnectFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3424,14 +18193,14 @@ pub struct Input {
     pub sources: Option<Vec<InputSource>>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InputState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InputType>,
 }
 
 /// <p>Placeholder documentation for InputAttachment</p>
@@ -3466,12 +18235,115 @@ pub struct InputChannelLevel {
     pub input_channel: i64,
 }
 
+/// <p>A standard input has two sources and a single pipeline input only has one.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputClass {
+    SinglePipeline,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputClass),
+}
+
+impl Default for InputClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputClass {
+    fn into(self) -> String {
+        match self {
+            InputClass::SinglePipeline => "SINGLE_PIPELINE".to_string(),
+            InputClass::Standard => "STANDARD".to_string(),
+            InputClass::UnknownVariant(UnknownInputClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputClass {
+    fn into(self) -> &'a str {
+        match self {
+            InputClass::SinglePipeline => &"SINGLE_PIPELINE",
+            InputClass::Standard => &"STANDARD",
+            InputClass::UnknownVariant(UnknownInputClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "SINGLE_PIPELINE" => InputClass::SinglePipeline,
+            "STANDARD" => InputClass::Standard,
+            _ => InputClass::UnknownVariant(UnknownInputClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SINGLE_PIPELINE" => InputClass::SinglePipeline,
+            "STANDARD" => InputClass::Standard,
+            _ => InputClass::UnknownVariant(UnknownInputClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings to let you create a clip of the file input, in order to set up the input to ingest only a portion of the file.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputClippingSettings {
     /// <p>The source of the timecodes in the source being clipped.</p>
     #[serde(rename = "InputTimecodeSource")]
-    pub input_timecode_source: String,
+    pub input_timecode_source: InputTimecodeSource,
     /// <p>Settings to identify the start of the clip.</p>
     #[serde(rename = "StartTimecode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3480,6 +18352,325 @@ pub struct InputClippingSettings {
     #[serde(rename = "StopTimecode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_timecode: Option<StopTimecode>,
+}
+
+/// <p>codec in increasing order of complexity</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputCodec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputCodec {
+    Avc,
+    Hevc,
+    Mpeg2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputCodec),
+}
+
+impl Default for InputCodec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputCodec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputCodec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputCodec {
+    fn into(self) -> String {
+        match self {
+            InputCodec::Avc => "AVC".to_string(),
+            InputCodec::Hevc => "HEVC".to_string(),
+            InputCodec::Mpeg2 => "MPEG2".to_string(),
+            InputCodec::UnknownVariant(UnknownInputCodec { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputCodec {
+    fn into(self) -> &'a str {
+        match self {
+            InputCodec::Avc => &"AVC",
+            InputCodec::Hevc => &"HEVC",
+            InputCodec::Mpeg2 => &"MPEG2",
+            InputCodec::UnknownVariant(UnknownInputCodec { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputCodec {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVC" => InputCodec::Avc,
+            "HEVC" => InputCodec::Hevc,
+            "MPEG2" => InputCodec::Mpeg2,
+            _ => InputCodec::UnknownVariant(UnknownInputCodec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputCodec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVC" => InputCodec::Avc,
+            "HEVC" => InputCodec::Hevc,
+            "MPEG2" => InputCodec::Mpeg2,
+            _ => InputCodec::UnknownVariant(UnknownInputCodec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputCodec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputCodec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputCodec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Input Deblock Filter</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeblockFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeblockFilter {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeblockFilter),
+}
+
+impl Default for InputDeblockFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeblockFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeblockFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeblockFilter {
+    fn into(self) -> String {
+        match self {
+            InputDeblockFilter::Disabled => "DISABLED".to_string(),
+            InputDeblockFilter::Enabled => "ENABLED".to_string(),
+            InputDeblockFilter::UnknownVariant(UnknownInputDeblockFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeblockFilter {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeblockFilter::Disabled => &"DISABLED",
+            InputDeblockFilter::Enabled => &"ENABLED",
+            InputDeblockFilter::UnknownVariant(UnknownInputDeblockFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputDeblockFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => InputDeblockFilter::Disabled,
+            "ENABLED" => InputDeblockFilter::Enabled,
+            _ => InputDeblockFilter::UnknownVariant(UnknownInputDeblockFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeblockFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => InputDeblockFilter::Disabled,
+            "ENABLED" => InputDeblockFilter::Enabled,
+            _ => InputDeblockFilter::UnknownVariant(UnknownInputDeblockFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeblockFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputDeblockFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeblockFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Input Denoise Filter</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDenoiseFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDenoiseFilter {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDenoiseFilter),
+}
+
+impl Default for InputDenoiseFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDenoiseFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDenoiseFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDenoiseFilter {
+    fn into(self) -> String {
+        match self {
+            InputDenoiseFilter::Disabled => "DISABLED".to_string(),
+            InputDenoiseFilter::Enabled => "ENABLED".to_string(),
+            InputDenoiseFilter::UnknownVariant(UnknownInputDenoiseFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDenoiseFilter {
+    fn into(self) -> &'a str {
+        match self {
+            InputDenoiseFilter::Disabled => &"DISABLED",
+            InputDenoiseFilter::Enabled => &"ENABLED",
+            InputDenoiseFilter::UnknownVariant(UnknownInputDenoiseFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputDenoiseFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => InputDenoiseFilter::Disabled,
+            "ENABLED" => InputDenoiseFilter::Enabled,
+            _ => InputDenoiseFilter::UnknownVariant(UnknownInputDenoiseFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDenoiseFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => InputDenoiseFilter::Disabled,
+            "ENABLED" => InputDenoiseFilter::Enabled,
+            _ => InputDenoiseFilter::UnknownVariant(UnknownInputDenoiseFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDenoiseFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputDenoiseFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDenoiseFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The settings for a PUSH type input.</p>
@@ -3530,6 +18721,113 @@ pub struct InputDestinationVpc {
     pub network_interface_id: Option<String>,
 }
 
+/// <p>The source at the input device that is currently active.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceActiveInput {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceActiveInput {
+    Hdmi,
+    Sdi,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceActiveInput),
+}
+
+impl Default for InputDeviceActiveInput {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceActiveInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceActiveInput {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceActiveInput {
+    fn into(self) -> String {
+        match self {
+            InputDeviceActiveInput::Hdmi => "HDMI".to_string(),
+            InputDeviceActiveInput::Sdi => "SDI".to_string(),
+            InputDeviceActiveInput::UnknownVariant(UnknownInputDeviceActiveInput {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceActiveInput {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceActiveInput::Hdmi => &"HDMI",
+            InputDeviceActiveInput::Sdi => &"SDI",
+            InputDeviceActiveInput::UnknownVariant(UnknownInputDeviceActiveInput {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputDeviceActiveInput {
+    fn from(name: &str) -> Self {
+        match name {
+            "HDMI" => InputDeviceActiveInput::Hdmi,
+            "SDI" => InputDeviceActiveInput::Sdi,
+            _ => InputDeviceActiveInput::UnknownVariant(UnknownInputDeviceActiveInput {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceActiveInput {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HDMI" => InputDeviceActiveInput::Hdmi,
+            "SDI" => InputDeviceActiveInput::Sdi,
+            _ => InputDeviceActiveInput::UnknownVariant(UnknownInputDeviceActiveInput { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceActiveInput {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceActiveInput {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceActiveInput {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configurable settings for the input device.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3537,11 +18835,233 @@ pub struct InputDeviceConfigurableSettings {
     /// <p>The input source that you want to use. If the device has a source connected to only one of its input ports, or if you don&#39;t care which source the device sends, specify Auto. If the device has sources connected to both its input ports, and you want to use a specific source, specify the source.</p>
     #[serde(rename = "ConfiguredInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configured_input: Option<String>,
+    pub configured_input: Option<InputDeviceConfiguredInput>,
     /// <p>The maximum bitrate in bits per second. Set a value here to throttle the bitrate of the source video.</p>
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
+}
+
+/// <p>The source to activate (use) from the input device.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceConfiguredInput {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceConfiguredInput {
+    Auto,
+    Hdmi,
+    Sdi,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceConfiguredInput),
+}
+
+impl Default for InputDeviceConfiguredInput {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceConfiguredInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceConfiguredInput {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceConfiguredInput {
+    fn into(self) -> String {
+        match self {
+            InputDeviceConfiguredInput::Auto => "AUTO".to_string(),
+            InputDeviceConfiguredInput::Hdmi => "HDMI".to_string(),
+            InputDeviceConfiguredInput::Sdi => "SDI".to_string(),
+            InputDeviceConfiguredInput::UnknownVariant(UnknownInputDeviceConfiguredInput {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceConfiguredInput {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceConfiguredInput::Auto => &"AUTO",
+            InputDeviceConfiguredInput::Hdmi => &"HDMI",
+            InputDeviceConfiguredInput::Sdi => &"SDI",
+            InputDeviceConfiguredInput::UnknownVariant(UnknownInputDeviceConfiguredInput {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputDeviceConfiguredInput {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => InputDeviceConfiguredInput::Auto,
+            "HDMI" => InputDeviceConfiguredInput::Hdmi,
+            "SDI" => InputDeviceConfiguredInput::Sdi,
+            _ => InputDeviceConfiguredInput::UnknownVariant(UnknownInputDeviceConfiguredInput {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceConfiguredInput {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => InputDeviceConfiguredInput::Auto,
+            "HDMI" => InputDeviceConfiguredInput::Hdmi,
+            "SDI" => InputDeviceConfiguredInput::Sdi,
+            _ => InputDeviceConfiguredInput::UnknownVariant(UnknownInputDeviceConfiguredInput {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceConfiguredInput {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputDeviceConfiguredInput {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceConfiguredInput {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The state of the connection between the input device and AWS.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceConnectionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceConnectionState {
+    Connected,
+    Disconnected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceConnectionState),
+}
+
+impl Default for InputDeviceConnectionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceConnectionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceConnectionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceConnectionState {
+    fn into(self) -> String {
+        match self {
+            InputDeviceConnectionState::Connected => "CONNECTED".to_string(),
+            InputDeviceConnectionState::Disconnected => "DISCONNECTED".to_string(),
+            InputDeviceConnectionState::UnknownVariant(UnknownInputDeviceConnectionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceConnectionState {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceConnectionState::Connected => &"CONNECTED",
+            InputDeviceConnectionState::Disconnected => &"DISCONNECTED",
+            InputDeviceConnectionState::UnknownVariant(UnknownInputDeviceConnectionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputDeviceConnectionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECTED" => InputDeviceConnectionState::Connected,
+            "DISCONNECTED" => InputDeviceConnectionState::Disconnected,
+            _ => InputDeviceConnectionState::UnknownVariant(UnknownInputDeviceConnectionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceConnectionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECTED" => InputDeviceConnectionState::Connected,
+            "DISCONNECTED" => InputDeviceConnectionState::Disconnected,
+            _ => InputDeviceConnectionState::UnknownVariant(UnknownInputDeviceConnectionState {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceConnectionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceConnectionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceConnectionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings that describe the active source from the input device, and the video characteristics of that source.</p>
@@ -3551,15 +19071,15 @@ pub struct InputDeviceHdSettings {
     /// <p>If you specified Auto as the configured input, specifies which of the sources is currently active (SDI or HDMI).</p>
     #[serde(rename = "ActiveInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub active_input: Option<String>,
+    pub active_input: Option<InputDeviceActiveInput>,
     /// <p>The source at the input device that is currently active. You can specify this source.</p>
     #[serde(rename = "ConfiguredInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configured_input: Option<String>,
+    pub configured_input: Option<InputDeviceConfiguredInput>,
     /// <p>The state of the input device.</p>
     #[serde(rename = "DeviceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_state: Option<String>,
+    pub device_state: Option<InputDeviceState>,
     /// <p>The frame rate of the video source.</p>
     #[serde(rename = "Framerate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3575,11 +19095,118 @@ pub struct InputDeviceHdSettings {
     /// <p>The scan type of the video source.</p>
     #[serde(rename = "ScanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scan_type: Option<String>,
+    pub scan_type: Option<InputDeviceScanType>,
     /// <p>The width of the video source, in pixels.</p>
     #[serde(rename = "Width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<i64>,
+}
+
+/// <p>Specifies whether the input device has been configured (outside of MediaLive) to use a dynamic IP address assignment (DHCP) or a static IP address.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceIpScheme {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceIpScheme {
+    Dhcp,
+    Static,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceIpScheme),
+}
+
+impl Default for InputDeviceIpScheme {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceIpScheme {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceIpScheme {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceIpScheme {
+    fn into(self) -> String {
+        match self {
+            InputDeviceIpScheme::Dhcp => "DHCP".to_string(),
+            InputDeviceIpScheme::Static => "STATIC".to_string(),
+            InputDeviceIpScheme::UnknownVariant(UnknownInputDeviceIpScheme { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceIpScheme {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceIpScheme::Dhcp => &"DHCP",
+            InputDeviceIpScheme::Static => &"STATIC",
+            InputDeviceIpScheme::UnknownVariant(UnknownInputDeviceIpScheme { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputDeviceIpScheme {
+    fn from(name: &str) -> Self {
+        match name {
+            "DHCP" => InputDeviceIpScheme::Dhcp,
+            "STATIC" => InputDeviceIpScheme::Static,
+            _ => InputDeviceIpScheme::UnknownVariant(UnknownInputDeviceIpScheme {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceIpScheme {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DHCP" => InputDeviceIpScheme::Dhcp,
+            "STATIC" => InputDeviceIpScheme::Static,
+            _ => InputDeviceIpScheme::UnknownVariant(UnknownInputDeviceIpScheme { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceIpScheme {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceIpScheme {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceIpScheme {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The network settings for the input device.</p>
@@ -3601,7 +19228,7 @@ pub struct InputDeviceNetworkSettings {
     /// <p>Specifies whether the input device has been configured (outside of MediaLive) to use a dynamic IP address assignment (DHCP) or a static IP address.</p>
     #[serde(rename = "IpScheme")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_scheme: Option<String>,
+    pub ip_scheme: Option<InputDeviceIpScheme>,
     /// <p>The subnet mask of the input device.</p>
     #[serde(rename = "SubnetMask")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3618,6 +19245,113 @@ pub struct InputDeviceRequest {
     pub id: Option<String>,
 }
 
+/// <p>The scan type of the video source.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceScanType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceScanType {
+    Interlaced,
+    Progressive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceScanType),
+}
+
+impl Default for InputDeviceScanType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceScanType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceScanType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceScanType {
+    fn into(self) -> String {
+        match self {
+            InputDeviceScanType::Interlaced => "INTERLACED".to_string(),
+            InputDeviceScanType::Progressive => "PROGRESSIVE".to_string(),
+            InputDeviceScanType::UnknownVariant(UnknownInputDeviceScanType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceScanType {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceScanType::Interlaced => &"INTERLACED",
+            InputDeviceScanType::Progressive => &"PROGRESSIVE",
+            InputDeviceScanType::UnknownVariant(UnknownInputDeviceScanType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputDeviceScanType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERLACED" => InputDeviceScanType::Interlaced,
+            "PROGRESSIVE" => InputDeviceScanType::Progressive,
+            _ => InputDeviceScanType::UnknownVariant(UnknownInputDeviceScanType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceScanType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERLACED" => InputDeviceScanType::Interlaced,
+            "PROGRESSIVE" => InputDeviceScanType::Progressive,
+            _ => InputDeviceScanType::UnknownVariant(UnknownInputDeviceScanType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceScanType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceScanType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceScanType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings for an input device.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDeviceSettings {
@@ -3625,6 +19359,113 @@ pub struct InputDeviceSettings {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+}
+
+/// <p>The state of the input device.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceState {
+    Idle,
+    Streaming,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceState),
+}
+
+impl Default for InputDeviceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceState {
+    fn into(self) -> String {
+        match self {
+            InputDeviceState::Idle => "IDLE".to_string(),
+            InputDeviceState::Streaming => "STREAMING".to_string(),
+            InputDeviceState::UnknownVariant(UnknownInputDeviceState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceState {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceState::Idle => &"IDLE",
+            InputDeviceState::Streaming => &"STREAMING",
+            InputDeviceState::UnknownVariant(UnknownInputDeviceState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputDeviceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "IDLE" => InputDeviceState::Idle,
+            "STREAMING" => InputDeviceState::Streaming,
+            _ => InputDeviceState::UnknownVariant(UnknownInputDeviceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IDLE" => InputDeviceState::Idle,
+            "STREAMING" => InputDeviceState::Streaming,
+            _ => InputDeviceState::UnknownVariant(UnknownInputDeviceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details of the input device.</p>
@@ -3638,15 +19479,15 @@ pub struct InputDeviceSummary {
     /// <p>The state of the connection between the input device and AWS.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<InputDeviceConnectionState>,
     /// <p>The status of the action to synchronize the device configuration. If you change the configuration of the input device (for example, the maximum bitrate), MediaLive sends the new data to the device. The device might not update itself immediately. SYNCED means the device has updated its configuration. SYNCING means that it has not updated its configuration.</p>
     #[serde(rename = "DeviceSettingsSyncState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_settings_sync_state: Option<String>,
+    pub device_settings_sync_state: Option<DeviceSettingsSyncState>,
     /// <p>The status of software on the input device.</p>
     #[serde(rename = "DeviceUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_update_status: Option<String>,
+    pub device_update_status: Option<DeviceUpdateStatus>,
     /// <p>Settings that describe an input device that is type HD.</p>
     #[serde(rename = "HdDeviceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3674,11 +19515,216 @@ pub struct InputDeviceSummary {
     /// <p>The type of the input device.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InputDeviceType>,
     /// <p>Settings that describe an input device that is type UHD.</p>
     #[serde(rename = "UhdDeviceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uhd_device_settings: Option<InputDeviceUhdSettings>,
+}
+
+/// <p>The type of device transfer. INCOMING for an input device that is being transferred to you, OUTGOING for an input device that you are transferring to another AWS account.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceTransferType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceTransferType {
+    Incoming,
+    Outgoing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceTransferType),
+}
+
+impl Default for InputDeviceTransferType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceTransferType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceTransferType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceTransferType {
+    fn into(self) -> String {
+        match self {
+            InputDeviceTransferType::Incoming => "INCOMING".to_string(),
+            InputDeviceTransferType::Outgoing => "OUTGOING".to_string(),
+            InputDeviceTransferType::UnknownVariant(UnknownInputDeviceTransferType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceTransferType {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceTransferType::Incoming => &"INCOMING",
+            InputDeviceTransferType::Outgoing => &"OUTGOING",
+            InputDeviceTransferType::UnknownVariant(UnknownInputDeviceTransferType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputDeviceTransferType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INCOMING" => InputDeviceTransferType::Incoming,
+            "OUTGOING" => InputDeviceTransferType::Outgoing,
+            _ => InputDeviceTransferType::UnknownVariant(UnknownInputDeviceTransferType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceTransferType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INCOMING" => InputDeviceTransferType::Incoming,
+            "OUTGOING" => InputDeviceTransferType::Outgoing,
+            _ => InputDeviceTransferType::UnknownVariant(UnknownInputDeviceTransferType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceTransferType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceTransferType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceTransferType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The type of the input device. For an AWS Elemental Link device that outputs resolutions up to 1080, choose &quot;HD&quot;.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputDeviceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputDeviceType {
+    Hd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputDeviceType),
+}
+
+impl Default for InputDeviceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputDeviceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputDeviceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputDeviceType {
+    fn into(self) -> String {
+        match self {
+            InputDeviceType::Hd => "HD".to_string(),
+            InputDeviceType::UnknownVariant(UnknownInputDeviceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputDeviceType {
+    fn into(self) -> &'a str {
+        match self {
+            InputDeviceType::Hd => &"HD",
+            InputDeviceType::UnknownVariant(UnknownInputDeviceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputDeviceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HD" => InputDeviceType::Hd,
+            _ => InputDeviceType::UnknownVariant(UnknownInputDeviceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputDeviceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HD" => InputDeviceType::Hd,
+            _ => InputDeviceType::UnknownVariant(UnknownInputDeviceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputDeviceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputDeviceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputDeviceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings that describe the active source from the input device, and the video characteristics of that source.</p>
@@ -3688,15 +19734,15 @@ pub struct InputDeviceUhdSettings {
     /// <p>If you specified Auto as the configured input, specifies which of the sources is currently active (SDI or HDMI).</p>
     #[serde(rename = "ActiveInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub active_input: Option<String>,
+    pub active_input: Option<InputDeviceActiveInput>,
     /// <p>The source at the input device that is currently active. You can specify this source.</p>
     #[serde(rename = "ConfiguredInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configured_input: Option<String>,
+    pub configured_input: Option<InputDeviceConfiguredInput>,
     /// <p>The state of the input device.</p>
     #[serde(rename = "DeviceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_state: Option<String>,
+    pub device_state: Option<InputDeviceState>,
     /// <p>The frame rate of the video source.</p>
     #[serde(rename = "Framerate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3712,11 +19758,118 @@ pub struct InputDeviceUhdSettings {
     /// <p>The scan type of the video source.</p>
     #[serde(rename = "ScanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scan_type: Option<String>,
+    pub scan_type: Option<InputDeviceScanType>,
     /// <p>The width of the video source, in pixels.</p>
     #[serde(rename = "Width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<i64>,
+}
+
+/// <p>Input Filter</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputFilter {
+    Auto,
+    Disabled,
+    Forced,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputFilter),
+}
+
+impl Default for InputFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputFilter {
+    fn into(self) -> String {
+        match self {
+            InputFilter::Auto => "AUTO".to_string(),
+            InputFilter::Disabled => "DISABLED".to_string(),
+            InputFilter::Forced => "FORCED".to_string(),
+            InputFilter::UnknownVariant(UnknownInputFilter { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputFilter {
+    fn into(self) -> &'a str {
+        match self {
+            InputFilter::Auto => &"AUTO",
+            InputFilter::Disabled => &"DISABLED",
+            InputFilter::Forced => &"FORCED",
+            InputFilter::UnknownVariant(UnknownInputFilter { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => InputFilter::Auto,
+            "DISABLED" => InputFilter::Disabled,
+            "FORCED" => InputFilter::Forced,
+            _ => InputFilter::UnknownVariant(UnknownInputFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => InputFilter::Auto,
+            "DISABLED" => InputFilter::Disabled,
+            "FORCED" => InputFilter::Forced,
+            _ => InputFilter::UnknownVariant(UnknownInputFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Input Location</p>
@@ -3733,6 +19886,441 @@ pub struct InputLocation {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+/// <p>Input Loss Action For Hls Out</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputLossActionForHlsOut {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputLossActionForHlsOut {
+    EmitOutput,
+    PauseOutput,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputLossActionForHlsOut),
+}
+
+impl Default for InputLossActionForHlsOut {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputLossActionForHlsOut {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputLossActionForHlsOut {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputLossActionForHlsOut {
+    fn into(self) -> String {
+        match self {
+            InputLossActionForHlsOut::EmitOutput => "EMIT_OUTPUT".to_string(),
+            InputLossActionForHlsOut::PauseOutput => "PAUSE_OUTPUT".to_string(),
+            InputLossActionForHlsOut::UnknownVariant(UnknownInputLossActionForHlsOut {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputLossActionForHlsOut {
+    fn into(self) -> &'a str {
+        match self {
+            InputLossActionForHlsOut::EmitOutput => &"EMIT_OUTPUT",
+            InputLossActionForHlsOut::PauseOutput => &"PAUSE_OUTPUT",
+            InputLossActionForHlsOut::UnknownVariant(UnknownInputLossActionForHlsOut {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputLossActionForHlsOut {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMIT_OUTPUT" => InputLossActionForHlsOut::EmitOutput,
+            "PAUSE_OUTPUT" => InputLossActionForHlsOut::PauseOutput,
+            _ => InputLossActionForHlsOut::UnknownVariant(UnknownInputLossActionForHlsOut {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputLossActionForHlsOut {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMIT_OUTPUT" => InputLossActionForHlsOut::EmitOutput,
+            "PAUSE_OUTPUT" => InputLossActionForHlsOut::PauseOutput,
+            _ => InputLossActionForHlsOut::UnknownVariant(UnknownInputLossActionForHlsOut { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputLossActionForHlsOut {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputLossActionForHlsOut {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputLossActionForHlsOut {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Input Loss Action For Ms Smooth Out</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputLossActionForMsSmoothOut {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputLossActionForMsSmoothOut {
+    EmitOutput,
+    PauseOutput,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputLossActionForMsSmoothOut),
+}
+
+impl Default for InputLossActionForMsSmoothOut {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputLossActionForMsSmoothOut {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputLossActionForMsSmoothOut {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputLossActionForMsSmoothOut {
+    fn into(self) -> String {
+        match self {
+            InputLossActionForMsSmoothOut::EmitOutput => "EMIT_OUTPUT".to_string(),
+            InputLossActionForMsSmoothOut::PauseOutput => "PAUSE_OUTPUT".to_string(),
+            InputLossActionForMsSmoothOut::UnknownVariant(
+                UnknownInputLossActionForMsSmoothOut { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputLossActionForMsSmoothOut {
+    fn into(self) -> &'a str {
+        match self {
+            InputLossActionForMsSmoothOut::EmitOutput => &"EMIT_OUTPUT",
+            InputLossActionForMsSmoothOut::PauseOutput => &"PAUSE_OUTPUT",
+            InputLossActionForMsSmoothOut::UnknownVariant(
+                UnknownInputLossActionForMsSmoothOut { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InputLossActionForMsSmoothOut {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMIT_OUTPUT" => InputLossActionForMsSmoothOut::EmitOutput,
+            "PAUSE_OUTPUT" => InputLossActionForMsSmoothOut::PauseOutput,
+            _ => InputLossActionForMsSmoothOut::UnknownVariant(
+                UnknownInputLossActionForMsSmoothOut {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InputLossActionForMsSmoothOut {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMIT_OUTPUT" => InputLossActionForMsSmoothOut::EmitOutput,
+            "PAUSE_OUTPUT" => InputLossActionForMsSmoothOut::PauseOutput,
+            _ => InputLossActionForMsSmoothOut::UnknownVariant(
+                UnknownInputLossActionForMsSmoothOut { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputLossActionForMsSmoothOut {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputLossActionForMsSmoothOut {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputLossActionForMsSmoothOut {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Input Loss Action For Rtmp Out</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputLossActionForRtmpOut {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputLossActionForRtmpOut {
+    EmitOutput,
+    PauseOutput,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputLossActionForRtmpOut),
+}
+
+impl Default for InputLossActionForRtmpOut {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputLossActionForRtmpOut {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputLossActionForRtmpOut {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputLossActionForRtmpOut {
+    fn into(self) -> String {
+        match self {
+            InputLossActionForRtmpOut::EmitOutput => "EMIT_OUTPUT".to_string(),
+            InputLossActionForRtmpOut::PauseOutput => "PAUSE_OUTPUT".to_string(),
+            InputLossActionForRtmpOut::UnknownVariant(UnknownInputLossActionForRtmpOut {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputLossActionForRtmpOut {
+    fn into(self) -> &'a str {
+        match self {
+            InputLossActionForRtmpOut::EmitOutput => &"EMIT_OUTPUT",
+            InputLossActionForRtmpOut::PauseOutput => &"PAUSE_OUTPUT",
+            InputLossActionForRtmpOut::UnknownVariant(UnknownInputLossActionForRtmpOut {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputLossActionForRtmpOut {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMIT_OUTPUT" => InputLossActionForRtmpOut::EmitOutput,
+            "PAUSE_OUTPUT" => InputLossActionForRtmpOut::PauseOutput,
+            _ => InputLossActionForRtmpOut::UnknownVariant(UnknownInputLossActionForRtmpOut {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputLossActionForRtmpOut {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMIT_OUTPUT" => InputLossActionForRtmpOut::EmitOutput,
+            "PAUSE_OUTPUT" => InputLossActionForRtmpOut::PauseOutput,
+            _ => {
+                InputLossActionForRtmpOut::UnknownVariant(UnknownInputLossActionForRtmpOut { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputLossActionForRtmpOut {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputLossActionForRtmpOut {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputLossActionForRtmpOut {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Input Loss Action For Udp Out</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputLossActionForUdpOut {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputLossActionForUdpOut {
+    DropProgram,
+    DropTs,
+    EmitProgram,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputLossActionForUdpOut),
+}
+
+impl Default for InputLossActionForUdpOut {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputLossActionForUdpOut {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputLossActionForUdpOut {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputLossActionForUdpOut {
+    fn into(self) -> String {
+        match self {
+            InputLossActionForUdpOut::DropProgram => "DROP_PROGRAM".to_string(),
+            InputLossActionForUdpOut::DropTs => "DROP_TS".to_string(),
+            InputLossActionForUdpOut::EmitProgram => "EMIT_PROGRAM".to_string(),
+            InputLossActionForUdpOut::UnknownVariant(UnknownInputLossActionForUdpOut {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputLossActionForUdpOut {
+    fn into(self) -> &'a str {
+        match self {
+            InputLossActionForUdpOut::DropProgram => &"DROP_PROGRAM",
+            InputLossActionForUdpOut::DropTs => &"DROP_TS",
+            InputLossActionForUdpOut::EmitProgram => &"EMIT_PROGRAM",
+            InputLossActionForUdpOut::UnknownVariant(UnknownInputLossActionForUdpOut {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputLossActionForUdpOut {
+    fn from(name: &str) -> Self {
+        match name {
+            "DROP_PROGRAM" => InputLossActionForUdpOut::DropProgram,
+            "DROP_TS" => InputLossActionForUdpOut::DropTs,
+            "EMIT_PROGRAM" => InputLossActionForUdpOut::EmitProgram,
+            _ => InputLossActionForUdpOut::UnknownVariant(UnknownInputLossActionForUdpOut {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputLossActionForUdpOut {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DROP_PROGRAM" => InputLossActionForUdpOut::DropProgram,
+            "DROP_TS" => InputLossActionForUdpOut::DropTs,
+            "EMIT_PROGRAM" => InputLossActionForUdpOut::EmitProgram,
+            _ => InputLossActionForUdpOut::UnknownVariant(UnknownInputLossActionForUdpOut { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputLossActionForUdpOut {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputLossActionForUdpOut {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputLossActionForUdpOut {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Input Loss Behavior</p>
@@ -3753,7 +20341,7 @@ pub struct InputLossBehavior {
     /// <p>Indicates whether to substitute a solid color or a slate into the output after input loss exceeds blackFrameMsec.</p>
     #[serde(rename = "InputLossImageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_loss_image_type: Option<String>,
+    pub input_loss_image_type: Option<InputLossImageType>,
     /// <p>Documentation update needed</p>
     #[serde(rename = "RepeatFrameMsec")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3767,6 +20355,327 @@ pub struct InputLossFailoverSettings {
     #[serde(rename = "InputLossThresholdMsec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_loss_threshold_msec: Option<i64>,
+}
+
+/// <p>Input Loss Image Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputLossImageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputLossImageType {
+    Color,
+    Slate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputLossImageType),
+}
+
+impl Default for InputLossImageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputLossImageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputLossImageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputLossImageType {
+    fn into(self) -> String {
+        match self {
+            InputLossImageType::Color => "COLOR".to_string(),
+            InputLossImageType::Slate => "SLATE".to_string(),
+            InputLossImageType::UnknownVariant(UnknownInputLossImageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputLossImageType {
+    fn into(self) -> &'a str {
+        match self {
+            InputLossImageType::Color => &"COLOR",
+            InputLossImageType::Slate => &"SLATE",
+            InputLossImageType::UnknownVariant(UnknownInputLossImageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputLossImageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COLOR" => InputLossImageType::Color,
+            "SLATE" => InputLossImageType::Slate,
+            _ => InputLossImageType::UnknownVariant(UnknownInputLossImageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputLossImageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COLOR" => InputLossImageType::Color,
+            "SLATE" => InputLossImageType::Slate,
+            _ => InputLossImageType::UnknownVariant(UnknownInputLossImageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputLossImageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputLossImageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputLossImageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Maximum input bitrate in megabits per second. Bitrates up to 50 Mbps are supported currently.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputMaximumBitrate {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputMaximumBitrate {
+    Max10Mbps,
+    Max20Mbps,
+    Max50Mbps,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputMaximumBitrate),
+}
+
+impl Default for InputMaximumBitrate {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputMaximumBitrate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputMaximumBitrate {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputMaximumBitrate {
+    fn into(self) -> String {
+        match self {
+            InputMaximumBitrate::Max10Mbps => "MAX_10_MBPS".to_string(),
+            InputMaximumBitrate::Max20Mbps => "MAX_20_MBPS".to_string(),
+            InputMaximumBitrate::Max50Mbps => "MAX_50_MBPS".to_string(),
+            InputMaximumBitrate::UnknownVariant(UnknownInputMaximumBitrate { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputMaximumBitrate {
+    fn into(self) -> &'a str {
+        match self {
+            InputMaximumBitrate::Max10Mbps => &"MAX_10_MBPS",
+            InputMaximumBitrate::Max20Mbps => &"MAX_20_MBPS",
+            InputMaximumBitrate::Max50Mbps => &"MAX_50_MBPS",
+            InputMaximumBitrate::UnknownVariant(UnknownInputMaximumBitrate { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputMaximumBitrate {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX_10_MBPS" => InputMaximumBitrate::Max10Mbps,
+            "MAX_20_MBPS" => InputMaximumBitrate::Max20Mbps,
+            "MAX_50_MBPS" => InputMaximumBitrate::Max50Mbps,
+            _ => InputMaximumBitrate::UnknownVariant(UnknownInputMaximumBitrate {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputMaximumBitrate {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX_10_MBPS" => InputMaximumBitrate::Max10Mbps,
+            "MAX_20_MBPS" => InputMaximumBitrate::Max20Mbps,
+            "MAX_50_MBPS" => InputMaximumBitrate::Max50Mbps,
+            _ => InputMaximumBitrate::UnknownVariant(UnknownInputMaximumBitrate { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputMaximumBitrate {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputMaximumBitrate {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputMaximumBitrate {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Input preference when deciding which input to make active when a previously failed input has recovered.
+/// If &quot;EQUAL<em>INPUT</em>PREFERENCE&quot;, then the active input will stay active as long as it is healthy.
+/// If &quot;PRIMARY<em>INPUT</em>PREFERRED&quot;, then always switch back to the primary input when it is healthy.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputPreference {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputPreference {
+    EqualInputPreference,
+    PrimaryInputPreferred,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputPreference),
+}
+
+impl Default for InputPreference {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputPreference {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputPreference {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputPreference {
+    fn into(self) -> String {
+        match self {
+            InputPreference::EqualInputPreference => "EQUAL_INPUT_PREFERENCE".to_string(),
+            InputPreference::PrimaryInputPreferred => "PRIMARY_INPUT_PREFERRED".to_string(),
+            InputPreference::UnknownVariant(UnknownInputPreference { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputPreference {
+    fn into(self) -> &'a str {
+        match self {
+            InputPreference::EqualInputPreference => &"EQUAL_INPUT_PREFERENCE",
+            InputPreference::PrimaryInputPreferred => &"PRIMARY_INPUT_PREFERRED",
+            InputPreference::UnknownVariant(UnknownInputPreference { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputPreference {
+    fn from(name: &str) -> Self {
+        match name {
+            "EQUAL_INPUT_PREFERENCE" => InputPreference::EqualInputPreference,
+            "PRIMARY_INPUT_PREFERRED" => InputPreference::PrimaryInputPreferred,
+            _ => InputPreference::UnknownVariant(UnknownInputPreference {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputPreference {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EQUAL_INPUT_PREFERENCE" => InputPreference::EqualInputPreference,
+            "PRIMARY_INPUT_PREFERRED" => InputPreference::PrimaryInputPreferred,
+            _ => InputPreference::UnknownVariant(UnknownInputPreference { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputPreference {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputPreference {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputPreference {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Action to prepare an input for a future immediate input switch.</p>
@@ -3784,6 +20693,113 @@ pub struct InputPrepareScheduleActionSettings {
     #[serde(rename = "UrlPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url_path: Option<Vec<String>>,
+}
+
+/// <p>Input resolution based on lines of vertical resolution in the input; SD is less than 720 lines, HD is 720 to 1080 lines, UHD is greater than 1080 lines</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputResolution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputResolution {
+    Hd,
+    Sd,
+    Uhd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputResolution),
+}
+
+impl Default for InputResolution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputResolution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputResolution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputResolution {
+    fn into(self) -> String {
+        match self {
+            InputResolution::Hd => "HD".to_string(),
+            InputResolution::Sd => "SD".to_string(),
+            InputResolution::Uhd => "UHD".to_string(),
+            InputResolution::UnknownVariant(UnknownInputResolution { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputResolution {
+    fn into(self) -> &'a str {
+        match self {
+            InputResolution::Hd => &"HD",
+            InputResolution::Sd => &"SD",
+            InputResolution::Uhd => &"UHD",
+            InputResolution::UnknownVariant(UnknownInputResolution { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputResolution {
+    fn from(name: &str) -> Self {
+        match name {
+            "HD" => InputResolution::Hd,
+            "SD" => InputResolution::Sd,
+            "UHD" => InputResolution::Uhd,
+            _ => InputResolution::UnknownVariant(UnknownInputResolution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputResolution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HD" => InputResolution::Hd,
+            "SD" => InputResolution::Sd,
+            "UHD" => InputResolution::Uhd,
+            _ => InputResolution::UnknownVariant(UnknownInputResolution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputResolution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputResolution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputResolution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An Input Security Group</p>
@@ -3805,7 +20821,7 @@ pub struct InputSecurityGroup {
     /// <p>The current state of the Input Security Group.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InputSecurityGroupState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3814,6 +20830,123 @@ pub struct InputSecurityGroup {
     #[serde(rename = "WhitelistRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist_rules: Option<Vec<InputWhitelistRule>>,
+}
+
+/// <p>Placeholder documentation for InputSecurityGroupState</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputSecurityGroupState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputSecurityGroupState {
+    Deleted,
+    Idle,
+    InUse,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputSecurityGroupState),
+}
+
+impl Default for InputSecurityGroupState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputSecurityGroupState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputSecurityGroupState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputSecurityGroupState {
+    fn into(self) -> String {
+        match self {
+            InputSecurityGroupState::Deleted => "DELETED".to_string(),
+            InputSecurityGroupState::Idle => "IDLE".to_string(),
+            InputSecurityGroupState::InUse => "IN_USE".to_string(),
+            InputSecurityGroupState::Updating => "UPDATING".to_string(),
+            InputSecurityGroupState::UnknownVariant(UnknownInputSecurityGroupState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputSecurityGroupState {
+    fn into(self) -> &'a str {
+        match self {
+            InputSecurityGroupState::Deleted => &"DELETED",
+            InputSecurityGroupState::Idle => &"IDLE",
+            InputSecurityGroupState::InUse => &"IN_USE",
+            InputSecurityGroupState::Updating => &"UPDATING",
+            InputSecurityGroupState::UnknownVariant(UnknownInputSecurityGroupState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputSecurityGroupState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED" => InputSecurityGroupState::Deleted,
+            "IDLE" => InputSecurityGroupState::Idle,
+            "IN_USE" => InputSecurityGroupState::InUse,
+            "UPDATING" => InputSecurityGroupState::Updating,
+            _ => InputSecurityGroupState::UnknownVariant(UnknownInputSecurityGroupState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputSecurityGroupState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED" => InputSecurityGroupState::Deleted,
+            "IDLE" => InputSecurityGroupState::Idle,
+            "IN_USE" => InputSecurityGroupState::InUse,
+            "UPDATING" => InputSecurityGroupState::Updating,
+            _ => InputSecurityGroupState::UnknownVariant(UnknownInputSecurityGroupState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputSecurityGroupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputSecurityGroupState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputSecurityGroupState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Live Event input parameters. There can be multiple inputs in a single Live Event.</p>
@@ -3830,11 +20963,11 @@ pub struct InputSettings {
     /// <p>Enable or disable the deblock filter when filtering.</p>
     #[serde(rename = "DeblockFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deblock_filter: Option<String>,
+    pub deblock_filter: Option<InputDeblockFilter>,
     /// <p>Enable or disable the denoise filter when filtering.</p>
     #[serde(rename = "DenoiseFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub denoise_filter: Option<String>,
+    pub denoise_filter: Option<InputDenoiseFilter>,
     /// <p>Adjusts the magnitude of filtering from 1 (minimal) to 5 (strongest).</p>
     #[serde(rename = "FilterStrength")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3845,7 +20978,7 @@ pub struct InputSettings {
     /// 3) forced - filtering will be applied regardless of input type</p>
     #[serde(rename = "InputFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_filter: Option<String>,
+    pub input_filter: Option<InputFilter>,
     /// <p>Input settings.</p>
     #[serde(rename = "NetworkInputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3855,11 +20988,11 @@ pub struct InputSettings {
     /// - IGNORE: Never extract any ancillary data from SMPTE-2038.</p>
     #[serde(rename = "Smpte2038DataPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub smpte_2038_data_preference: Option<String>,
+    pub smpte_2038_data_preference: Option<Smpte2038DataPreference>,
     /// <p>Loop input if it is a file. This allows a file input to be streamed indefinitely.</p>
     #[serde(rename = "SourceEndBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_end_behavior: Option<String>,
+    pub source_end_behavior: Option<InputSourceEndBehavior>,
     /// <p>Informs which video elementary stream to decode for input types that have multiple available.</p>
     #[serde(rename = "VideoSelector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3885,6 +21018,112 @@ pub struct InputSource {
     pub username: Option<String>,
 }
 
+/// <p>Input Source End Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputSourceEndBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputSourceEndBehavior {
+    Continue,
+    Loop,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputSourceEndBehavior),
+}
+
+impl Default for InputSourceEndBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputSourceEndBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputSourceEndBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputSourceEndBehavior {
+    fn into(self) -> String {
+        match self {
+            InputSourceEndBehavior::Continue => "CONTINUE".to_string(),
+            InputSourceEndBehavior::Loop => "LOOP".to_string(),
+            InputSourceEndBehavior::UnknownVariant(UnknownInputSourceEndBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputSourceEndBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            InputSourceEndBehavior::Continue => &"CONTINUE",
+            InputSourceEndBehavior::Loop => &"LOOP",
+            InputSourceEndBehavior::UnknownVariant(UnknownInputSourceEndBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputSourceEndBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTINUE" => InputSourceEndBehavior::Continue,
+            "LOOP" => InputSourceEndBehavior::Loop,
+            _ => InputSourceEndBehavior::UnknownVariant(UnknownInputSourceEndBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputSourceEndBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTINUE" => InputSourceEndBehavior::Continue,
+            "LOOP" => InputSourceEndBehavior::Loop,
+            _ => InputSourceEndBehavior::UnknownVariant(UnknownInputSourceEndBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputSourceEndBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputSourceEndBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputSourceEndBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings for for a PULL type input.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3904,21 +21143,244 @@ pub struct InputSourceRequest {
     pub username: Option<String>,
 }
 
+/// <p>There are two types of input sources, static and dynamic. If an input source is dynamic you can
+/// change the source url of the input dynamically using an input switch action. However, the only input type
+/// to support a dynamic url at this time is MP4_FILE. By default all input sources are static.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputSourceType {
+    Dynamic,
+    Static,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputSourceType),
+}
+
+impl Default for InputSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputSourceType {
+    fn into(self) -> String {
+        match self {
+            InputSourceType::Dynamic => "DYNAMIC".to_string(),
+            InputSourceType::Static => "STATIC".to_string(),
+            InputSourceType::UnknownVariant(UnknownInputSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            InputSourceType::Dynamic => &"DYNAMIC",
+            InputSourceType::Static => &"STATIC",
+            InputSourceType::UnknownVariant(UnknownInputSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DYNAMIC" => InputSourceType::Dynamic,
+            "STATIC" => InputSourceType::Static,
+            _ => InputSourceType::UnknownVariant(UnknownInputSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DYNAMIC" => InputSourceType::Dynamic,
+            "STATIC" => InputSourceType::Static,
+            _ => InputSourceType::UnknownVariant(UnknownInputSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Placeholder documentation for InputSpecification</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputSpecification {
     /// <p>Input codec</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub codec: Option<String>,
+    pub codec: Option<InputCodec>,
     /// <p>Maximum input bitrate, categorized coarsely</p>
     #[serde(rename = "MaximumBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_bitrate: Option<String>,
+    pub maximum_bitrate: Option<InputMaximumBitrate>,
     /// <p>Input resolution, categorized coarsely</p>
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolution: Option<String>,
+    pub resolution: Option<InputResolution>,
+}
+
+/// <p>Placeholder documentation for InputState</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputState {
+    Attached,
+    Creating,
+    Deleted,
+    Deleting,
+    Detached,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputState),
+}
+
+impl Default for InputState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputState {
+    fn into(self) -> String {
+        match self {
+            InputState::Attached => "ATTACHED".to_string(),
+            InputState::Creating => "CREATING".to_string(),
+            InputState::Deleted => "DELETED".to_string(),
+            InputState::Deleting => "DELETING".to_string(),
+            InputState::Detached => "DETACHED".to_string(),
+            InputState::UnknownVariant(UnknownInputState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputState {
+    fn into(self) -> &'a str {
+        match self {
+            InputState::Attached => &"ATTACHED",
+            InputState::Creating => &"CREATING",
+            InputState::Deleted => &"DELETED",
+            InputState::Deleting => &"DELETING",
+            InputState::Detached => &"DETACHED",
+            InputState::UnknownVariant(UnknownInputState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATTACHED" => InputState::Attached,
+            "CREATING" => InputState::Creating,
+            "DELETED" => InputState::Deleted,
+            "DELETING" => InputState::Deleting,
+            "DETACHED" => InputState::Detached,
+            _ => InputState::UnknownVariant(UnknownInputState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATTACHED" => InputState::Attached,
+            "CREATING" => InputState::Creating,
+            "DELETED" => InputState::Deleted,
+            "DELETING" => InputState::Deleting,
+            "DETACHED" => InputState::Detached,
+            _ => InputState::UnknownVariant(UnknownInputState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings for the &quot;switch input&quot; action: to switch from ingesting one input to ingesting another input.</p>
@@ -3935,6 +21397,249 @@ pub struct InputSwitchScheduleActionSettings {
     #[serde(rename = "UrlPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url_path: Option<Vec<String>>,
+}
+
+/// <p>Documentation update needed</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputTimecodeSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputTimecodeSource {
+    Embedded,
+    Zerobased,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputTimecodeSource),
+}
+
+impl Default for InputTimecodeSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputTimecodeSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputTimecodeSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputTimecodeSource {
+    fn into(self) -> String {
+        match self {
+            InputTimecodeSource::Embedded => "EMBEDDED".to_string(),
+            InputTimecodeSource::Zerobased => "ZEROBASED".to_string(),
+            InputTimecodeSource::UnknownVariant(UnknownInputTimecodeSource { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputTimecodeSource {
+    fn into(self) -> &'a str {
+        match self {
+            InputTimecodeSource::Embedded => &"EMBEDDED",
+            InputTimecodeSource::Zerobased => &"ZEROBASED",
+            InputTimecodeSource::UnknownVariant(UnknownInputTimecodeSource { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputTimecodeSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMBEDDED" => InputTimecodeSource::Embedded,
+            "ZEROBASED" => InputTimecodeSource::Zerobased,
+            _ => InputTimecodeSource::UnknownVariant(UnknownInputTimecodeSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputTimecodeSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMBEDDED" => InputTimecodeSource::Embedded,
+            "ZEROBASED" => InputTimecodeSource::Zerobased,
+            _ => InputTimecodeSource::UnknownVariant(UnknownInputTimecodeSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputTimecodeSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputTimecodeSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputTimecodeSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Placeholder documentation for InputType</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputType {
+    AwsCdi,
+    InputDevice,
+    Mediaconnect,
+    Mp4File,
+    RtmpPull,
+    RtmpPush,
+    RtpPush,
+    UdpPush,
+    UrlPull,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputType),
+}
+
+impl Default for InputType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputType {
+    fn into(self) -> String {
+        match self {
+            InputType::AwsCdi => "AWS_CDI".to_string(),
+            InputType::InputDevice => "INPUT_DEVICE".to_string(),
+            InputType::Mediaconnect => "MEDIACONNECT".to_string(),
+            InputType::Mp4File => "MP4_FILE".to_string(),
+            InputType::RtmpPull => "RTMP_PULL".to_string(),
+            InputType::RtmpPush => "RTMP_PUSH".to_string(),
+            InputType::RtpPush => "RTP_PUSH".to_string(),
+            InputType::UdpPush => "UDP_PUSH".to_string(),
+            InputType::UrlPull => "URL_PULL".to_string(),
+            InputType::UnknownVariant(UnknownInputType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputType {
+    fn into(self) -> &'a str {
+        match self {
+            InputType::AwsCdi => &"AWS_CDI",
+            InputType::InputDevice => &"INPUT_DEVICE",
+            InputType::Mediaconnect => &"MEDIACONNECT",
+            InputType::Mp4File => &"MP4_FILE",
+            InputType::RtmpPull => &"RTMP_PULL",
+            InputType::RtmpPush => &"RTMP_PUSH",
+            InputType::RtpPush => &"RTP_PUSH",
+            InputType::UdpPush => &"UDP_PUSH",
+            InputType::UrlPull => &"URL_PULL",
+            InputType::UnknownVariant(UnknownInputType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_CDI" => InputType::AwsCdi,
+            "INPUT_DEVICE" => InputType::InputDevice,
+            "MEDIACONNECT" => InputType::Mediaconnect,
+            "MP4_FILE" => InputType::Mp4File,
+            "RTMP_PULL" => InputType::RtmpPull,
+            "RTMP_PUSH" => InputType::RtmpPush,
+            "RTP_PUSH" => InputType::RtpPush,
+            "UDP_PUSH" => InputType::UdpPush,
+            "URL_PULL" => InputType::UrlPull,
+            _ => InputType::UnknownVariant(UnknownInputType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_CDI" => InputType::AwsCdi,
+            "INPUT_DEVICE" => InputType::InputDevice,
+            "MEDIACONNECT" => InputType::Mediaconnect,
+            "MP4_FILE" => InputType::Mp4File,
+            "RTMP_PULL" => InputType::RtmpPull,
+            "RTMP_PUSH" => InputType::RtmpPush,
+            "RTP_PUSH" => InputType::RtpPush,
+            "UDP_PUSH" => InputType::UdpPush,
+            "URL_PULL" => InputType::UrlPull,
+            _ => InputType::UnknownVariant(UnknownInputType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings for a private VPC Input.
@@ -3981,6 +21686,114 @@ pub struct KeyProviderSettings {
     #[serde(rename = "StaticKeySettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_key_settings: Option<StaticKeySettings>,
+}
+
+/// <p>If you specify a StopTimecode in an input (in order to clip the file), you can specify if you want the clip to exclude (the default) or include the frame specified by the timecode.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLastFrameClippingBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LastFrameClippingBehavior {
+    ExcludeLastFrame,
+    IncludeLastFrame,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLastFrameClippingBehavior),
+}
+
+impl Default for LastFrameClippingBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LastFrameClippingBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LastFrameClippingBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LastFrameClippingBehavior {
+    fn into(self) -> String {
+        match self {
+            LastFrameClippingBehavior::ExcludeLastFrame => "EXCLUDE_LAST_FRAME".to_string(),
+            LastFrameClippingBehavior::IncludeLastFrame => "INCLUDE_LAST_FRAME".to_string(),
+            LastFrameClippingBehavior::UnknownVariant(UnknownLastFrameClippingBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LastFrameClippingBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            LastFrameClippingBehavior::ExcludeLastFrame => &"EXCLUDE_LAST_FRAME",
+            LastFrameClippingBehavior::IncludeLastFrame => &"INCLUDE_LAST_FRAME",
+            LastFrameClippingBehavior::UnknownVariant(UnknownLastFrameClippingBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LastFrameClippingBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUDE_LAST_FRAME" => LastFrameClippingBehavior::ExcludeLastFrame,
+            "INCLUDE_LAST_FRAME" => LastFrameClippingBehavior::IncludeLastFrame,
+            _ => LastFrameClippingBehavior::UnknownVariant(UnknownLastFrameClippingBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LastFrameClippingBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUDE_LAST_FRAME" => LastFrameClippingBehavior::ExcludeLastFrame,
+            "INCLUDE_LAST_FRAME" => LastFrameClippingBehavior::IncludeLastFrame,
+            _ => {
+                LastFrameClippingBehavior::UnknownVariant(UnknownLastFrameClippingBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for LastFrameClippingBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LastFrameClippingBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LastFrameClippingBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Placeholder documentation for ListChannelsRequest</p>
@@ -4310,17 +22123,2042 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>The log level the user wants for their channel.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogLevel {
+    Debug,
+    Disabled,
+    Error,
+    Info,
+    Warning,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogLevel),
+}
+
+impl Default for LogLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogLevel {
+    fn into(self) -> String {
+        match self {
+            LogLevel::Debug => "DEBUG".to_string(),
+            LogLevel::Disabled => "DISABLED".to_string(),
+            LogLevel::Error => "ERROR".to_string(),
+            LogLevel::Info => "INFO".to_string(),
+            LogLevel::Warning => "WARNING".to_string(),
+            LogLevel::UnknownVariant(UnknownLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LogLevel::Debug => &"DEBUG",
+            LogLevel::Disabled => &"DISABLED",
+            LogLevel::Error => &"ERROR",
+            LogLevel::Info => &"INFO",
+            LogLevel::Warning => &"WARNING",
+            LogLevel::UnknownVariant(UnknownLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEBUG" => LogLevel::Debug,
+            "DISABLED" => LogLevel::Disabled,
+            "ERROR" => LogLevel::Error,
+            "INFO" => LogLevel::Info,
+            "WARNING" => LogLevel::Warning,
+            _ => LogLevel::UnknownVariant(UnknownLogLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEBUG" => LogLevel::Debug,
+            "DISABLED" => LogLevel::Disabled,
+            "ERROR" => LogLevel::Error,
+            "INFO" => LogLevel::Info,
+            "WARNING" => LogLevel::Warning,
+            _ => LogLevel::UnknownVariant(UnknownLogLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Absent Input Audio Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsAbsentInputAudioBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsAbsentInputAudioBehavior {
+    Drop,
+    EncodeSilence,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsAbsentInputAudioBehavior),
+}
+
+impl Default for M2tsAbsentInputAudioBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsAbsentInputAudioBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsAbsentInputAudioBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsAbsentInputAudioBehavior {
+    fn into(self) -> String {
+        match self {
+            M2tsAbsentInputAudioBehavior::Drop => "DROP".to_string(),
+            M2tsAbsentInputAudioBehavior::EncodeSilence => "ENCODE_SILENCE".to_string(),
+            M2tsAbsentInputAudioBehavior::UnknownVariant(UnknownM2tsAbsentInputAudioBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsAbsentInputAudioBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsAbsentInputAudioBehavior::Drop => &"DROP",
+            M2tsAbsentInputAudioBehavior::EncodeSilence => &"ENCODE_SILENCE",
+            M2tsAbsentInputAudioBehavior::UnknownVariant(UnknownM2tsAbsentInputAudioBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsAbsentInputAudioBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DROP" => M2tsAbsentInputAudioBehavior::Drop,
+            "ENCODE_SILENCE" => M2tsAbsentInputAudioBehavior::EncodeSilence,
+            _ => {
+                M2tsAbsentInputAudioBehavior::UnknownVariant(UnknownM2tsAbsentInputAudioBehavior {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for M2tsAbsentInputAudioBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DROP" => M2tsAbsentInputAudioBehavior::Drop,
+            "ENCODE_SILENCE" => M2tsAbsentInputAudioBehavior::EncodeSilence,
+            _ => {
+                M2tsAbsentInputAudioBehavior::UnknownVariant(UnknownM2tsAbsentInputAudioBehavior {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsAbsentInputAudioBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsAbsentInputAudioBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsAbsentInputAudioBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Arib</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsArib {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsArib {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsArib),
+}
+
+impl Default for M2tsArib {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsArib {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsArib {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsArib {
+    fn into(self) -> String {
+        match self {
+            M2tsArib::Disabled => "DISABLED".to_string(),
+            M2tsArib::Enabled => "ENABLED".to_string(),
+            M2tsArib::UnknownVariant(UnknownM2tsArib { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsArib {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsArib::Disabled => &"DISABLED",
+            M2tsArib::Enabled => &"ENABLED",
+            M2tsArib::UnknownVariant(UnknownM2tsArib { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsArib {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => M2tsArib::Disabled,
+            "ENABLED" => M2tsArib::Enabled,
+            _ => M2tsArib::UnknownVariant(UnknownM2tsArib {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsArib {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => M2tsArib::Disabled,
+            "ENABLED" => M2tsArib::Enabled,
+            _ => M2tsArib::UnknownVariant(UnknownM2tsArib { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsArib {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsArib {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsArib {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Arib Captions Pid Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsAribCaptionsPidControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsAribCaptionsPidControl {
+    Auto,
+    UseConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsAribCaptionsPidControl),
+}
+
+impl Default for M2tsAribCaptionsPidControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsAribCaptionsPidControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsAribCaptionsPidControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsAribCaptionsPidControl {
+    fn into(self) -> String {
+        match self {
+            M2tsAribCaptionsPidControl::Auto => "AUTO".to_string(),
+            M2tsAribCaptionsPidControl::UseConfigured => "USE_CONFIGURED".to_string(),
+            M2tsAribCaptionsPidControl::UnknownVariant(UnknownM2tsAribCaptionsPidControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsAribCaptionsPidControl {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsAribCaptionsPidControl::Auto => &"AUTO",
+            M2tsAribCaptionsPidControl::UseConfigured => &"USE_CONFIGURED",
+            M2tsAribCaptionsPidControl::UnknownVariant(UnknownM2tsAribCaptionsPidControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsAribCaptionsPidControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => M2tsAribCaptionsPidControl::Auto,
+            "USE_CONFIGURED" => M2tsAribCaptionsPidControl::UseConfigured,
+            _ => M2tsAribCaptionsPidControl::UnknownVariant(UnknownM2tsAribCaptionsPidControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsAribCaptionsPidControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => M2tsAribCaptionsPidControl::Auto,
+            "USE_CONFIGURED" => M2tsAribCaptionsPidControl::UseConfigured,
+            _ => M2tsAribCaptionsPidControl::UnknownVariant(UnknownM2tsAribCaptionsPidControl {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsAribCaptionsPidControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsAribCaptionsPidControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsAribCaptionsPidControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Audio Buffer Model</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsAudioBufferModel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsAudioBufferModel {
+    Atsc,
+    Dvb,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsAudioBufferModel),
+}
+
+impl Default for M2tsAudioBufferModel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsAudioBufferModel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsAudioBufferModel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsAudioBufferModel {
+    fn into(self) -> String {
+        match self {
+            M2tsAudioBufferModel::Atsc => "ATSC".to_string(),
+            M2tsAudioBufferModel::Dvb => "DVB".to_string(),
+            M2tsAudioBufferModel::UnknownVariant(UnknownM2tsAudioBufferModel {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsAudioBufferModel {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsAudioBufferModel::Atsc => &"ATSC",
+            M2tsAudioBufferModel::Dvb => &"DVB",
+            M2tsAudioBufferModel::UnknownVariant(UnknownM2tsAudioBufferModel {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsAudioBufferModel {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATSC" => M2tsAudioBufferModel::Atsc,
+            "DVB" => M2tsAudioBufferModel::Dvb,
+            _ => M2tsAudioBufferModel::UnknownVariant(UnknownM2tsAudioBufferModel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsAudioBufferModel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATSC" => M2tsAudioBufferModel::Atsc,
+            "DVB" => M2tsAudioBufferModel::Dvb,
+            _ => M2tsAudioBufferModel::UnknownVariant(UnknownM2tsAudioBufferModel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsAudioBufferModel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsAudioBufferModel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsAudioBufferModel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Audio Interval</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsAudioInterval {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsAudioInterval {
+    VideoAndFixedIntervals,
+    VideoInterval,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsAudioInterval),
+}
+
+impl Default for M2tsAudioInterval {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsAudioInterval {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsAudioInterval {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsAudioInterval {
+    fn into(self) -> String {
+        match self {
+            M2tsAudioInterval::VideoAndFixedIntervals => "VIDEO_AND_FIXED_INTERVALS".to_string(),
+            M2tsAudioInterval::VideoInterval => "VIDEO_INTERVAL".to_string(),
+            M2tsAudioInterval::UnknownVariant(UnknownM2tsAudioInterval { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsAudioInterval {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsAudioInterval::VideoAndFixedIntervals => &"VIDEO_AND_FIXED_INTERVALS",
+            M2tsAudioInterval::VideoInterval => &"VIDEO_INTERVAL",
+            M2tsAudioInterval::UnknownVariant(UnknownM2tsAudioInterval { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for M2tsAudioInterval {
+    fn from(name: &str) -> Self {
+        match name {
+            "VIDEO_AND_FIXED_INTERVALS" => M2tsAudioInterval::VideoAndFixedIntervals,
+            "VIDEO_INTERVAL" => M2tsAudioInterval::VideoInterval,
+            _ => M2tsAudioInterval::UnknownVariant(UnknownM2tsAudioInterval {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsAudioInterval {
+    fn from(name: String) -> Self {
+        match &*name {
+            "VIDEO_AND_FIXED_INTERVALS" => M2tsAudioInterval::VideoAndFixedIntervals,
+            "VIDEO_INTERVAL" => M2tsAudioInterval::VideoInterval,
+            _ => M2tsAudioInterval::UnknownVariant(UnknownM2tsAudioInterval { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsAudioInterval {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsAudioInterval {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsAudioInterval {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Audio Stream Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsAudioStreamType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsAudioStreamType {
+    Atsc,
+    Dvb,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsAudioStreamType),
+}
+
+impl Default for M2tsAudioStreamType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsAudioStreamType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsAudioStreamType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsAudioStreamType {
+    fn into(self) -> String {
+        match self {
+            M2tsAudioStreamType::Atsc => "ATSC".to_string(),
+            M2tsAudioStreamType::Dvb => "DVB".to_string(),
+            M2tsAudioStreamType::UnknownVariant(UnknownM2tsAudioStreamType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsAudioStreamType {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsAudioStreamType::Atsc => &"ATSC",
+            M2tsAudioStreamType::Dvb => &"DVB",
+            M2tsAudioStreamType::UnknownVariant(UnknownM2tsAudioStreamType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for M2tsAudioStreamType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATSC" => M2tsAudioStreamType::Atsc,
+            "DVB" => M2tsAudioStreamType::Dvb,
+            _ => M2tsAudioStreamType::UnknownVariant(UnknownM2tsAudioStreamType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsAudioStreamType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATSC" => M2tsAudioStreamType::Atsc,
+            "DVB" => M2tsAudioStreamType::Dvb,
+            _ => M2tsAudioStreamType::UnknownVariant(UnknownM2tsAudioStreamType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsAudioStreamType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsAudioStreamType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsAudioStreamType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Buffer Model</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsBufferModel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsBufferModel {
+    Multiplex,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsBufferModel),
+}
+
+impl Default for M2tsBufferModel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsBufferModel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsBufferModel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsBufferModel {
+    fn into(self) -> String {
+        match self {
+            M2tsBufferModel::Multiplex => "MULTIPLEX".to_string(),
+            M2tsBufferModel::None => "NONE".to_string(),
+            M2tsBufferModel::UnknownVariant(UnknownM2tsBufferModel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsBufferModel {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsBufferModel::Multiplex => &"MULTIPLEX",
+            M2tsBufferModel::None => &"NONE",
+            M2tsBufferModel::UnknownVariant(UnknownM2tsBufferModel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsBufferModel {
+    fn from(name: &str) -> Self {
+        match name {
+            "MULTIPLEX" => M2tsBufferModel::Multiplex,
+            "NONE" => M2tsBufferModel::None,
+            _ => M2tsBufferModel::UnknownVariant(UnknownM2tsBufferModel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsBufferModel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MULTIPLEX" => M2tsBufferModel::Multiplex,
+            "NONE" => M2tsBufferModel::None,
+            _ => M2tsBufferModel::UnknownVariant(UnknownM2tsBufferModel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsBufferModel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsBufferModel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsBufferModel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Cc Descriptor</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsCcDescriptor {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsCcDescriptor {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsCcDescriptor),
+}
+
+impl Default for M2tsCcDescriptor {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsCcDescriptor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsCcDescriptor {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsCcDescriptor {
+    fn into(self) -> String {
+        match self {
+            M2tsCcDescriptor::Disabled => "DISABLED".to_string(),
+            M2tsCcDescriptor::Enabled => "ENABLED".to_string(),
+            M2tsCcDescriptor::UnknownVariant(UnknownM2tsCcDescriptor { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsCcDescriptor {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsCcDescriptor::Disabled => &"DISABLED",
+            M2tsCcDescriptor::Enabled => &"ENABLED",
+            M2tsCcDescriptor::UnknownVariant(UnknownM2tsCcDescriptor { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for M2tsCcDescriptor {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => M2tsCcDescriptor::Disabled,
+            "ENABLED" => M2tsCcDescriptor::Enabled,
+            _ => M2tsCcDescriptor::UnknownVariant(UnknownM2tsCcDescriptor {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsCcDescriptor {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => M2tsCcDescriptor::Disabled,
+            "ENABLED" => M2tsCcDescriptor::Enabled,
+            _ => M2tsCcDescriptor::UnknownVariant(UnknownM2tsCcDescriptor { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsCcDescriptor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsCcDescriptor {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsCcDescriptor {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Ebif Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsEbifControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsEbifControl {
+    None,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsEbifControl),
+}
+
+impl Default for M2tsEbifControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsEbifControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsEbifControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsEbifControl {
+    fn into(self) -> String {
+        match self {
+            M2tsEbifControl::None => "NONE".to_string(),
+            M2tsEbifControl::Passthrough => "PASSTHROUGH".to_string(),
+            M2tsEbifControl::UnknownVariant(UnknownM2tsEbifControl { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsEbifControl {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsEbifControl::None => &"NONE",
+            M2tsEbifControl::Passthrough => &"PASSTHROUGH",
+            M2tsEbifControl::UnknownVariant(UnknownM2tsEbifControl { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsEbifControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => M2tsEbifControl::None,
+            "PASSTHROUGH" => M2tsEbifControl::Passthrough,
+            _ => M2tsEbifControl::UnknownVariant(UnknownM2tsEbifControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsEbifControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => M2tsEbifControl::None,
+            "PASSTHROUGH" => M2tsEbifControl::Passthrough,
+            _ => M2tsEbifControl::UnknownVariant(UnknownM2tsEbifControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsEbifControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsEbifControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsEbifControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Ebp Placement</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsEbpPlacement {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsEbpPlacement {
+    VideoAndAudioPids,
+    VideoPid,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsEbpPlacement),
+}
+
+impl Default for M2tsEbpPlacement {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsEbpPlacement {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsEbpPlacement {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsEbpPlacement {
+    fn into(self) -> String {
+        match self {
+            M2tsEbpPlacement::VideoAndAudioPids => "VIDEO_AND_AUDIO_PIDS".to_string(),
+            M2tsEbpPlacement::VideoPid => "VIDEO_PID".to_string(),
+            M2tsEbpPlacement::UnknownVariant(UnknownM2tsEbpPlacement { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsEbpPlacement {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsEbpPlacement::VideoAndAudioPids => &"VIDEO_AND_AUDIO_PIDS",
+            M2tsEbpPlacement::VideoPid => &"VIDEO_PID",
+            M2tsEbpPlacement::UnknownVariant(UnknownM2tsEbpPlacement { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for M2tsEbpPlacement {
+    fn from(name: &str) -> Self {
+        match name {
+            "VIDEO_AND_AUDIO_PIDS" => M2tsEbpPlacement::VideoAndAudioPids,
+            "VIDEO_PID" => M2tsEbpPlacement::VideoPid,
+            _ => M2tsEbpPlacement::UnknownVariant(UnknownM2tsEbpPlacement {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsEbpPlacement {
+    fn from(name: String) -> Self {
+        match &*name {
+            "VIDEO_AND_AUDIO_PIDS" => M2tsEbpPlacement::VideoAndAudioPids,
+            "VIDEO_PID" => M2tsEbpPlacement::VideoPid,
+            _ => M2tsEbpPlacement::UnknownVariant(UnknownM2tsEbpPlacement { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsEbpPlacement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsEbpPlacement {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsEbpPlacement {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Es Rate In Pes</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsEsRateInPes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsEsRateInPes {
+    Exclude,
+    Include,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsEsRateInPes),
+}
+
+impl Default for M2tsEsRateInPes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsEsRateInPes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsEsRateInPes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsEsRateInPes {
+    fn into(self) -> String {
+        match self {
+            M2tsEsRateInPes::Exclude => "EXCLUDE".to_string(),
+            M2tsEsRateInPes::Include => "INCLUDE".to_string(),
+            M2tsEsRateInPes::UnknownVariant(UnknownM2tsEsRateInPes { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsEsRateInPes {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsEsRateInPes::Exclude => &"EXCLUDE",
+            M2tsEsRateInPes::Include => &"INCLUDE",
+            M2tsEsRateInPes::UnknownVariant(UnknownM2tsEsRateInPes { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsEsRateInPes {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUDE" => M2tsEsRateInPes::Exclude,
+            "INCLUDE" => M2tsEsRateInPes::Include,
+            _ => M2tsEsRateInPes::UnknownVariant(UnknownM2tsEsRateInPes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsEsRateInPes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUDE" => M2tsEsRateInPes::Exclude,
+            "INCLUDE" => M2tsEsRateInPes::Include,
+            _ => M2tsEsRateInPes::UnknownVariant(UnknownM2tsEsRateInPes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsEsRateInPes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsEsRateInPes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsEsRateInPes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Klv</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsKlv {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsKlv {
+    None,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsKlv),
+}
+
+impl Default for M2tsKlv {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsKlv {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsKlv {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsKlv {
+    fn into(self) -> String {
+        match self {
+            M2tsKlv::None => "NONE".to_string(),
+            M2tsKlv::Passthrough => "PASSTHROUGH".to_string(),
+            M2tsKlv::UnknownVariant(UnknownM2tsKlv { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsKlv {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsKlv::None => &"NONE",
+            M2tsKlv::Passthrough => &"PASSTHROUGH",
+            M2tsKlv::UnknownVariant(UnknownM2tsKlv { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsKlv {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => M2tsKlv::None,
+            "PASSTHROUGH" => M2tsKlv::Passthrough,
+            _ => M2tsKlv::UnknownVariant(UnknownM2tsKlv {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsKlv {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => M2tsKlv::None,
+            "PASSTHROUGH" => M2tsKlv::Passthrough,
+            _ => M2tsKlv::UnknownVariant(UnknownM2tsKlv { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsKlv {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsKlv {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsKlv {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Nielsen Id3 Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsNielsenId3Behavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsNielsenId3Behavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsNielsenId3Behavior),
+}
+
+impl Default for M2tsNielsenId3Behavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsNielsenId3Behavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsNielsenId3Behavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsNielsenId3Behavior {
+    fn into(self) -> String {
+        match self {
+            M2tsNielsenId3Behavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            M2tsNielsenId3Behavior::Passthrough => "PASSTHROUGH".to_string(),
+            M2tsNielsenId3Behavior::UnknownVariant(UnknownM2tsNielsenId3Behavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsNielsenId3Behavior {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsNielsenId3Behavior::NoPassthrough => &"NO_PASSTHROUGH",
+            M2tsNielsenId3Behavior::Passthrough => &"PASSTHROUGH",
+            M2tsNielsenId3Behavior::UnknownVariant(UnknownM2tsNielsenId3Behavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsNielsenId3Behavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => M2tsNielsenId3Behavior::NoPassthrough,
+            "PASSTHROUGH" => M2tsNielsenId3Behavior::Passthrough,
+            _ => M2tsNielsenId3Behavior::UnknownVariant(UnknownM2tsNielsenId3Behavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsNielsenId3Behavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => M2tsNielsenId3Behavior::NoPassthrough,
+            "PASSTHROUGH" => M2tsNielsenId3Behavior::Passthrough,
+            _ => M2tsNielsenId3Behavior::UnknownVariant(UnknownM2tsNielsenId3Behavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsNielsenId3Behavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsNielsenId3Behavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsNielsenId3Behavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Pcr Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsPcrControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsPcrControl {
+    ConfiguredPcrPeriod,
+    PcrEveryPesPacket,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsPcrControl),
+}
+
+impl Default for M2tsPcrControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsPcrControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsPcrControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsPcrControl {
+    fn into(self) -> String {
+        match self {
+            M2tsPcrControl::ConfiguredPcrPeriod => "CONFIGURED_PCR_PERIOD".to_string(),
+            M2tsPcrControl::PcrEveryPesPacket => "PCR_EVERY_PES_PACKET".to_string(),
+            M2tsPcrControl::UnknownVariant(UnknownM2tsPcrControl { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsPcrControl {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsPcrControl::ConfiguredPcrPeriod => &"CONFIGURED_PCR_PERIOD",
+            M2tsPcrControl::PcrEveryPesPacket => &"PCR_EVERY_PES_PACKET",
+            M2tsPcrControl::UnknownVariant(UnknownM2tsPcrControl { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsPcrControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIGURED_PCR_PERIOD" => M2tsPcrControl::ConfiguredPcrPeriod,
+            "PCR_EVERY_PES_PACKET" => M2tsPcrControl::PcrEveryPesPacket,
+            _ => M2tsPcrControl::UnknownVariant(UnknownM2tsPcrControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsPcrControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIGURED_PCR_PERIOD" => M2tsPcrControl::ConfiguredPcrPeriod,
+            "PCR_EVERY_PES_PACKET" => M2tsPcrControl::PcrEveryPesPacket,
+            _ => M2tsPcrControl::UnknownVariant(UnknownM2tsPcrControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsPcrControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsPcrControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsPcrControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Rate Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsRateMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsRateMode {
+    Cbr,
+    Vbr,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsRateMode),
+}
+
+impl Default for M2tsRateMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsRateMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsRateMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsRateMode {
+    fn into(self) -> String {
+        match self {
+            M2tsRateMode::Cbr => "CBR".to_string(),
+            M2tsRateMode::Vbr => "VBR".to_string(),
+            M2tsRateMode::UnknownVariant(UnknownM2tsRateMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsRateMode {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsRateMode::Cbr => &"CBR",
+            M2tsRateMode::Vbr => &"VBR",
+            M2tsRateMode::UnknownVariant(UnknownM2tsRateMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsRateMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CBR" => M2tsRateMode::Cbr,
+            "VBR" => M2tsRateMode::Vbr,
+            _ => M2tsRateMode::UnknownVariant(UnknownM2tsRateMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsRateMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CBR" => M2tsRateMode::Cbr,
+            "VBR" => M2tsRateMode::Vbr,
+            _ => M2tsRateMode::UnknownVariant(UnknownM2tsRateMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsRateMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsRateMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsRateMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Scte35 Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsScte35Control {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsScte35Control {
+    None,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsScte35Control),
+}
+
+impl Default for M2tsScte35Control {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsScte35Control {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsScte35Control {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsScte35Control {
+    fn into(self) -> String {
+        match self {
+            M2tsScte35Control::None => "NONE".to_string(),
+            M2tsScte35Control::Passthrough => "PASSTHROUGH".to_string(),
+            M2tsScte35Control::UnknownVariant(UnknownM2tsScte35Control { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsScte35Control {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsScte35Control::None => &"NONE",
+            M2tsScte35Control::Passthrough => &"PASSTHROUGH",
+            M2tsScte35Control::UnknownVariant(UnknownM2tsScte35Control { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for M2tsScte35Control {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => M2tsScte35Control::None,
+            "PASSTHROUGH" => M2tsScte35Control::Passthrough,
+            _ => M2tsScte35Control::UnknownVariant(UnknownM2tsScte35Control {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsScte35Control {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => M2tsScte35Control::None,
+            "PASSTHROUGH" => M2tsScte35Control::Passthrough,
+            _ => M2tsScte35Control::UnknownVariant(UnknownM2tsScte35Control { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsScte35Control {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsScte35Control {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsScte35Control {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Segmentation Markers</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsSegmentationMarkers {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsSegmentationMarkers {
+    Ebp,
+    EbpLegacy,
+    None,
+    PsiSegstart,
+    RaiAdapt,
+    RaiSegstart,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsSegmentationMarkers),
+}
+
+impl Default for M2tsSegmentationMarkers {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsSegmentationMarkers {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsSegmentationMarkers {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsSegmentationMarkers {
+    fn into(self) -> String {
+        match self {
+            M2tsSegmentationMarkers::Ebp => "EBP".to_string(),
+            M2tsSegmentationMarkers::EbpLegacy => "EBP_LEGACY".to_string(),
+            M2tsSegmentationMarkers::None => "NONE".to_string(),
+            M2tsSegmentationMarkers::PsiSegstart => "PSI_SEGSTART".to_string(),
+            M2tsSegmentationMarkers::RaiAdapt => "RAI_ADAPT".to_string(),
+            M2tsSegmentationMarkers::RaiSegstart => "RAI_SEGSTART".to_string(),
+            M2tsSegmentationMarkers::UnknownVariant(UnknownM2tsSegmentationMarkers {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsSegmentationMarkers {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsSegmentationMarkers::Ebp => &"EBP",
+            M2tsSegmentationMarkers::EbpLegacy => &"EBP_LEGACY",
+            M2tsSegmentationMarkers::None => &"NONE",
+            M2tsSegmentationMarkers::PsiSegstart => &"PSI_SEGSTART",
+            M2tsSegmentationMarkers::RaiAdapt => &"RAI_ADAPT",
+            M2tsSegmentationMarkers::RaiSegstart => &"RAI_SEGSTART",
+            M2tsSegmentationMarkers::UnknownVariant(UnknownM2tsSegmentationMarkers {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsSegmentationMarkers {
+    fn from(name: &str) -> Self {
+        match name {
+            "EBP" => M2tsSegmentationMarkers::Ebp,
+            "EBP_LEGACY" => M2tsSegmentationMarkers::EbpLegacy,
+            "NONE" => M2tsSegmentationMarkers::None,
+            "PSI_SEGSTART" => M2tsSegmentationMarkers::PsiSegstart,
+            "RAI_ADAPT" => M2tsSegmentationMarkers::RaiAdapt,
+            "RAI_SEGSTART" => M2tsSegmentationMarkers::RaiSegstart,
+            _ => M2tsSegmentationMarkers::UnknownVariant(UnknownM2tsSegmentationMarkers {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsSegmentationMarkers {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EBP" => M2tsSegmentationMarkers::Ebp,
+            "EBP_LEGACY" => M2tsSegmentationMarkers::EbpLegacy,
+            "NONE" => M2tsSegmentationMarkers::None,
+            "PSI_SEGSTART" => M2tsSegmentationMarkers::PsiSegstart,
+            "RAI_ADAPT" => M2tsSegmentationMarkers::RaiAdapt,
+            "RAI_SEGSTART" => M2tsSegmentationMarkers::RaiSegstart,
+            _ => M2tsSegmentationMarkers::UnknownVariant(UnknownM2tsSegmentationMarkers { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsSegmentationMarkers {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsSegmentationMarkers {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsSegmentationMarkers {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M2ts Segmentation Style</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsSegmentationStyle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsSegmentationStyle {
+    MaintainCadence,
+    ResetCadence,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsSegmentationStyle),
+}
+
+impl Default for M2tsSegmentationStyle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsSegmentationStyle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsSegmentationStyle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsSegmentationStyle {
+    fn into(self) -> String {
+        match self {
+            M2tsSegmentationStyle::MaintainCadence => "MAINTAIN_CADENCE".to_string(),
+            M2tsSegmentationStyle::ResetCadence => "RESET_CADENCE".to_string(),
+            M2tsSegmentationStyle::UnknownVariant(UnknownM2tsSegmentationStyle {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsSegmentationStyle {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsSegmentationStyle::MaintainCadence => &"MAINTAIN_CADENCE",
+            M2tsSegmentationStyle::ResetCadence => &"RESET_CADENCE",
+            M2tsSegmentationStyle::UnknownVariant(UnknownM2tsSegmentationStyle {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsSegmentationStyle {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAINTAIN_CADENCE" => M2tsSegmentationStyle::MaintainCadence,
+            "RESET_CADENCE" => M2tsSegmentationStyle::ResetCadence,
+            _ => M2tsSegmentationStyle::UnknownVariant(UnknownM2tsSegmentationStyle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsSegmentationStyle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAINTAIN_CADENCE" => M2tsSegmentationStyle::MaintainCadence,
+            "RESET_CADENCE" => M2tsSegmentationStyle::ResetCadence,
+            _ => M2tsSegmentationStyle::UnknownVariant(UnknownM2tsSegmentationStyle { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsSegmentationStyle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsSegmentationStyle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsSegmentationStyle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>M2ts Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct M2tsSettings {
     /// <p>When set to drop, output audio streams will be removed from the program if the selected input audio stream is removed from the input. This allows the output audio configuration to dynamically change based on input configuration. If this is set to encodeSilence, all output audio streams will output encoded silence when not connected to an active input stream.</p>
     #[serde(rename = "AbsentInputAudioBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub absent_input_audio_behavior: Option<String>,
+    pub absent_input_audio_behavior: Option<M2tsAbsentInputAudioBehavior>,
     /// <p>When set to enabled, uses ARIB-compliant field muxing and removes video descriptor.</p>
     #[serde(rename = "Arib")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub arib: Option<String>,
+    pub arib: Option<M2tsArib>,
     /// <p>Packet Identifier (PID) for ARIB Captions in the transport stream. Can be entered as a decimal or hexadecimal value.  Valid values are 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "AribCaptionsPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4328,11 +24166,11 @@ pub struct M2tsSettings {
     /// <p>If set to auto, pid number used for ARIB Captions will be auto-selected from unused pids.  If set to useConfigured, ARIB Captions will be on the configured pid number.</p>
     #[serde(rename = "AribCaptionsPidControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub arib_captions_pid_control: Option<String>,
+    pub arib_captions_pid_control: Option<M2tsAribCaptionsPidControl>,
     /// <p>When set to dvb, uses DVB buffer model for Dolby Digital audio.  When set to atsc, the ATSC model is used.</p>
     #[serde(rename = "AudioBufferModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audio_buffer_model: Option<String>,
+    pub audio_buffer_model: Option<M2tsAudioBufferModel>,
     /// <p>The number of audio frames to insert for each PES packet.</p>
     #[serde(rename = "AudioFramesPerPes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4344,7 +24182,7 @@ pub struct M2tsSettings {
     /// <p>When set to atsc, uses stream type = 0x81 for AC3 and stream type = 0x87 for EAC3. When set to dvb, uses stream type = 0x06.</p>
     #[serde(rename = "AudioStreamType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audio_stream_type: Option<String>,
+    pub audio_stream_type: Option<M2tsAudioStreamType>,
     /// <p>The output bitrate of the transport stream in bits per second. Setting to 0 lets the muxer automatically determine the appropriate bitrate.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4352,11 +24190,11 @@ pub struct M2tsSettings {
     /// <p>Controls the timing accuracy for output network traffic. Leave as MULTIPLEX to ensure accurate network packet timing. Or set to NONE, which might result in lower latency but will result in more variability in output network packet timing. This variability might cause interruptions, jitter, or bursty behavior in your playback or receiving devices.</p>
     #[serde(rename = "BufferModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub buffer_model: Option<String>,
+    pub buffer_model: Option<M2tsBufferModel>,
     /// <p>When set to enabled, generates captionServiceDescriptor in PMT.</p>
     #[serde(rename = "CcDescriptor")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cc_descriptor: Option<String>,
+    pub cc_descriptor: Option<M2tsCcDescriptor>,
     /// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
     #[serde(rename = "DvbNitSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4380,11 +24218,11 @@ pub struct M2tsSettings {
     /// <p>If set to passthrough, passes any EBIF data from the input source to this output.</p>
     #[serde(rename = "Ebif")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ebif: Option<String>,
+    pub ebif: Option<M2tsEbifControl>,
     /// <p>When videoAndFixedIntervals is selected, audio EBP markers will be added to partitions 3 and 4. The interval between these additional markers will be fixed, and will be slightly shorter than the video EBP marker interval. Only available when EBP Cablelabs segmentation markers are selected.  Partitions 1 and 2 will always follow the video interval.</p>
     #[serde(rename = "EbpAudioInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ebp_audio_interval: Option<String>,
+    pub ebp_audio_interval: Option<M2tsAudioInterval>,
     /// <p>When set, enforces that Encoder Boundary Points do not come within the specified time interval of each other by looking ahead at input video. If another EBP is going to come in within the specified time interval, the current EBP is not emitted, and the segment is &quot;stretched&quot; to the next marker.  The lookahead value does not add latency to the system. The Live Event must be configured elsewhere to create sufficient latency to make the lookahead accurate.</p>
     #[serde(rename = "EbpLookaheadMs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4392,7 +24230,7 @@ pub struct M2tsSettings {
     /// <p>Controls placement of EBP on Audio PIDs. If set to videoAndAudioPids, EBP markers will be placed on the video PID and all audio PIDs.  If set to videoPid, EBP markers will be placed on only the video PID.</p>
     #[serde(rename = "EbpPlacement")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ebp_placement: Option<String>,
+    pub ebp_placement: Option<M2tsEbpPlacement>,
     /// <p>This field is unused and deprecated.</p>
     #[serde(rename = "EcmPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4400,7 +24238,7 @@ pub struct M2tsSettings {
     /// <p>Include or exclude the ES Rate field in the PES header.</p>
     #[serde(rename = "EsRateInPes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub es_rate_in_pes: Option<String>,
+    pub es_rate_in_pes: Option<M2tsEsRateInPes>,
     /// <p>Packet Identifier (PID) for input source ETV Platform data to this output. Can be entered as a decimal or hexadecimal value.  Valid values are 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "EtvPlatformPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4416,7 +24254,7 @@ pub struct M2tsSettings {
     /// <p>If set to passthrough, passes any KLV data from the input source to this output.</p>
     #[serde(rename = "Klv")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub klv: Option<String>,
+    pub klv: Option<M2tsKlv>,
     /// <p>Packet Identifier (PID) for input source KLV data to this output. Multiple values are accepted, and can be entered in ranges and/or by comma separation. Can be entered as decimal or hexadecimal values.  Each PID specified must be in the range of 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "KlvDataPids")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4424,7 +24262,7 @@ pub struct M2tsSettings {
     /// <p>If set to passthrough, Nielsen inaudible tones for media tracking will be detected in the input audio and an equivalent ID3 tag will be inserted in the output.</p>
     #[serde(rename = "NielsenId3Behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nielsen_id_3_behavior: Option<String>,
+    pub nielsen_id_3_behavior: Option<M2tsNielsenId3Behavior>,
     /// <p>Value in bits per second of extra null packets to insert into the transport stream. This can be used if a downstream encryption system requires periodic null packets.</p>
     #[serde(rename = "NullPacketBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4436,7 +24274,7 @@ pub struct M2tsSettings {
     /// <p>When set to pcrEveryPesPacket, a Program Clock Reference value is inserted for every Packetized Elementary Stream (PES) header. This parameter is effective only when the PCR PID is the same as the video or audio elementary stream.</p>
     #[serde(rename = "PcrControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pcr_control: Option<String>,
+    pub pcr_control: Option<M2tsPcrControl>,
     /// <p>Maximum time in milliseconds between Program Clock Reference (PCRs) inserted into the transport stream.</p>
     #[serde(rename = "PcrPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4460,7 +24298,7 @@ pub struct M2tsSettings {
     /// <p>When vbr, does not insert null packets into transport stream to fill specified bitrate. The bitrate setting acts as the maximum bitrate when vbr is set.</p>
     #[serde(rename = "RateMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rate_mode: Option<String>,
+    pub rate_mode: Option<M2tsRateMode>,
     /// <p>Packet Identifier (PID) for input source SCTE-27 data to this output. Multiple values are accepted, and can be entered in ranges and/or by comma separation. Can be entered as decimal or hexadecimal values.  Each PID specified must be in the range of 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "Scte27Pids")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4468,7 +24306,7 @@ pub struct M2tsSettings {
     /// <p>Optionally pass SCTE-35 signals from the input source to this output.</p>
     #[serde(rename = "Scte35Control")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scte_35_control: Option<String>,
+    pub scte_35_control: Option<M2tsScte35Control>,
     /// <p>Packet Identifier (PID) of the SCTE-35 stream in the transport stream. Can be entered as a decimal or hexadecimal value.  Valid values are 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "Scte35Pid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4476,7 +24314,7 @@ pub struct M2tsSettings {
     /// <p>Inserts segmentation markers at each segmentationTime period. raiSegstart sets the Random Access Indicator bit in the adaptation field. raiAdapt sets the RAI bit and adds the current timecode in the private data bytes. psiSegstart inserts PAT and PMT tables at the start of segments. ebp adds Encoder Boundary Point information to the adaptation field as per OpenCable specification OC-SP-EBP-I01-130118. ebpLegacy adds Encoder Boundary Point information to the adaptation field using a legacy proprietary format.</p>
     #[serde(rename = "SegmentationMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segmentation_markers: Option<String>,
+    pub segmentation_markers: Option<M2tsSegmentationMarkers>,
     /// <p>The segmentation style parameter controls how segmentation markers are inserted into the transport stream. With avails, it is possible that segments may be truncated, which can influence where future segmentation markers are inserted.</p>
     ///
     /// <p>When a segmentation style of &quot;resetCadence&quot; is selected and a segment is truncated due to an avail, we will reset the segmentation cadence. This means the subsequent segment will have a duration of $segmentationTime seconds.</p>
@@ -4484,7 +24322,7 @@ pub struct M2tsSettings {
     /// <p>When a segmentation style of &quot;maintainCadence&quot; is selected and a segment is truncated due to an avail, we will not reset the segmentation cadence. This means the subsequent segment will likely be truncated as well. However, all segments after that will have a duration of $segmentationTime seconds. Note that EBP lookahead is a slight exception to this rule.</p>
     #[serde(rename = "SegmentationStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segmentation_style: Option<String>,
+    pub segmentation_style: Option<M2tsSegmentationStyle>,
     /// <p>The length in seconds of each segment. Required unless markers is set to <em>none</em>.</p>
     #[serde(rename = "SegmentationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4492,7 +24330,7 @@ pub struct M2tsSettings {
     /// <p>When set to passthrough, timed metadata will be passed through from input to output.</p>
     #[serde(rename = "TimedMetadataBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timed_metadata_behavior: Option<String>,
+    pub timed_metadata_behavior: Option<M2tsTimedMetadataBehavior>,
     /// <p>Packet Identifier (PID) of the timed metadata stream in the transport stream. Can be entered as a decimal or hexadecimal value.  Valid values are 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "TimedMetadataPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4505,6 +24343,428 @@ pub struct M2tsSettings {
     #[serde(rename = "VideoPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_pid: Option<String>,
+}
+
+/// <p>M2ts Timed Metadata Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM2tsTimedMetadataBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M2tsTimedMetadataBehavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM2tsTimedMetadataBehavior),
+}
+
+impl Default for M2tsTimedMetadataBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M2tsTimedMetadataBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M2tsTimedMetadataBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M2tsTimedMetadataBehavior {
+    fn into(self) -> String {
+        match self {
+            M2tsTimedMetadataBehavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            M2tsTimedMetadataBehavior::Passthrough => "PASSTHROUGH".to_string(),
+            M2tsTimedMetadataBehavior::UnknownVariant(UnknownM2tsTimedMetadataBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M2tsTimedMetadataBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            M2tsTimedMetadataBehavior::NoPassthrough => &"NO_PASSTHROUGH",
+            M2tsTimedMetadataBehavior::Passthrough => &"PASSTHROUGH",
+            M2tsTimedMetadataBehavior::UnknownVariant(UnknownM2tsTimedMetadataBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M2tsTimedMetadataBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => M2tsTimedMetadataBehavior::NoPassthrough,
+            "PASSTHROUGH" => M2tsTimedMetadataBehavior::Passthrough,
+            _ => M2tsTimedMetadataBehavior::UnknownVariant(UnknownM2tsTimedMetadataBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M2tsTimedMetadataBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => M2tsTimedMetadataBehavior::NoPassthrough,
+            "PASSTHROUGH" => M2tsTimedMetadataBehavior::Passthrough,
+            _ => {
+                M2tsTimedMetadataBehavior::UnknownVariant(UnknownM2tsTimedMetadataBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for M2tsTimedMetadataBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M2tsTimedMetadataBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M2tsTimedMetadataBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M3u8 Nielsen Id3 Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM3u8NielsenId3Behavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M3u8NielsenId3Behavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM3u8NielsenId3Behavior),
+}
+
+impl Default for M3u8NielsenId3Behavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M3u8NielsenId3Behavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M3u8NielsenId3Behavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M3u8NielsenId3Behavior {
+    fn into(self) -> String {
+        match self {
+            M3u8NielsenId3Behavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            M3u8NielsenId3Behavior::Passthrough => "PASSTHROUGH".to_string(),
+            M3u8NielsenId3Behavior::UnknownVariant(UnknownM3u8NielsenId3Behavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M3u8NielsenId3Behavior {
+    fn into(self) -> &'a str {
+        match self {
+            M3u8NielsenId3Behavior::NoPassthrough => &"NO_PASSTHROUGH",
+            M3u8NielsenId3Behavior::Passthrough => &"PASSTHROUGH",
+            M3u8NielsenId3Behavior::UnknownVariant(UnknownM3u8NielsenId3Behavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M3u8NielsenId3Behavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => M3u8NielsenId3Behavior::NoPassthrough,
+            "PASSTHROUGH" => M3u8NielsenId3Behavior::Passthrough,
+            _ => M3u8NielsenId3Behavior::UnknownVariant(UnknownM3u8NielsenId3Behavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M3u8NielsenId3Behavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => M3u8NielsenId3Behavior::NoPassthrough,
+            "PASSTHROUGH" => M3u8NielsenId3Behavior::Passthrough,
+            _ => M3u8NielsenId3Behavior::UnknownVariant(UnknownM3u8NielsenId3Behavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M3u8NielsenId3Behavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M3u8NielsenId3Behavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M3u8NielsenId3Behavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M3u8 Pcr Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM3u8PcrControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M3u8PcrControl {
+    ConfiguredPcrPeriod,
+    PcrEveryPesPacket,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM3u8PcrControl),
+}
+
+impl Default for M3u8PcrControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M3u8PcrControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M3u8PcrControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M3u8PcrControl {
+    fn into(self) -> String {
+        match self {
+            M3u8PcrControl::ConfiguredPcrPeriod => "CONFIGURED_PCR_PERIOD".to_string(),
+            M3u8PcrControl::PcrEveryPesPacket => "PCR_EVERY_PES_PACKET".to_string(),
+            M3u8PcrControl::UnknownVariant(UnknownM3u8PcrControl { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M3u8PcrControl {
+    fn into(self) -> &'a str {
+        match self {
+            M3u8PcrControl::ConfiguredPcrPeriod => &"CONFIGURED_PCR_PERIOD",
+            M3u8PcrControl::PcrEveryPesPacket => &"PCR_EVERY_PES_PACKET",
+            M3u8PcrControl::UnknownVariant(UnknownM3u8PcrControl { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for M3u8PcrControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIGURED_PCR_PERIOD" => M3u8PcrControl::ConfiguredPcrPeriod,
+            "PCR_EVERY_PES_PACKET" => M3u8PcrControl::PcrEveryPesPacket,
+            _ => M3u8PcrControl::UnknownVariant(UnknownM3u8PcrControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M3u8PcrControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIGURED_PCR_PERIOD" => M3u8PcrControl::ConfiguredPcrPeriod,
+            "PCR_EVERY_PES_PACKET" => M3u8PcrControl::PcrEveryPesPacket,
+            _ => M3u8PcrControl::UnknownVariant(UnknownM3u8PcrControl { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M3u8PcrControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M3u8PcrControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M3u8PcrControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>M3u8 Scte35 Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM3u8Scte35Behavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M3u8Scte35Behavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM3u8Scte35Behavior),
+}
+
+impl Default for M3u8Scte35Behavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M3u8Scte35Behavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M3u8Scte35Behavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M3u8Scte35Behavior {
+    fn into(self) -> String {
+        match self {
+            M3u8Scte35Behavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            M3u8Scte35Behavior::Passthrough => "PASSTHROUGH".to_string(),
+            M3u8Scte35Behavior::UnknownVariant(UnknownM3u8Scte35Behavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M3u8Scte35Behavior {
+    fn into(self) -> &'a str {
+        match self {
+            M3u8Scte35Behavior::NoPassthrough => &"NO_PASSTHROUGH",
+            M3u8Scte35Behavior::Passthrough => &"PASSTHROUGH",
+            M3u8Scte35Behavior::UnknownVariant(UnknownM3u8Scte35Behavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for M3u8Scte35Behavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => M3u8Scte35Behavior::NoPassthrough,
+            "PASSTHROUGH" => M3u8Scte35Behavior::Passthrough,
+            _ => M3u8Scte35Behavior::UnknownVariant(UnknownM3u8Scte35Behavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M3u8Scte35Behavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => M3u8Scte35Behavior::NoPassthrough,
+            "PASSTHROUGH" => M3u8Scte35Behavior::Passthrough,
+            _ => M3u8Scte35Behavior::UnknownVariant(UnknownM3u8Scte35Behavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for M3u8Scte35Behavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M3u8Scte35Behavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M3u8Scte35Behavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings information for the .m3u8 container</p>
@@ -4525,7 +24785,7 @@ pub struct M3u8Settings {
     /// <p>If set to passthrough, Nielsen inaudible tones for media tracking will be detected in the input audio and an equivalent ID3 tag will be inserted in the output.</p>
     #[serde(rename = "NielsenId3Behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nielsen_id_3_behavior: Option<String>,
+    pub nielsen_id_3_behavior: Option<M3u8NielsenId3Behavior>,
     /// <p>The number of milliseconds between instances of this table in the output transport stream. A value of &quot;0&quot; writes out the PMT once per segment file.</p>
     #[serde(rename = "PatInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4533,7 +24793,7 @@ pub struct M3u8Settings {
     /// <p>When set to pcrEveryPesPacket, a Program Clock Reference value is inserted for every Packetized Elementary Stream (PES) header. This parameter is effective only when the PCR PID is the same as the video or audio elementary stream.</p>
     #[serde(rename = "PcrControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pcr_control: Option<String>,
+    pub pcr_control: Option<M3u8PcrControl>,
     /// <p>Maximum time in milliseconds between Program Clock References (PCRs) inserted into the transport stream.</p>
     #[serde(rename = "PcrPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4557,7 +24817,7 @@ pub struct M3u8Settings {
     /// <p>If set to passthrough, passes any SCTE-35 signals from the input source to this output.</p>
     #[serde(rename = "Scte35Behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scte_35_behavior: Option<String>,
+    pub scte_35_behavior: Option<M3u8Scte35Behavior>,
     /// <p>Packet Identifier (PID) of the SCTE-35 stream in the transport stream. Can be entered as a decimal or hexadecimal value.</p>
     #[serde(rename = "Scte35Pid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4565,7 +24825,7 @@ pub struct M3u8Settings {
     /// <p>When set to passthrough, timed metadata is passed through from input to output.</p>
     #[serde(rename = "TimedMetadataBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timed_metadata_behavior: Option<String>,
+    pub timed_metadata_behavior: Option<M3u8TimedMetadataBehavior>,
     /// <p>Packet Identifier (PID) of the timed metadata stream in the transport stream. Can be entered as a decimal or hexadecimal value.  Valid values are 32 (or 0x20)..8182 (or 0x1ff6).</p>
     #[serde(rename = "TimedMetadataPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4578,6 +24838,114 @@ pub struct M3u8Settings {
     #[serde(rename = "VideoPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_pid: Option<String>,
+}
+
+/// <p>M3u8 Timed Metadata Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownM3u8TimedMetadataBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum M3u8TimedMetadataBehavior {
+    NoPassthrough,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownM3u8TimedMetadataBehavior),
+}
+
+impl Default for M3u8TimedMetadataBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for M3u8TimedMetadataBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for M3u8TimedMetadataBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for M3u8TimedMetadataBehavior {
+    fn into(self) -> String {
+        match self {
+            M3u8TimedMetadataBehavior::NoPassthrough => "NO_PASSTHROUGH".to_string(),
+            M3u8TimedMetadataBehavior::Passthrough => "PASSTHROUGH".to_string(),
+            M3u8TimedMetadataBehavior::UnknownVariant(UnknownM3u8TimedMetadataBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a M3u8TimedMetadataBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            M3u8TimedMetadataBehavior::NoPassthrough => &"NO_PASSTHROUGH",
+            M3u8TimedMetadataBehavior::Passthrough => &"PASSTHROUGH",
+            M3u8TimedMetadataBehavior::UnknownVariant(UnknownM3u8TimedMetadataBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for M3u8TimedMetadataBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_PASSTHROUGH" => M3u8TimedMetadataBehavior::NoPassthrough,
+            "PASSTHROUGH" => M3u8TimedMetadataBehavior::Passthrough,
+            _ => M3u8TimedMetadataBehavior::UnknownVariant(UnknownM3u8TimedMetadataBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for M3u8TimedMetadataBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_PASSTHROUGH" => M3u8TimedMetadataBehavior::NoPassthrough,
+            "PASSTHROUGH" => M3u8TimedMetadataBehavior::Passthrough,
+            _ => {
+                M3u8TimedMetadataBehavior::UnknownVariant(UnknownM3u8TimedMetadataBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for M3u8TimedMetadataBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for M3u8TimedMetadataBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for M3u8TimedMetadataBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The settings for a MediaConnect Flow.</p>
@@ -4621,6 +24989,108 @@ pub struct MediaPackageOutputDestinationSettings {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MediaPackageOutputSettings {}
 
+/// <p>Mp2 Coding Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMp2CodingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mp2CodingMode {
+    CodingMode10,
+    CodingMode20,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMp2CodingMode),
+}
+
+impl Default for Mp2CodingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mp2CodingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mp2CodingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mp2CodingMode {
+    fn into(self) -> String {
+        match self {
+            Mp2CodingMode::CodingMode10 => "CODING_MODE_1_0".to_string(),
+            Mp2CodingMode::CodingMode20 => "CODING_MODE_2_0".to_string(),
+            Mp2CodingMode::UnknownVariant(UnknownMp2CodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mp2CodingMode {
+    fn into(self) -> &'a str {
+        match self {
+            Mp2CodingMode::CodingMode10 => &"CODING_MODE_1_0",
+            Mp2CodingMode::CodingMode20 => &"CODING_MODE_2_0",
+            Mp2CodingMode::UnknownVariant(UnknownMp2CodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Mp2CodingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODING_MODE_1_0" => Mp2CodingMode::CodingMode10,
+            "CODING_MODE_2_0" => Mp2CodingMode::CodingMode20,
+            _ => Mp2CodingMode::UnknownVariant(UnknownMp2CodingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mp2CodingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODING_MODE_1_0" => Mp2CodingMode::CodingMode10,
+            "CODING_MODE_2_0" => Mp2CodingMode::CodingMode20,
+            _ => Mp2CodingMode::UnknownVariant(UnknownMp2CodingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mp2CodingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mp2CodingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mp2CodingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Mp2 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mp2Settings {
@@ -4631,11 +25101,448 @@ pub struct Mp2Settings {
     /// <p>The MPEG2 Audio coding mode.  Valid values are codingMode10 (for mono) or codingMode20 (for stereo).</p>
     #[serde(rename = "CodingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub coding_mode: Option<String>,
+    pub coding_mode: Option<Mp2CodingMode>,
     /// <p>Sample rate in Hz.</p>
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<f64>,
+}
+
+/// <p>Mpeg2 Adaptive Quantization</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2AdaptiveQuantization {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2AdaptiveQuantization {
+    Auto,
+    High,
+    Low,
+    Medium,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2AdaptiveQuantization),
+}
+
+impl Default for Mpeg2AdaptiveQuantization {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2AdaptiveQuantization {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2AdaptiveQuantization {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2AdaptiveQuantization {
+    fn into(self) -> String {
+        match self {
+            Mpeg2AdaptiveQuantization::Auto => "AUTO".to_string(),
+            Mpeg2AdaptiveQuantization::High => "HIGH".to_string(),
+            Mpeg2AdaptiveQuantization::Low => "LOW".to_string(),
+            Mpeg2AdaptiveQuantization::Medium => "MEDIUM".to_string(),
+            Mpeg2AdaptiveQuantization::Off => "OFF".to_string(),
+            Mpeg2AdaptiveQuantization::UnknownVariant(UnknownMpeg2AdaptiveQuantization {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2AdaptiveQuantization {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2AdaptiveQuantization::Auto => &"AUTO",
+            Mpeg2AdaptiveQuantization::High => &"HIGH",
+            Mpeg2AdaptiveQuantization::Low => &"LOW",
+            Mpeg2AdaptiveQuantization::Medium => &"MEDIUM",
+            Mpeg2AdaptiveQuantization::Off => &"OFF",
+            Mpeg2AdaptiveQuantization::UnknownVariant(UnknownMpeg2AdaptiveQuantization {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Mpeg2AdaptiveQuantization {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => Mpeg2AdaptiveQuantization::Auto,
+            "HIGH" => Mpeg2AdaptiveQuantization::High,
+            "LOW" => Mpeg2AdaptiveQuantization::Low,
+            "MEDIUM" => Mpeg2AdaptiveQuantization::Medium,
+            "OFF" => Mpeg2AdaptiveQuantization::Off,
+            _ => Mpeg2AdaptiveQuantization::UnknownVariant(UnknownMpeg2AdaptiveQuantization {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2AdaptiveQuantization {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => Mpeg2AdaptiveQuantization::Auto,
+            "HIGH" => Mpeg2AdaptiveQuantization::High,
+            "LOW" => Mpeg2AdaptiveQuantization::Low,
+            "MEDIUM" => Mpeg2AdaptiveQuantization::Medium,
+            "OFF" => Mpeg2AdaptiveQuantization::Off,
+            _ => {
+                Mpeg2AdaptiveQuantization::UnknownVariant(UnknownMpeg2AdaptiveQuantization { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2AdaptiveQuantization {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2AdaptiveQuantization {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2AdaptiveQuantization {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Mpeg2 Color Metadata</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2ColorMetadata {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2ColorMetadata {
+    Ignore,
+    Insert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2ColorMetadata),
+}
+
+impl Default for Mpeg2ColorMetadata {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2ColorMetadata {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2ColorMetadata {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2ColorMetadata {
+    fn into(self) -> String {
+        match self {
+            Mpeg2ColorMetadata::Ignore => "IGNORE".to_string(),
+            Mpeg2ColorMetadata::Insert => "INSERT".to_string(),
+            Mpeg2ColorMetadata::UnknownVariant(UnknownMpeg2ColorMetadata { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2ColorMetadata {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2ColorMetadata::Ignore => &"IGNORE",
+            Mpeg2ColorMetadata::Insert => &"INSERT",
+            Mpeg2ColorMetadata::UnknownVariant(UnknownMpeg2ColorMetadata { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Mpeg2ColorMetadata {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => Mpeg2ColorMetadata::Ignore,
+            "INSERT" => Mpeg2ColorMetadata::Insert,
+            _ => Mpeg2ColorMetadata::UnknownVariant(UnknownMpeg2ColorMetadata {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2ColorMetadata {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => Mpeg2ColorMetadata::Ignore,
+            "INSERT" => Mpeg2ColorMetadata::Insert,
+            _ => Mpeg2ColorMetadata::UnknownVariant(UnknownMpeg2ColorMetadata { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2ColorMetadata {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2ColorMetadata {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2ColorMetadata {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Mpeg2 Color Space</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2ColorSpace {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2ColorSpace {
+    Auto,
+    Passthrough,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2ColorSpace),
+}
+
+impl Default for Mpeg2ColorSpace {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2ColorSpace {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2ColorSpace {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2ColorSpace {
+    fn into(self) -> String {
+        match self {
+            Mpeg2ColorSpace::Auto => "AUTO".to_string(),
+            Mpeg2ColorSpace::Passthrough => "PASSTHROUGH".to_string(),
+            Mpeg2ColorSpace::UnknownVariant(UnknownMpeg2ColorSpace { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2ColorSpace {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2ColorSpace::Auto => &"AUTO",
+            Mpeg2ColorSpace::Passthrough => &"PASSTHROUGH",
+            Mpeg2ColorSpace::UnknownVariant(UnknownMpeg2ColorSpace { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Mpeg2ColorSpace {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => Mpeg2ColorSpace::Auto,
+            "PASSTHROUGH" => Mpeg2ColorSpace::Passthrough,
+            _ => Mpeg2ColorSpace::UnknownVariant(UnknownMpeg2ColorSpace {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2ColorSpace {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => Mpeg2ColorSpace::Auto,
+            "PASSTHROUGH" => Mpeg2ColorSpace::Passthrough,
+            _ => Mpeg2ColorSpace::UnknownVariant(UnknownMpeg2ColorSpace { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2ColorSpace {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2ColorSpace {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2ColorSpace {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Mpeg2 Display Ratio</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2DisplayRatio {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2DisplayRatio {
+    Displayratio16X9,
+    Displayratio4X3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2DisplayRatio),
+}
+
+impl Default for Mpeg2DisplayRatio {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2DisplayRatio {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2DisplayRatio {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2DisplayRatio {
+    fn into(self) -> String {
+        match self {
+            Mpeg2DisplayRatio::Displayratio16X9 => "DISPLAYRATIO16X9".to_string(),
+            Mpeg2DisplayRatio::Displayratio4X3 => "DISPLAYRATIO4X3".to_string(),
+            Mpeg2DisplayRatio::UnknownVariant(UnknownMpeg2DisplayRatio { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2DisplayRatio {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2DisplayRatio::Displayratio16X9 => &"DISPLAYRATIO16X9",
+            Mpeg2DisplayRatio::Displayratio4X3 => &"DISPLAYRATIO4X3",
+            Mpeg2DisplayRatio::UnknownVariant(UnknownMpeg2DisplayRatio { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Mpeg2DisplayRatio {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISPLAYRATIO16X9" => Mpeg2DisplayRatio::Displayratio16X9,
+            "DISPLAYRATIO4X3" => Mpeg2DisplayRatio::Displayratio4X3,
+            _ => Mpeg2DisplayRatio::UnknownVariant(UnknownMpeg2DisplayRatio {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2DisplayRatio {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISPLAYRATIO16X9" => Mpeg2DisplayRatio::Displayratio16X9,
+            "DISPLAYRATIO4X3" => Mpeg2DisplayRatio::Displayratio4X3,
+            _ => Mpeg2DisplayRatio::UnknownVariant(UnknownMpeg2DisplayRatio { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2DisplayRatio {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2DisplayRatio {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2DisplayRatio {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Mpeg2 Filter Settings</p>
@@ -4646,33 +25553,241 @@ pub struct Mpeg2FilterSettings {
     pub temporal_filter_settings: Option<TemporalFilterSettings>,
 }
 
+/// <p>Mpeg2 Gop Size Units</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2GopSizeUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2GopSizeUnits {
+    Frames,
+    Seconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2GopSizeUnits),
+}
+
+impl Default for Mpeg2GopSizeUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2GopSizeUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2GopSizeUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2GopSizeUnits {
+    fn into(self) -> String {
+        match self {
+            Mpeg2GopSizeUnits::Frames => "FRAMES".to_string(),
+            Mpeg2GopSizeUnits::Seconds => "SECONDS".to_string(),
+            Mpeg2GopSizeUnits::UnknownVariant(UnknownMpeg2GopSizeUnits { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2GopSizeUnits {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2GopSizeUnits::Frames => &"FRAMES",
+            Mpeg2GopSizeUnits::Seconds => &"SECONDS",
+            Mpeg2GopSizeUnits::UnknownVariant(UnknownMpeg2GopSizeUnits { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Mpeg2GopSizeUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "FRAMES" => Mpeg2GopSizeUnits::Frames,
+            "SECONDS" => Mpeg2GopSizeUnits::Seconds,
+            _ => Mpeg2GopSizeUnits::UnknownVariant(UnknownMpeg2GopSizeUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2GopSizeUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FRAMES" => Mpeg2GopSizeUnits::Frames,
+            "SECONDS" => Mpeg2GopSizeUnits::Seconds,
+            _ => Mpeg2GopSizeUnits::UnknownVariant(UnknownMpeg2GopSizeUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2GopSizeUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2GopSizeUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2GopSizeUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Mpeg2 Scan Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2ScanType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2ScanType {
+    Interlaced,
+    Progressive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2ScanType),
+}
+
+impl Default for Mpeg2ScanType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2ScanType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2ScanType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2ScanType {
+    fn into(self) -> String {
+        match self {
+            Mpeg2ScanType::Interlaced => "INTERLACED".to_string(),
+            Mpeg2ScanType::Progressive => "PROGRESSIVE".to_string(),
+            Mpeg2ScanType::UnknownVariant(UnknownMpeg2ScanType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2ScanType {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2ScanType::Interlaced => &"INTERLACED",
+            Mpeg2ScanType::Progressive => &"PROGRESSIVE",
+            Mpeg2ScanType::UnknownVariant(UnknownMpeg2ScanType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Mpeg2ScanType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERLACED" => Mpeg2ScanType::Interlaced,
+            "PROGRESSIVE" => Mpeg2ScanType::Progressive,
+            _ => Mpeg2ScanType::UnknownVariant(UnknownMpeg2ScanType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2ScanType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERLACED" => Mpeg2ScanType::Interlaced,
+            "PROGRESSIVE" => Mpeg2ScanType::Progressive,
+            _ => Mpeg2ScanType::UnknownVariant(UnknownMpeg2ScanType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2ScanType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2ScanType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2ScanType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Mpeg2 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mpeg2Settings {
     /// <p>Choose Off to disable adaptive quantization. Or choose another value to enable the quantizer and set its strength. The strengths are: Auto, Off, Low, Medium, High. When you enable this field, MediaLive allows intra-frame quantizers to vary, which might improve visual quality.</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub adaptive_quantization: Option<String>,
+    pub adaptive_quantization: Option<Mpeg2AdaptiveQuantization>,
     /// <p>Indicates the AFD values that MediaLive will write into the video encode. If you do not know what AFD signaling is, or if your downstream system has not given you guidance, choose AUTO.
     /// AUTO: MediaLive will try to preserve the input AFD value (in cases where multiple AFD values are valid).
     /// FIXED: MediaLive will use the value you specify in fixedAFD.</p>
     #[serde(rename = "AfdSignaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub afd_signaling: Option<String>,
+    pub afd_signaling: Option<AfdSignaling>,
     /// <p>Specifies whether to include the color space metadata. The metadata describes the color space that applies to the video (the colorSpace field). We recommend that you insert the metadata.</p>
     #[serde(rename = "ColorMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color_metadata: Option<String>,
+    pub color_metadata: Option<Mpeg2ColorMetadata>,
     /// <p>Choose the type of color space conversion to apply to the output. For detailed information on setting up both the input and the output to obtain the desired color space in the output, see the section on &quot;MediaLive Features - Video - color space&quot; in the MediaLive User Guide.
     /// PASSTHROUGH: Keep the color space of the input content - do not convert it.
     /// AUTO:Convert all content that is SD to rec 601, and convert all content that is HD to rec 709.</p>
     #[serde(rename = "ColorSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color_space: Option<String>,
+    pub color_space: Option<Mpeg2ColorSpace>,
     /// <p>Sets the pixel aspect ratio for the encode.</p>
     #[serde(rename = "DisplayAspectRatio")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_aspect_ratio: Option<String>,
+    pub display_aspect_ratio: Option<Mpeg2DisplayRatio>,
     /// <p>Optionally specify a noise reduction filter, which can improve quality of compressed content. If you do not choose a filter, no filter will be applied.
     /// TEMPORAL: This filter is useful for both source content that is noisy (when it has excessive digital artifacts) and source content that is clean.
     /// When the content is noisy, the filter cleans up the source content before the encoding phase, with these two effects: First, it improves the output video quality because the content has been cleaned up. Secondly, it decreases the bandwidth because MediaLive does not waste bits on encoding noise.
@@ -4683,7 +25798,7 @@ pub struct Mpeg2Settings {
     /// <p>Complete this field only when afdSignaling is set to FIXED. Enter the AFD value (4 bits) to write on all frames of the video encode.</p>
     #[serde(rename = "FixedAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fixed_afd: Option<String>,
+    pub fixed_afd: Option<FixedAfd>,
     /// <p>description&quot;: &quot;The framerate denominator. For example, 1001. The framerate is the numerator divided by the denominator. For example, 24000 / 1001 = 23.976 FPS.</p>
     #[serde(rename = "FramerateDenominator")]
     pub framerate_denominator: i64,
@@ -4707,23 +25822,239 @@ pub struct Mpeg2Settings {
     /// <p>Relates to the GOP structure. Specifies whether the gopSize is specified in frames or seconds. If you do not plan to change the default gopSize, leave the default. If you specify SECONDS, MediaLive will internally convert the gop size to a frame count.</p>
     #[serde(rename = "GopSizeUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gop_size_units: Option<String>,
+    pub gop_size_units: Option<Mpeg2GopSizeUnits>,
     /// <p>Set the scan type of the output to PROGRESSIVE or INTERLACED (top field first).</p>
     #[serde(rename = "ScanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scan_type: Option<String>,
+    pub scan_type: Option<Mpeg2ScanType>,
     /// <p>Relates to the GOP structure. If you do not know what GOP is, use the default.
     /// FIXED: Set the number of B-frames in each sub-GOP to the value in gopNumBFrames.
     /// DYNAMIC: Let MediaLive optimize the number of B-frames in each sub-GOP, to improve visual quality.</p>
     #[serde(rename = "SubgopLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subgop_length: Option<String>,
+    pub subgop_length: Option<Mpeg2SubGopLength>,
     /// <p>Determines how MediaLive inserts timecodes in the output video. For detailed information about setting up the input and the output for a timecode, see the section on &quot;MediaLive Features - Timecode configuration&quot; in the MediaLive User Guide.
     /// DISABLED: do not include timecodes.
     /// GOP_TIMECODE: Include timecode metadata in the GOP header.</p>
     #[serde(rename = "TimecodeInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timecode_insertion: Option<String>,
+    pub timecode_insertion: Option<Mpeg2TimecodeInsertionBehavior>,
+}
+
+/// <p>Mpeg2 Sub Gop Length</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2SubGopLength {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2SubGopLength {
+    Dynamic,
+    Fixed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2SubGopLength),
+}
+
+impl Default for Mpeg2SubGopLength {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2SubGopLength {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2SubGopLength {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2SubGopLength {
+    fn into(self) -> String {
+        match self {
+            Mpeg2SubGopLength::Dynamic => "DYNAMIC".to_string(),
+            Mpeg2SubGopLength::Fixed => "FIXED".to_string(),
+            Mpeg2SubGopLength::UnknownVariant(UnknownMpeg2SubGopLength { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2SubGopLength {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2SubGopLength::Dynamic => &"DYNAMIC",
+            Mpeg2SubGopLength::Fixed => &"FIXED",
+            Mpeg2SubGopLength::UnknownVariant(UnknownMpeg2SubGopLength { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for Mpeg2SubGopLength {
+    fn from(name: &str) -> Self {
+        match name {
+            "DYNAMIC" => Mpeg2SubGopLength::Dynamic,
+            "FIXED" => Mpeg2SubGopLength::Fixed,
+            _ => Mpeg2SubGopLength::UnknownVariant(UnknownMpeg2SubGopLength {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mpeg2SubGopLength {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DYNAMIC" => Mpeg2SubGopLength::Dynamic,
+            "FIXED" => Mpeg2SubGopLength::Fixed,
+            _ => Mpeg2SubGopLength::UnknownVariant(UnknownMpeg2SubGopLength { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2SubGopLength {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2SubGopLength {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2SubGopLength {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Mpeg2 Timecode Insertion Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMpeg2TimecodeInsertionBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mpeg2TimecodeInsertionBehavior {
+    Disabled,
+    GopTimecode,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMpeg2TimecodeInsertionBehavior),
+}
+
+impl Default for Mpeg2TimecodeInsertionBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mpeg2TimecodeInsertionBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mpeg2TimecodeInsertionBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mpeg2TimecodeInsertionBehavior {
+    fn into(self) -> String {
+        match self {
+            Mpeg2TimecodeInsertionBehavior::Disabled => "DISABLED".to_string(),
+            Mpeg2TimecodeInsertionBehavior::GopTimecode => "GOP_TIMECODE".to_string(),
+            Mpeg2TimecodeInsertionBehavior::UnknownVariant(
+                UnknownMpeg2TimecodeInsertionBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mpeg2TimecodeInsertionBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            Mpeg2TimecodeInsertionBehavior::Disabled => &"DISABLED",
+            Mpeg2TimecodeInsertionBehavior::GopTimecode => &"GOP_TIMECODE",
+            Mpeg2TimecodeInsertionBehavior::UnknownVariant(
+                UnknownMpeg2TimecodeInsertionBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for Mpeg2TimecodeInsertionBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Mpeg2TimecodeInsertionBehavior::Disabled,
+            "GOP_TIMECODE" => Mpeg2TimecodeInsertionBehavior::GopTimecode,
+            _ => Mpeg2TimecodeInsertionBehavior::UnknownVariant(
+                UnknownMpeg2TimecodeInsertionBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for Mpeg2TimecodeInsertionBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Mpeg2TimecodeInsertionBehavior::Disabled,
+            "GOP_TIMECODE" => Mpeg2TimecodeInsertionBehavior::GopTimecode,
+            _ => Mpeg2TimecodeInsertionBehavior::UnknownVariant(
+                UnknownMpeg2TimecodeInsertionBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mpeg2TimecodeInsertionBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mpeg2TimecodeInsertionBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mpeg2TimecodeInsertionBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Ms Smooth Group Settings</p>
@@ -4736,11 +26067,11 @@ pub struct MsSmoothGroupSettings {
     /// <p>If set to passthrough for an audio-only MS Smooth output, the fragment absolute time will be set to the current timecode. This option does not write timecodes to the audio elementary stream.</p>
     #[serde(rename = "AudioOnlyTimecodeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub audio_only_timecode_control: Option<String>,
+    pub audio_only_timecode_control: Option<SmoothGroupAudioOnlyTimecodeControl>,
     /// <p>If set to verifyAuthenticity, verify the https certificate chain to a trusted Certificate Authority (CA).  This will cause https outputs to self-signed certificates to fail.</p>
     #[serde(rename = "CertificateMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_mode: Option<String>,
+    pub certificate_mode: Option<SmoothGroupCertificateMode>,
     /// <p>Number of seconds to wait before retrying connection to the IIS server if the connection is lost. Content will be cached during this time and the cache will be be delivered to the IIS server once the connection is re-established.</p>
     #[serde(rename = "ConnectionRetryInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4762,11 +26093,11 @@ pub struct MsSmoothGroupSettings {
     /// - &quot;noEventId&quot; - do not send an event ID to the IIS server.</p>
     #[serde(rename = "EventIdMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_id_mode: Option<String>,
+    pub event_id_mode: Option<SmoothGroupEventIdMode>,
     /// <p>When set to sendEos, send EOS signal to IIS server when stopping the event</p>
     #[serde(rename = "EventStopBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_stop_behavior: Option<String>,
+    pub event_stop_behavior: Option<SmoothGroupEventStopBehavior>,
     /// <p>Size in seconds of file cache for streaming outputs.</p>
     #[serde(rename = "FilecacheDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4778,7 +26109,7 @@ pub struct MsSmoothGroupSettings {
     /// <p>Parameter that control output group behavior on input loss.</p>
     #[serde(rename = "InputLossAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_loss_action: Option<String>,
+    pub input_loss_action: Option<InputLossActionForMsSmoothOut>,
     /// <p>Number of retry attempts.</p>
     #[serde(rename = "NumRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4790,7 +26121,7 @@ pub struct MsSmoothGroupSettings {
     /// <p>useInputSegmentation has been deprecated. The configured segment size is always used.</p>
     #[serde(rename = "SegmentationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segmentation_mode: Option<String>,
+    pub segmentation_mode: Option<SmoothGroupSegmentationMode>,
     /// <p>Number of milliseconds to delay the output from the second pipeline.</p>
     #[serde(rename = "SendDelayMs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4801,11 +26132,11 @@ pub struct MsSmoothGroupSettings {
     /// - NONE: Don&#39;t generate a sparse track for any outputs in this output group.</p>
     #[serde(rename = "SparseTrackType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sparse_track_type: Option<String>,
+    pub sparse_track_type: Option<SmoothGroupSparseTrackType>,
     /// <p>When set to send, send stream manifest so publishing point doesn&#39;t start until all streams start.</p>
     #[serde(rename = "StreamManifestBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_manifest_behavior: Option<String>,
+    pub stream_manifest_behavior: Option<SmoothGroupStreamManifestBehavior>,
     /// <p>Timestamp offset for the event.  Only used if timestampOffsetMode is set to useConfiguredOffset.</p>
     #[serde(rename = "TimestampOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4815,7 +26146,115 @@ pub struct MsSmoothGroupSettings {
     /// - useConfiguredOffset: Use an explicitly configured date as the offset</p>
     #[serde(rename = "TimestampOffsetMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timestamp_offset_mode: Option<String>,
+    pub timestamp_offset_mode: Option<SmoothGroupTimestampOffsetMode>,
+}
+
+/// <p>Ms Smooth H265 Packaging Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMsSmoothH265PackagingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MsSmoothH265PackagingType {
+    Hev1,
+    Hvc1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMsSmoothH265PackagingType),
+}
+
+impl Default for MsSmoothH265PackagingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MsSmoothH265PackagingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MsSmoothH265PackagingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MsSmoothH265PackagingType {
+    fn into(self) -> String {
+        match self {
+            MsSmoothH265PackagingType::Hev1 => "HEV1".to_string(),
+            MsSmoothH265PackagingType::Hvc1 => "HVC1".to_string(),
+            MsSmoothH265PackagingType::UnknownVariant(UnknownMsSmoothH265PackagingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MsSmoothH265PackagingType {
+    fn into(self) -> &'a str {
+        match self {
+            MsSmoothH265PackagingType::Hev1 => &"HEV1",
+            MsSmoothH265PackagingType::Hvc1 => &"HVC1",
+            MsSmoothH265PackagingType::UnknownVariant(UnknownMsSmoothH265PackagingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MsSmoothH265PackagingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEV1" => MsSmoothH265PackagingType::Hev1,
+            "HVC1" => MsSmoothH265PackagingType::Hvc1,
+            _ => MsSmoothH265PackagingType::UnknownVariant(UnknownMsSmoothH265PackagingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MsSmoothH265PackagingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEV1" => MsSmoothH265PackagingType::Hev1,
+            "HVC1" => MsSmoothH265PackagingType::Hvc1,
+            _ => {
+                MsSmoothH265PackagingType::UnknownVariant(UnknownMsSmoothH265PackagingType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for MsSmoothH265PackagingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MsSmoothH265PackagingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MsSmoothH265PackagingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Ms Smooth Output Settings</p>
@@ -4825,7 +26264,7 @@ pub struct MsSmoothOutputSettings {
     /// Specifies whether MP4 segments should be packaged as HEV1 or HVC1.</p>
     #[serde(rename = "H265PackagingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub h265_packaging_type: Option<String>,
+    pub h265_packaging_type: Option<MsSmoothH265PackagingType>,
     /// <p>String concatenated to the end of the destination filename.  Required for multiple outputs of the same type.</p>
     #[serde(rename = "NameModifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4871,7 +26310,7 @@ pub struct Multiplex {
     /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MultiplexState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5026,7 +26465,7 @@ pub struct MultiplexProgramSettings {
     /// <p>Indicates which pipeline is preferred by the multiplex for program ingest.</p>
     #[serde(rename = "PreferredChannelPipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub preferred_channel_pipeline: Option<String>,
+    pub preferred_channel_pipeline: Option<PreferredChannelPipeline>,
     /// <p>Unique program number.</p>
     #[serde(rename = "ProgramNumber")]
     pub program_number: i64,
@@ -5083,6 +26522,144 @@ pub struct MultiplexSettingsSummary {
     pub transport_stream_bitrate: Option<i64>,
 }
 
+/// <p>The current state of the multiplex.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMultiplexState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MultiplexState {
+    CreateFailed,
+    Creating,
+    Deleted,
+    Deleting,
+    Idle,
+    Recovering,
+    Running,
+    Starting,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMultiplexState),
+}
+
+impl Default for MultiplexState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MultiplexState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MultiplexState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MultiplexState {
+    fn into(self) -> String {
+        match self {
+            MultiplexState::CreateFailed => "CREATE_FAILED".to_string(),
+            MultiplexState::Creating => "CREATING".to_string(),
+            MultiplexState::Deleted => "DELETED".to_string(),
+            MultiplexState::Deleting => "DELETING".to_string(),
+            MultiplexState::Idle => "IDLE".to_string(),
+            MultiplexState::Recovering => "RECOVERING".to_string(),
+            MultiplexState::Running => "RUNNING".to_string(),
+            MultiplexState::Starting => "STARTING".to_string(),
+            MultiplexState::Stopping => "STOPPING".to_string(),
+            MultiplexState::UnknownVariant(UnknownMultiplexState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MultiplexState {
+    fn into(self) -> &'a str {
+        match self {
+            MultiplexState::CreateFailed => &"CREATE_FAILED",
+            MultiplexState::Creating => &"CREATING",
+            MultiplexState::Deleted => &"DELETED",
+            MultiplexState::Deleting => &"DELETING",
+            MultiplexState::Idle => &"IDLE",
+            MultiplexState::Recovering => &"RECOVERING",
+            MultiplexState::Running => &"RUNNING",
+            MultiplexState::Starting => &"STARTING",
+            MultiplexState::Stopping => &"STOPPING",
+            MultiplexState::UnknownVariant(UnknownMultiplexState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MultiplexState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => MultiplexState::CreateFailed,
+            "CREATING" => MultiplexState::Creating,
+            "DELETED" => MultiplexState::Deleted,
+            "DELETING" => MultiplexState::Deleting,
+            "IDLE" => MultiplexState::Idle,
+            "RECOVERING" => MultiplexState::Recovering,
+            "RUNNING" => MultiplexState::Running,
+            "STARTING" => MultiplexState::Starting,
+            "STOPPING" => MultiplexState::Stopping,
+            _ => MultiplexState::UnknownVariant(UnknownMultiplexState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MultiplexState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => MultiplexState::CreateFailed,
+            "CREATING" => MultiplexState::Creating,
+            "DELETED" => MultiplexState::Deleted,
+            "DELETING" => MultiplexState::Deleting,
+            "IDLE" => MultiplexState::Idle,
+            "RECOVERING" => MultiplexState::Recovering,
+            "RUNNING" => MultiplexState::Running,
+            "STARTING" => MultiplexState::Starting,
+            "STOPPING" => MultiplexState::Stopping,
+            _ => MultiplexState::UnknownVariant(UnknownMultiplexState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MultiplexState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MultiplexState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MultiplexState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Statmux rate control settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexStatmuxVideoSettings {
@@ -5135,7 +26712,7 @@ pub struct MultiplexSummary {
     /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MultiplexState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5157,6 +26734,128 @@ pub struct MultiplexVideoSettings {
     pub statmux_settings: Option<MultiplexStatmuxVideoSettings>,
 }
 
+/// <p>Network Input Server Validation</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNetworkInputServerValidation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NetworkInputServerValidation {
+    CheckCryptographyAndValidateName,
+    CheckCryptographyOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNetworkInputServerValidation),
+}
+
+impl Default for NetworkInputServerValidation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NetworkInputServerValidation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NetworkInputServerValidation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NetworkInputServerValidation {
+    fn into(self) -> String {
+        match self {
+            NetworkInputServerValidation::CheckCryptographyAndValidateName => {
+                "CHECK_CRYPTOGRAPHY_AND_VALIDATE_NAME".to_string()
+            }
+            NetworkInputServerValidation::CheckCryptographyOnly => {
+                "CHECK_CRYPTOGRAPHY_ONLY".to_string()
+            }
+            NetworkInputServerValidation::UnknownVariant(UnknownNetworkInputServerValidation {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NetworkInputServerValidation {
+    fn into(self) -> &'a str {
+        match self {
+            NetworkInputServerValidation::CheckCryptographyAndValidateName => {
+                &"CHECK_CRYPTOGRAPHY_AND_VALIDATE_NAME"
+            }
+            NetworkInputServerValidation::CheckCryptographyOnly => &"CHECK_CRYPTOGRAPHY_ONLY",
+            NetworkInputServerValidation::UnknownVariant(UnknownNetworkInputServerValidation {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NetworkInputServerValidation {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHECK_CRYPTOGRAPHY_AND_VALIDATE_NAME" => {
+                NetworkInputServerValidation::CheckCryptographyAndValidateName
+            }
+            "CHECK_CRYPTOGRAPHY_ONLY" => NetworkInputServerValidation::CheckCryptographyOnly,
+            _ => {
+                NetworkInputServerValidation::UnknownVariant(UnknownNetworkInputServerValidation {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for NetworkInputServerValidation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHECK_CRYPTOGRAPHY_AND_VALIDATE_NAME" => {
+                NetworkInputServerValidation::CheckCryptographyAndValidateName
+            }
+            "CHECK_CRYPTOGRAPHY_ONLY" => NetworkInputServerValidation::CheckCryptographyOnly,
+            _ => {
+                NetworkInputServerValidation::UnknownVariant(UnknownNetworkInputServerValidation {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkInputServerValidation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NetworkInputServerValidation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NetworkInputServerValidation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Network source to transcode. Must be accessible to the Elemental Live node that is running the live event through a network connection.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NetworkInputSettings {
@@ -5167,7 +26866,7 @@ pub struct NetworkInputSettings {
     /// <p>Check HTTPS server certificates. When set to checkCryptographyOnly, cryptography in the certificate will be checked, but not the server&#39;s name. Certain subdomains (notably S3 buckets that use dots in the bucket name) do not strictly match the corresponding certificate&#39;s wildcard pattern and would otherwise cause the event to error. This setting is ignored for protocols that do not use https.</p>
     #[serde(rename = "ServerValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_validation: Option<String>,
+    pub server_validation: Option<NetworkInputServerValidation>,
 }
 
 /// <p>Nielsen Configuration</p>
@@ -5180,7 +26879,115 @@ pub struct NielsenConfiguration {
     /// <p>Enables Nielsen PCM to ID3 tagging</p>
     #[serde(rename = "NielsenPcmToId3Tagging")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nielsen_pcm_to_id_3_tagging: Option<String>,
+    pub nielsen_pcm_to_id_3_tagging: Option<NielsenPcmToId3TaggingState>,
+}
+
+/// <p>State of Nielsen PCM to ID3 tagging</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNielsenPcmToId3TaggingState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NielsenPcmToId3TaggingState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNielsenPcmToId3TaggingState),
+}
+
+impl Default for NielsenPcmToId3TaggingState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NielsenPcmToId3TaggingState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NielsenPcmToId3TaggingState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NielsenPcmToId3TaggingState {
+    fn into(self) -> String {
+        match self {
+            NielsenPcmToId3TaggingState::Disabled => "DISABLED".to_string(),
+            NielsenPcmToId3TaggingState::Enabled => "ENABLED".to_string(),
+            NielsenPcmToId3TaggingState::UnknownVariant(UnknownNielsenPcmToId3TaggingState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NielsenPcmToId3TaggingState {
+    fn into(self) -> &'a str {
+        match self {
+            NielsenPcmToId3TaggingState::Disabled => &"DISABLED",
+            NielsenPcmToId3TaggingState::Enabled => &"ENABLED",
+            NielsenPcmToId3TaggingState::UnknownVariant(UnknownNielsenPcmToId3TaggingState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NielsenPcmToId3TaggingState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => NielsenPcmToId3TaggingState::Disabled,
+            "ENABLED" => NielsenPcmToId3TaggingState::Enabled,
+            _ => NielsenPcmToId3TaggingState::UnknownVariant(UnknownNielsenPcmToId3TaggingState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NielsenPcmToId3TaggingState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => NielsenPcmToId3TaggingState::Disabled,
+            "ENABLED" => NielsenPcmToId3TaggingState::Enabled,
+            _ => NielsenPcmToId3TaggingState::UnknownVariant(UnknownNielsenPcmToId3TaggingState {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NielsenPcmToId3TaggingState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NielsenPcmToId3TaggingState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NielsenPcmToId3TaggingState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Reserved resources available for purchase</p>
@@ -5202,7 +27009,7 @@ pub struct Offering {
     /// <p>Units for duration, e.g. &#39;MONTHS&#39;</p>
     #[serde(rename = "DurationUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_units: Option<String>,
+    pub duration_units: Option<OfferingDurationUnits>,
     /// <p>One-time charge for each reserved resource, e.g. &#39;0.0&#39; for a NO_UPFRONT offering</p>
     #[serde(rename = "FixedPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5218,7 +27025,7 @@ pub struct Offering {
     /// <p>Offering type, e.g. &#39;NO_UPFRONT&#39;</p>
     #[serde(rename = "OfferingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_type: Option<String>,
+    pub offering_type: Option<OfferingType>,
     /// <p>AWS region, e.g. &#39;us-west-2&#39;</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5231,6 +27038,206 @@ pub struct Offering {
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_price: Option<f64>,
+}
+
+/// <p>Units for duration, e.g. &#39;MONTHS&#39;</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOfferingDurationUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OfferingDurationUnits {
+    Months,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOfferingDurationUnits),
+}
+
+impl Default for OfferingDurationUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OfferingDurationUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OfferingDurationUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OfferingDurationUnits {
+    fn into(self) -> String {
+        match self {
+            OfferingDurationUnits::Months => "MONTHS".to_string(),
+            OfferingDurationUnits::UnknownVariant(UnknownOfferingDurationUnits {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OfferingDurationUnits {
+    fn into(self) -> &'a str {
+        match self {
+            OfferingDurationUnits::Months => &"MONTHS",
+            OfferingDurationUnits::UnknownVariant(UnknownOfferingDurationUnits {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OfferingDurationUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "MONTHS" => OfferingDurationUnits::Months,
+            _ => OfferingDurationUnits::UnknownVariant(UnknownOfferingDurationUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OfferingDurationUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MONTHS" => OfferingDurationUnits::Months,
+            _ => OfferingDurationUnits::UnknownVariant(UnknownOfferingDurationUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingDurationUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OfferingDurationUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OfferingDurationUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Offering type, e.g. &#39;NO_UPFRONT&#39;</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOfferingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OfferingType {
+    NoUpfront,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOfferingType),
+}
+
+impl Default for OfferingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OfferingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OfferingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OfferingType {
+    fn into(self) -> String {
+        match self {
+            OfferingType::NoUpfront => "NO_UPFRONT".to_string(),
+            OfferingType::UnknownVariant(UnknownOfferingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OfferingType {
+    fn into(self) -> &'a str {
+        match self {
+            OfferingType::NoUpfront => &"NO_UPFRONT",
+            OfferingType::UnknownVariant(UnknownOfferingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OfferingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_UPFRONT" => OfferingType::NoUpfront,
+            _ => OfferingType::UnknownVariant(UnknownOfferingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OfferingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_UPFRONT" => OfferingType::NoUpfront,
+            _ => OfferingType::UnknownVariant(UnknownOfferingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OfferingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OfferingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Output settings. There can be multiple outputs within a group.</p>
@@ -5409,12 +27416,229 @@ pub struct PipelineDetail {
     pub pipeline_id: Option<String>,
 }
 
+/// <p>Pipeline ID</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPipelineId {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PipelineId {
+    Pipeline0,
+    Pipeline1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPipelineId),
+}
+
+impl Default for PipelineId {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PipelineId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PipelineId {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PipelineId {
+    fn into(self) -> String {
+        match self {
+            PipelineId::Pipeline0 => "PIPELINE_0".to_string(),
+            PipelineId::Pipeline1 => "PIPELINE_1".to_string(),
+            PipelineId::UnknownVariant(UnknownPipelineId { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PipelineId {
+    fn into(self) -> &'a str {
+        match self {
+            PipelineId::Pipeline0 => &"PIPELINE_0",
+            PipelineId::Pipeline1 => &"PIPELINE_1",
+            PipelineId::UnknownVariant(UnknownPipelineId { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PipelineId {
+    fn from(name: &str) -> Self {
+        match name {
+            "PIPELINE_0" => PipelineId::Pipeline0,
+            "PIPELINE_1" => PipelineId::Pipeline1,
+            _ => PipelineId::UnknownVariant(UnknownPipelineId {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PipelineId {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PIPELINE_0" => PipelineId::Pipeline0,
+            "PIPELINE_1" => PipelineId::Pipeline1,
+            _ => PipelineId::UnknownVariant(UnknownPipelineId { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineId {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PipelineId {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PipelineId {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings for pausing a pipeline.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PipelinePauseStateSettings {
     /// <p>Pipeline ID to pause (&quot;PIPELINE<em>0&quot; or &quot;PIPELINE</em>1&quot;).</p>
     #[serde(rename = "PipelineId")]
-    pub pipeline_id: String,
+    pub pipeline_id: PipelineId,
+}
+
+/// <p>Indicates which pipeline is preferred by the multiplex for program ingest.
+/// If set to &quot;PIPELINE<em>0&quot; or &quot;PIPELINE</em>1&quot; and an unhealthy ingest causes the multiplex to switch to the non-preferred pipeline,
+/// it will switch back once that ingest is healthy again. If set to &quot;CURRENTLY_ACTIVE&quot;,
+/// it will not switch back to the other pipeline based on it recovering to a healthy state,
+/// it will only switch if the active pipeline becomes unhealthy.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPreferredChannelPipeline {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PreferredChannelPipeline {
+    CurrentlyActive,
+    Pipeline0,
+    Pipeline1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPreferredChannelPipeline),
+}
+
+impl Default for PreferredChannelPipeline {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PreferredChannelPipeline {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PreferredChannelPipeline {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PreferredChannelPipeline {
+    fn into(self) -> String {
+        match self {
+            PreferredChannelPipeline::CurrentlyActive => "CURRENTLY_ACTIVE".to_string(),
+            PreferredChannelPipeline::Pipeline0 => "PIPELINE_0".to_string(),
+            PreferredChannelPipeline::Pipeline1 => "PIPELINE_1".to_string(),
+            PreferredChannelPipeline::UnknownVariant(UnknownPreferredChannelPipeline {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PreferredChannelPipeline {
+    fn into(self) -> &'a str {
+        match self {
+            PreferredChannelPipeline::CurrentlyActive => &"CURRENTLY_ACTIVE",
+            PreferredChannelPipeline::Pipeline0 => &"PIPELINE_0",
+            PreferredChannelPipeline::Pipeline1 => &"PIPELINE_1",
+            PreferredChannelPipeline::UnknownVariant(UnknownPreferredChannelPipeline {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PreferredChannelPipeline {
+    fn from(name: &str) -> Self {
+        match name {
+            "CURRENTLY_ACTIVE" => PreferredChannelPipeline::CurrentlyActive,
+            "PIPELINE_0" => PreferredChannelPipeline::Pipeline0,
+            "PIPELINE_1" => PreferredChannelPipeline::Pipeline1,
+            _ => PreferredChannelPipeline::UnknownVariant(UnknownPreferredChannelPipeline {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PreferredChannelPipeline {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CURRENTLY_ACTIVE" => PreferredChannelPipeline::CurrentlyActive,
+            "PIPELINE_0" => PreferredChannelPipeline::Pipeline0,
+            "PIPELINE_1" => PreferredChannelPipeline::Pipeline1,
+            _ => PreferredChannelPipeline::UnknownVariant(UnknownPreferredChannelPipeline { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PreferredChannelPipeline {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PreferredChannelPipeline {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PreferredChannelPipeline {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
@@ -5520,7 +27744,7 @@ pub struct Reservation {
     /// <p>Units for duration, e.g. &#39;MONTHS&#39;</p>
     #[serde(rename = "DurationUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_units: Option<String>,
+    pub duration_units: Option<OfferingDurationUnits>,
     /// <p>Reservation UTC end date and time in ISO-8601 format, e.g. &#39;2019-03-01T00:00:00&#39;</p>
     #[serde(rename = "End")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5544,7 +27768,7 @@ pub struct Reservation {
     /// <p>Offering type, e.g. &#39;NO_UPFRONT&#39;</p>
     #[serde(rename = "OfferingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_type: Option<String>,
+    pub offering_type: Option<OfferingType>,
     /// <p>AWS region, e.g. &#39;us-west-2&#39;</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5564,7 +27788,7 @@ pub struct Reservation {
     /// <p>Current state of reservation, e.g. &#39;ACTIVE&#39;</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReservationState>,
     /// <p>A collection of key-value pairs</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5575,6 +27799,468 @@ pub struct Reservation {
     pub usage_price: Option<f64>,
 }
 
+/// <p>Codec, &#39;MPEG2&#39;, &#39;AVC&#39;, &#39;HEVC&#39;, or &#39;AUDIO&#39;</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationCodec {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationCodec {
+    Audio,
+    Avc,
+    Hevc,
+    Link,
+    Mpeg2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationCodec),
+}
+
+impl Default for ReservationCodec {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationCodec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationCodec {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationCodec {
+    fn into(self) -> String {
+        match self {
+            ReservationCodec::Audio => "AUDIO".to_string(),
+            ReservationCodec::Avc => "AVC".to_string(),
+            ReservationCodec::Hevc => "HEVC".to_string(),
+            ReservationCodec::Link => "LINK".to_string(),
+            ReservationCodec::Mpeg2 => "MPEG2".to_string(),
+            ReservationCodec::UnknownVariant(UnknownReservationCodec { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationCodec {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationCodec::Audio => &"AUDIO",
+            ReservationCodec::Avc => &"AVC",
+            ReservationCodec::Hevc => &"HEVC",
+            ReservationCodec::Link => &"LINK",
+            ReservationCodec::Mpeg2 => &"MPEG2",
+            ReservationCodec::UnknownVariant(UnknownReservationCodec { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReservationCodec {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUDIO" => ReservationCodec::Audio,
+            "AVC" => ReservationCodec::Avc,
+            "HEVC" => ReservationCodec::Hevc,
+            "LINK" => ReservationCodec::Link,
+            "MPEG2" => ReservationCodec::Mpeg2,
+            _ => ReservationCodec::UnknownVariant(UnknownReservationCodec {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationCodec {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUDIO" => ReservationCodec::Audio,
+            "AVC" => ReservationCodec::Avc,
+            "HEVC" => ReservationCodec::Hevc,
+            "LINK" => ReservationCodec::Link,
+            "MPEG2" => ReservationCodec::Mpeg2,
+            _ => ReservationCodec::UnknownVariant(UnknownReservationCodec { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationCodec {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationCodec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationCodec {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Maximum bitrate in megabits per second</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationMaximumBitrate {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationMaximumBitrate {
+    Max10Mbps,
+    Max20Mbps,
+    Max50Mbps,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationMaximumBitrate),
+}
+
+impl Default for ReservationMaximumBitrate {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationMaximumBitrate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationMaximumBitrate {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationMaximumBitrate {
+    fn into(self) -> String {
+        match self {
+            ReservationMaximumBitrate::Max10Mbps => "MAX_10_MBPS".to_string(),
+            ReservationMaximumBitrate::Max20Mbps => "MAX_20_MBPS".to_string(),
+            ReservationMaximumBitrate::Max50Mbps => "MAX_50_MBPS".to_string(),
+            ReservationMaximumBitrate::UnknownVariant(UnknownReservationMaximumBitrate {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationMaximumBitrate {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationMaximumBitrate::Max10Mbps => &"MAX_10_MBPS",
+            ReservationMaximumBitrate::Max20Mbps => &"MAX_20_MBPS",
+            ReservationMaximumBitrate::Max50Mbps => &"MAX_50_MBPS",
+            ReservationMaximumBitrate::UnknownVariant(UnknownReservationMaximumBitrate {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservationMaximumBitrate {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX_10_MBPS" => ReservationMaximumBitrate::Max10Mbps,
+            "MAX_20_MBPS" => ReservationMaximumBitrate::Max20Mbps,
+            "MAX_50_MBPS" => ReservationMaximumBitrate::Max50Mbps,
+            _ => ReservationMaximumBitrate::UnknownVariant(UnknownReservationMaximumBitrate {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationMaximumBitrate {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX_10_MBPS" => ReservationMaximumBitrate::Max10Mbps,
+            "MAX_20_MBPS" => ReservationMaximumBitrate::Max20Mbps,
+            "MAX_50_MBPS" => ReservationMaximumBitrate::Max50Mbps,
+            _ => {
+                ReservationMaximumBitrate::UnknownVariant(UnknownReservationMaximumBitrate { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationMaximumBitrate {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationMaximumBitrate {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationMaximumBitrate {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Maximum framerate in frames per second (Outputs only)</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationMaximumFramerate {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationMaximumFramerate {
+    Max30Fps,
+    Max60Fps,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationMaximumFramerate),
+}
+
+impl Default for ReservationMaximumFramerate {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationMaximumFramerate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationMaximumFramerate {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationMaximumFramerate {
+    fn into(self) -> String {
+        match self {
+            ReservationMaximumFramerate::Max30Fps => "MAX_30_FPS".to_string(),
+            ReservationMaximumFramerate::Max60Fps => "MAX_60_FPS".to_string(),
+            ReservationMaximumFramerate::UnknownVariant(UnknownReservationMaximumFramerate {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationMaximumFramerate {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationMaximumFramerate::Max30Fps => &"MAX_30_FPS",
+            ReservationMaximumFramerate::Max60Fps => &"MAX_60_FPS",
+            ReservationMaximumFramerate::UnknownVariant(UnknownReservationMaximumFramerate {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservationMaximumFramerate {
+    fn from(name: &str) -> Self {
+        match name {
+            "MAX_30_FPS" => ReservationMaximumFramerate::Max30Fps,
+            "MAX_60_FPS" => ReservationMaximumFramerate::Max60Fps,
+            _ => ReservationMaximumFramerate::UnknownVariant(UnknownReservationMaximumFramerate {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationMaximumFramerate {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MAX_30_FPS" => ReservationMaximumFramerate::Max30Fps,
+            "MAX_60_FPS" => ReservationMaximumFramerate::Max60Fps,
+            _ => ReservationMaximumFramerate::UnknownVariant(UnknownReservationMaximumFramerate {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationMaximumFramerate {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationMaximumFramerate {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationMaximumFramerate {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Resolution based on lines of vertical resolution; SD is less than 720 lines, HD is 720 to 1080 lines, FHD is 1080 lines, UHD is greater than 1080 lines</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationResolution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationResolution {
+    Fhd,
+    Hd,
+    Sd,
+    Uhd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationResolution),
+}
+
+impl Default for ReservationResolution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationResolution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationResolution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationResolution {
+    fn into(self) -> String {
+        match self {
+            ReservationResolution::Fhd => "FHD".to_string(),
+            ReservationResolution::Hd => "HD".to_string(),
+            ReservationResolution::Sd => "SD".to_string(),
+            ReservationResolution::Uhd => "UHD".to_string(),
+            ReservationResolution::UnknownVariant(UnknownReservationResolution {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationResolution {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationResolution::Fhd => &"FHD",
+            ReservationResolution::Hd => &"HD",
+            ReservationResolution::Sd => &"SD",
+            ReservationResolution::Uhd => &"UHD",
+            ReservationResolution::UnknownVariant(UnknownReservationResolution {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservationResolution {
+    fn from(name: &str) -> Self {
+        match name {
+            "FHD" => ReservationResolution::Fhd,
+            "HD" => ReservationResolution::Hd,
+            "SD" => ReservationResolution::Sd,
+            "UHD" => ReservationResolution::Uhd,
+            _ => ReservationResolution::UnknownVariant(UnknownReservationResolution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationResolution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FHD" => ReservationResolution::Fhd,
+            "HD" => ReservationResolution::Hd,
+            "SD" => ReservationResolution::Sd,
+            "UHD" => ReservationResolution::Uhd,
+            _ => ReservationResolution::UnknownVariant(UnknownReservationResolution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationResolution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationResolution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationResolution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Resource configuration (codec, resolution, bitrate, ...)</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5582,35 +28268,800 @@ pub struct ReservationResourceSpecification {
     /// <p>Channel class, e.g. &#39;STANDARD&#39;</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>Codec, e.g. &#39;AVC&#39;</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub codec: Option<String>,
+    pub codec: Option<ReservationCodec>,
     /// <p>Maximum bitrate, e.g. &#39;MAX<em>20</em>MBPS&#39;</p>
     #[serde(rename = "MaximumBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_bitrate: Option<String>,
+    pub maximum_bitrate: Option<ReservationMaximumBitrate>,
     /// <p>Maximum framerate, e.g. &#39;MAX<em>30</em>FPS&#39; (Outputs only)</p>
     #[serde(rename = "MaximumFramerate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_framerate: Option<String>,
+    pub maximum_framerate: Option<ReservationMaximumFramerate>,
     /// <p>Resolution, e.g. &#39;HD&#39;</p>
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolution: Option<String>,
+    pub resolution: Option<ReservationResolution>,
     /// <p>Resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, &#39;MULTIPLEX&#39;, or &#39;CHANNEL&#39;</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ReservationResourceType>,
     /// <p>Special feature, e.g. &#39;AUDIO_NORMALIZATION&#39; (Channels only)</p>
     #[serde(rename = "SpecialFeature")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub special_feature: Option<String>,
+    pub special_feature: Option<ReservationSpecialFeature>,
     /// <p>Video quality, e.g. &#39;STANDARD&#39; (Outputs only)</p>
     #[serde(rename = "VideoQuality")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub video_quality: Option<String>,
+    pub video_quality: Option<ReservationVideoQuality>,
+}
+
+/// <p>Resource type, &#39;INPUT&#39;, &#39;OUTPUT&#39;, &#39;MULTIPLEX&#39;, or &#39;CHANNEL&#39;</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationResourceType {
+    Channel,
+    Input,
+    Multiplex,
+    Output,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationResourceType),
+}
+
+impl Default for ReservationResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationResourceType {
+    fn into(self) -> String {
+        match self {
+            ReservationResourceType::Channel => "CHANNEL".to_string(),
+            ReservationResourceType::Input => "INPUT".to_string(),
+            ReservationResourceType::Multiplex => "MULTIPLEX".to_string(),
+            ReservationResourceType::Output => "OUTPUT".to_string(),
+            ReservationResourceType::UnknownVariant(UnknownReservationResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationResourceType::Channel => &"CHANNEL",
+            ReservationResourceType::Input => &"INPUT",
+            ReservationResourceType::Multiplex => &"MULTIPLEX",
+            ReservationResourceType::Output => &"OUTPUT",
+            ReservationResourceType::UnknownVariant(UnknownReservationResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservationResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHANNEL" => ReservationResourceType::Channel,
+            "INPUT" => ReservationResourceType::Input,
+            "MULTIPLEX" => ReservationResourceType::Multiplex,
+            "OUTPUT" => ReservationResourceType::Output,
+            _ => ReservationResourceType::UnknownVariant(UnknownReservationResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHANNEL" => ReservationResourceType::Channel,
+            "INPUT" => ReservationResourceType::Input,
+            "MULTIPLEX" => ReservationResourceType::Multiplex,
+            "OUTPUT" => ReservationResourceType::Output,
+            _ => ReservationResourceType::UnknownVariant(UnknownReservationResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Special features, &#39;ADVANCED<em>AUDIO&#39; or &#39;AUDIO</em>NORMALIZATION&#39;</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationSpecialFeature {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationSpecialFeature {
+    AdvancedAudio,
+    AudioNormalization,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationSpecialFeature),
+}
+
+impl Default for ReservationSpecialFeature {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationSpecialFeature {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationSpecialFeature {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationSpecialFeature {
+    fn into(self) -> String {
+        match self {
+            ReservationSpecialFeature::AdvancedAudio => "ADVANCED_AUDIO".to_string(),
+            ReservationSpecialFeature::AudioNormalization => "AUDIO_NORMALIZATION".to_string(),
+            ReservationSpecialFeature::UnknownVariant(UnknownReservationSpecialFeature {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationSpecialFeature {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationSpecialFeature::AdvancedAudio => &"ADVANCED_AUDIO",
+            ReservationSpecialFeature::AudioNormalization => &"AUDIO_NORMALIZATION",
+            ReservationSpecialFeature::UnknownVariant(UnknownReservationSpecialFeature {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservationSpecialFeature {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADVANCED_AUDIO" => ReservationSpecialFeature::AdvancedAudio,
+            "AUDIO_NORMALIZATION" => ReservationSpecialFeature::AudioNormalization,
+            _ => ReservationSpecialFeature::UnknownVariant(UnknownReservationSpecialFeature {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationSpecialFeature {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADVANCED_AUDIO" => ReservationSpecialFeature::AdvancedAudio,
+            "AUDIO_NORMALIZATION" => ReservationSpecialFeature::AudioNormalization,
+            _ => {
+                ReservationSpecialFeature::UnknownVariant(UnknownReservationSpecialFeature { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationSpecialFeature {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationSpecialFeature {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationSpecialFeature {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Current reservation state</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationState {
+    Active,
+    Canceled,
+    Deleted,
+    Expired,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationState),
+}
+
+impl Default for ReservationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationState {
+    fn into(self) -> String {
+        match self {
+            ReservationState::Active => "ACTIVE".to_string(),
+            ReservationState::Canceled => "CANCELED".to_string(),
+            ReservationState::Deleted => "DELETED".to_string(),
+            ReservationState::Expired => "EXPIRED".to_string(),
+            ReservationState::UnknownVariant(UnknownReservationState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationState {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationState::Active => &"ACTIVE",
+            ReservationState::Canceled => &"CANCELED",
+            ReservationState::Deleted => &"DELETED",
+            ReservationState::Expired => &"EXPIRED",
+            ReservationState::UnknownVariant(UnknownReservationState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReservationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReservationState::Active,
+            "CANCELED" => ReservationState::Canceled,
+            "DELETED" => ReservationState::Deleted,
+            "EXPIRED" => ReservationState::Expired,
+            _ => ReservationState::UnknownVariant(UnknownReservationState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReservationState::Active,
+            "CANCELED" => ReservationState::Canceled,
+            "DELETED" => ReservationState::Deleted,
+            "EXPIRED" => ReservationState::Expired,
+            _ => ReservationState::UnknownVariant(UnknownReservationState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Video quality, e.g. &#39;STANDARD&#39; (Outputs only)</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationVideoQuality {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationVideoQuality {
+    Enhanced,
+    Premium,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationVideoQuality),
+}
+
+impl Default for ReservationVideoQuality {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationVideoQuality {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationVideoQuality {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationVideoQuality {
+    fn into(self) -> String {
+        match self {
+            ReservationVideoQuality::Enhanced => "ENHANCED".to_string(),
+            ReservationVideoQuality::Premium => "PREMIUM".to_string(),
+            ReservationVideoQuality::Standard => "STANDARD".to_string(),
+            ReservationVideoQuality::UnknownVariant(UnknownReservationVideoQuality {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationVideoQuality {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationVideoQuality::Enhanced => &"ENHANCED",
+            ReservationVideoQuality::Premium => &"PREMIUM",
+            ReservationVideoQuality::Standard => &"STANDARD",
+            ReservationVideoQuality::UnknownVariant(UnknownReservationVideoQuality {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservationVideoQuality {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENHANCED" => ReservationVideoQuality::Enhanced,
+            "PREMIUM" => ReservationVideoQuality::Premium,
+            "STANDARD" => ReservationVideoQuality::Standard,
+            _ => ReservationVideoQuality::UnknownVariant(UnknownReservationVideoQuality {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationVideoQuality {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENHANCED" => ReservationVideoQuality::Enhanced,
+            "PREMIUM" => ReservationVideoQuality::Premium,
+            "STANDARD" => ReservationVideoQuality::Standard,
+            _ => ReservationVideoQuality::UnknownVariant(UnknownReservationVideoQuality { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationVideoQuality {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationVideoQuality {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationVideoQuality {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Rtmp Ad Markers</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRtmpAdMarkers {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RtmpAdMarkers {
+    OnCuePointScte35,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRtmpAdMarkers),
+}
+
+impl Default for RtmpAdMarkers {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RtmpAdMarkers {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RtmpAdMarkers {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RtmpAdMarkers {
+    fn into(self) -> String {
+        match self {
+            RtmpAdMarkers::OnCuePointScte35 => "ON_CUE_POINT_SCTE35".to_string(),
+            RtmpAdMarkers::UnknownVariant(UnknownRtmpAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RtmpAdMarkers {
+    fn into(self) -> &'a str {
+        match self {
+            RtmpAdMarkers::OnCuePointScte35 => &"ON_CUE_POINT_SCTE35",
+            RtmpAdMarkers::UnknownVariant(UnknownRtmpAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RtmpAdMarkers {
+    fn from(name: &str) -> Self {
+        match name {
+            "ON_CUE_POINT_SCTE35" => RtmpAdMarkers::OnCuePointScte35,
+            _ => RtmpAdMarkers::UnknownVariant(UnknownRtmpAdMarkers {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RtmpAdMarkers {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ON_CUE_POINT_SCTE35" => RtmpAdMarkers::OnCuePointScte35,
+            _ => RtmpAdMarkers::UnknownVariant(UnknownRtmpAdMarkers { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RtmpAdMarkers {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RtmpAdMarkers {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RtmpAdMarkers {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Rtmp Cache Full Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRtmpCacheFullBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RtmpCacheFullBehavior {
+    DisconnectImmediately,
+    WaitForServer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRtmpCacheFullBehavior),
+}
+
+impl Default for RtmpCacheFullBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RtmpCacheFullBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RtmpCacheFullBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RtmpCacheFullBehavior {
+    fn into(self) -> String {
+        match self {
+            RtmpCacheFullBehavior::DisconnectImmediately => "DISCONNECT_IMMEDIATELY".to_string(),
+            RtmpCacheFullBehavior::WaitForServer => "WAIT_FOR_SERVER".to_string(),
+            RtmpCacheFullBehavior::UnknownVariant(UnknownRtmpCacheFullBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RtmpCacheFullBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            RtmpCacheFullBehavior::DisconnectImmediately => &"DISCONNECT_IMMEDIATELY",
+            RtmpCacheFullBehavior::WaitForServer => &"WAIT_FOR_SERVER",
+            RtmpCacheFullBehavior::UnknownVariant(UnknownRtmpCacheFullBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RtmpCacheFullBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISCONNECT_IMMEDIATELY" => RtmpCacheFullBehavior::DisconnectImmediately,
+            "WAIT_FOR_SERVER" => RtmpCacheFullBehavior::WaitForServer,
+            _ => RtmpCacheFullBehavior::UnknownVariant(UnknownRtmpCacheFullBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RtmpCacheFullBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISCONNECT_IMMEDIATELY" => RtmpCacheFullBehavior::DisconnectImmediately,
+            "WAIT_FOR_SERVER" => RtmpCacheFullBehavior::WaitForServer,
+            _ => RtmpCacheFullBehavior::UnknownVariant(UnknownRtmpCacheFullBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RtmpCacheFullBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RtmpCacheFullBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RtmpCacheFullBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Rtmp Caption Data</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRtmpCaptionData {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RtmpCaptionData {
+    All,
+    Field1608,
+    Field1AndField2608,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRtmpCaptionData),
+}
+
+impl Default for RtmpCaptionData {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RtmpCaptionData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RtmpCaptionData {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RtmpCaptionData {
+    fn into(self) -> String {
+        match self {
+            RtmpCaptionData::All => "ALL".to_string(),
+            RtmpCaptionData::Field1608 => "FIELD1_608".to_string(),
+            RtmpCaptionData::Field1AndField2608 => "FIELD1_AND_FIELD2_608".to_string(),
+            RtmpCaptionData::UnknownVariant(UnknownRtmpCaptionData { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RtmpCaptionData {
+    fn into(self) -> &'a str {
+        match self {
+            RtmpCaptionData::All => &"ALL",
+            RtmpCaptionData::Field1608 => &"FIELD1_608",
+            RtmpCaptionData::Field1AndField2608 => &"FIELD1_AND_FIELD2_608",
+            RtmpCaptionData::UnknownVariant(UnknownRtmpCaptionData { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RtmpCaptionData {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => RtmpCaptionData::All,
+            "FIELD1_608" => RtmpCaptionData::Field1608,
+            "FIELD1_AND_FIELD2_608" => RtmpCaptionData::Field1AndField2608,
+            _ => RtmpCaptionData::UnknownVariant(UnknownRtmpCaptionData {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RtmpCaptionData {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => RtmpCaptionData::All,
+            "FIELD1_608" => RtmpCaptionData::Field1608,
+            "FIELD1_AND_FIELD2_608" => RtmpCaptionData::Field1AndField2608,
+            _ => RtmpCaptionData::UnknownVariant(UnknownRtmpCaptionData { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RtmpCaptionData {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RtmpCaptionData {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RtmpCaptionData {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Rtmp Caption Info Destination Settings</p>
@@ -5623,15 +29074,15 @@ pub struct RtmpGroupSettings {
     /// <p>Choose the ad marker type for this output group. MediaLive will create a message based on the content of each SCTE-35 message, format it for that marker type, and insert it in the datastream.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_markers: Option<Vec<String>>,
+    pub ad_markers: Option<Vec<RtmpAdMarkers>>,
     /// <p>Authentication scheme to use when connecting with CDN</p>
     #[serde(rename = "AuthenticationScheme")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_scheme: Option<String>,
+    pub authentication_scheme: Option<AuthenticationScheme>,
     /// <p>Controls behavior when content cache fills up. If remote origin server stalls the RTMP connection and does not accept content fast enough the &#39;Media Cache&#39; will fill up. When the cache reaches the duration specified by cacheLength the cache will stop accepting new content. If set to disconnectImmediately, the RTMP output will force a disconnect. Clear the media cache, and reconnect after restartDelay seconds. If set to waitForServer, the RTMP output will wait up to 5 minutes to allow the origin server to begin accepting data again.</p>
     #[serde(rename = "CacheFullBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cache_full_behavior: Option<String>,
+    pub cache_full_behavior: Option<RtmpCacheFullBehavior>,
     /// <p>Cache length, in seconds, is used to calculate buffer size.</p>
     #[serde(rename = "CacheLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5639,7 +29090,7 @@ pub struct RtmpGroupSettings {
     /// <p>Controls the types of data that passes to onCaptionInfo outputs.  If set to &#39;all&#39; then 608 and 708 carried DTVCC data will be passed.  If set to &#39;field1AndField2608&#39; then DTVCC data will be stripped out, but 608 data from both fields will be passed. If set to &#39;field1608&#39; then only the data carried in 608 from field 1 video will be passed.</p>
     #[serde(rename = "CaptionData")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub caption_data: Option<String>,
+    pub caption_data: Option<RtmpCaptionData>,
     /// <p>Controls the behavior of this RTMP group if input becomes unavailable.</p>
     ///
     /// <ul>
@@ -5648,11 +29099,119 @@ pub struct RtmpGroupSettings {
     /// </ul>
     #[serde(rename = "InputLossAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_loss_action: Option<String>,
+    pub input_loss_action: Option<InputLossActionForRtmpOut>,
     /// <p>If a streaming output fails, number of seconds to wait until a restart is initiated. A value of 0 means never restart.</p>
     #[serde(rename = "RestartDelay")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restart_delay: Option<i64>,
+}
+
+/// <p>Rtmp Output Certificate Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRtmpOutputCertificateMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RtmpOutputCertificateMode {
+    SelfSigned,
+    VerifyAuthenticity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRtmpOutputCertificateMode),
+}
+
+impl Default for RtmpOutputCertificateMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RtmpOutputCertificateMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RtmpOutputCertificateMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RtmpOutputCertificateMode {
+    fn into(self) -> String {
+        match self {
+            RtmpOutputCertificateMode::SelfSigned => "SELF_SIGNED".to_string(),
+            RtmpOutputCertificateMode::VerifyAuthenticity => "VERIFY_AUTHENTICITY".to_string(),
+            RtmpOutputCertificateMode::UnknownVariant(UnknownRtmpOutputCertificateMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RtmpOutputCertificateMode {
+    fn into(self) -> &'a str {
+        match self {
+            RtmpOutputCertificateMode::SelfSigned => &"SELF_SIGNED",
+            RtmpOutputCertificateMode::VerifyAuthenticity => &"VERIFY_AUTHENTICITY",
+            RtmpOutputCertificateMode::UnknownVariant(UnknownRtmpOutputCertificateMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RtmpOutputCertificateMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "SELF_SIGNED" => RtmpOutputCertificateMode::SelfSigned,
+            "VERIFY_AUTHENTICITY" => RtmpOutputCertificateMode::VerifyAuthenticity,
+            _ => RtmpOutputCertificateMode::UnknownVariant(UnknownRtmpOutputCertificateMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RtmpOutputCertificateMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SELF_SIGNED" => RtmpOutputCertificateMode::SelfSigned,
+            "VERIFY_AUTHENTICITY" => RtmpOutputCertificateMode::VerifyAuthenticity,
+            _ => {
+                RtmpOutputCertificateMode::UnknownVariant(UnknownRtmpOutputCertificateMode { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RtmpOutputCertificateMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RtmpOutputCertificateMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RtmpOutputCertificateMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Rtmp Output Settings</p>
@@ -5661,7 +29220,7 @@ pub struct RtmpOutputSettings {
     /// <p>If set to verifyAuthenticity, verify the tls certificate chain to a trusted Certificate Authority (CA).  This will cause rtmps outputs with self-signed certificates to fail.</p>
     #[serde(rename = "CertificateMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_mode: Option<String>,
+    pub certificate_mode: Option<RtmpOutputCertificateMode>,
     /// <p>Number of seconds to wait before retrying a connection to the Flash Media server if the connection is lost.</p>
     #[serde(rename = "ConnectionRetryInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5752,6 +29311,112 @@ pub struct ScheduleActionStartSettings {
         Option<ImmediateModeScheduleActionStartSettings>,
 }
 
+/// <p>Scte20 Convert608 To708</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte20Convert608To708 {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte20Convert608To708 {
+    Disabled,
+    Upconvert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte20Convert608To708),
+}
+
+impl Default for Scte20Convert608To708 {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte20Convert608To708 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte20Convert608To708 {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte20Convert608To708 {
+    fn into(self) -> String {
+        match self {
+            Scte20Convert608To708::Disabled => "DISABLED".to_string(),
+            Scte20Convert608To708::Upconvert => "UPCONVERT".to_string(),
+            Scte20Convert608To708::UnknownVariant(UnknownScte20Convert608To708 {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte20Convert608To708 {
+    fn into(self) -> &'a str {
+        match self {
+            Scte20Convert608To708::Disabled => &"DISABLED",
+            Scte20Convert608To708::Upconvert => &"UPCONVERT",
+            Scte20Convert608To708::UnknownVariant(UnknownScte20Convert608To708 {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte20Convert608To708 {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Scte20Convert608To708::Disabled,
+            "UPCONVERT" => Scte20Convert608To708::Upconvert,
+            _ => Scte20Convert608To708::UnknownVariant(UnknownScte20Convert608To708 {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Scte20Convert608To708 {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Scte20Convert608To708::Disabled,
+            "UPCONVERT" => Scte20Convert608To708::Upconvert,
+            _ => Scte20Convert608To708::UnknownVariant(UnknownScte20Convert608To708 { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte20Convert608To708 {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte20Convert608To708 {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte20Convert608To708 {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Scte20 Plus Embedded Destination Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte20PlusEmbeddedDestinationSettings {}
@@ -5762,7 +29427,7 @@ pub struct Scte20SourceSettings {
     /// <p>If upconvert, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
     #[serde(rename = "Convert608To708")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub convert_608_to_708: Option<String>,
+    pub convert_608_to_708: Option<Scte20Convert608To708>,
     /// <p>Specifies the 608/708 channel number within the video track from which to extract captions. Unused for passthrough.</p>
     #[serde(rename = "Source608ChannelNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5786,21 +29451,347 @@ pub struct Scte27SourceSettings {
     pub pid: Option<i64>,
 }
 
+/// <p>Scte35 Apos No Regional Blackout Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35AposNoRegionalBlackoutBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35AposNoRegionalBlackoutBehavior {
+    Follow,
+    Ignore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35AposNoRegionalBlackoutBehavior),
+}
+
+impl Default for Scte35AposNoRegionalBlackoutBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35AposNoRegionalBlackoutBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35AposNoRegionalBlackoutBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35AposNoRegionalBlackoutBehavior {
+    fn into(self) -> String {
+        match self {
+            Scte35AposNoRegionalBlackoutBehavior::Follow => "FOLLOW".to_string(),
+            Scte35AposNoRegionalBlackoutBehavior::Ignore => "IGNORE".to_string(),
+            Scte35AposNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35AposNoRegionalBlackoutBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35AposNoRegionalBlackoutBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35AposNoRegionalBlackoutBehavior::Follow => &"FOLLOW",
+            Scte35AposNoRegionalBlackoutBehavior::Ignore => &"IGNORE",
+            Scte35AposNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35AposNoRegionalBlackoutBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35AposNoRegionalBlackoutBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW" => Scte35AposNoRegionalBlackoutBehavior::Follow,
+            "IGNORE" => Scte35AposNoRegionalBlackoutBehavior::Ignore,
+            _ => Scte35AposNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35AposNoRegionalBlackoutBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for Scte35AposNoRegionalBlackoutBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW" => Scte35AposNoRegionalBlackoutBehavior::Follow,
+            "IGNORE" => Scte35AposNoRegionalBlackoutBehavior::Ignore,
+            _ => Scte35AposNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35AposNoRegionalBlackoutBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35AposNoRegionalBlackoutBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35AposNoRegionalBlackoutBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35AposNoRegionalBlackoutBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Scte35 Apos Web Delivery Allowed Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35AposWebDeliveryAllowedBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35AposWebDeliveryAllowedBehavior {
+    Follow,
+    Ignore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35AposWebDeliveryAllowedBehavior),
+}
+
+impl Default for Scte35AposWebDeliveryAllowedBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35AposWebDeliveryAllowedBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35AposWebDeliveryAllowedBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35AposWebDeliveryAllowedBehavior {
+    fn into(self) -> String {
+        match self {
+            Scte35AposWebDeliveryAllowedBehavior::Follow => "FOLLOW".to_string(),
+            Scte35AposWebDeliveryAllowedBehavior::Ignore => "IGNORE".to_string(),
+            Scte35AposWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35AposWebDeliveryAllowedBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35AposWebDeliveryAllowedBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35AposWebDeliveryAllowedBehavior::Follow => &"FOLLOW",
+            Scte35AposWebDeliveryAllowedBehavior::Ignore => &"IGNORE",
+            Scte35AposWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35AposWebDeliveryAllowedBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35AposWebDeliveryAllowedBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW" => Scte35AposWebDeliveryAllowedBehavior::Follow,
+            "IGNORE" => Scte35AposWebDeliveryAllowedBehavior::Ignore,
+            _ => Scte35AposWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35AposWebDeliveryAllowedBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for Scte35AposWebDeliveryAllowedBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW" => Scte35AposWebDeliveryAllowedBehavior::Follow,
+            "IGNORE" => Scte35AposWebDeliveryAllowedBehavior::Ignore,
+            _ => Scte35AposWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35AposWebDeliveryAllowedBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35AposWebDeliveryAllowedBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35AposWebDeliveryAllowedBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35AposWebDeliveryAllowedBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Corresponds to the archive<em>allowed parameter. A value of ARCHIVE</em>NOT_ALLOWED corresponds to 0 (false) in the SCTE-35 specification. If you include one of the &quot;restriction&quot; flags then you must include all four of them.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35ArchiveAllowedFlag {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35ArchiveAllowedFlag {
+    ArchiveAllowed,
+    ArchiveNotAllowed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35ArchiveAllowedFlag),
+}
+
+impl Default for Scte35ArchiveAllowedFlag {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35ArchiveAllowedFlag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35ArchiveAllowedFlag {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35ArchiveAllowedFlag {
+    fn into(self) -> String {
+        match self {
+            Scte35ArchiveAllowedFlag::ArchiveAllowed => "ARCHIVE_ALLOWED".to_string(),
+            Scte35ArchiveAllowedFlag::ArchiveNotAllowed => "ARCHIVE_NOT_ALLOWED".to_string(),
+            Scte35ArchiveAllowedFlag::UnknownVariant(UnknownScte35ArchiveAllowedFlag {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35ArchiveAllowedFlag {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35ArchiveAllowedFlag::ArchiveAllowed => &"ARCHIVE_ALLOWED",
+            Scte35ArchiveAllowedFlag::ArchiveNotAllowed => &"ARCHIVE_NOT_ALLOWED",
+            Scte35ArchiveAllowedFlag::UnknownVariant(UnknownScte35ArchiveAllowedFlag {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35ArchiveAllowedFlag {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARCHIVE_ALLOWED" => Scte35ArchiveAllowedFlag::ArchiveAllowed,
+            "ARCHIVE_NOT_ALLOWED" => Scte35ArchiveAllowedFlag::ArchiveNotAllowed,
+            _ => Scte35ArchiveAllowedFlag::UnknownVariant(UnknownScte35ArchiveAllowedFlag {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Scte35ArchiveAllowedFlag {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARCHIVE_ALLOWED" => Scte35ArchiveAllowedFlag::ArchiveAllowed,
+            "ARCHIVE_NOT_ALLOWED" => Scte35ArchiveAllowedFlag::ArchiveNotAllowed,
+            _ => Scte35ArchiveAllowedFlag::UnknownVariant(UnknownScte35ArchiveAllowedFlag { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35ArchiveAllowedFlag {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35ArchiveAllowedFlag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35ArchiveAllowedFlag {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Corresponds to SCTE-35 delivery<em>not</em>restricted_flag parameter. To declare delivery restrictions, include this element and its four &quot;restriction&quot; flags. To declare that there are no restrictions, omit this element.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35DeliveryRestrictions {
     /// <p>Corresponds to SCTE-35 archive<em>allowed</em>flag.</p>
     #[serde(rename = "ArchiveAllowedFlag")]
-    pub archive_allowed_flag: String,
+    pub archive_allowed_flag: Scte35ArchiveAllowedFlag,
     /// <p>Corresponds to SCTE-35 device_restrictions parameter.</p>
     #[serde(rename = "DeviceRestrictions")]
-    pub device_restrictions: String,
+    pub device_restrictions: Scte35DeviceRestrictions,
     /// <p>Corresponds to SCTE-35 no<em>regional</em>blackout_flag parameter.</p>
     #[serde(rename = "NoRegionalBlackoutFlag")]
-    pub no_regional_blackout_flag: String,
+    pub no_regional_blackout_flag: Scte35NoRegionalBlackoutFlag,
     /// <p>Corresponds to SCTE-35 web<em>delivery</em>allowed_flag parameter.</p>
     #[serde(rename = "WebDeliveryAllowedFlag")]
-    pub web_delivery_allowed_flag: String,
+    pub web_delivery_allowed_flag: Scte35WebDeliveryAllowedFlag,
 }
 
 /// <p>Holds one set of SCTE-35 Descriptor Settings.</p>
@@ -5819,12 +29810,366 @@ pub struct Scte35DescriptorSettings {
     pub segmentation_descriptor_scte_35_descriptor_settings: Scte35SegmentationDescriptor,
 }
 
+/// <p>Corresponds to the device<em>restrictions parameter in a segmentation</em>descriptor. If you include one of the &quot;restriction&quot; flags then you must include all four of them.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35DeviceRestrictions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35DeviceRestrictions {
+    None,
+    RestrictGroup0,
+    RestrictGroup1,
+    RestrictGroup2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35DeviceRestrictions),
+}
+
+impl Default for Scte35DeviceRestrictions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35DeviceRestrictions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35DeviceRestrictions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35DeviceRestrictions {
+    fn into(self) -> String {
+        match self {
+            Scte35DeviceRestrictions::None => "NONE".to_string(),
+            Scte35DeviceRestrictions::RestrictGroup0 => "RESTRICT_GROUP0".to_string(),
+            Scte35DeviceRestrictions::RestrictGroup1 => "RESTRICT_GROUP1".to_string(),
+            Scte35DeviceRestrictions::RestrictGroup2 => "RESTRICT_GROUP2".to_string(),
+            Scte35DeviceRestrictions::UnknownVariant(UnknownScte35DeviceRestrictions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35DeviceRestrictions {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35DeviceRestrictions::None => &"NONE",
+            Scte35DeviceRestrictions::RestrictGroup0 => &"RESTRICT_GROUP0",
+            Scte35DeviceRestrictions::RestrictGroup1 => &"RESTRICT_GROUP1",
+            Scte35DeviceRestrictions::RestrictGroup2 => &"RESTRICT_GROUP2",
+            Scte35DeviceRestrictions::UnknownVariant(UnknownScte35DeviceRestrictions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35DeviceRestrictions {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => Scte35DeviceRestrictions::None,
+            "RESTRICT_GROUP0" => Scte35DeviceRestrictions::RestrictGroup0,
+            "RESTRICT_GROUP1" => Scte35DeviceRestrictions::RestrictGroup1,
+            "RESTRICT_GROUP2" => Scte35DeviceRestrictions::RestrictGroup2,
+            _ => Scte35DeviceRestrictions::UnknownVariant(UnknownScte35DeviceRestrictions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Scte35DeviceRestrictions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => Scte35DeviceRestrictions::None,
+            "RESTRICT_GROUP0" => Scte35DeviceRestrictions::RestrictGroup0,
+            "RESTRICT_GROUP1" => Scte35DeviceRestrictions::RestrictGroup1,
+            "RESTRICT_GROUP2" => Scte35DeviceRestrictions::RestrictGroup2,
+            _ => Scte35DeviceRestrictions::UnknownVariant(UnknownScte35DeviceRestrictions { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35DeviceRestrictions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35DeviceRestrictions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35DeviceRestrictions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Corresponds to the no<em>regional</em>blackout<em>flag parameter. A value of REGIONAL</em>BLACKOUT corresponds to 0 (false) in the SCTE-35 specification. If you include one of the &quot;restriction&quot; flags then you must include all four of them.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35NoRegionalBlackoutFlag {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35NoRegionalBlackoutFlag {
+    NoRegionalBlackout,
+    RegionalBlackout,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35NoRegionalBlackoutFlag),
+}
+
+impl Default for Scte35NoRegionalBlackoutFlag {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35NoRegionalBlackoutFlag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35NoRegionalBlackoutFlag {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35NoRegionalBlackoutFlag {
+    fn into(self) -> String {
+        match self {
+            Scte35NoRegionalBlackoutFlag::NoRegionalBlackout => "NO_REGIONAL_BLACKOUT".to_string(),
+            Scte35NoRegionalBlackoutFlag::RegionalBlackout => "REGIONAL_BLACKOUT".to_string(),
+            Scte35NoRegionalBlackoutFlag::UnknownVariant(UnknownScte35NoRegionalBlackoutFlag {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35NoRegionalBlackoutFlag {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35NoRegionalBlackoutFlag::NoRegionalBlackout => &"NO_REGIONAL_BLACKOUT",
+            Scte35NoRegionalBlackoutFlag::RegionalBlackout => &"REGIONAL_BLACKOUT",
+            Scte35NoRegionalBlackoutFlag::UnknownVariant(UnknownScte35NoRegionalBlackoutFlag {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35NoRegionalBlackoutFlag {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_REGIONAL_BLACKOUT" => Scte35NoRegionalBlackoutFlag::NoRegionalBlackout,
+            "REGIONAL_BLACKOUT" => Scte35NoRegionalBlackoutFlag::RegionalBlackout,
+            _ => {
+                Scte35NoRegionalBlackoutFlag::UnknownVariant(UnknownScte35NoRegionalBlackoutFlag {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for Scte35NoRegionalBlackoutFlag {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_REGIONAL_BLACKOUT" => Scte35NoRegionalBlackoutFlag::NoRegionalBlackout,
+            "REGIONAL_BLACKOUT" => Scte35NoRegionalBlackoutFlag::RegionalBlackout,
+            _ => {
+                Scte35NoRegionalBlackoutFlag::UnknownVariant(UnknownScte35NoRegionalBlackoutFlag {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35NoRegionalBlackoutFlag {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35NoRegionalBlackoutFlag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35NoRegionalBlackoutFlag {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings for a SCTE-35 return<em>to</em>network message.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35ReturnToNetworkScheduleActionSettings {
     /// <p>The splice<em>event</em>id for the SCTE-35 splice_insert, as defined in SCTE-35.</p>
     #[serde(rename = "SpliceEventId")]
     pub splice_event_id: i64,
+}
+
+/// <p>Corresponds to SCTE-35 segmentation<em>event</em>cancel<em>indicator. SEGMENTATION</em>EVENT<em>NOT</em>CANCELED corresponds to 0 in the SCTE-35 specification and indicates that this is an insertion request. SEGMENTATION<em>EVENT</em>CANCELED corresponds to 1 in the SCTE-35 specification and indicates that this is a cancelation request, in which case complete this field and the existing event ID to cancel.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35SegmentationCancelIndicator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35SegmentationCancelIndicator {
+    SegmentationEventCanceled,
+    SegmentationEventNotCanceled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35SegmentationCancelIndicator),
+}
+
+impl Default for Scte35SegmentationCancelIndicator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35SegmentationCancelIndicator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35SegmentationCancelIndicator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35SegmentationCancelIndicator {
+    fn into(self) -> String {
+        match self {
+            Scte35SegmentationCancelIndicator::SegmentationEventCanceled => {
+                "SEGMENTATION_EVENT_CANCELED".to_string()
+            }
+            Scte35SegmentationCancelIndicator::SegmentationEventNotCanceled => {
+                "SEGMENTATION_EVENT_NOT_CANCELED".to_string()
+            }
+            Scte35SegmentationCancelIndicator::UnknownVariant(
+                UnknownScte35SegmentationCancelIndicator { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35SegmentationCancelIndicator {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35SegmentationCancelIndicator::SegmentationEventCanceled => {
+                &"SEGMENTATION_EVENT_CANCELED"
+            }
+            Scte35SegmentationCancelIndicator::SegmentationEventNotCanceled => {
+                &"SEGMENTATION_EVENT_NOT_CANCELED"
+            }
+            Scte35SegmentationCancelIndicator::UnknownVariant(
+                UnknownScte35SegmentationCancelIndicator { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35SegmentationCancelIndicator {
+    fn from(name: &str) -> Self {
+        match name {
+            "SEGMENTATION_EVENT_CANCELED" => {
+                Scte35SegmentationCancelIndicator::SegmentationEventCanceled
+            }
+            "SEGMENTATION_EVENT_NOT_CANCELED" => {
+                Scte35SegmentationCancelIndicator::SegmentationEventNotCanceled
+            }
+            _ => Scte35SegmentationCancelIndicator::UnknownVariant(
+                UnknownScte35SegmentationCancelIndicator {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for Scte35SegmentationCancelIndicator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SEGMENTATION_EVENT_CANCELED" => {
+                Scte35SegmentationCancelIndicator::SegmentationEventCanceled
+            }
+            "SEGMENTATION_EVENT_NOT_CANCELED" => {
+                Scte35SegmentationCancelIndicator::SegmentationEventNotCanceled
+            }
+            _ => Scte35SegmentationCancelIndicator::UnknownVariant(
+                UnknownScte35SegmentationCancelIndicator { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35SegmentationCancelIndicator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35SegmentationCancelIndicator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35SegmentationCancelIndicator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Corresponds to SCTE-35 segmentation_descriptor.</p>
@@ -5840,7 +30185,7 @@ pub struct Scte35SegmentationDescriptor {
     pub segment_num: Option<i64>,
     /// <p>Corresponds to SCTE-35 segmentation<em>event</em>cancel_indicator.</p>
     #[serde(rename = "SegmentationCancelIndicator")]
-    pub segmentation_cancel_indicator: String,
+    pub segmentation_cancel_indicator: Scte35SegmentationCancelIndicator,
     /// <p>Corresponds to SCTE-35 segmentation<em>duration. Optional. The duration for the time</em>signal, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. Enter time in 90 KHz clock ticks. If you do not enter a duration, the time_signal will continue until you insert a cancellation message.</p>
     #[serde(rename = "SegmentationDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5884,11 +30229,121 @@ pub struct Scte35SpliceInsert {
     /// <p>When set to ignore, Segment Descriptors with noRegionalBlackoutFlag set to 0 will no longer trigger blackouts or Ad Avail slates</p>
     #[serde(rename = "NoRegionalBlackoutFlag")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub no_regional_blackout_flag: Option<String>,
+    pub no_regional_blackout_flag: Option<Scte35SpliceInsertNoRegionalBlackoutBehavior>,
     /// <p>When set to ignore, Segment Descriptors with webDeliveryAllowedFlag set to 0 will no longer trigger blackouts or Ad Avail slates</p>
     #[serde(rename = "WebDeliveryAllowedFlag")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub web_delivery_allowed_flag: Option<String>,
+    pub web_delivery_allowed_flag: Option<Scte35SpliceInsertWebDeliveryAllowedBehavior>,
+}
+
+/// <p>Scte35 Splice Insert No Regional Blackout Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35SpliceInsertNoRegionalBlackoutBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    Follow,
+    Ignore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35SpliceInsertNoRegionalBlackoutBehavior),
+}
+
+impl Default for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn into(self) -> String {
+        match self {
+            Scte35SpliceInsertNoRegionalBlackoutBehavior::Follow => "FOLLOW".to_string(),
+            Scte35SpliceInsertNoRegionalBlackoutBehavior::Ignore => "IGNORE".to_string(),
+            Scte35SpliceInsertNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertNoRegionalBlackoutBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35SpliceInsertNoRegionalBlackoutBehavior::Follow => &"FOLLOW",
+            Scte35SpliceInsertNoRegionalBlackoutBehavior::Ignore => &"IGNORE",
+            Scte35SpliceInsertNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertNoRegionalBlackoutBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW" => Scte35SpliceInsertNoRegionalBlackoutBehavior::Follow,
+            "IGNORE" => Scte35SpliceInsertNoRegionalBlackoutBehavior::Ignore,
+            _ => Scte35SpliceInsertNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertNoRegionalBlackoutBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW" => Scte35SpliceInsertNoRegionalBlackoutBehavior::Follow,
+            "IGNORE" => Scte35SpliceInsertNoRegionalBlackoutBehavior::Ignore,
+            _ => Scte35SpliceInsertNoRegionalBlackoutBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertNoRegionalBlackoutBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35SpliceInsertNoRegionalBlackoutBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Settings for a SCTE-35 splice_insert message.</p>
@@ -5903,6 +30358,116 @@ pub struct Scte35SpliceInsertScheduleActionSettings {
     pub splice_event_id: i64,
 }
 
+/// <p>Scte35 Splice Insert Web Delivery Allowed Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35SpliceInsertWebDeliveryAllowedBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    Follow,
+    Ignore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35SpliceInsertWebDeliveryAllowedBehavior),
+}
+
+impl Default for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn into(self) -> String {
+        match self {
+            Scte35SpliceInsertWebDeliveryAllowedBehavior::Follow => "FOLLOW".to_string(),
+            Scte35SpliceInsertWebDeliveryAllowedBehavior::Ignore => "IGNORE".to_string(),
+            Scte35SpliceInsertWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertWebDeliveryAllowedBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35SpliceInsertWebDeliveryAllowedBehavior::Follow => &"FOLLOW",
+            Scte35SpliceInsertWebDeliveryAllowedBehavior::Ignore => &"IGNORE",
+            Scte35SpliceInsertWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertWebDeliveryAllowedBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW" => Scte35SpliceInsertWebDeliveryAllowedBehavior::Follow,
+            "IGNORE" => Scte35SpliceInsertWebDeliveryAllowedBehavior::Ignore,
+            _ => Scte35SpliceInsertWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertWebDeliveryAllowedBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW" => Scte35SpliceInsertWebDeliveryAllowedBehavior::Follow,
+            "IGNORE" => Scte35SpliceInsertWebDeliveryAllowedBehavior::Ignore,
+            _ => Scte35SpliceInsertWebDeliveryAllowedBehavior::UnknownVariant(
+                UnknownScte35SpliceInsertWebDeliveryAllowedBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35SpliceInsertWebDeliveryAllowedBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Scte35 Time Signal Apos</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35TimeSignalApos {
@@ -5913,11 +30478,11 @@ pub struct Scte35TimeSignalApos {
     /// <p>When set to ignore, Segment Descriptors with noRegionalBlackoutFlag set to 0 will no longer trigger blackouts or Ad Avail slates</p>
     #[serde(rename = "NoRegionalBlackoutFlag")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub no_regional_blackout_flag: Option<String>,
+    pub no_regional_blackout_flag: Option<Scte35AposNoRegionalBlackoutBehavior>,
     /// <p>When set to ignore, Segment Descriptors with webDeliveryAllowedFlag set to 0 will no longer trigger blackouts or Ad Avail slates</p>
     #[serde(rename = "WebDeliveryAllowedFlag")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub web_delivery_allowed_flag: Option<String>,
+    pub web_delivery_allowed_flag: Option<Scte35AposWebDeliveryAllowedBehavior>,
 }
 
 /// <p>Settings for a SCTE-35 time_signal.</p>
@@ -5926,6 +30491,1118 @@ pub struct Scte35TimeSignalScheduleActionSettings {
     /// <p>The list of SCTE-35 descriptors accompanying the SCTE-35 time_signal.</p>
     #[serde(rename = "Scte35Descriptors")]
     pub scte_35_descriptors: Vec<Scte35Descriptor>,
+}
+
+/// <p>Corresponds to the web<em>delivery</em>allowed<em>flag parameter. A value of WEB</em>DELIVERY<em>NOT</em>ALLOWED corresponds to 0 (false) in the SCTE-35 specification. If you include one of the &quot;restriction&quot; flags then you must include all four of them.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScte35WebDeliveryAllowedFlag {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scte35WebDeliveryAllowedFlag {
+    WebDeliveryAllowed,
+    WebDeliveryNotAllowed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScte35WebDeliveryAllowedFlag),
+}
+
+impl Default for Scte35WebDeliveryAllowedFlag {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scte35WebDeliveryAllowedFlag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scte35WebDeliveryAllowedFlag {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scte35WebDeliveryAllowedFlag {
+    fn into(self) -> String {
+        match self {
+            Scte35WebDeliveryAllowedFlag::WebDeliveryAllowed => "WEB_DELIVERY_ALLOWED".to_string(),
+            Scte35WebDeliveryAllowedFlag::WebDeliveryNotAllowed => {
+                "WEB_DELIVERY_NOT_ALLOWED".to_string()
+            }
+            Scte35WebDeliveryAllowedFlag::UnknownVariant(UnknownScte35WebDeliveryAllowedFlag {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scte35WebDeliveryAllowedFlag {
+    fn into(self) -> &'a str {
+        match self {
+            Scte35WebDeliveryAllowedFlag::WebDeliveryAllowed => &"WEB_DELIVERY_ALLOWED",
+            Scte35WebDeliveryAllowedFlag::WebDeliveryNotAllowed => &"WEB_DELIVERY_NOT_ALLOWED",
+            Scte35WebDeliveryAllowedFlag::UnknownVariant(UnknownScte35WebDeliveryAllowedFlag {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Scte35WebDeliveryAllowedFlag {
+    fn from(name: &str) -> Self {
+        match name {
+            "WEB_DELIVERY_ALLOWED" => Scte35WebDeliveryAllowedFlag::WebDeliveryAllowed,
+            "WEB_DELIVERY_NOT_ALLOWED" => Scte35WebDeliveryAllowedFlag::WebDeliveryNotAllowed,
+            _ => {
+                Scte35WebDeliveryAllowedFlag::UnknownVariant(UnknownScte35WebDeliveryAllowedFlag {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for Scte35WebDeliveryAllowedFlag {
+    fn from(name: String) -> Self {
+        match &*name {
+            "WEB_DELIVERY_ALLOWED" => Scte35WebDeliveryAllowedFlag::WebDeliveryAllowed,
+            "WEB_DELIVERY_NOT_ALLOWED" => Scte35WebDeliveryAllowedFlag::WebDeliveryNotAllowed,
+            _ => {
+                Scte35WebDeliveryAllowedFlag::UnknownVariant(UnknownScte35WebDeliveryAllowedFlag {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scte35WebDeliveryAllowedFlag {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scte35WebDeliveryAllowedFlag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scte35WebDeliveryAllowedFlag {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Audio Only Timecode Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupAudioOnlyTimecodeControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupAudioOnlyTimecodeControl {
+    Passthrough,
+    UseConfiguredClock,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupAudioOnlyTimecodeControl),
+}
+
+impl Default for SmoothGroupAudioOnlyTimecodeControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupAudioOnlyTimecodeControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupAudioOnlyTimecodeControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupAudioOnlyTimecodeControl {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupAudioOnlyTimecodeControl::Passthrough => "PASSTHROUGH".to_string(),
+            SmoothGroupAudioOnlyTimecodeControl::UseConfiguredClock => {
+                "USE_CONFIGURED_CLOCK".to_string()
+            }
+            SmoothGroupAudioOnlyTimecodeControl::UnknownVariant(
+                UnknownSmoothGroupAudioOnlyTimecodeControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupAudioOnlyTimecodeControl {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupAudioOnlyTimecodeControl::Passthrough => &"PASSTHROUGH",
+            SmoothGroupAudioOnlyTimecodeControl::UseConfiguredClock => &"USE_CONFIGURED_CLOCK",
+            SmoothGroupAudioOnlyTimecodeControl::UnknownVariant(
+                UnknownSmoothGroupAudioOnlyTimecodeControl { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupAudioOnlyTimecodeControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "PASSTHROUGH" => SmoothGroupAudioOnlyTimecodeControl::Passthrough,
+            "USE_CONFIGURED_CLOCK" => SmoothGroupAudioOnlyTimecodeControl::UseConfiguredClock,
+            _ => SmoothGroupAudioOnlyTimecodeControl::UnknownVariant(
+                UnknownSmoothGroupAudioOnlyTimecodeControl {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupAudioOnlyTimecodeControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PASSTHROUGH" => SmoothGroupAudioOnlyTimecodeControl::Passthrough,
+            "USE_CONFIGURED_CLOCK" => SmoothGroupAudioOnlyTimecodeControl::UseConfiguredClock,
+            _ => SmoothGroupAudioOnlyTimecodeControl::UnknownVariant(
+                UnknownSmoothGroupAudioOnlyTimecodeControl { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupAudioOnlyTimecodeControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupAudioOnlyTimecodeControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupAudioOnlyTimecodeControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Certificate Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupCertificateMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupCertificateMode {
+    SelfSigned,
+    VerifyAuthenticity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupCertificateMode),
+}
+
+impl Default for SmoothGroupCertificateMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupCertificateMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupCertificateMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupCertificateMode {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupCertificateMode::SelfSigned => "SELF_SIGNED".to_string(),
+            SmoothGroupCertificateMode::VerifyAuthenticity => "VERIFY_AUTHENTICITY".to_string(),
+            SmoothGroupCertificateMode::UnknownVariant(UnknownSmoothGroupCertificateMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupCertificateMode {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupCertificateMode::SelfSigned => &"SELF_SIGNED",
+            SmoothGroupCertificateMode::VerifyAuthenticity => &"VERIFY_AUTHENTICITY",
+            SmoothGroupCertificateMode::UnknownVariant(UnknownSmoothGroupCertificateMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupCertificateMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "SELF_SIGNED" => SmoothGroupCertificateMode::SelfSigned,
+            "VERIFY_AUTHENTICITY" => SmoothGroupCertificateMode::VerifyAuthenticity,
+            _ => SmoothGroupCertificateMode::UnknownVariant(UnknownSmoothGroupCertificateMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupCertificateMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SELF_SIGNED" => SmoothGroupCertificateMode::SelfSigned,
+            "VERIFY_AUTHENTICITY" => SmoothGroupCertificateMode::VerifyAuthenticity,
+            _ => SmoothGroupCertificateMode::UnknownVariant(UnknownSmoothGroupCertificateMode {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupCertificateMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupCertificateMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupCertificateMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Event Id Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupEventIdMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupEventIdMode {
+    NoEventId,
+    UseConfigured,
+    UseTimestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupEventIdMode),
+}
+
+impl Default for SmoothGroupEventIdMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupEventIdMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupEventIdMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupEventIdMode {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupEventIdMode::NoEventId => "NO_EVENT_ID".to_string(),
+            SmoothGroupEventIdMode::UseConfigured => "USE_CONFIGURED".to_string(),
+            SmoothGroupEventIdMode::UseTimestamp => "USE_TIMESTAMP".to_string(),
+            SmoothGroupEventIdMode::UnknownVariant(UnknownSmoothGroupEventIdMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupEventIdMode {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupEventIdMode::NoEventId => &"NO_EVENT_ID",
+            SmoothGroupEventIdMode::UseConfigured => &"USE_CONFIGURED",
+            SmoothGroupEventIdMode::UseTimestamp => &"USE_TIMESTAMP",
+            SmoothGroupEventIdMode::UnknownVariant(UnknownSmoothGroupEventIdMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupEventIdMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_EVENT_ID" => SmoothGroupEventIdMode::NoEventId,
+            "USE_CONFIGURED" => SmoothGroupEventIdMode::UseConfigured,
+            "USE_TIMESTAMP" => SmoothGroupEventIdMode::UseTimestamp,
+            _ => SmoothGroupEventIdMode::UnknownVariant(UnknownSmoothGroupEventIdMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupEventIdMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_EVENT_ID" => SmoothGroupEventIdMode::NoEventId,
+            "USE_CONFIGURED" => SmoothGroupEventIdMode::UseConfigured,
+            "USE_TIMESTAMP" => SmoothGroupEventIdMode::UseTimestamp,
+            _ => SmoothGroupEventIdMode::UnknownVariant(UnknownSmoothGroupEventIdMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupEventIdMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupEventIdMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupEventIdMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Event Stop Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupEventStopBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupEventStopBehavior {
+    None,
+    SendEos,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupEventStopBehavior),
+}
+
+impl Default for SmoothGroupEventStopBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupEventStopBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupEventStopBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupEventStopBehavior {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupEventStopBehavior::None => "NONE".to_string(),
+            SmoothGroupEventStopBehavior::SendEos => "SEND_EOS".to_string(),
+            SmoothGroupEventStopBehavior::UnknownVariant(UnknownSmoothGroupEventStopBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupEventStopBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupEventStopBehavior::None => &"NONE",
+            SmoothGroupEventStopBehavior::SendEos => &"SEND_EOS",
+            SmoothGroupEventStopBehavior::UnknownVariant(UnknownSmoothGroupEventStopBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupEventStopBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => SmoothGroupEventStopBehavior::None,
+            "SEND_EOS" => SmoothGroupEventStopBehavior::SendEos,
+            _ => {
+                SmoothGroupEventStopBehavior::UnknownVariant(UnknownSmoothGroupEventStopBehavior {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for SmoothGroupEventStopBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => SmoothGroupEventStopBehavior::None,
+            "SEND_EOS" => SmoothGroupEventStopBehavior::SendEos,
+            _ => {
+                SmoothGroupEventStopBehavior::UnknownVariant(UnknownSmoothGroupEventStopBehavior {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupEventStopBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupEventStopBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupEventStopBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Segmentation Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupSegmentationMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupSegmentationMode {
+    UseInputSegmentation,
+    UseSegmentDuration,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupSegmentationMode),
+}
+
+impl Default for SmoothGroupSegmentationMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupSegmentationMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupSegmentationMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupSegmentationMode {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupSegmentationMode::UseInputSegmentation => {
+                "USE_INPUT_SEGMENTATION".to_string()
+            }
+            SmoothGroupSegmentationMode::UseSegmentDuration => "USE_SEGMENT_DURATION".to_string(),
+            SmoothGroupSegmentationMode::UnknownVariant(UnknownSmoothGroupSegmentationMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupSegmentationMode {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupSegmentationMode::UseInputSegmentation => &"USE_INPUT_SEGMENTATION",
+            SmoothGroupSegmentationMode::UseSegmentDuration => &"USE_SEGMENT_DURATION",
+            SmoothGroupSegmentationMode::UnknownVariant(UnknownSmoothGroupSegmentationMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupSegmentationMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "USE_INPUT_SEGMENTATION" => SmoothGroupSegmentationMode::UseInputSegmentation,
+            "USE_SEGMENT_DURATION" => SmoothGroupSegmentationMode::UseSegmentDuration,
+            _ => SmoothGroupSegmentationMode::UnknownVariant(UnknownSmoothGroupSegmentationMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupSegmentationMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "USE_INPUT_SEGMENTATION" => SmoothGroupSegmentationMode::UseInputSegmentation,
+            "USE_SEGMENT_DURATION" => SmoothGroupSegmentationMode::UseSegmentDuration,
+            _ => SmoothGroupSegmentationMode::UnknownVariant(UnknownSmoothGroupSegmentationMode {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupSegmentationMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupSegmentationMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupSegmentationMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Sparse Track Type</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupSparseTrackType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupSparseTrackType {
+    None,
+    Scte35,
+    Scte35WithoutSegmentation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupSparseTrackType),
+}
+
+impl Default for SmoothGroupSparseTrackType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupSparseTrackType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupSparseTrackType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupSparseTrackType {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupSparseTrackType::None => "NONE".to_string(),
+            SmoothGroupSparseTrackType::Scte35 => "SCTE_35".to_string(),
+            SmoothGroupSparseTrackType::Scte35WithoutSegmentation => {
+                "SCTE_35_WITHOUT_SEGMENTATION".to_string()
+            }
+            SmoothGroupSparseTrackType::UnknownVariant(UnknownSmoothGroupSparseTrackType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupSparseTrackType {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupSparseTrackType::None => &"NONE",
+            SmoothGroupSparseTrackType::Scte35 => &"SCTE_35",
+            SmoothGroupSparseTrackType::Scte35WithoutSegmentation => {
+                &"SCTE_35_WITHOUT_SEGMENTATION"
+            }
+            SmoothGroupSparseTrackType::UnknownVariant(UnknownSmoothGroupSparseTrackType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupSparseTrackType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => SmoothGroupSparseTrackType::None,
+            "SCTE_35" => SmoothGroupSparseTrackType::Scte35,
+            "SCTE_35_WITHOUT_SEGMENTATION" => SmoothGroupSparseTrackType::Scte35WithoutSegmentation,
+            _ => SmoothGroupSparseTrackType::UnknownVariant(UnknownSmoothGroupSparseTrackType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupSparseTrackType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => SmoothGroupSparseTrackType::None,
+            "SCTE_35" => SmoothGroupSparseTrackType::Scte35,
+            "SCTE_35_WITHOUT_SEGMENTATION" => SmoothGroupSparseTrackType::Scte35WithoutSegmentation,
+            _ => SmoothGroupSparseTrackType::UnknownVariant(UnknownSmoothGroupSparseTrackType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupSparseTrackType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupSparseTrackType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupSparseTrackType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Stream Manifest Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupStreamManifestBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupStreamManifestBehavior {
+    DoNotSend,
+    Send,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupStreamManifestBehavior),
+}
+
+impl Default for SmoothGroupStreamManifestBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupStreamManifestBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupStreamManifestBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupStreamManifestBehavior {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupStreamManifestBehavior::DoNotSend => "DO_NOT_SEND".to_string(),
+            SmoothGroupStreamManifestBehavior::Send => "SEND".to_string(),
+            SmoothGroupStreamManifestBehavior::UnknownVariant(
+                UnknownSmoothGroupStreamManifestBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupStreamManifestBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupStreamManifestBehavior::DoNotSend => &"DO_NOT_SEND",
+            SmoothGroupStreamManifestBehavior::Send => &"SEND",
+            SmoothGroupStreamManifestBehavior::UnknownVariant(
+                UnknownSmoothGroupStreamManifestBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupStreamManifestBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DO_NOT_SEND" => SmoothGroupStreamManifestBehavior::DoNotSend,
+            "SEND" => SmoothGroupStreamManifestBehavior::Send,
+            _ => SmoothGroupStreamManifestBehavior::UnknownVariant(
+                UnknownSmoothGroupStreamManifestBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupStreamManifestBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DO_NOT_SEND" => SmoothGroupStreamManifestBehavior::DoNotSend,
+            "SEND" => SmoothGroupStreamManifestBehavior::Send,
+            _ => SmoothGroupStreamManifestBehavior::UnknownVariant(
+                UnknownSmoothGroupStreamManifestBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupStreamManifestBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupStreamManifestBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupStreamManifestBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smooth Group Timestamp Offset Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmoothGroupTimestampOffsetMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SmoothGroupTimestampOffsetMode {
+    UseConfiguredOffset,
+    UseEventStartDate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmoothGroupTimestampOffsetMode),
+}
+
+impl Default for SmoothGroupTimestampOffsetMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SmoothGroupTimestampOffsetMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SmoothGroupTimestampOffsetMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SmoothGroupTimestampOffsetMode {
+    fn into(self) -> String {
+        match self {
+            SmoothGroupTimestampOffsetMode::UseConfiguredOffset => {
+                "USE_CONFIGURED_OFFSET".to_string()
+            }
+            SmoothGroupTimestampOffsetMode::UseEventStartDate => "USE_EVENT_START_DATE".to_string(),
+            SmoothGroupTimestampOffsetMode::UnknownVariant(
+                UnknownSmoothGroupTimestampOffsetMode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SmoothGroupTimestampOffsetMode {
+    fn into(self) -> &'a str {
+        match self {
+            SmoothGroupTimestampOffsetMode::UseConfiguredOffset => &"USE_CONFIGURED_OFFSET",
+            SmoothGroupTimestampOffsetMode::UseEventStartDate => &"USE_EVENT_START_DATE",
+            SmoothGroupTimestampOffsetMode::UnknownVariant(
+                UnknownSmoothGroupTimestampOffsetMode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SmoothGroupTimestampOffsetMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "USE_CONFIGURED_OFFSET" => SmoothGroupTimestampOffsetMode::UseConfiguredOffset,
+            "USE_EVENT_START_DATE" => SmoothGroupTimestampOffsetMode::UseEventStartDate,
+            _ => SmoothGroupTimestampOffsetMode::UnknownVariant(
+                UnknownSmoothGroupTimestampOffsetMode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SmoothGroupTimestampOffsetMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "USE_CONFIGURED_OFFSET" => SmoothGroupTimestampOffsetMode::UseConfiguredOffset,
+            "USE_EVENT_START_DATE" => SmoothGroupTimestampOffsetMode::UseEventStartDate,
+            _ => SmoothGroupTimestampOffsetMode::UnknownVariant(
+                UnknownSmoothGroupTimestampOffsetMode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SmoothGroupTimestampOffsetMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SmoothGroupTimestampOffsetMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SmoothGroupTimestampOffsetMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Smpte2038 Data Preference</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSmpte2038DataPreference {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Smpte2038DataPreference {
+    Ignore,
+    Prefer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSmpte2038DataPreference),
+}
+
+impl Default for Smpte2038DataPreference {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Smpte2038DataPreference {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Smpte2038DataPreference {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Smpte2038DataPreference {
+    fn into(self) -> String {
+        match self {
+            Smpte2038DataPreference::Ignore => "IGNORE".to_string(),
+            Smpte2038DataPreference::Prefer => "PREFER".to_string(),
+            Smpte2038DataPreference::UnknownVariant(UnknownSmpte2038DataPreference {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Smpte2038DataPreference {
+    fn into(self) -> &'a str {
+        match self {
+            Smpte2038DataPreference::Ignore => &"IGNORE",
+            Smpte2038DataPreference::Prefer => &"PREFER",
+            Smpte2038DataPreference::UnknownVariant(UnknownSmpte2038DataPreference {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for Smpte2038DataPreference {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => Smpte2038DataPreference::Ignore,
+            "PREFER" => Smpte2038DataPreference::Prefer,
+            _ => Smpte2038DataPreference::UnknownVariant(UnknownSmpte2038DataPreference {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Smpte2038DataPreference {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => Smpte2038DataPreference::Ignore,
+            "PREFER" => Smpte2038DataPreference::Prefer,
+            _ => Smpte2038DataPreference::UnknownVariant(UnknownSmpte2038DataPreference { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Smpte2038DataPreference {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Smpte2038DataPreference {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Smpte2038DataPreference {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Smpte Tt Destination Settings</p>
@@ -5967,7 +31644,7 @@ pub struct StartChannelResponse {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -5996,7 +31673,7 @@ pub struct StartChannelResponse {
     /// <p>The log level being written to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel. (user-mutable)</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6015,7 +31692,7 @@ pub struct StartChannelResponse {
     pub role_arn: Option<String>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ChannelState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6070,7 +31747,7 @@ pub struct StartMultiplexResponse {
     /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MultiplexState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6179,7 +31856,7 @@ pub struct StopChannelResponse {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_class: Option<String>,
+    pub channel_class: Option<ChannelClass>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -6208,7 +31885,7 @@ pub struct StopChannelResponse {
     /// <p>The log level being written to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel. (user-mutable)</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6227,7 +31904,7 @@ pub struct StopChannelResponse {
     pub role_arn: Option<String>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ChannelState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6282,7 +31959,7 @@ pub struct StopMultiplexResponse {
     /// <p>The current state of the multiplex.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<MultiplexState>,
     /// <p>A collection of key-value pairs.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6295,7 +31972,7 @@ pub struct StopTimecode {
     /// <p>If you specify a StopTimecode in an input (in order to clip the file), you can specify if you want the clip to exclude (the default) or include the frame specified by the timecode.</p>
     #[serde(rename = "LastFrameClippingBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_frame_clipping_behavior: Option<String>,
+    pub last_frame_clipping_behavior: Option<LastFrameClippingBehavior>,
     /// <p>The timecode for the frame where you want to stop the clip. Optional; if not specified, the clip continues to the end of the file. Enter the timecode as HH:MM:SS:FF or HH:MM:SS;FF.</p>
     #[serde(rename = "Timecode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6315,6 +31992,121 @@ pub struct TeletextSourceSettings {
     pub page_number: Option<String>,
 }
 
+/// <p>Temporal Filter Post Filter Sharpening</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTemporalFilterPostFilterSharpening {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TemporalFilterPostFilterSharpening {
+    Auto,
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTemporalFilterPostFilterSharpening),
+}
+
+impl Default for TemporalFilterPostFilterSharpening {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TemporalFilterPostFilterSharpening {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TemporalFilterPostFilterSharpening {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TemporalFilterPostFilterSharpening {
+    fn into(self) -> String {
+        match self {
+            TemporalFilterPostFilterSharpening::Auto => "AUTO".to_string(),
+            TemporalFilterPostFilterSharpening::Disabled => "DISABLED".to_string(),
+            TemporalFilterPostFilterSharpening::Enabled => "ENABLED".to_string(),
+            TemporalFilterPostFilterSharpening::UnknownVariant(
+                UnknownTemporalFilterPostFilterSharpening { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TemporalFilterPostFilterSharpening {
+    fn into(self) -> &'a str {
+        match self {
+            TemporalFilterPostFilterSharpening::Auto => &"AUTO",
+            TemporalFilterPostFilterSharpening::Disabled => &"DISABLED",
+            TemporalFilterPostFilterSharpening::Enabled => &"ENABLED",
+            TemporalFilterPostFilterSharpening::UnknownVariant(
+                UnknownTemporalFilterPostFilterSharpening { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for TemporalFilterPostFilterSharpening {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => TemporalFilterPostFilterSharpening::Auto,
+            "DISABLED" => TemporalFilterPostFilterSharpening::Disabled,
+            "ENABLED" => TemporalFilterPostFilterSharpening::Enabled,
+            _ => TemporalFilterPostFilterSharpening::UnknownVariant(
+                UnknownTemporalFilterPostFilterSharpening {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for TemporalFilterPostFilterSharpening {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => TemporalFilterPostFilterSharpening::Auto,
+            "DISABLED" => TemporalFilterPostFilterSharpening::Disabled,
+            "ENABLED" => TemporalFilterPostFilterSharpening::Enabled,
+            _ => TemporalFilterPostFilterSharpening::UnknownVariant(
+                UnknownTemporalFilterPostFilterSharpening { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TemporalFilterPostFilterSharpening {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TemporalFilterPostFilterSharpening {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TemporalFilterPostFilterSharpening {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Temporal Filter Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TemporalFilterSettings {
@@ -6323,11 +32115,192 @@ pub struct TemporalFilterSettings {
     /// - If the source content is already clean, the filter tends to decrease the bitrate, especially when the rate control mode is QVBR.</p>
     #[serde(rename = "PostFilterSharpening")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub post_filter_sharpening: Option<String>,
+    pub post_filter_sharpening: Option<TemporalFilterPostFilterSharpening>,
     /// <p>Choose a filter strength. We recommend a strength of 1 or 2. A higher strength might take out good information, resulting in an image that is overly soft.</p>
     #[serde(rename = "Strength")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub strength: Option<String>,
+    pub strength: Option<TemporalFilterStrength>,
+}
+
+/// <p>Temporal Filter Strength</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTemporalFilterStrength {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TemporalFilterStrength {
+    Auto,
+    Strength1,
+    Strength10,
+    Strength11,
+    Strength12,
+    Strength13,
+    Strength14,
+    Strength15,
+    Strength16,
+    Strength2,
+    Strength3,
+    Strength4,
+    Strength5,
+    Strength6,
+    Strength7,
+    Strength8,
+    Strength9,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTemporalFilterStrength),
+}
+
+impl Default for TemporalFilterStrength {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TemporalFilterStrength {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TemporalFilterStrength {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TemporalFilterStrength {
+    fn into(self) -> String {
+        match self {
+            TemporalFilterStrength::Auto => "AUTO".to_string(),
+            TemporalFilterStrength::Strength1 => "STRENGTH_1".to_string(),
+            TemporalFilterStrength::Strength10 => "STRENGTH_10".to_string(),
+            TemporalFilterStrength::Strength11 => "STRENGTH_11".to_string(),
+            TemporalFilterStrength::Strength12 => "STRENGTH_12".to_string(),
+            TemporalFilterStrength::Strength13 => "STRENGTH_13".to_string(),
+            TemporalFilterStrength::Strength14 => "STRENGTH_14".to_string(),
+            TemporalFilterStrength::Strength15 => "STRENGTH_15".to_string(),
+            TemporalFilterStrength::Strength16 => "STRENGTH_16".to_string(),
+            TemporalFilterStrength::Strength2 => "STRENGTH_2".to_string(),
+            TemporalFilterStrength::Strength3 => "STRENGTH_3".to_string(),
+            TemporalFilterStrength::Strength4 => "STRENGTH_4".to_string(),
+            TemporalFilterStrength::Strength5 => "STRENGTH_5".to_string(),
+            TemporalFilterStrength::Strength6 => "STRENGTH_6".to_string(),
+            TemporalFilterStrength::Strength7 => "STRENGTH_7".to_string(),
+            TemporalFilterStrength::Strength8 => "STRENGTH_8".to_string(),
+            TemporalFilterStrength::Strength9 => "STRENGTH_9".to_string(),
+            TemporalFilterStrength::UnknownVariant(UnknownTemporalFilterStrength {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TemporalFilterStrength {
+    fn into(self) -> &'a str {
+        match self {
+            TemporalFilterStrength::Auto => &"AUTO",
+            TemporalFilterStrength::Strength1 => &"STRENGTH_1",
+            TemporalFilterStrength::Strength10 => &"STRENGTH_10",
+            TemporalFilterStrength::Strength11 => &"STRENGTH_11",
+            TemporalFilterStrength::Strength12 => &"STRENGTH_12",
+            TemporalFilterStrength::Strength13 => &"STRENGTH_13",
+            TemporalFilterStrength::Strength14 => &"STRENGTH_14",
+            TemporalFilterStrength::Strength15 => &"STRENGTH_15",
+            TemporalFilterStrength::Strength16 => &"STRENGTH_16",
+            TemporalFilterStrength::Strength2 => &"STRENGTH_2",
+            TemporalFilterStrength::Strength3 => &"STRENGTH_3",
+            TemporalFilterStrength::Strength4 => &"STRENGTH_4",
+            TemporalFilterStrength::Strength5 => &"STRENGTH_5",
+            TemporalFilterStrength::Strength6 => &"STRENGTH_6",
+            TemporalFilterStrength::Strength7 => &"STRENGTH_7",
+            TemporalFilterStrength::Strength8 => &"STRENGTH_8",
+            TemporalFilterStrength::Strength9 => &"STRENGTH_9",
+            TemporalFilterStrength::UnknownVariant(UnknownTemporalFilterStrength {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TemporalFilterStrength {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => TemporalFilterStrength::Auto,
+            "STRENGTH_1" => TemporalFilterStrength::Strength1,
+            "STRENGTH_10" => TemporalFilterStrength::Strength10,
+            "STRENGTH_11" => TemporalFilterStrength::Strength11,
+            "STRENGTH_12" => TemporalFilterStrength::Strength12,
+            "STRENGTH_13" => TemporalFilterStrength::Strength13,
+            "STRENGTH_14" => TemporalFilterStrength::Strength14,
+            "STRENGTH_15" => TemporalFilterStrength::Strength15,
+            "STRENGTH_16" => TemporalFilterStrength::Strength16,
+            "STRENGTH_2" => TemporalFilterStrength::Strength2,
+            "STRENGTH_3" => TemporalFilterStrength::Strength3,
+            "STRENGTH_4" => TemporalFilterStrength::Strength4,
+            "STRENGTH_5" => TemporalFilterStrength::Strength5,
+            "STRENGTH_6" => TemporalFilterStrength::Strength6,
+            "STRENGTH_7" => TemporalFilterStrength::Strength7,
+            "STRENGTH_8" => TemporalFilterStrength::Strength8,
+            "STRENGTH_9" => TemporalFilterStrength::Strength9,
+            _ => TemporalFilterStrength::UnknownVariant(UnknownTemporalFilterStrength {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TemporalFilterStrength {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => TemporalFilterStrength::Auto,
+            "STRENGTH_1" => TemporalFilterStrength::Strength1,
+            "STRENGTH_10" => TemporalFilterStrength::Strength10,
+            "STRENGTH_11" => TemporalFilterStrength::Strength11,
+            "STRENGTH_12" => TemporalFilterStrength::Strength12,
+            "STRENGTH_13" => TemporalFilterStrength::Strength13,
+            "STRENGTH_14" => TemporalFilterStrength::Strength14,
+            "STRENGTH_15" => TemporalFilterStrength::Strength15,
+            "STRENGTH_16" => TemporalFilterStrength::Strength16,
+            "STRENGTH_2" => TemporalFilterStrength::Strength2,
+            "STRENGTH_3" => TemporalFilterStrength::Strength3,
+            "STRENGTH_4" => TemporalFilterStrength::Strength4,
+            "STRENGTH_5" => TemporalFilterStrength::Strength5,
+            "STRENGTH_6" => TemporalFilterStrength::Strength6,
+            "STRENGTH_7" => TemporalFilterStrength::Strength7,
+            "STRENGTH_8" => TemporalFilterStrength::Strength8,
+            "STRENGTH_9" => TemporalFilterStrength::Strength9,
+            _ => TemporalFilterStrength::UnknownVariant(UnknownTemporalFilterStrength { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TemporalFilterStrength {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TemporalFilterStrength {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TemporalFilterStrength {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Timecode Config</p>
@@ -6338,11 +32311,122 @@ pub struct TimecodeConfig {
     /// -System Clock (systemclock): Use the UTC time.
     /// -Start at 0 (zerobased): The time of the first frame of the event will be 00:00:00:00.</p>
     #[serde(rename = "Source")]
-    pub source: String,
+    pub source: TimecodeConfigSource,
     /// <p>Threshold in frames beyond which output timecode is resynchronized to the input timecode. Discrepancies below this threshold are permitted to avoid unnecessary discontinuities in the output timecode. No timecode sync when this is not specified.</p>
     #[serde(rename = "SyncThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_threshold: Option<i64>,
+}
+
+/// <p>Timecode Config Source</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTimecodeConfigSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TimecodeConfigSource {
+    Embedded,
+    Systemclock,
+    Zerobased,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTimecodeConfigSource),
+}
+
+impl Default for TimecodeConfigSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TimecodeConfigSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TimecodeConfigSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TimecodeConfigSource {
+    fn into(self) -> String {
+        match self {
+            TimecodeConfigSource::Embedded => "EMBEDDED".to_string(),
+            TimecodeConfigSource::Systemclock => "SYSTEMCLOCK".to_string(),
+            TimecodeConfigSource::Zerobased => "ZEROBASED".to_string(),
+            TimecodeConfigSource::UnknownVariant(UnknownTimecodeConfigSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TimecodeConfigSource {
+    fn into(self) -> &'a str {
+        match self {
+            TimecodeConfigSource::Embedded => &"EMBEDDED",
+            TimecodeConfigSource::Systemclock => &"SYSTEMCLOCK",
+            TimecodeConfigSource::Zerobased => &"ZEROBASED",
+            TimecodeConfigSource::UnknownVariant(UnknownTimecodeConfigSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TimecodeConfigSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMBEDDED" => TimecodeConfigSource::Embedded,
+            "SYSTEMCLOCK" => TimecodeConfigSource::Systemclock,
+            "ZEROBASED" => TimecodeConfigSource::Zerobased,
+            _ => TimecodeConfigSource::UnknownVariant(UnknownTimecodeConfigSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TimecodeConfigSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMBEDDED" => TimecodeConfigSource::Embedded,
+            "SYSTEMCLOCK" => TimecodeConfigSource::Systemclock,
+            "ZEROBASED" => TimecodeConfigSource::Zerobased,
+            _ => TimecodeConfigSource::UnknownVariant(UnknownTimecodeConfigSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimecodeConfigSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TimecodeConfigSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TimecodeConfigSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A request to transfer an input device.</p>
@@ -6386,7 +32470,7 @@ pub struct TransferringInputDeviceSummary {
     /// <p>The type (direction) of the input device transfer.</p>
     #[serde(rename = "TransferType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transfer_type: Option<String>,
+    pub transfer_type: Option<InputDeviceTransferType>,
 }
 
 /// <p>Ttml Destination Settings</p>
@@ -6395,7 +32479,115 @@ pub struct TtmlDestinationSettings {
     /// <p>When set to passthrough, passes through style and position information from a TTML-like input source (TTML, SMPTE-TT, CFF-TT) to the CFF-TT output or TTML output.</p>
     #[serde(rename = "StyleControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub style_control: Option<String>,
+    pub style_control: Option<TtmlDestinationStyleControl>,
+}
+
+/// <p>Ttml Destination Style Control</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTtmlDestinationStyleControl {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TtmlDestinationStyleControl {
+    Passthrough,
+    UseConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTtmlDestinationStyleControl),
+}
+
+impl Default for TtmlDestinationStyleControl {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TtmlDestinationStyleControl {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TtmlDestinationStyleControl {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TtmlDestinationStyleControl {
+    fn into(self) -> String {
+        match self {
+            TtmlDestinationStyleControl::Passthrough => "PASSTHROUGH".to_string(),
+            TtmlDestinationStyleControl::UseConfigured => "USE_CONFIGURED".to_string(),
+            TtmlDestinationStyleControl::UnknownVariant(UnknownTtmlDestinationStyleControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TtmlDestinationStyleControl {
+    fn into(self) -> &'a str {
+        match self {
+            TtmlDestinationStyleControl::Passthrough => &"PASSTHROUGH",
+            TtmlDestinationStyleControl::UseConfigured => &"USE_CONFIGURED",
+            TtmlDestinationStyleControl::UnknownVariant(UnknownTtmlDestinationStyleControl {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TtmlDestinationStyleControl {
+    fn from(name: &str) -> Self {
+        match name {
+            "PASSTHROUGH" => TtmlDestinationStyleControl::Passthrough,
+            "USE_CONFIGURED" => TtmlDestinationStyleControl::UseConfigured,
+            _ => TtmlDestinationStyleControl::UnknownVariant(UnknownTtmlDestinationStyleControl {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TtmlDestinationStyleControl {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PASSTHROUGH" => TtmlDestinationStyleControl::Passthrough,
+            "USE_CONFIGURED" => TtmlDestinationStyleControl::UseConfigured,
+            _ => TtmlDestinationStyleControl::UnknownVariant(UnknownTtmlDestinationStyleControl {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TtmlDestinationStyleControl {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TtmlDestinationStyleControl {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TtmlDestinationStyleControl {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Udp Container Settings</p>
@@ -6412,11 +32604,11 @@ pub struct UdpGroupSettings {
     /// <p>Specifies behavior of last resort when input video is lost, and no more backup inputs are available. When dropTs is selected the entire transport stream will stop being emitted.  When dropProgram is selected the program can be dropped from the transport stream (and replaced with null packets to meet the TS bitrate requirement).  Or, when emitProgram is chosen the transport stream will continue to be produced normally with repeat frames, black frames, or slate frames substituted for the absent input video.</p>
     #[serde(rename = "InputLossAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_loss_action: Option<String>,
+    pub input_loss_action: Option<InputLossActionForUdpOut>,
     /// <p>Indicates ID3 frame that has the timecode.</p>
     #[serde(rename = "TimedMetadataId3Frame")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timed_metadata_id_3_frame: Option<String>,
+    pub timed_metadata_id_3_frame: Option<UdpTimedMetadataId3Frame>,
     /// <p>Timed Metadata interval in seconds.</p>
     #[serde(rename = "TimedMetadataId3Period")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6441,13 +32633,124 @@ pub struct UdpOutputSettings {
     pub fec_output_settings: Option<FecOutputSettings>,
 }
 
+/// <p>Udp Timed Metadata Id3 Frame</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUdpTimedMetadataId3Frame {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UdpTimedMetadataId3Frame {
+    None,
+    Priv,
+    Tdrl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUdpTimedMetadataId3Frame),
+}
+
+impl Default for UdpTimedMetadataId3Frame {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UdpTimedMetadataId3Frame {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UdpTimedMetadataId3Frame {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UdpTimedMetadataId3Frame {
+    fn into(self) -> String {
+        match self {
+            UdpTimedMetadataId3Frame::None => "NONE".to_string(),
+            UdpTimedMetadataId3Frame::Priv => "PRIV".to_string(),
+            UdpTimedMetadataId3Frame::Tdrl => "TDRL".to_string(),
+            UdpTimedMetadataId3Frame::UnknownVariant(UnknownUdpTimedMetadataId3Frame {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UdpTimedMetadataId3Frame {
+    fn into(self) -> &'a str {
+        match self {
+            UdpTimedMetadataId3Frame::None => &"NONE",
+            UdpTimedMetadataId3Frame::Priv => &"PRIV",
+            UdpTimedMetadataId3Frame::Tdrl => &"TDRL",
+            UdpTimedMetadataId3Frame::UnknownVariant(UnknownUdpTimedMetadataId3Frame {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UdpTimedMetadataId3Frame {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => UdpTimedMetadataId3Frame::None,
+            "PRIV" => UdpTimedMetadataId3Frame::Priv,
+            "TDRL" => UdpTimedMetadataId3Frame::Tdrl,
+            _ => UdpTimedMetadataId3Frame::UnknownVariant(UnknownUdpTimedMetadataId3Frame {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UdpTimedMetadataId3Frame {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => UdpTimedMetadataId3Frame::None,
+            "PRIV" => UdpTimedMetadataId3Frame::Priv,
+            "TDRL" => UdpTimedMetadataId3Frame::Tdrl,
+            _ => UdpTimedMetadataId3Frame::UnknownVariant(UnknownUdpTimedMetadataId3Frame { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UdpTimedMetadataId3Frame {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UdpTimedMetadataId3Frame {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UdpTimedMetadataId3Frame {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Channel class that the channel should be updated to.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelClassRequest {
     /// <p>The channel class that you wish to update this channel to use.</p>
     #[serde(rename = "ChannelClass")]
-    pub channel_class: String,
+    pub channel_class: ChannelClass,
     /// <p>Channel Id of the channel whose class should be updated.</p>
     #[serde(rename = "ChannelId")]
     pub channel_id: String,
@@ -6495,7 +32798,7 @@ pub struct UpdateChannelRequest {
     /// <p>The log level to write to CloudWatch Logs.</p>
     #[serde(rename = "LogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_level: Option<String>,
+    pub log_level: Option<LogLevel>,
     /// <p>The name of the channel.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6547,15 +32850,15 @@ pub struct UpdateInputDeviceResponse {
     /// <p>The state of the connection between the input device and AWS.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<InputDeviceConnectionState>,
     /// <p>The status of the action to synchronize the device configuration. If you change the configuration of the input device (for example, the maximum bitrate), MediaLive sends the new data to the device. The device might not update itself immediately. SYNCED means the device has updated its configuration. SYNCING means that it has not updated its configuration.</p>
     #[serde(rename = "DeviceSettingsSyncState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_settings_sync_state: Option<String>,
+    pub device_settings_sync_state: Option<DeviceSettingsSyncState>,
     /// <p>The status of software on the input device.</p>
     #[serde(rename = "DeviceUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_update_status: Option<String>,
+    pub device_update_status: Option<DeviceUpdateStatus>,
     /// <p>Settings that describe an input device that is type HD.</p>
     #[serde(rename = "HdDeviceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6583,7 +32886,7 @@ pub struct UpdateInputDeviceResponse {
     /// <p>The type of the input device.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InputDeviceType>,
     /// <p>Settings that describe an input device that is type UHD.</p>
     #[serde(rename = "UhdDeviceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6800,11 +33103,11 @@ pub struct VideoDescription {
     /// NONE: MediaLive does not clip the input video and does not include the AFD values in the output</p>
     #[serde(rename = "RespondToAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub respond_to_afd: Option<String>,
+    pub respond_to_afd: Option<VideoDescriptionRespondToAfd>,
     /// <p>STRETCH<em>TO</em>OUTPUT configures the output position to stretch the video to the specified output resolution (height and width). This option will override any position value. DEFAULT may insert black boxes (pillar boxes or letter boxes) around the video to provide the specified output resolution.</p>
     #[serde(rename = "ScalingBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_behavior: Option<String>,
+    pub scaling_behavior: Option<VideoDescriptionScalingBehavior>,
     /// <p>Changes the strength of the anti-alias filter used for scaling. 0 is the softest setting, 100 is the sharpest. A setting of 50 is recommended for most content.</p>
     #[serde(rename = "Sharpness")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6815,21 +33118,471 @@ pub struct VideoDescription {
     pub width: Option<i64>,
 }
 
+/// <p>Video Description Respond To Afd</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVideoDescriptionRespondToAfd {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VideoDescriptionRespondToAfd {
+    None,
+    Passthrough,
+    Respond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVideoDescriptionRespondToAfd),
+}
+
+impl Default for VideoDescriptionRespondToAfd {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VideoDescriptionRespondToAfd {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VideoDescriptionRespondToAfd {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VideoDescriptionRespondToAfd {
+    fn into(self) -> String {
+        match self {
+            VideoDescriptionRespondToAfd::None => "NONE".to_string(),
+            VideoDescriptionRespondToAfd::Passthrough => "PASSTHROUGH".to_string(),
+            VideoDescriptionRespondToAfd::Respond => "RESPOND".to_string(),
+            VideoDescriptionRespondToAfd::UnknownVariant(UnknownVideoDescriptionRespondToAfd {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VideoDescriptionRespondToAfd {
+    fn into(self) -> &'a str {
+        match self {
+            VideoDescriptionRespondToAfd::None => &"NONE",
+            VideoDescriptionRespondToAfd::Passthrough => &"PASSTHROUGH",
+            VideoDescriptionRespondToAfd::Respond => &"RESPOND",
+            VideoDescriptionRespondToAfd::UnknownVariant(UnknownVideoDescriptionRespondToAfd {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VideoDescriptionRespondToAfd {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => VideoDescriptionRespondToAfd::None,
+            "PASSTHROUGH" => VideoDescriptionRespondToAfd::Passthrough,
+            "RESPOND" => VideoDescriptionRespondToAfd::Respond,
+            _ => {
+                VideoDescriptionRespondToAfd::UnknownVariant(UnknownVideoDescriptionRespondToAfd {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for VideoDescriptionRespondToAfd {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => VideoDescriptionRespondToAfd::None,
+            "PASSTHROUGH" => VideoDescriptionRespondToAfd::Passthrough,
+            "RESPOND" => VideoDescriptionRespondToAfd::Respond,
+            _ => {
+                VideoDescriptionRespondToAfd::UnknownVariant(UnknownVideoDescriptionRespondToAfd {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for VideoDescriptionRespondToAfd {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VideoDescriptionRespondToAfd {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VideoDescriptionRespondToAfd {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Video Description Scaling Behavior</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVideoDescriptionScalingBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VideoDescriptionScalingBehavior {
+    Default,
+    StretchToOutput,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVideoDescriptionScalingBehavior),
+}
+
+impl Default for VideoDescriptionScalingBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VideoDescriptionScalingBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VideoDescriptionScalingBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VideoDescriptionScalingBehavior {
+    fn into(self) -> String {
+        match self {
+            VideoDescriptionScalingBehavior::Default => "DEFAULT".to_string(),
+            VideoDescriptionScalingBehavior::StretchToOutput => "STRETCH_TO_OUTPUT".to_string(),
+            VideoDescriptionScalingBehavior::UnknownVariant(
+                UnknownVideoDescriptionScalingBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VideoDescriptionScalingBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            VideoDescriptionScalingBehavior::Default => &"DEFAULT",
+            VideoDescriptionScalingBehavior::StretchToOutput => &"STRETCH_TO_OUTPUT",
+            VideoDescriptionScalingBehavior::UnknownVariant(
+                UnknownVideoDescriptionScalingBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for VideoDescriptionScalingBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => VideoDescriptionScalingBehavior::Default,
+            "STRETCH_TO_OUTPUT" => VideoDescriptionScalingBehavior::StretchToOutput,
+            _ => VideoDescriptionScalingBehavior::UnknownVariant(
+                UnknownVideoDescriptionScalingBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for VideoDescriptionScalingBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => VideoDescriptionScalingBehavior::Default,
+            "STRETCH_TO_OUTPUT" => VideoDescriptionScalingBehavior::StretchToOutput,
+            _ => VideoDescriptionScalingBehavior::UnknownVariant(
+                UnknownVideoDescriptionScalingBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VideoDescriptionScalingBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VideoDescriptionScalingBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VideoDescriptionScalingBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies a particular video stream within an input source. An input may have only a single video selector.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoSelector {
     /// <p>Specifies the color space of an input. This setting works in tandem with colorSpaceUsage and a video description&#39;s colorSpaceSettingsChoice to determine if any conversion will be performed.</p>
     #[serde(rename = "ColorSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color_space: Option<String>,
+    pub color_space: Option<VideoSelectorColorSpace>,
     /// <p>Applies only if colorSpace is a value other than follow. This field controls how the value in the colorSpace field will be used. fallback means that when the input does include color space data, that data will be used, but when the input has no color space data, the value in colorSpace will be used. Choose fallback if your input is sometimes missing color space data, but when it does have color space data, that data is correct. force means to always use the value in colorSpace. Choose force if your input usually has no color space data or might have unreliable color space data.</p>
     #[serde(rename = "ColorSpaceUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub color_space_usage: Option<String>,
+    pub color_space_usage: Option<VideoSelectorColorSpaceUsage>,
     /// <p>The video selector settings.</p>
     #[serde(rename = "SelectorSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selector_settings: Option<VideoSelectorSettings>,
+}
+
+/// <p>Video Selector Color Space</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVideoSelectorColorSpace {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VideoSelectorColorSpace {
+    Follow,
+    Rec601,
+    Rec709,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVideoSelectorColorSpace),
+}
+
+impl Default for VideoSelectorColorSpace {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VideoSelectorColorSpace {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VideoSelectorColorSpace {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VideoSelectorColorSpace {
+    fn into(self) -> String {
+        match self {
+            VideoSelectorColorSpace::Follow => "FOLLOW".to_string(),
+            VideoSelectorColorSpace::Rec601 => "REC_601".to_string(),
+            VideoSelectorColorSpace::Rec709 => "REC_709".to_string(),
+            VideoSelectorColorSpace::UnknownVariant(UnknownVideoSelectorColorSpace {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VideoSelectorColorSpace {
+    fn into(self) -> &'a str {
+        match self {
+            VideoSelectorColorSpace::Follow => &"FOLLOW",
+            VideoSelectorColorSpace::Rec601 => &"REC_601",
+            VideoSelectorColorSpace::Rec709 => &"REC_709",
+            VideoSelectorColorSpace::UnknownVariant(UnknownVideoSelectorColorSpace {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VideoSelectorColorSpace {
+    fn from(name: &str) -> Self {
+        match name {
+            "FOLLOW" => VideoSelectorColorSpace::Follow,
+            "REC_601" => VideoSelectorColorSpace::Rec601,
+            "REC_709" => VideoSelectorColorSpace::Rec709,
+            _ => VideoSelectorColorSpace::UnknownVariant(UnknownVideoSelectorColorSpace {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VideoSelectorColorSpace {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FOLLOW" => VideoSelectorColorSpace::Follow,
+            "REC_601" => VideoSelectorColorSpace::Rec601,
+            "REC_709" => VideoSelectorColorSpace::Rec709,
+            _ => VideoSelectorColorSpace::UnknownVariant(UnknownVideoSelectorColorSpace { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VideoSelectorColorSpace {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VideoSelectorColorSpace {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VideoSelectorColorSpace {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Video Selector Color Space Usage</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVideoSelectorColorSpaceUsage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VideoSelectorColorSpaceUsage {
+    Fallback,
+    Force,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVideoSelectorColorSpaceUsage),
+}
+
+impl Default for VideoSelectorColorSpaceUsage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VideoSelectorColorSpaceUsage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VideoSelectorColorSpaceUsage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VideoSelectorColorSpaceUsage {
+    fn into(self) -> String {
+        match self {
+            VideoSelectorColorSpaceUsage::Fallback => "FALLBACK".to_string(),
+            VideoSelectorColorSpaceUsage::Force => "FORCE".to_string(),
+            VideoSelectorColorSpaceUsage::UnknownVariant(UnknownVideoSelectorColorSpaceUsage {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VideoSelectorColorSpaceUsage {
+    fn into(self) -> &'a str {
+        match self {
+            VideoSelectorColorSpaceUsage::Fallback => &"FALLBACK",
+            VideoSelectorColorSpaceUsage::Force => &"FORCE",
+            VideoSelectorColorSpaceUsage::UnknownVariant(UnknownVideoSelectorColorSpaceUsage {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VideoSelectorColorSpaceUsage {
+    fn from(name: &str) -> Self {
+        match name {
+            "FALLBACK" => VideoSelectorColorSpaceUsage::Fallback,
+            "FORCE" => VideoSelectorColorSpaceUsage::Force,
+            _ => {
+                VideoSelectorColorSpaceUsage::UnknownVariant(UnknownVideoSelectorColorSpaceUsage {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for VideoSelectorColorSpaceUsage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FALLBACK" => VideoSelectorColorSpaceUsage::Fallback,
+            "FORCE" => VideoSelectorColorSpaceUsage::Force,
+            _ => {
+                VideoSelectorColorSpaceUsage::UnknownVariant(UnknownVideoSelectorColorSpaceUsage {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for VideoSelectorColorSpaceUsage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VideoSelectorColorSpaceUsage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VideoSelectorColorSpaceUsage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Video Selector Pid</p>
@@ -6861,6 +33614,118 @@ pub struct VideoSelectorSettings {
     pub video_selector_program_id: Option<VideoSelectorProgramId>,
 }
 
+/// <p>Wav Coding Mode</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWavCodingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WavCodingMode {
+    CodingMode10,
+    CodingMode20,
+    CodingMode40,
+    CodingMode80,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWavCodingMode),
+}
+
+impl Default for WavCodingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WavCodingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WavCodingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WavCodingMode {
+    fn into(self) -> String {
+        match self {
+            WavCodingMode::CodingMode10 => "CODING_MODE_1_0".to_string(),
+            WavCodingMode::CodingMode20 => "CODING_MODE_2_0".to_string(),
+            WavCodingMode::CodingMode40 => "CODING_MODE_4_0".to_string(),
+            WavCodingMode::CodingMode80 => "CODING_MODE_8_0".to_string(),
+            WavCodingMode::UnknownVariant(UnknownWavCodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WavCodingMode {
+    fn into(self) -> &'a str {
+        match self {
+            WavCodingMode::CodingMode10 => &"CODING_MODE_1_0",
+            WavCodingMode::CodingMode20 => &"CODING_MODE_2_0",
+            WavCodingMode::CodingMode40 => &"CODING_MODE_4_0",
+            WavCodingMode::CodingMode80 => &"CODING_MODE_8_0",
+            WavCodingMode::UnknownVariant(UnknownWavCodingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WavCodingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODING_MODE_1_0" => WavCodingMode::CodingMode10,
+            "CODING_MODE_2_0" => WavCodingMode::CodingMode20,
+            "CODING_MODE_4_0" => WavCodingMode::CodingMode40,
+            "CODING_MODE_8_0" => WavCodingMode::CodingMode80,
+            _ => WavCodingMode::UnknownVariant(UnknownWavCodingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WavCodingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODING_MODE_1_0" => WavCodingMode::CodingMode10,
+            "CODING_MODE_2_0" => WavCodingMode::CodingMode20,
+            "CODING_MODE_4_0" => WavCodingMode::CodingMode40,
+            "CODING_MODE_8_0" => WavCodingMode::CodingMode80,
+            _ => WavCodingMode::UnknownVariant(UnknownWavCodingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WavCodingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WavCodingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WavCodingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Wav Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WavSettings {
@@ -6871,7 +33736,7 @@ pub struct WavSettings {
     /// <p>The audio coding mode for the WAV audio. The mode determines the number of channels in the audio.</p>
     #[serde(rename = "CodingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub coding_mode: Option<String>,
+    pub coding_mode: Option<WavCodingMode>,
     /// <p>Sample rate in Hz.</p>
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11894,7 +38759,10 @@ impl MediaLive for MediaLiveClient {
                 .headers
                 .remove("Content-Length")
                 .map(|value| value.parse::<i64>().unwrap());
-            result.content_type = response.headers.remove("Content-Type");
+            result.content_type = response
+                .headers
+                .remove("Content-Type")
+                .map(|value| value.into());
             result.e_tag = response.headers.remove("ETag");
             result.last_modified = response
                 .headers

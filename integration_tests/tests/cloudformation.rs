@@ -3,7 +3,7 @@
 extern crate rusoto_cloudformation;
 extern crate rusoto_core;
 
-use rusoto_cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput};
+use rusoto_cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput, StackStatus};
 use rusoto_core::Region;
 
 #[tokio::test]
@@ -19,7 +19,7 @@ async fn should_list_stacks() {
 async fn should_list_stacks_with_status_filter() {
     let client = CloudFormationClient::new(Region::UsEast1);
 
-    let filters = vec!["CREATE_COMPLETE".to_owned()];
+    let filters = vec![StackStatus::CreateComplete];
     let request = ListStacksInput {
         stack_status_filter: Some(filters),
         ..Default::default()

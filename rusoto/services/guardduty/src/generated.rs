@@ -138,7 +138,108 @@ pub struct AdminAccount {
     /// <p>Indicates whether the account is enabled as the delegated administrator.</p>
     #[serde(rename = "AdminStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub admin_status: Option<String>,
+    pub admin_status: Option<AdminStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdminStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdminStatus {
+    DisableInProgress,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdminStatus),
+}
+
+impl Default for AdminStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdminStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdminStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdminStatus {
+    fn into(self) -> String {
+        match self {
+            AdminStatus::DisableInProgress => "DISABLE_IN_PROGRESS".to_string(),
+            AdminStatus::Enabled => "ENABLED".to_string(),
+            AdminStatus::UnknownVariant(UnknownAdminStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdminStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AdminStatus::DisableInProgress => &"DISABLE_IN_PROGRESS",
+            AdminStatus::Enabled => &"ENABLED",
+            AdminStatus::UnknownVariant(UnknownAdminStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdminStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLE_IN_PROGRESS" => AdminStatus::DisableInProgress,
+            "ENABLED" => AdminStatus::Enabled,
+            _ => AdminStatus::UnknownVariant(UnknownAdminStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdminStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLE_IN_PROGRESS" => AdminStatus::DisableInProgress,
+            "ENABLED" => AdminStatus::Enabled,
+            _ => AdminStatus::UnknownVariant(UnknownAdminStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdminStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AdminStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdminStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -256,7 +357,7 @@ pub struct City {
 pub struct CloudTrailConfigurationResult {
     /// <p>Describes whether CloudTrail is enabled as a data source for the detector.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DataSourceStatus,
 }
 
 /// <p>Contains information about the condition.</p>
@@ -319,7 +420,7 @@ pub struct CreateDetectorRequest {
     /// <p>A value that specifies how frequently updated findings are exported.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_publishing_frequency: Option<String>,
+    pub finding_publishing_frequency: Option<FindingPublishingFrequency>,
     /// <p>The tags to be added to a new detector resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -341,7 +442,7 @@ pub struct CreateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<FilterAction>,
     /// <p>The idempotency token for the create request.</p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -392,7 +493,7 @@ pub struct CreateIPSetRequest {
     pub detector_id: String,
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
-    pub format: String,
+    pub format: IpSetFormat,
     /// <p>The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
@@ -444,7 +545,7 @@ pub struct CreatePublishingDestinationRequest {
     pub destination_properties: DestinationProperties,
     /// <p>The type of resource for the publishing destination. Currently only Amazon S3 buckets are supported.</p>
     #[serde(rename = "DestinationType")]
-    pub destination_type: String,
+    pub destination_type: DestinationType,
     /// <p>The ID of the GuardDuty detector associated with the publishing destination.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -489,7 +590,7 @@ pub struct CreateThreatIntelSetRequest {
     pub detector_id: String,
     /// <p>The format of the file that contains the ThreatIntelSet.</p>
     #[serde(rename = "Format")]
-    pub format: String,
+    pub format: ThreatIntelSetFormat,
     /// <p>The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
@@ -516,7 +617,117 @@ pub struct CreateThreatIntelSetResponse {
 pub struct DNSLogsConfigurationResult {
     /// <p>Denotes whether DNS logs is enabled as a data source.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DataSourceStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSource {
+    CloudTrail,
+    DnsLogs,
+    FlowLogs,
+    S3Logs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSource),
+}
+
+impl Default for DataSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSource {
+    fn into(self) -> String {
+        match self {
+            DataSource::CloudTrail => "CLOUD_TRAIL".to_string(),
+            DataSource::DnsLogs => "DNS_LOGS".to_string(),
+            DataSource::FlowLogs => "FLOW_LOGS".to_string(),
+            DataSource::S3Logs => "S3_LOGS".to_string(),
+            DataSource::UnknownVariant(UnknownDataSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSource {
+    fn into(self) -> &'a str {
+        match self {
+            DataSource::CloudTrail => &"CLOUD_TRAIL",
+            DataSource::DnsLogs => &"DNS_LOGS",
+            DataSource::FlowLogs => &"FLOW_LOGS",
+            DataSource::S3Logs => &"S3_LOGS",
+            DataSource::UnknownVariant(UnknownDataSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUD_TRAIL" => DataSource::CloudTrail,
+            "DNS_LOGS" => DataSource::DnsLogs,
+            "FLOW_LOGS" => DataSource::FlowLogs,
+            "S3_LOGS" => DataSource::S3Logs,
+            _ => DataSource::UnknownVariant(UnknownDataSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUD_TRAIL" => DataSource::CloudTrail,
+            "DNS_LOGS" => DataSource::DnsLogs,
+            "FLOW_LOGS" => DataSource::FlowLogs,
+            "S3_LOGS" => DataSource::S3Logs,
+            _ => DataSource::UnknownVariant(UnknownDataSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about which data sources are enabled.</p>
@@ -545,6 +756,111 @@ pub struct DataSourceConfigurationsResult {
     /// <p>An object that contains information on the status of S3 Data event logs as a data source.</p>
     #[serde(rename = "S3Logs")]
     pub s3_logs: S3LogsConfigurationResult,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceStatus),
+}
+
+impl Default for DataSourceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceStatus {
+    fn into(self) -> String {
+        match self {
+            DataSourceStatus::Disabled => "DISABLED".to_string(),
+            DataSourceStatus::Enabled => "ENABLED".to_string(),
+            DataSourceStatus::UnknownVariant(UnknownDataSourceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceStatus::Disabled => &"DISABLED",
+            DataSourceStatus::Enabled => &"ENABLED",
+            DataSourceStatus::UnknownVariant(UnknownDataSourceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DataSourceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => DataSourceStatus::Disabled,
+            "ENABLED" => DataSourceStatus::Enabled,
+            _ => DataSourceStatus::UnknownVariant(UnknownDataSourceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => DataSourceStatus::Disabled,
+            "ENABLED" => DataSourceStatus::Enabled,
+            _ => DataSourceStatus::UnknownVariant(UnknownDataSourceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DataSourceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -729,13 +1045,13 @@ pub struct DescribePublishingDestinationResponse {
     pub destination_properties: DestinationProperties,
     /// <p>The type of publishing destination. Currently, only Amazon S3 buckets are supported.</p>
     #[serde(rename = "DestinationType")]
-    pub destination_type: String,
+    pub destination_type: DestinationType,
     /// <p>The time, in epoch millisecond format, at which GuardDuty was first unable to publish findings to the destination.</p>
     #[serde(rename = "PublishingFailureStartTimestamp")]
     pub publishing_failure_start_timestamp: i64,
     /// <p>The status of the publishing destination.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: PublishingStatus,
 }
 
 /// <p>Contains information about the publishing destination, including the ID, type, and status.</p>
@@ -747,10 +1063,10 @@ pub struct Destination {
     pub destination_id: String,
     /// <p>The type of resource used for the publishing destination. Currently, only Amazon S3 buckets are supported.</p>
     #[serde(rename = "DestinationType")]
-    pub destination_type: String,
+    pub destination_type: DestinationType,
     /// <p>The status of the publishing destination.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: PublishingStatus,
 }
 
 /// <p>Contains the Amazon Resource Name (ARN) of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.</p>
@@ -764,6 +1080,202 @@ pub struct DestinationProperties {
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDestinationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DestinationType {
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDestinationType),
+}
+
+impl Default for DestinationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DestinationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DestinationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DestinationType {
+    fn into(self) -> String {
+        match self {
+            DestinationType::S3 => "S3".to_string(),
+            DestinationType::UnknownVariant(UnknownDestinationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DestinationType {
+    fn into(self) -> &'a str {
+        match self {
+            DestinationType::S3 => &"S3",
+            DestinationType::UnknownVariant(UnknownDestinationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DestinationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "S3" => DestinationType::S3,
+            _ => DestinationType::UnknownVariant(UnknownDestinationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DestinationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "S3" => DestinationType::S3,
+            _ => DestinationType::UnknownVariant(UnknownDestinationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DestinationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DestinationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DestinationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetectorStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetectorStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetectorStatus),
+}
+
+impl Default for DetectorStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetectorStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetectorStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetectorStatus {
+    fn into(self) -> String {
+        match self {
+            DetectorStatus::Disabled => "DISABLED".to_string(),
+            DetectorStatus::Enabled => "ENABLED".to_string(),
+            DetectorStatus::UnknownVariant(UnknownDetectorStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetectorStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DetectorStatus::Disabled => &"DISABLED",
+            DetectorStatus::Enabled => &"ENABLED",
+            DetectorStatus::UnknownVariant(UnknownDetectorStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DetectorStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => DetectorStatus::Disabled,
+            "ENABLED" => DetectorStatus::Enabled,
+            _ => DetectorStatus::UnknownVariant(UnknownDetectorStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetectorStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => DetectorStatus::Disabled,
+            "ENABLED" => DetectorStatus::Enabled,
+            _ => DetectorStatus::UnknownVariant(UnknownDetectorStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetectorStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DetectorStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetectorStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -851,6 +1363,207 @@ pub struct Evidence {
     pub threat_intelligence_details: Option<Vec<ThreatIntelligenceDetail>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeedback {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Feedback {
+    NotUseful,
+    Useful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeedback),
+}
+
+impl Default for Feedback {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Feedback {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Feedback {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Feedback {
+    fn into(self) -> String {
+        match self {
+            Feedback::NotUseful => "NOT_USEFUL".to_string(),
+            Feedback::Useful => "USEFUL".to_string(),
+            Feedback::UnknownVariant(UnknownFeedback { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Feedback {
+    fn into(self) -> &'a str {
+        match self {
+            Feedback::NotUseful => &"NOT_USEFUL",
+            Feedback::Useful => &"USEFUL",
+            Feedback::UnknownVariant(UnknownFeedback { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Feedback {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_USEFUL" => Feedback::NotUseful,
+            "USEFUL" => Feedback::Useful,
+            _ => Feedback::UnknownVariant(UnknownFeedback {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Feedback {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_USEFUL" => Feedback::NotUseful,
+            "USEFUL" => Feedback::Useful,
+            _ => Feedback::UnknownVariant(UnknownFeedback { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Feedback {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Feedback {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Feedback {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterAction {
+    Archive,
+    Noop,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterAction),
+}
+
+impl Default for FilterAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterAction {
+    fn into(self) -> String {
+        match self {
+            FilterAction::Archive => "ARCHIVE".to_string(),
+            FilterAction::Noop => "NOOP".to_string(),
+            FilterAction::UnknownVariant(UnknownFilterAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterAction {
+    fn into(self) -> &'a str {
+        match self {
+            FilterAction::Archive => &"ARCHIVE",
+            FilterAction::Noop => &"NOOP",
+            FilterAction::UnknownVariant(UnknownFilterAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARCHIVE" => FilterAction::Archive,
+            "NOOP" => FilterAction::Noop,
+            _ => FilterAction::UnknownVariant(UnknownFilterAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARCHIVE" => FilterAction::Archive,
+            "NOOP" => FilterAction::Noop,
+            _ => FilterAction::UnknownVariant(UnknownFilterAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FilterAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the finding, which is generated when abnormal or suspicious activity is detected.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -914,6 +1627,217 @@ pub struct FindingCriteria {
     pub criterion: Option<::std::collections::HashMap<String, Condition>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFindingPublishingFrequency {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FindingPublishingFrequency {
+    FifteenMinutes,
+    OneHour,
+    SixHours,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFindingPublishingFrequency),
+}
+
+impl Default for FindingPublishingFrequency {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FindingPublishingFrequency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FindingPublishingFrequency {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FindingPublishingFrequency {
+    fn into(self) -> String {
+        match self {
+            FindingPublishingFrequency::FifteenMinutes => "FIFTEEN_MINUTES".to_string(),
+            FindingPublishingFrequency::OneHour => "ONE_HOUR".to_string(),
+            FindingPublishingFrequency::SixHours => "SIX_HOURS".to_string(),
+            FindingPublishingFrequency::UnknownVariant(UnknownFindingPublishingFrequency {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FindingPublishingFrequency {
+    fn into(self) -> &'a str {
+        match self {
+            FindingPublishingFrequency::FifteenMinutes => &"FIFTEEN_MINUTES",
+            FindingPublishingFrequency::OneHour => &"ONE_HOUR",
+            FindingPublishingFrequency::SixHours => &"SIX_HOURS",
+            FindingPublishingFrequency::UnknownVariant(UnknownFindingPublishingFrequency {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FindingPublishingFrequency {
+    fn from(name: &str) -> Self {
+        match name {
+            "FIFTEEN_MINUTES" => FindingPublishingFrequency::FifteenMinutes,
+            "ONE_HOUR" => FindingPublishingFrequency::OneHour,
+            "SIX_HOURS" => FindingPublishingFrequency::SixHours,
+            _ => FindingPublishingFrequency::UnknownVariant(UnknownFindingPublishingFrequency {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FindingPublishingFrequency {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FIFTEEN_MINUTES" => FindingPublishingFrequency::FifteenMinutes,
+            "ONE_HOUR" => FindingPublishingFrequency::OneHour,
+            "SIX_HOURS" => FindingPublishingFrequency::SixHours,
+            _ => FindingPublishingFrequency::UnknownVariant(UnknownFindingPublishingFrequency {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FindingPublishingFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FindingPublishingFrequency {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FindingPublishingFrequency {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFindingStatisticType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FindingStatisticType {
+    CountBySeverity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFindingStatisticType),
+}
+
+impl Default for FindingStatisticType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FindingStatisticType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FindingStatisticType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FindingStatisticType {
+    fn into(self) -> String {
+        match self {
+            FindingStatisticType::CountBySeverity => "COUNT_BY_SEVERITY".to_string(),
+            FindingStatisticType::UnknownVariant(UnknownFindingStatisticType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FindingStatisticType {
+    fn into(self) -> &'a str {
+        match self {
+            FindingStatisticType::CountBySeverity => &"COUNT_BY_SEVERITY",
+            FindingStatisticType::UnknownVariant(UnknownFindingStatisticType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FindingStatisticType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COUNT_BY_SEVERITY" => FindingStatisticType::CountBySeverity,
+            _ => FindingStatisticType::UnknownVariant(UnknownFindingStatisticType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FindingStatisticType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COUNT_BY_SEVERITY" => FindingStatisticType::CountBySeverity,
+            _ => FindingStatisticType::UnknownVariant(UnknownFindingStatisticType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FindingStatisticType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FindingStatisticType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FindingStatisticType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about finding statistics.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -930,7 +1854,7 @@ pub struct FindingStatistics {
 pub struct FlowLogsConfigurationResult {
     /// <p>Denotes whether VPC flow logs is enabled as a data source.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DataSourceStatus,
 }
 
 /// <p>Contains information about the location of the remote IP address.</p>
@@ -969,13 +1893,13 @@ pub struct GetDetectorResponse {
     /// <p>The publishing frequency of the finding.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_publishing_frequency: Option<String>,
+    pub finding_publishing_frequency: Option<FindingPublishingFrequency>,
     /// <p>The GuardDuty service role.</p>
     #[serde(rename = "ServiceRole")]
     pub service_role: String,
     /// <p>The detector status.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DetectorStatus,
     /// <p>The tags of the detector resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1002,7 +1926,7 @@ pub struct GetFilterRequest {
 pub struct GetFilterResponse {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: FilterAction,
     /// <p>The description of the filter.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1058,7 +1982,7 @@ pub struct GetFindingsStatisticsRequest {
     pub finding_criteria: Option<FindingCriteria>,
     /// <p>The types of finding statistics to retrieve.</p>
     #[serde(rename = "FindingStatisticTypes")]
-    pub finding_statistic_types: Vec<String>,
+    pub finding_statistic_types: Vec<FindingStatisticType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1085,7 +2009,7 @@ pub struct GetIPSetRequest {
 pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
-    pub format: String,
+    pub format: IpSetFormat,
     /// <p>The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
@@ -1094,7 +2018,7 @@ pub struct GetIPSetResponse {
     pub name: String,
     /// <p>The status of IPSet file that was uploaded.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: IpSetStatus,
     /// <p>The tags of the IPSet resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1190,7 +2114,7 @@ pub struct GetThreatIntelSetRequest {
 pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
-    pub format: String,
+    pub format: ThreatIntelSetFormat,
     /// <p>The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
@@ -1199,7 +2123,7 @@ pub struct GetThreatIntelSetResponse {
     pub name: String,
     /// <p>The status of threatIntelSet file uploaded.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: ThreatIntelSetStatus,
     /// <p>The tags of the threat list resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1229,7 +2153,7 @@ pub struct GetUsageStatisticsRequest {
     pub usage_criteria: UsageCriteria,
     /// <p>The type of usage statistics to retrieve.</p>
     #[serde(rename = "UsageStatisticType")]
-    pub usage_statistic_type: String,
+    pub usage_statistic_type: UsageStatisticType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1364,6 +2288,252 @@ pub struct InviteMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpSetFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpSetFormat {
+    AlienVault,
+    FireEye,
+    OtxCsv,
+    ProofPoint,
+    Stix,
+    Txt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpSetFormat),
+}
+
+impl Default for IpSetFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpSetFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpSetFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpSetFormat {
+    fn into(self) -> String {
+        match self {
+            IpSetFormat::AlienVault => "ALIEN_VAULT".to_string(),
+            IpSetFormat::FireEye => "FIRE_EYE".to_string(),
+            IpSetFormat::OtxCsv => "OTX_CSV".to_string(),
+            IpSetFormat::ProofPoint => "PROOF_POINT".to_string(),
+            IpSetFormat::Stix => "STIX".to_string(),
+            IpSetFormat::Txt => "TXT".to_string(),
+            IpSetFormat::UnknownVariant(UnknownIpSetFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpSetFormat {
+    fn into(self) -> &'a str {
+        match self {
+            IpSetFormat::AlienVault => &"ALIEN_VAULT",
+            IpSetFormat::FireEye => &"FIRE_EYE",
+            IpSetFormat::OtxCsv => &"OTX_CSV",
+            IpSetFormat::ProofPoint => &"PROOF_POINT",
+            IpSetFormat::Stix => &"STIX",
+            IpSetFormat::Txt => &"TXT",
+            IpSetFormat::UnknownVariant(UnknownIpSetFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpSetFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALIEN_VAULT" => IpSetFormat::AlienVault,
+            "FIRE_EYE" => IpSetFormat::FireEye,
+            "OTX_CSV" => IpSetFormat::OtxCsv,
+            "PROOF_POINT" => IpSetFormat::ProofPoint,
+            "STIX" => IpSetFormat::Stix,
+            "TXT" => IpSetFormat::Txt,
+            _ => IpSetFormat::UnknownVariant(UnknownIpSetFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpSetFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALIEN_VAULT" => IpSetFormat::AlienVault,
+            "FIRE_EYE" => IpSetFormat::FireEye,
+            "OTX_CSV" => IpSetFormat::OtxCsv,
+            "PROOF_POINT" => IpSetFormat::ProofPoint,
+            "STIX" => IpSetFormat::Stix,
+            "TXT" => IpSetFormat::Txt,
+            _ => IpSetFormat::UnknownVariant(UnknownIpSetFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpSetFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IpSetFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpSetFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpSetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpSetStatus {
+    Activating,
+    Active,
+    Deactivating,
+    Deleted,
+    DeletePending,
+    Error,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpSetStatus),
+}
+
+impl Default for IpSetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpSetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpSetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpSetStatus {
+    fn into(self) -> String {
+        match self {
+            IpSetStatus::Activating => "ACTIVATING".to_string(),
+            IpSetStatus::Active => "ACTIVE".to_string(),
+            IpSetStatus::Deactivating => "DEACTIVATING".to_string(),
+            IpSetStatus::Deleted => "DELETED".to_string(),
+            IpSetStatus::DeletePending => "DELETE_PENDING".to_string(),
+            IpSetStatus::Error => "ERROR".to_string(),
+            IpSetStatus::Inactive => "INACTIVE".to_string(),
+            IpSetStatus::UnknownVariant(UnknownIpSetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpSetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            IpSetStatus::Activating => &"ACTIVATING",
+            IpSetStatus::Active => &"ACTIVE",
+            IpSetStatus::Deactivating => &"DEACTIVATING",
+            IpSetStatus::Deleted => &"DELETED",
+            IpSetStatus::DeletePending => &"DELETE_PENDING",
+            IpSetStatus::Error => &"ERROR",
+            IpSetStatus::Inactive => &"INACTIVE",
+            IpSetStatus::UnknownVariant(UnknownIpSetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpSetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => IpSetStatus::Activating,
+            "ACTIVE" => IpSetStatus::Active,
+            "DEACTIVATING" => IpSetStatus::Deactivating,
+            "DELETED" => IpSetStatus::Deleted,
+            "DELETE_PENDING" => IpSetStatus::DeletePending,
+            "ERROR" => IpSetStatus::Error,
+            "INACTIVE" => IpSetStatus::Inactive,
+            _ => IpSetStatus::UnknownVariant(UnknownIpSetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpSetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => IpSetStatus::Activating,
+            "ACTIVE" => IpSetStatus::Active,
+            "DEACTIVATING" => IpSetStatus::Deactivating,
+            "DELETED" => IpSetStatus::Deleted,
+            "DELETE_PENDING" => IpSetStatus::DeletePending,
+            "ERROR" => IpSetStatus::Error,
+            "INACTIVE" => IpSetStatus::Inactive,
+            _ => IpSetStatus::UnknownVariant(UnknownIpSetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpSetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IpSetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpSetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1808,6 +2978,107 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderBy {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderBy),
+}
+
+impl Default for OrderBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderBy {
+    fn into(self) -> String {
+        match self {
+            OrderBy::Asc => "ASC".to_string(),
+            OrderBy::Desc => "DESC".to_string(),
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderBy {
+    fn into(self) -> &'a str {
+        match self {
+            OrderBy::Asc => &"ASC",
+            OrderBy::Desc => &"DESC",
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASC" => OrderBy::Asc,
+            "DESC" => OrderBy::Desc,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASC" => OrderBy::Asc,
+            "DESC" => OrderBy::Desc,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the ISP organization of the remote IP address.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1965,6 +3236,129 @@ pub struct PublicAccess {
     pub permission_configuration: Option<PermissionConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPublishingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PublishingStatus {
+    PendingVerification,
+    Publishing,
+    Stopped,
+    UnableToPublishFixDestinationProperty,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPublishingStatus),
+}
+
+impl Default for PublishingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PublishingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PublishingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PublishingStatus {
+    fn into(self) -> String {
+        match self {
+            PublishingStatus::PendingVerification => "PENDING_VERIFICATION".to_string(),
+            PublishingStatus::Publishing => "PUBLISHING".to_string(),
+            PublishingStatus::Stopped => "STOPPED".to_string(),
+            PublishingStatus::UnableToPublishFixDestinationProperty => {
+                "UNABLE_TO_PUBLISH_FIX_DESTINATION_PROPERTY".to_string()
+            }
+            PublishingStatus::UnknownVariant(UnknownPublishingStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PublishingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PublishingStatus::PendingVerification => &"PENDING_VERIFICATION",
+            PublishingStatus::Publishing => &"PUBLISHING",
+            PublishingStatus::Stopped => &"STOPPED",
+            PublishingStatus::UnableToPublishFixDestinationProperty => {
+                &"UNABLE_TO_PUBLISH_FIX_DESTINATION_PROPERTY"
+            }
+            PublishingStatus::UnknownVariant(UnknownPublishingStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PublishingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "PENDING_VERIFICATION" => PublishingStatus::PendingVerification,
+            "PUBLISHING" => PublishingStatus::Publishing,
+            "STOPPED" => PublishingStatus::Stopped,
+            "UNABLE_TO_PUBLISH_FIX_DESTINATION_PROPERTY" => {
+                PublishingStatus::UnableToPublishFixDestinationProperty
+            }
+            _ => PublishingStatus::UnknownVariant(UnknownPublishingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PublishingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PENDING_VERIFICATION" => PublishingStatus::PendingVerification,
+            "PUBLISHING" => PublishingStatus::Publishing,
+            "STOPPED" => PublishingStatus::Stopped,
+            "UNABLE_TO_PUBLISH_FIX_DESTINATION_PROPERTY" => {
+                PublishingStatus::UnableToPublishFixDestinationProperty
+            }
+            _ => PublishingStatus::UnknownVariant(UnknownPublishingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PublishingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PublishingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PublishingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the remote IP address of the connection.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2080,7 +3474,7 @@ pub struct S3LogsConfiguration {
 pub struct S3LogsConfigurationResult {
     /// <p>A value that describes whether S3 data event logs are automatically enabled for new members of the organization.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DataSourceStatus,
 }
 
 /// <p>Contains information about the security groups associated with the EC2 instance.</p>
@@ -2154,7 +3548,7 @@ pub struct SortCriteria {
     /// <p>The order by which the sorted findings are to be displayed.</p>
     #[serde(rename = "OrderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order_by: Option<String>,
+    pub order_by: Option<OrderBy>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2223,6 +3617,260 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThreatIntelSetFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThreatIntelSetFormat {
+    AlienVault,
+    FireEye,
+    OtxCsv,
+    ProofPoint,
+    Stix,
+    Txt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThreatIntelSetFormat),
+}
+
+impl Default for ThreatIntelSetFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThreatIntelSetFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThreatIntelSetFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThreatIntelSetFormat {
+    fn into(self) -> String {
+        match self {
+            ThreatIntelSetFormat::AlienVault => "ALIEN_VAULT".to_string(),
+            ThreatIntelSetFormat::FireEye => "FIRE_EYE".to_string(),
+            ThreatIntelSetFormat::OtxCsv => "OTX_CSV".to_string(),
+            ThreatIntelSetFormat::ProofPoint => "PROOF_POINT".to_string(),
+            ThreatIntelSetFormat::Stix => "STIX".to_string(),
+            ThreatIntelSetFormat::Txt => "TXT".to_string(),
+            ThreatIntelSetFormat::UnknownVariant(UnknownThreatIntelSetFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThreatIntelSetFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ThreatIntelSetFormat::AlienVault => &"ALIEN_VAULT",
+            ThreatIntelSetFormat::FireEye => &"FIRE_EYE",
+            ThreatIntelSetFormat::OtxCsv => &"OTX_CSV",
+            ThreatIntelSetFormat::ProofPoint => &"PROOF_POINT",
+            ThreatIntelSetFormat::Stix => &"STIX",
+            ThreatIntelSetFormat::Txt => &"TXT",
+            ThreatIntelSetFormat::UnknownVariant(UnknownThreatIntelSetFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThreatIntelSetFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALIEN_VAULT" => ThreatIntelSetFormat::AlienVault,
+            "FIRE_EYE" => ThreatIntelSetFormat::FireEye,
+            "OTX_CSV" => ThreatIntelSetFormat::OtxCsv,
+            "PROOF_POINT" => ThreatIntelSetFormat::ProofPoint,
+            "STIX" => ThreatIntelSetFormat::Stix,
+            "TXT" => ThreatIntelSetFormat::Txt,
+            _ => ThreatIntelSetFormat::UnknownVariant(UnknownThreatIntelSetFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThreatIntelSetFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALIEN_VAULT" => ThreatIntelSetFormat::AlienVault,
+            "FIRE_EYE" => ThreatIntelSetFormat::FireEye,
+            "OTX_CSV" => ThreatIntelSetFormat::OtxCsv,
+            "PROOF_POINT" => ThreatIntelSetFormat::ProofPoint,
+            "STIX" => ThreatIntelSetFormat::Stix,
+            "TXT" => ThreatIntelSetFormat::Txt,
+            _ => ThreatIntelSetFormat::UnknownVariant(UnknownThreatIntelSetFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThreatIntelSetFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ThreatIntelSetFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThreatIntelSetFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThreatIntelSetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThreatIntelSetStatus {
+    Activating,
+    Active,
+    Deactivating,
+    Deleted,
+    DeletePending,
+    Error,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThreatIntelSetStatus),
+}
+
+impl Default for ThreatIntelSetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThreatIntelSetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThreatIntelSetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThreatIntelSetStatus {
+    fn into(self) -> String {
+        match self {
+            ThreatIntelSetStatus::Activating => "ACTIVATING".to_string(),
+            ThreatIntelSetStatus::Active => "ACTIVE".to_string(),
+            ThreatIntelSetStatus::Deactivating => "DEACTIVATING".to_string(),
+            ThreatIntelSetStatus::Deleted => "DELETED".to_string(),
+            ThreatIntelSetStatus::DeletePending => "DELETE_PENDING".to_string(),
+            ThreatIntelSetStatus::Error => "ERROR".to_string(),
+            ThreatIntelSetStatus::Inactive => "INACTIVE".to_string(),
+            ThreatIntelSetStatus::UnknownVariant(UnknownThreatIntelSetStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThreatIntelSetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ThreatIntelSetStatus::Activating => &"ACTIVATING",
+            ThreatIntelSetStatus::Active => &"ACTIVE",
+            ThreatIntelSetStatus::Deactivating => &"DEACTIVATING",
+            ThreatIntelSetStatus::Deleted => &"DELETED",
+            ThreatIntelSetStatus::DeletePending => &"DELETE_PENDING",
+            ThreatIntelSetStatus::Error => &"ERROR",
+            ThreatIntelSetStatus::Inactive => &"INACTIVE",
+            ThreatIntelSetStatus::UnknownVariant(UnknownThreatIntelSetStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThreatIntelSetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => ThreatIntelSetStatus::Activating,
+            "ACTIVE" => ThreatIntelSetStatus::Active,
+            "DEACTIVATING" => ThreatIntelSetStatus::Deactivating,
+            "DELETED" => ThreatIntelSetStatus::Deleted,
+            "DELETE_PENDING" => ThreatIntelSetStatus::DeletePending,
+            "ERROR" => ThreatIntelSetStatus::Error,
+            "INACTIVE" => ThreatIntelSetStatus::Inactive,
+            _ => ThreatIntelSetStatus::UnknownVariant(UnknownThreatIntelSetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThreatIntelSetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => ThreatIntelSetStatus::Activating,
+            "ACTIVE" => ThreatIntelSetStatus::Active,
+            "DEACTIVATING" => ThreatIntelSetStatus::Deactivating,
+            "DELETED" => ThreatIntelSetStatus::Deleted,
+            "DELETE_PENDING" => ThreatIntelSetStatus::DeletePending,
+            "ERROR" => ThreatIntelSetStatus::Error,
+            "INACTIVE" => ThreatIntelSetStatus::Inactive,
+            _ => ThreatIntelSetStatus::UnknownVariant(UnknownThreatIntelSetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThreatIntelSetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ThreatIntelSetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThreatIntelSetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>An instance of a threat intelligence detail that constitutes evidence for the finding.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2311,7 +3959,7 @@ pub struct UpdateDetectorRequest {
     /// <p>An enum value that specifies how frequently findings are exported, such as to CloudWatch Events.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_publishing_frequency: Option<String>,
+    pub finding_publishing_frequency: Option<FindingPublishingFrequency>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2324,7 +3972,7 @@ pub struct UpdateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<FilterAction>,
     /// <p>The description of the filter.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2365,7 +4013,7 @@ pub struct UpdateFindingsFeedbackRequest {
     pub detector_id: String,
     /// <p>The feedback for the finding.</p>
     #[serde(rename = "Feedback")]
-    pub feedback: String,
+    pub feedback: Feedback,
     /// <p>The IDs of the findings that you want to mark as useful or not useful.</p>
     #[serde(rename = "FindingIds")]
     pub finding_ids: Vec<String>,
@@ -2514,7 +4162,7 @@ pub struct UsageCriteria {
     pub account_ids: Option<Vec<String>>,
     /// <p>The data sources to aggregate usage statistics from.</p>
     #[serde(rename = "DataSources")]
-    pub data_sources: Vec<String>,
+    pub data_sources: Vec<DataSource>,
     /// <p>The resources to aggregate usage statistics from. Only accepts exact resource names.</p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2528,7 +4176,7 @@ pub struct UsageDataSourceResult {
     /// <p>The data source type that generated usage.</p>
     #[serde(rename = "DataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source: Option<String>,
+    pub data_source: Option<DataSource>,
     /// <p>Represents the total of usage for the specified data source.</p>
     #[serde(rename = "Total")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2547,6 +4195,121 @@ pub struct UsageResourceResult {
     #[serde(rename = "Total")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<Total>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsageStatisticType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsageStatisticType {
+    SumByAccount,
+    SumByDataSource,
+    SumByResource,
+    TopResources,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsageStatisticType),
+}
+
+impl Default for UsageStatisticType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsageStatisticType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsageStatisticType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsageStatisticType {
+    fn into(self) -> String {
+        match self {
+            UsageStatisticType::SumByAccount => "SUM_BY_ACCOUNT".to_string(),
+            UsageStatisticType::SumByDataSource => "SUM_BY_DATA_SOURCE".to_string(),
+            UsageStatisticType::SumByResource => "SUM_BY_RESOURCE".to_string(),
+            UsageStatisticType::TopResources => "TOP_RESOURCES".to_string(),
+            UsageStatisticType::UnknownVariant(UnknownUsageStatisticType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsageStatisticType {
+    fn into(self) -> &'a str {
+        match self {
+            UsageStatisticType::SumByAccount => &"SUM_BY_ACCOUNT",
+            UsageStatisticType::SumByDataSource => &"SUM_BY_DATA_SOURCE",
+            UsageStatisticType::SumByResource => &"SUM_BY_RESOURCE",
+            UsageStatisticType::TopResources => &"TOP_RESOURCES",
+            UsageStatisticType::UnknownVariant(UnknownUsageStatisticType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UsageStatisticType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SUM_BY_ACCOUNT" => UsageStatisticType::SumByAccount,
+            "SUM_BY_DATA_SOURCE" => UsageStatisticType::SumByDataSource,
+            "SUM_BY_RESOURCE" => UsageStatisticType::SumByResource,
+            "TOP_RESOURCES" => UsageStatisticType::TopResources,
+            _ => UsageStatisticType::UnknownVariant(UnknownUsageStatisticType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsageStatisticType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SUM_BY_ACCOUNT" => UsageStatisticType::SumByAccount,
+            "SUM_BY_DATA_SOURCE" => UsageStatisticType::SumByDataSource,
+            "SUM_BY_RESOURCE" => UsageStatisticType::SumByResource,
+            "TOP_RESOURCES" => UsageStatisticType::TopResources,
+            _ => UsageStatisticType::UnknownVariant(UnknownUsageStatisticType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsageStatisticType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UsageStatisticType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UsageStatisticType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains the result of GuardDuty usage. If a UsageStatisticType is provided the result for other types will be null. </p>

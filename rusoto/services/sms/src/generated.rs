@@ -50,6 +50,693 @@ impl ServerMigrationServiceClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppLaunchConfigurationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppLaunchConfigurationStatus {
+    Configured,
+    NotConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppLaunchConfigurationStatus),
+}
+
+impl Default for AppLaunchConfigurationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppLaunchConfigurationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppLaunchConfigurationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppLaunchConfigurationStatus {
+    fn into(self) -> String {
+        match self {
+            AppLaunchConfigurationStatus::Configured => "CONFIGURED".to_string(),
+            AppLaunchConfigurationStatus::NotConfigured => "NOT_CONFIGURED".to_string(),
+            AppLaunchConfigurationStatus::UnknownVariant(UnknownAppLaunchConfigurationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppLaunchConfigurationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AppLaunchConfigurationStatus::Configured => &"CONFIGURED",
+            AppLaunchConfigurationStatus::NotConfigured => &"NOT_CONFIGURED",
+            AppLaunchConfigurationStatus::UnknownVariant(UnknownAppLaunchConfigurationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppLaunchConfigurationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIGURED" => AppLaunchConfigurationStatus::Configured,
+            "NOT_CONFIGURED" => AppLaunchConfigurationStatus::NotConfigured,
+            _ => {
+                AppLaunchConfigurationStatus::UnknownVariant(UnknownAppLaunchConfigurationStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for AppLaunchConfigurationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIGURED" => AppLaunchConfigurationStatus::Configured,
+            "NOT_CONFIGURED" => AppLaunchConfigurationStatus::NotConfigured,
+            _ => {
+                AppLaunchConfigurationStatus::UnknownVariant(UnknownAppLaunchConfigurationStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppLaunchConfigurationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AppLaunchConfigurationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppLaunchConfigurationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppLaunchStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppLaunchStatus {
+    ConfigurationInvalid,
+    ConfigurationInProgress,
+    DeltaLaunchFailed,
+    DeltaLaunchInProgress,
+    Launched,
+    LaunchFailed,
+    LaunchInProgress,
+    LaunchPending,
+    PartiallyLaunched,
+    ReadyForConfiguration,
+    ReadyForLaunch,
+    Terminated,
+    TerminateFailed,
+    TerminateInProgress,
+    ValidationInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppLaunchStatus),
+}
+
+impl Default for AppLaunchStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppLaunchStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppLaunchStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppLaunchStatus {
+    fn into(self) -> String {
+        match self {
+            AppLaunchStatus::ConfigurationInvalid => "CONFIGURATION_INVALID".to_string(),
+            AppLaunchStatus::ConfigurationInProgress => "CONFIGURATION_IN_PROGRESS".to_string(),
+            AppLaunchStatus::DeltaLaunchFailed => "DELTA_LAUNCH_FAILED".to_string(),
+            AppLaunchStatus::DeltaLaunchInProgress => "DELTA_LAUNCH_IN_PROGRESS".to_string(),
+            AppLaunchStatus::Launched => "LAUNCHED".to_string(),
+            AppLaunchStatus::LaunchFailed => "LAUNCH_FAILED".to_string(),
+            AppLaunchStatus::LaunchInProgress => "LAUNCH_IN_PROGRESS".to_string(),
+            AppLaunchStatus::LaunchPending => "LAUNCH_PENDING".to_string(),
+            AppLaunchStatus::PartiallyLaunched => "PARTIALLY_LAUNCHED".to_string(),
+            AppLaunchStatus::ReadyForConfiguration => "READY_FOR_CONFIGURATION".to_string(),
+            AppLaunchStatus::ReadyForLaunch => "READY_FOR_LAUNCH".to_string(),
+            AppLaunchStatus::Terminated => "TERMINATED".to_string(),
+            AppLaunchStatus::TerminateFailed => "TERMINATE_FAILED".to_string(),
+            AppLaunchStatus::TerminateInProgress => "TERMINATE_IN_PROGRESS".to_string(),
+            AppLaunchStatus::ValidationInProgress => "VALIDATION_IN_PROGRESS".to_string(),
+            AppLaunchStatus::UnknownVariant(UnknownAppLaunchStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppLaunchStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AppLaunchStatus::ConfigurationInvalid => &"CONFIGURATION_INVALID",
+            AppLaunchStatus::ConfigurationInProgress => &"CONFIGURATION_IN_PROGRESS",
+            AppLaunchStatus::DeltaLaunchFailed => &"DELTA_LAUNCH_FAILED",
+            AppLaunchStatus::DeltaLaunchInProgress => &"DELTA_LAUNCH_IN_PROGRESS",
+            AppLaunchStatus::Launched => &"LAUNCHED",
+            AppLaunchStatus::LaunchFailed => &"LAUNCH_FAILED",
+            AppLaunchStatus::LaunchInProgress => &"LAUNCH_IN_PROGRESS",
+            AppLaunchStatus::LaunchPending => &"LAUNCH_PENDING",
+            AppLaunchStatus::PartiallyLaunched => &"PARTIALLY_LAUNCHED",
+            AppLaunchStatus::ReadyForConfiguration => &"READY_FOR_CONFIGURATION",
+            AppLaunchStatus::ReadyForLaunch => &"READY_FOR_LAUNCH",
+            AppLaunchStatus::Terminated => &"TERMINATED",
+            AppLaunchStatus::TerminateFailed => &"TERMINATE_FAILED",
+            AppLaunchStatus::TerminateInProgress => &"TERMINATE_IN_PROGRESS",
+            AppLaunchStatus::ValidationInProgress => &"VALIDATION_IN_PROGRESS",
+            AppLaunchStatus::UnknownVariant(UnknownAppLaunchStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppLaunchStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIGURATION_INVALID" => AppLaunchStatus::ConfigurationInvalid,
+            "CONFIGURATION_IN_PROGRESS" => AppLaunchStatus::ConfigurationInProgress,
+            "DELTA_LAUNCH_FAILED" => AppLaunchStatus::DeltaLaunchFailed,
+            "DELTA_LAUNCH_IN_PROGRESS" => AppLaunchStatus::DeltaLaunchInProgress,
+            "LAUNCHED" => AppLaunchStatus::Launched,
+            "LAUNCH_FAILED" => AppLaunchStatus::LaunchFailed,
+            "LAUNCH_IN_PROGRESS" => AppLaunchStatus::LaunchInProgress,
+            "LAUNCH_PENDING" => AppLaunchStatus::LaunchPending,
+            "PARTIALLY_LAUNCHED" => AppLaunchStatus::PartiallyLaunched,
+            "READY_FOR_CONFIGURATION" => AppLaunchStatus::ReadyForConfiguration,
+            "READY_FOR_LAUNCH" => AppLaunchStatus::ReadyForLaunch,
+            "TERMINATED" => AppLaunchStatus::Terminated,
+            "TERMINATE_FAILED" => AppLaunchStatus::TerminateFailed,
+            "TERMINATE_IN_PROGRESS" => AppLaunchStatus::TerminateInProgress,
+            "VALIDATION_IN_PROGRESS" => AppLaunchStatus::ValidationInProgress,
+            _ => AppLaunchStatus::UnknownVariant(UnknownAppLaunchStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppLaunchStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIGURATION_INVALID" => AppLaunchStatus::ConfigurationInvalid,
+            "CONFIGURATION_IN_PROGRESS" => AppLaunchStatus::ConfigurationInProgress,
+            "DELTA_LAUNCH_FAILED" => AppLaunchStatus::DeltaLaunchFailed,
+            "DELTA_LAUNCH_IN_PROGRESS" => AppLaunchStatus::DeltaLaunchInProgress,
+            "LAUNCHED" => AppLaunchStatus::Launched,
+            "LAUNCH_FAILED" => AppLaunchStatus::LaunchFailed,
+            "LAUNCH_IN_PROGRESS" => AppLaunchStatus::LaunchInProgress,
+            "LAUNCH_PENDING" => AppLaunchStatus::LaunchPending,
+            "PARTIALLY_LAUNCHED" => AppLaunchStatus::PartiallyLaunched,
+            "READY_FOR_CONFIGURATION" => AppLaunchStatus::ReadyForConfiguration,
+            "READY_FOR_LAUNCH" => AppLaunchStatus::ReadyForLaunch,
+            "TERMINATED" => AppLaunchStatus::Terminated,
+            "TERMINATE_FAILED" => AppLaunchStatus::TerminateFailed,
+            "TERMINATE_IN_PROGRESS" => AppLaunchStatus::TerminateInProgress,
+            "VALIDATION_IN_PROGRESS" => AppLaunchStatus::ValidationInProgress,
+            _ => AppLaunchStatus::UnknownVariant(UnknownAppLaunchStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppLaunchStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AppLaunchStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppLaunchStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppReplicationConfigurationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppReplicationConfigurationStatus {
+    Configured,
+    NotConfigured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppReplicationConfigurationStatus),
+}
+
+impl Default for AppReplicationConfigurationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppReplicationConfigurationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppReplicationConfigurationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppReplicationConfigurationStatus {
+    fn into(self) -> String {
+        match self {
+            AppReplicationConfigurationStatus::Configured => "CONFIGURED".to_string(),
+            AppReplicationConfigurationStatus::NotConfigured => "NOT_CONFIGURED".to_string(),
+            AppReplicationConfigurationStatus::UnknownVariant(
+                UnknownAppReplicationConfigurationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppReplicationConfigurationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AppReplicationConfigurationStatus::Configured => &"CONFIGURED",
+            AppReplicationConfigurationStatus::NotConfigured => &"NOT_CONFIGURED",
+            AppReplicationConfigurationStatus::UnknownVariant(
+                UnknownAppReplicationConfigurationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AppReplicationConfigurationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIGURED" => AppReplicationConfigurationStatus::Configured,
+            "NOT_CONFIGURED" => AppReplicationConfigurationStatus::NotConfigured,
+            _ => AppReplicationConfigurationStatus::UnknownVariant(
+                UnknownAppReplicationConfigurationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AppReplicationConfigurationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIGURED" => AppReplicationConfigurationStatus::Configured,
+            "NOT_CONFIGURED" => AppReplicationConfigurationStatus::NotConfigured,
+            _ => AppReplicationConfigurationStatus::UnknownVariant(
+                UnknownAppReplicationConfigurationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppReplicationConfigurationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AppReplicationConfigurationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppReplicationConfigurationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppReplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppReplicationStatus {
+    ConfigurationInvalid,
+    ConfigurationInProgress,
+    DeltaReplicated,
+    DeltaReplicationFailed,
+    DeltaReplicationInProgress,
+    PartiallyReplicated,
+    ReadyForConfiguration,
+    ReadyForReplication,
+    Replicated,
+    ReplicationFailed,
+    ReplicationInProgress,
+    ReplicationPending,
+    ReplicationStopped,
+    ReplicationStopping,
+    ReplicationStopFailed,
+    ValidationInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppReplicationStatus),
+}
+
+impl Default for AppReplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppReplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppReplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppReplicationStatus {
+    fn into(self) -> String {
+        match self {
+            AppReplicationStatus::ConfigurationInvalid => "CONFIGURATION_INVALID".to_string(),
+            AppReplicationStatus::ConfigurationInProgress => {
+                "CONFIGURATION_IN_PROGRESS".to_string()
+            }
+            AppReplicationStatus::DeltaReplicated => "DELTA_REPLICATED".to_string(),
+            AppReplicationStatus::DeltaReplicationFailed => "DELTA_REPLICATION_FAILED".to_string(),
+            AppReplicationStatus::DeltaReplicationInProgress => {
+                "DELTA_REPLICATION_IN_PROGRESS".to_string()
+            }
+            AppReplicationStatus::PartiallyReplicated => "PARTIALLY_REPLICATED".to_string(),
+            AppReplicationStatus::ReadyForConfiguration => "READY_FOR_CONFIGURATION".to_string(),
+            AppReplicationStatus::ReadyForReplication => "READY_FOR_REPLICATION".to_string(),
+            AppReplicationStatus::Replicated => "REPLICATED".to_string(),
+            AppReplicationStatus::ReplicationFailed => "REPLICATION_FAILED".to_string(),
+            AppReplicationStatus::ReplicationInProgress => "REPLICATION_IN_PROGRESS".to_string(),
+            AppReplicationStatus::ReplicationPending => "REPLICATION_PENDING".to_string(),
+            AppReplicationStatus::ReplicationStopped => "REPLICATION_STOPPED".to_string(),
+            AppReplicationStatus::ReplicationStopping => "REPLICATION_STOPPING".to_string(),
+            AppReplicationStatus::ReplicationStopFailed => "REPLICATION_STOP_FAILED".to_string(),
+            AppReplicationStatus::ValidationInProgress => "VALIDATION_IN_PROGRESS".to_string(),
+            AppReplicationStatus::UnknownVariant(UnknownAppReplicationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppReplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AppReplicationStatus::ConfigurationInvalid => &"CONFIGURATION_INVALID",
+            AppReplicationStatus::ConfigurationInProgress => &"CONFIGURATION_IN_PROGRESS",
+            AppReplicationStatus::DeltaReplicated => &"DELTA_REPLICATED",
+            AppReplicationStatus::DeltaReplicationFailed => &"DELTA_REPLICATION_FAILED",
+            AppReplicationStatus::DeltaReplicationInProgress => &"DELTA_REPLICATION_IN_PROGRESS",
+            AppReplicationStatus::PartiallyReplicated => &"PARTIALLY_REPLICATED",
+            AppReplicationStatus::ReadyForConfiguration => &"READY_FOR_CONFIGURATION",
+            AppReplicationStatus::ReadyForReplication => &"READY_FOR_REPLICATION",
+            AppReplicationStatus::Replicated => &"REPLICATED",
+            AppReplicationStatus::ReplicationFailed => &"REPLICATION_FAILED",
+            AppReplicationStatus::ReplicationInProgress => &"REPLICATION_IN_PROGRESS",
+            AppReplicationStatus::ReplicationPending => &"REPLICATION_PENDING",
+            AppReplicationStatus::ReplicationStopped => &"REPLICATION_STOPPED",
+            AppReplicationStatus::ReplicationStopping => &"REPLICATION_STOPPING",
+            AppReplicationStatus::ReplicationStopFailed => &"REPLICATION_STOP_FAILED",
+            AppReplicationStatus::ValidationInProgress => &"VALIDATION_IN_PROGRESS",
+            AppReplicationStatus::UnknownVariant(UnknownAppReplicationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppReplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIGURATION_INVALID" => AppReplicationStatus::ConfigurationInvalid,
+            "CONFIGURATION_IN_PROGRESS" => AppReplicationStatus::ConfigurationInProgress,
+            "DELTA_REPLICATED" => AppReplicationStatus::DeltaReplicated,
+            "DELTA_REPLICATION_FAILED" => AppReplicationStatus::DeltaReplicationFailed,
+            "DELTA_REPLICATION_IN_PROGRESS" => AppReplicationStatus::DeltaReplicationInProgress,
+            "PARTIALLY_REPLICATED" => AppReplicationStatus::PartiallyReplicated,
+            "READY_FOR_CONFIGURATION" => AppReplicationStatus::ReadyForConfiguration,
+            "READY_FOR_REPLICATION" => AppReplicationStatus::ReadyForReplication,
+            "REPLICATED" => AppReplicationStatus::Replicated,
+            "REPLICATION_FAILED" => AppReplicationStatus::ReplicationFailed,
+            "REPLICATION_IN_PROGRESS" => AppReplicationStatus::ReplicationInProgress,
+            "REPLICATION_PENDING" => AppReplicationStatus::ReplicationPending,
+            "REPLICATION_STOPPED" => AppReplicationStatus::ReplicationStopped,
+            "REPLICATION_STOPPING" => AppReplicationStatus::ReplicationStopping,
+            "REPLICATION_STOP_FAILED" => AppReplicationStatus::ReplicationStopFailed,
+            "VALIDATION_IN_PROGRESS" => AppReplicationStatus::ValidationInProgress,
+            _ => AppReplicationStatus::UnknownVariant(UnknownAppReplicationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppReplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIGURATION_INVALID" => AppReplicationStatus::ConfigurationInvalid,
+            "CONFIGURATION_IN_PROGRESS" => AppReplicationStatus::ConfigurationInProgress,
+            "DELTA_REPLICATED" => AppReplicationStatus::DeltaReplicated,
+            "DELTA_REPLICATION_FAILED" => AppReplicationStatus::DeltaReplicationFailed,
+            "DELTA_REPLICATION_IN_PROGRESS" => AppReplicationStatus::DeltaReplicationInProgress,
+            "PARTIALLY_REPLICATED" => AppReplicationStatus::PartiallyReplicated,
+            "READY_FOR_CONFIGURATION" => AppReplicationStatus::ReadyForConfiguration,
+            "READY_FOR_REPLICATION" => AppReplicationStatus::ReadyForReplication,
+            "REPLICATED" => AppReplicationStatus::Replicated,
+            "REPLICATION_FAILED" => AppReplicationStatus::ReplicationFailed,
+            "REPLICATION_IN_PROGRESS" => AppReplicationStatus::ReplicationInProgress,
+            "REPLICATION_PENDING" => AppReplicationStatus::ReplicationPending,
+            "REPLICATION_STOPPED" => AppReplicationStatus::ReplicationStopped,
+            "REPLICATION_STOPPING" => AppReplicationStatus::ReplicationStopping,
+            "REPLICATION_STOP_FAILED" => AppReplicationStatus::ReplicationStopFailed,
+            "VALIDATION_IN_PROGRESS" => AppReplicationStatus::ValidationInProgress,
+            _ => AppReplicationStatus::UnknownVariant(UnknownAppReplicationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppReplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AppReplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppReplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppStatus {
+    Active,
+    Creating,
+    Deleted,
+    DeleteFailed,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppStatus),
+}
+
+impl Default for AppStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppStatus {
+    fn into(self) -> String {
+        match self {
+            AppStatus::Active => "ACTIVE".to_string(),
+            AppStatus::Creating => "CREATING".to_string(),
+            AppStatus::Deleted => "DELETED".to_string(),
+            AppStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            AppStatus::Deleting => "DELETING".to_string(),
+            AppStatus::Updating => "UPDATING".to_string(),
+            AppStatus::UnknownVariant(UnknownAppStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AppStatus::Active => &"ACTIVE",
+            AppStatus::Creating => &"CREATING",
+            AppStatus::Deleted => &"DELETED",
+            AppStatus::DeleteFailed => &"DELETE_FAILED",
+            AppStatus::Deleting => &"DELETING",
+            AppStatus::Updating => &"UPDATING",
+            AppStatus::UnknownVariant(UnknownAppStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => AppStatus::Active,
+            "CREATING" => AppStatus::Creating,
+            "DELETED" => AppStatus::Deleted,
+            "DELETE_FAILED" => AppStatus::DeleteFailed,
+            "DELETING" => AppStatus::Deleting,
+            "UPDATING" => AppStatus::Updating,
+            _ => AppStatus::UnknownVariant(UnknownAppStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => AppStatus::Active,
+            "CREATING" => AppStatus::Creating,
+            "DELETED" => AppStatus::Deleted,
+            "DELETE_FAILED" => AppStatus::DeleteFailed,
+            "DELETING" => AppStatus::Deleting,
+            "UPDATING" => AppStatus::Updating,
+            _ => AppStatus::UnknownVariant(UnknownAppStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AppStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -81,7 +768,7 @@ pub struct AppSummary {
     /// <p>Status of the launch configuration.</p>
     #[serde(rename = "launchConfigurationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_configuration_status: Option<String>,
+    pub launch_configuration_status: Option<AppLaunchConfigurationStatus>,
     /// <p>Details about the latest launch of the application.</p>
     #[serde(rename = "launchDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,7 +776,7 @@ pub struct AppSummary {
     /// <p>The launch status of the application.</p>
     #[serde(rename = "launchStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_status: Option<String>,
+    pub launch_status: Option<AppLaunchStatus>,
     /// <p>A message related to the launch status of the application.</p>
     #[serde(rename = "launchStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -101,11 +788,11 @@ pub struct AppSummary {
     /// <p>Status of the replication configuration.</p>
     #[serde(rename = "replicationConfigurationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replication_configuration_status: Option<String>,
+    pub replication_configuration_status: Option<AppReplicationConfigurationStatus>,
     /// <p>The replication status of the application.</p>
     #[serde(rename = "replicationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replication_status: Option<String>,
+    pub replication_status: Option<AppReplicationStatus>,
     /// <p>A message related to the replication status of the application.</p>
     #[serde(rename = "replicationStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +804,7 @@ pub struct AppSummary {
     /// <p>Status of the application.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AppStatus>,
     /// <p>A message related to the status of the application</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -138,7 +825,7 @@ pub struct AppValidationConfiguration {
     /// <p>The validation strategy.</p>
     #[serde(rename = "appValidationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_validation_strategy: Option<String>,
+    pub app_validation_strategy: Option<AppValidationStrategy>,
     /// <p>The name of the configuration.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,6 +850,105 @@ pub struct AppValidationOutput {
     pub ssm_output: Option<SSMOutput>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppValidationStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppValidationStrategy {
+    Ssm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppValidationStrategy),
+}
+
+impl Default for AppValidationStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppValidationStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppValidationStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppValidationStrategy {
+    fn into(self) -> String {
+        match self {
+            AppValidationStrategy::Ssm => "SSM".to_string(),
+            AppValidationStrategy::UnknownVariant(UnknownAppValidationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppValidationStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            AppValidationStrategy::Ssm => &"SSM",
+            AppValidationStrategy::UnknownVariant(UnknownAppValidationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppValidationStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "SSM" => AppValidationStrategy::Ssm,
+            _ => AppValidationStrategy::UnknownVariant(UnknownAppValidationStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppValidationStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SSM" => AppValidationStrategy::Ssm,
+            _ => AppValidationStrategy::UnknownVariant(UnknownAppValidationStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppValidationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppValidationStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppValidationStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents a connector.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -174,7 +960,7 @@ pub struct Connector {
     /// <p>The capabilities of the connector.</p>
     #[serde(rename = "capabilityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub capability_list: Option<Vec<String>>,
+    pub capability_list: Option<Vec<ConnectorCapability>>,
     /// <p>The ID of the connector.</p>
     #[serde(rename = "connectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,7 +976,7 @@ pub struct Connector {
     /// <p>The status of the connector.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ConnectorStatus>,
     /// <p>The connector version.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -206,7 +992,228 @@ pub struct Connector {
     /// <p>The VM management product.</p>
     #[serde(rename = "vmManagerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vm_manager_type: Option<String>,
+    pub vm_manager_type: Option<VmManagerType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectorCapability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectorCapability {
+    HypervManager,
+    Scvmm,
+    SmsOptimized,
+    SnapshotBatching,
+    Vsphere,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectorCapability),
+}
+
+impl Default for ConnectorCapability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectorCapability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectorCapability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectorCapability {
+    fn into(self) -> String {
+        match self {
+            ConnectorCapability::HypervManager => "HYPERV-MANAGER".to_string(),
+            ConnectorCapability::Scvmm => "SCVMM".to_string(),
+            ConnectorCapability::SmsOptimized => "SMS_OPTIMIZED".to_string(),
+            ConnectorCapability::SnapshotBatching => "SNAPSHOT_BATCHING".to_string(),
+            ConnectorCapability::Vsphere => "VSPHERE".to_string(),
+            ConnectorCapability::UnknownVariant(UnknownConnectorCapability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectorCapability {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectorCapability::HypervManager => &"HYPERV-MANAGER",
+            ConnectorCapability::Scvmm => &"SCVMM",
+            ConnectorCapability::SmsOptimized => &"SMS_OPTIMIZED",
+            ConnectorCapability::SnapshotBatching => &"SNAPSHOT_BATCHING",
+            ConnectorCapability::Vsphere => &"VSPHERE",
+            ConnectorCapability::UnknownVariant(UnknownConnectorCapability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConnectorCapability {
+    fn from(name: &str) -> Self {
+        match name {
+            "HYPERV-MANAGER" => ConnectorCapability::HypervManager,
+            "SCVMM" => ConnectorCapability::Scvmm,
+            "SMS_OPTIMIZED" => ConnectorCapability::SmsOptimized,
+            "SNAPSHOT_BATCHING" => ConnectorCapability::SnapshotBatching,
+            "VSPHERE" => ConnectorCapability::Vsphere,
+            _ => ConnectorCapability::UnknownVariant(UnknownConnectorCapability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectorCapability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HYPERV-MANAGER" => ConnectorCapability::HypervManager,
+            "SCVMM" => ConnectorCapability::Scvmm,
+            "SMS_OPTIMIZED" => ConnectorCapability::SmsOptimized,
+            "SNAPSHOT_BATCHING" => ConnectorCapability::SnapshotBatching,
+            "VSPHERE" => ConnectorCapability::Vsphere,
+            _ => ConnectorCapability::UnknownVariant(UnknownConnectorCapability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectorCapability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectorCapability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectorCapability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectorStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectorStatus {
+    Healthy,
+    Unhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectorStatus),
+}
+
+impl Default for ConnectorStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectorStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectorStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectorStatus {
+    fn into(self) -> String {
+        match self {
+            ConnectorStatus::Healthy => "HEALTHY".to_string(),
+            ConnectorStatus::Unhealthy => "UNHEALTHY".to_string(),
+            ConnectorStatus::UnknownVariant(UnknownConnectorStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectorStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectorStatus::Healthy => &"HEALTHY",
+            ConnectorStatus::Unhealthy => &"UNHEALTHY",
+            ConnectorStatus::UnknownVariant(UnknownConnectorStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectorStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => ConnectorStatus::Healthy,
+            "UNHEALTHY" => ConnectorStatus::Unhealthy,
+            _ => ConnectorStatus::UnknownVariant(UnknownConnectorStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectorStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => ConnectorStatus::Healthy,
+            "UNHEALTHY" => ConnectorStatus::Unhealthy,
+            _ => ConnectorStatus::UnknownVariant(UnknownConnectorStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectorStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectorStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectorStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -277,7 +1284,7 @@ pub struct CreateReplicationJobRequest {
     /// <p>The license type to be used for the AMI created by a successful replication run.</p>
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<LicenseType>,
     /// <p>The maximum number of SMS-created AMIs to retain. The oldest is deleted after the maximum number is reached and a new AMI is created.</p>
     #[serde(rename = "numberOfRecentAmisToKeep")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -408,7 +1415,7 @@ pub struct GenerateChangeSetRequest {
     /// <p>The format for the change set.</p>
     #[serde(rename = "changesetFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub changeset_format: Option<String>,
+    pub changeset_format: Option<OutputFormat>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -430,7 +1437,7 @@ pub struct GenerateTemplateRequest {
     /// <p>The format for generating the AWS CloudFormation template.</p>
     #[serde(rename = "templateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_format: Option<String>,
+    pub template_format: Option<OutputFormat>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -674,7 +1681,7 @@ pub struct GetServersResponse {
     /// <p>The status of the server catalog.</p>
     #[serde(rename = "serverCatalogStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_catalog_status: Option<String>,
+    pub server_catalog_status: Option<ServerCatalogStatus>,
     /// <p>Information about the servers.</p>
     #[serde(rename = "serverList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -733,6 +1740,106 @@ pub struct LaunchDetails {
     pub stack_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLicenseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LicenseType {
+    Aws,
+    Byol,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLicenseType),
+}
+
+impl Default for LicenseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LicenseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LicenseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LicenseType {
+    fn into(self) -> String {
+        match self {
+            LicenseType::Aws => "AWS".to_string(),
+            LicenseType::Byol => "BYOL".to_string(),
+            LicenseType::UnknownVariant(UnknownLicenseType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LicenseType {
+    fn into(self) -> &'a str {
+        match self {
+            LicenseType::Aws => &"AWS",
+            LicenseType::Byol => &"BYOL",
+            LicenseType::UnknownVariant(UnknownLicenseType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LicenseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => LicenseType::Aws,
+            "BYOL" => LicenseType::Byol,
+            _ => LicenseType::UnknownVariant(UnknownLicenseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LicenseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => LicenseType::Aws,
+            "BYOL" => LicenseType::Byol,
+            _ => LicenseType::UnknownVariant(UnknownLicenseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LicenseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LicenseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LicenseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
@@ -770,7 +1877,7 @@ pub struct NotificationContext {
     /// <p>The status of the validation.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ValidationStatus>,
     /// <p>The status message.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -796,6 +1903,107 @@ pub struct NotifyAppValidationOutputRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyAppValidationOutputResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOutputFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OutputFormat {
+    Json,
+    Yaml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOutputFormat),
+}
+
+impl Default for OutputFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OutputFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OutputFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OutputFormat {
+    fn into(self) -> String {
+        match self {
+            OutputFormat::Json => "JSON".to_string(),
+            OutputFormat::Yaml => "YAML".to_string(),
+            OutputFormat::UnknownVariant(UnknownOutputFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OutputFormat {
+    fn into(self) -> &'a str {
+        match self {
+            OutputFormat::Json => &"JSON",
+            OutputFormat::Yaml => &"YAML",
+            OutputFormat::UnknownVariant(UnknownOutputFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OutputFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => OutputFormat::Json,
+            "YAML" => OutputFormat::Yaml,
+            _ => OutputFormat::UnknownVariant(UnknownOutputFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OutputFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => OutputFormat::Json,
+            "YAML" => OutputFormat::Yaml,
+            _ => OutputFormat::UnknownVariant(UnknownOutputFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutputFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OutputFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OutputFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -886,7 +2094,7 @@ pub struct ReplicationJob {
     /// <p>The license type to be used for the AMI created by a successful replication run.</p>
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<LicenseType>,
     /// <p>The start time of the next replication run.</p>
     #[serde(rename = "nextReplicationRunStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -922,11 +2130,11 @@ pub struct ReplicationJob {
     /// <p>The type of server.</p>
     #[serde(rename = "serverType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_type: Option<String>,
+    pub server_type: Option<ServerType>,
     /// <p>The state of the replication job.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplicationJobState>,
     /// <p>The description of the current status of the replication job.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -935,6 +2143,141 @@ pub struct ReplicationJob {
     #[serde(rename = "vmServer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server: Option<VmServer>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationJobState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationJobState {
+    Active,
+    Completed,
+    Deleted,
+    Deleting,
+    Failed,
+    Failing,
+    PausedOnFailure,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationJobState),
+}
+
+impl Default for ReplicationJobState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationJobState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationJobState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationJobState {
+    fn into(self) -> String {
+        match self {
+            ReplicationJobState::Active => "ACTIVE".to_string(),
+            ReplicationJobState::Completed => "COMPLETED".to_string(),
+            ReplicationJobState::Deleted => "DELETED".to_string(),
+            ReplicationJobState::Deleting => "DELETING".to_string(),
+            ReplicationJobState::Failed => "FAILED".to_string(),
+            ReplicationJobState::Failing => "FAILING".to_string(),
+            ReplicationJobState::PausedOnFailure => "PAUSED_ON_FAILURE".to_string(),
+            ReplicationJobState::Pending => "PENDING".to_string(),
+            ReplicationJobState::UnknownVariant(UnknownReplicationJobState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationJobState {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationJobState::Active => &"ACTIVE",
+            ReplicationJobState::Completed => &"COMPLETED",
+            ReplicationJobState::Deleted => &"DELETED",
+            ReplicationJobState::Deleting => &"DELETING",
+            ReplicationJobState::Failed => &"FAILED",
+            ReplicationJobState::Failing => &"FAILING",
+            ReplicationJobState::PausedOnFailure => &"PAUSED_ON_FAILURE",
+            ReplicationJobState::Pending => &"PENDING",
+            ReplicationJobState::UnknownVariant(UnknownReplicationJobState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReplicationJobState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReplicationJobState::Active,
+            "COMPLETED" => ReplicationJobState::Completed,
+            "DELETED" => ReplicationJobState::Deleted,
+            "DELETING" => ReplicationJobState::Deleting,
+            "FAILED" => ReplicationJobState::Failed,
+            "FAILING" => ReplicationJobState::Failing,
+            "PAUSED_ON_FAILURE" => ReplicationJobState::PausedOnFailure,
+            "PENDING" => ReplicationJobState::Pending,
+            _ => ReplicationJobState::UnknownVariant(UnknownReplicationJobState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationJobState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReplicationJobState::Active,
+            "COMPLETED" => ReplicationJobState::Completed,
+            "DELETED" => ReplicationJobState::Deleted,
+            "DELETING" => ReplicationJobState::Deleting,
+            "FAILED" => ReplicationJobState::Failed,
+            "FAILING" => ReplicationJobState::Failing,
+            "PAUSED_ON_FAILURE" => ReplicationJobState::PausedOnFailure,
+            "PENDING" => ReplicationJobState::Pending,
+            _ => ReplicationJobState::UnknownVariant(UnknownReplicationJobState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationJobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReplicationJobState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicationJobState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a replication run.</p>
@@ -976,7 +2319,7 @@ pub struct ReplicationRun {
     /// <p>The state of the replication run.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplicationRunState>,
     /// <p>The description of the current status of the replication job.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -984,7 +2327,7 @@ pub struct ReplicationRun {
     /// <p>The type of replication run.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ReplicationRunType>,
 }
 
 /// <p>Details of the current stage of a replication run.</p>
@@ -999,6 +2342,241 @@ pub struct ReplicationRunStageDetails {
     #[serde(rename = "stageProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_progress: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationRunState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationRunState {
+    Active,
+    Completed,
+    Deleted,
+    Deleting,
+    Failed,
+    Missed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationRunState),
+}
+
+impl Default for ReplicationRunState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationRunState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationRunState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationRunState {
+    fn into(self) -> String {
+        match self {
+            ReplicationRunState::Active => "ACTIVE".to_string(),
+            ReplicationRunState::Completed => "COMPLETED".to_string(),
+            ReplicationRunState::Deleted => "DELETED".to_string(),
+            ReplicationRunState::Deleting => "DELETING".to_string(),
+            ReplicationRunState::Failed => "FAILED".to_string(),
+            ReplicationRunState::Missed => "MISSED".to_string(),
+            ReplicationRunState::Pending => "PENDING".to_string(),
+            ReplicationRunState::UnknownVariant(UnknownReplicationRunState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationRunState {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationRunState::Active => &"ACTIVE",
+            ReplicationRunState::Completed => &"COMPLETED",
+            ReplicationRunState::Deleted => &"DELETED",
+            ReplicationRunState::Deleting => &"DELETING",
+            ReplicationRunState::Failed => &"FAILED",
+            ReplicationRunState::Missed => &"MISSED",
+            ReplicationRunState::Pending => &"PENDING",
+            ReplicationRunState::UnknownVariant(UnknownReplicationRunState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReplicationRunState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReplicationRunState::Active,
+            "COMPLETED" => ReplicationRunState::Completed,
+            "DELETED" => ReplicationRunState::Deleted,
+            "DELETING" => ReplicationRunState::Deleting,
+            "FAILED" => ReplicationRunState::Failed,
+            "MISSED" => ReplicationRunState::Missed,
+            "PENDING" => ReplicationRunState::Pending,
+            _ => ReplicationRunState::UnknownVariant(UnknownReplicationRunState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationRunState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReplicationRunState::Active,
+            "COMPLETED" => ReplicationRunState::Completed,
+            "DELETED" => ReplicationRunState::Deleted,
+            "DELETING" => ReplicationRunState::Deleting,
+            "FAILED" => ReplicationRunState::Failed,
+            "MISSED" => ReplicationRunState::Missed,
+            "PENDING" => ReplicationRunState::Pending,
+            _ => ReplicationRunState::UnknownVariant(UnknownReplicationRunState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationRunState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReplicationRunState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicationRunState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationRunType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationRunType {
+    Automatic,
+    OnDemand,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationRunType),
+}
+
+impl Default for ReplicationRunType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationRunType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationRunType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationRunType {
+    fn into(self) -> String {
+        match self {
+            ReplicationRunType::Automatic => "AUTOMATIC".to_string(),
+            ReplicationRunType::OnDemand => "ON_DEMAND".to_string(),
+            ReplicationRunType::UnknownVariant(UnknownReplicationRunType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationRunType {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationRunType::Automatic => &"AUTOMATIC",
+            ReplicationRunType::OnDemand => &"ON_DEMAND",
+            ReplicationRunType::UnknownVariant(UnknownReplicationRunType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReplicationRunType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOMATIC" => ReplicationRunType::Automatic,
+            "ON_DEMAND" => ReplicationRunType::OnDemand,
+            _ => ReplicationRunType::UnknownVariant(UnknownReplicationRunType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationRunType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOMATIC" => ReplicationRunType::Automatic,
+            "ON_DEMAND" => ReplicationRunType::OnDemand,
+            _ => ReplicationRunType::UnknownVariant(UnknownReplicationRunType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationRunType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReplicationRunType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicationRunType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Location of an Amazon S3 object.</p>
@@ -1045,11 +2623,111 @@ pub struct SSMValidationParameters {
     /// <p>The type of validation script.</p>
     #[serde(rename = "scriptType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub script_type: Option<String>,
+    pub script_type: Option<ScriptType>,
     /// <p>The location of the validation script.</p>
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<Source>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScriptType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScriptType {
+    PowershellScript,
+    ShellScript,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScriptType),
+}
+
+impl Default for ScriptType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScriptType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScriptType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScriptType {
+    fn into(self) -> String {
+        match self {
+            ScriptType::PowershellScript => "POWERSHELL_SCRIPT".to_string(),
+            ScriptType::ShellScript => "SHELL_SCRIPT".to_string(),
+            ScriptType::UnknownVariant(UnknownScriptType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScriptType {
+    fn into(self) -> &'a str {
+        match self {
+            ScriptType::PowershellScript => &"POWERSHELL_SCRIPT",
+            ScriptType::ShellScript => &"SHELL_SCRIPT",
+            ScriptType::UnknownVariant(UnknownScriptType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScriptType {
+    fn from(name: &str) -> Self {
+        match name {
+            "POWERSHELL_SCRIPT" => ScriptType::PowershellScript,
+            "SHELL_SCRIPT" => ScriptType::ShellScript,
+            _ => ScriptType::UnknownVariant(UnknownScriptType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScriptType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "POWERSHELL_SCRIPT" => ScriptType::PowershellScript,
+            "SHELL_SCRIPT" => ScriptType::ShellScript,
+            _ => ScriptType::UnknownVariant(UnknownScriptType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScriptType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScriptType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScriptType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a server.</p>
@@ -1070,11 +2748,131 @@ pub struct Server {
     /// <p>The type of server.</p>
     #[serde(rename = "serverType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_type: Option<String>,
+    pub server_type: Option<ServerType>,
     /// <p>Information about the VM server.</p>
     #[serde(rename = "vmServer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server: Option<VmServer>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerCatalogStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerCatalogStatus {
+    Available,
+    Deleted,
+    Expired,
+    Importing,
+    NotImported,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerCatalogStatus),
+}
+
+impl Default for ServerCatalogStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerCatalogStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerCatalogStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerCatalogStatus {
+    fn into(self) -> String {
+        match self {
+            ServerCatalogStatus::Available => "AVAILABLE".to_string(),
+            ServerCatalogStatus::Deleted => "DELETED".to_string(),
+            ServerCatalogStatus::Expired => "EXPIRED".to_string(),
+            ServerCatalogStatus::Importing => "IMPORTING".to_string(),
+            ServerCatalogStatus::NotImported => "NOT_IMPORTED".to_string(),
+            ServerCatalogStatus::UnknownVariant(UnknownServerCatalogStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerCatalogStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ServerCatalogStatus::Available => &"AVAILABLE",
+            ServerCatalogStatus::Deleted => &"DELETED",
+            ServerCatalogStatus::Expired => &"EXPIRED",
+            ServerCatalogStatus::Importing => &"IMPORTING",
+            ServerCatalogStatus::NotImported => &"NOT_IMPORTED",
+            ServerCatalogStatus::UnknownVariant(UnknownServerCatalogStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ServerCatalogStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ServerCatalogStatus::Available,
+            "DELETED" => ServerCatalogStatus::Deleted,
+            "EXPIRED" => ServerCatalogStatus::Expired,
+            "IMPORTING" => ServerCatalogStatus::Importing,
+            "NOT_IMPORTED" => ServerCatalogStatus::NotImported,
+            _ => ServerCatalogStatus::UnknownVariant(UnknownServerCatalogStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerCatalogStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ServerCatalogStatus::Available,
+            "DELETED" => ServerCatalogStatus::Deleted,
+            "EXPIRED" => ServerCatalogStatus::Expired,
+            "IMPORTING" => ServerCatalogStatus::Importing,
+            "NOT_IMPORTED" => ServerCatalogStatus::NotImported,
+            _ => ServerCatalogStatus::UnknownVariant(UnknownServerCatalogStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerCatalogStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ServerCatalogStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServerCatalogStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Logical grouping of servers.</p>
@@ -1150,7 +2948,7 @@ pub struct ServerLaunchConfiguration {
     /// <p>The type of configuration script.</p>
     #[serde(rename = "configureScriptType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configure_script_type: Option<String>,
+    pub configure_script_type: Option<ScriptType>,
     /// <p>The name of the Amazon EC2 SSH key to be used for connecting to the launched server.</p>
     #[serde(rename = "ec2KeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1220,7 +3018,7 @@ pub struct ServerReplicationParameters {
     /// <p>The license type for creating a replication job for the server.</p>
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<LicenseType>,
     /// <p>The number of recent AMIs to keep when creating a replication job for this server.</p>
     #[serde(rename = "numberOfRecentAmisToKeep")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1233,6 +3031,101 @@ pub struct ServerReplicationParameters {
     #[serde(rename = "seedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub seed_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerType {
+    VirtualMachine,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerType),
+}
+
+impl Default for ServerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerType {
+    fn into(self) -> String {
+        match self {
+            ServerType::VirtualMachine => "VIRTUAL_MACHINE".to_string(),
+            ServerType::UnknownVariant(UnknownServerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerType {
+    fn into(self) -> &'a str {
+        match self {
+            ServerType::VirtualMachine => &"VIRTUAL_MACHINE",
+            ServerType::UnknownVariant(UnknownServerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "VIRTUAL_MACHINE" => ServerType::VirtualMachine,
+            _ => ServerType::UnknownVariant(UnknownServerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "VIRTUAL_MACHINE" => ServerType::VirtualMachine,
+            _ => ServerType::UnknownVariant(UnknownServerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration for validating an instance.</p>
@@ -1248,7 +3141,7 @@ pub struct ServerValidationConfiguration {
     /// <p>The validation strategy.</p>
     #[serde(rename = "serverValidationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_validation_strategy: Option<String>,
+    pub server_validation_strategy: Option<ServerValidationStrategy>,
     /// <p>The validation parameters.</p>
     #[serde(rename = "userDataValidationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1266,6 +3159,105 @@ pub struct ServerValidationOutput {
     #[serde(rename = "server")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server: Option<Server>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerValidationStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerValidationStrategy {
+    Userdata,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerValidationStrategy),
+}
+
+impl Default for ServerValidationStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerValidationStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerValidationStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerValidationStrategy {
+    fn into(self) -> String {
+        match self {
+            ServerValidationStrategy::Userdata => "USERDATA".to_string(),
+            ServerValidationStrategy::UnknownVariant(UnknownServerValidationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerValidationStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            ServerValidationStrategy::Userdata => &"USERDATA",
+            ServerValidationStrategy::UnknownVariant(UnknownServerValidationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServerValidationStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "USERDATA" => ServerValidationStrategy::Userdata,
+            _ => ServerValidationStrategy::UnknownVariant(UnknownServerValidationStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerValidationStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "USERDATA" => ServerValidationStrategy::Userdata,
+            _ => ServerValidationStrategy::UnknownVariant(UnknownServerValidationStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerValidationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServerValidationStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServerValidationStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains the location of a validation script.</p>
@@ -1433,7 +3425,7 @@ pub struct UpdateReplicationJobRequest {
     /// <p>The license type to be used for the AMI created by a successful replication run.</p>
     #[serde(rename = "licenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<LicenseType>,
     /// <p>The start time of the next replication run.</p>
     #[serde(rename = "nextReplicationRunStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1470,7 +3462,7 @@ pub struct UserDataValidationParameters {
     /// <p>The type of validation script.</p>
     #[serde(rename = "scriptType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub script_type: Option<String>,
+    pub script_type: Option<ScriptType>,
     /// <p>The location of the validation script.</p>
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1500,7 +3492,7 @@ pub struct ValidationOutput {
     /// <p>The status of the validation.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ValidationStatus>,
     /// <p>The status message.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1509,6 +3501,230 @@ pub struct ValidationOutput {
     #[serde(rename = "validationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidationStatus {
+    Failed,
+    InProgress,
+    Pending,
+    ReadyForValidation,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidationStatus),
+}
+
+impl Default for ValidationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidationStatus {
+    fn into(self) -> String {
+        match self {
+            ValidationStatus::Failed => "FAILED".to_string(),
+            ValidationStatus::InProgress => "IN_PROGRESS".to_string(),
+            ValidationStatus::Pending => "PENDING".to_string(),
+            ValidationStatus::ReadyForValidation => "READY_FOR_VALIDATION".to_string(),
+            ValidationStatus::Succeeded => "SUCCEEDED".to_string(),
+            ValidationStatus::UnknownVariant(UnknownValidationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ValidationStatus::Failed => &"FAILED",
+            ValidationStatus::InProgress => &"IN_PROGRESS",
+            ValidationStatus::Pending => &"PENDING",
+            ValidationStatus::ReadyForValidation => &"READY_FOR_VALIDATION",
+            ValidationStatus::Succeeded => &"SUCCEEDED",
+            ValidationStatus::UnknownVariant(UnknownValidationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ValidationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => ValidationStatus::Failed,
+            "IN_PROGRESS" => ValidationStatus::InProgress,
+            "PENDING" => ValidationStatus::Pending,
+            "READY_FOR_VALIDATION" => ValidationStatus::ReadyForValidation,
+            "SUCCEEDED" => ValidationStatus::Succeeded,
+            _ => ValidationStatus::UnknownVariant(UnknownValidationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => ValidationStatus::Failed,
+            "IN_PROGRESS" => ValidationStatus::InProgress,
+            "PENDING" => ValidationStatus::Pending,
+            "READY_FOR_VALIDATION" => ValidationStatus::ReadyForValidation,
+            "SUCCEEDED" => ValidationStatus::Succeeded,
+            _ => ValidationStatus::UnknownVariant(UnknownValidationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ValidationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ValidationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVmManagerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VmManagerType {
+    HypervManager,
+    Scvmm,
+    Vsphere,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVmManagerType),
+}
+
+impl Default for VmManagerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VmManagerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VmManagerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VmManagerType {
+    fn into(self) -> String {
+        match self {
+            VmManagerType::HypervManager => "HYPERV-MANAGER".to_string(),
+            VmManagerType::Scvmm => "SCVMM".to_string(),
+            VmManagerType::Vsphere => "VSPHERE".to_string(),
+            VmManagerType::UnknownVariant(UnknownVmManagerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VmManagerType {
+    fn into(self) -> &'a str {
+        match self {
+            VmManagerType::HypervManager => &"HYPERV-MANAGER",
+            VmManagerType::Scvmm => &"SCVMM",
+            VmManagerType::Vsphere => &"VSPHERE",
+            VmManagerType::UnknownVariant(UnknownVmManagerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VmManagerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HYPERV-MANAGER" => VmManagerType::HypervManager,
+            "SCVMM" => VmManagerType::Scvmm,
+            "VSPHERE" => VmManagerType::Vsphere,
+            _ => VmManagerType::UnknownVariant(UnknownVmManagerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VmManagerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HYPERV-MANAGER" => VmManagerType::HypervManager,
+            "SCVMM" => VmManagerType::Scvmm,
+            "VSPHERE" => VmManagerType::Vsphere,
+            _ => VmManagerType::UnknownVariant(UnknownVmManagerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VmManagerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VmManagerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VmManagerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a VM server.</p>
@@ -1521,7 +3737,7 @@ pub struct VmServer {
     /// <p>The type of VM management product.</p>
     #[serde(rename = "vmManagerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vm_manager_type: Option<String>,
+    pub vm_manager_type: Option<VmManagerType>,
     /// <p>The name of the VM.</p>
     #[serde(rename = "vmName")]
     #[serde(skip_serializing_if = "Option::is_none")]

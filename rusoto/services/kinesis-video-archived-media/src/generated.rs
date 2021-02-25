@@ -30,10 +30,115 @@ use serde_json;
 pub struct ClipFragmentSelector {
     /// <p>The origin of the timestamps to use (Server or Producer).</p>
     #[serde(rename = "FragmentSelectorType")]
-    pub fragment_selector_type: String,
+    pub fragment_selector_type: ClipFragmentSelectorType,
     /// <p>The range of timestamps to return.</p>
     #[serde(rename = "TimestampRange")]
     pub timestamp_range: ClipTimestampRange,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClipFragmentSelectorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClipFragmentSelectorType {
+    ProducerTimestamp,
+    ServerTimestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClipFragmentSelectorType),
+}
+
+impl Default for ClipFragmentSelectorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClipFragmentSelectorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClipFragmentSelectorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClipFragmentSelectorType {
+    fn into(self) -> String {
+        match self {
+            ClipFragmentSelectorType::ProducerTimestamp => "PRODUCER_TIMESTAMP".to_string(),
+            ClipFragmentSelectorType::ServerTimestamp => "SERVER_TIMESTAMP".to_string(),
+            ClipFragmentSelectorType::UnknownVariant(UnknownClipFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClipFragmentSelectorType {
+    fn into(self) -> &'a str {
+        match self {
+            ClipFragmentSelectorType::ProducerTimestamp => &"PRODUCER_TIMESTAMP",
+            ClipFragmentSelectorType::ServerTimestamp => &"SERVER_TIMESTAMP",
+            ClipFragmentSelectorType::UnknownVariant(UnknownClipFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClipFragmentSelectorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRODUCER_TIMESTAMP" => ClipFragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => ClipFragmentSelectorType::ServerTimestamp,
+            _ => ClipFragmentSelectorType::UnknownVariant(UnknownClipFragmentSelectorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClipFragmentSelectorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRODUCER_TIMESTAMP" => ClipFragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => ClipFragmentSelectorType::ServerTimestamp,
+            _ => ClipFragmentSelectorType::UnknownVariant(UnknownClipFragmentSelectorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClipFragmentSelectorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClipFragmentSelectorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ClipFragmentSelectorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The range of timestamps for which to return fragments.</p> <p>The values in the ClipTimestampRange are <code>inclusive</code>. Fragments that begin before the start time but continue past it, or fragments that begin before the end time but continue past it, are included in the session. </p>
@@ -48,6 +153,325 @@ pub struct ClipTimestampRange {
     pub start_timestamp: f64,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerFormat {
+    FragmentedMp4,
+    MpegTs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerFormat),
+}
+
+impl Default for ContainerFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerFormat {
+    fn into(self) -> String {
+        match self {
+            ContainerFormat::FragmentedMp4 => "FRAGMENTED_MP4".to_string(),
+            ContainerFormat::MpegTs => "MPEG_TS".to_string(),
+            ContainerFormat::UnknownVariant(UnknownContainerFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerFormat::FragmentedMp4 => &"FRAGMENTED_MP4",
+            ContainerFormat::MpegTs => &"MPEG_TS",
+            ContainerFormat::UnknownVariant(UnknownContainerFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "FRAGMENTED_MP4" => ContainerFormat::FragmentedMp4,
+            "MPEG_TS" => ContainerFormat::MpegTs,
+            _ => ContainerFormat::UnknownVariant(UnknownContainerFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FRAGMENTED_MP4" => ContainerFormat::FragmentedMp4,
+            "MPEG_TS" => ContainerFormat::MpegTs,
+            _ => ContainerFormat::UnknownVariant(UnknownContainerFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContainerFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDASHDisplayFragmentNumber {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DASHDisplayFragmentNumber {
+    Always,
+    Never,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDASHDisplayFragmentNumber),
+}
+
+impl Default for DASHDisplayFragmentNumber {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DASHDisplayFragmentNumber {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DASHDisplayFragmentNumber {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DASHDisplayFragmentNumber {
+    fn into(self) -> String {
+        match self {
+            DASHDisplayFragmentNumber::Always => "ALWAYS".to_string(),
+            DASHDisplayFragmentNumber::Never => "NEVER".to_string(),
+            DASHDisplayFragmentNumber::UnknownVariant(UnknownDASHDisplayFragmentNumber {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DASHDisplayFragmentNumber {
+    fn into(self) -> &'a str {
+        match self {
+            DASHDisplayFragmentNumber::Always => &"ALWAYS",
+            DASHDisplayFragmentNumber::Never => &"NEVER",
+            DASHDisplayFragmentNumber::UnknownVariant(UnknownDASHDisplayFragmentNumber {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DASHDisplayFragmentNumber {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS" => DASHDisplayFragmentNumber::Always,
+            "NEVER" => DASHDisplayFragmentNumber::Never,
+            _ => DASHDisplayFragmentNumber::UnknownVariant(UnknownDASHDisplayFragmentNumber {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DASHDisplayFragmentNumber {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS" => DASHDisplayFragmentNumber::Always,
+            "NEVER" => DASHDisplayFragmentNumber::Never,
+            _ => {
+                DASHDisplayFragmentNumber::UnknownVariant(UnknownDASHDisplayFragmentNumber { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DASHDisplayFragmentNumber {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DASHDisplayFragmentNumber {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DASHDisplayFragmentNumber {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDASHDisplayFragmentTimestamp {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DASHDisplayFragmentTimestamp {
+    Always,
+    Never,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDASHDisplayFragmentTimestamp),
+}
+
+impl Default for DASHDisplayFragmentTimestamp {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DASHDisplayFragmentTimestamp {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DASHDisplayFragmentTimestamp {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DASHDisplayFragmentTimestamp {
+    fn into(self) -> String {
+        match self {
+            DASHDisplayFragmentTimestamp::Always => "ALWAYS".to_string(),
+            DASHDisplayFragmentTimestamp::Never => "NEVER".to_string(),
+            DASHDisplayFragmentTimestamp::UnknownVariant(UnknownDASHDisplayFragmentTimestamp {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DASHDisplayFragmentTimestamp {
+    fn into(self) -> &'a str {
+        match self {
+            DASHDisplayFragmentTimestamp::Always => &"ALWAYS",
+            DASHDisplayFragmentTimestamp::Never => &"NEVER",
+            DASHDisplayFragmentTimestamp::UnknownVariant(UnknownDASHDisplayFragmentTimestamp {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DASHDisplayFragmentTimestamp {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS" => DASHDisplayFragmentTimestamp::Always,
+            "NEVER" => DASHDisplayFragmentTimestamp::Never,
+            _ => {
+                DASHDisplayFragmentTimestamp::UnknownVariant(UnknownDASHDisplayFragmentTimestamp {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for DASHDisplayFragmentTimestamp {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS" => DASHDisplayFragmentTimestamp::Always,
+            "NEVER" => DASHDisplayFragmentTimestamp::Never,
+            _ => {
+                DASHDisplayFragmentTimestamp::UnknownVariant(UnknownDASHDisplayFragmentTimestamp {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DASHDisplayFragmentTimestamp {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DASHDisplayFragmentTimestamp {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DASHDisplayFragmentTimestamp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the range of timestamps for the requested media, and the source of the timestamps. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -55,11 +479,226 @@ pub struct DASHFragmentSelector {
     /// <p>The source of the timestamps for the requested media.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetDASHStreamingSessionURLInput$PlaybackMode</a> is <code>ON_DEMAND</code> or <code>LIVE_REPLAY</code>, the first fragment ingested with a producer timestamp within the specified <a>FragmentSelector$TimestampRange</a> is included in the media playlist. In addition, the fragments with producer timestamps within the <code>TimestampRange</code> ingested immediately following the first fragment (up to the <a>GetDASHStreamingSessionURLInput$MaxManifestFragmentResults</a> value) are included. </p> <p>Fragments that have duplicate producer timestamps are deduplicated. This means that if producers are producing a stream of fragments with producer timestamps that are approximately equal to the true clock time, the MPEG-DASH manifest will contain all of the fragments within the requested timestamp range. If some fragments are ingested within the same time range and very different points in time, only the oldest ingested collection of fragments are returned.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetDASHStreamingSessionURLInput$PlaybackMode</a> is <code>LIVE</code>, the producer timestamps are used in the MP4 fragments and for deduplication. But the most recently ingested fragments based on server timestamps are included in the MPEG-DASH manifest. This means that even if fragments ingested in the past have producer timestamps with values now, they are not included in the HLS media playlist.</p> <p>The default is <code>SERVER_TIMESTAMP</code>.</p>
     #[serde(rename = "FragmentSelectorType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fragment_selector_type: Option<String>,
+    pub fragment_selector_type: Option<DASHFragmentSelectorType>,
     /// <p>The start and end of the timestamp range for the requested media.</p> <p>This value should not be present if <code>PlaybackType</code> is <code>LIVE</code>.</p>
     #[serde(rename = "TimestampRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_range: Option<DASHTimestampRange>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDASHFragmentSelectorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DASHFragmentSelectorType {
+    ProducerTimestamp,
+    ServerTimestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDASHFragmentSelectorType),
+}
+
+impl Default for DASHFragmentSelectorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DASHFragmentSelectorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DASHFragmentSelectorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DASHFragmentSelectorType {
+    fn into(self) -> String {
+        match self {
+            DASHFragmentSelectorType::ProducerTimestamp => "PRODUCER_TIMESTAMP".to_string(),
+            DASHFragmentSelectorType::ServerTimestamp => "SERVER_TIMESTAMP".to_string(),
+            DASHFragmentSelectorType::UnknownVariant(UnknownDASHFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DASHFragmentSelectorType {
+    fn into(self) -> &'a str {
+        match self {
+            DASHFragmentSelectorType::ProducerTimestamp => &"PRODUCER_TIMESTAMP",
+            DASHFragmentSelectorType::ServerTimestamp => &"SERVER_TIMESTAMP",
+            DASHFragmentSelectorType::UnknownVariant(UnknownDASHFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DASHFragmentSelectorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRODUCER_TIMESTAMP" => DASHFragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => DASHFragmentSelectorType::ServerTimestamp,
+            _ => DASHFragmentSelectorType::UnknownVariant(UnknownDASHFragmentSelectorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DASHFragmentSelectorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRODUCER_TIMESTAMP" => DASHFragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => DASHFragmentSelectorType::ServerTimestamp,
+            _ => DASHFragmentSelectorType::UnknownVariant(UnknownDASHFragmentSelectorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DASHFragmentSelectorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DASHFragmentSelectorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DASHFragmentSelectorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDASHPlaybackMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DASHPlaybackMode {
+    Live,
+    LiveReplay,
+    OnDemand,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDASHPlaybackMode),
+}
+
+impl Default for DASHPlaybackMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DASHPlaybackMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DASHPlaybackMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DASHPlaybackMode {
+    fn into(self) -> String {
+        match self {
+            DASHPlaybackMode::Live => "LIVE".to_string(),
+            DASHPlaybackMode::LiveReplay => "LIVE_REPLAY".to_string(),
+            DASHPlaybackMode::OnDemand => "ON_DEMAND".to_string(),
+            DASHPlaybackMode::UnknownVariant(UnknownDASHPlaybackMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DASHPlaybackMode {
+    fn into(self) -> &'a str {
+        match self {
+            DASHPlaybackMode::Live => &"LIVE",
+            DASHPlaybackMode::LiveReplay => &"LIVE_REPLAY",
+            DASHPlaybackMode::OnDemand => &"ON_DEMAND",
+            DASHPlaybackMode::UnknownVariant(UnknownDASHPlaybackMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DASHPlaybackMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "LIVE" => DASHPlaybackMode::Live,
+            "LIVE_REPLAY" => DASHPlaybackMode::LiveReplay,
+            "ON_DEMAND" => DASHPlaybackMode::OnDemand,
+            _ => DASHPlaybackMode::UnknownVariant(UnknownDASHPlaybackMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DASHPlaybackMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LIVE" => DASHPlaybackMode::Live,
+            "LIVE_REPLAY" => DASHPlaybackMode::LiveReplay,
+            "ON_DEMAND" => DASHPlaybackMode::OnDemand,
+            _ => DASHPlaybackMode::UnknownVariant(UnknownDASHPlaybackMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DASHPlaybackMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DASHPlaybackMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DASHPlaybackMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The start and end of the timestamp range for the requested media.</p> <p>This value should not be present if <code>PlaybackType</code> is <code>LIVE</code>.</p> <note> <p>The values in the <code>DASHimestampRange</code> are inclusive. Fragments that begin before the start time but continue past it, or fragments that begin before the end time but continue past it, are included in the session.</p> </note></p>
@@ -108,10 +747,115 @@ pub struct Fragment {
 pub struct FragmentSelector {
     /// <p>The origin of the timestamps to use (Server or Producer).</p>
     #[serde(rename = "FragmentSelectorType")]
-    pub fragment_selector_type: String,
+    pub fragment_selector_type: FragmentSelectorType,
     /// <p>The range of timestamps to return.</p>
     #[serde(rename = "TimestampRange")]
     pub timestamp_range: TimestampRange,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFragmentSelectorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FragmentSelectorType {
+    ProducerTimestamp,
+    ServerTimestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFragmentSelectorType),
+}
+
+impl Default for FragmentSelectorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FragmentSelectorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FragmentSelectorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FragmentSelectorType {
+    fn into(self) -> String {
+        match self {
+            FragmentSelectorType::ProducerTimestamp => "PRODUCER_TIMESTAMP".to_string(),
+            FragmentSelectorType::ServerTimestamp => "SERVER_TIMESTAMP".to_string(),
+            FragmentSelectorType::UnknownVariant(UnknownFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FragmentSelectorType {
+    fn into(self) -> &'a str {
+        match self {
+            FragmentSelectorType::ProducerTimestamp => &"PRODUCER_TIMESTAMP",
+            FragmentSelectorType::ServerTimestamp => &"SERVER_TIMESTAMP",
+            FragmentSelectorType::UnknownVariant(UnknownFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FragmentSelectorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRODUCER_TIMESTAMP" => FragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => FragmentSelectorType::ServerTimestamp,
+            _ => FragmentSelectorType::UnknownVariant(UnknownFragmentSelectorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FragmentSelectorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRODUCER_TIMESTAMP" => FragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => FragmentSelectorType::ServerTimestamp,
+            _ => FragmentSelectorType::UnknownVariant(UnknownFragmentSelectorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FragmentSelectorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FragmentSelectorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FragmentSelectorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -148,11 +892,11 @@ pub struct GetDASHStreamingSessionURLInput {
     /// <p>Fragments are identified in the manifest file based on their sequence number in the session. If DisplayFragmentNumber is set to <code>ALWAYS</code>, the Kinesis Video Streams fragment number is added to each S element in the manifest file with the attribute name “kvs:fn”. These fragment numbers can be used for logging or for use with other APIs (e.g. <code>GetMedia</code> and <code>GetMediaForFragmentList</code>). A custom MPEG-DASH media player is necessary to leverage these this custom attribute.</p> <p>The default value is <code>NEVER</code>.</p>
     #[serde(rename = "DisplayFragmentNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_fragment_number: Option<String>,
+    pub display_fragment_number: Option<DASHDisplayFragmentNumber>,
     /// <p>Per the MPEG-DASH specification, the wall-clock time of fragments in the manifest file can be derived using attributes in the manifest itself. However, typically, MPEG-DASH compatible media players do not properly handle gaps in the media timeline. Kinesis Video Streams adjusts the media timeline in the manifest file to enable playback of media with discontinuities. Therefore, the wall-clock time derived from the manifest file may be inaccurate. If DisplayFragmentTimestamp is set to <code>ALWAYS</code>, the accurate fragment timestamp is added to each S element in the manifest file with the attribute name “kvs:ts”. A custom MPEG-DASH media player is necessary to leverage this custom attribute.</p> <p>The default value is <code>NEVER</code>. When <a>DASHFragmentSelector</a> is <code>SERVER_TIMESTAMP</code>, the timestamps will be the server start timestamps. Similarly, when <a>DASHFragmentSelector</a> is <code>PRODUCER_TIMESTAMP</code>, the timestamps will be the producer start timestamps. </p>
     #[serde(rename = "DisplayFragmentTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_fragment_timestamp: Option<String>,
+    pub display_fragment_timestamp: Option<DASHDisplayFragmentTimestamp>,
     /// <p>The time in seconds until the requested session expires. This value can be between 300 (5 minutes) and 43200 (12 hours).</p> <p>When a session expires, no new calls to <code>GetDashManifest</code>, <code>GetMP4InitFragment</code>, or <code>GetMP4MediaFragment</code> can be made for that session.</p> <p>The default is 300 (5 minutes).</p>
     #[serde(rename = "Expires")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -164,7 +908,7 @@ pub struct GetDASHStreamingSessionURLInput {
     /// <p>Whether to retrieve live, live replay, or archived, on-demand data.</p> <p>Features of the three types of sessions include the following:</p> <ul> <li> <p> <b> <code>LIVE</code> </b>: For sessions of this type, the MPEG-DASH manifest is continually updated with the latest fragments as they become available. We recommend that the media player retrieve a new manifest on a one-second interval. When this type of session is played in a media player, the user interface typically displays a "live" notification, with no scrubber control for choosing the position in the playback window to display.</p> <note> <p>In <code>LIVE</code> mode, the newest available fragments are included in an MPEG-DASH manifest, even if there is a gap between fragments (that is, if a fragment is missing). A gap like this might cause a media player to halt or cause a jump in playback. In this mode, fragments are not added to the MPEG-DASH manifest if they are older than the newest fragment in the playlist. If the missing fragment becomes available after a subsequent fragment is added to the manifest, the older fragment is not added, and the gap is not filled.</p> </note> </li> <li> <p> <b> <code>LIVE_REPLAY</code> </b>: For sessions of this type, the MPEG-DASH manifest is updated similarly to how it is updated for <code>LIVE</code> mode except that it starts by including fragments from a given start time. Instead of fragments being added as they are ingested, fragments are added as the duration of the next fragment elapses. For example, if the fragments in the session are two seconds long, then a new fragment is added to the manifest every two seconds. This mode is useful to be able to start playback from when an event is detected and continue live streaming media that has not yet been ingested as of the time of the session creation. This mode is also useful to stream previously archived media without being limited by the 1,000 fragment limit in the <code>ON_DEMAND</code> mode. </p> </li> <li> <p> <b> <code>ON_DEMAND</code> </b>: For sessions of this type, the MPEG-DASH manifest contains all the fragments for the session, up to the number that is specified in <code>MaxMediaPlaylistFragmentResults</code>. The manifest must be retrieved only once for each session. When this type of session is played in a media player, the user interface typically displays a scrubber control for choosing the position in the playback window to display.</p> </li> </ul> <p>In all playback modes, if <code>FragmentSelectorType</code> is <code>PRODUCER_TIMESTAMP</code>, and if there are multiple fragments with the same start timestamp, the fragment that has the larger fragment number (that is, the newer fragment) is included in the MPEG-DASH manifest. The other fragments are not included. Fragments that have different timestamps but have overlapping durations are still included in the MPEG-DASH manifest. This can lead to unexpected behavior in the media player.</p> <p>The default is <code>LIVE</code>.</p>
     #[serde(rename = "PlaybackMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub playback_mode: Option<String>,
+    pub playback_mode: Option<DASHPlaybackMode>,
     /// <p>The Amazon Resource Name (ARN) of the stream for which to retrieve the MPEG-DASH manifest URL.</p> <p>You must specify either the <code>StreamName</code> or the <code>StreamARN</code>.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,15 +934,15 @@ pub struct GetHLSStreamingSessionURLInput {
     /// <p>Specifies which format should be used for packaging the media. Specifying the <code>FRAGMENTED_MP4</code> container format packages the media into MP4 fragments (fMP4 or CMAF). This is the recommended packaging because there is minimal packaging overhead. The other container format option is <code>MPEG_TS</code>. HLS has supported MPEG TS chunks since it was released and is sometimes the only supported packaging on older HLS players. MPEG TS typically has a 5-25 percent packaging overhead. This means MPEG TS typically requires 5-25 percent more bandwidth and cost than fMP4.</p> <p>The default is <code>FRAGMENTED_MP4</code>.</p>
     #[serde(rename = "ContainerFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub container_format: Option<String>,
+    pub container_format: Option<ContainerFormat>,
     /// <p>Specifies when flags marking discontinuities between fragments are added to the media playlists.</p> <p>Media players typically build a timeline of media content to play, based on the timestamps of each fragment. This means that if there is any overlap or gap between fragments (as is typical if <a>HLSFragmentSelector</a> is set to <code>SERVER_TIMESTAMP</code>), the media player timeline will also have small gaps between fragments in some places, and will overwrite frames in other places. Gaps in the media player timeline can cause playback to stall and overlaps can cause playback to be jittery. When there are discontinuity flags between fragments, the media player is expected to reset the timeline, resulting in the next fragment being played immediately after the previous fragment. </p> <p>The following modes are supported:</p> <ul> <li> <p> <code>ALWAYS</code>: a discontinuity marker is placed between every fragment in the HLS media playlist. It is recommended to use a value of <code>ALWAYS</code> if the fragment timestamps are not accurate.</p> </li> <li> <p> <code>NEVER</code>: no discontinuity markers are placed anywhere. It is recommended to use a value of <code>NEVER</code> to ensure the media player timeline most accurately maps to the producer timestamps. </p> </li> <li> <p> <code>ON_DISCONTIUNITY</code>: a discontinuity marker is placed between fragments that have a gap or overlap of more than 50 milliseconds. For most playback scenarios, it is recommended to use a value of <code>ON_DISCONTINUITY</code> so that the media player timeline is only reset when there is a significant issue with the media timeline (e.g. a missing fragment).</p> </li> </ul> <p>The default is <code>ALWAYS</code> when <a>HLSFragmentSelector</a> is set to <code>SERVER_TIMESTAMP</code>, and <code>NEVER</code> when it is set to <code>PRODUCER_TIMESTAMP</code>.</p>
     #[serde(rename = "DiscontinuityMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub discontinuity_mode: Option<String>,
+    pub discontinuity_mode: Option<HLSDiscontinuityMode>,
     /// <p>Specifies when the fragment start timestamps should be included in the HLS media playlist. Typically, media players report the playhead position as a time relative to the start of the first fragment in the playback session. However, when the start timestamps are included in the HLS media playlist, some media players might report the current playhead as an absolute time based on the fragment timestamps. This can be useful for creating a playback experience that shows viewers the wall-clock time of the media.</p> <p>The default is <code>NEVER</code>. When <a>HLSFragmentSelector</a> is <code>SERVER_TIMESTAMP</code>, the timestamps will be the server start timestamps. Similarly, when <a>HLSFragmentSelector</a> is <code>PRODUCER_TIMESTAMP</code>, the timestamps will be the producer start timestamps. </p>
     #[serde(rename = "DisplayFragmentTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_fragment_timestamp: Option<String>,
+    pub display_fragment_timestamp: Option<HLSDisplayFragmentTimestamp>,
     /// <p>The time in seconds until the requested session expires. This value can be between 300 (5 minutes) and 43200 (12 hours).</p> <p>When a session expires, no new calls to <code>GetHLSMasterPlaylist</code>, <code>GetHLSMediaPlaylist</code>, <code>GetMP4InitFragment</code>, <code>GetMP4MediaFragment</code>, or <code>GetTSFragment</code> can be made for that session.</p> <p>The default is 300 (5 minutes).</p>
     #[serde(rename = "Expires")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -214,7 +958,7 @@ pub struct GetHLSStreamingSessionURLInput {
     /// <p>Whether to retrieve live, live replay, or archived, on-demand data.</p> <p>Features of the three types of sessions include the following:</p> <ul> <li> <p> <b> <code>LIVE</code> </b>: For sessions of this type, the HLS media playlist is continually updated with the latest fragments as they become available. We recommend that the media player retrieve a new playlist on a one-second interval. When this type of session is played in a media player, the user interface typically displays a "live" notification, with no scrubber control for choosing the position in the playback window to display.</p> <note> <p>In <code>LIVE</code> mode, the newest available fragments are included in an HLS media playlist, even if there is a gap between fragments (that is, if a fragment is missing). A gap like this might cause a media player to halt or cause a jump in playback. In this mode, fragments are not added to the HLS media playlist if they are older than the newest fragment in the playlist. If the missing fragment becomes available after a subsequent fragment is added to the playlist, the older fragment is not added, and the gap is not filled.</p> </note> </li> <li> <p> <b> <code>LIVE_REPLAY</code> </b>: For sessions of this type, the HLS media playlist is updated similarly to how it is updated for <code>LIVE</code> mode except that it starts by including fragments from a given start time. Instead of fragments being added as they are ingested, fragments are added as the duration of the next fragment elapses. For example, if the fragments in the session are two seconds long, then a new fragment is added to the media playlist every two seconds. This mode is useful to be able to start playback from when an event is detected and continue live streaming media that has not yet been ingested as of the time of the session creation. This mode is also useful to stream previously archived media without being limited by the 1,000 fragment limit in the <code>ON_DEMAND</code> mode. </p> </li> <li> <p> <b> <code>ON_DEMAND</code> </b>: For sessions of this type, the HLS media playlist contains all the fragments for the session, up to the number that is specified in <code>MaxMediaPlaylistFragmentResults</code>. The playlist must be retrieved only once for each session. When this type of session is played in a media player, the user interface typically displays a scrubber control for choosing the position in the playback window to display.</p> </li> </ul> <p>In all playback modes, if <code>FragmentSelectorType</code> is <code>PRODUCER_TIMESTAMP</code>, and if there are multiple fragments with the same start timestamp, the fragment that has the larger fragment number (that is, the newer fragment) is included in the HLS media playlist. The other fragments are not included. Fragments that have different timestamps but have overlapping durations are still included in the HLS media playlist. This can lead to unexpected behavior in the media player.</p> <p>The default is <code>LIVE</code>.</p>
     #[serde(rename = "PlaybackMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub playback_mode: Option<String>,
+    pub playback_mode: Option<HLSPlaybackMode>,
     /// <p>The Amazon Resource Name (ARN) of the stream for which to retrieve the HLS master playlist URL.</p> <p>You must specify either the <code>StreamName</code> or the <code>StreamARN</code>.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -253,6 +997,223 @@ pub struct GetMediaForFragmentListOutput {
     pub payload: Option<bytes::Bytes>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHLSDiscontinuityMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HLSDiscontinuityMode {
+    Always,
+    Never,
+    OnDiscontinuity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHLSDiscontinuityMode),
+}
+
+impl Default for HLSDiscontinuityMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HLSDiscontinuityMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HLSDiscontinuityMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HLSDiscontinuityMode {
+    fn into(self) -> String {
+        match self {
+            HLSDiscontinuityMode::Always => "ALWAYS".to_string(),
+            HLSDiscontinuityMode::Never => "NEVER".to_string(),
+            HLSDiscontinuityMode::OnDiscontinuity => "ON_DISCONTINUITY".to_string(),
+            HLSDiscontinuityMode::UnknownVariant(UnknownHLSDiscontinuityMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HLSDiscontinuityMode {
+    fn into(self) -> &'a str {
+        match self {
+            HLSDiscontinuityMode::Always => &"ALWAYS",
+            HLSDiscontinuityMode::Never => &"NEVER",
+            HLSDiscontinuityMode::OnDiscontinuity => &"ON_DISCONTINUITY",
+            HLSDiscontinuityMode::UnknownVariant(UnknownHLSDiscontinuityMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HLSDiscontinuityMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS" => HLSDiscontinuityMode::Always,
+            "NEVER" => HLSDiscontinuityMode::Never,
+            "ON_DISCONTINUITY" => HLSDiscontinuityMode::OnDiscontinuity,
+            _ => HLSDiscontinuityMode::UnknownVariant(UnknownHLSDiscontinuityMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HLSDiscontinuityMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS" => HLSDiscontinuityMode::Always,
+            "NEVER" => HLSDiscontinuityMode::Never,
+            "ON_DISCONTINUITY" => HLSDiscontinuityMode::OnDiscontinuity,
+            _ => HLSDiscontinuityMode::UnknownVariant(UnknownHLSDiscontinuityMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HLSDiscontinuityMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HLSDiscontinuityMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HLSDiscontinuityMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHLSDisplayFragmentTimestamp {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HLSDisplayFragmentTimestamp {
+    Always,
+    Never,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHLSDisplayFragmentTimestamp),
+}
+
+impl Default for HLSDisplayFragmentTimestamp {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HLSDisplayFragmentTimestamp {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HLSDisplayFragmentTimestamp {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HLSDisplayFragmentTimestamp {
+    fn into(self) -> String {
+        match self {
+            HLSDisplayFragmentTimestamp::Always => "ALWAYS".to_string(),
+            HLSDisplayFragmentTimestamp::Never => "NEVER".to_string(),
+            HLSDisplayFragmentTimestamp::UnknownVariant(UnknownHLSDisplayFragmentTimestamp {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HLSDisplayFragmentTimestamp {
+    fn into(self) -> &'a str {
+        match self {
+            HLSDisplayFragmentTimestamp::Always => &"ALWAYS",
+            HLSDisplayFragmentTimestamp::Never => &"NEVER",
+            HLSDisplayFragmentTimestamp::UnknownVariant(UnknownHLSDisplayFragmentTimestamp {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HLSDisplayFragmentTimestamp {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS" => HLSDisplayFragmentTimestamp::Always,
+            "NEVER" => HLSDisplayFragmentTimestamp::Never,
+            _ => HLSDisplayFragmentTimestamp::UnknownVariant(UnknownHLSDisplayFragmentTimestamp {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HLSDisplayFragmentTimestamp {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS" => HLSDisplayFragmentTimestamp::Always,
+            "NEVER" => HLSDisplayFragmentTimestamp::Never,
+            _ => HLSDisplayFragmentTimestamp::UnknownVariant(UnknownHLSDisplayFragmentTimestamp {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HLSDisplayFragmentTimestamp {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HLSDisplayFragmentTimestamp {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HLSDisplayFragmentTimestamp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the range of timestamps for the requested media, and the source of the timestamps.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -260,11 +1221,222 @@ pub struct HLSFragmentSelector {
     /// <p>The source of the timestamps for the requested media.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetHLSStreamingSessionURLInput$PlaybackMode</a> is <code>ON_DEMAND</code> or <code>LIVE_REPLAY</code>, the first fragment ingested with a producer timestamp within the specified <a>FragmentSelector$TimestampRange</a> is included in the media playlist. In addition, the fragments with producer timestamps within the <code>TimestampRange</code> ingested immediately following the first fragment (up to the <a>GetHLSStreamingSessionURLInput$MaxMediaPlaylistFragmentResults</a> value) are included. </p> <p>Fragments that have duplicate producer timestamps are deduplicated. This means that if producers are producing a stream of fragments with producer timestamps that are approximately equal to the true clock time, the HLS media playlists will contain all of the fragments within the requested timestamp range. If some fragments are ingested within the same time range and very different points in time, only the oldest ingested collection of fragments are returned.</p> <p>When <code>FragmentSelectorType</code> is set to <code>PRODUCER_TIMESTAMP</code> and <a>GetHLSStreamingSessionURLInput$PlaybackMode</a> is <code>LIVE</code>, the producer timestamps are used in the MP4 fragments and for deduplication. But the most recently ingested fragments based on server timestamps are included in the HLS media playlist. This means that even if fragments ingested in the past have producer timestamps with values now, they are not included in the HLS media playlist.</p> <p>The default is <code>SERVER_TIMESTAMP</code>.</p>
     #[serde(rename = "FragmentSelectorType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fragment_selector_type: Option<String>,
+    pub fragment_selector_type: Option<HLSFragmentSelectorType>,
     /// <p>The start and end of the timestamp range for the requested media.</p> <p>This value should not be present if <code>PlaybackType</code> is <code>LIVE</code>.</p>
     #[serde(rename = "TimestampRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_range: Option<HLSTimestampRange>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHLSFragmentSelectorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HLSFragmentSelectorType {
+    ProducerTimestamp,
+    ServerTimestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHLSFragmentSelectorType),
+}
+
+impl Default for HLSFragmentSelectorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HLSFragmentSelectorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HLSFragmentSelectorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HLSFragmentSelectorType {
+    fn into(self) -> String {
+        match self {
+            HLSFragmentSelectorType::ProducerTimestamp => "PRODUCER_TIMESTAMP".to_string(),
+            HLSFragmentSelectorType::ServerTimestamp => "SERVER_TIMESTAMP".to_string(),
+            HLSFragmentSelectorType::UnknownVariant(UnknownHLSFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HLSFragmentSelectorType {
+    fn into(self) -> &'a str {
+        match self {
+            HLSFragmentSelectorType::ProducerTimestamp => &"PRODUCER_TIMESTAMP",
+            HLSFragmentSelectorType::ServerTimestamp => &"SERVER_TIMESTAMP",
+            HLSFragmentSelectorType::UnknownVariant(UnknownHLSFragmentSelectorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HLSFragmentSelectorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRODUCER_TIMESTAMP" => HLSFragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => HLSFragmentSelectorType::ServerTimestamp,
+            _ => HLSFragmentSelectorType::UnknownVariant(UnknownHLSFragmentSelectorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HLSFragmentSelectorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRODUCER_TIMESTAMP" => HLSFragmentSelectorType::ProducerTimestamp,
+            "SERVER_TIMESTAMP" => HLSFragmentSelectorType::ServerTimestamp,
+            _ => HLSFragmentSelectorType::UnknownVariant(UnknownHLSFragmentSelectorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HLSFragmentSelectorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HLSFragmentSelectorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HLSFragmentSelectorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHLSPlaybackMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HLSPlaybackMode {
+    Live,
+    LiveReplay,
+    OnDemand,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHLSPlaybackMode),
+}
+
+impl Default for HLSPlaybackMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HLSPlaybackMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HLSPlaybackMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HLSPlaybackMode {
+    fn into(self) -> String {
+        match self {
+            HLSPlaybackMode::Live => "LIVE".to_string(),
+            HLSPlaybackMode::LiveReplay => "LIVE_REPLAY".to_string(),
+            HLSPlaybackMode::OnDemand => "ON_DEMAND".to_string(),
+            HLSPlaybackMode::UnknownVariant(UnknownHLSPlaybackMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HLSPlaybackMode {
+    fn into(self) -> &'a str {
+        match self {
+            HLSPlaybackMode::Live => &"LIVE",
+            HLSPlaybackMode::LiveReplay => &"LIVE_REPLAY",
+            HLSPlaybackMode::OnDemand => &"ON_DEMAND",
+            HLSPlaybackMode::UnknownVariant(UnknownHLSPlaybackMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HLSPlaybackMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "LIVE" => HLSPlaybackMode::Live,
+            "LIVE_REPLAY" => HLSPlaybackMode::LiveReplay,
+            "ON_DEMAND" => HLSPlaybackMode::OnDemand,
+            _ => HLSPlaybackMode::UnknownVariant(UnknownHLSPlaybackMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HLSPlaybackMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LIVE" => HLSPlaybackMode::Live,
+            "LIVE_REPLAY" => HLSPlaybackMode::LiveReplay,
+            "ON_DEMAND" => HLSPlaybackMode::OnDemand,
+            _ => HLSPlaybackMode::UnknownVariant(UnknownHLSPlaybackMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HLSPlaybackMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HLSPlaybackMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HLSPlaybackMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The start and end of the timestamp range for the requested media.</p> <p>This value should not be present if <code>PlaybackType</code> is <code>LIVE</code>.</p> <note> <p>The values in the <code>HLSTimestampRange</code> are inclusive. Fragments that begin before the start time but continue past it, or fragments that begin before the end time but continue past it, are included in the session.</p> </note></p>

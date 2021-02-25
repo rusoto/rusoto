@@ -150,7 +150,7 @@ pub struct CreateDetectorVersionRequest {
     /// <p>The rule execution mode for the rules included in the detector version.</p> <p>You can define and edit the rule mode at the detector version level, when it is in draft status.</p> <p>If you specify <code>FIRST_MATCHED</code>, Amazon Fraud Detector evaluates rules sequentially, first to last, stopping at the first matched rule. Amazon Fraud dectector then provides the outcomes for that single rule.</p> <p>If you specifiy <code>ALL_MATCHED</code>, Amazon Fraud Detector evaluates all rules and returns the outcomes for all matched rules. </p> <p>The default behavior is <code>FIRST_MATCHED</code>.</p>
     #[serde(rename = "ruleExecutionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_execution_mode: Option<String>,
+    pub rule_execution_mode: Option<RuleExecutionMode>,
     /// <p>The rules to include in the detector version.</p>
     #[serde(rename = "rules")]
     pub rules: Vec<Rule>,
@@ -174,7 +174,7 @@ pub struct CreateDetectorVersionResult {
     /// <p>The status of the detector version.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DetectorVersionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -192,7 +192,7 @@ pub struct CreateModelRequest {
     pub model_id: String,
     /// <p>The model type. </p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>A collection of key and value pairs.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -215,7 +215,7 @@ pub struct CreateModelVersionRequest {
     pub model_id: String,
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>A collection of key and value pairs.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -225,7 +225,7 @@ pub struct CreateModelVersionRequest {
     pub training_data_schema: TrainingDataSchema,
     /// <p>The training data source location in Amazon S3. </p>
     #[serde(rename = "trainingDataSource")]
-    pub training_data_source: String,
+    pub training_data_source: TrainingDataSourceEnum,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -238,7 +238,7 @@ pub struct CreateModelVersionResult {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
     /// <p>The model version number of the model version created.</p>
     #[serde(rename = "modelVersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,7 +264,7 @@ pub struct CreateRuleRequest {
     pub expression: String,
     /// <p>The language of the rule.</p>
     #[serde(rename = "language")]
-    pub language: String,
+    pub language: Language,
     /// <p>The outcome or outcomes returned when the rule expression matches.</p>
     #[serde(rename = "outcomes")]
     pub outcomes: Vec<String>,
@@ -291,10 +291,10 @@ pub struct CreateRuleResult {
 pub struct CreateVariableRequest {
     /// <p>The source of the data.</p>
     #[serde(rename = "dataSource")]
-    pub data_source: String,
+    pub data_source: DataSource,
     /// <p>The data type.</p>
     #[serde(rename = "dataType")]
-    pub data_type: String,
+    pub data_type: DataType,
     /// <p>The default value for the variable when no value is received.</p>
     #[serde(rename = "defaultValue")]
     pub default_value: String,
@@ -318,6 +318,221 @@ pub struct CreateVariableRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVariableResult {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSource {
+    Event,
+    ExternalModelScore,
+    ModelScore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSource),
+}
+
+impl Default for DataSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSource {
+    fn into(self) -> String {
+        match self {
+            DataSource::Event => "EVENT".to_string(),
+            DataSource::ExternalModelScore => "EXTERNAL_MODEL_SCORE".to_string(),
+            DataSource::ModelScore => "MODEL_SCORE".to_string(),
+            DataSource::UnknownVariant(UnknownDataSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSource {
+    fn into(self) -> &'a str {
+        match self {
+            DataSource::Event => &"EVENT",
+            DataSource::ExternalModelScore => &"EXTERNAL_MODEL_SCORE",
+            DataSource::ModelScore => &"MODEL_SCORE",
+            DataSource::UnknownVariant(UnknownDataSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "EVENT" => DataSource::Event,
+            "EXTERNAL_MODEL_SCORE" => DataSource::ExternalModelScore,
+            "MODEL_SCORE" => DataSource::ModelScore,
+            _ => DataSource::UnknownVariant(UnknownDataSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EVENT" => DataSource::Event,
+            "EXTERNAL_MODEL_SCORE" => DataSource::ExternalModelScore,
+            "MODEL_SCORE" => DataSource::ModelScore,
+            _ => DataSource::UnknownVariant(UnknownDataSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataType {
+    Boolean,
+    Float,
+    Integer,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataType),
+}
+
+impl Default for DataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataType {
+    fn into(self) -> String {
+        match self {
+            DataType::Boolean => "BOOLEAN".to_string(),
+            DataType::Float => "FLOAT".to_string(),
+            DataType::Integer => "INTEGER".to_string(),
+            DataType::String => "STRING".to_string(),
+            DataType::UnknownVariant(UnknownDataType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataType {
+    fn into(self) -> &'a str {
+        match self {
+            DataType::Boolean => &"BOOLEAN",
+            DataType::Float => &"FLOAT",
+            DataType::Integer => &"INTEGER",
+            DataType::String => &"STRING",
+            DataType::UnknownVariant(UnknownDataType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOOLEAN" => DataType::Boolean,
+            "FLOAT" => DataType::Float,
+            "INTEGER" => DataType::Integer,
+            "STRING" => DataType::String,
+            _ => DataType::UnknownVariant(UnknownDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOOLEAN" => DataType::Boolean,
+            "FLOAT" => DataType::Float,
+            "INTEGER" => DataType::Integer,
+            "STRING" => DataType::String,
+            _ => DataType::UnknownVariant(UnknownDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>The model training validation messages.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -431,7 +646,7 @@ pub struct DeleteModelRequest {
     pub model_id: String,
     /// <p>The model type of the model to delete.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -446,7 +661,7 @@ pub struct DeleteModelVersionRequest {
     pub model_id: String,
     /// <p>The model type of the model version to delete.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>The model version number of the model version to delete.</p>
     #[serde(rename = "modelVersionNumber")]
     pub model_version_number: String,
@@ -542,7 +757,7 @@ pub struct DescribeModelVersionsRequest {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
     /// <p>The model version number.</p>
     #[serde(rename = "modelVersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -596,6 +811,115 @@ pub struct Detector {
     pub last_updated_time: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetectorVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetectorVersionStatus {
+    Active,
+    Draft,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetectorVersionStatus),
+}
+
+impl Default for DetectorVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetectorVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetectorVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetectorVersionStatus {
+    fn into(self) -> String {
+        match self {
+            DetectorVersionStatus::Active => "ACTIVE".to_string(),
+            DetectorVersionStatus::Draft => "DRAFT".to_string(),
+            DetectorVersionStatus::Inactive => "INACTIVE".to_string(),
+            DetectorVersionStatus::UnknownVariant(UnknownDetectorVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetectorVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DetectorVersionStatus::Active => &"ACTIVE",
+            DetectorVersionStatus::Draft => &"DRAFT",
+            DetectorVersionStatus::Inactive => &"INACTIVE",
+            DetectorVersionStatus::UnknownVariant(UnknownDetectorVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DetectorVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DetectorVersionStatus::Active,
+            "DRAFT" => DetectorVersionStatus::Draft,
+            "INACTIVE" => DetectorVersionStatus::Inactive,
+            _ => DetectorVersionStatus::UnknownVariant(UnknownDetectorVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetectorVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DetectorVersionStatus::Active,
+            "DRAFT" => DetectorVersionStatus::Draft,
+            "INACTIVE" => DetectorVersionStatus::Inactive,
+            _ => DetectorVersionStatus::UnknownVariant(UnknownDetectorVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetectorVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DetectorVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetectorVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The summary of the detector version.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -615,7 +939,7 @@ pub struct DetectorVersionSummary {
     /// <p>The detector version status. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DetectorVersionStatus>,
 }
 
 /// <p>The entity details. </p>
@@ -736,11 +1060,11 @@ pub struct ExternalModel {
     /// <p>The Amazon Fraud Detector status for the external model endpoint</p>
     #[serde(rename = "modelEndpointStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_endpoint_status: Option<String>,
+    pub model_endpoint_status: Option<ModelEndpointStatus>,
     /// <p>The source of the model.</p>
     #[serde(rename = "modelSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_source: Option<String>,
+    pub model_source: Option<ModelSource>,
     /// <p>The output configuration.</p>
     #[serde(rename = "outputConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -840,7 +1164,7 @@ pub struct GetDetectorVersionResult {
     /// <p>The execution mode of the rule in the dectector</p> <p> <code>FIRST_MATCHED</code> indicates that Amazon Fraud Detector evaluates rules sequentially, first to last, stopping at the first matched rule. Amazon Fraud dectector then provides the outcomes for that single rule.</p> <p> <code>ALL_MATCHED</code> indicates that Amazon Fraud Detector evaluates all rules and returns the outcomes for all matched rules. You can define and edit the rule mode at the detector version level, when it is in draft status.</p>
     #[serde(rename = "ruleExecutionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_execution_mode: Option<String>,
+    pub rule_execution_mode: Option<RuleExecutionMode>,
     /// <p>The rules included in the detector version.</p>
     #[serde(rename = "rules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -848,7 +1172,7 @@ pub struct GetDetectorVersionResult {
     /// <p>The status of the detector version.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DetectorVersionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1063,7 +1387,7 @@ pub struct GetModelVersionRequest {
     pub model_id: String,
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>The model version number.</p>
     #[serde(rename = "modelVersionNumber")]
     pub model_version_number: String,
@@ -1087,7 +1411,7 @@ pub struct GetModelVersionResult {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
     /// <p>The model version number.</p>
     #[serde(rename = "modelVersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1103,7 +1427,7 @@ pub struct GetModelVersionResult {
     /// <p>The training data source.</p>
     #[serde(rename = "trainingDataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub training_data_source: Option<String>,
+    pub training_data_source: Option<TrainingDataSourceEnum>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1120,7 +1444,7 @@ pub struct GetModelsRequest {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
     /// <p>The next token for the subsequent request.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1281,6 +1605,101 @@ pub struct LabelSchema {
     pub label_mapper: ::std::collections::HashMap<String, Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLanguage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Language {
+    Detectorpl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLanguage),
+}
+
+impl Default for Language {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Language {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Language {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Language {
+    fn into(self) -> String {
+        match self {
+            Language::Detectorpl => "DETECTORPL".to_string(),
+            Language::UnknownVariant(UnknownLanguage { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Language {
+    fn into(self) -> &'a str {
+        match self {
+            Language::Detectorpl => &"DETECTORPL",
+            Language::UnknownVariant(UnknownLanguage { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Language {
+    fn from(name: &str) -> Self {
+        match name {
+            "DETECTORPL" => Language::Detectorpl,
+            _ => Language::UnknownVariant(UnknownLanguage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Language {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DETECTORPL" => Language::Detectorpl,
+            _ => Language::UnknownVariant(UnknownLanguage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Language {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Language {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Language {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1363,7 +1782,7 @@ pub struct Model {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
 }
 
 /// <p>A pre-formed Amazon SageMaker model input you can include if your detector version includes an imported Amazon SageMaker model endpoint with pass-through input configuration.</p>
@@ -1385,6 +1804,110 @@ pub struct ModelEndpointDataBlob {
     pub content_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelEndpointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelEndpointStatus {
+    Associated,
+    Dissociated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelEndpointStatus),
+}
+
+impl Default for ModelEndpointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelEndpointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelEndpointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelEndpointStatus {
+    fn into(self) -> String {
+        match self {
+            ModelEndpointStatus::Associated => "ASSOCIATED".to_string(),
+            ModelEndpointStatus::Dissociated => "DISSOCIATED".to_string(),
+            ModelEndpointStatus::UnknownVariant(UnknownModelEndpointStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelEndpointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelEndpointStatus::Associated => &"ASSOCIATED",
+            ModelEndpointStatus::Dissociated => &"DISSOCIATED",
+            ModelEndpointStatus::UnknownVariant(UnknownModelEndpointStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ModelEndpointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSOCIATED" => ModelEndpointStatus::Associated,
+            "DISSOCIATED" => ModelEndpointStatus::Dissociated,
+            _ => ModelEndpointStatus::UnknownVariant(UnknownModelEndpointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelEndpointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSOCIATED" => ModelEndpointStatus::Associated,
+            "DISSOCIATED" => ModelEndpointStatus::Dissociated,
+            _ => ModelEndpointStatus::UnknownVariant(UnknownModelEndpointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelEndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelEndpointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelEndpointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The Amazon SageMaker model input configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelInputConfiguration {
@@ -1399,7 +1922,7 @@ pub struct ModelInputConfiguration {
     /// <p> The format of the model input configuration. The format differs depending on if it is passed through to SageMaker or constructed by Amazon Fraud Detector.</p>
     #[serde(rename = "format")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: Option<ModelInputDataFormat>,
     /// <p> Template for constructing the JSON input-data sent to SageMaker. At event-evaluation, the placeholders for variable names in the template will be replaced with the variable values before being sent to SageMaker. </p>
     #[serde(rename = "jsonInputTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1407,6 +1930,110 @@ pub struct ModelInputConfiguration {
     /// <p>The event variables.</p>
     #[serde(rename = "useEventVariables")]
     pub use_event_variables: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelInputDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelInputDataFormat {
+    ApplicationJson,
+    TextCsv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelInputDataFormat),
+}
+
+impl Default for ModelInputDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelInputDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelInputDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelInputDataFormat {
+    fn into(self) -> String {
+        match self {
+            ModelInputDataFormat::ApplicationJson => "APPLICATION_JSON".to_string(),
+            ModelInputDataFormat::TextCsv => "TEXT_CSV".to_string(),
+            ModelInputDataFormat::UnknownVariant(UnknownModelInputDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelInputDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ModelInputDataFormat::ApplicationJson => &"APPLICATION_JSON",
+            ModelInputDataFormat::TextCsv => &"TEXT_CSV",
+            ModelInputDataFormat::UnknownVariant(UnknownModelInputDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelInputDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION_JSON" => ModelInputDataFormat::ApplicationJson,
+            "TEXT_CSV" => ModelInputDataFormat::TextCsv,
+            _ => ModelInputDataFormat::UnknownVariant(UnknownModelInputDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelInputDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION_JSON" => ModelInputDataFormat::ApplicationJson,
+            "TEXT_CSV" => ModelInputDataFormat::TextCsv,
+            _ => ModelInputDataFormat::UnknownVariant(UnknownModelInputDataFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelInputDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelInputDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelInputDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides the Amazon Sagemaker model output configuration.</p>
@@ -1418,11 +2045,115 @@ pub struct ModelOutputConfiguration {
     pub csv_index_to_variable_map: Option<::std::collections::HashMap<String, String>>,
     /// <p>The format of the model output configuration.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: ModelOutputDataFormat,
     /// <p>A map of JSON keys in response from SageMaker to the Amazon Fraud Detector variables. </p>
     #[serde(rename = "jsonKeyToVariableMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub json_key_to_variable_map: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelOutputDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelOutputDataFormat {
+    ApplicationJsonlines,
+    TextCsv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelOutputDataFormat),
+}
+
+impl Default for ModelOutputDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelOutputDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelOutputDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelOutputDataFormat {
+    fn into(self) -> String {
+        match self {
+            ModelOutputDataFormat::ApplicationJsonlines => "APPLICATION_JSONLINES".to_string(),
+            ModelOutputDataFormat::TextCsv => "TEXT_CSV".to_string(),
+            ModelOutputDataFormat::UnknownVariant(UnknownModelOutputDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelOutputDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ModelOutputDataFormat::ApplicationJsonlines => &"APPLICATION_JSONLINES",
+            ModelOutputDataFormat::TextCsv => &"TEXT_CSV",
+            ModelOutputDataFormat::UnknownVariant(UnknownModelOutputDataFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelOutputDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION_JSONLINES" => ModelOutputDataFormat::ApplicationJsonlines,
+            "TEXT_CSV" => ModelOutputDataFormat::TextCsv,
+            _ => ModelOutputDataFormat::UnknownVariant(UnknownModelOutputDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelOutputDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION_JSONLINES" => ModelOutputDataFormat::ApplicationJsonlines,
+            "TEXT_CSV" => ModelOutputDataFormat::TextCsv,
+            _ => ModelOutputDataFormat::UnknownVariant(UnknownModelOutputDataFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelOutputDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelOutputDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelOutputDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The fraud prediction scores.</p>
@@ -1439,6 +2170,196 @@ pub struct ModelScores {
     pub scores: Option<::std::collections::HashMap<String, f32>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelSource {
+    Sagemaker,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelSource),
+}
+
+impl Default for ModelSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelSource {
+    fn into(self) -> String {
+        match self {
+            ModelSource::Sagemaker => "SAGEMAKER".to_string(),
+            ModelSource::UnknownVariant(UnknownModelSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelSource {
+    fn into(self) -> &'a str {
+        match self {
+            ModelSource::Sagemaker => &"SAGEMAKER",
+            ModelSource::UnknownVariant(UnknownModelSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "SAGEMAKER" => ModelSource::Sagemaker,
+            _ => ModelSource::UnknownVariant(UnknownModelSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SAGEMAKER" => ModelSource::Sagemaker,
+            _ => ModelSource::UnknownVariant(UnknownModelSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelTypeEnum {
+    OnlineFraudInsights,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelTypeEnum),
+}
+
+impl Default for ModelTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ModelTypeEnum::OnlineFraudInsights => "ONLINE_FRAUD_INSIGHTS".to_string(),
+            ModelTypeEnum::UnknownVariant(UnknownModelTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ModelTypeEnum::OnlineFraudInsights => &"ONLINE_FRAUD_INSIGHTS",
+            ModelTypeEnum::UnknownVariant(UnknownModelTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "ONLINE_FRAUD_INSIGHTS" => ModelTypeEnum::OnlineFraudInsights,
+            _ => ModelTypeEnum::UnknownVariant(UnknownModelTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ONLINE_FRAUD_INSIGHTS" => ModelTypeEnum::OnlineFraudInsights,
+            _ => ModelTypeEnum::UnknownVariant(UnknownModelTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The model version.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelVersion {
@@ -1451,7 +2372,7 @@ pub struct ModelVersion {
     pub model_id: String,
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>The model version number.</p>
     #[serde(rename = "modelVersionNumber")]
     pub model_version_number: String,
@@ -1484,7 +2405,7 @@ pub struct ModelVersionDetail {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
     /// <p>The model version number.</p>
     #[serde(rename = "modelVersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1500,11 +2421,116 @@ pub struct ModelVersionDetail {
     /// <p>The model version training data source.</p>
     #[serde(rename = "trainingDataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub training_data_source: Option<String>,
+    pub training_data_source: Option<TrainingDataSourceEnum>,
     /// <p>The training results.</p>
     #[serde(rename = "trainingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_result: Option<TrainingResult>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelVersionStatus {
+    Active,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelVersionStatus),
+}
+
+impl Default for ModelVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelVersionStatus {
+    fn into(self) -> String {
+        match self {
+            ModelVersionStatus::Active => "ACTIVE".to_string(),
+            ModelVersionStatus::Inactive => "INACTIVE".to_string(),
+            ModelVersionStatus::UnknownVariant(UnknownModelVersionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelVersionStatus::Active => &"ACTIVE",
+            ModelVersionStatus::Inactive => &"INACTIVE",
+            ModelVersionStatus::UnknownVariant(UnknownModelVersionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ModelVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ModelVersionStatus::Active,
+            "INACTIVE" => ModelVersionStatus::Inactive,
+            _ => ModelVersionStatus::UnknownVariant(UnknownModelVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ModelVersionStatus::Active,
+            "INACTIVE" => ModelVersionStatus::Inactive,
+            _ => ModelVersionStatus::UnknownVariant(UnknownModelVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ModelVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The outcome.</p>
@@ -1620,10 +2646,10 @@ pub struct PutExternalModelRequest {
     pub model_endpoint: String,
     /// <p>The model endpoint’s status in Amazon Fraud Detector.</p>
     #[serde(rename = "modelEndpointStatus")]
-    pub model_endpoint_status: String,
+    pub model_endpoint_status: ModelEndpointStatus,
     /// <p>The source of the model.</p>
     #[serde(rename = "modelSource")]
-    pub model_source: String,
+    pub model_source: ModelSource,
     /// <p>The model endpoint output configuration.</p>
     #[serde(rename = "outputConfiguration")]
     pub output_configuration: ModelOutputConfiguration,
@@ -1730,7 +2756,7 @@ pub struct RuleDetail {
     /// <p>The rule language.</p>
     #[serde(rename = "language")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language: Option<String>,
+    pub language: Option<Language>,
     /// <p>Timestamp of the last time the rule was updated.</p>
     #[serde(rename = "lastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1747,6 +2773,110 @@ pub struct RuleDetail {
     #[serde(rename = "ruleVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuleExecutionMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RuleExecutionMode {
+    AllMatched,
+    FirstMatched,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuleExecutionMode),
+}
+
+impl Default for RuleExecutionMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RuleExecutionMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RuleExecutionMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RuleExecutionMode {
+    fn into(self) -> String {
+        match self {
+            RuleExecutionMode::AllMatched => "ALL_MATCHED".to_string(),
+            RuleExecutionMode::FirstMatched => "FIRST_MATCHED".to_string(),
+            RuleExecutionMode::UnknownVariant(UnknownRuleExecutionMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RuleExecutionMode {
+    fn into(self) -> &'a str {
+        match self {
+            RuleExecutionMode::AllMatched => &"ALL_MATCHED",
+            RuleExecutionMode::FirstMatched => &"FIRST_MATCHED",
+            RuleExecutionMode::UnknownVariant(UnknownRuleExecutionMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RuleExecutionMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_MATCHED" => RuleExecutionMode::AllMatched,
+            "FIRST_MATCHED" => RuleExecutionMode::FirstMatched,
+            _ => RuleExecutionMode::UnknownVariant(UnknownRuleExecutionMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RuleExecutionMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_MATCHED" => RuleExecutionMode::AllMatched,
+            "FIRST_MATCHED" => RuleExecutionMode::FirstMatched,
+            _ => RuleExecutionMode::UnknownVariant(UnknownRuleExecutionMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleExecutionMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RuleExecutionMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuleExecutionMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The rule results.</p>
@@ -1797,6 +2927,105 @@ pub struct TrainingDataSchema {
     /// <p>The training data schema variables.</p>
     #[serde(rename = "modelVariables")]
     pub model_variables: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingDataSourceEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingDataSourceEnum {
+    ExternalEvents,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingDataSourceEnum),
+}
+
+impl Default for TrainingDataSourceEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingDataSourceEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingDataSourceEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingDataSourceEnum {
+    fn into(self) -> String {
+        match self {
+            TrainingDataSourceEnum::ExternalEvents => "EXTERNAL_EVENTS".to_string(),
+            TrainingDataSourceEnum::UnknownVariant(UnknownTrainingDataSourceEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingDataSourceEnum {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingDataSourceEnum::ExternalEvents => &"EXTERNAL_EVENTS",
+            TrainingDataSourceEnum::UnknownVariant(UnknownTrainingDataSourceEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrainingDataSourceEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXTERNAL_EVENTS" => TrainingDataSourceEnum::ExternalEvents,
+            _ => TrainingDataSourceEnum::UnknownVariant(UnknownTrainingDataSourceEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrainingDataSourceEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXTERNAL_EVENTS" => TrainingDataSourceEnum::ExternalEvents,
+            _ => TrainingDataSourceEnum::UnknownVariant(UnknownTrainingDataSourceEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingDataSourceEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingDataSourceEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrainingDataSourceEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The training metric details.</p>
@@ -1883,7 +3112,7 @@ pub struct UpdateDetectorVersionRequest {
     /// <p>The rule execution mode to add to the detector.</p> <p>If you specify <code>FIRST_MATCHED</code>, Amazon Fraud Detector evaluates rules sequentially, first to last, stopping at the first matched rule. Amazon Fraud dectector then provides the outcomes for that single rule.</p> <p>If you specifiy <code>ALL_MATCHED</code>, Amazon Fraud Detector evaluates all rules and returns the outcomes for all matched rules. You can define and edit the rule mode at the detector version level, when it is in draft status.</p> <p>The default behavior is <code>FIRST_MATCHED</code>.</p>
     #[serde(rename = "ruleExecutionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_execution_mode: Option<String>,
+    pub rule_execution_mode: Option<RuleExecutionMode>,
     /// <p>The rules to include in the detector version.</p>
     #[serde(rename = "rules")]
     pub rules: Vec<Rule>,
@@ -1904,7 +3133,7 @@ pub struct UpdateDetectorVersionStatusRequest {
     pub detector_version_id: String,
     /// <p>The new status.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: DetectorVersionStatus,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1923,7 +3152,7 @@ pub struct UpdateModelRequest {
     pub model_id: String,
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1945,7 +3174,7 @@ pub struct UpdateModelVersionRequest {
     pub model_id: String,
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>A collection of key and value pairs.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1962,7 +3191,7 @@ pub struct UpdateModelVersionResult {
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_type: Option<String>,
+    pub model_type: Option<ModelTypeEnum>,
     /// <p>The model version number of the model version updated.</p>
     #[serde(rename = "modelVersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1981,13 +3210,13 @@ pub struct UpdateModelVersionStatusRequest {
     pub model_id: String,
     /// <p>The model type.</p>
     #[serde(rename = "modelType")]
-    pub model_type: String,
+    pub model_type: ModelTypeEnum,
     /// <p>The model version number.</p>
     #[serde(rename = "modelVersionNumber")]
     pub model_version_number: String,
     /// <p>The model version status.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: ModelVersionStatus,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2021,7 +3250,7 @@ pub struct UpdateRuleVersionRequest {
     pub expression: String,
     /// <p>The language.</p>
     #[serde(rename = "language")]
-    pub language: String,
+    pub language: Language,
     /// <p>The outcomes.</p>
     #[serde(rename = "outcomes")]
     pub outcomes: Vec<String>,
@@ -2082,11 +3311,11 @@ pub struct Variable {
     /// <p>The data source of the variable.</p>
     #[serde(rename = "dataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source: Option<String>,
+    pub data_source: Option<DataSource>,
     /// <p>The data type of the variable. For more information see <a href="https://docs.aws.amazon.com/frauddetector/latest/ug/create-a-variable.html#variable-types">Variable types</a>.</p>
     #[serde(rename = "dataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_type: Option<String>,
+    pub data_type: Option<DataType>,
     /// <p>The default value of the variable.</p>
     #[serde(rename = "defaultValue")]
     #[serde(skip_serializing_if = "Option::is_none")]

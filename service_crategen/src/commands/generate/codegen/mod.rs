@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::fs::File;
 use std::io::{BufWriter, Write};
@@ -256,6 +257,9 @@ pub fn get_rust_type(
             ShapeType::Double => "f64".into(),
             ShapeType::Float => "f32".into(),
             ShapeType::Integer | ShapeType::Long => "i64".into(),
+            ShapeType::String if shape.shape_enum.is_some() => {
+                mutate_type_name(service, shape_name)
+            }
             ShapeType::String => "String".into(),
             ShapeType::Timestamp => for_timestamps.into(),
             ShapeType::List => format!(
@@ -470,14 +474,14 @@ where
         let deserialized = deserialized_types.contains(&type_name);
         let serialized = serialized_types.contains(&type_name);
 
-        if shape.shape_type == ShapeType::Structure {
+        if shape.shape_type == ShapeType::Structure || shape.shape_enum.is_some() {
             // If botocore includes documentation, clean it up a bit and use it
             if let Some(ref docs) = shape.documentation {
                 writeln!(writer, "{}", crate::doco::Item(docs))?;
             }
 
             // generate a rust type for the shape
-            if type_name != "String" {
+            if type_name != "String" && shape.shape_type == ShapeType::Structure {
                 let generated = if shape.eventstream() {
                     generate_event_enum(service, &type_name, shape, protocol_generator)
                 } else {
@@ -492,6 +496,15 @@ where
                     )
                 };
                 writeln!(writer, "{}", generated)?;
+            }
+
+            if let Some(ref variants) = shape.shape_enum {
+                if variants.len() > 0 {
+                    let generated = generate_enum(&type_name, variants, serialized &&
+                        protocol_generator.serialize_trait().is_some(), deserialized &&
+                        protocol_generator.deserialize_trait().is_some());
+                    writeln!(writer, "{}", generated)?;
+                }
             }
         }
 
@@ -523,6 +536,163 @@ where
         }
     }
     Ok(())
+}
+
+fn get_variant_name(variant: &str) -> String {
+    // There are a few enum types that use numbers. These are not possible to turn into
+    // enums normally due to them not meeting naming conventions, so we replace '.' with
+    // an underscore as well as prepend one to make them valid identifiers.
+    if variant.parse::<f32>().is_ok() || variant.parse::<u32>().is_ok() {
+        format!("_{}", variant.replace(".", "_"))
+    } else if variant.to_lowercase() == "self" {
+        "AwsSelf".to_owned()
+    } else {
+        variant
+            .replace(|c| !char::is_alphanumeric(c), "_")
+            .to_pascal_case()
+    }
+}
+
+fn generate_enum(name: &str, variants: &Vec<String>, serialized: bool, deserialized: bool) -> String {
+    let variant_names: BTreeMap<String, String> = variants
+        .iter()
+        .map(|v| (v.clone(), get_variant_name(&v)))
+        .collect();
+
+        let seralize_cfg = if serialized {
+            ""
+        } else if deserialized {
+                "#[cfg(any(test, feature = \"serialize_structs\"))]"
+            }  else {
+                "#[cfg(feature = \"serialize_structs\")]"
+            };
+
+        let deseralize_cfg = if deserialized {
+            ""
+        }  else {
+            "#[cfg(feature = \"deserialize_structs\")]"
+        };
+
+        format!(
+        "
+
+        #[derive(Clone,Debug,Eq,PartialEq,Hash)]
+        pub struct Unknown{name}{{name: String}}
+
+        #[allow(non_camel_case_types)]
+        #[derive(Clone,Debug,Eq,PartialEq,Hash)]
+        #[non_exhaustive]
+        pub enum {name} {{
+            {variants},
+            #[doc(hidden)]
+            UnknownVariant(Unknown{name})
+        }}
+
+        impl Default for {name} {{
+            fn default() -> Self {{
+                \"\".into()
+            }}
+        }}
+
+        impl fmt::Display for {name} {{
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{
+                f.write_str(self.into())
+            }}
+        }}
+
+        impl rusoto_core::param::ToParam for {name} {{
+            fn to_param(&self) -> String {{
+                self.to_string()
+            }}
+        }}
+
+        impl Into<String> for {name} {{
+            fn into(self) -> String {{
+                match self {{
+                    {matches},
+                    {name}::UnknownVariant(Unknown{name}{{name: original}}) => original
+                }}
+            }}
+        }}
+
+        impl<'a> Into<&'a str> for &'a {name} {{
+            fn into(self) -> &'a str {{
+                match self {{
+                    {str_matches},
+                    {name}::UnknownVariant(Unknown{name}{{name: original}}) => original
+                }}
+            }}
+        }}
+
+        impl From<&str> for {name} {{
+            fn from(name: &str) -> Self {{
+                match name {{
+                    {reverse_matches},
+                    _ => {name}::UnknownVariant(Unknown{name}{{name: name.to_owned()}})
+                }}
+            }}
+        }}
+
+        impl From<String> for {name} {{
+            fn from(name: String) -> Self {{
+                match &*name {{
+                    {reverse_matches},
+                    _ => {name}::UnknownVariant(Unknown{name}{{name}})
+                }}
+            }}
+        }}
+
+        impl ::std::str::FromStr for {name} {{
+            type Err = ();
+            fn from_str(s: &str) -> Result<Self, Self::Err> {{
+                Ok(s.into())
+            }}
+        }}
+
+        {seralize_cfg}
+        impl Serialize for {name} {{
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: serde::Serializer,
+            {{
+                serializer.serialize_str(self.into())
+            }}
+        }}
+
+        {deseralize_cfg}
+        impl<'de> Deserialize<'de> for {name} {{
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {{
+                Ok(String::deserialize(deserializer)?.into())
+            }}
+        }}
+        ",
+        name = name,
+        variants = variant_names
+            .values()
+            .cloned()
+            .collect::<Vec<_>>()
+            .join(",\n"),
+        matches = variant_names
+            .iter()
+            .map(|(s, v)| format!("{}::{} => \"{}\".to_string()", name, v, s))
+            .collect::<Vec<_>>()
+            .join(",\n"),
+        str_matches = variant_names
+            .iter()
+            .map(|(s, v)| format!("{}::{} => &\"{}\"", name, v, s))
+            .collect::<Vec<_>>()
+            .join(",\n"),
+        reverse_matches = variant_names
+            .iter()
+            .map(|(s, v)| format!("\"{}\" => {}::{}", s, name, v))
+            .collect::<Vec<_>>()
+            .join(",\n"),
+        seralize_cfg = seralize_cfg,
+        deseralize_cfg = deseralize_cfg,
+    )
 }
 
 fn generate_event_enum<P>(

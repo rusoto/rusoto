@@ -35,7 +35,7 @@ pub struct Account {
     /// <p>The Amazon Chime account type. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p>
     #[serde(rename = "AccountType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<String>,
+    pub account_type: Option<AccountType>,
     /// <p>The AWS account ID.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
@@ -46,7 +46,7 @@ pub struct Account {
     /// <p>The default license for the Amazon Chime account.</p>
     #[serde(rename = "DefaultLicense")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_license: Option<String>,
+    pub default_license: Option<License>,
     /// <p>The Amazon Chime account name.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -57,7 +57,7 @@ pub struct Account {
     /// <p>Supported licenses for the Amazon Chime account.</p>
     #[serde(rename = "SupportedLicenses")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_licenses: Option<Vec<String>>,
+    pub supported_licenses: Option<Vec<License>>,
 }
 
 /// <p>Settings related to the Amazon Chime account. This includes settings that start or stop remote control of shared screens, or start or stop the dial-out option in the Amazon Chime web application. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
@@ -71,6 +71,117 @@ pub struct AccountSettings {
     #[serde(rename = "EnableDialOut")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_dial_out: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountType {
+    EnterpriseDirectory,
+    EnterpriseLWA,
+    EnterpriseOIDC,
+    Team,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountType),
+}
+
+impl Default for AccountType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountType {
+    fn into(self) -> String {
+        match self {
+            AccountType::EnterpriseDirectory => "EnterpriseDirectory".to_string(),
+            AccountType::EnterpriseLWA => "EnterpriseLWA".to_string(),
+            AccountType::EnterpriseOIDC => "EnterpriseOIDC".to_string(),
+            AccountType::Team => "Team".to_string(),
+            AccountType::UnknownVariant(UnknownAccountType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountType {
+    fn into(self) -> &'a str {
+        match self {
+            AccountType::EnterpriseDirectory => &"EnterpriseDirectory",
+            AccountType::EnterpriseLWA => &"EnterpriseLWA",
+            AccountType::EnterpriseOIDC => &"EnterpriseOIDC",
+            AccountType::Team => &"Team",
+            AccountType::UnknownVariant(UnknownAccountType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccountType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EnterpriseDirectory" => AccountType::EnterpriseDirectory,
+            "EnterpriseLWA" => AccountType::EnterpriseLWA,
+            "EnterpriseOIDC" => AccountType::EnterpriseOIDC,
+            "Team" => AccountType::Team,
+            _ => AccountType::UnknownVariant(UnknownAccountType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EnterpriseDirectory" => AccountType::EnterpriseDirectory,
+            "EnterpriseLWA" => AccountType::EnterpriseLWA,
+            "EnterpriseOIDC" => AccountType::EnterpriseOIDC,
+            "Team" => AccountType::Team,
+            _ => AccountType::UnknownVariant(UnknownAccountType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AccountType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccountType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Alexa for Business metadata associated with an Amazon Chime user, used to integrate Alexa for Business with a device.</p>
@@ -140,6 +251,110 @@ pub struct AppInstanceAdminSummary {
     pub admin: Option<Identity>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppInstanceDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppInstanceDataType {
+    Channel,
+    ChannelMessage,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppInstanceDataType),
+}
+
+impl Default for AppInstanceDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppInstanceDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppInstanceDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppInstanceDataType {
+    fn into(self) -> String {
+        match self {
+            AppInstanceDataType::Channel => "Channel".to_string(),
+            AppInstanceDataType::ChannelMessage => "ChannelMessage".to_string(),
+            AppInstanceDataType::UnknownVariant(UnknownAppInstanceDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppInstanceDataType {
+    fn into(self) -> &'a str {
+        match self {
+            AppInstanceDataType::Channel => &"Channel",
+            AppInstanceDataType::ChannelMessage => &"ChannelMessage",
+            AppInstanceDataType::UnknownVariant(UnknownAppInstanceDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AppInstanceDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Channel" => AppInstanceDataType::Channel,
+            "ChannelMessage" => AppInstanceDataType::ChannelMessage,
+            _ => AppInstanceDataType::UnknownVariant(UnknownAppInstanceDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppInstanceDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Channel" => AppInstanceDataType::Channel,
+            "ChannelMessage" => AppInstanceDataType::ChannelMessage,
+            _ => AppInstanceDataType::UnknownVariant(UnknownAppInstanceDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppInstanceDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppInstanceDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppInstanceDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The length of time in days to retain messages.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AppInstanceRetentionSettings {
@@ -154,7 +369,7 @@ pub struct AppInstanceRetentionSettings {
 pub struct AppInstanceStreamingConfiguration {
     /// <p>The data type of the app instance.</p>
     #[serde(rename = "AppInstanceDataType")]
-    pub app_instance_data_type: String,
+    pub app_instance_data_type: AppInstanceDataType,
     /// <p>The resource ARN.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -215,7 +430,7 @@ pub struct AppInstanceUserMembershipSummary {
     /// <p>The type of channel summary, </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelMembershipType>,
 }
 
 /// <p>The app instance user summary data .</p>
@@ -491,7 +706,7 @@ pub struct Bot {
     /// <p>The bot type.</p>
     #[serde(rename = "BotType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bot_type: Option<String>,
+    pub bot_type: Option<BotType>,
     /// <p>The bot creation timestamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -518,6 +733,102 @@ pub struct Bot {
     pub user_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBotType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BotType {
+    ChatBot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBotType),
+}
+
+impl Default for BotType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BotType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BotType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BotType {
+    fn into(self) -> String {
+        match self {
+            BotType::ChatBot => "ChatBot".to_string(),
+            BotType::UnknownVariant(UnknownBotType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BotType {
+    fn into(self) -> &'a str {
+        match self {
+            BotType::ChatBot => &"ChatBot",
+            BotType::UnknownVariant(UnknownBotType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BotType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ChatBot" => BotType::ChatBot,
+            _ => BotType::UnknownVariant(UnknownBotType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BotType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ChatBot" => BotType::ChatBot,
+            _ => BotType::UnknownVariant(UnknownBotType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BotType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BotType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BotType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The Amazon Chime Business Calling settings for the administrator's AWS account. Includes any Amazon S3 buckets designated for storing call detail records.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BusinessCallingSettings {
@@ -525,6 +836,221 @@ pub struct BusinessCallingSettings {
     #[serde(rename = "CdrBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdr_bucket: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCallingNameStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CallingNameStatus {
+    Unassigned,
+    UpdateFailed,
+    UpdateInProgress,
+    UpdateSucceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCallingNameStatus),
+}
+
+impl Default for CallingNameStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CallingNameStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CallingNameStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CallingNameStatus {
+    fn into(self) -> String {
+        match self {
+            CallingNameStatus::Unassigned => "Unassigned".to_string(),
+            CallingNameStatus::UpdateFailed => "UpdateFailed".to_string(),
+            CallingNameStatus::UpdateInProgress => "UpdateInProgress".to_string(),
+            CallingNameStatus::UpdateSucceeded => "UpdateSucceeded".to_string(),
+            CallingNameStatus::UnknownVariant(UnknownCallingNameStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CallingNameStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CallingNameStatus::Unassigned => &"Unassigned",
+            CallingNameStatus::UpdateFailed => &"UpdateFailed",
+            CallingNameStatus::UpdateInProgress => &"UpdateInProgress",
+            CallingNameStatus::UpdateSucceeded => &"UpdateSucceeded",
+            CallingNameStatus::UnknownVariant(UnknownCallingNameStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CallingNameStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Unassigned" => CallingNameStatus::Unassigned,
+            "UpdateFailed" => CallingNameStatus::UpdateFailed,
+            "UpdateInProgress" => CallingNameStatus::UpdateInProgress,
+            "UpdateSucceeded" => CallingNameStatus::UpdateSucceeded,
+            _ => CallingNameStatus::UnknownVariant(UnknownCallingNameStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CallingNameStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Unassigned" => CallingNameStatus::Unassigned,
+            "UpdateFailed" => CallingNameStatus::UpdateFailed,
+            "UpdateInProgress" => CallingNameStatus::UpdateInProgress,
+            "UpdateSucceeded" => CallingNameStatus::UpdateSucceeded,
+            _ => CallingNameStatus::UnknownVariant(UnknownCallingNameStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CallingNameStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CallingNameStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CallingNameStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Capability {
+    Sms,
+    Voice,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapability),
+}
+
+impl Default for Capability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Capability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Capability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Capability {
+    fn into(self) -> String {
+        match self {
+            Capability::Sms => "SMS".to_string(),
+            Capability::Voice => "Voice".to_string(),
+            Capability::UnknownVariant(UnknownCapability { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Capability {
+    fn into(self) -> &'a str {
+        match self {
+            Capability::Sms => &"SMS",
+            Capability::Voice => &"Voice",
+            Capability::UnknownVariant(UnknownCapability { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Capability {
+    fn from(name: &str) -> Self {
+        match name {
+            "SMS" => Capability::Sms,
+            "Voice" => Capability::Voice,
+            _ => Capability::UnknownVariant(UnknownCapability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Capability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SMS" => Capability::Sms,
+            "Voice" => Capability::Voice,
+            _ => Capability::UnknownVariant(UnknownCapability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Capability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Capability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Capability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Creates a channel.</p>
@@ -558,7 +1084,7 @@ pub struct Channel {
     /// <p>The mode of the channel.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ChannelMode>,
     /// <p>The name of the channel.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -566,7 +1092,7 @@ pub struct Channel {
     /// <p>The channel's privacy setting, <code>PUBLIC</code> or <code>HIDDEN</code>.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub privacy: Option<String>,
+    pub privacy: Option<ChannelPrivacy>,
 }
 
 /// <p>Bans a user from a channel.</p>
@@ -628,7 +1154,7 @@ pub struct ChannelMembership {
     /// <p>The membership type set for the channel member.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelMembershipType>,
 }
 
 /// <p>Returns the channel membership summary data for an app instance.</p>
@@ -652,6 +1178,110 @@ pub struct ChannelMembershipSummary {
     #[serde(rename = "Member")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member: Option<Identity>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelMembershipType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelMembershipType {
+    Default,
+    Hidden,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelMembershipType),
+}
+
+impl Default for ChannelMembershipType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelMembershipType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelMembershipType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelMembershipType {
+    fn into(self) -> String {
+        match self {
+            ChannelMembershipType::Default => "DEFAULT".to_string(),
+            ChannelMembershipType::Hidden => "HIDDEN".to_string(),
+            ChannelMembershipType::UnknownVariant(UnknownChannelMembershipType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelMembershipType {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelMembershipType::Default => &"DEFAULT",
+            ChannelMembershipType::Hidden => &"HIDDEN",
+            ChannelMembershipType::UnknownVariant(UnknownChannelMembershipType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelMembershipType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => ChannelMembershipType::Default,
+            "HIDDEN" => ChannelMembershipType::Hidden,
+            _ => ChannelMembershipType::UnknownVariant(UnknownChannelMembershipType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelMembershipType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => ChannelMembershipType::Default,
+            "HIDDEN" => ChannelMembershipType::Hidden,
+            _ => ChannelMembershipType::UnknownVariant(UnknownChannelMembershipType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelMembershipType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelMembershipType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelMembershipType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Creates a message in a channel.</p>
@@ -688,7 +1318,7 @@ pub struct ChannelMessage {
     pub metadata: Option<String>,
     #[serde(rename = "Persistence")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub persistence: Option<String>,
+    pub persistence: Option<ChannelMessagePersistenceType>,
     /// <p>Hides the content of a message. The message still exists on the back end, but this action only returns metadata.</p>
     #[serde(rename = "Redacted")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -700,7 +1330,115 @@ pub struct ChannelMessage {
     /// <p>The message type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelMessageType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelMessagePersistenceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelMessagePersistenceType {
+    NonPersistent,
+    Persistent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelMessagePersistenceType),
+}
+
+impl Default for ChannelMessagePersistenceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelMessagePersistenceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelMessagePersistenceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelMessagePersistenceType {
+    fn into(self) -> String {
+        match self {
+            ChannelMessagePersistenceType::NonPersistent => "NON_PERSISTENT".to_string(),
+            ChannelMessagePersistenceType::Persistent => "PERSISTENT".to_string(),
+            ChannelMessagePersistenceType::UnknownVariant(
+                UnknownChannelMessagePersistenceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelMessagePersistenceType {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelMessagePersistenceType::NonPersistent => &"NON_PERSISTENT",
+            ChannelMessagePersistenceType::Persistent => &"PERSISTENT",
+            ChannelMessagePersistenceType::UnknownVariant(
+                UnknownChannelMessagePersistenceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelMessagePersistenceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NON_PERSISTENT" => ChannelMessagePersistenceType::NonPersistent,
+            "PERSISTENT" => ChannelMessagePersistenceType::Persistent,
+            _ => ChannelMessagePersistenceType::UnknownVariant(
+                UnknownChannelMessagePersistenceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ChannelMessagePersistenceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NON_PERSISTENT" => ChannelMessagePersistenceType::NonPersistent,
+            "PERSISTENT" => ChannelMessagePersistenceType::Persistent,
+            _ => ChannelMessagePersistenceType::UnknownVariant(
+                UnknownChannelMessagePersistenceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelMessagePersistenceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelMessagePersistenceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelMessagePersistenceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A summary of the messages in a channel.</p>
@@ -740,7 +1478,211 @@ pub struct ChannelMessageSummary {
     /// <p>The type of message summary.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelMessageType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelMessageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelMessageType {
+    Control,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelMessageType),
+}
+
+impl Default for ChannelMessageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelMessageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelMessageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelMessageType {
+    fn into(self) -> String {
+        match self {
+            ChannelMessageType::Control => "CONTROL".to_string(),
+            ChannelMessageType::Standard => "STANDARD".to_string(),
+            ChannelMessageType::UnknownVariant(UnknownChannelMessageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelMessageType {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelMessageType::Control => &"CONTROL",
+            ChannelMessageType::Standard => &"STANDARD",
+            ChannelMessageType::UnknownVariant(UnknownChannelMessageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ChannelMessageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTROL" => ChannelMessageType::Control,
+            "STANDARD" => ChannelMessageType::Standard,
+            _ => ChannelMessageType::UnknownVariant(UnknownChannelMessageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelMessageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTROL" => ChannelMessageType::Control,
+            "STANDARD" => ChannelMessageType::Standard,
+            _ => ChannelMessageType::UnknownVariant(UnknownChannelMessageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelMessageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelMessageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelMessageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelMode {
+    Restricted,
+    Unrestricted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelMode),
+}
+
+impl Default for ChannelMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelMode {
+    fn into(self) -> String {
+        match self {
+            ChannelMode::Restricted => "RESTRICTED".to_string(),
+            ChannelMode::Unrestricted => "UNRESTRICTED".to_string(),
+            ChannelMode::UnknownVariant(UnknownChannelMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelMode {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelMode::Restricted => &"RESTRICTED",
+            ChannelMode::Unrestricted => &"UNRESTRICTED",
+            ChannelMode::UnknownVariant(UnknownChannelMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "RESTRICTED" => ChannelMode::Restricted,
+            "UNRESTRICTED" => ChannelMode::Unrestricted,
+            _ => ChannelMode::UnknownVariant(UnknownChannelMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RESTRICTED" => ChannelMode::Restricted,
+            "UNRESTRICTED" => ChannelMode::Unrestricted,
+            _ => ChannelMode::UnknownVariant(UnknownChannelMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns the summary data for a moderated channel.</p>
@@ -784,6 +1726,106 @@ pub struct ChannelModeratorSummary {
     pub moderator: Option<Identity>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelPrivacy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelPrivacy {
+    Private,
+    Public,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelPrivacy),
+}
+
+impl Default for ChannelPrivacy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelPrivacy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelPrivacy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelPrivacy {
+    fn into(self) -> String {
+        match self {
+            ChannelPrivacy::Private => "PRIVATE".to_string(),
+            ChannelPrivacy::Public => "PUBLIC".to_string(),
+            ChannelPrivacy::UnknownVariant(UnknownChannelPrivacy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelPrivacy {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelPrivacy::Private => &"PRIVATE",
+            ChannelPrivacy::Public => &"PUBLIC",
+            ChannelPrivacy::UnknownVariant(UnknownChannelPrivacy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelPrivacy {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRIVATE" => ChannelPrivacy::Private,
+            "PUBLIC" => ChannelPrivacy::Public,
+            _ => ChannelPrivacy::UnknownVariant(UnknownChannelPrivacy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelPrivacy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRIVATE" => ChannelPrivacy::Private,
+            "PUBLIC" => ChannelPrivacy::Public,
+            _ => ChannelPrivacy::UnknownVariant(UnknownChannelPrivacy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelPrivacy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelPrivacy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelPrivacy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The retention settings for a channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ChannelRetentionSettings {
@@ -812,7 +1854,7 @@ pub struct ChannelSummary {
     /// <p>The summary mode of the channel.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ChannelMode>,
     /// <p>The parameter of the action.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -820,7 +1862,7 @@ pub struct ChannelSummary {
     /// <p>The privacy setting of the channel being summarized, <code>PUBLIC</code> or <code>HIDDEN</code>.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub privacy: Option<String>,
+    pub privacy: Option<ChannelPrivacy>,
 }
 
 /// <p>The retention settings that determine how long to retain chat conversation messages for an Amazon Chime Enterprise account.</p>
@@ -1040,7 +2082,7 @@ pub struct CreateChannelMembershipRequest {
     pub member_arn: String,
     /// <p>The membership type of a user, <code>DEFAULT</code> or <code>HIDDEN</code>. Default members are always returned as part of <code>ListChannelMemberships</code>. Hidden members are only returned if the type filter in <code>ListChannelMemberships</code> equals <code>HIDDEN</code>. Otherwise hidden members are not returned. This is only supported by moderators.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ChannelMembershipType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1096,14 +2138,14 @@ pub struct CreateChannelRequest {
     /// <p>The channel mode: <code>UNRESTRICTED</code> or <code>RESTRICTED</code>. Administrators, moderators, and channel members can add themselves and other members to unrestricted channels. Only administrators and moderators can add members to restricted channels.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ChannelMode>,
     /// <p>The name of the channel.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The channel's privacy level: <code>PUBLIC</code> or <code>PRIVATE</code>. Private channels aren't discoverable by users outside the channel. Public channels are discoverable by anyone in the app instance.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub privacy: Option<String>,
+    pub privacy: Option<ChannelPrivacy>,
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1236,7 +2278,7 @@ pub struct CreatePhoneNumberOrderRequest {
     pub e164_phone_numbers: Vec<String>,
     /// <p>The phone number product type.</p>
     #[serde(rename = "ProductType")]
-    pub product_type: String,
+    pub product_type: PhoneNumberProductType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1253,7 +2295,7 @@ pub struct CreatePhoneNumberOrderResponse {
 pub struct CreateProxySessionRequest {
     /// <p>The proxy session capabilities.</p>
     #[serde(rename = "Capabilities")]
-    pub capabilities: Vec<String>,
+    pub capabilities: Vec<Capability>,
     /// <p>The number of minutes allowed for the proxy session.</p>
     #[serde(rename = "ExpiryMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1261,7 +2303,7 @@ pub struct CreateProxySessionRequest {
     /// <p>The preference for matching the country or area code of the proxy phone number with that of the first participant.</p>
     #[serde(rename = "GeoMatchLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub geo_match_level: Option<String>,
+    pub geo_match_level: Option<GeoMatchLevel>,
     /// <p>The country and area code for the proxy phone number.</p>
     #[serde(rename = "GeoMatchParams")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1273,7 +2315,7 @@ pub struct CreateProxySessionRequest {
     /// <p>The preference for proxy phone number reuse, or stickiness, between the same participants across sessions.</p>
     #[serde(rename = "NumberSelectionBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub number_selection_behavior: Option<String>,
+    pub number_selection_behavior: Option<NumberSelectionBehavior>,
     /// <p>The participant phone numbers.</p>
     #[serde(rename = "ParticipantPhoneNumbers")]
     pub participant_phone_numbers: Vec<String>,
@@ -1303,7 +2345,7 @@ pub struct CreateRoomMembershipRequest {
     /// <p>The role of the member.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<RoomMembershipRole>,
     /// <p>The room ID.</p>
     #[serde(rename = "RoomId")]
     pub room_id: String,
@@ -1406,7 +2448,7 @@ pub struct CreateSipRuleRequest {
     pub target_applications: Vec<SipRuleTargetApplication>,
     /// <p>The type of trigger whose value is assigned to the SIP rule in <code>TriggerValue</code>. Allowed trigger values are <code>RequestUriHostname</code> and <code>ToPhoneNumber</code>.</p>
     #[serde(rename = "TriggerType")]
-    pub trigger_type: String,
+    pub trigger_type: SipRuleTriggerType,
     /// <p>If <code>TriggerType</code> is <code>RequestUriHostname</code> then the value can be the outbound host name of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code> then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered if the SIP application requests a host name, or a If <code>TriggerType</code> is <code>RequestUriHostname</code>, then the value can be the outbound hostname of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code>, then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered if the SIP application requests a host name, or a <code>ToPhoneNumber</code> value matches the incoming SIP request.</p>
     #[serde(rename = "TriggerValue")]
     pub trigger_value: String,
@@ -1434,7 +2476,7 @@ pub struct CreateUserRequest {
     /// <p>The user type.</p>
     #[serde(rename = "UserType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_type: Option<String>,
+    pub user_type: Option<UserType>,
     /// <p>The user name.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1476,7 +2518,7 @@ pub struct CreateVoiceConnectorRequest {
     /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default value: <code>us-east-1</code>.</p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub aws_region: Option<String>,
+    pub aws_region: Option<VoiceConnectorAwsRegion>,
     /// <p>The name of the Amazon Chime Voice Connector.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -2020,6 +3062,112 @@ pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSigninDelegateGroupsFromAccountResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEmailStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EmailStatus {
+    Failed,
+    NotSent,
+    Sent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEmailStatus),
+}
+
+impl Default for EmailStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EmailStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EmailStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EmailStatus {
+    fn into(self) -> String {
+        match self {
+            EmailStatus::Failed => "Failed".to_string(),
+            EmailStatus::NotSent => "NotSent".to_string(),
+            EmailStatus::Sent => "Sent".to_string(),
+            EmailStatus::UnknownVariant(UnknownEmailStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EmailStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EmailStatus::Failed => &"Failed",
+            EmailStatus::NotSent => &"NotSent",
+            EmailStatus::Sent => &"Sent",
+            EmailStatus::UnknownVariant(UnknownEmailStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EmailStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => EmailStatus::Failed,
+            "NotSent" => EmailStatus::NotSent,
+            "Sent" => EmailStatus::Sent,
+            _ => EmailStatus::UnknownVariant(UnknownEmailStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EmailStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => EmailStatus::Failed,
+            "NotSent" => EmailStatus::NotSent,
+            "Sent" => EmailStatus::Sent,
+            _ => EmailStatus::UnknownVariant(UnknownEmailStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmailStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EmailStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EmailStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The emergency calling configuration details associated with an Amazon Chime Voice Connector.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmergencyCallingConfiguration {
@@ -2027,6 +3175,180 @@ pub struct EmergencyCallingConfiguration {
     #[serde(rename = "DNIS")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dnis: Option<Vec<DNISEmergencyCallingConfiguration>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    AccessDenied,
+    BadRequest,
+    Conflict,
+    Forbidden,
+    NotFound,
+    PhoneNumberAssociationsExist,
+    PreconditionFailed,
+    ResourceLimitExceeded,
+    ServiceFailure,
+    ServiceUnavailable,
+    Throttled,
+    Throttling,
+    Unauthorized,
+    Unprocessable,
+    VoiceConnectorGroupAssociationsExist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::AccessDenied => "AccessDenied".to_string(),
+            ErrorCode::BadRequest => "BadRequest".to_string(),
+            ErrorCode::Conflict => "Conflict".to_string(),
+            ErrorCode::Forbidden => "Forbidden".to_string(),
+            ErrorCode::NotFound => "NotFound".to_string(),
+            ErrorCode::PhoneNumberAssociationsExist => "PhoneNumberAssociationsExist".to_string(),
+            ErrorCode::PreconditionFailed => "PreconditionFailed".to_string(),
+            ErrorCode::ResourceLimitExceeded => "ResourceLimitExceeded".to_string(),
+            ErrorCode::ServiceFailure => "ServiceFailure".to_string(),
+            ErrorCode::ServiceUnavailable => "ServiceUnavailable".to_string(),
+            ErrorCode::Throttled => "Throttled".to_string(),
+            ErrorCode::Throttling => "Throttling".to_string(),
+            ErrorCode::Unauthorized => "Unauthorized".to_string(),
+            ErrorCode::Unprocessable => "Unprocessable".to_string(),
+            ErrorCode::VoiceConnectorGroupAssociationsExist => {
+                "VoiceConnectorGroupAssociationsExist".to_string()
+            }
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::AccessDenied => &"AccessDenied",
+            ErrorCode::BadRequest => &"BadRequest",
+            ErrorCode::Conflict => &"Conflict",
+            ErrorCode::Forbidden => &"Forbidden",
+            ErrorCode::NotFound => &"NotFound",
+            ErrorCode::PhoneNumberAssociationsExist => &"PhoneNumberAssociationsExist",
+            ErrorCode::PreconditionFailed => &"PreconditionFailed",
+            ErrorCode::ResourceLimitExceeded => &"ResourceLimitExceeded",
+            ErrorCode::ServiceFailure => &"ServiceFailure",
+            ErrorCode::ServiceUnavailable => &"ServiceUnavailable",
+            ErrorCode::Throttled => &"Throttled",
+            ErrorCode::Throttling => &"Throttling",
+            ErrorCode::Unauthorized => &"Unauthorized",
+            ErrorCode::Unprocessable => &"Unprocessable",
+            ErrorCode::VoiceConnectorGroupAssociationsExist => {
+                &"VoiceConnectorGroupAssociationsExist"
+            }
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => ErrorCode::AccessDenied,
+            "BadRequest" => ErrorCode::BadRequest,
+            "Conflict" => ErrorCode::Conflict,
+            "Forbidden" => ErrorCode::Forbidden,
+            "NotFound" => ErrorCode::NotFound,
+            "PhoneNumberAssociationsExist" => ErrorCode::PhoneNumberAssociationsExist,
+            "PreconditionFailed" => ErrorCode::PreconditionFailed,
+            "ResourceLimitExceeded" => ErrorCode::ResourceLimitExceeded,
+            "ServiceFailure" => ErrorCode::ServiceFailure,
+            "ServiceUnavailable" => ErrorCode::ServiceUnavailable,
+            "Throttled" => ErrorCode::Throttled,
+            "Throttling" => ErrorCode::Throttling,
+            "Unauthorized" => ErrorCode::Unauthorized,
+            "Unprocessable" => ErrorCode::Unprocessable,
+            "VoiceConnectorGroupAssociationsExist" => {
+                ErrorCode::VoiceConnectorGroupAssociationsExist
+            }
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => ErrorCode::AccessDenied,
+            "BadRequest" => ErrorCode::BadRequest,
+            "Conflict" => ErrorCode::Conflict,
+            "Forbidden" => ErrorCode::Forbidden,
+            "NotFound" => ErrorCode::NotFound,
+            "PhoneNumberAssociationsExist" => ErrorCode::PhoneNumberAssociationsExist,
+            "PreconditionFailed" => ErrorCode::PreconditionFailed,
+            "ResourceLimitExceeded" => ErrorCode::ResourceLimitExceeded,
+            "ServiceFailure" => ErrorCode::ServiceFailure,
+            "ServiceUnavailable" => ErrorCode::ServiceUnavailable,
+            "Throttled" => ErrorCode::Throttled,
+            "Throttling" => ErrorCode::Throttling,
+            "Unauthorized" => ErrorCode::Unauthorized,
+            "Unprocessable" => ErrorCode::Unprocessable,
+            "VoiceConnectorGroupAssociationsExist" => {
+                ErrorCode::VoiceConnectorGroupAssociationsExist
+            }
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The configuration that allows a bot to receive outgoing events. Can be either an HTTPS endpoint or a Lambda function ARN.</p>
@@ -2045,6 +3367,106 @@ pub struct EventsConfiguration {
     #[serde(rename = "OutboundEventsHTTPSEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outbound_events_https_endpoint: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGeoMatchLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GeoMatchLevel {
+    AreaCode,
+    Country,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGeoMatchLevel),
+}
+
+impl Default for GeoMatchLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GeoMatchLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GeoMatchLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GeoMatchLevel {
+    fn into(self) -> String {
+        match self {
+            GeoMatchLevel::AreaCode => "AreaCode".to_string(),
+            GeoMatchLevel::Country => "Country".to_string(),
+            GeoMatchLevel::UnknownVariant(UnknownGeoMatchLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GeoMatchLevel {
+    fn into(self) -> &'a str {
+        match self {
+            GeoMatchLevel::AreaCode => &"AreaCode",
+            GeoMatchLevel::Country => &"Country",
+            GeoMatchLevel::UnknownVariant(UnknownGeoMatchLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GeoMatchLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "AreaCode" => GeoMatchLevel::AreaCode,
+            "Country" => GeoMatchLevel::Country,
+            _ => GeoMatchLevel::UnknownVariant(UnknownGeoMatchLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GeoMatchLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AreaCode" => GeoMatchLevel::AreaCode,
+            "Country" => GeoMatchLevel::Country,
+            _ => GeoMatchLevel::UnknownVariant(UnknownGeoMatchLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoMatchLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GeoMatchLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GeoMatchLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The country and area code for a proxy phone number in a proxy phone session.</p>
@@ -2630,7 +4052,7 @@ pub struct Invite {
     /// <p>The status of the invite email.</p>
     #[serde(rename = "EmailStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub email_status: Option<String>,
+    pub email_status: Option<EmailStatus>,
     /// <p>The invite ID.</p>
     #[serde(rename = "InviteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2638,7 +4060,113 @@ pub struct Invite {
     /// <p>The status of the invite.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<InviteStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInviteStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InviteStatus {
+    Accepted,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInviteStatus),
+}
+
+impl Default for InviteStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InviteStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InviteStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InviteStatus {
+    fn into(self) -> String {
+        match self {
+            InviteStatus::Accepted => "Accepted".to_string(),
+            InviteStatus::Failed => "Failed".to_string(),
+            InviteStatus::Pending => "Pending".to_string(),
+            InviteStatus::UnknownVariant(UnknownInviteStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InviteStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InviteStatus::Accepted => &"Accepted",
+            InviteStatus::Failed => &"Failed",
+            InviteStatus::Pending => &"Pending",
+            InviteStatus::UnknownVariant(UnknownInviteStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InviteStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Accepted" => InviteStatus::Accepted,
+            "Failed" => InviteStatus::Failed,
+            "Pending" => InviteStatus::Pending,
+            _ => InviteStatus::UnknownVariant(UnknownInviteStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InviteStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Accepted" => InviteStatus::Accepted,
+            "Failed" => InviteStatus::Failed,
+            "Pending" => InviteStatus::Pending,
+            _ => InviteStatus::UnknownVariant(UnknownInviteStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InviteStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InviteStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InviteStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2653,7 +4181,7 @@ pub struct InviteUsersRequest {
     /// <p>The user type.</p>
     #[serde(rename = "UserType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_type: Option<String>,
+    pub user_type: Option<UserType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2663,6 +4191,116 @@ pub struct InviteUsersResponse {
     #[serde(rename = "Invites")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invites: Option<Vec<Invite>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLicense {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum License {
+    Basic,
+    Plus,
+    Pro,
+    ProTrial,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLicense),
+}
+
+impl Default for License {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for License {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for License {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for License {
+    fn into(self) -> String {
+        match self {
+            License::Basic => "Basic".to_string(),
+            License::Plus => "Plus".to_string(),
+            License::Pro => "Pro".to_string(),
+            License::ProTrial => "ProTrial".to_string(),
+            License::UnknownVariant(UnknownLicense { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a License {
+    fn into(self) -> &'a str {
+        match self {
+            License::Basic => &"Basic",
+            License::Plus => &"Plus",
+            License::Pro => &"Pro",
+            License::ProTrial => &"ProTrial",
+            License::UnknownVariant(UnknownLicense { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for License {
+    fn from(name: &str) -> Self {
+        match name {
+            "Basic" => License::Basic,
+            "Plus" => License::Plus,
+            "Pro" => License::Pro,
+            "ProTrial" => License::ProTrial,
+            _ => License::UnknownVariant(UnknownLicense {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for License {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Basic" => License::Basic,
+            "Plus" => License::Plus,
+            "Pro" => License::Pro,
+            "ProTrial" => License::ProTrial,
+            _ => License::UnknownVariant(UnknownLicense { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for License {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for License {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for License {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2949,7 +4587,7 @@ pub struct ListChannelMembershipsRequest {
     /// <p>The membership type of a user, <code>DEFAULT</code> or <code>HIDDEN</code>. Default members are always returned as part of <code>ListChannelMemberships</code>. Hidden members are only returned if the type filter in <code>ListChannelMemberships</code> equals <code>HIDDEN</code>. Otherwise hidden members are not returned.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelMembershipType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2994,7 +4632,7 @@ pub struct ListChannelMessagesRequest {
     /// <p>The order in which you want messages sorted. Default is Descending, based on time created.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3094,7 +4732,7 @@ pub struct ListChannelsRequest {
     /// <p>The privacy setting. <code>PUBLIC</code> retrieves all the public channels. <code>PRIVATE</code> retrieves private channels. Only an app instance administrator can retrieve private channels.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub privacy: Option<String>,
+    pub privacy: Option<ChannelPrivacy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3185,7 +4823,7 @@ pub struct ListPhoneNumbersRequest {
     /// <p>The filter to use to limit the number of results.</p>
     #[serde(rename = "FilterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_name: Option<String>,
+    pub filter_name: Option<PhoneNumberAssociationName>,
     /// <p>The value to use for the filter.</p>
     #[serde(rename = "FilterValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3201,11 +4839,11 @@ pub struct ListPhoneNumbersRequest {
     /// <p>The phone number product type.</p>
     #[serde(rename = "ProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<PhoneNumberProductType>,
     /// <p>The phone number status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PhoneNumberStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3235,7 +4873,7 @@ pub struct ListProxySessionsRequest {
     /// <p>The proxy session status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProxySessionStatus>,
     /// <p>The Amazon Chime voice connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
@@ -3413,7 +5051,7 @@ pub struct ListUsersRequest {
     /// <p>The user type.</p>
     #[serde(rename = "UserType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_type: Option<String>,
+    pub user_type: Option<UserType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3615,7 +5253,7 @@ pub struct Member {
     /// <p>The member type.</p>
     #[serde(rename = "MemberType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_type: Option<String>,
+    pub member_type: Option<MemberType>,
 }
 
 /// <p>The list of errors returned when a member action results in an error.</p>
@@ -3625,7 +5263,7 @@ pub struct MemberError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3634,6 +5272,112 @@ pub struct MemberError {
     #[serde(rename = "MemberId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberType {
+    Bot,
+    User,
+    Webhook,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberType),
+}
+
+impl Default for MemberType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberType {
+    fn into(self) -> String {
+        match self {
+            MemberType::Bot => "Bot".to_string(),
+            MemberType::User => "User".to_string(),
+            MemberType::Webhook => "Webhook".to_string(),
+            MemberType::UnknownVariant(UnknownMemberType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberType {
+    fn into(self) -> &'a str {
+        match self {
+            MemberType::Bot => &"Bot",
+            MemberType::User => &"User",
+            MemberType::Webhook => &"Webhook",
+            MemberType::UnknownVariant(UnknownMemberType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MemberType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bot" => MemberType::Bot,
+            "User" => MemberType::User,
+            "Webhook" => MemberType::Webhook,
+            _ => MemberType::UnknownVariant(UnknownMemberType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bot" => MemberType::Bot,
+            "User" => MemberType::User,
+            "Webhook" => MemberType::Webhook,
+            _ => MemberType::UnknownVariant(UnknownMemberType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MemberType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MemberType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Membership details, such as member ID and member role.</p>
@@ -3647,7 +5391,7 @@ pub struct MembershipItem {
     /// <p>The member role.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<RoomMembershipRole>,
 }
 
 /// <p>The endpoint of a meeting session.</p>
@@ -3658,6 +5402,219 @@ pub struct MessagingSessionEndpoint {
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotificationTarget {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotificationTarget {
+    EventBridge,
+    Sns,
+    Sqs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotificationTarget),
+}
+
+impl Default for NotificationTarget {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotificationTarget {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotificationTarget {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotificationTarget {
+    fn into(self) -> String {
+        match self {
+            NotificationTarget::EventBridge => "EventBridge".to_string(),
+            NotificationTarget::Sns => "SNS".to_string(),
+            NotificationTarget::Sqs => "SQS".to_string(),
+            NotificationTarget::UnknownVariant(UnknownNotificationTarget { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotificationTarget {
+    fn into(self) -> &'a str {
+        match self {
+            NotificationTarget::EventBridge => &"EventBridge",
+            NotificationTarget::Sns => &"SNS",
+            NotificationTarget::Sqs => &"SQS",
+            NotificationTarget::UnknownVariant(UnknownNotificationTarget { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NotificationTarget {
+    fn from(name: &str) -> Self {
+        match name {
+            "EventBridge" => NotificationTarget::EventBridge,
+            "SNS" => NotificationTarget::Sns,
+            "SQS" => NotificationTarget::Sqs,
+            _ => NotificationTarget::UnknownVariant(UnknownNotificationTarget {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotificationTarget {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EventBridge" => NotificationTarget::EventBridge,
+            "SNS" => NotificationTarget::Sns,
+            "SQS" => NotificationTarget::Sqs,
+            _ => NotificationTarget::UnknownVariant(UnknownNotificationTarget { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationTarget {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotificationTarget {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotificationTarget {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNumberSelectionBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NumberSelectionBehavior {
+    AvoidSticky,
+    PreferSticky,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNumberSelectionBehavior),
+}
+
+impl Default for NumberSelectionBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NumberSelectionBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NumberSelectionBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NumberSelectionBehavior {
+    fn into(self) -> String {
+        match self {
+            NumberSelectionBehavior::AvoidSticky => "AvoidSticky".to_string(),
+            NumberSelectionBehavior::PreferSticky => "PreferSticky".to_string(),
+            NumberSelectionBehavior::UnknownVariant(UnknownNumberSelectionBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NumberSelectionBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            NumberSelectionBehavior::AvoidSticky => &"AvoidSticky",
+            NumberSelectionBehavior::PreferSticky => &"PreferSticky",
+            NumberSelectionBehavior::UnknownVariant(UnknownNumberSelectionBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NumberSelectionBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "AvoidSticky" => NumberSelectionBehavior::AvoidSticky,
+            "PreferSticky" => NumberSelectionBehavior::PreferSticky,
+            _ => NumberSelectionBehavior::UnknownVariant(UnknownNumberSelectionBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NumberSelectionBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AvoidSticky" => NumberSelectionBehavior::AvoidSticky,
+            "PreferSticky" => NumberSelectionBehavior::PreferSticky,
+            _ => NumberSelectionBehavior::UnknownVariant(UnknownNumberSelectionBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NumberSelectionBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NumberSelectionBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NumberSelectionBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A phone number for which an order has been placed.</p>
@@ -3671,7 +5628,117 @@ pub struct OrderedPhoneNumber {
     /// <p>The phone number status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OrderedPhoneNumberStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderedPhoneNumberStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderedPhoneNumberStatus {
+    Acquired,
+    Failed,
+    Processing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderedPhoneNumberStatus),
+}
+
+impl Default for OrderedPhoneNumberStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderedPhoneNumberStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderedPhoneNumberStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderedPhoneNumberStatus {
+    fn into(self) -> String {
+        match self {
+            OrderedPhoneNumberStatus::Acquired => "Acquired".to_string(),
+            OrderedPhoneNumberStatus::Failed => "Failed".to_string(),
+            OrderedPhoneNumberStatus::Processing => "Processing".to_string(),
+            OrderedPhoneNumberStatus::UnknownVariant(UnknownOrderedPhoneNumberStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderedPhoneNumberStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OrderedPhoneNumberStatus::Acquired => &"Acquired",
+            OrderedPhoneNumberStatus::Failed => &"Failed",
+            OrderedPhoneNumberStatus::Processing => &"Processing",
+            OrderedPhoneNumberStatus::UnknownVariant(UnknownOrderedPhoneNumberStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderedPhoneNumberStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Acquired" => OrderedPhoneNumberStatus::Acquired,
+            "Failed" => OrderedPhoneNumberStatus::Failed,
+            "Processing" => OrderedPhoneNumberStatus::Processing,
+            _ => OrderedPhoneNumberStatus::UnknownVariant(UnknownOrderedPhoneNumberStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderedPhoneNumberStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Acquired" => OrderedPhoneNumberStatus::Acquired,
+            "Failed" => OrderedPhoneNumberStatus::Failed,
+            "Processing" => OrderedPhoneNumberStatus::Processing,
+            _ => OrderedPhoneNumberStatus::UnknownVariant(UnknownOrderedPhoneNumberStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderedPhoneNumberStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OrderedPhoneNumberStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrderedPhoneNumberStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Origination settings enable your SIP hosts to receive inbound calls using your Amazon Chime Voice Connector.</p>
@@ -3705,11 +5772,115 @@ pub struct OriginationRoute {
     /// <p>The protocol to use for the origination route. Encryption-enabled Amazon Chime Voice Connectors use TCP protocol by default.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<OriginationRouteProtocol>,
     /// <p>The weight associated with the host. If hosts are equal in priority, calls are distributed among them based on their relative weight.</p>
     #[serde(rename = "Weight")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginationRouteProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginationRouteProtocol {
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginationRouteProtocol),
+}
+
+impl Default for OriginationRouteProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginationRouteProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginationRouteProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginationRouteProtocol {
+    fn into(self) -> String {
+        match self {
+            OriginationRouteProtocol::Tcp => "TCP".to_string(),
+            OriginationRouteProtocol::Udp => "UDP".to_string(),
+            OriginationRouteProtocol::UnknownVariant(UnknownOriginationRouteProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginationRouteProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            OriginationRouteProtocol::Tcp => &"TCP",
+            OriginationRouteProtocol::Udp => &"UDP",
+            OriginationRouteProtocol::UnknownVariant(UnknownOriginationRouteProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginationRouteProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "TCP" => OriginationRouteProtocol::Tcp,
+            "UDP" => OriginationRouteProtocol::Udp,
+            _ => OriginationRouteProtocol::UnknownVariant(UnknownOriginationRouteProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OriginationRouteProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TCP" => OriginationRouteProtocol::Tcp,
+            "UDP" => OriginationRouteProtocol::Udp,
+            _ => OriginationRouteProtocol::UnknownVariant(UnknownOriginationRouteProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginationRouteProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OriginationRouteProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OriginationRouteProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The phone number and proxy phone number for a participant in an Amazon Chime Voice Connector proxy session.</p>
@@ -3741,7 +5912,7 @@ pub struct PhoneNumber {
     /// <p>The outbound calling name status.</p>
     #[serde(rename = "CallingNameStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub calling_name_status: Option<String>,
+    pub calling_name_status: Option<CallingNameStatus>,
     /// <p>The phone number capabilities.</p>
     #[serde(rename = "Capabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3765,15 +5936,15 @@ pub struct PhoneNumber {
     /// <p>The phone number product type.</p>
     #[serde(rename = "ProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<PhoneNumberProductType>,
     /// <p>The phone number status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PhoneNumberStatus>,
     /// <p>The phone number type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PhoneNumberType>,
     /// <p>The updated phone number timestamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3791,11 +5962,134 @@ pub struct PhoneNumberAssociation {
     /// <p>Defines the association with an Amazon Chime account ID, user ID, Amazon Chime Voice Connector ID, or Amazon Chime Voice Connector group ID.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<PhoneNumberAssociationName>,
     /// <p>Contains the ID for the entity specified in Name.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberAssociationName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberAssociationName {
+    AccountId,
+    SipRuleId,
+    UserId,
+    VoiceConnectorGroupId,
+    VoiceConnectorId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberAssociationName),
+}
+
+impl Default for PhoneNumberAssociationName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberAssociationName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberAssociationName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberAssociationName {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberAssociationName::AccountId => "AccountId".to_string(),
+            PhoneNumberAssociationName::SipRuleId => "SipRuleId".to_string(),
+            PhoneNumberAssociationName::UserId => "UserId".to_string(),
+            PhoneNumberAssociationName::VoiceConnectorGroupId => {
+                "VoiceConnectorGroupId".to_string()
+            }
+            PhoneNumberAssociationName::VoiceConnectorId => "VoiceConnectorId".to_string(),
+            PhoneNumberAssociationName::UnknownVariant(UnknownPhoneNumberAssociationName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberAssociationName {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberAssociationName::AccountId => &"AccountId",
+            PhoneNumberAssociationName::SipRuleId => &"SipRuleId",
+            PhoneNumberAssociationName::UserId => &"UserId",
+            PhoneNumberAssociationName::VoiceConnectorGroupId => &"VoiceConnectorGroupId",
+            PhoneNumberAssociationName::VoiceConnectorId => &"VoiceConnectorId",
+            PhoneNumberAssociationName::UnknownVariant(UnknownPhoneNumberAssociationName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberAssociationName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccountId" => PhoneNumberAssociationName::AccountId,
+            "SipRuleId" => PhoneNumberAssociationName::SipRuleId,
+            "UserId" => PhoneNumberAssociationName::UserId,
+            "VoiceConnectorGroupId" => PhoneNumberAssociationName::VoiceConnectorGroupId,
+            "VoiceConnectorId" => PhoneNumberAssociationName::VoiceConnectorId,
+            _ => PhoneNumberAssociationName::UnknownVariant(UnknownPhoneNumberAssociationName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberAssociationName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccountId" => PhoneNumberAssociationName::AccountId,
+            "SipRuleId" => PhoneNumberAssociationName::SipRuleId,
+            "UserId" => PhoneNumberAssociationName::UserId,
+            "VoiceConnectorGroupId" => PhoneNumberAssociationName::VoiceConnectorGroupId,
+            "VoiceConnectorId" => PhoneNumberAssociationName::VoiceConnectorId,
+            _ => PhoneNumberAssociationName::UnknownVariant(UnknownPhoneNumberAssociationName {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberAssociationName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PhoneNumberAssociationName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberAssociationName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The phone number capabilities for Amazon Chime Business Calling phone numbers, such as enabled inbound and outbound calling and text messaging.</p>
@@ -3835,7 +6129,7 @@ pub struct PhoneNumberError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3865,15 +6159,469 @@ pub struct PhoneNumberOrder {
     /// <p>The phone number order product type.</p>
     #[serde(rename = "ProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<PhoneNumberProductType>,
     /// <p>The status of the phone number order.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PhoneNumberOrderStatus>,
     /// <p>The updated phone number order timestamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberOrderStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberOrderStatus {
+    Failed,
+    Partial,
+    Processing,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberOrderStatus),
+}
+
+impl Default for PhoneNumberOrderStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberOrderStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberOrderStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberOrderStatus {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberOrderStatus::Failed => "Failed".to_string(),
+            PhoneNumberOrderStatus::Partial => "Partial".to_string(),
+            PhoneNumberOrderStatus::Processing => "Processing".to_string(),
+            PhoneNumberOrderStatus::Successful => "Successful".to_string(),
+            PhoneNumberOrderStatus::UnknownVariant(UnknownPhoneNumberOrderStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberOrderStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberOrderStatus::Failed => &"Failed",
+            PhoneNumberOrderStatus::Partial => &"Partial",
+            PhoneNumberOrderStatus::Processing => &"Processing",
+            PhoneNumberOrderStatus::Successful => &"Successful",
+            PhoneNumberOrderStatus::UnknownVariant(UnknownPhoneNumberOrderStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberOrderStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => PhoneNumberOrderStatus::Failed,
+            "Partial" => PhoneNumberOrderStatus::Partial,
+            "Processing" => PhoneNumberOrderStatus::Processing,
+            "Successful" => PhoneNumberOrderStatus::Successful,
+            _ => PhoneNumberOrderStatus::UnknownVariant(UnknownPhoneNumberOrderStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberOrderStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => PhoneNumberOrderStatus::Failed,
+            "Partial" => PhoneNumberOrderStatus::Partial,
+            "Processing" => PhoneNumberOrderStatus::Processing,
+            "Successful" => PhoneNumberOrderStatus::Successful,
+            _ => PhoneNumberOrderStatus::UnknownVariant(UnknownPhoneNumberOrderStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberOrderStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PhoneNumberOrderStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberOrderStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberProductType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberProductType {
+    BusinessCalling,
+    VoiceConnector,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberProductType),
+}
+
+impl Default for PhoneNumberProductType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberProductType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberProductType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberProductType {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberProductType::BusinessCalling => "BusinessCalling".to_string(),
+            PhoneNumberProductType::VoiceConnector => "VoiceConnector".to_string(),
+            PhoneNumberProductType::UnknownVariant(UnknownPhoneNumberProductType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberProductType {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberProductType::BusinessCalling => &"BusinessCalling",
+            PhoneNumberProductType::VoiceConnector => &"VoiceConnector",
+            PhoneNumberProductType::UnknownVariant(UnknownPhoneNumberProductType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberProductType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BusinessCalling" => PhoneNumberProductType::BusinessCalling,
+            "VoiceConnector" => PhoneNumberProductType::VoiceConnector,
+            _ => PhoneNumberProductType::UnknownVariant(UnknownPhoneNumberProductType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberProductType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BusinessCalling" => PhoneNumberProductType::BusinessCalling,
+            "VoiceConnector" => PhoneNumberProductType::VoiceConnector,
+            _ => PhoneNumberProductType::UnknownVariant(UnknownPhoneNumberProductType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberProductType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PhoneNumberProductType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberProductType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberStatus {
+    AcquireFailed,
+    AcquireInProgress,
+    Assigned,
+    DeleteFailed,
+    DeleteInProgress,
+    ReleaseFailed,
+    ReleaseInProgress,
+    Unassigned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberStatus),
+}
+
+impl Default for PhoneNumberStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberStatus {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberStatus::AcquireFailed => "AcquireFailed".to_string(),
+            PhoneNumberStatus::AcquireInProgress => "AcquireInProgress".to_string(),
+            PhoneNumberStatus::Assigned => "Assigned".to_string(),
+            PhoneNumberStatus::DeleteFailed => "DeleteFailed".to_string(),
+            PhoneNumberStatus::DeleteInProgress => "DeleteInProgress".to_string(),
+            PhoneNumberStatus::ReleaseFailed => "ReleaseFailed".to_string(),
+            PhoneNumberStatus::ReleaseInProgress => "ReleaseInProgress".to_string(),
+            PhoneNumberStatus::Unassigned => "Unassigned".to_string(),
+            PhoneNumberStatus::UnknownVariant(UnknownPhoneNumberStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberStatus::AcquireFailed => &"AcquireFailed",
+            PhoneNumberStatus::AcquireInProgress => &"AcquireInProgress",
+            PhoneNumberStatus::Assigned => &"Assigned",
+            PhoneNumberStatus::DeleteFailed => &"DeleteFailed",
+            PhoneNumberStatus::DeleteInProgress => &"DeleteInProgress",
+            PhoneNumberStatus::ReleaseFailed => &"ReleaseFailed",
+            PhoneNumberStatus::ReleaseInProgress => &"ReleaseInProgress",
+            PhoneNumberStatus::Unassigned => &"Unassigned",
+            PhoneNumberStatus::UnknownVariant(UnknownPhoneNumberStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AcquireFailed" => PhoneNumberStatus::AcquireFailed,
+            "AcquireInProgress" => PhoneNumberStatus::AcquireInProgress,
+            "Assigned" => PhoneNumberStatus::Assigned,
+            "DeleteFailed" => PhoneNumberStatus::DeleteFailed,
+            "DeleteInProgress" => PhoneNumberStatus::DeleteInProgress,
+            "ReleaseFailed" => PhoneNumberStatus::ReleaseFailed,
+            "ReleaseInProgress" => PhoneNumberStatus::ReleaseInProgress,
+            "Unassigned" => PhoneNumberStatus::Unassigned,
+            _ => PhoneNumberStatus::UnknownVariant(UnknownPhoneNumberStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AcquireFailed" => PhoneNumberStatus::AcquireFailed,
+            "AcquireInProgress" => PhoneNumberStatus::AcquireInProgress,
+            "Assigned" => PhoneNumberStatus::Assigned,
+            "DeleteFailed" => PhoneNumberStatus::DeleteFailed,
+            "DeleteInProgress" => PhoneNumberStatus::DeleteInProgress,
+            "ReleaseFailed" => PhoneNumberStatus::ReleaseFailed,
+            "ReleaseInProgress" => PhoneNumberStatus::ReleaseInProgress,
+            "Unassigned" => PhoneNumberStatus::Unassigned,
+            _ => PhoneNumberStatus::UnknownVariant(UnknownPhoneNumberStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PhoneNumberStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPhoneNumberType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PhoneNumberType {
+    Local,
+    TollFree,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPhoneNumberType),
+}
+
+impl Default for PhoneNumberType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PhoneNumberType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PhoneNumberType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PhoneNumberType {
+    fn into(self) -> String {
+        match self {
+            PhoneNumberType::Local => "Local".to_string(),
+            PhoneNumberType::TollFree => "TollFree".to_string(),
+            PhoneNumberType::UnknownVariant(UnknownPhoneNumberType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PhoneNumberType {
+    fn into(self) -> &'a str {
+        match self {
+            PhoneNumberType::Local => &"Local",
+            PhoneNumberType::TollFree => &"TollFree",
+            PhoneNumberType::UnknownVariant(UnknownPhoneNumberType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PhoneNumberType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Local" => PhoneNumberType::Local,
+            "TollFree" => PhoneNumberType::TollFree,
+            _ => PhoneNumberType::UnknownVariant(UnknownPhoneNumberType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PhoneNumberType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Local" => PhoneNumberType::Local,
+            "TollFree" => PhoneNumberType::TollFree,
+            _ => PhoneNumberType::UnknownVariant(UnknownPhoneNumberType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PhoneNumberType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PhoneNumberType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PhoneNumberType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The proxy configuration for an Amazon Chime Voice Connector.</p>
@@ -3905,7 +6653,7 @@ pub struct ProxySession {
     /// <p>The proxy session capabilities.</p>
     #[serde(rename = "Capabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub capabilities: Option<Vec<String>>,
+    pub capabilities: Option<Vec<Capability>>,
     /// <p>The created timestamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3921,7 +6669,7 @@ pub struct ProxySession {
     /// <p>The preference for matching the country or area code of the proxy phone number with that of the first participant.</p>
     #[serde(rename = "GeoMatchLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub geo_match_level: Option<String>,
+    pub geo_match_level: Option<GeoMatchLevel>,
     /// <p>The country and area code for the proxy phone number.</p>
     #[serde(rename = "GeoMatchParams")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3933,7 +6681,7 @@ pub struct ProxySession {
     /// <p>The preference for proxy phone number reuse, or stickiness, between the same participants across sessions.</p>
     #[serde(rename = "NumberSelectionBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub number_selection_behavior: Option<String>,
+    pub number_selection_behavior: Option<NumberSelectionBehavior>,
     /// <p>The proxy session participants.</p>
     #[serde(rename = "Participants")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3945,7 +6693,7 @@ pub struct ProxySession {
     /// <p>The status of the proxy session.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProxySessionStatus>,
     /// <p>The updated timestamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3954,6 +6702,115 @@ pub struct ProxySession {
     #[serde(rename = "VoiceConnectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_connector_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProxySessionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProxySessionStatus {
+    Closed,
+    InProgress,
+    Open,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProxySessionStatus),
+}
+
+impl Default for ProxySessionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProxySessionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProxySessionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProxySessionStatus {
+    fn into(self) -> String {
+        match self {
+            ProxySessionStatus::Closed => "Closed".to_string(),
+            ProxySessionStatus::InProgress => "InProgress".to_string(),
+            ProxySessionStatus::Open => "Open".to_string(),
+            ProxySessionStatus::UnknownVariant(UnknownProxySessionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProxySessionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProxySessionStatus::Closed => &"Closed",
+            ProxySessionStatus::InProgress => &"InProgress",
+            ProxySessionStatus::Open => &"Open",
+            ProxySessionStatus::UnknownVariant(UnknownProxySessionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ProxySessionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Closed" => ProxySessionStatus::Closed,
+            "InProgress" => ProxySessionStatus::InProgress,
+            "Open" => ProxySessionStatus::Open,
+            _ => ProxySessionStatus::UnknownVariant(UnknownProxySessionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProxySessionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Closed" => ProxySessionStatus::Closed,
+            "InProgress" => ProxySessionStatus::InProgress,
+            "Open" => ProxySessionStatus::Open,
+            _ => ProxySessionStatus::UnknownVariant(UnknownProxySessionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProxySessionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProxySessionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProxySessionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4296,6 +7153,116 @@ pub struct RegenerateSecurityTokenResponse {
     pub bot: Option<Bot>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegistrationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegistrationStatus {
+    Registered,
+    Suspended,
+    Unregistered,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegistrationStatus),
+}
+
+impl Default for RegistrationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegistrationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegistrationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegistrationStatus {
+    fn into(self) -> String {
+        match self {
+            RegistrationStatus::Registered => "Registered".to_string(),
+            RegistrationStatus::Suspended => "Suspended".to_string(),
+            RegistrationStatus::Unregistered => "Unregistered".to_string(),
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegistrationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RegistrationStatus::Registered => &"Registered",
+            RegistrationStatus::Suspended => &"Suspended",
+            RegistrationStatus::Unregistered => &"Unregistered",
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RegistrationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Registered" => RegistrationStatus::Registered,
+            "Suspended" => RegistrationStatus::Suspended,
+            "Unregistered" => RegistrationStatus::Unregistered,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegistrationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Registered" => RegistrationStatus::Registered,
+            "Suspended" => RegistrationStatus::Suspended,
+            "Unregistered" => RegistrationStatus::Unregistered,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RegistrationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RegistrationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPersonalPINRequest {
@@ -4390,7 +7357,7 @@ pub struct RoomMembership {
     /// <p>The membership role.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<RoomMembershipRole>,
     /// <p>The room ID.</p>
     #[serde(rename = "RoomId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4399,6 +7366,110 @@ pub struct RoomMembership {
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRoomMembershipRole {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RoomMembershipRole {
+    Administrator,
+    Member,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRoomMembershipRole),
+}
+
+impl Default for RoomMembershipRole {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RoomMembershipRole {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RoomMembershipRole {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RoomMembershipRole {
+    fn into(self) -> String {
+        match self {
+            RoomMembershipRole::Administrator => "Administrator".to_string(),
+            RoomMembershipRole::Member => "Member".to_string(),
+            RoomMembershipRole::UnknownVariant(UnknownRoomMembershipRole { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RoomMembershipRole {
+    fn into(self) -> &'a str {
+        match self {
+            RoomMembershipRole::Administrator => &"Administrator",
+            RoomMembershipRole::Member => &"Member",
+            RoomMembershipRole::UnknownVariant(UnknownRoomMembershipRole { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RoomMembershipRole {
+    fn from(name: &str) -> Self {
+        match name {
+            "Administrator" => RoomMembershipRole::Administrator,
+            "Member" => RoomMembershipRole::Member,
+            _ => RoomMembershipRole::UnknownVariant(UnknownRoomMembershipRole {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RoomMembershipRole {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Administrator" => RoomMembershipRole::Administrator,
+            "Member" => RoomMembershipRole::Member,
+            _ => RoomMembershipRole::UnknownVariant(UnknownRoomMembershipRole { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoomMembershipRole {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RoomMembershipRole {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RoomMembershipRole {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The retention settings that determine how long to retain chat room messages for an Amazon Chime Enterprise account.</p>
@@ -4470,10 +7541,10 @@ pub struct SendChannelMessageRequest {
     pub metadata: Option<String>,
     /// <p>Boolean that controls whether the message is persisted on the back end. Required.</p>
     #[serde(rename = "Persistence")]
-    pub persistence: String,
+    pub persistence: ChannelMessagePersistenceType,
     /// <p>The type of message, <code>STANDARD</code> or <code>CONTROL</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ChannelMessageType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -4583,7 +7654,7 @@ pub struct SipRule {
     /// <p>The type of trigger whose value is assigned to the SIP rule in <code>TriggerValue</code>.</p>
     #[serde(rename = "TriggerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trigger_type: Option<String>,
+    pub trigger_type: Option<SipRuleTriggerType>,
     /// <p>If <code>TriggerType</code> is <code>RequestUriHostname</code>, then the value can be the outbound host name of the Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code>, then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered when a SIP rule requests host name or <code>ToPhoneNumber</code> matches in the incoming SIP request.</p>
     #[serde(rename = "TriggerValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4611,6 +7682,211 @@ pub struct SipRuleTargetApplication {
     pub sip_media_application_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSipRuleTriggerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SipRuleTriggerType {
+    RequestUriHostname,
+    ToPhoneNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSipRuleTriggerType),
+}
+
+impl Default for SipRuleTriggerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SipRuleTriggerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SipRuleTriggerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SipRuleTriggerType {
+    fn into(self) -> String {
+        match self {
+            SipRuleTriggerType::RequestUriHostname => "RequestUriHostname".to_string(),
+            SipRuleTriggerType::ToPhoneNumber => "ToPhoneNumber".to_string(),
+            SipRuleTriggerType::UnknownVariant(UnknownSipRuleTriggerType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SipRuleTriggerType {
+    fn into(self) -> &'a str {
+        match self {
+            SipRuleTriggerType::RequestUriHostname => &"RequestUriHostname",
+            SipRuleTriggerType::ToPhoneNumber => &"ToPhoneNumber",
+            SipRuleTriggerType::UnknownVariant(UnknownSipRuleTriggerType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SipRuleTriggerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RequestUriHostname" => SipRuleTriggerType::RequestUriHostname,
+            "ToPhoneNumber" => SipRuleTriggerType::ToPhoneNumber,
+            _ => SipRuleTriggerType::UnknownVariant(UnknownSipRuleTriggerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SipRuleTriggerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RequestUriHostname" => SipRuleTriggerType::RequestUriHostname,
+            "ToPhoneNumber" => SipRuleTriggerType::ToPhoneNumber,
+            _ => SipRuleTriggerType::UnknownVariant(UnknownSipRuleTriggerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SipRuleTriggerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SipRuleTriggerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SipRuleTriggerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "ASCENDING".to_string(),
+            SortOrder::Descending => "DESCENDING".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"ASCENDING",
+            SortOrder::Descending => &"DESCENDING",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The streaming configuration associated with an Amazon Chime Voice Connector. Specifies whether media streaming is enabled for sending to Amazon Kinesis, and shows the retention period for the Amazon Kinesis data, in hours.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamingConfiguration {
@@ -4632,7 +7908,7 @@ pub struct StreamingConfiguration {
 pub struct StreamingNotificationTarget {
     /// <p>The streaming notification target.</p>
     #[serde(rename = "NotificationTarget")]
-    pub notification_target: String,
+    pub notification_target: NotificationTarget,
 }
 
 /// <p>Describes a tag applied to a resource.</p>
@@ -4939,7 +8215,7 @@ pub struct UpdateChannelRequest {
     pub metadata: Option<String>,
     /// <p>The mode of the update request.</p>
     #[serde(rename = "Mode")]
-    pub mode: String,
+    pub mode: ChannelMode,
     /// <p>The name of the channel.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -4978,7 +8254,7 @@ pub struct UpdatePhoneNumberRequest {
     /// <p>The product type.</p>
     #[serde(rename = "ProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<PhoneNumberProductType>,
 }
 
 /// <p>The phone number ID, product type, or calling name fields to update, used with the <a>BatchUpdatePhoneNumber</a> and <a>UpdatePhoneNumber</a> actions.</p>
@@ -4995,7 +8271,7 @@ pub struct UpdatePhoneNumberRequestItem {
     /// <p>The product type to update.</p>
     #[serde(rename = "ProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub product_type: Option<String>,
+    pub product_type: Option<PhoneNumberProductType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5020,7 +8296,7 @@ pub struct UpdatePhoneNumberSettingsRequest {
 pub struct UpdateProxySessionRequest {
     /// <p>The proxy session capabilities.</p>
     #[serde(rename = "Capabilities")]
-    pub capabilities: Vec<String>,
+    pub capabilities: Vec<Capability>,
     /// <p>The number of minutes allowed for the proxy session.</p>
     #[serde(rename = "ExpiryMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5054,7 +8330,7 @@ pub struct UpdateRoomMembershipRequest {
     /// <p>The role of the member.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<RoomMembershipRole>,
     /// <p>The room ID.</p>
     #[serde(rename = "RoomId")]
     pub room_id: String,
@@ -5159,14 +8435,14 @@ pub struct UpdateUserRequest {
     /// <p>The user license type to update. This must be a supported license type for the Amazon Chime account that the user belongs to.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<License>,
     /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
     /// <p>The user type.</p>
     #[serde(rename = "UserType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_type: Option<String>,
+    pub user_type: Option<UserType>,
 }
 
 /// <p>The user ID and user fields to update, used with the <a>BatchUpdateUser</a> action.</p>
@@ -5180,14 +8456,14 @@ pub struct UpdateUserRequestItem {
     /// <p>The user license type.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<License>,
     /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
     /// <p>The user type.</p>
     #[serde(rename = "UserType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_type: Option<String>,
+    pub user_type: Option<UserType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5282,7 +8558,7 @@ pub struct User {
     /// <p>The license type for the user.</p>
     #[serde(rename = "LicenseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_type: Option<String>,
+    pub license_type: Option<License>,
     /// <p>The user's personal meeting PIN.</p>
     #[serde(rename = "PersonalPIN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5305,15 +8581,15 @@ pub struct User {
     /// <p>The user invite status.</p>
     #[serde(rename = "UserInvitationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_invitation_status: Option<String>,
+    pub user_invitation_status: Option<InviteStatus>,
     /// <p>The user registration status.</p>
     #[serde(rename = "UserRegistrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_registration_status: Option<String>,
+    pub user_registration_status: Option<RegistrationStatus>,
     /// <p>The user type.</p>
     #[serde(rename = "UserType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_type: Option<String>,
+    pub user_type: Option<UserType>,
 }
 
 /// <p>The list of errors returned when errors are encountered during the <a>BatchSuspendUser</a>, <a>BatchUnsuspendUser</a>, or <a>BatchUpdateUser</a> actions. This includes user IDs, error codes, and error messages.</p>
@@ -5323,7 +8599,7 @@ pub struct UserError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5342,6 +8618,106 @@ pub struct UserSettings {
     pub telephony: TelephonySettings,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserType {
+    PrivateUser,
+    SharedDevice,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserType),
+}
+
+impl Default for UserType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserType {
+    fn into(self) -> String {
+        match self {
+            UserType::PrivateUser => "PrivateUser".to_string(),
+            UserType::SharedDevice => "SharedDevice".to_string(),
+            UserType::UnknownVariant(UnknownUserType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserType {
+    fn into(self) -> &'a str {
+        match self {
+            UserType::PrivateUser => &"PrivateUser",
+            UserType::SharedDevice => &"SharedDevice",
+            UserType::UnknownVariant(UnknownUserType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PrivateUser" => UserType::PrivateUser,
+            "SharedDevice" => UserType::SharedDevice,
+            _ => UserType::UnknownVariant(UnknownUserType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PrivateUser" => UserType::PrivateUser,
+            "SharedDevice" => UserType::SharedDevice,
+            _ => UserType::UnknownVariant(UnknownUserType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The Amazon Chime Voice Connector configuration, including outbound host name and encryption settings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5349,7 +8725,7 @@ pub struct VoiceConnector {
     /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default: <code>us-east-1</code>.</p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub aws_region: Option<String>,
+    pub aws_region: Option<VoiceConnectorAwsRegion>,
     /// <p>The Amazon Chime Voice Connector creation timestamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5374,6 +8750,110 @@ pub struct VoiceConnector {
     #[serde(rename = "VoiceConnectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_connector_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVoiceConnectorAwsRegion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VoiceConnectorAwsRegion {
+    UsEast1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVoiceConnectorAwsRegion),
+}
+
+impl Default for VoiceConnectorAwsRegion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VoiceConnectorAwsRegion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VoiceConnectorAwsRegion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VoiceConnectorAwsRegion {
+    fn into(self) -> String {
+        match self {
+            VoiceConnectorAwsRegion::UsEast1 => "us-east-1".to_string(),
+            VoiceConnectorAwsRegion::UsWest2 => "us-west-2".to_string(),
+            VoiceConnectorAwsRegion::UnknownVariant(UnknownVoiceConnectorAwsRegion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VoiceConnectorAwsRegion {
+    fn into(self) -> &'a str {
+        match self {
+            VoiceConnectorAwsRegion::UsEast1 => &"us-east-1",
+            VoiceConnectorAwsRegion::UsWest2 => &"us-west-2",
+            VoiceConnectorAwsRegion::UnknownVariant(UnknownVoiceConnectorAwsRegion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VoiceConnectorAwsRegion {
+    fn from(name: &str) -> Self {
+        match name {
+            "us-east-1" => VoiceConnectorAwsRegion::UsEast1,
+            "us-west-2" => VoiceConnectorAwsRegion::UsWest2,
+            _ => VoiceConnectorAwsRegion::UnknownVariant(UnknownVoiceConnectorAwsRegion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VoiceConnectorAwsRegion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "us-east-1" => VoiceConnectorAwsRegion::UsEast1,
+            "us-west-2" => VoiceConnectorAwsRegion::UsWest2,
+            _ => VoiceConnectorAwsRegion::UnknownVariant(UnknownVoiceConnectorAwsRegion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VoiceConnectorAwsRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VoiceConnectorAwsRegion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VoiceConnectorAwsRegion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Amazon Chime Voice Connector group configuration, including associated Amazon Chime Voice Connectors. You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>

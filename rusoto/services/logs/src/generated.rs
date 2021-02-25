@@ -260,7 +260,7 @@ pub struct DescribeExportTasksRequest {
     /// <p>The status code of the export task. Specifying a status code filters the results to zero or more export tasks.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<ExportTaskStatusCode>,
     /// <p>The ID of the export task. Specifying a task ID filters the results to zero or one export tasks.</p>
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,7 +333,7 @@ pub struct DescribeLogStreamsRequest {
     /// <p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p> <code>lastEventTimeStamp</code> represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. <code>lastEventTimeStamp</code> updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but in rare situations might take longer.</p>
     #[serde(rename = "orderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order_by: Option<String>,
+    pub order_by: Option<OrderBy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -406,7 +406,7 @@ pub struct DescribeQueriesRequest {
     /// <p>Limits the returned queries to only those that have the specified status. Valid values are <code>Cancelled</code>, <code>Complete</code>, <code>Failed</code>, <code>Running</code>, and <code>Scheduled</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<QueryStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -543,6 +543,108 @@ pub struct DisassociateKmsKeyRequest {
     pub log_group_name: String,
 }
 
+/// <p>The method used to distribute log data to the destination, which can be either random or grouped by log stream.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDistribution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Distribution {
+    ByLogStream,
+    Random,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDistribution),
+}
+
+impl Default for Distribution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Distribution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Distribution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Distribution {
+    fn into(self) -> String {
+        match self {
+            Distribution::ByLogStream => "ByLogStream".to_string(),
+            Distribution::Random => "Random".to_string(),
+            Distribution::UnknownVariant(UnknownDistribution { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Distribution {
+    fn into(self) -> &'a str {
+        match self {
+            Distribution::ByLogStream => &"ByLogStream",
+            Distribution::Random => &"Random",
+            Distribution::UnknownVariant(UnknownDistribution { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Distribution {
+    fn from(name: &str) -> Self {
+        match name {
+            "ByLogStream" => Distribution::ByLogStream,
+            "Random" => Distribution::Random,
+            _ => Distribution::UnknownVariant(UnknownDistribution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Distribution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ByLogStream" => Distribution::ByLogStream,
+            "Random" => Distribution::Random,
+            _ => Distribution::UnknownVariant(UnknownDistribution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Distribution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Distribution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Distribution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents an export task.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -606,11 +708,135 @@ pub struct ExportTaskStatus {
     /// <p>The status code of the export task.</p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<ExportTaskStatusCode>,
     /// <p>The status message related to the status code.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportTaskStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportTaskStatusCode {
+    Cancelled,
+    Completed,
+    Failed,
+    Pending,
+    PendingCancel,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportTaskStatusCode),
+}
+
+impl Default for ExportTaskStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportTaskStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportTaskStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportTaskStatusCode {
+    fn into(self) -> String {
+        match self {
+            ExportTaskStatusCode::Cancelled => "CANCELLED".to_string(),
+            ExportTaskStatusCode::Completed => "COMPLETED".to_string(),
+            ExportTaskStatusCode::Failed => "FAILED".to_string(),
+            ExportTaskStatusCode::Pending => "PENDING".to_string(),
+            ExportTaskStatusCode::PendingCancel => "PENDING_CANCEL".to_string(),
+            ExportTaskStatusCode::Running => "RUNNING".to_string(),
+            ExportTaskStatusCode::UnknownVariant(UnknownExportTaskStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportTaskStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            ExportTaskStatusCode::Cancelled => &"CANCELLED",
+            ExportTaskStatusCode::Completed => &"COMPLETED",
+            ExportTaskStatusCode::Failed => &"FAILED",
+            ExportTaskStatusCode::Pending => &"PENDING",
+            ExportTaskStatusCode::PendingCancel => &"PENDING_CANCEL",
+            ExportTaskStatusCode::Running => &"RUNNING",
+            ExportTaskStatusCode::UnknownVariant(UnknownExportTaskStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportTaskStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => ExportTaskStatusCode::Cancelled,
+            "COMPLETED" => ExportTaskStatusCode::Completed,
+            "FAILED" => ExportTaskStatusCode::Failed,
+            "PENDING" => ExportTaskStatusCode::Pending,
+            "PENDING_CANCEL" => ExportTaskStatusCode::PendingCancel,
+            "RUNNING" => ExportTaskStatusCode::Running,
+            _ => ExportTaskStatusCode::UnknownVariant(UnknownExportTaskStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportTaskStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => ExportTaskStatusCode::Cancelled,
+            "COMPLETED" => ExportTaskStatusCode::Completed,
+            "FAILED" => ExportTaskStatusCode::Failed,
+            "PENDING" => ExportTaskStatusCode::Pending,
+            "PENDING_CANCEL" => ExportTaskStatusCode::PendingCancel,
+            "RUNNING" => ExportTaskStatusCode::Running,
+            _ => ExportTaskStatusCode::UnknownVariant(UnknownExportTaskStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportTaskStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExportTaskStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportTaskStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -800,7 +1026,7 @@ pub struct GetQueryResultsResponse {
     /// <p>The status of the most recent running of the query. Possible values are <code>Cancelled</code>, <code>Complete</code>, <code>Failed</code>, <code>Running</code>, <code>Scheduled</code>, <code>Timeout</code>, and <code>Unknown</code>.</p> <p>Queries time out after 15 minutes of execution. To avoid having your queries time out, reduce the time range being searched or partition your query into a number of queries.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<QueryStatus>,
 }
 
 /// <p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>
@@ -974,6 +1200,107 @@ pub struct MetricTransformation {
     pub metric_value: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderBy {
+    LastEventTime,
+    LogStreamName,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderBy),
+}
+
+impl Default for OrderBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderBy {
+    fn into(self) -> String {
+        match self {
+            OrderBy::LastEventTime => "LastEventTime".to_string(),
+            OrderBy::LogStreamName => "LogStreamName".to_string(),
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderBy {
+    fn into(self) -> &'a str {
+        match self {
+            OrderBy::LastEventTime => &"LastEventTime",
+            OrderBy::LogStreamName => &"LogStreamName",
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "LastEventTime" => OrderBy::LastEventTime,
+            "LogStreamName" => OrderBy::LogStreamName,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LastEventTime" => OrderBy::LastEventTime,
+            "LogStreamName" => OrderBy::LogStreamName,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents a log event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1143,7 +1470,7 @@ pub struct PutSubscriptionFilterRequest {
     /// <p>The method used to distribute log data to the destination. By default, log data is grouped by log stream, but the grouping can be set to random for a more even distribution. This property is only applicable when the destination is an Amazon Kinesis stream. </p>
     #[serde(rename = "distribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub distribution: Option<String>,
+    pub distribution: Option<Distribution>,
     /// <p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeSubscriptionFilters.html">DescribeSubscriptionFilters</a>.</p>
     #[serde(rename = "filterName")]
     pub filter_name: String,
@@ -1226,7 +1553,7 @@ pub struct QueryInfo {
     /// <p>The status of this query. Possible values are <code>Cancelled</code>, <code>Complete</code>, <code>Failed</code>, <code>Running</code>, <code>Scheduled</code>, and <code>Unknown</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<QueryStatus>,
 }
 
 /// <p>Contains the number of log events scanned by the query, the number of log events that matched the query criteria, and the total number of bytes in the log events that were scanned.</p>
@@ -1245,6 +1572,121 @@ pub struct QueryStatistics {
     #[serde(rename = "recordsScanned")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub records_scanned: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryStatus {
+    Cancelled,
+    Complete,
+    Failed,
+    Running,
+    Scheduled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryStatus),
+}
+
+impl Default for QueryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryStatus {
+    fn into(self) -> String {
+        match self {
+            QueryStatus::Cancelled => "Cancelled".to_string(),
+            QueryStatus::Complete => "Complete".to_string(),
+            QueryStatus::Failed => "Failed".to_string(),
+            QueryStatus::Running => "Running".to_string(),
+            QueryStatus::Scheduled => "Scheduled".to_string(),
+            QueryStatus::UnknownVariant(UnknownQueryStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            QueryStatus::Cancelled => &"Cancelled",
+            QueryStatus::Complete => &"Complete",
+            QueryStatus::Failed => &"Failed",
+            QueryStatus::Running => &"Running",
+            QueryStatus::Scheduled => &"Scheduled",
+            QueryStatus::UnknownVariant(UnknownQueryStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QueryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => QueryStatus::Cancelled,
+            "Complete" => QueryStatus::Complete,
+            "Failed" => QueryStatus::Failed,
+            "Running" => QueryStatus::Running,
+            "Scheduled" => QueryStatus::Scheduled,
+            _ => QueryStatus::UnknownVariant(UnknownQueryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => QueryStatus::Cancelled,
+            "Complete" => QueryStatus::Complete,
+            "Failed" => QueryStatus::Failed,
+            "Running" => QueryStatus::Running,
+            "Scheduled" => QueryStatus::Scheduled,
+            _ => QueryStatus::UnknownVariant(UnknownQueryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QueryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the rejected events.</p>
@@ -1377,7 +1819,7 @@ pub struct SubscriptionFilter {
     pub destination_arn: Option<String>,
     #[serde(rename = "distribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub distribution: Option<String>,
+    pub distribution: Option<Distribution>,
     /// <p>The name of the subscription filter.</p>
     #[serde(rename = "filterName")]
     #[serde(skip_serializing_if = "Option::is_none")]

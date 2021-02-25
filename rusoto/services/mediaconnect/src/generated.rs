@@ -134,7 +134,7 @@ pub struct AddOutputRequest {
     pub port: Option<i64>,
     /// <p>The protocol to use for the output.</p>
     #[serde(rename = "Protocol")]
-    pub protocol: String,
+    pub protocol: Protocol,
     /// <p>The remote ID for the Zixi-pull output stream.</p>
     #[serde(rename = "RemoteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -151,6 +151,111 @@ pub struct AddOutputRequest {
     #[serde(rename = "VpcInterfaceAttachment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Algorithm {
+    Aes128,
+    Aes192,
+    Aes256,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlgorithm),
+}
+
+impl Default for Algorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Algorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Algorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Algorithm {
+    fn into(self) -> String {
+        match self {
+            Algorithm::Aes128 => "aes128".to_string(),
+            Algorithm::Aes192 => "aes192".to_string(),
+            Algorithm::Aes256 => "aes256".to_string(),
+            Algorithm::UnknownVariant(UnknownAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Algorithm {
+    fn into(self) -> &'a str {
+        match self {
+            Algorithm::Aes128 => &"aes128",
+            Algorithm::Aes192 => &"aes192",
+            Algorithm::Aes256 => &"aes256",
+            Algorithm::UnknownVariant(UnknownAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Algorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "aes128" => Algorithm::Aes128,
+            "aes192" => Algorithm::Aes192,
+            "aes256" => Algorithm::Aes256,
+            _ => Algorithm::UnknownVariant(UnknownAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Algorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aes128" => Algorithm::Aes128,
+            "aes192" => Algorithm::Aes192,
+            "aes256" => Algorithm::Aes256,
+            _ => Algorithm::UnknownVariant(UnknownAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Algorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Algorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Algorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
@@ -213,7 +318,7 @@ pub struct DeleteFlowResponse {
     /// <p>The status of the flow when the DeleteFlow process begins.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -267,12 +372,108 @@ pub struct DescribeReservationResponse {
     pub reservation: Option<Reservation>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDurationUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DurationUnits {
+    Months,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDurationUnits),
+}
+
+impl Default for DurationUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DurationUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DurationUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DurationUnits {
+    fn into(self) -> String {
+        match self {
+            DurationUnits::Months => "MONTHS".to_string(),
+            DurationUnits::UnknownVariant(UnknownDurationUnits { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DurationUnits {
+    fn into(self) -> &'a str {
+        match self {
+            DurationUnits::Months => &"MONTHS",
+            DurationUnits::UnknownVariant(UnknownDurationUnits { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DurationUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "MONTHS" => DurationUnits::Months,
+            _ => DurationUnits::UnknownVariant(UnknownDurationUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DurationUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MONTHS" => DurationUnits::Months,
+            _ => DurationUnits::UnknownVariant(UnknownDurationUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DurationUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DurationUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DurationUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the encryption of the flow.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Encryption {
     /// <p>The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).</p>
     #[serde(rename = "Algorithm")]
-    pub algorithm: String,
+    pub algorithm: Algorithm,
     /// <p>A 128-bit, 16-byte hex value represented by a 32-character string, to be used with the key for encrypting content. This parameter is not valid for static key encryption.</p>
     #[serde(rename = "ConstantInitializationVector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -284,7 +485,7 @@ pub struct Encryption {
     /// <p>The type of key that is used for the encryption. If no keyType is provided, the service will use the default setting (static-key).</p>
     #[serde(rename = "KeyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_type: Option<String>,
+    pub key_type: Option<KeyType>,
     /// <p>The AWS Region that the API Gateway proxy endpoint was created in. This parameter is required for SPEKE encryption and is not valid for static key encryption.</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -328,13 +529,117 @@ pub struct Entitlement {
     /// <p>An indication of whether the entitlement is enabled.</p>
     #[serde(rename = "EntitlementStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub entitlement_status: Option<String>,
+    pub entitlement_status: Option<EntitlementStatus>,
     /// <p>The name of the entitlement.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The AWS account IDs that you want to share your content with. The receiving accounts (subscribers) will be allowed to create their own flow using your content as the source.</p>
     #[serde(rename = "Subscribers")]
     pub subscribers: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntitlementStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntitlementStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntitlementStatus),
+}
+
+impl Default for EntitlementStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntitlementStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntitlementStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntitlementStatus {
+    fn into(self) -> String {
+        match self {
+            EntitlementStatus::Disabled => "DISABLED".to_string(),
+            EntitlementStatus::Enabled => "ENABLED".to_string(),
+            EntitlementStatus::UnknownVariant(UnknownEntitlementStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntitlementStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EntitlementStatus::Disabled => &"DISABLED",
+            EntitlementStatus::Enabled => &"ENABLED",
+            EntitlementStatus::UnknownVariant(UnknownEntitlementStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EntitlementStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => EntitlementStatus::Disabled,
+            "ENABLED" => EntitlementStatus::Enabled,
+            _ => EntitlementStatus::UnknownVariant(UnknownEntitlementStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntitlementStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => EntitlementStatus::Disabled,
+            "ENABLED" => EntitlementStatus::Enabled,
+            _ => EntitlementStatus::UnknownVariant(UnknownEntitlementStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntitlementStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntitlementStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntitlementStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The settings for source failover</p>
@@ -346,7 +651,7 @@ pub struct FailoverConfig {
     pub recovery_window: Option<i64>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<State>,
 }
 
 /// <p>The settings for a flow, including its source, outputs, and entitlements.</p>
@@ -386,7 +691,7 @@ pub struct Flow {
     pub sources: Option<Vec<Source>>,
     /// <p>The current status of the flow.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: Status,
     /// <p>The VPC Interfaces for this flow.</p>
     #[serde(rename = "VpcInterfaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -412,7 +717,7 @@ pub struct GrantEntitlementRequest {
     /// <p>An indication of whether the new entitlement should be enabled or disabled as soon as it is created. If you don’t specify the entitlementStatus field in your request, MediaConnect sets it to ENABLED.</p>
     #[serde(rename = "EntitlementStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub entitlement_status: Option<String>,
+    pub entitlement_status: Option<EntitlementStatus>,
     /// <p>The name of the entitlement. This value must be unique within the current flow.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -445,6 +750,106 @@ pub struct GrantFlowEntitlementsResponse {
     #[serde(rename = "FlowArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyType {
+    Speke,
+    StaticKey,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyType),
+}
+
+impl Default for KeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyType {
+    fn into(self) -> String {
+        match self {
+            KeyType::Speke => "speke".to_string(),
+            KeyType::StaticKey => "static-key".to_string(),
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyType {
+    fn into(self) -> &'a str {
+        match self {
+            KeyType::Speke => &"speke",
+            KeyType::StaticKey => &"static-key",
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "speke" => KeyType::Speke,
+            "static-key" => KeyType::StaticKey,
+            _ => KeyType::UnknownVariant(UnknownKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "speke" => KeyType::Speke,
+            "static-key" => KeyType::StaticKey,
+            _ => KeyType::UnknownVariant(UnknownKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for KeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -602,10 +1007,10 @@ pub struct ListedFlow {
     pub name: String,
     /// <p>The type of source. This value is either owned (originated somewhere other than an AWS Elemental MediaConnect flow owned by another AWS account) or entitled (originated at an AWS Elemental MediaConnect flow owned by another AWS account).</p>
     #[serde(rename = "SourceType")]
-    pub source_type: String,
+    pub source_type: SourceType,
     /// <p>The current status of the flow.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: Status,
 }
 
 /// <p>Messages that provide the state of the flow.</p>
@@ -629,7 +1034,7 @@ pub struct Offering {
     pub duration: i64,
     /// <p>The unit of measurement for the duration of the offering.</p>
     #[serde(rename = "DurationUnits")]
-    pub duration_units: String,
+    pub duration_units: DurationUnits,
     /// <p>The Amazon Resource Name (ARN) that MediaConnect assigns to the offering.</p>
     #[serde(rename = "OfferingArn")]
     pub offering_arn: String,
@@ -641,7 +1046,7 @@ pub struct Offering {
     pub price_per_unit: String,
     /// <p>The unit of measurement that is used for billing. This value, in combination with pricePerUnit, makes up the rate.</p>
     #[serde(rename = "PriceUnits")]
-    pub price_units: String,
+    pub price_units: PriceUnits,
     /// <p>A definition of the amount of outbound bandwidth that you would be reserving if you purchase the offering.</p>
     #[serde(rename = "ResourceSpecification")]
     pub resource_specification: ResourceSpecification,
@@ -693,6 +1098,217 @@ pub struct Output {
     #[serde(rename = "VpcInterfaceAttachment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPriceUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PriceUnits {
+    Hourly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPriceUnits),
+}
+
+impl Default for PriceUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PriceUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PriceUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PriceUnits {
+    fn into(self) -> String {
+        match self {
+            PriceUnits::Hourly => "HOURLY".to_string(),
+            PriceUnits::UnknownVariant(UnknownPriceUnits { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PriceUnits {
+    fn into(self) -> &'a str {
+        match self {
+            PriceUnits::Hourly => &"HOURLY",
+            PriceUnits::UnknownVariant(UnknownPriceUnits { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PriceUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "HOURLY" => PriceUnits::Hourly,
+            _ => PriceUnits::UnknownVariant(UnknownPriceUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PriceUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HOURLY" => PriceUnits::Hourly,
+            _ => PriceUnits::UnknownVariant(UnknownPriceUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PriceUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PriceUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PriceUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Protocol {
+    Rist,
+    Rtp,
+    RtpFec,
+    ZixiPull,
+    ZixiPush,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtocol),
+}
+
+impl Default for Protocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Protocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Protocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Protocol {
+    fn into(self) -> String {
+        match self {
+            Protocol::Rist => "rist".to_string(),
+            Protocol::Rtp => "rtp".to_string(),
+            Protocol::RtpFec => "rtp-fec".to_string(),
+            Protocol::ZixiPull => "zixi-pull".to_string(),
+            Protocol::ZixiPush => "zixi-push".to_string(),
+            Protocol::UnknownVariant(UnknownProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Protocol {
+    fn into(self) -> &'a str {
+        match self {
+            Protocol::Rist => &"rist",
+            Protocol::Rtp => &"rtp",
+            Protocol::RtpFec => &"rtp-fec",
+            Protocol::ZixiPull => &"zixi-pull",
+            Protocol::ZixiPush => &"zixi-push",
+            Protocol::UnknownVariant(UnknownProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Protocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "rist" => Protocol::Rist,
+            "rtp" => Protocol::Rtp,
+            "rtp-fec" => Protocol::RtpFec,
+            "zixi-pull" => Protocol::ZixiPull,
+            "zixi-push" => Protocol::ZixiPush,
+            _ => Protocol::UnknownVariant(UnknownProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Protocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "rist" => Protocol::Rist,
+            "rtp" => Protocol::Rtp,
+            "rtp-fec" => Protocol::RtpFec,
+            "zixi-pull" => Protocol::ZixiPull,
+            "zixi-push" => Protocol::ZixiPush,
+            _ => Protocol::UnknownVariant(UnknownProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Protocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Protocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Protocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A request to purchase a offering.</p>
@@ -806,7 +1422,7 @@ pub struct Reservation {
     pub duration: i64,
     /// <p>The unit of measurement for the duration of the reservation. MediaConnect defines this value in the offering.</p>
     #[serde(rename = "DurationUnits")]
-    pub duration_units: String,
+    pub duration_units: DurationUnits,
     /// <p>The day and time that this reservation expires. This value is calculated based on the start date and time that you set and the offering&#39;s duration.</p>
     #[serde(rename = "End")]
     pub end: String,
@@ -821,7 +1437,7 @@ pub struct Reservation {
     pub price_per_unit: String,
     /// <p>The unit of measurement that is used for billing. This value, in combination with pricePerUnit, makes up the rate. MediaConnect defines this value in the offering.</p>
     #[serde(rename = "PriceUnits")]
-    pub price_units: String,
+    pub price_units: PriceUnits,
     /// <p>The Amazon Resource Name (ARN) that MediaConnect assigns to the reservation when you purchase an offering.</p>
     #[serde(rename = "ReservationArn")]
     pub reservation_arn: String,
@@ -830,13 +1446,128 @@ pub struct Reservation {
     pub reservation_name: String,
     /// <p>The status of your reservation.</p>
     #[serde(rename = "ReservationState")]
-    pub reservation_state: String,
+    pub reservation_state: ReservationState,
     /// <p>A definition of the amount of outbound bandwidth that you would be reserving if you purchase the offering. MediaConnect defines the values that make up the resourceSpecification in the offering.</p>
     #[serde(rename = "ResourceSpecification")]
     pub resource_specification: ResourceSpecification,
     /// <p>The day and time that the reservation becomes active. You set this value when you purchase the offering.</p>
     #[serde(rename = "Start")]
     pub start: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservationState {
+    Active,
+    Canceled,
+    Expired,
+    Processing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservationState),
+}
+
+impl Default for ReservationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservationState {
+    fn into(self) -> String {
+        match self {
+            ReservationState::Active => "ACTIVE".to_string(),
+            ReservationState::Canceled => "CANCELED".to_string(),
+            ReservationState::Expired => "EXPIRED".to_string(),
+            ReservationState::Processing => "PROCESSING".to_string(),
+            ReservationState::UnknownVariant(UnknownReservationState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservationState {
+    fn into(self) -> &'a str {
+        match self {
+            ReservationState::Active => &"ACTIVE",
+            ReservationState::Canceled => &"CANCELED",
+            ReservationState::Expired => &"EXPIRED",
+            ReservationState::Processing => &"PROCESSING",
+            ReservationState::UnknownVariant(UnknownReservationState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReservationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReservationState::Active,
+            "CANCELED" => ReservationState::Canceled,
+            "EXPIRED" => ReservationState::Expired,
+            "PROCESSING" => ReservationState::Processing,
+            _ => ReservationState::UnknownVariant(UnknownReservationState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReservationState::Active,
+            "CANCELED" => ReservationState::Canceled,
+            "EXPIRED" => ReservationState::Expired,
+            "PROCESSING" => ReservationState::Processing,
+            _ => ReservationState::UnknownVariant(UnknownReservationState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReservationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReservationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A definition of what is being billed for, including the type and amount.</p>
@@ -849,7 +1580,103 @@ pub struct ResourceSpecification {
     pub reserved_bitrate: Option<i64>,
     /// <p>The type of resource and the unit that is being billed for.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    MbpsOutboundBandwidth,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::MbpsOutboundBandwidth => "Mbps_Outbound_Bandwidth".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::MbpsOutboundBandwidth => &"Mbps_Outbound_Bandwidth",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Mbps_Outbound_Bandwidth" => ResourceType::MbpsOutboundBandwidth,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Mbps_Outbound_Bandwidth" => ResourceType::MbpsOutboundBandwidth,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -911,7 +1738,7 @@ pub struct SetSourceRequest {
     /// <p>The protocol that is used by the source.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
     /// <p>The stream ID that you want to use for this transport. This parameter applies only to Zixi-based streams.</p>
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -974,6 +1801,107 @@ pub struct Source {
     pub whitelist_cidr: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Entitled,
+    Owned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Entitled => "ENTITLED".to_string(),
+            SourceType::Owned => "OWNED".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Entitled => &"ENTITLED",
+            SourceType::Owned => &"OWNED",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENTITLED" => SourceType::Entitled,
+            "OWNED" => SourceType::Owned,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENTITLED" => SourceType::Entitled,
+            "OWNED" => SourceType::Owned,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFlowRequest {
@@ -992,7 +1920,233 @@ pub struct StartFlowResponse {
     /// <p>The status of the flow when the StartFlow process begins.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum State {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownState),
+}
+
+impl Default for State {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for State {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for State {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for State {
+    fn into(self) -> String {
+        match self {
+            State::Disabled => "DISABLED".to_string(),
+            State::Enabled => "ENABLED".to_string(),
+            State::UnknownVariant(UnknownState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a State {
+    fn into(self) -> &'a str {
+        match self {
+            State::Disabled => &"DISABLED",
+            State::Enabled => &"ENABLED",
+            State::UnknownVariant(UnknownState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for State {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => State::Disabled,
+            "ENABLED" => State::Enabled,
+            _ => State::UnknownVariant(UnknownState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for State {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => State::Disabled,
+            "ENABLED" => State::Enabled,
+            _ => State::UnknownVariant(UnknownState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for State {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for State {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for State {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Active,
+    Deleting,
+    Error,
+    Standby,
+    Starting,
+    Stopping,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Active => "ACTIVE".to_string(),
+            Status::Deleting => "DELETING".to_string(),
+            Status::Error => "ERROR".to_string(),
+            Status::Standby => "STANDBY".to_string(),
+            Status::Starting => "STARTING".to_string(),
+            Status::Stopping => "STOPPING".to_string(),
+            Status::Updating => "UPDATING".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Active => &"ACTIVE",
+            Status::Deleting => &"DELETING",
+            Status::Error => &"ERROR",
+            Status::Standby => &"STANDBY",
+            Status::Starting => &"STARTING",
+            Status::Stopping => &"STOPPING",
+            Status::Updating => &"UPDATING",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => Status::Active,
+            "DELETING" => Status::Deleting,
+            "ERROR" => Status::Error,
+            "STANDBY" => Status::Standby,
+            "STARTING" => Status::Starting,
+            "STOPPING" => Status::Stopping,
+            "UPDATING" => Status::Updating,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => Status::Active,
+            "DELETING" => Status::Deleting,
+            "ERROR" => Status::Error,
+            "STANDBY" => Status::Standby,
+            "STARTING" => Status::Starting,
+            "STOPPING" => Status::Stopping,
+            "UPDATING" => Status::Updating,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1013,7 +2167,7 @@ pub struct StopFlowResponse {
     /// <p>The status of the flow when the StopFlow process begins.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
 }
 
 /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
@@ -1046,7 +2200,7 @@ pub struct Transport {
     pub max_latency: Option<i64>,
     /// <p>The protocol that is used by the source or output.</p>
     #[serde(rename = "Protocol")]
-    pub protocol: String,
+    pub protocol: Protocol,
     /// <p>The remote ID for the Zixi-pull stream.</p>
     #[serde(rename = "RemoteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1079,7 +2233,7 @@ pub struct UpdateEncryption {
     /// <p>The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).</p>
     #[serde(rename = "Algorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub algorithm: Option<String>,
+    pub algorithm: Option<Algorithm>,
     /// <p>A 128-bit, 16-byte hex value represented by a 32-character string, to be used with the key for encrypting content. This parameter is not valid for static key encryption.</p>
     #[serde(rename = "ConstantInitializationVector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1091,7 +2245,7 @@ pub struct UpdateEncryption {
     /// <p>The type of key that is used for the encryption. If no keyType is provided, the service will use the default setting (static-key).</p>
     #[serde(rename = "KeyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_type: Option<String>,
+    pub key_type: Option<KeyType>,
     /// <p>The AWS Region that the API Gateway proxy endpoint was created in. This parameter is required for SPEKE encryption and is not valid for static key encryption.</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1124,7 +2278,7 @@ pub struct UpdateFailoverConfig {
     pub recovery_window: Option<i64>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<State>,
 }
 
 /// <p>The entitlement fields that you want to update.</p>
@@ -1145,7 +2299,7 @@ pub struct UpdateFlowEntitlementRequest {
     /// <p>An indication of whether you want to enable the entitlement to allow access, or disable it to stop streaming content to the subscriber’s flow temporarily. If you don’t specify the entitlementStatus field in your request, MediaConnect leaves the value unchanged.</p>
     #[serde(rename = "EntitlementStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub entitlement_status: Option<String>,
+    pub entitlement_status: Option<EntitlementStatus>,
     /// <p>The flow that is associated with the entitlement that you want to update.</p>
     #[serde(rename = "FlowArn")]
     pub flow_arn: String,
@@ -1205,7 +2359,7 @@ pub struct UpdateFlowOutputRequest {
     /// <p>The protocol to use for the output.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
     /// <p>The remote ID for the Zixi-pull stream.</p>
     #[serde(rename = "RemoteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1291,7 +2445,7 @@ pub struct UpdateFlowSourceRequest {
     /// <p>The protocol that is used by the source.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
     /// <p>The ARN of the source that you want to update.</p>
     #[serde(rename = "SourceArn")]
     pub source_arn: String,

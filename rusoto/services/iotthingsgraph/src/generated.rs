@@ -117,7 +117,7 @@ pub struct CreateSystemInstanceRequest {
     pub tags: Option<Vec<Tag>>,
     /// <p>The target type of the deployment. Valid values are <code>GREENGRASS</code> and <code>CLOUD</code>.</p>
     #[serde(rename = "target")]
-    pub target: String,
+    pub target: DeploymentTarget,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -155,10 +155,109 @@ pub struct CreateSystemTemplateResponse {
 pub struct DefinitionDocument {
     /// <p>The language used to define the entity. <code>GRAPHQL</code> is the only valid value.</p>
     #[serde(rename = "language")]
-    pub language: String,
+    pub language: DefinitionLanguage,
     /// <p>The GraphQL text that defines the entity.</p>
     #[serde(rename = "text")]
     pub text: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDefinitionLanguage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DefinitionLanguage {
+    Graphql,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDefinitionLanguage),
+}
+
+impl Default for DefinitionLanguage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DefinitionLanguage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DefinitionLanguage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DefinitionLanguage {
+    fn into(self) -> String {
+        match self {
+            DefinitionLanguage::Graphql => "GRAPHQL".to_string(),
+            DefinitionLanguage::UnknownVariant(UnknownDefinitionLanguage { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DefinitionLanguage {
+    fn into(self) -> &'a str {
+        match self {
+            DefinitionLanguage::Graphql => &"GRAPHQL",
+            DefinitionLanguage::UnknownVariant(UnknownDefinitionLanguage { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DefinitionLanguage {
+    fn from(name: &str) -> Self {
+        match name {
+            "GRAPHQL" => DefinitionLanguage::Graphql,
+            _ => DefinitionLanguage::UnknownVariant(UnknownDefinitionLanguage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DefinitionLanguage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GRAPHQL" => DefinitionLanguage::Graphql,
+            _ => DefinitionLanguage::UnknownVariant(UnknownDefinitionLanguage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DefinitionLanguage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DefinitionLanguage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DefinitionLanguage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -250,6 +349,110 @@ pub struct DeploySystemInstanceResponse {
     pub summary: SystemInstanceSummary,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentTarget {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentTarget {
+    Cloud,
+    Greengrass,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentTarget),
+}
+
+impl Default for DeploymentTarget {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentTarget {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentTarget {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentTarget {
+    fn into(self) -> String {
+        match self {
+            DeploymentTarget::Cloud => "CLOUD".to_string(),
+            DeploymentTarget::Greengrass => "GREENGRASS".to_string(),
+            DeploymentTarget::UnknownVariant(UnknownDeploymentTarget { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentTarget {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentTarget::Cloud => &"CLOUD",
+            DeploymentTarget::Greengrass => &"GREENGRASS",
+            DeploymentTarget::UnknownVariant(UnknownDeploymentTarget { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentTarget {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUD" => DeploymentTarget::Cloud,
+            "GREENGRASS" => DeploymentTarget::Greengrass,
+            _ => DeploymentTarget::UnknownVariant(UnknownDeploymentTarget {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentTarget {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUD" => DeploymentTarget::Cloud,
+            "GREENGRASS" => DeploymentTarget::Greengrass,
+            _ => DeploymentTarget::UnknownVariant(UnknownDeploymentTarget { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentTarget {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentTarget {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentTarget {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateFlowTemplateRequest {
@@ -313,7 +516,7 @@ pub struct DescribeNamespaceResponse {
 pub struct DissociateEntityFromThingRequest {
     /// <p>The entity type from which to disassociate the thing.</p>
     #[serde(rename = "entityType")]
-    pub entity_type: String,
+    pub entity_type: EntityType,
     /// <p>The name of the thing to disassociate.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -346,7 +549,7 @@ pub struct EntityDescription {
     /// <p>The entity type.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EntityType>,
 }
 
 /// <p>An object that filters an entity search. Multiple filters function as OR criteria in the search. For example a search that includes a <code>NAMESPACE</code> and a <code>REFERENCED_ENTITY_ID</code> filter searches for entities in the specified namespace that use the entity specified by the value of <code>REFERENCED_ENTITY_ID</code>.</p>
@@ -356,11 +559,454 @@ pub struct EntityFilter {
     /// <p>The name of the entity search filter field. <code>REFERENCED_ENTITY_ID</code> filters on entities that are used by the entity in the result set. For example, you can filter on the ID of a property that is used in a state.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<EntityFilterName>,
     /// <p>An array of string values for the search filter field. Multiple values function as AND criteria in the search.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityFilterName {
+    Name,
+    Namespace,
+    ReferencedEntityId,
+    SemanticTypePath,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityFilterName),
+}
+
+impl Default for EntityFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityFilterName {
+    fn into(self) -> String {
+        match self {
+            EntityFilterName::Name => "NAME".to_string(),
+            EntityFilterName::Namespace => "NAMESPACE".to_string(),
+            EntityFilterName::ReferencedEntityId => "REFERENCED_ENTITY_ID".to_string(),
+            EntityFilterName::SemanticTypePath => "SEMANTIC_TYPE_PATH".to_string(),
+            EntityFilterName::UnknownVariant(UnknownEntityFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            EntityFilterName::Name => &"NAME",
+            EntityFilterName::Namespace => &"NAMESPACE",
+            EntityFilterName::ReferencedEntityId => &"REFERENCED_ENTITY_ID",
+            EntityFilterName::SemanticTypePath => &"SEMANTIC_TYPE_PATH",
+            EntityFilterName::UnknownVariant(UnknownEntityFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EntityFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "NAME" => EntityFilterName::Name,
+            "NAMESPACE" => EntityFilterName::Namespace,
+            "REFERENCED_ENTITY_ID" => EntityFilterName::ReferencedEntityId,
+            "SEMANTIC_TYPE_PATH" => EntityFilterName::SemanticTypePath,
+            _ => EntityFilterName::UnknownVariant(UnknownEntityFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NAME" => EntityFilterName::Name,
+            "NAMESPACE" => EntityFilterName::Namespace,
+            "REFERENCED_ENTITY_ID" => EntityFilterName::ReferencedEntityId,
+            "SEMANTIC_TYPE_PATH" => EntityFilterName::SemanticTypePath,
+            _ => EntityFilterName::UnknownVariant(UnknownEntityFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntityFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EntityFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityType {
+    Action,
+    Capability,
+    Device,
+    DeviceModel,
+    Enum,
+    Event,
+    Mapping,
+    Property,
+    Service,
+    State,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityType),
+}
+
+impl Default for EntityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityType {
+    fn into(self) -> String {
+        match self {
+            EntityType::Action => "ACTION".to_string(),
+            EntityType::Capability => "CAPABILITY".to_string(),
+            EntityType::Device => "DEVICE".to_string(),
+            EntityType::DeviceModel => "DEVICE_MODEL".to_string(),
+            EntityType::Enum => "ENUM".to_string(),
+            EntityType::Event => "EVENT".to_string(),
+            EntityType::Mapping => "MAPPING".to_string(),
+            EntityType::Property => "PROPERTY".to_string(),
+            EntityType::Service => "SERVICE".to_string(),
+            EntityType::State => "STATE".to_string(),
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityType {
+    fn into(self) -> &'a str {
+        match self {
+            EntityType::Action => &"ACTION",
+            EntityType::Capability => &"CAPABILITY",
+            EntityType::Device => &"DEVICE",
+            EntityType::DeviceModel => &"DEVICE_MODEL",
+            EntityType::Enum => &"ENUM",
+            EntityType::Event => &"EVENT",
+            EntityType::Mapping => &"MAPPING",
+            EntityType::Property => &"PROPERTY",
+            EntityType::Service => &"SERVICE",
+            EntityType::State => &"STATE",
+            EntityType::UnknownVariant(UnknownEntityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTION" => EntityType::Action,
+            "CAPABILITY" => EntityType::Capability,
+            "DEVICE" => EntityType::Device,
+            "DEVICE_MODEL" => EntityType::DeviceModel,
+            "ENUM" => EntityType::Enum,
+            "EVENT" => EntityType::Event,
+            "MAPPING" => EntityType::Mapping,
+            "PROPERTY" => EntityType::Property,
+            "SERVICE" => EntityType::Service,
+            "STATE" => EntityType::State,
+            _ => EntityType::UnknownVariant(UnknownEntityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTION" => EntityType::Action,
+            "CAPABILITY" => EntityType::Capability,
+            "DEVICE" => EntityType::Device,
+            "DEVICE_MODEL" => EntityType::DeviceModel,
+            "ENUM" => EntityType::Enum,
+            "EVENT" => EntityType::Event,
+            "MAPPING" => EntityType::Mapping,
+            "PROPERTY" => EntityType::Property,
+            "SERVICE" => EntityType::Service,
+            "STATE" => EntityType::State,
+            _ => EntityType::UnknownVariant(UnknownEntityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFlowExecutionEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FlowExecutionEventType {
+    AcknowledgeTaskMessage,
+    ActivityFailed,
+    ActivityScheduled,
+    ActivityStarted,
+    ActivitySucceeded,
+    ExecutionAborted,
+    ExecutionFailed,
+    ExecutionStarted,
+    ExecutionSucceeded,
+    ScheduleNextReadyStepsTask,
+    StartFlowExecutionTask,
+    StepFailed,
+    StepStarted,
+    StepSucceeded,
+    ThingActionTask,
+    ThingActionTaskFailed,
+    ThingActionTaskSucceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFlowExecutionEventType),
+}
+
+impl Default for FlowExecutionEventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FlowExecutionEventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FlowExecutionEventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FlowExecutionEventType {
+    fn into(self) -> String {
+        match self {
+            FlowExecutionEventType::AcknowledgeTaskMessage => {
+                "ACKNOWLEDGE_TASK_MESSAGE".to_string()
+            }
+            FlowExecutionEventType::ActivityFailed => "ACTIVITY_FAILED".to_string(),
+            FlowExecutionEventType::ActivityScheduled => "ACTIVITY_SCHEDULED".to_string(),
+            FlowExecutionEventType::ActivityStarted => "ACTIVITY_STARTED".to_string(),
+            FlowExecutionEventType::ActivitySucceeded => "ACTIVITY_SUCCEEDED".to_string(),
+            FlowExecutionEventType::ExecutionAborted => "EXECUTION_ABORTED".to_string(),
+            FlowExecutionEventType::ExecutionFailed => "EXECUTION_FAILED".to_string(),
+            FlowExecutionEventType::ExecutionStarted => "EXECUTION_STARTED".to_string(),
+            FlowExecutionEventType::ExecutionSucceeded => "EXECUTION_SUCCEEDED".to_string(),
+            FlowExecutionEventType::ScheduleNextReadyStepsTask => {
+                "SCHEDULE_NEXT_READY_STEPS_TASK".to_string()
+            }
+            FlowExecutionEventType::StartFlowExecutionTask => {
+                "START_FLOW_EXECUTION_TASK".to_string()
+            }
+            FlowExecutionEventType::StepFailed => "STEP_FAILED".to_string(),
+            FlowExecutionEventType::StepStarted => "STEP_STARTED".to_string(),
+            FlowExecutionEventType::StepSucceeded => "STEP_SUCCEEDED".to_string(),
+            FlowExecutionEventType::ThingActionTask => "THING_ACTION_TASK".to_string(),
+            FlowExecutionEventType::ThingActionTaskFailed => "THING_ACTION_TASK_FAILED".to_string(),
+            FlowExecutionEventType::ThingActionTaskSucceeded => {
+                "THING_ACTION_TASK_SUCCEEDED".to_string()
+            }
+            FlowExecutionEventType::UnknownVariant(UnknownFlowExecutionEventType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FlowExecutionEventType {
+    fn into(self) -> &'a str {
+        match self {
+            FlowExecutionEventType::AcknowledgeTaskMessage => &"ACKNOWLEDGE_TASK_MESSAGE",
+            FlowExecutionEventType::ActivityFailed => &"ACTIVITY_FAILED",
+            FlowExecutionEventType::ActivityScheduled => &"ACTIVITY_SCHEDULED",
+            FlowExecutionEventType::ActivityStarted => &"ACTIVITY_STARTED",
+            FlowExecutionEventType::ActivitySucceeded => &"ACTIVITY_SUCCEEDED",
+            FlowExecutionEventType::ExecutionAborted => &"EXECUTION_ABORTED",
+            FlowExecutionEventType::ExecutionFailed => &"EXECUTION_FAILED",
+            FlowExecutionEventType::ExecutionStarted => &"EXECUTION_STARTED",
+            FlowExecutionEventType::ExecutionSucceeded => &"EXECUTION_SUCCEEDED",
+            FlowExecutionEventType::ScheduleNextReadyStepsTask => &"SCHEDULE_NEXT_READY_STEPS_TASK",
+            FlowExecutionEventType::StartFlowExecutionTask => &"START_FLOW_EXECUTION_TASK",
+            FlowExecutionEventType::StepFailed => &"STEP_FAILED",
+            FlowExecutionEventType::StepStarted => &"STEP_STARTED",
+            FlowExecutionEventType::StepSucceeded => &"STEP_SUCCEEDED",
+            FlowExecutionEventType::ThingActionTask => &"THING_ACTION_TASK",
+            FlowExecutionEventType::ThingActionTaskFailed => &"THING_ACTION_TASK_FAILED",
+            FlowExecutionEventType::ThingActionTaskSucceeded => &"THING_ACTION_TASK_SUCCEEDED",
+            FlowExecutionEventType::UnknownVariant(UnknownFlowExecutionEventType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FlowExecutionEventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACKNOWLEDGE_TASK_MESSAGE" => FlowExecutionEventType::AcknowledgeTaskMessage,
+            "ACTIVITY_FAILED" => FlowExecutionEventType::ActivityFailed,
+            "ACTIVITY_SCHEDULED" => FlowExecutionEventType::ActivityScheduled,
+            "ACTIVITY_STARTED" => FlowExecutionEventType::ActivityStarted,
+            "ACTIVITY_SUCCEEDED" => FlowExecutionEventType::ActivitySucceeded,
+            "EXECUTION_ABORTED" => FlowExecutionEventType::ExecutionAborted,
+            "EXECUTION_FAILED" => FlowExecutionEventType::ExecutionFailed,
+            "EXECUTION_STARTED" => FlowExecutionEventType::ExecutionStarted,
+            "EXECUTION_SUCCEEDED" => FlowExecutionEventType::ExecutionSucceeded,
+            "SCHEDULE_NEXT_READY_STEPS_TASK" => FlowExecutionEventType::ScheduleNextReadyStepsTask,
+            "START_FLOW_EXECUTION_TASK" => FlowExecutionEventType::StartFlowExecutionTask,
+            "STEP_FAILED" => FlowExecutionEventType::StepFailed,
+            "STEP_STARTED" => FlowExecutionEventType::StepStarted,
+            "STEP_SUCCEEDED" => FlowExecutionEventType::StepSucceeded,
+            "THING_ACTION_TASK" => FlowExecutionEventType::ThingActionTask,
+            "THING_ACTION_TASK_FAILED" => FlowExecutionEventType::ThingActionTaskFailed,
+            "THING_ACTION_TASK_SUCCEEDED" => FlowExecutionEventType::ThingActionTaskSucceeded,
+            _ => FlowExecutionEventType::UnknownVariant(UnknownFlowExecutionEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FlowExecutionEventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACKNOWLEDGE_TASK_MESSAGE" => FlowExecutionEventType::AcknowledgeTaskMessage,
+            "ACTIVITY_FAILED" => FlowExecutionEventType::ActivityFailed,
+            "ACTIVITY_SCHEDULED" => FlowExecutionEventType::ActivityScheduled,
+            "ACTIVITY_STARTED" => FlowExecutionEventType::ActivityStarted,
+            "ACTIVITY_SUCCEEDED" => FlowExecutionEventType::ActivitySucceeded,
+            "EXECUTION_ABORTED" => FlowExecutionEventType::ExecutionAborted,
+            "EXECUTION_FAILED" => FlowExecutionEventType::ExecutionFailed,
+            "EXECUTION_STARTED" => FlowExecutionEventType::ExecutionStarted,
+            "EXECUTION_SUCCEEDED" => FlowExecutionEventType::ExecutionSucceeded,
+            "SCHEDULE_NEXT_READY_STEPS_TASK" => FlowExecutionEventType::ScheduleNextReadyStepsTask,
+            "START_FLOW_EXECUTION_TASK" => FlowExecutionEventType::StartFlowExecutionTask,
+            "STEP_FAILED" => FlowExecutionEventType::StepFailed,
+            "STEP_STARTED" => FlowExecutionEventType::StepStarted,
+            "STEP_SUCCEEDED" => FlowExecutionEventType::StepSucceeded,
+            "THING_ACTION_TASK" => FlowExecutionEventType::ThingActionTask,
+            "THING_ACTION_TASK_FAILED" => FlowExecutionEventType::ThingActionTaskFailed,
+            "THING_ACTION_TASK_SUCCEEDED" => FlowExecutionEventType::ThingActionTaskSucceeded,
+            _ => FlowExecutionEventType::UnknownVariant(UnknownFlowExecutionEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FlowExecutionEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FlowExecutionEventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FlowExecutionEventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains information about a flow event.</p>
@@ -370,7 +1016,7 @@ pub struct FlowExecutionMessage {
     /// <p>The type of flow event .</p>
     #[serde(rename = "eventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type: Option<String>,
+    pub event_type: Option<FlowExecutionEventType>,
     /// <p>The unique identifier of the message.</p>
     #[serde(rename = "messageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,6 +1029,121 @@ pub struct FlowExecutionMessage {
     #[serde(rename = "timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFlowExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FlowExecutionStatus {
+    Aborted,
+    Failed,
+    Running,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFlowExecutionStatus),
+}
+
+impl Default for FlowExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FlowExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FlowExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FlowExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            FlowExecutionStatus::Aborted => "ABORTED".to_string(),
+            FlowExecutionStatus::Failed => "FAILED".to_string(),
+            FlowExecutionStatus::Running => "RUNNING".to_string(),
+            FlowExecutionStatus::Succeeded => "SUCCEEDED".to_string(),
+            FlowExecutionStatus::UnknownVariant(UnknownFlowExecutionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FlowExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FlowExecutionStatus::Aborted => &"ABORTED",
+            FlowExecutionStatus::Failed => &"FAILED",
+            FlowExecutionStatus::Running => &"RUNNING",
+            FlowExecutionStatus::Succeeded => &"SUCCEEDED",
+            FlowExecutionStatus::UnknownVariant(UnknownFlowExecutionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FlowExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABORTED" => FlowExecutionStatus::Aborted,
+            "FAILED" => FlowExecutionStatus::Failed,
+            "RUNNING" => FlowExecutionStatus::Running,
+            "SUCCEEDED" => FlowExecutionStatus::Succeeded,
+            _ => FlowExecutionStatus::UnknownVariant(UnknownFlowExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FlowExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABORTED" => FlowExecutionStatus::Aborted,
+            "FAILED" => FlowExecutionStatus::Failed,
+            "RUNNING" => FlowExecutionStatus::Running,
+            "SUCCEEDED" => FlowExecutionStatus::Succeeded,
+            _ => FlowExecutionStatus::UnknownVariant(UnknownFlowExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FlowExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FlowExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FlowExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains summary information about a flow execution.</p>
@@ -404,7 +1165,7 @@ pub struct FlowExecutionSummary {
     /// <p>The current status of the flow execution.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<FlowExecutionStatus>,
     /// <p>The ID of the system instance that contains the flow.</p>
     #[serde(rename = "systemInstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -439,10 +1200,110 @@ pub struct FlowTemplateDescription {
 pub struct FlowTemplateFilter {
     /// <p>The name of the search filter field.</p>
     #[serde(rename = "name")]
-    pub name: String,
+    pub name: FlowTemplateFilterName,
     /// <p>An array of string values for the search filter field. Multiple values function as AND criteria in the search.</p>
     #[serde(rename = "value")]
     pub value: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFlowTemplateFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FlowTemplateFilterName {
+    DeviceModelId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFlowTemplateFilterName),
+}
+
+impl Default for FlowTemplateFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FlowTemplateFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FlowTemplateFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FlowTemplateFilterName {
+    fn into(self) -> String {
+        match self {
+            FlowTemplateFilterName::DeviceModelId => "DEVICE_MODEL_ID".to_string(),
+            FlowTemplateFilterName::UnknownVariant(UnknownFlowTemplateFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FlowTemplateFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            FlowTemplateFilterName::DeviceModelId => &"DEVICE_MODEL_ID",
+            FlowTemplateFilterName::UnknownVariant(UnknownFlowTemplateFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FlowTemplateFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEVICE_MODEL_ID" => FlowTemplateFilterName::DeviceModelId,
+            _ => FlowTemplateFilterName::UnknownVariant(UnknownFlowTemplateFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FlowTemplateFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEVICE_MODEL_ID" => FlowTemplateFilterName::DeviceModelId,
+            _ => FlowTemplateFilterName::UnknownVariant(UnknownFlowTemplateFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FlowTemplateFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FlowTemplateFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FlowTemplateFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains summary information about a workflow.</p>
@@ -548,7 +1409,7 @@ pub struct GetNamespaceDeletionStatusResponse {
     /// <p>An error code returned by the namespace deletion task.</p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<NamespaceDeletionStatusErrorCodes>,
     /// <p>An error code returned by the namespace deletion task.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -564,7 +1425,7 @@ pub struct GetNamespaceDeletionStatusResponse {
     /// <p>The status of the deletion request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NamespaceDeletionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -669,7 +1530,7 @@ pub struct GetUploadStatusResponse {
     pub upload_id: String,
     /// <p>The status of the upload. The initial status is <code>IN_PROGRESS</code>. The response show all validation failures if the upload fails.</p>
     #[serde(rename = "uploadStatus")]
-    pub upload_status: String,
+    pub upload_status: UploadStatus,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -743,12 +1604,226 @@ pub struct MetricsConfiguration {
     pub metric_rule_role_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNamespaceDeletionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NamespaceDeletionStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNamespaceDeletionStatus),
+}
+
+impl Default for NamespaceDeletionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NamespaceDeletionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NamespaceDeletionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NamespaceDeletionStatus {
+    fn into(self) -> String {
+        match self {
+            NamespaceDeletionStatus::Failed => "FAILED".to_string(),
+            NamespaceDeletionStatus::InProgress => "IN_PROGRESS".to_string(),
+            NamespaceDeletionStatus::Succeeded => "SUCCEEDED".to_string(),
+            NamespaceDeletionStatus::UnknownVariant(UnknownNamespaceDeletionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NamespaceDeletionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NamespaceDeletionStatus::Failed => &"FAILED",
+            NamespaceDeletionStatus::InProgress => &"IN_PROGRESS",
+            NamespaceDeletionStatus::Succeeded => &"SUCCEEDED",
+            NamespaceDeletionStatus::UnknownVariant(UnknownNamespaceDeletionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NamespaceDeletionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => NamespaceDeletionStatus::Failed,
+            "IN_PROGRESS" => NamespaceDeletionStatus::InProgress,
+            "SUCCEEDED" => NamespaceDeletionStatus::Succeeded,
+            _ => NamespaceDeletionStatus::UnknownVariant(UnknownNamespaceDeletionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NamespaceDeletionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => NamespaceDeletionStatus::Failed,
+            "IN_PROGRESS" => NamespaceDeletionStatus::InProgress,
+            "SUCCEEDED" => NamespaceDeletionStatus::Succeeded,
+            _ => NamespaceDeletionStatus::UnknownVariant(UnknownNamespaceDeletionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NamespaceDeletionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NamespaceDeletionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NamespaceDeletionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNamespaceDeletionStatusErrorCodes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NamespaceDeletionStatusErrorCodes {
+    ValidationFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNamespaceDeletionStatusErrorCodes),
+}
+
+impl Default for NamespaceDeletionStatusErrorCodes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NamespaceDeletionStatusErrorCodes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NamespaceDeletionStatusErrorCodes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NamespaceDeletionStatusErrorCodes {
+    fn into(self) -> String {
+        match self {
+            NamespaceDeletionStatusErrorCodes::ValidationFailed => "VALIDATION_FAILED".to_string(),
+            NamespaceDeletionStatusErrorCodes::UnknownVariant(
+                UnknownNamespaceDeletionStatusErrorCodes { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NamespaceDeletionStatusErrorCodes {
+    fn into(self) -> &'a str {
+        match self {
+            NamespaceDeletionStatusErrorCodes::ValidationFailed => &"VALIDATION_FAILED",
+            NamespaceDeletionStatusErrorCodes::UnknownVariant(
+                UnknownNamespaceDeletionStatusErrorCodes { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for NamespaceDeletionStatusErrorCodes {
+    fn from(name: &str) -> Self {
+        match name {
+            "VALIDATION_FAILED" => NamespaceDeletionStatusErrorCodes::ValidationFailed,
+            _ => NamespaceDeletionStatusErrorCodes::UnknownVariant(
+                UnknownNamespaceDeletionStatusErrorCodes {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for NamespaceDeletionStatusErrorCodes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "VALIDATION_FAILED" => NamespaceDeletionStatusErrorCodes::ValidationFailed,
+            _ => NamespaceDeletionStatusErrorCodes::UnknownVariant(
+                UnknownNamespaceDeletionStatusErrorCodes { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NamespaceDeletionStatusErrorCodes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NamespaceDeletionStatusErrorCodes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NamespaceDeletionStatusErrorCodes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchEntitiesRequest {
     /// <p>The entity types for which to search.</p>
     #[serde(rename = "entityTypes")]
-    pub entity_types: Vec<String>,
+    pub entity_types: Vec<EntityType>,
     /// <p>Optional filter to apply to the search. Valid filters are <code>NAME</code> <code>NAMESPACE</code>, <code>SEMANTIC_TYPE_PATH</code> and <code>REFERENCED_ENTITY_ID</code>. <code>REFERENCED_ENTITY_ID</code> filters on entities that are used by the entity in the result set. For example, you can filter on the ID of a property that is used in a state.</p> <p>Multiple filters function as OR criteria in the query. Multiple values passed inside the filter function as AND criteria.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -944,6 +2019,147 @@ pub struct SearchThingsResponse {
     pub things: Option<Vec<Thing>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSystemInstanceDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SystemInstanceDeploymentStatus {
+    Bootstrap,
+    DeletedInTarget,
+    DeployedInTarget,
+    DeployInProgress,
+    Failed,
+    NotDeployed,
+    PendingDelete,
+    UndeployInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSystemInstanceDeploymentStatus),
+}
+
+impl Default for SystemInstanceDeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SystemInstanceDeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SystemInstanceDeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SystemInstanceDeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            SystemInstanceDeploymentStatus::Bootstrap => "BOOTSTRAP".to_string(),
+            SystemInstanceDeploymentStatus::DeletedInTarget => "DELETED_IN_TARGET".to_string(),
+            SystemInstanceDeploymentStatus::DeployedInTarget => "DEPLOYED_IN_TARGET".to_string(),
+            SystemInstanceDeploymentStatus::DeployInProgress => "DEPLOY_IN_PROGRESS".to_string(),
+            SystemInstanceDeploymentStatus::Failed => "FAILED".to_string(),
+            SystemInstanceDeploymentStatus::NotDeployed => "NOT_DEPLOYED".to_string(),
+            SystemInstanceDeploymentStatus::PendingDelete => "PENDING_DELETE".to_string(),
+            SystemInstanceDeploymentStatus::UndeployInProgress => {
+                "UNDEPLOY_IN_PROGRESS".to_string()
+            }
+            SystemInstanceDeploymentStatus::UnknownVariant(
+                UnknownSystemInstanceDeploymentStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SystemInstanceDeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SystemInstanceDeploymentStatus::Bootstrap => &"BOOTSTRAP",
+            SystemInstanceDeploymentStatus::DeletedInTarget => &"DELETED_IN_TARGET",
+            SystemInstanceDeploymentStatus::DeployedInTarget => &"DEPLOYED_IN_TARGET",
+            SystemInstanceDeploymentStatus::DeployInProgress => &"DEPLOY_IN_PROGRESS",
+            SystemInstanceDeploymentStatus::Failed => &"FAILED",
+            SystemInstanceDeploymentStatus::NotDeployed => &"NOT_DEPLOYED",
+            SystemInstanceDeploymentStatus::PendingDelete => &"PENDING_DELETE",
+            SystemInstanceDeploymentStatus::UndeployInProgress => &"UNDEPLOY_IN_PROGRESS",
+            SystemInstanceDeploymentStatus::UnknownVariant(
+                UnknownSystemInstanceDeploymentStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SystemInstanceDeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOOTSTRAP" => SystemInstanceDeploymentStatus::Bootstrap,
+            "DELETED_IN_TARGET" => SystemInstanceDeploymentStatus::DeletedInTarget,
+            "DEPLOYED_IN_TARGET" => SystemInstanceDeploymentStatus::DeployedInTarget,
+            "DEPLOY_IN_PROGRESS" => SystemInstanceDeploymentStatus::DeployInProgress,
+            "FAILED" => SystemInstanceDeploymentStatus::Failed,
+            "NOT_DEPLOYED" => SystemInstanceDeploymentStatus::NotDeployed,
+            "PENDING_DELETE" => SystemInstanceDeploymentStatus::PendingDelete,
+            "UNDEPLOY_IN_PROGRESS" => SystemInstanceDeploymentStatus::UndeployInProgress,
+            _ => SystemInstanceDeploymentStatus::UnknownVariant(
+                UnknownSystemInstanceDeploymentStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SystemInstanceDeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOOTSTRAP" => SystemInstanceDeploymentStatus::Bootstrap,
+            "DELETED_IN_TARGET" => SystemInstanceDeploymentStatus::DeletedInTarget,
+            "DEPLOYED_IN_TARGET" => SystemInstanceDeploymentStatus::DeployedInTarget,
+            "DEPLOY_IN_PROGRESS" => SystemInstanceDeploymentStatus::DeployInProgress,
+            "FAILED" => SystemInstanceDeploymentStatus::Failed,
+            "NOT_DEPLOYED" => SystemInstanceDeploymentStatus::NotDeployed,
+            "PENDING_DELETE" => SystemInstanceDeploymentStatus::PendingDelete,
+            "UNDEPLOY_IN_PROGRESS" => SystemInstanceDeploymentStatus::UndeployInProgress,
+            _ => SystemInstanceDeploymentStatus::UnknownVariant(
+                UnknownSystemInstanceDeploymentStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SystemInstanceDeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SystemInstanceDeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SystemInstanceDeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that contains a system instance definition and summary information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -983,11 +2199,121 @@ pub struct SystemInstanceFilter {
     /// <p>The name of the search filter field.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SystemInstanceFilterName>,
     /// <p>An array of string values for the search filter field. Multiple values function as AND criteria in the search. </p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSystemInstanceFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SystemInstanceFilterName {
+    GreengrassGroupName,
+    Status,
+    SystemTemplateId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSystemInstanceFilterName),
+}
+
+impl Default for SystemInstanceFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SystemInstanceFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SystemInstanceFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SystemInstanceFilterName {
+    fn into(self) -> String {
+        match self {
+            SystemInstanceFilterName::GreengrassGroupName => "GREENGRASS_GROUP_NAME".to_string(),
+            SystemInstanceFilterName::Status => "STATUS".to_string(),
+            SystemInstanceFilterName::SystemTemplateId => "SYSTEM_TEMPLATE_ID".to_string(),
+            SystemInstanceFilterName::UnknownVariant(UnknownSystemInstanceFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SystemInstanceFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            SystemInstanceFilterName::GreengrassGroupName => &"GREENGRASS_GROUP_NAME",
+            SystemInstanceFilterName::Status => &"STATUS",
+            SystemInstanceFilterName::SystemTemplateId => &"SYSTEM_TEMPLATE_ID",
+            SystemInstanceFilterName::UnknownVariant(UnknownSystemInstanceFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SystemInstanceFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "GREENGRASS_GROUP_NAME" => SystemInstanceFilterName::GreengrassGroupName,
+            "STATUS" => SystemInstanceFilterName::Status,
+            "SYSTEM_TEMPLATE_ID" => SystemInstanceFilterName::SystemTemplateId,
+            _ => SystemInstanceFilterName::UnknownVariant(UnknownSystemInstanceFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SystemInstanceFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GREENGRASS_GROUP_NAME" => SystemInstanceFilterName::GreengrassGroupName,
+            "STATUS" => SystemInstanceFilterName::Status,
+            "SYSTEM_TEMPLATE_ID" => SystemInstanceFilterName::SystemTemplateId,
+            _ => SystemInstanceFilterName::UnknownVariant(UnknownSystemInstanceFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SystemInstanceFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SystemInstanceFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SystemInstanceFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains summary information about a system instance.</p>
@@ -1021,11 +2347,11 @@ pub struct SystemInstanceSummary {
     /// <p>The status of the system instance.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SystemInstanceDeploymentStatus>,
     /// <p>The target of the system instance.</p>
     #[serde(rename = "target")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
+    pub target: Option<DeploymentTarget>,
     /// <p> The date and time when the system instance was last updated.</p>
     #[serde(rename = "updatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1056,10 +2382,110 @@ pub struct SystemTemplateDescription {
 pub struct SystemTemplateFilter {
     /// <p>The name of the system search filter field.</p>
     #[serde(rename = "name")]
-    pub name: String,
+    pub name: SystemTemplateFilterName,
     /// <p>An array of string values for the search filter field. Multiple values function as AND criteria in the search.</p>
     #[serde(rename = "value")]
     pub value: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSystemTemplateFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SystemTemplateFilterName {
+    FlowTemplateId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSystemTemplateFilterName),
+}
+
+impl Default for SystemTemplateFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SystemTemplateFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SystemTemplateFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SystemTemplateFilterName {
+    fn into(self) -> String {
+        match self {
+            SystemTemplateFilterName::FlowTemplateId => "FLOW_TEMPLATE_ID".to_string(),
+            SystemTemplateFilterName::UnknownVariant(UnknownSystemTemplateFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SystemTemplateFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            SystemTemplateFilterName::FlowTemplateId => &"FLOW_TEMPLATE_ID",
+            SystemTemplateFilterName::UnknownVariant(UnknownSystemTemplateFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SystemTemplateFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "FLOW_TEMPLATE_ID" => SystemTemplateFilterName::FlowTemplateId,
+            _ => SystemTemplateFilterName::UnknownVariant(UnknownSystemTemplateFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SystemTemplateFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FLOW_TEMPLATE_ID" => SystemTemplateFilterName::FlowTemplateId,
+            _ => SystemTemplateFilterName::UnknownVariant(UnknownSystemTemplateFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SystemTemplateFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SystemTemplateFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SystemTemplateFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains information about a system.</p>
@@ -1228,6 +2654,112 @@ pub struct UploadEntityDefinitionsResponse {
     /// <p>The ID that specifies the upload action. You can use this to track the status of the upload.</p>
     #[serde(rename = "uploadId")]
     pub upload_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUploadStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UploadStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUploadStatus),
+}
+
+impl Default for UploadStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UploadStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UploadStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UploadStatus {
+    fn into(self) -> String {
+        match self {
+            UploadStatus::Failed => "FAILED".to_string(),
+            UploadStatus::InProgress => "IN_PROGRESS".to_string(),
+            UploadStatus::Succeeded => "SUCCEEDED".to_string(),
+            UploadStatus::UnknownVariant(UnknownUploadStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UploadStatus {
+    fn into(self) -> &'a str {
+        match self {
+            UploadStatus::Failed => &"FAILED",
+            UploadStatus::InProgress => &"IN_PROGRESS",
+            UploadStatus::Succeeded => &"SUCCEEDED",
+            UploadStatus::UnknownVariant(UnknownUploadStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UploadStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => UploadStatus::Failed,
+            "IN_PROGRESS" => UploadStatus::InProgress,
+            "SUCCEEDED" => UploadStatus::Succeeded,
+            _ => UploadStatus::UnknownVariant(UnknownUploadStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UploadStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => UploadStatus::Failed,
+            "IN_PROGRESS" => UploadStatus::InProgress,
+            "SUCCEEDED" => UploadStatus::Succeeded,
+            _ => UploadStatus::UnknownVariant(UnknownUploadStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UploadStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UploadStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UploadStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateEntityToThing

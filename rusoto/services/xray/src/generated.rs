@@ -294,11 +294,216 @@ pub struct EncryptionConfig {
     /// <p>The encryption status. While the status is <code>UPDATING</code>, X-Ray may encrypt data with a combination of the new and old settings.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EncryptionStatus>,
     /// <p>The type of encryption. Set to <code>KMS</code> for encryption with CMKs. Set to <code>NONE</code> for default encryption.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EncryptionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionStatus {
+    Active,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionStatus),
+}
+
+impl Default for EncryptionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionStatus {
+    fn into(self) -> String {
+        match self {
+            EncryptionStatus::Active => "ACTIVE".to_string(),
+            EncryptionStatus::Updating => "UPDATING".to_string(),
+            EncryptionStatus::UnknownVariant(UnknownEncryptionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionStatus::Active => &"ACTIVE",
+            EncryptionStatus::Updating => &"UPDATING",
+            EncryptionStatus::UnknownVariant(UnknownEncryptionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => EncryptionStatus::Active,
+            "UPDATING" => EncryptionStatus::Updating,
+            _ => EncryptionStatus::UnknownVariant(UnknownEncryptionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => EncryptionStatus::Active,
+            "UPDATING" => EncryptionStatus::Updating,
+            _ => EncryptionStatus::UnknownVariant(UnknownEncryptionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EncryptionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionType {
+    Kms,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionType),
+}
+
+impl Default for EncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionType {
+    fn into(self) -> String {
+        match self {
+            EncryptionType::Kms => "KMS".to_string(),
+            EncryptionType::None => "NONE".to_string(),
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionType::Kms => &"KMS",
+            EncryptionType::None => &"NONE",
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KMS" => EncryptionType::Kms,
+            "NONE" => EncryptionType::None,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KMS" => EncryptionType::Kms,
+            "NONE" => EncryptionType::None,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The root cause of a trace summary error.</p>
@@ -653,7 +858,7 @@ pub struct GetInsightSummariesRequest {
     /// <p>The list of insight states. </p>
     #[serde(rename = "States")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub states: Option<Vec<String>>,
+    pub states: Option<Vec<InsightState>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -891,7 +1096,7 @@ pub struct GetTraceSummariesRequest {
     /// <p>A parameter to indicate whether to query trace summaries by TraceId or Event time.</p>
     #[serde(rename = "TimeRangeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_range_type: Option<String>,
+    pub time_range_type: Option<TimeRangeType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1006,7 +1211,7 @@ pub struct Insight {
     /// <p>The categories that label and describe the type of insight.</p>
     #[serde(rename = "Categories")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub categories: Option<Vec<String>>,
+    pub categories: Option<Vec<InsightCategory>>,
     /// <p>The impact statistics of the client side service. This includes the number of requests to the client service and whether the requests were faults or okay.</p>
     #[serde(rename = "ClientRequestImpactStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1041,7 +1246,7 @@ pub struct Insight {
     /// <p>The current state of the insight.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InsightState>,
     /// <p>A brief description of the insight.</p>
     #[serde(rename = "Summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1050,6 +1255,102 @@ pub struct Insight {
     #[serde(rename = "TopAnomalousServices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_anomalous_services: Option<Vec<AnomalousService>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInsightCategory {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InsightCategory {
+    Fault,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInsightCategory),
+}
+
+impl Default for InsightCategory {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InsightCategory {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InsightCategory {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InsightCategory {
+    fn into(self) -> String {
+        match self {
+            InsightCategory::Fault => "FAULT".to_string(),
+            InsightCategory::UnknownVariant(UnknownInsightCategory { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InsightCategory {
+    fn into(self) -> &'a str {
+        match self {
+            InsightCategory::Fault => &"FAULT",
+            InsightCategory::UnknownVariant(UnknownInsightCategory { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InsightCategory {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAULT" => InsightCategory::Fault,
+            _ => InsightCategory::UnknownVariant(UnknownInsightCategory {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InsightCategory {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAULT" => InsightCategory::Fault,
+            _ => InsightCategory::UnknownVariant(UnknownInsightCategory { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InsightCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InsightCategory {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InsightCategory {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>X-Ray reevaluates insights periodically until they are resolved, and records each intermediate state in an event. You can review incident events in the Impact Timeline on the Inspect page in the X-Ray console.</p>
@@ -1118,6 +1419,106 @@ pub struct InsightImpactGraphService {
     pub type_: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInsightState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InsightState {
+    Active,
+    Closed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInsightState),
+}
+
+impl Default for InsightState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InsightState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InsightState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InsightState {
+    fn into(self) -> String {
+        match self {
+            InsightState::Active => "ACTIVE".to_string(),
+            InsightState::Closed => "CLOSED".to_string(),
+            InsightState::UnknownVariant(UnknownInsightState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InsightState {
+    fn into(self) -> &'a str {
+        match self {
+            InsightState::Active => &"ACTIVE",
+            InsightState::Closed => &"CLOSED",
+            InsightState::UnknownVariant(UnknownInsightState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InsightState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => InsightState::Active,
+            "CLOSED" => InsightState::Closed,
+            _ => InsightState::UnknownVariant(UnknownInsightState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InsightState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => InsightState::Active,
+            "CLOSED" => InsightState::Closed,
+            _ => InsightState::UnknownVariant(UnknownInsightState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InsightState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InsightState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InsightState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information that describes an insight.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1125,7 +1526,7 @@ pub struct InsightSummary {
     /// <p> Categories The categories that label and describe the type of insight.</p>
     #[serde(rename = "Categories")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub categories: Option<Vec<String>>,
+    pub categories: Option<Vec<InsightCategory>>,
     /// <p>The impact statistics of the client side service. This includes the number of requests to the client service and whether the requests were faults or okay. </p>
     #[serde(rename = "ClientRequestImpactStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1164,7 +1565,7 @@ pub struct InsightSummary {
     /// <p>The current state of the insight.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InsightState>,
     /// <p>A brief description of the insight.</p>
     #[serde(rename = "Summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,7 +1633,7 @@ pub struct PutEncryptionConfigRequest {
     pub key_id: Option<String>,
     /// <p>The type of encryption. Set to <code>KMS</code> to use your own key for encryption. Set to <code>NONE</code> for default encryption.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: EncryptionType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1566,11 +1967,116 @@ pub struct SamplingStrategy {
     /// <p>The name of a sampling rule.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SamplingStrategyName>,
     /// <p>The value of a sampling rule.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSamplingStrategyName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SamplingStrategyName {
+    FixedRate,
+    PartialScan,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSamplingStrategyName),
+}
+
+impl Default for SamplingStrategyName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SamplingStrategyName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SamplingStrategyName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SamplingStrategyName {
+    fn into(self) -> String {
+        match self {
+            SamplingStrategyName::FixedRate => "FixedRate".to_string(),
+            SamplingStrategyName::PartialScan => "PartialScan".to_string(),
+            SamplingStrategyName::UnknownVariant(UnknownSamplingStrategyName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SamplingStrategyName {
+    fn into(self) -> &'a str {
+        match self {
+            SamplingStrategyName::FixedRate => &"FixedRate",
+            SamplingStrategyName::PartialScan => &"PartialScan",
+            SamplingStrategyName::UnknownVariant(UnknownSamplingStrategyName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SamplingStrategyName {
+    fn from(name: &str) -> Self {
+        match name {
+            "FixedRate" => SamplingStrategyName::FixedRate,
+            "PartialScan" => SamplingStrategyName::PartialScan,
+            _ => SamplingStrategyName::UnknownVariant(UnknownSamplingStrategyName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SamplingStrategyName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FixedRate" => SamplingStrategyName::FixedRate,
+            "PartialScan" => SamplingStrategyName::PartialScan,
+            _ => SamplingStrategyName::UnknownVariant(UnknownSamplingStrategyName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SamplingStrategyName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SamplingStrategyName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SamplingStrategyName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Temporary changes to a sampling rule configuration. To meet the global sampling target for a rule, X-Ray calculates a new reservoir for each service based on the recent sampling results of all services that called <a>GetSamplingTargets</a>.</p>
@@ -1772,6 +2278,107 @@ pub struct TelemetryRecord {
     /// <p><p/></p>
     #[serde(rename = "Timestamp")]
     pub timestamp: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTimeRangeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TimeRangeType {
+    Event,
+    TraceId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTimeRangeType),
+}
+
+impl Default for TimeRangeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TimeRangeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TimeRangeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TimeRangeType {
+    fn into(self) -> String {
+        match self {
+            TimeRangeType::Event => "Event".to_string(),
+            TimeRangeType::TraceId => "TraceId".to_string(),
+            TimeRangeType::UnknownVariant(UnknownTimeRangeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TimeRangeType {
+    fn into(self) -> &'a str {
+        match self {
+            TimeRangeType::Event => &"Event",
+            TimeRangeType::TraceId => &"TraceId",
+            TimeRangeType::UnknownVariant(UnknownTimeRangeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TimeRangeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Event" => TimeRangeType::Event,
+            "TraceId" => TimeRangeType::TraceId,
+            _ => TimeRangeType::UnknownVariant(UnknownTimeRangeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TimeRangeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Event" => TimeRangeType::Event,
+            "TraceId" => TimeRangeType::TraceId,
+            _ => TimeRangeType::UnknownVariant(UnknownTimeRangeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimeRangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TimeRangeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TimeRangeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A list of TimeSeriesStatistic structures.</p>

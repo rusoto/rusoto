@@ -75,7 +75,7 @@ impl ActionsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -112,8 +112,11 @@ impl AddPermissionInputSerializer {
             &format!("{}{}", prefix, "ActionName"),
             &obj.action_name,
         );
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label.to_string());
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -158,7 +161,10 @@ impl CheckIfPhoneNumberIsOptedOutInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
+        params.put(
+            &format!("{}{}", prefix, "phoneNumber"),
+            &obj.phone_number.to_string(),
+        );
     }
 }
 
@@ -218,11 +224,14 @@ impl ConfirmSubscriptionInputSerializer {
         if let Some(ref field_value) = obj.authenticate_on_unsubscribe {
             params.put(
                 &format!("{}{}", prefix, "AuthenticateOnUnsubscribe"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
-        params.put(&format!("{}{}", prefix, "Token"), &obj.token);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Token"), &obj.token.to_string());
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -313,8 +322,11 @@ impl CreatePlatformApplicationInputSerializer {
             &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Platform"), &obj.platform);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
+        params.put(
+            &format!("{}{}", prefix, "Platform"),
+            &obj.platform.to_string(),
+        );
     }
 }
 
@@ -383,13 +395,16 @@ impl CreatePlatformEndpointInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.custom_user_data {
-            params.put(&format!("{}{}", prefix, "CustomUserData"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CustomUserData"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "PlatformApplicationArn"),
-            &obj.platform_application_arn,
+            &obj.platform_application_arn.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Token"), &obj.token);
+        params.put(&format!("{}{}", prefix, "Token"), &obj.token.to_string());
     }
 }
 
@@ -421,7 +436,7 @@ impl CreateTopicInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -462,7 +477,7 @@ impl DelegatesListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -484,7 +499,10 @@ impl DeleteEndpointInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+        params.put(
+            &format!("{}{}", prefix, "EndpointArn"),
+            &obj.endpoint_arn.to_string(),
+        );
     }
 }
 
@@ -507,7 +525,7 @@ impl DeletePlatformApplicationInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PlatformApplicationArn"),
-            &obj.platform_application_arn,
+            &obj.platform_application_arn.to_string(),
         );
     }
 }
@@ -528,7 +546,10 @@ impl DeleteTopicInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -557,7 +578,10 @@ impl GetEndpointAttributesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+        params.put(
+            &format!("{}{}", prefix, "EndpointArn"),
+            &obj.endpoint_arn.to_string(),
+        );
     }
 }
 
@@ -614,7 +638,7 @@ impl GetPlatformApplicationAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PlatformApplicationArn"),
-            &obj.platform_application_arn,
+            &obj.platform_application_arn.to_string(),
         );
     }
 }
@@ -733,7 +757,7 @@ impl GetSubscriptionAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SubscriptionArn"),
-            &obj.subscription_arn,
+            &obj.subscription_arn.to_string(),
         );
     }
 }
@@ -789,7 +813,10 @@ impl GetTopicAttributesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -847,11 +874,14 @@ impl ListEndpointsByPlatformApplicationInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "PlatformApplicationArn"),
-            &obj.platform_application_arn,
+            &obj.platform_application_arn.to_string(),
         );
     }
 }
@@ -950,7 +980,10 @@ impl ListPhoneNumbersOptedOutInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "nextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "nextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1011,7 +1044,10 @@ impl ListPlatformApplicationsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1064,7 +1100,7 @@ impl ListStringSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1089,9 +1125,15 @@ impl ListSubscriptionsByTopicInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -1152,7 +1194,10 @@ impl ListSubscriptionsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1212,7 +1257,10 @@ impl ListTagsForResourceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.to_string(),
+        );
     }
 }
 
@@ -1265,7 +1313,10 @@ impl ListTopicsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1392,9 +1443,15 @@ impl MessageAttributeValueSerializer {
                 ::std::str::from_utf8(&field_value).unwrap(),
             );
         }
-        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        params.put(
+            &format!("{}{}", prefix, "DataType"),
+            &obj.data_type.to_string(),
+        );
         if let Some(ref field_value) = obj.string_value {
-            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StringValue"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1432,7 +1489,10 @@ impl OptInPhoneNumberInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
+        params.put(
+            &format!("{}{}", prefix, "phoneNumber"),
+            &obj.phone_number.to_string(),
+        );
     }
 }
 
@@ -1563,7 +1623,10 @@ impl PublishInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Message"), &obj.message);
+        params.put(
+            &format!("{}{}", prefix, "Message"),
+            &obj.message.to_string(),
+        );
         if let Some(ref field_value) = obj.message_attributes {
             MessageAttributeMapSerializer::serialize(
                 params,
@@ -1574,26 +1637,44 @@ impl PublishInputSerializer {
         if let Some(ref field_value) = obj.message_deduplication_id {
             params.put(
                 &format!("{}{}", prefix, "MessageDeduplicationId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.message_group_id {
-            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MessageGroupId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.message_structure {
-            params.put(&format!("{}{}", prefix, "MessageStructure"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MessageStructure"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.phone_number {
-            params.put(&format!("{}{}", prefix, "PhoneNumber"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PhoneNumber"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.subject {
-            params.put(&format!("{}{}", prefix, "Subject"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Subject"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.target_arn {
-            params.put(&format!("{}{}", prefix, "TargetArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TopicArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1650,8 +1731,11 @@ impl RemovePermissionInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label.to_string());
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -1679,7 +1763,10 @@ impl SetEndpointAttributesInputSerializer {
             &format!("{}{}.entry", prefix, "Attributes"),
             &obj.attributes,
         );
-        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+        params.put(
+            &format!("{}{}", prefix, "EndpointArn"),
+            &obj.endpoint_arn.to_string(),
+        );
     }
 }
 
@@ -1709,7 +1796,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "PlatformApplicationArn"),
-            &obj.platform_application_arn,
+            &obj.platform_application_arn.to_string(),
         );
     }
 }
@@ -1784,14 +1871,17 @@ impl SetSubscriptionAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AttributeName"),
-            &obj.attribute_name,
+            &obj.attribute_name.to_string(),
         );
         if let Some(ref field_value) = obj.attribute_value {
-            params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AttributeValue"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "SubscriptionArn"),
-            &obj.subscription_arn,
+            &obj.subscription_arn.to_string(),
         );
     }
 }
@@ -1819,12 +1909,18 @@ impl SetTopicAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AttributeName"),
-            &obj.attribute_name,
+            &obj.attribute_name.to_string(),
         );
         if let Some(ref field_value) = obj.attribute_value {
-            params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AttributeValue"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -1869,16 +1965,25 @@ impl SubscribeInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.endpoint {
-            params.put(&format!("{}{}", prefix, "Endpoint"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Endpoint"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
+        params.put(
+            &format!("{}{}", prefix, "Protocol"),
+            &obj.protocol.to_string(),
+        );
         if let Some(ref field_value) = obj.return_subscription_arn {
             params.put(
                 &format!("{}{}", prefix, "ReturnSubscriptionArn"),
                 &field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -2069,8 +2174,8 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -2089,7 +2194,7 @@ impl TagKeyListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2142,7 +2247,10 @@ impl TagResourceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.to_string(),
+        );
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
     }
 }
@@ -2286,7 +2394,7 @@ impl UnsubscribeInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SubscriptionArn"),
-            &obj.subscription_arn,
+            &obj.subscription_arn.to_string(),
         );
     }
 }
@@ -2309,7 +2417,10 @@ impl UntagResourceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceArn"), &obj.resource_arn);
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.to_string(),
+        );
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
     }
 }

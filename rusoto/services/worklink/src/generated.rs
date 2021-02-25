@@ -52,7 +52,7 @@ pub struct AssociateDomainResponse {}
 pub struct AssociateWebsiteAuthorizationProviderRequest {
     /// <p>The authorization provider type.</p>
     #[serde(rename = "AuthorizationProviderType")]
-    pub authorization_provider_type: String,
+    pub authorization_provider_type: AuthorizationProviderType,
     /// <p>The domain name of the authorization provider. This applies only to SAML-based authorization providers.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,6 +93,107 @@ pub struct AssociateWebsiteCertificateAuthorityResponse {
     #[serde(rename = "WebsiteCaId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub website_ca_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthorizationProviderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthorizationProviderType {
+    Saml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthorizationProviderType),
+}
+
+impl Default for AuthorizationProviderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthorizationProviderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthorizationProviderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthorizationProviderType {
+    fn into(self) -> String {
+        match self {
+            AuthorizationProviderType::Saml => "SAML".to_string(),
+            AuthorizationProviderType::UnknownVariant(UnknownAuthorizationProviderType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthorizationProviderType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthorizationProviderType::Saml => &"SAML",
+            AuthorizationProviderType::UnknownVariant(UnknownAuthorizationProviderType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthorizationProviderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SAML" => AuthorizationProviderType::Saml,
+            _ => AuthorizationProviderType::UnknownVariant(UnknownAuthorizationProviderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthorizationProviderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SAML" => AuthorizationProviderType::Saml,
+            _ => {
+                AuthorizationProviderType::UnknownVariant(UnknownAuthorizationProviderType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthorizationProviderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthorizationProviderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthorizationProviderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -240,7 +341,7 @@ pub struct DescribeDeviceResponse {
     /// <p>The current state of the device.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeviceStatus>,
     /// <p>The user name associated with the device.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -280,7 +381,7 @@ pub struct DescribeDomainResponse {
     /// <p>The current state for the domain.</p>
     #[serde(rename = "DomainStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_status: Option<String>,
+    pub domain_status: Option<DomainStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -313,7 +414,7 @@ pub struct DescribeFleetMetadataResponse {
     /// <p>The current state of the fleet.</p>
     #[serde(rename = "FleetStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fleet_status: Option<String>,
+    pub fleet_status: Option<FleetStatus>,
     /// <p>The time that the fleet was last updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -346,7 +447,7 @@ pub struct DescribeIdentityProviderConfigurationResponse {
     /// <p>The type of identity provider.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_provider_type: Option<String>,
+    pub identity_provider_type: Option<IdentityProviderType>,
     /// <p>The SAML metadata document uploaded to the user’s identity provider.</p>
     #[serde(rename = "ServiceProviderSamlMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -381,6 +482,107 @@ pub struct DescribeWebsiteCertificateAuthorityResponse {
     pub display_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceStatus {
+    Active,
+    SignedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceStatus),
+}
+
+impl Default for DeviceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceStatus {
+    fn into(self) -> String {
+        match self {
+            DeviceStatus::Active => "ACTIVE".to_string(),
+            DeviceStatus::SignedOut => "SIGNED_OUT".to_string(),
+            DeviceStatus::UnknownVariant(UnknownDeviceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceStatus::Active => &"ACTIVE",
+            DeviceStatus::SignedOut => &"SIGNED_OUT",
+            DeviceStatus::UnknownVariant(UnknownDeviceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeviceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DeviceStatus::Active,
+            "SIGNED_OUT" => DeviceStatus::SignedOut,
+            _ => DeviceStatus::UnknownVariant(UnknownDeviceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DeviceStatus::Active,
+            "SIGNED_OUT" => DeviceStatus::SignedOut,
+            _ => DeviceStatus::UnknownVariant(UnknownDeviceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeviceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeviceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The summary of devices.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -392,7 +594,7 @@ pub struct DeviceSummary {
     /// <p>The status of the device.</p>
     #[serde(rename = "DeviceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_status: Option<String>,
+    pub device_status: Option<DeviceStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -440,6 +642,137 @@ pub struct DisassociateWebsiteCertificateAuthorityRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteCertificateAuthorityResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainStatus {
+    Active,
+    Associating,
+    Disassociated,
+    Disassociating,
+    FailedToAssociate,
+    FailedToDisassociate,
+    Inactive,
+    PendingValidation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainStatus),
+}
+
+impl Default for DomainStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainStatus {
+    fn into(self) -> String {
+        match self {
+            DomainStatus::Active => "ACTIVE".to_string(),
+            DomainStatus::Associating => "ASSOCIATING".to_string(),
+            DomainStatus::Disassociated => "DISASSOCIATED".to_string(),
+            DomainStatus::Disassociating => "DISASSOCIATING".to_string(),
+            DomainStatus::FailedToAssociate => "FAILED_TO_ASSOCIATE".to_string(),
+            DomainStatus::FailedToDisassociate => "FAILED_TO_DISASSOCIATE".to_string(),
+            DomainStatus::Inactive => "INACTIVE".to_string(),
+            DomainStatus::PendingValidation => "PENDING_VALIDATION".to_string(),
+            DomainStatus::UnknownVariant(UnknownDomainStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainStatus::Active => &"ACTIVE",
+            DomainStatus::Associating => &"ASSOCIATING",
+            DomainStatus::Disassociated => &"DISASSOCIATED",
+            DomainStatus::Disassociating => &"DISASSOCIATING",
+            DomainStatus::FailedToAssociate => &"FAILED_TO_ASSOCIATE",
+            DomainStatus::FailedToDisassociate => &"FAILED_TO_DISASSOCIATE",
+            DomainStatus::Inactive => &"INACTIVE",
+            DomainStatus::PendingValidation => &"PENDING_VALIDATION",
+            DomainStatus::UnknownVariant(UnknownDomainStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DomainStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DomainStatus::Active,
+            "ASSOCIATING" => DomainStatus::Associating,
+            "DISASSOCIATED" => DomainStatus::Disassociated,
+            "DISASSOCIATING" => DomainStatus::Disassociating,
+            "FAILED_TO_ASSOCIATE" => DomainStatus::FailedToAssociate,
+            "FAILED_TO_DISASSOCIATE" => DomainStatus::FailedToDisassociate,
+            "INACTIVE" => DomainStatus::Inactive,
+            "PENDING_VALIDATION" => DomainStatus::PendingValidation,
+            _ => DomainStatus::UnknownVariant(UnknownDomainStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DomainStatus::Active,
+            "ASSOCIATING" => DomainStatus::Associating,
+            "DISASSOCIATED" => DomainStatus::Disassociated,
+            "DISASSOCIATING" => DomainStatus::Disassociating,
+            "FAILED_TO_ASSOCIATE" => DomainStatus::FailedToAssociate,
+            "FAILED_TO_DISASSOCIATE" => DomainStatus::FailedToDisassociate,
+            "INACTIVE" => DomainStatus::Inactive,
+            "PENDING_VALIDATION" => DomainStatus::PendingValidation,
+            _ => DomainStatus::UnknownVariant(UnknownDomainStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The summary of the domain.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -456,7 +789,128 @@ pub struct DomainSummary {
     pub domain_name: String,
     /// <p>The status of the domain.</p>
     #[serde(rename = "DomainStatus")]
-    pub domain_status: String,
+    pub domain_status: DomainStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFleetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FleetStatus {
+    Active,
+    Creating,
+    Deleted,
+    Deleting,
+    FailedToCreate,
+    FailedToDelete,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFleetStatus),
+}
+
+impl Default for FleetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FleetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FleetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FleetStatus {
+    fn into(self) -> String {
+        match self {
+            FleetStatus::Active => "ACTIVE".to_string(),
+            FleetStatus::Creating => "CREATING".to_string(),
+            FleetStatus::Deleted => "DELETED".to_string(),
+            FleetStatus::Deleting => "DELETING".to_string(),
+            FleetStatus::FailedToCreate => "FAILED_TO_CREATE".to_string(),
+            FleetStatus::FailedToDelete => "FAILED_TO_DELETE".to_string(),
+            FleetStatus::UnknownVariant(UnknownFleetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FleetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FleetStatus::Active => &"ACTIVE",
+            FleetStatus::Creating => &"CREATING",
+            FleetStatus::Deleted => &"DELETED",
+            FleetStatus::Deleting => &"DELETING",
+            FleetStatus::FailedToCreate => &"FAILED_TO_CREATE",
+            FleetStatus::FailedToDelete => &"FAILED_TO_DELETE",
+            FleetStatus::UnknownVariant(UnknownFleetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FleetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => FleetStatus::Active,
+            "CREATING" => FleetStatus::Creating,
+            "DELETED" => FleetStatus::Deleted,
+            "DELETING" => FleetStatus::Deleting,
+            "FAILED_TO_CREATE" => FleetStatus::FailedToCreate,
+            "FAILED_TO_DELETE" => FleetStatus::FailedToDelete,
+            _ => FleetStatus::UnknownVariant(UnknownFleetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FleetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => FleetStatus::Active,
+            "CREATING" => FleetStatus::Creating,
+            "DELETED" => FleetStatus::Deleted,
+            "DELETING" => FleetStatus::Deleting,
+            "FAILED_TO_CREATE" => FleetStatus::FailedToCreate,
+            "FAILED_TO_DELETE" => FleetStatus::FailedToDelete,
+            _ => FleetStatus::UnknownVariant(UnknownFleetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FleetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FleetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The summary of the fleet.</p>
@@ -486,7 +940,7 @@ pub struct FleetSummary {
     /// <p>The status of the fleet.</p>
     #[serde(rename = "FleetStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fleet_status: Option<String>,
+    pub fleet_status: Option<FleetStatus>,
     /// <p>The time when the fleet was last updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -495,6 +949,105 @@ pub struct FleetSummary {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityProviderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityProviderType {
+    Saml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityProviderType),
+}
+
+impl Default for IdentityProviderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityProviderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityProviderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityProviderType {
+    fn into(self) -> String {
+        match self {
+            IdentityProviderType::Saml => "SAML".to_string(),
+            IdentityProviderType::UnknownVariant(UnknownIdentityProviderType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityProviderType {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityProviderType::Saml => &"SAML",
+            IdentityProviderType::UnknownVariant(UnknownIdentityProviderType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityProviderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SAML" => IdentityProviderType::Saml,
+            _ => IdentityProviderType::UnknownVariant(UnknownIdentityProviderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityProviderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SAML" => IdentityProviderType::Saml,
+            _ => IdentityProviderType::UnknownVariant(UnknownIdentityProviderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityProviderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IdentityProviderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IdentityProviderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -835,7 +1388,7 @@ pub struct UpdateIdentityProviderConfigurationRequest {
     pub identity_provider_saml_metadata: Option<String>,
     /// <p>The type of identity provider.</p>
     #[serde(rename = "IdentityProviderType")]
-    pub identity_provider_type: String,
+    pub identity_provider_type: IdentityProviderType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -852,7 +1405,7 @@ pub struct WebsiteAuthorizationProviderSummary {
     pub authorization_provider_id: Option<String>,
     /// <p>The authorization provider type.</p>
     #[serde(rename = "AuthorizationProviderType")]
-    pub authorization_provider_type: String,
+    pub authorization_provider_type: AuthorizationProviderType,
     /// <p>The time of creation.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]

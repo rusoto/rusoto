@@ -25,6 +25,120 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentClassifier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentClassifier {
+    FreeOfAdultContent,
+    FreeOfPersonallyIdentifiableInformation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentClassifier),
+}
+
+impl Default for ContentClassifier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentClassifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentClassifier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentClassifier {
+    fn into(self) -> String {
+        match self {
+            ContentClassifier::FreeOfAdultContent => "FreeOfAdultContent".to_string(),
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                "FreeOfPersonallyIdentifiableInformation".to_string()
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentClassifier {
+    fn into(self) -> &'a str {
+        match self {
+            ContentClassifier::FreeOfAdultContent => &"FreeOfAdultContent",
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                &"FreeOfPersonallyIdentifiableInformation"
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContentClassifier {
+    fn from(name: &str) -> Self {
+        match name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentClassifier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentClassifier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentClassifier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentClassifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanLoopRequest {
@@ -74,7 +188,7 @@ pub struct DescribeHumanLoopResponse {
     pub human_loop_output: Option<HumanLoopOutput>,
     /// <p>The status of the human loop. </p>
     #[serde(rename = "HumanLoopStatus")]
-    pub human_loop_status: String,
+    pub human_loop_status: HumanLoopStatus,
 }
 
 /// <p>Attributes of the data specified by the customer. Use these to describe the data to be labeled.</p>
@@ -83,7 +197,7 @@ pub struct DescribeHumanLoopResponse {
 pub struct HumanLoopDataAttributes {
     /// <p>Declares that your content is free of personally identifiable information or adult content.</p> <p>Amazon SageMaker can restrict the Amazon Mechanical Turk workers who can view your task based on this information.</p>
     #[serde(rename = "ContentClassifiers")]
-    pub content_classifiers: Vec<String>,
+    pub content_classifiers: Vec<ContentClassifier>,
 }
 
 /// <p>An object containing the human loop input in JSON format.</p>
@@ -102,6 +216,122 @@ pub struct HumanLoopOutput {
     /// <p>The location of the Amazon S3 object where Amazon Augmented AI stores your human loop output.</p>
     #[serde(rename = "OutputS3Uri")]
     pub output_s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHumanLoopStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HumanLoopStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHumanLoopStatus),
+}
+
+impl Default for HumanLoopStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HumanLoopStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HumanLoopStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HumanLoopStatus {
+    fn into(self) -> String {
+        match self {
+            HumanLoopStatus::Completed => "Completed".to_string(),
+            HumanLoopStatus::Failed => "Failed".to_string(),
+            HumanLoopStatus::InProgress => "InProgress".to_string(),
+            HumanLoopStatus::Stopped => "Stopped".to_string(),
+            HumanLoopStatus::Stopping => "Stopping".to_string(),
+            HumanLoopStatus::UnknownVariant(UnknownHumanLoopStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HumanLoopStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HumanLoopStatus::Completed => &"Completed",
+            HumanLoopStatus::Failed => &"Failed",
+            HumanLoopStatus::InProgress => &"InProgress",
+            HumanLoopStatus::Stopped => &"Stopped",
+            HumanLoopStatus::Stopping => &"Stopping",
+            HumanLoopStatus::UnknownVariant(UnknownHumanLoopStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HumanLoopStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => HumanLoopStatus::Completed,
+            "Failed" => HumanLoopStatus::Failed,
+            "InProgress" => HumanLoopStatus::InProgress,
+            "Stopped" => HumanLoopStatus::Stopped,
+            "Stopping" => HumanLoopStatus::Stopping,
+            _ => HumanLoopStatus::UnknownVariant(UnknownHumanLoopStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HumanLoopStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => HumanLoopStatus::Completed,
+            "Failed" => HumanLoopStatus::Failed,
+            "InProgress" => HumanLoopStatus::InProgress,
+            "Stopped" => HumanLoopStatus::Stopped,
+            "Stopping" => HumanLoopStatus::Stopping,
+            _ => HumanLoopStatus::UnknownVariant(UnknownHumanLoopStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HumanLoopStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HumanLoopStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HumanLoopStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about the human loop.</p>
@@ -127,7 +357,7 @@ pub struct HumanLoopSummary {
     /// <p>The status of the human loop. </p>
     #[serde(rename = "HumanLoopStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub human_loop_status: Option<String>,
+    pub human_loop_status: Option<HumanLoopStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -155,7 +385,7 @@ pub struct ListHumanLoopsRequest {
     /// <p>Optional. The order for displaying results. Valid values: <code>Ascending</code> and <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -168,6 +398,107 @@ pub struct ListHumanLoopsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "Ascending".to_string(),
+            SortOrder::Descending => "Descending".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"Ascending",
+            SortOrder::Descending => &"Descending",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => SortOrder::Ascending,
+            "Descending" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => SortOrder::Ascending,
+            "Descending" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

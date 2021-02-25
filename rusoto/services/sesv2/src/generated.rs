@@ -36,11 +36,11 @@ pub struct AccountDetails {
     /// <p>The language you would prefer for the case. The contact language can be one of <code>ENGLISH</code> or <code>JAPANESE</code>.</p>
     #[serde(rename = "ContactLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_language: Option<String>,
+    pub contact_language: Option<ContactLanguage>,
     /// <p><p>The type of email your account is sending. The mail type can be one of the following:</p> <ul> <li> <p> <code>MARKETING</code> – Most of your sending traffic is to keep your customers informed of your latest offering.</p> </li> <li> <p> <code>TRANSACTIONAL</code> – Most of your sending traffic is to communicate during a transaction with a customer.</p> </li> </ul></p>
     #[serde(rename = "MailType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mail_type: Option<String>,
+    pub mail_type: Option<MailType>,
     /// <p>Information about the review of the latest details you submitted.</p>
     #[serde(rename = "ReviewDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,6 +53,112 @@ pub struct AccountDetails {
     #[serde(rename = "WebsiteURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub website_url: Option<String>,
+}
+
+/// <p>The action that you want to take if the required MX record can't be found when you send an email. When you set this value to <code>UseDefaultValue</code>, the mail is sent using <i>amazonses.com</i> as the MAIL FROM domain. When you set this value to <code>RejectMessage</code>, the Amazon SES API v2 returns a <code>MailFromDomainNotVerified</code> error, and doesn't attempt to deliver the email.</p> <p>These behaviors are taken when the custom MAIL FROM domain configuration is in the <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code> states.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBehaviorOnMxFailure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BehaviorOnMxFailure {
+    RejectMessage,
+    UseDefaultValue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBehaviorOnMxFailure),
+}
+
+impl Default for BehaviorOnMxFailure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BehaviorOnMxFailure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BehaviorOnMxFailure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BehaviorOnMxFailure {
+    fn into(self) -> String {
+        match self {
+            BehaviorOnMxFailure::RejectMessage => "REJECT_MESSAGE".to_string(),
+            BehaviorOnMxFailure::UseDefaultValue => "USE_DEFAULT_VALUE".to_string(),
+            BehaviorOnMxFailure::UnknownVariant(UnknownBehaviorOnMxFailure { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BehaviorOnMxFailure {
+    fn into(self) -> &'a str {
+        match self {
+            BehaviorOnMxFailure::RejectMessage => &"REJECT_MESSAGE",
+            BehaviorOnMxFailure::UseDefaultValue => &"USE_DEFAULT_VALUE",
+            BehaviorOnMxFailure::UnknownVariant(UnknownBehaviorOnMxFailure { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BehaviorOnMxFailure {
+    fn from(name: &str) -> Self {
+        match name {
+            "REJECT_MESSAGE" => BehaviorOnMxFailure::RejectMessage,
+            "USE_DEFAULT_VALUE" => BehaviorOnMxFailure::UseDefaultValue,
+            _ => BehaviorOnMxFailure::UnknownVariant(UnknownBehaviorOnMxFailure {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BehaviorOnMxFailure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "REJECT_MESSAGE" => BehaviorOnMxFailure::RejectMessage,
+            "USE_DEFAULT_VALUE" => BehaviorOnMxFailure::UseDefaultValue,
+            _ => BehaviorOnMxFailure::UnknownVariant(UnknownBehaviorOnMxFailure { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BehaviorOnMxFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BehaviorOnMxFailure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BehaviorOnMxFailure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains information about a blacklisting event that impacts one of the dedicated IP addresses that is associated with your account.</p>
@@ -128,7 +234,174 @@ pub struct BulkEmailEntryResult {
     /// <p><p>The status of a message sent using the <code>SendBulkTemplatedEmail</code> operation.</p> <p>Possible values for this parameter include:</p> <ul> <li> <p>SUCCESS: Amazon SES accepted the message, and will attempt to deliver it to the recipients.</p> </li> <li> <p>MESSAGE<em>REJECTED: The message was rejected because it contained a virus.</p> </li> <li> <p>MAIL</em>FROM<em>DOMAIN</em>NOT<em>VERIFIED: The sender&#39;s email address or domain was not verified.</p> </li> <li> <p>CONFIGURATION</em>SET<em>DOES</em>NOT<em>EXIST: The configuration set you specified does not exist.</p> </li> <li> <p>TEMPLATE</em>DOES<em>NOT</em>EXIST: The template you specified does not exist.</p> </li> <li> <p>ACCOUNT<em>SUSPENDED: Your account has been shut down because of issues related to your email sending practices.</p> </li> <li> <p>ACCOUNT</em>THROTTLED: The number of emails you can send has been reduced because your account has exceeded its allocated sending limit.</p> </li> <li> <p>ACCOUNT<em>DAILY</em>QUOTA<em>EXCEEDED: You have reached or exceeded the maximum number of emails you can send from your account in a 24-hour period.</p> </li> <li> <p>INVALID</em>SENDING<em>POOL</em>NAME: The configuration set you specified refers to an IP pool that does not exist.</p> </li> <li> <p>ACCOUNT<em>SENDING</em>PAUSED: Email sending for the Amazon SES account was disabled using the <a href="https://docs.aws.amazon.com/ses/latest/APIReference/API_UpdateAccountSendingEnabled.html">UpdateAccountSendingEnabled</a> operation.</p> </li> <li> <p>CONFIGURATION<em>SET</em>SENDING<em>PAUSED: Email sending for this configuration set was disabled using the &lt;a href=&quot;https://docs.aws.amazon.com/ses/latest/APIReference/API</em>UpdateConfigurationSetSendingEnabled.html&quot;&gt;UpdateConfigurationSetSendingEnabled</a> operation.</p> </li> <li> <p>INVALID<em>PARAMETER</em>VALUE: One or more of the parameters you specified when calling this operation was invalid. See the error message for additional information.</p> </li> <li> <p>TRANSIENT_FAILURE: Amazon SES was unable to process your request because of a temporary issue.</p> </li> <li> <p>FAILED: Amazon SES was unable to process your request. See the error message for additional information.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<BulkEmailStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBulkEmailStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BulkEmailStatus {
+    AccountDailyQuotaExceeded,
+    AccountSendingPaused,
+    AccountSuspended,
+    AccountThrottled,
+    ConfigurationSetNotFound,
+    ConfigurationSetSendingPaused,
+    Failed,
+    InvalidParameter,
+    InvalidSendingPoolName,
+    MailFromDomainNotVerified,
+    MessageRejected,
+    Success,
+    TemplateNotFound,
+    TransientFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBulkEmailStatus),
+}
+
+impl Default for BulkEmailStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BulkEmailStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BulkEmailStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BulkEmailStatus {
+    fn into(self) -> String {
+        match self {
+            BulkEmailStatus::AccountDailyQuotaExceeded => {
+                "ACCOUNT_DAILY_QUOTA_EXCEEDED".to_string()
+            }
+            BulkEmailStatus::AccountSendingPaused => "ACCOUNT_SENDING_PAUSED".to_string(),
+            BulkEmailStatus::AccountSuspended => "ACCOUNT_SUSPENDED".to_string(),
+            BulkEmailStatus::AccountThrottled => "ACCOUNT_THROTTLED".to_string(),
+            BulkEmailStatus::ConfigurationSetNotFound => "CONFIGURATION_SET_NOT_FOUND".to_string(),
+            BulkEmailStatus::ConfigurationSetSendingPaused => {
+                "CONFIGURATION_SET_SENDING_PAUSED".to_string()
+            }
+            BulkEmailStatus::Failed => "FAILED".to_string(),
+            BulkEmailStatus::InvalidParameter => "INVALID_PARAMETER".to_string(),
+            BulkEmailStatus::InvalidSendingPoolName => "INVALID_SENDING_POOL_NAME".to_string(),
+            BulkEmailStatus::MailFromDomainNotVerified => {
+                "MAIL_FROM_DOMAIN_NOT_VERIFIED".to_string()
+            }
+            BulkEmailStatus::MessageRejected => "MESSAGE_REJECTED".to_string(),
+            BulkEmailStatus::Success => "SUCCESS".to_string(),
+            BulkEmailStatus::TemplateNotFound => "TEMPLATE_NOT_FOUND".to_string(),
+            BulkEmailStatus::TransientFailure => "TRANSIENT_FAILURE".to_string(),
+            BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BulkEmailStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BulkEmailStatus::AccountDailyQuotaExceeded => &"ACCOUNT_DAILY_QUOTA_EXCEEDED",
+            BulkEmailStatus::AccountSendingPaused => &"ACCOUNT_SENDING_PAUSED",
+            BulkEmailStatus::AccountSuspended => &"ACCOUNT_SUSPENDED",
+            BulkEmailStatus::AccountThrottled => &"ACCOUNT_THROTTLED",
+            BulkEmailStatus::ConfigurationSetNotFound => &"CONFIGURATION_SET_NOT_FOUND",
+            BulkEmailStatus::ConfigurationSetSendingPaused => &"CONFIGURATION_SET_SENDING_PAUSED",
+            BulkEmailStatus::Failed => &"FAILED",
+            BulkEmailStatus::InvalidParameter => &"INVALID_PARAMETER",
+            BulkEmailStatus::InvalidSendingPoolName => &"INVALID_SENDING_POOL_NAME",
+            BulkEmailStatus::MailFromDomainNotVerified => &"MAIL_FROM_DOMAIN_NOT_VERIFIED",
+            BulkEmailStatus::MessageRejected => &"MESSAGE_REJECTED",
+            BulkEmailStatus::Success => &"SUCCESS",
+            BulkEmailStatus::TemplateNotFound => &"TEMPLATE_NOT_FOUND",
+            BulkEmailStatus::TransientFailure => &"TRANSIENT_FAILURE",
+            BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BulkEmailStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_DAILY_QUOTA_EXCEEDED" => BulkEmailStatus::AccountDailyQuotaExceeded,
+            "ACCOUNT_SENDING_PAUSED" => BulkEmailStatus::AccountSendingPaused,
+            "ACCOUNT_SUSPENDED" => BulkEmailStatus::AccountSuspended,
+            "ACCOUNT_THROTTLED" => BulkEmailStatus::AccountThrottled,
+            "CONFIGURATION_SET_NOT_FOUND" => BulkEmailStatus::ConfigurationSetNotFound,
+            "CONFIGURATION_SET_SENDING_PAUSED" => BulkEmailStatus::ConfigurationSetSendingPaused,
+            "FAILED" => BulkEmailStatus::Failed,
+            "INVALID_PARAMETER" => BulkEmailStatus::InvalidParameter,
+            "INVALID_SENDING_POOL_NAME" => BulkEmailStatus::InvalidSendingPoolName,
+            "MAIL_FROM_DOMAIN_NOT_VERIFIED" => BulkEmailStatus::MailFromDomainNotVerified,
+            "MESSAGE_REJECTED" => BulkEmailStatus::MessageRejected,
+            "SUCCESS" => BulkEmailStatus::Success,
+            "TEMPLATE_NOT_FOUND" => BulkEmailStatus::TemplateNotFound,
+            "TRANSIENT_FAILURE" => BulkEmailStatus::TransientFailure,
+            _ => BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BulkEmailStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_DAILY_QUOTA_EXCEEDED" => BulkEmailStatus::AccountDailyQuotaExceeded,
+            "ACCOUNT_SENDING_PAUSED" => BulkEmailStatus::AccountSendingPaused,
+            "ACCOUNT_SUSPENDED" => BulkEmailStatus::AccountSuspended,
+            "ACCOUNT_THROTTLED" => BulkEmailStatus::AccountThrottled,
+            "CONFIGURATION_SET_NOT_FOUND" => BulkEmailStatus::ConfigurationSetNotFound,
+            "CONFIGURATION_SET_SENDING_PAUSED" => BulkEmailStatus::ConfigurationSetSendingPaused,
+            "FAILED" => BulkEmailStatus::Failed,
+            "INVALID_PARAMETER" => BulkEmailStatus::InvalidParameter,
+            "INVALID_SENDING_POOL_NAME" => BulkEmailStatus::InvalidSendingPoolName,
+            "MAIL_FROM_DOMAIN_NOT_VERIFIED" => BulkEmailStatus::MailFromDomainNotVerified,
+            "MESSAGE_REJECTED" => BulkEmailStatus::MessageRejected,
+            "SUCCESS" => BulkEmailStatus::Success,
+            "TEMPLATE_NOT_FOUND" => BulkEmailStatus::TemplateNotFound,
+            "TRANSIENT_FAILURE" => BulkEmailStatus::TransientFailure,
+            _ => BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BulkEmailStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BulkEmailStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BulkEmailStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that defines an Amazon CloudWatch destination for email events. You can use Amazon CloudWatch to monitor and gain insights on your email sending metrics.</p>
@@ -150,7 +423,7 @@ pub struct CloudWatchDimensionConfiguration {
     pub dimension_name: String,
     /// <p>The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. If you want to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code> or <code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want to use your own email headers, choose <code>emailHeader</code>. If you want to use link tags, choose <code>linkTags</code>.</p>
     #[serde(rename = "DimensionValueSource")]
-    pub dimension_value_source: String,
+    pub dimension_value_source: DimensionValueSource,
 }
 
 /// <p>A contact is the end-user who is receiving the email.</p>
@@ -179,6 +452,106 @@ pub struct Contact {
     pub unsubscribe_all: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactLanguage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactLanguage {
+    En,
+    Ja,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactLanguage),
+}
+
+impl Default for ContactLanguage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactLanguage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactLanguage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactLanguage {
+    fn into(self) -> String {
+        match self {
+            ContactLanguage::En => "EN".to_string(),
+            ContactLanguage::Ja => "JA".to_string(),
+            ContactLanguage::UnknownVariant(UnknownContactLanguage { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactLanguage {
+    fn into(self) -> &'a str {
+        match self {
+            ContactLanguage::En => &"EN",
+            ContactLanguage::Ja => &"JA",
+            ContactLanguage::UnknownVariant(UnknownContactLanguage { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactLanguage {
+    fn from(name: &str) -> Self {
+        match name {
+            "EN" => ContactLanguage::En,
+            "JA" => ContactLanguage::Ja,
+            _ => ContactLanguage::UnknownVariant(UnknownContactLanguage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactLanguage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EN" => ContactLanguage::En,
+            "JA" => ContactLanguage::Ja,
+            _ => ContactLanguage::UnknownVariant(UnknownContactLanguage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactLanguage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactLanguage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactLanguage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A list that contains contacts that have subscribed to a particular topic or topics.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -198,10 +571,114 @@ pub struct ContactList {
 pub struct ContactListDestination {
     /// <p><p>&gt;The type of action that you want to perform on the addresses. Acceptable values:</p> <ul> <li> <p>PUT: add the addresses to the contact list. If the record already exists, it will override it with the new value.</p> </li> <li> <p>DELETE: remove the addresses from the contact list.</p> </li> </ul></p>
     #[serde(rename = "ContactListImportAction")]
-    pub contact_list_import_action: String,
+    pub contact_list_import_action: ContactListImportAction,
     /// <p>The name of the contact list.</p>
     #[serde(rename = "ContactListName")]
     pub contact_list_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactListImportAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactListImportAction {
+    Delete,
+    Put,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactListImportAction),
+}
+
+impl Default for ContactListImportAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactListImportAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactListImportAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactListImportAction {
+    fn into(self) -> String {
+        match self {
+            ContactListImportAction::Delete => "DELETE".to_string(),
+            ContactListImportAction::Put => "PUT".to_string(),
+            ContactListImportAction::UnknownVariant(UnknownContactListImportAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactListImportAction {
+    fn into(self) -> &'a str {
+        match self {
+            ContactListImportAction::Delete => &"DELETE",
+            ContactListImportAction::Put => &"PUT",
+            ContactListImportAction::UnknownVariant(UnknownContactListImportAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactListImportAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => ContactListImportAction::Delete,
+            "PUT" => ContactListImportAction::Put,
+            _ => ContactListImportAction::UnknownVariant(UnknownContactListImportAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactListImportAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => ContactListImportAction::Delete,
+            "PUT" => ContactListImportAction::Put,
+            _ => ContactListImportAction::UnknownVariant(UnknownContactListImportAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactListImportAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactListImportAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactListImportAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the content of the email, and optionally a character set specification.</p>
@@ -398,7 +875,7 @@ pub struct CreateDeliverabilityTestReportRequest {
 pub struct CreateDeliverabilityTestReportResponse {
     /// <p>The status of the predictive inbox placement test. If the status is <code>IN_PROGRESS</code>, then the predictive inbox placement test is currently running. Predictive inbox placement tests are usually complete within 24 hours of creating the test. If the status is <code>COMPLETE</code>, then the test is finished, and you can use the <code>GetDeliverabilityTestReport</code> to view the results of the test.</p>
     #[serde(rename = "DeliverabilityTestStatus")]
-    pub deliverability_test_status: String,
+    pub deliverability_test_status: DeliverabilityTestStatus,
     /// <p>A unique string that identifies the predictive inbox placement test.</p>
     #[serde(rename = "ReportId")]
     pub report_id: String,
@@ -452,7 +929,7 @@ pub struct CreateEmailIdentityResponse {
     /// <p>The email identity type.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>Specifies whether or not the identity is verified. You can only send email from verified email addresses or domains. For more information about verifying identities, see the <a href="https://docs.aws.amazon.com/pinpoint/latest/userguide/channels-email-manage-verify.html">Amazon Pinpoint User Guide</a>.</p>
     #[serde(rename = "VerifiedForSendingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -542,6 +1019,108 @@ pub struct DailyVolume {
     pub volume_statistics: Option<VolumeStatistics>,
 }
 
+/// <p>The data format of the import job's data source.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataFormat {
+    Csv,
+    Json,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataFormat),
+}
+
+impl Default for DataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataFormat {
+    fn into(self) -> String {
+        match self {
+            DataFormat::Csv => "CSV".to_string(),
+            DataFormat::Json => "JSON".to_string(),
+            DataFormat::UnknownVariant(UnknownDataFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            DataFormat::Csv => &"CSV",
+            DataFormat::Json => &"JSON",
+            DataFormat::UnknownVariant(UnknownDataFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => DataFormat::Csv,
+            "JSON" => DataFormat::Json,
+            _ => DataFormat::UnknownVariant(UnknownDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => DataFormat::Csv,
+            "JSON" => DataFormat::Json,
+            _ => DataFormat::UnknownVariant(UnknownDataFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about a dedicated IP address that is associated with your Amazon SES account.</p> <p>To learn more about requesting dedicated IP addresses, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/dedicated-ip-case.html">Requesting and Relinquishing Dedicated IP Addresses</a> in the <i>Amazon SES Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -558,7 +1137,7 @@ pub struct DedicatedIp {
     pub warmup_percentage: i64,
     /// <p><p>The warm-up status of a dedicated IP address. The status can have one of the following values:</p> <ul> <li> <p> <code>IN_PROGRESS</code> – The IP address isn&#39;t ready to use because the dedicated IP warm-up process is ongoing.</p> </li> <li> <p> <code>DONE</code> – The dedicated IP warm-up process is complete, and the IP address is ready to use.</p> </li> </ul></p>
     #[serde(rename = "WarmupStatus")]
-    pub warmup_status: String,
+    pub warmup_status: WarmupStatus,
 }
 
 /// <p>A request to delete an event destination from a configuration set.</p>
@@ -706,6 +1285,124 @@ pub struct DeleteSuppressedDestinationRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSuppressedDestinationResponse {}
 
+/// <p>The current status of your Deliverability dashboard subscription. If this value is <code>PENDING_EXPIRATION</code>, your subscription is scheduled to expire at the end of the current calendar month.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliverabilityDashboardAccountStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliverabilityDashboardAccountStatus {
+    Active,
+    Disabled,
+    PendingExpiration,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliverabilityDashboardAccountStatus),
+}
+
+impl Default for DeliverabilityDashboardAccountStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliverabilityDashboardAccountStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliverabilityDashboardAccountStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliverabilityDashboardAccountStatus {
+    fn into(self) -> String {
+        match self {
+            DeliverabilityDashboardAccountStatus::Active => "ACTIVE".to_string(),
+            DeliverabilityDashboardAccountStatus::Disabled => "DISABLED".to_string(),
+            DeliverabilityDashboardAccountStatus::PendingExpiration => {
+                "PENDING_EXPIRATION".to_string()
+            }
+            DeliverabilityDashboardAccountStatus::UnknownVariant(
+                UnknownDeliverabilityDashboardAccountStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliverabilityDashboardAccountStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeliverabilityDashboardAccountStatus::Active => &"ACTIVE",
+            DeliverabilityDashboardAccountStatus::Disabled => &"DISABLED",
+            DeliverabilityDashboardAccountStatus::PendingExpiration => &"PENDING_EXPIRATION",
+            DeliverabilityDashboardAccountStatus::UnknownVariant(
+                UnknownDeliverabilityDashboardAccountStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DeliverabilityDashboardAccountStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DeliverabilityDashboardAccountStatus::Active,
+            "DISABLED" => DeliverabilityDashboardAccountStatus::Disabled,
+            "PENDING_EXPIRATION" => DeliverabilityDashboardAccountStatus::PendingExpiration,
+            _ => DeliverabilityDashboardAccountStatus::UnknownVariant(
+                UnknownDeliverabilityDashboardAccountStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DeliverabilityDashboardAccountStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DeliverabilityDashboardAccountStatus::Active,
+            "DISABLED" => DeliverabilityDashboardAccountStatus::Disabled,
+            "PENDING_EXPIRATION" => DeliverabilityDashboardAccountStatus::PendingExpiration,
+            _ => DeliverabilityDashboardAccountStatus::UnknownVariant(
+                UnknownDeliverabilityDashboardAccountStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliverabilityDashboardAccountStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeliverabilityDashboardAccountStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliverabilityDashboardAccountStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that contains metadata related to a predictive inbox placement test.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -717,7 +1414,7 @@ pub struct DeliverabilityTestReport {
     /// <p>The status of the predictive inbox placement test. If the status is <code>IN_PROGRESS</code>, then the predictive inbox placement test is currently running. Predictive inbox placement tests are usually complete within 24 hours of creating the test. If the status is <code>COMPLETE</code>, then the test is finished, and you can use the <code>GetDeliverabilityTestReport</code> to view the results of the test.</p>
     #[serde(rename = "DeliverabilityTestStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deliverability_test_status: Option<String>,
+    pub deliverability_test_status: Option<DeliverabilityTestStatus>,
     /// <p>The sender address that you specified for the predictive inbox placement test.</p>
     #[serde(rename = "FromEmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -736,6 +1433,113 @@ pub struct DeliverabilityTestReport {
     pub subject: Option<String>,
 }
 
+/// <p>The status of a predictive inbox placement test. If the status is <code>IN_PROGRESS</code>, then the predictive inbox placement test is currently running. Predictive inbox placement tests are usually complete within 24 hours of creating the test. If the status is <code>COMPLETE</code>, then the test is finished, and you can use the <code>GetDeliverabilityTestReport</code> operation to view the results of the test.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliverabilityTestStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliverabilityTestStatus {
+    Completed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliverabilityTestStatus),
+}
+
+impl Default for DeliverabilityTestStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliverabilityTestStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliverabilityTestStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliverabilityTestStatus {
+    fn into(self) -> String {
+        match self {
+            DeliverabilityTestStatus::Completed => "COMPLETED".to_string(),
+            DeliverabilityTestStatus::InProgress => "IN_PROGRESS".to_string(),
+            DeliverabilityTestStatus::UnknownVariant(UnknownDeliverabilityTestStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliverabilityTestStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeliverabilityTestStatus::Completed => &"COMPLETED",
+            DeliverabilityTestStatus::InProgress => &"IN_PROGRESS",
+            DeliverabilityTestStatus::UnknownVariant(UnknownDeliverabilityTestStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeliverabilityTestStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => DeliverabilityTestStatus::Completed,
+            "IN_PROGRESS" => DeliverabilityTestStatus::InProgress,
+            _ => DeliverabilityTestStatus::UnknownVariant(UnknownDeliverabilityTestStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeliverabilityTestStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => DeliverabilityTestStatus::Completed,
+            "IN_PROGRESS" => DeliverabilityTestStatus::InProgress,
+            _ => DeliverabilityTestStatus::UnknownVariant(UnknownDeliverabilityTestStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliverabilityTestStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeliverabilityTestStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliverabilityTestStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Used to associate a configuration set with a dedicated IP pool.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeliveryOptions {
@@ -746,7 +1550,7 @@ pub struct DeliveryOptions {
     /// <p>Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is <code>Require</code>, messages are only delivered if a TLS connection can be established. If the value is <code>Optional</code>, messages can be delivered in plain text if a TLS connection can't be established.</p>
     #[serde(rename = "TlsPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tls_policy: Option<String>,
+    pub tls_policy: Option<TlsPolicy>,
 }
 
 /// <p>An object that describes the recipients for an email.</p>
@@ -767,6 +1571,117 @@ pub struct Destination {
     pub to_addresses: Option<Vec<String>>,
 }
 
+/// <p>The location where the Amazon SES API v2 finds the value of a dimension to publish to Amazon CloudWatch. If you want to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code> or <code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want to use your own email headers, choose <code>emailHeader</code>. If you want to use link tags, choose <code>linkTags</code>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDimensionValueSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DimensionValueSource {
+    EmailHeader,
+    LinkTag,
+    MessageTag,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDimensionValueSource),
+}
+
+impl Default for DimensionValueSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DimensionValueSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DimensionValueSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DimensionValueSource {
+    fn into(self) -> String {
+        match self {
+            DimensionValueSource::EmailHeader => "EMAIL_HEADER".to_string(),
+            DimensionValueSource::LinkTag => "LINK_TAG".to_string(),
+            DimensionValueSource::MessageTag => "MESSAGE_TAG".to_string(),
+            DimensionValueSource::UnknownVariant(UnknownDimensionValueSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DimensionValueSource {
+    fn into(self) -> &'a str {
+        match self {
+            DimensionValueSource::EmailHeader => &"EMAIL_HEADER",
+            DimensionValueSource::LinkTag => &"LINK_TAG",
+            DimensionValueSource::MessageTag => &"MESSAGE_TAG",
+            DimensionValueSource::UnknownVariant(UnknownDimensionValueSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DimensionValueSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMAIL_HEADER" => DimensionValueSource::EmailHeader,
+            "LINK_TAG" => DimensionValueSource::LinkTag,
+            "MESSAGE_TAG" => DimensionValueSource::MessageTag,
+            _ => DimensionValueSource::UnknownVariant(UnknownDimensionValueSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DimensionValueSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMAIL_HEADER" => DimensionValueSource::EmailHeader,
+            "LINK_TAG" => DimensionValueSource::LinkTag,
+            "MESSAGE_TAG" => DimensionValueSource::MessageTag,
+            _ => DimensionValueSource::UnknownVariant(UnknownDimensionValueSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DimensionValueSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DimensionValueSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DimensionValueSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that contains information about the DKIM authentication status for an email identity.</p> <p>Amazon SES determines the authentication status by searching for specific records in the DNS configuration for the domain. If you used <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a> to set up DKIM authentication, Amazon SES tries to find three unique CNAME records in the DNS configuration for your domain. If you provided a public key to perform DKIM authentication, Amazon SES tries to find a TXT record that uses the selector that you specified. The value of the TXT record must be a public key that's paired with the private key that you specified in the process of creating the identity</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -774,7 +1689,7 @@ pub struct DkimAttributes {
     /// <p><p>A string that indicates how DKIM was configured for the identity. There are two possible values:</p> <ul> <li> <p> <code>AWS_SES</code> – Indicates that DKIM was configured for the identity by using <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> </li> <li> <p> <code>EXTERNAL</code> – Indicates that DKIM was configured for the identity by using Bring Your Own DKIM (BYODKIM).</p> </li> </ul></p>
     #[serde(rename = "SigningAttributesOrigin")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_attributes_origin: Option<String>,
+    pub signing_attributes_origin: Option<DkimSigningAttributesOrigin>,
     /// <p>If the value is <code>true</code>, then the messages that you send from the identity are signed using DKIM. If the value is <code>false</code>, then the messages that you send from the identity aren't DKIM-signed.</p>
     #[serde(rename = "SigningEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -782,7 +1697,7 @@ pub struct DkimAttributes {
     /// <p><p>Describes whether or not Amazon SES has successfully located the DKIM records in the DNS records for the domain. The status can be one of the following:</p> <ul> <li> <p> <code>PENDING</code> – The verification process was initiated, but Amazon SES hasn&#39;t yet detected the DKIM records in the DNS configuration for the domain.</p> </li> <li> <p> <code>SUCCESS</code> – The verification process completed successfully.</p> </li> <li> <p> <code>FAILED</code> – The verification process failed. This typically occurs when Amazon SES fails to find the DKIM records in the DNS configuration of the domain.</p> </li> <li> <p> <code>TEMPORARY<em>FAILURE</code> – A temporary issue is preventing Amazon SES from determining the DKIM authentication status of the domain.</p> </li> <li> <p> <code>NOT</em>STARTED</code> – The DKIM verification process hasn&#39;t been initiated for the domain.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DkimStatus>,
     /// <p>If you used <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a> to configure DKIM authentication for the domain, then this object contains a set of unique strings that you use to create a set of CNAME records that you add to the DNS configuration for your domain. When Amazon SES detects these records in the DNS configuration for your domain, the DKIM authentication process is complete.</p> <p>If you configured DKIM authentication for the domain by providing your own public-private key pair, then this object contains the selector for the public key.</p> <p>Regardless of the DKIM authentication method you use, Amazon SES searches for the appropriate records in the DNS configuration of the domain for up to 72 hours.</p>
     #[serde(rename = "Tokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -799,6 +1714,230 @@ pub struct DkimSigningAttributes {
     /// <p>A string that's used to identify a public key in the DNS configuration for a domain.</p>
     #[serde(rename = "DomainSigningSelector")]
     pub domain_signing_selector: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDkimSigningAttributesOrigin {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DkimSigningAttributesOrigin {
+    AwsSes,
+    External,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDkimSigningAttributesOrigin),
+}
+
+impl Default for DkimSigningAttributesOrigin {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DkimSigningAttributesOrigin {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DkimSigningAttributesOrigin {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DkimSigningAttributesOrigin {
+    fn into(self) -> String {
+        match self {
+            DkimSigningAttributesOrigin::AwsSes => "AWS_SES".to_string(),
+            DkimSigningAttributesOrigin::External => "EXTERNAL".to_string(),
+            DkimSigningAttributesOrigin::UnknownVariant(UnknownDkimSigningAttributesOrigin {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DkimSigningAttributesOrigin {
+    fn into(self) -> &'a str {
+        match self {
+            DkimSigningAttributesOrigin::AwsSes => &"AWS_SES",
+            DkimSigningAttributesOrigin::External => &"EXTERNAL",
+            DkimSigningAttributesOrigin::UnknownVariant(UnknownDkimSigningAttributesOrigin {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DkimSigningAttributesOrigin {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_SES" => DkimSigningAttributesOrigin::AwsSes,
+            "EXTERNAL" => DkimSigningAttributesOrigin::External,
+            _ => DkimSigningAttributesOrigin::UnknownVariant(UnknownDkimSigningAttributesOrigin {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DkimSigningAttributesOrigin {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_SES" => DkimSigningAttributesOrigin::AwsSes,
+            "EXTERNAL" => DkimSigningAttributesOrigin::External,
+            _ => DkimSigningAttributesOrigin::UnknownVariant(UnknownDkimSigningAttributesOrigin {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DkimSigningAttributesOrigin {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DkimSigningAttributesOrigin {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DkimSigningAttributesOrigin {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p><p>The DKIM authentication status of the identity. The status can be one of the following:</p> <ul> <li> <p> <code>PENDING</code> – The verification process was initiated, but Amazon SES hasn&#39;t yet detected the DKIM records in the DNS configuration for the domain.</p> </li> <li> <p> <code>SUCCESS</code> – The verification process completed successfully.</p> </li> <li> <p> <code>FAILED</code> – The verification process failed. This typically occurs when Amazon SES fails to find the DKIM records in the DNS configuration of the domain.</p> </li> <li> <p> <code>TEMPORARY<em>FAILURE</code> – A temporary issue is preventing Amazon SES from determining the DKIM authentication status of the domain.</p> </li> <li> <p> <code>NOT</em>STARTED</code> – The DKIM verification process hasn&#39;t been initiated for the domain.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDkimStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DkimStatus {
+    Failed,
+    NotStarted,
+    Pending,
+    Success,
+    TemporaryFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDkimStatus),
+}
+
+impl Default for DkimStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DkimStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DkimStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DkimStatus {
+    fn into(self) -> String {
+        match self {
+            DkimStatus::Failed => "FAILED".to_string(),
+            DkimStatus::NotStarted => "NOT_STARTED".to_string(),
+            DkimStatus::Pending => "PENDING".to_string(),
+            DkimStatus::Success => "SUCCESS".to_string(),
+            DkimStatus::TemporaryFailure => "TEMPORARY_FAILURE".to_string(),
+            DkimStatus::UnknownVariant(UnknownDkimStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DkimStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DkimStatus::Failed => &"FAILED",
+            DkimStatus::NotStarted => &"NOT_STARTED",
+            DkimStatus::Pending => &"PENDING",
+            DkimStatus::Success => &"SUCCESS",
+            DkimStatus::TemporaryFailure => &"TEMPORARY_FAILURE",
+            DkimStatus::UnknownVariant(UnknownDkimStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DkimStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => DkimStatus::Failed,
+            "NOT_STARTED" => DkimStatus::NotStarted,
+            "PENDING" => DkimStatus::Pending,
+            "SUCCESS" => DkimStatus::Success,
+            "TEMPORARY_FAILURE" => DkimStatus::TemporaryFailure,
+            _ => DkimStatus::UnknownVariant(UnknownDkimStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DkimStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => DkimStatus::Failed,
+            "NOT_STARTED" => DkimStatus::NotStarted,
+            "PENDING" => DkimStatus::Pending,
+            "SUCCESS" => DkimStatus::Success,
+            "TEMPORARY_FAILURE" => DkimStatus::TemporaryFailure,
+            _ => DkimStatus::UnknownVariant(UnknownDkimStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DkimStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DkimStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DkimStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for (<code>PutDeliverabilityDashboardOption</code> operation).</p>
@@ -973,7 +2112,7 @@ pub struct EventDestination {
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     /// <p>The types of events that Amazon SES sends to the specified event destinations.</p>
     #[serde(rename = "MatchingEventTypes")]
-    pub matching_event_types: Vec<String>,
+    pub matching_event_types: Vec<EventType>,
     /// <p>A name that identifies the event destination.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1006,7 +2145,7 @@ pub struct EventDestinationDefinition {
     /// <p>An array that specifies which events the Amazon SES API v2 should send to the destinations in this <code>EventDestinationDefinition</code>.</p>
     #[serde(rename = "MatchingEventTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub matching_event_types: Option<Vec<String>>,
+    pub matching_event_types: Option<Vec<EventType>>,
     /// <p>An object that defines an Amazon Pinpoint project destination for email events. You can send email event data to a Amazon Pinpoint project to view metrics using the Transactional Messaging dashboards that are built in to Amazon Pinpoint. For more information, see <a href="https://docs.aws.amazon.com/pinpoint/latest/userguide/analytics-transactional-messages.html">Transactional Messaging Charts</a> in the <i>Amazon Pinpoint User Guide</i>.</p>
     #[serde(rename = "PinpointDestination")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1015,6 +2154,148 @@ pub struct EventDestinationDefinition {
     #[serde(rename = "SnsDestination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_destination: Option<SnsDestination>,
+}
+
+/// <p>An email sending event type. For example, email sends, opens, and bounces are all email events.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    Bounce,
+    Click,
+    Complaint,
+    Delivery,
+    DeliveryDelay,
+    Open,
+    Reject,
+    RenderingFailure,
+    Send,
+    Subscription,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::Bounce => "BOUNCE".to_string(),
+            EventType::Click => "CLICK".to_string(),
+            EventType::Complaint => "COMPLAINT".to_string(),
+            EventType::Delivery => "DELIVERY".to_string(),
+            EventType::DeliveryDelay => "DELIVERY_DELAY".to_string(),
+            EventType::Open => "OPEN".to_string(),
+            EventType::Reject => "REJECT".to_string(),
+            EventType::RenderingFailure => "RENDERING_FAILURE".to_string(),
+            EventType::Send => "SEND".to_string(),
+            EventType::Subscription => "SUBSCRIPTION".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::Bounce => &"BOUNCE",
+            EventType::Click => &"CLICK",
+            EventType::Complaint => &"COMPLAINT",
+            EventType::Delivery => &"DELIVERY",
+            EventType::DeliveryDelay => &"DELIVERY_DELAY",
+            EventType::Open => &"OPEN",
+            EventType::Reject => &"REJECT",
+            EventType::RenderingFailure => &"RENDERING_FAILURE",
+            EventType::Send => &"SEND",
+            EventType::Subscription => &"SUBSCRIPTION",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOUNCE" => EventType::Bounce,
+            "CLICK" => EventType::Click,
+            "COMPLAINT" => EventType::Complaint,
+            "DELIVERY" => EventType::Delivery,
+            "DELIVERY_DELAY" => EventType::DeliveryDelay,
+            "OPEN" => EventType::Open,
+            "REJECT" => EventType::Reject,
+            "RENDERING_FAILURE" => EventType::RenderingFailure,
+            "SEND" => EventType::Send,
+            "SUBSCRIPTION" => EventType::Subscription,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOUNCE" => EventType::Bounce,
+            "CLICK" => EventType::Click,
+            "COMPLAINT" => EventType::Complaint,
+            "DELIVERY" => EventType::Delivery,
+            "DELIVERY_DELAY" => EventType::DeliveryDelay,
+            "OPEN" => EventType::Open,
+            "REJECT" => EventType::Reject,
+            "RENDERING_FAILURE" => EventType::RenderingFailure,
+            "SEND" => EventType::Send,
+            "SUBSCRIPTION" => EventType::Subscription,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains the failure details about an import job.</p>
@@ -1337,7 +2618,7 @@ pub struct GetDeliverabilityDashboardOptionsResponse {
     /// <p>The current status of your Deliverability dashboard subscription. If this value is <code>PENDING_EXPIRATION</code>, your subscription is scheduled to expire at the end of the current calendar month.</p>
     #[serde(rename = "AccountStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_status: Option<String>,
+    pub account_status: Option<DeliverabilityDashboardAccountStatus>,
     /// <p>An array of objects, one for each verified domain that you use to send email and currently has an active Deliverability dashboard subscription that isn’t scheduled to expire at the end of the current calendar month.</p>
     #[serde(rename = "ActiveSubscribedDomains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1475,7 +2756,7 @@ pub struct GetEmailIdentityResponse {
     /// <p>The email identity type.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>An object that contains information about the Mail-From attributes for the email identity.</p>
     #[serde(rename = "MailFromAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1559,7 +2840,7 @@ pub struct GetImportJobResponse {
     /// <p>The status of the import job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
     /// <p>The current number of records processed.</p>
     #[serde(rename = "ProcessedRecordsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1595,11 +2876,119 @@ pub struct IdentityInfo {
     /// <p><p>The email identity type. The identity type can be one of the following:</p> <ul> <li> <p> <code>EMAIL<em>ADDRESS</code> – The identity is an email address.</p> </li> <li> <p> <code>DOMAIN</code> – The identity is a domain.</p> </li> <li> <p> <code>MANAGED</em>DOMAIN</code> – The identity is a domain that is managed by AWS.</p> </li> </ul></p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>Indicates whether or not you can send email from the identity.</p> <p>An <i>identity</i> is an email address or domain that you send email from. Before you can send email from an identity, you have to demostrate that you own the identity, and that you authorize Amazon SES to send email from that identity.</p>
     #[serde(rename = "SendingEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sending_enabled: Option<bool>,
+}
+
+/// <p><p>The email identity type. The identity type can be one of the following:</p> <ul> <li> <p> <code>EMAIL_ADDRESS</code> – The identity is an email address.</p> </li> <li> <p> <code>DOMAIN</code> – The identity is a domain.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityType {
+    Domain,
+    EmailAddress,
+    ManagedDomain,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityType),
+}
+
+impl Default for IdentityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityType {
+    fn into(self) -> String {
+        match self {
+            IdentityType::Domain => "DOMAIN".to_string(),
+            IdentityType::EmailAddress => "EMAIL_ADDRESS".to_string(),
+            IdentityType::ManagedDomain => "MANAGED_DOMAIN".to_string(),
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityType {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityType::Domain => &"DOMAIN",
+            IdentityType::EmailAddress => &"EMAIL_ADDRESS",
+            IdentityType::ManagedDomain => &"MANAGED_DOMAIN",
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOMAIN" => IdentityType::Domain,
+            "EMAIL_ADDRESS" => IdentityType::EmailAddress,
+            "MANAGED_DOMAIN" => IdentityType::ManagedDomain,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOMAIN" => IdentityType::Domain,
+            "EMAIL_ADDRESS" => IdentityType::EmailAddress,
+            "MANAGED_DOMAIN" => IdentityType::ManagedDomain,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IdentityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IdentityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains details about the data source of the import job.</p>
@@ -1607,7 +2996,7 @@ pub struct IdentityInfo {
 pub struct ImportDataSource {
     /// <p>The data format of the import job's data source.</p>
     #[serde(rename = "DataFormat")]
-    pub data_format: String,
+    pub data_format: DataFormat,
     /// <p>An Amazon S3 URL in the format s3://<i>&lt;bucket_name&gt;</i>/<i>&lt;object&gt;</i>.</p>
     #[serde(rename = "S3Url")]
     pub s3_url: String,
@@ -1626,6 +3015,113 @@ pub struct ImportDestination {
     pub suppression_list_destination: Option<SuppressionListDestination>,
 }
 
+/// <p>The destination of the import job, which can be used to list import jobs that have a certain <code>ImportDestinationType</code>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImportDestinationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImportDestinationType {
+    ContactList,
+    SuppressionList,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImportDestinationType),
+}
+
+impl Default for ImportDestinationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImportDestinationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImportDestinationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImportDestinationType {
+    fn into(self) -> String {
+        match self {
+            ImportDestinationType::ContactList => "CONTACT_LIST".to_string(),
+            ImportDestinationType::SuppressionList => "SUPPRESSION_LIST".to_string(),
+            ImportDestinationType::UnknownVariant(UnknownImportDestinationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImportDestinationType {
+    fn into(self) -> &'a str {
+        match self {
+            ImportDestinationType::ContactList => &"CONTACT_LIST",
+            ImportDestinationType::SuppressionList => &"SUPPRESSION_LIST",
+            ImportDestinationType::UnknownVariant(UnknownImportDestinationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImportDestinationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTACT_LIST" => ImportDestinationType::ContactList,
+            "SUPPRESSION_LIST" => ImportDestinationType::SuppressionList,
+            _ => ImportDestinationType::UnknownVariant(UnknownImportDestinationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImportDestinationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTACT_LIST" => ImportDestinationType::ContactList,
+            "SUPPRESSION_LIST" => ImportDestinationType::SuppressionList,
+            _ => ImportDestinationType::UnknownVariant(UnknownImportDestinationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImportDestinationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImportDestinationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImportDestinationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of the import job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1642,7 +3138,7 @@ pub struct ImportJobSummary {
     pub job_id: Option<String>,
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<JobStatus>,
 }
 
 /// <p>An object that contains information about the inbox placement data settings for a verified domain that’s associated with your AWS account. This data is available only if you enabled the Deliverability dashboard for the domain.</p>
@@ -1670,6 +3166,119 @@ pub struct IspPlacement {
     #[serde(rename = "PlacementStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_statistics: Option<PlacementStatistics>,
+}
+
+/// <p>The status of the import job.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Completed,
+    Created,
+    Failed,
+    Processing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Completed => "COMPLETED".to_string(),
+            JobStatus::Created => "CREATED".to_string(),
+            JobStatus::Failed => "FAILED".to_string(),
+            JobStatus::Processing => "PROCESSING".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Completed => &"COMPLETED",
+            JobStatus::Created => &"CREATED",
+            JobStatus::Failed => &"FAILED",
+            JobStatus::Processing => &"PROCESSING",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => JobStatus::Completed,
+            "CREATED" => JobStatus::Created,
+            "FAILED" => JobStatus::Failed,
+            "PROCESSING" => JobStatus::Processing,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => JobStatus::Completed,
+            "CREATED" => JobStatus::Created,
+            "FAILED" => JobStatus::Failed,
+            "PROCESSING" => JobStatus::Processing,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that defines an Amazon Kinesis Data Firehose destination for email events. You can use Amazon Kinesis Data Firehose to stream data to other services, such as Amazon S3 and Amazon Redshift.</p>
@@ -1744,7 +3353,7 @@ pub struct ListContactsFilter {
     /// <p>The status by which you are filtering: <code>OPT_IN</code> or <code>OPT_OUT</code>.</p>
     #[serde(rename = "FilteredStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filtered_status: Option<String>,
+    pub filtered_status: Option<SubscriptionStatus>,
     /// <p>Used for filtering by a specific topic preference.</p>
     #[serde(rename = "TopicFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1966,7 +3575,7 @@ pub struct ListImportJobsRequest {
     /// <p>The destination of the import job, which can be used to list import jobs that have a certain <code>ImportDestinationType</code>.</p>
     #[serde(rename = "ImportDestinationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub import_destination_type: Option<String>,
+    pub import_destination_type: Option<ImportDestinationType>,
     /// <p>A string token indicating that there might be additional import jobs available to be listed. Copy this token to a subsequent call to <code>ListImportJobs</code> with the same parameters to retrieve the next page of import jobs.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2023,7 +3632,7 @@ pub struct ListSuppressedDestinationsRequest {
     /// <p>The factors that caused the email address to be added to .</p>
     #[serde(rename = "Reasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reasons: Option<Vec<String>>,
+    pub reasons: Option<Vec<SuppressionListReason>>,
     /// <p>Used to filter the list of suppressed email destinations so that it only includes addresses that were added to the list after a specific date. The date that you specify should be in Unix time format.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2066,13 +3675,230 @@ pub struct ListTagsForResourceResponse {
 pub struct MailFromAttributes {
     /// <p>The action that you want to take if the required MX record can't be found when you send an email. When you set this value to <code>UseDefaultValue</code>, the mail is sent using <i>amazonses.com</i> as the MAIL FROM domain. When you set this value to <code>RejectMessage</code>, the Amazon SES API v2 returns a <code>MailFromDomainNotVerified</code> error, and doesn't attempt to deliver the email.</p> <p>These behaviors are taken when the custom MAIL FROM domain configuration is in the <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code> states.</p>
     #[serde(rename = "BehaviorOnMxFailure")]
-    pub behavior_on_mx_failure: String,
+    pub behavior_on_mx_failure: BehaviorOnMxFailure,
     /// <p>The name of a domain that an email identity uses as a custom MAIL FROM domain.</p>
     #[serde(rename = "MailFromDomain")]
     pub mail_from_domain: String,
     /// <p><p>The status of the MAIL FROM domain. This status can have the following values:</p> <ul> <li> <p> <code>PENDING</code> – Amazon SES hasn&#39;t started searching for the MX record yet.</p> </li> <li> <p> <code>SUCCESS</code> – Amazon SES detected the required MX record for the MAIL FROM domain.</p> </li> <li> <p> <code>FAILED</code> – Amazon SES can&#39;t find the required MX record, or the record no longer exists.</p> </li> <li> <p> <code>TEMPORARY_FAILURE</code> – A temporary issue occurred, which prevented Amazon SES from determining the status of the MAIL FROM domain.</p> </li> </ul></p>
     #[serde(rename = "MailFromDomainStatus")]
-    pub mail_from_domain_status: String,
+    pub mail_from_domain_status: MailFromDomainStatus,
+}
+
+/// <p><p>The status of the MAIL FROM domain. This status can have the following values:</p> <ul> <li> <p> <code>PENDING</code> – Amazon SES hasn&#39;t started searching for the MX record yet.</p> </li> <li> <p> <code>SUCCESS</code> – Amazon SES detected the required MX record for the MAIL FROM domain.</p> </li> <li> <p> <code>FAILED</code> – Amazon SES can&#39;t find the required MX record, or the record no longer exists.</p> </li> <li> <p> <code>TEMPORARY_FAILURE</code> – A temporary issue occurred, which prevented Amazon SES from determining the status of the MAIL FROM domain.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMailFromDomainStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MailFromDomainStatus {
+    Failed,
+    Pending,
+    Success,
+    TemporaryFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMailFromDomainStatus),
+}
+
+impl Default for MailFromDomainStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MailFromDomainStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MailFromDomainStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MailFromDomainStatus {
+    fn into(self) -> String {
+        match self {
+            MailFromDomainStatus::Failed => "FAILED".to_string(),
+            MailFromDomainStatus::Pending => "PENDING".to_string(),
+            MailFromDomainStatus::Success => "SUCCESS".to_string(),
+            MailFromDomainStatus::TemporaryFailure => "TEMPORARY_FAILURE".to_string(),
+            MailFromDomainStatus::UnknownVariant(UnknownMailFromDomainStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MailFromDomainStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MailFromDomainStatus::Failed => &"FAILED",
+            MailFromDomainStatus::Pending => &"PENDING",
+            MailFromDomainStatus::Success => &"SUCCESS",
+            MailFromDomainStatus::TemporaryFailure => &"TEMPORARY_FAILURE",
+            MailFromDomainStatus::UnknownVariant(UnknownMailFromDomainStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MailFromDomainStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => MailFromDomainStatus::Failed,
+            "PENDING" => MailFromDomainStatus::Pending,
+            "SUCCESS" => MailFromDomainStatus::Success,
+            "TEMPORARY_FAILURE" => MailFromDomainStatus::TemporaryFailure,
+            _ => MailFromDomainStatus::UnknownVariant(UnknownMailFromDomainStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MailFromDomainStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => MailFromDomainStatus::Failed,
+            "PENDING" => MailFromDomainStatus::Pending,
+            "SUCCESS" => MailFromDomainStatus::Success,
+            "TEMPORARY_FAILURE" => MailFromDomainStatus::TemporaryFailure,
+            _ => MailFromDomainStatus::UnknownVariant(UnknownMailFromDomainStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MailFromDomainStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MailFromDomainStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MailFromDomainStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMailType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MailType {
+    Marketing,
+    Transactional,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMailType),
+}
+
+impl Default for MailType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MailType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MailType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MailType {
+    fn into(self) -> String {
+        match self {
+            MailType::Marketing => "MARKETING".to_string(),
+            MailType::Transactional => "TRANSACTIONAL".to_string(),
+            MailType::UnknownVariant(UnknownMailType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MailType {
+    fn into(self) -> &'a str {
+        match self {
+            MailType::Marketing => &"MARKETING",
+            MailType::Transactional => &"TRANSACTIONAL",
+            MailType::UnknownVariant(UnknownMailType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MailType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MARKETING" => MailType::Marketing,
+            "TRANSACTIONAL" => MailType::Transactional,
+            _ => MailType::UnknownVariant(UnknownMailType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MailType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MARKETING" => MailType::Marketing,
+            "TRANSACTIONAL" => MailType::Transactional,
+            _ => MailType::UnknownVariant(UnknownMailType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MailType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MailType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MailType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the email message that you're sending. The <code>Message</code> object consists of a subject line and a message body.</p>
@@ -2178,10 +4004,10 @@ pub struct PutAccountDetailsRequest {
     /// <p>The language you would prefer to be contacted with.</p>
     #[serde(rename = "ContactLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_language: Option<String>,
+    pub contact_language: Option<ContactLanguage>,
     /// <p>The type of email your account will send.</p>
     #[serde(rename = "MailType")]
-    pub mail_type: String,
+    pub mail_type: MailType,
     /// <p>Indicates whether or not your account should have production access in the current AWS Region.</p> <p>If the value is <code>false</code>, then your account is in the <i>sandbox</i>. When your account is in the sandbox, you can only send email to verified identities. Additionally, the maximum number of emails you can send in a 24-hour period (your sending quota) is 200, and the maximum number of emails you can send per second (your maximum sending rate) is 1.</p> <p>If the value is <code>true</code>, then your account has production access. When your account has production access, you can send email to any address. The sending quota and maximum sending rate for your account vary based on your specific use case.</p>
     #[serde(rename = "ProductionAccessEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2221,7 +4047,7 @@ pub struct PutAccountSuppressionAttributesRequest {
     /// <p><p>A list that contains the reasons that email addresses will be automatically added to the suppression list for your account. This list can contain any or all of the following:</p> <ul> <li> <p> <code>COMPLAINT</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a complaint.</p> </li> <li> <p> <code>BOUNCE</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a hard bounce.</p> </li> </ul></p>
     #[serde(rename = "SuppressedReasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub suppressed_reasons: Option<Vec<String>>,
+    pub suppressed_reasons: Option<Vec<SuppressionListReason>>,
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
@@ -2243,7 +4069,7 @@ pub struct PutConfigurationSetDeliveryOptionsRequest {
     /// <p>Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is <code>Require</code>, messages are only delivered if a TLS connection can be established. If the value is <code>Optional</code>, messages can be delivered in plain text if a TLS connection can't be established.</p>
     #[serde(rename = "TlsPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tls_policy: Option<String>,
+    pub tls_policy: Option<TlsPolicy>,
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
@@ -2297,7 +4123,7 @@ pub struct PutConfigurationSetSuppressionOptionsRequest {
     /// <p><p>A list that contains the reasons that email addresses are automatically added to the suppression list for your account. This list can contain any or all of the following:</p> <ul> <li> <p> <code>COMPLAINT</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a complaint.</p> </li> <li> <p> <code>BOUNCE</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a hard bounce.</p> </li> </ul></p>
     #[serde(rename = "SuppressedReasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub suppressed_reasons: Option<Vec<String>>,
+    pub suppressed_reasons: Option<Vec<SuppressionListReason>>,
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
@@ -2406,7 +4232,7 @@ pub struct PutEmailIdentityDkimSigningAttributesRequest {
     pub signing_attributes: Option<DkimSigningAttributes>,
     /// <p><p>The method that you want to use to configure DKIM for the identity. There are two possible values:</p> <ul> <li> <p> <code>AWS_SES</code> – Configure DKIM for the identity by using <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> </li> <li> <p> <code>EXTERNAL</code> – Configure DKIM for the identity by using Bring Your Own DKIM (BYODKIM).</p> </li> </ul></p>
     #[serde(rename = "SigningAttributesOrigin")]
-    pub signing_attributes_origin: String,
+    pub signing_attributes_origin: DkimSigningAttributesOrigin,
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p> <p>The following data is returned in JSON format by the service.</p>
@@ -2416,7 +4242,7 @@ pub struct PutEmailIdentityDkimSigningAttributesResponse {
     /// <p><p>The DKIM authentication status of the identity. Amazon SES determines the authentication status by searching for specific records in the DNS configuration for your domain. If you used <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a> to set up DKIM authentication, Amazon SES tries to find three unique CNAME records in the DNS configuration for your domain.</p> <p>If you provided a public key to perform DKIM authentication, Amazon SES tries to find a TXT record that uses the selector that you specified. The value of the TXT record must be a public key that&#39;s paired with the private key that you specified in the process of creating the identity.</p> <p>The status can be one of the following:</p> <ul> <li> <p> <code>PENDING</code> – The verification process was initiated, but Amazon SES hasn&#39;t yet detected the DKIM records in the DNS configuration for the domain.</p> </li> <li> <p> <code>SUCCESS</code> – The verification process completed successfully.</p> </li> <li> <p> <code>FAILED</code> – The verification process failed. This typically occurs when Amazon SES fails to find the DKIM records in the DNS configuration of the domain.</p> </li> <li> <p> <code>TEMPORARY<em>FAILURE</code> – A temporary issue is preventing Amazon SES from determining the DKIM authentication status of the domain.</p> </li> <li> <p> <code>NOT</em>STARTED</code> – The DKIM verification process hasn&#39;t been initiated for the domain.</p> </li> </ul></p>
     #[serde(rename = "DkimStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dkim_status: Option<String>,
+    pub dkim_status: Option<DkimStatus>,
     /// <p>If you used <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a> to configure DKIM authentication for the domain, then this object contains a set of unique strings that you use to create a set of CNAME records that you add to the DNS configuration for your domain. When Amazon SES detects these records in the DNS configuration for your domain, the DKIM authentication process is complete.</p> <p>If you configured DKIM authentication for the domain by providing your own public-private key pair, then this object contains the selector that's associated with your public key.</p> <p>Regardless of the DKIM authentication method you use, Amazon SES searches for the appropriate records in the DNS configuration of the domain for up to 72 hours.</p>
     #[serde(rename = "DkimTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2448,7 +4274,7 @@ pub struct PutEmailIdentityMailFromAttributesRequest {
     /// <p>The action that you want to take if the required MX record isn't found when you send an email. When you set this value to <code>UseDefaultValue</code>, the mail is sent using <i>amazonses.com</i> as the MAIL FROM domain. When you set this value to <code>RejectMessage</code>, the Amazon SES API v2 returns a <code>MailFromDomainNotVerified</code> error, and doesn't attempt to deliver the email.</p> <p>These behaviors are taken when the custom MAIL FROM domain configuration is in the <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code> states.</p>
     #[serde(rename = "BehaviorOnMxFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub behavior_on_mx_failure: Option<String>,
+    pub behavior_on_mx_failure: Option<BehaviorOnMxFailure>,
     /// <p>The verified email identity that you want to set up the custom MAIL FROM domain for.</p>
     #[serde(rename = "EmailIdentity")]
     pub email_identity: String,
@@ -2472,7 +4298,7 @@ pub struct PutSuppressedDestinationRequest {
     pub email_address: String,
     /// <p>The factors that should cause the email address to be added to the suppression list for your account.</p>
     #[serde(rename = "Reason")]
-    pub reason: String,
+    pub reason: SuppressionListReason,
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
@@ -2538,7 +4364,118 @@ pub struct ReviewDetails {
     /// <p><p>The status of the latest review of your account. The status can be one of the following:</p> <ul> <li> <p> <code>PENDING</code> – We have received your appeal and are in the process of reviewing it.</p> </li> <li> <p> <code>GRANTED</code> – Your appeal has been reviewed and your production access has been granted.</p> </li> <li> <p> <code>DENIED</code> – Your appeal has been reviewed and your production access has been denied.</p> </li> <li> <p> <code>FAILED</code> – An internal error occurred and we didn&#39;t receive your appeal. You can submit your appeal again.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReviewStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReviewStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReviewStatus {
+    Denied,
+    Failed,
+    Granted,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReviewStatus),
+}
+
+impl Default for ReviewStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReviewStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReviewStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReviewStatus {
+    fn into(self) -> String {
+        match self {
+            ReviewStatus::Denied => "DENIED".to_string(),
+            ReviewStatus::Failed => "FAILED".to_string(),
+            ReviewStatus::Granted => "GRANTED".to_string(),
+            ReviewStatus::Pending => "PENDING".to_string(),
+            ReviewStatus::UnknownVariant(UnknownReviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReviewStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReviewStatus::Denied => &"DENIED",
+            ReviewStatus::Failed => &"FAILED",
+            ReviewStatus::Granted => &"GRANTED",
+            ReviewStatus::Pending => &"PENDING",
+            ReviewStatus::UnknownVariant(UnknownReviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReviewStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DENIED" => ReviewStatus::Denied,
+            "FAILED" => ReviewStatus::Failed,
+            "GRANTED" => ReviewStatus::Granted,
+            "PENDING" => ReviewStatus::Pending,
+            _ => ReviewStatus::UnknownVariant(UnknownReviewStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReviewStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DENIED" => ReviewStatus::Denied,
+            "FAILED" => ReviewStatus::Failed,
+            "GRANTED" => ReviewStatus::Granted,
+            "PENDING" => ReviewStatus::Pending,
+            _ => ReviewStatus::UnknownVariant(UnknownReviewStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReviewStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReviewStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a request to send email messages to multiple destinations using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
@@ -2705,6 +4642,110 @@ pub struct SnsDestination {
     pub topic_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriptionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriptionStatus {
+    OptIn,
+    OptOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriptionStatus),
+}
+
+impl Default for SubscriptionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriptionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriptionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriptionStatus {
+    fn into(self) -> String {
+        match self {
+            SubscriptionStatus::OptIn => "OPT_IN".to_string(),
+            SubscriptionStatus::OptOut => "OPT_OUT".to_string(),
+            SubscriptionStatus::UnknownVariant(UnknownSubscriptionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriptionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriptionStatus::OptIn => &"OPT_IN",
+            SubscriptionStatus::OptOut => &"OPT_OUT",
+            SubscriptionStatus::UnknownVariant(UnknownSubscriptionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SubscriptionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPT_IN" => SubscriptionStatus::OptIn,
+            "OPT_OUT" => SubscriptionStatus::OptOut,
+            _ => SubscriptionStatus::UnknownVariant(UnknownSubscriptionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriptionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPT_IN" => SubscriptionStatus::OptIn,
+            "OPT_OUT" => SubscriptionStatus::OptOut,
+            _ => SubscriptionStatus::UnknownVariant(UnknownSubscriptionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SubscriptionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubscriptionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that contains information about an email address that is on the suppression list for your account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2721,7 +4762,7 @@ pub struct SuppressedDestination {
     pub last_update_time: f64,
     /// <p>The reason that the address was added to the suppression list for your account.</p>
     #[serde(rename = "Reason")]
-    pub reason: String,
+    pub reason: SuppressionListReason,
 }
 
 /// <p>An object that contains additional attributes that are related an email address that is on the suppression list for your account.</p>
@@ -2750,7 +4791,7 @@ pub struct SuppressedDestinationSummary {
     pub last_update_time: f64,
     /// <p>The reason that the address was added to the suppression list for your account.</p>
     #[serde(rename = "Reason")]
-    pub reason: String,
+    pub reason: SuppressionListReason,
 }
 
 /// <p>An object that contains information about the email address suppression preferences for your account in the current AWS Region.</p>
@@ -2760,7 +4801,7 @@ pub struct SuppressionAttributes {
     /// <p><p>A list that contains the reasons that email addresses will be automatically added to the suppression list for your account. This list can contain any or all of the following:</p> <ul> <li> <p> <code>COMPLAINT</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a complaint.</p> </li> <li> <p> <code>BOUNCE</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a hard bounce.</p> </li> </ul></p>
     #[serde(rename = "SuppressedReasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub suppressed_reasons: Option<Vec<String>>,
+    pub suppressed_reasons: Option<Vec<SuppressionListReason>>,
 }
 
 /// <p>An object that contains details about the action of suppression list.</p>
@@ -2768,7 +4809,221 @@ pub struct SuppressionAttributes {
 pub struct SuppressionListDestination {
     /// <p><p>The type of action that you want to perform on the address. Acceptable values:</p> <ul> <li> <p>PUT: add the addresses to the suppression list. If the record already exists, it will override it with the new value.</p> </li> <li> <p>DELETE: remove the addresses from the suppression list.</p> </li> </ul></p>
     #[serde(rename = "SuppressionListImportAction")]
-    pub suppression_list_import_action: String,
+    pub suppression_list_import_action: SuppressionListImportAction,
+}
+
+/// <p><p>The type of action that you want to perform on the address. Acceptable values:</p> <ul> <li> <p>PUT: add the addresses to the suppression list.</p> </li> <li> <p>DELETE: remove the address from the suppression list.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSuppressionListImportAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SuppressionListImportAction {
+    Delete,
+    Put,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSuppressionListImportAction),
+}
+
+impl Default for SuppressionListImportAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SuppressionListImportAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SuppressionListImportAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SuppressionListImportAction {
+    fn into(self) -> String {
+        match self {
+            SuppressionListImportAction::Delete => "DELETE".to_string(),
+            SuppressionListImportAction::Put => "PUT".to_string(),
+            SuppressionListImportAction::UnknownVariant(UnknownSuppressionListImportAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SuppressionListImportAction {
+    fn into(self) -> &'a str {
+        match self {
+            SuppressionListImportAction::Delete => &"DELETE",
+            SuppressionListImportAction::Put => &"PUT",
+            SuppressionListImportAction::UnknownVariant(UnknownSuppressionListImportAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SuppressionListImportAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => SuppressionListImportAction::Delete,
+            "PUT" => SuppressionListImportAction::Put,
+            _ => SuppressionListImportAction::UnknownVariant(UnknownSuppressionListImportAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SuppressionListImportAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => SuppressionListImportAction::Delete,
+            "PUT" => SuppressionListImportAction::Put,
+            _ => SuppressionListImportAction::UnknownVariant(UnknownSuppressionListImportAction {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SuppressionListImportAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SuppressionListImportAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SuppressionListImportAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p><p>The reason that the address was added to the suppression list for your account. The value can be one of the following:</p> <ul> <li> <p> <code>COMPLAINT</code> – Amazon SES added an email address to the suppression list for your account because a message sent to that address results in a complaint.</p> </li> <li> <p> <code>BOUNCE</code> – Amazon SES added an email address to the suppression list for your account because a message sent to that address results in a hard bounce.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSuppressionListReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SuppressionListReason {
+    Bounce,
+    Complaint,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSuppressionListReason),
+}
+
+impl Default for SuppressionListReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SuppressionListReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SuppressionListReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SuppressionListReason {
+    fn into(self) -> String {
+        match self {
+            SuppressionListReason::Bounce => "BOUNCE".to_string(),
+            SuppressionListReason::Complaint => "COMPLAINT".to_string(),
+            SuppressionListReason::UnknownVariant(UnknownSuppressionListReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SuppressionListReason {
+    fn into(self) -> &'a str {
+        match self {
+            SuppressionListReason::Bounce => &"BOUNCE",
+            SuppressionListReason::Complaint => &"COMPLAINT",
+            SuppressionListReason::UnknownVariant(UnknownSuppressionListReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SuppressionListReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOUNCE" => SuppressionListReason::Bounce,
+            "COMPLAINT" => SuppressionListReason::Complaint,
+            _ => SuppressionListReason::UnknownVariant(UnknownSuppressionListReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SuppressionListReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOUNCE" => SuppressionListReason::Bounce,
+            "COMPLAINT" => SuppressionListReason::Complaint,
+            _ => SuppressionListReason::UnknownVariant(UnknownSuppressionListReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SuppressionListReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SuppressionListReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SuppressionListReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that contains information about the suppression list preferences for your account.</p>
@@ -2777,7 +5032,7 @@ pub struct SuppressionOptions {
     /// <p><p>A list that contains the reasons that email addresses are automatically added to the suppression list for your account. This list can contain any or all of the following:</p> <ul> <li> <p> <code>COMPLAINT</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a complaint.</p> </li> <li> <p> <code>BOUNCE</code> – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a hard bounce.</p> </li> </ul></p>
     #[serde(rename = "SuppressedReasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub suppressed_reasons: Option<Vec<String>>,
+    pub suppressed_reasons: Option<Vec<SuppressionListReason>>,
 }
 
 /// <p><p>An object that defines the tags that are associated with a resource. A <i>tag</i> is a label that you optionally define and associate with a resource. Tags can help you categorize and manage resources in different ways, such as by purpose, owner, environment, or other criteria. A resource can have as many as 50 tags.</p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for a more specific tag value. A tag value acts as a descriptor within a tag key. A tag key can contain as many as 128 characters. A tag value can contain as many as 256 characters. The characters can be Unicode letters, digits, white space, or one of the following symbols: _ . : / = + -. The following additional restrictions apply to tags:</p> <ul> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>For each associated resource, each tag key must be unique and it can have only one value.</p> </li> <li> <p>The <code>aws:</code> prefix is reserved for use by AWS; you can’t use it in any tag keys or values that you define. In addition, you can&#39;t edit or remove tag keys or values that use this prefix. Tags that use this prefix don’t count against the limit of 50 tags per resource.</p> </li> <li> <p>You can associate tags with public or shared resources, but the tags are available only for your AWS account, not any other accounts that share the resource. In addition, the tags are available only for resources that are located in the specified AWS Region for your AWS account.</p> </li> </ul></p>
@@ -2845,12 +5100,114 @@ pub struct TestRenderEmailTemplateResponse {
     pub rendered_template: String,
 }
 
+/// <p>Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is <code>Require</code>, messages are only delivered if a TLS connection can be established. If the value is <code>Optional</code>, messages can be delivered in plain text if a TLS connection can't be established.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTlsPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TlsPolicy {
+    Optional,
+    Require,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTlsPolicy),
+}
+
+impl Default for TlsPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TlsPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TlsPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TlsPolicy {
+    fn into(self) -> String {
+        match self {
+            TlsPolicy::Optional => "OPTIONAL".to_string(),
+            TlsPolicy::Require => "REQUIRE".to_string(),
+            TlsPolicy::UnknownVariant(UnknownTlsPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TlsPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            TlsPolicy::Optional => &"OPTIONAL",
+            TlsPolicy::Require => &"REQUIRE",
+            TlsPolicy::UnknownVariant(UnknownTlsPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TlsPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPTIONAL" => TlsPolicy::Optional,
+            "REQUIRE" => TlsPolicy::Require,
+            _ => TlsPolicy::UnknownVariant(UnknownTlsPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TlsPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPTIONAL" => TlsPolicy::Optional,
+            "REQUIRE" => TlsPolicy::Require,
+            _ => TlsPolicy::UnknownVariant(UnknownTlsPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TlsPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TlsPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TlsPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An interest group, theme, or label within a list. Lists can have multiple topics.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Topic {
     /// <p>The default subscription status to be applied to a contact if the contact has not noted their preference for subscribing to a topic.</p>
     #[serde(rename = "DefaultSubscriptionStatus")]
-    pub default_subscription_status: String,
+    pub default_subscription_status: SubscriptionStatus,
     /// <p>A description of what the topic is about, which the contact will see.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2882,7 +5239,7 @@ pub struct TopicFilter {
 pub struct TopicPreference {
     /// <p>The contact's subscription status to a topic which is either <code>OPT_IN</code> or <code>OPT_OUT</code>.</p>
     #[serde(rename = "SubscriptionStatus")]
-    pub subscription_status: String,
+    pub subscription_status: SubscriptionStatus,
     /// <p>The name of the topic.</p>
     #[serde(rename = "TopicName")]
     pub topic_name: String,
@@ -3064,6 +5421,109 @@ pub struct VolumeStatistics {
     #[serde(rename = "SpamRawCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spam_raw_count: Option<i64>,
+}
+
+/// <p>The warmup status of a dedicated IP.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWarmupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WarmupStatus {
+    Done,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWarmupStatus),
+}
+
+impl Default for WarmupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WarmupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WarmupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WarmupStatus {
+    fn into(self) -> String {
+        match self {
+            WarmupStatus::Done => "DONE".to_string(),
+            WarmupStatus::InProgress => "IN_PROGRESS".to_string(),
+            WarmupStatus::UnknownVariant(UnknownWarmupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WarmupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            WarmupStatus::Done => &"DONE",
+            WarmupStatus::InProgress => &"IN_PROGRESS",
+            WarmupStatus::UnknownVariant(UnknownWarmupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WarmupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DONE" => WarmupStatus::Done,
+            "IN_PROGRESS" => WarmupStatus::InProgress,
+            _ => WarmupStatus::UnknownVariant(UnknownWarmupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WarmupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DONE" => WarmupStatus::Done,
+            "IN_PROGRESS" => WarmupStatus::InProgress,
+            _ => WarmupStatus::UnknownVariant(UnknownWarmupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WarmupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WarmupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WarmupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateConfigurationSet

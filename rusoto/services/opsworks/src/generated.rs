@@ -79,7 +79,7 @@ pub struct App {
     /// <p>The stack attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<AppAttributesKeys, String>>,
     /// <p>When the app was created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -123,7 +123,346 @@ pub struct App {
     /// <p>The app type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<AppType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppAttributesKeys {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppAttributesKeys {
+    AutoBundleOnDeploy,
+    AwsFlowRubySettings,
+    DocumentRoot,
+    RailsEnv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppAttributesKeys),
+}
+
+impl Default for AppAttributesKeys {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppAttributesKeys {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppAttributesKeys {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppAttributesKeys {
+    fn into(self) -> String {
+        match self {
+            AppAttributesKeys::AutoBundleOnDeploy => "AutoBundleOnDeploy".to_string(),
+            AppAttributesKeys::AwsFlowRubySettings => "AwsFlowRubySettings".to_string(),
+            AppAttributesKeys::DocumentRoot => "DocumentRoot".to_string(),
+            AppAttributesKeys::RailsEnv => "RailsEnv".to_string(),
+            AppAttributesKeys::UnknownVariant(UnknownAppAttributesKeys { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppAttributesKeys {
+    fn into(self) -> &'a str {
+        match self {
+            AppAttributesKeys::AutoBundleOnDeploy => &"AutoBundleOnDeploy",
+            AppAttributesKeys::AwsFlowRubySettings => &"AwsFlowRubySettings",
+            AppAttributesKeys::DocumentRoot => &"DocumentRoot",
+            AppAttributesKeys::RailsEnv => &"RailsEnv",
+            AppAttributesKeys::UnknownVariant(UnknownAppAttributesKeys { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AppAttributesKeys {
+    fn from(name: &str) -> Self {
+        match name {
+            "AutoBundleOnDeploy" => AppAttributesKeys::AutoBundleOnDeploy,
+            "AwsFlowRubySettings" => AppAttributesKeys::AwsFlowRubySettings,
+            "DocumentRoot" => AppAttributesKeys::DocumentRoot,
+            "RailsEnv" => AppAttributesKeys::RailsEnv,
+            _ => AppAttributesKeys::UnknownVariant(UnknownAppAttributesKeys {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppAttributesKeys {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AutoBundleOnDeploy" => AppAttributesKeys::AutoBundleOnDeploy,
+            "AwsFlowRubySettings" => AppAttributesKeys::AwsFlowRubySettings,
+            "DocumentRoot" => AppAttributesKeys::DocumentRoot,
+            "RailsEnv" => AppAttributesKeys::RailsEnv,
+            _ => AppAttributesKeys::UnknownVariant(UnknownAppAttributesKeys { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppAttributesKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppAttributesKeys {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppAttributesKeys {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppType {
+    AwsFlowRuby,
+    Java,
+    Nodejs,
+    Other,
+    Php,
+    Rails,
+    Static,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppType),
+}
+
+impl Default for AppType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppType {
+    fn into(self) -> String {
+        match self {
+            AppType::AwsFlowRuby => "aws-flow-ruby".to_string(),
+            AppType::Java => "java".to_string(),
+            AppType::Nodejs => "nodejs".to_string(),
+            AppType::Other => "other".to_string(),
+            AppType::Php => "php".to_string(),
+            AppType::Rails => "rails".to_string(),
+            AppType::Static => "static".to_string(),
+            AppType::UnknownVariant(UnknownAppType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppType {
+    fn into(self) -> &'a str {
+        match self {
+            AppType::AwsFlowRuby => &"aws-flow-ruby",
+            AppType::Java => &"java",
+            AppType::Nodejs => &"nodejs",
+            AppType::Other => &"other",
+            AppType::Php => &"php",
+            AppType::Rails => &"rails",
+            AppType::Static => &"static",
+            AppType::UnknownVariant(UnknownAppType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppType {
+    fn from(name: &str) -> Self {
+        match name {
+            "aws-flow-ruby" => AppType::AwsFlowRuby,
+            "java" => AppType::Java,
+            "nodejs" => AppType::Nodejs,
+            "other" => AppType::Other,
+            "php" => AppType::Php,
+            "rails" => AppType::Rails,
+            "static" => AppType::Static,
+            _ => AppType::UnknownVariant(UnknownAppType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aws-flow-ruby" => AppType::AwsFlowRuby,
+            "java" => AppType::Java,
+            "nodejs" => AppType::Nodejs,
+            "other" => AppType::Other,
+            "php" => AppType::Php,
+            "rails" => AppType::Rails,
+            "static" => AppType::Static,
+            _ => AppType::UnknownVariant(UnknownAppType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArchitecture {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Architecture {
+    I386,
+    X8664,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArchitecture),
+}
+
+impl Default for Architecture {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Architecture {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Architecture {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Architecture {
+    fn into(self) -> String {
+        match self {
+            Architecture::I386 => "i386".to_string(),
+            Architecture::X8664 => "x86_64".to_string(),
+            Architecture::UnknownVariant(UnknownArchitecture { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Architecture {
+    fn into(self) -> &'a str {
+        match self {
+            Architecture::I386 => &"i386",
+            Architecture::X8664 => &"x86_64",
+            Architecture::UnknownVariant(UnknownArchitecture { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Architecture {
+    fn from(name: &str) -> Self {
+        match name {
+            "i386" => Architecture::I386,
+            "x86_64" => Architecture::X8664,
+            _ => Architecture::UnknownVariant(UnknownArchitecture {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Architecture {
+    fn from(name: String) -> Self {
+        match &*name {
+            "i386" => Architecture::I386,
+            "x86_64" => Architecture::X8664,
+            _ => Architecture::UnknownVariant(UnknownArchitecture { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Architecture {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Architecture {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Architecture {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -205,6 +544,106 @@ pub struct AutoScalingThresholds {
     pub thresholds_wait_time: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoScalingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoScalingType {
+    Load,
+    Timer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoScalingType),
+}
+
+impl Default for AutoScalingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoScalingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoScalingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoScalingType {
+    fn into(self) -> String {
+        match self {
+            AutoScalingType::Load => "load".to_string(),
+            AutoScalingType::Timer => "timer".to_string(),
+            AutoScalingType::UnknownVariant(UnknownAutoScalingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoScalingType {
+    fn into(self) -> &'a str {
+        match self {
+            AutoScalingType::Load => &"load",
+            AutoScalingType::Timer => &"timer",
+            AutoScalingType::UnknownVariant(UnknownAutoScalingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoScalingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "load" => AutoScalingType::Load,
+            "timer" => AutoScalingType::Timer,
+            _ => AutoScalingType::UnknownVariant(UnknownAutoScalingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoScalingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "load" => AutoScalingType::Load,
+            "timer" => AutoScalingType::Timer,
+            _ => AutoScalingType::UnknownVariant(UnknownAutoScalingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoScalingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoScalingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoScalingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a block device mapping. This data type maps directly to the Amazon EC2 <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_BlockDeviceMapping.html">BlockDeviceMapping</a> data type. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlockDeviceMapping {
@@ -249,7 +688,7 @@ pub struct CloneStackRequest {
     /// <p>A list of stack attributes and values as key/value pairs to be added to the cloned stack.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<StackAttributesKeys, String>>,
     /// <p>A <code>ChefConfiguration</code> object that specifies whether to enable Berkshelf and the Berkshelf version on Chef 11.10 stacks. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-creating.html">Create a New Stack</a>.</p>
     #[serde(rename = "ChefConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -289,7 +728,7 @@ pub struct CloneStackRequest {
     /// <p>The default root device type. This value is used by default for all instances in the cloned stack, but you can override it when you create an instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device">Storage for the Root Device</a>.</p>
     #[serde(rename = "DefaultRootDeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_root_device_type: Option<String>,
+    pub default_root_device_type: Option<RootDeviceType>,
     /// <p>A default Amazon EC2 key pair name. The default value is none. If you specify a key pair name, AWS OpsWorks installs the public key on the instance and you can use the private key with an SSH client to log in to the instance. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-ssh.html"> Using SSH to Communicate with an Instance</a> and <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html"> Managing SSH Access</a>. You can override this setting by specifying a different key pair, or no key pair, when you <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html"> create an instance</a>. </p>
     #[serde(rename = "DefaultSshKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -353,6 +792,672 @@ pub struct CloudWatchLogsConfiguration {
     pub log_streams: Option<Vec<CloudWatchLogsLogStream>>,
 }
 
+/// <p>Specifies the encoding of the log file so that the file can be read correctly. The default is <code>utf_8</code>. Encodings supported by Python <code>codecs.decode()</code> can be used here.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudWatchLogsEncoding {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudWatchLogsEncoding {
+    Ascii,
+    Big5,
+    Big5Hkscs,
+    Cp037,
+    Cp1006,
+    Cp1026,
+    Cp1140,
+    Cp1250,
+    Cp1251,
+    Cp1252,
+    Cp1253,
+    Cp1254,
+    Cp1255,
+    Cp1256,
+    Cp1257,
+    Cp1258,
+    Cp424,
+    Cp437,
+    Cp500,
+    Cp720,
+    Cp737,
+    Cp775,
+    Cp850,
+    Cp852,
+    Cp855,
+    Cp856,
+    Cp857,
+    Cp858,
+    Cp860,
+    Cp861,
+    Cp862,
+    Cp863,
+    Cp864,
+    Cp865,
+    Cp866,
+    Cp869,
+    Cp874,
+    Cp875,
+    Cp932,
+    Cp949,
+    Cp950,
+    EucJis2004,
+    EucJisx0213,
+    EucJp,
+    EucKr,
+    Gb18030,
+    Gb2312,
+    Gbk,
+    Hz,
+    Iso2022Jp,
+    Iso2022Jp1,
+    Iso2022Jp2,
+    Iso2022Jp2004,
+    Iso2022Jp3,
+    Iso2022JpExt,
+    Iso2022Kr,
+    Iso885910,
+    Iso885913,
+    Iso885914,
+    Iso885915,
+    Iso885916,
+    Iso88592,
+    Iso88593,
+    Iso88594,
+    Iso88595,
+    Iso88596,
+    Iso88597,
+    Iso88598,
+    Iso88599,
+    Johab,
+    Koi8R,
+    Koi8U,
+    Latin1,
+    MacCyrillic,
+    MacGreek,
+    MacIceland,
+    MacLatin2,
+    MacRoman,
+    MacTurkish,
+    Ptcp154,
+    ShiftJis,
+    ShiftJis2004,
+    ShiftJisx0213,
+    Utf16,
+    Utf16Be,
+    Utf16Le,
+    Utf32,
+    Utf32Be,
+    Utf32Le,
+    Utf7,
+    Utf8,
+    Utf8Sig,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudWatchLogsEncoding),
+}
+
+impl Default for CloudWatchLogsEncoding {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudWatchLogsEncoding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudWatchLogsEncoding {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudWatchLogsEncoding {
+    fn into(self) -> String {
+        match self {
+            CloudWatchLogsEncoding::Ascii => "ascii".to_string(),
+            CloudWatchLogsEncoding::Big5 => "big5".to_string(),
+            CloudWatchLogsEncoding::Big5Hkscs => "big5hkscs".to_string(),
+            CloudWatchLogsEncoding::Cp037 => "cp037".to_string(),
+            CloudWatchLogsEncoding::Cp1006 => "cp1006".to_string(),
+            CloudWatchLogsEncoding::Cp1026 => "cp1026".to_string(),
+            CloudWatchLogsEncoding::Cp1140 => "cp1140".to_string(),
+            CloudWatchLogsEncoding::Cp1250 => "cp1250".to_string(),
+            CloudWatchLogsEncoding::Cp1251 => "cp1251".to_string(),
+            CloudWatchLogsEncoding::Cp1252 => "cp1252".to_string(),
+            CloudWatchLogsEncoding::Cp1253 => "cp1253".to_string(),
+            CloudWatchLogsEncoding::Cp1254 => "cp1254".to_string(),
+            CloudWatchLogsEncoding::Cp1255 => "cp1255".to_string(),
+            CloudWatchLogsEncoding::Cp1256 => "cp1256".to_string(),
+            CloudWatchLogsEncoding::Cp1257 => "cp1257".to_string(),
+            CloudWatchLogsEncoding::Cp1258 => "cp1258".to_string(),
+            CloudWatchLogsEncoding::Cp424 => "cp424".to_string(),
+            CloudWatchLogsEncoding::Cp437 => "cp437".to_string(),
+            CloudWatchLogsEncoding::Cp500 => "cp500".to_string(),
+            CloudWatchLogsEncoding::Cp720 => "cp720".to_string(),
+            CloudWatchLogsEncoding::Cp737 => "cp737".to_string(),
+            CloudWatchLogsEncoding::Cp775 => "cp775".to_string(),
+            CloudWatchLogsEncoding::Cp850 => "cp850".to_string(),
+            CloudWatchLogsEncoding::Cp852 => "cp852".to_string(),
+            CloudWatchLogsEncoding::Cp855 => "cp855".to_string(),
+            CloudWatchLogsEncoding::Cp856 => "cp856".to_string(),
+            CloudWatchLogsEncoding::Cp857 => "cp857".to_string(),
+            CloudWatchLogsEncoding::Cp858 => "cp858".to_string(),
+            CloudWatchLogsEncoding::Cp860 => "cp860".to_string(),
+            CloudWatchLogsEncoding::Cp861 => "cp861".to_string(),
+            CloudWatchLogsEncoding::Cp862 => "cp862".to_string(),
+            CloudWatchLogsEncoding::Cp863 => "cp863".to_string(),
+            CloudWatchLogsEncoding::Cp864 => "cp864".to_string(),
+            CloudWatchLogsEncoding::Cp865 => "cp865".to_string(),
+            CloudWatchLogsEncoding::Cp866 => "cp866".to_string(),
+            CloudWatchLogsEncoding::Cp869 => "cp869".to_string(),
+            CloudWatchLogsEncoding::Cp874 => "cp874".to_string(),
+            CloudWatchLogsEncoding::Cp875 => "cp875".to_string(),
+            CloudWatchLogsEncoding::Cp932 => "cp932".to_string(),
+            CloudWatchLogsEncoding::Cp949 => "cp949".to_string(),
+            CloudWatchLogsEncoding::Cp950 => "cp950".to_string(),
+            CloudWatchLogsEncoding::EucJis2004 => "euc_jis_2004".to_string(),
+            CloudWatchLogsEncoding::EucJisx0213 => "euc_jisx0213".to_string(),
+            CloudWatchLogsEncoding::EucJp => "euc_jp".to_string(),
+            CloudWatchLogsEncoding::EucKr => "euc_kr".to_string(),
+            CloudWatchLogsEncoding::Gb18030 => "gb18030".to_string(),
+            CloudWatchLogsEncoding::Gb2312 => "gb2312".to_string(),
+            CloudWatchLogsEncoding::Gbk => "gbk".to_string(),
+            CloudWatchLogsEncoding::Hz => "hz".to_string(),
+            CloudWatchLogsEncoding::Iso2022Jp => "iso2022_jp".to_string(),
+            CloudWatchLogsEncoding::Iso2022Jp1 => "iso2022_jp_1".to_string(),
+            CloudWatchLogsEncoding::Iso2022Jp2 => "iso2022_jp_2".to_string(),
+            CloudWatchLogsEncoding::Iso2022Jp2004 => "iso2022_jp_2004".to_string(),
+            CloudWatchLogsEncoding::Iso2022Jp3 => "iso2022_jp_3".to_string(),
+            CloudWatchLogsEncoding::Iso2022JpExt => "iso2022_jp_ext".to_string(),
+            CloudWatchLogsEncoding::Iso2022Kr => "iso2022_kr".to_string(),
+            CloudWatchLogsEncoding::Iso885910 => "iso8859_10".to_string(),
+            CloudWatchLogsEncoding::Iso885913 => "iso8859_13".to_string(),
+            CloudWatchLogsEncoding::Iso885914 => "iso8859_14".to_string(),
+            CloudWatchLogsEncoding::Iso885915 => "iso8859_15".to_string(),
+            CloudWatchLogsEncoding::Iso885916 => "iso8859_16".to_string(),
+            CloudWatchLogsEncoding::Iso88592 => "iso8859_2".to_string(),
+            CloudWatchLogsEncoding::Iso88593 => "iso8859_3".to_string(),
+            CloudWatchLogsEncoding::Iso88594 => "iso8859_4".to_string(),
+            CloudWatchLogsEncoding::Iso88595 => "iso8859_5".to_string(),
+            CloudWatchLogsEncoding::Iso88596 => "iso8859_6".to_string(),
+            CloudWatchLogsEncoding::Iso88597 => "iso8859_7".to_string(),
+            CloudWatchLogsEncoding::Iso88598 => "iso8859_8".to_string(),
+            CloudWatchLogsEncoding::Iso88599 => "iso8859_9".to_string(),
+            CloudWatchLogsEncoding::Johab => "johab".to_string(),
+            CloudWatchLogsEncoding::Koi8R => "koi8_r".to_string(),
+            CloudWatchLogsEncoding::Koi8U => "koi8_u".to_string(),
+            CloudWatchLogsEncoding::Latin1 => "latin_1".to_string(),
+            CloudWatchLogsEncoding::MacCyrillic => "mac_cyrillic".to_string(),
+            CloudWatchLogsEncoding::MacGreek => "mac_greek".to_string(),
+            CloudWatchLogsEncoding::MacIceland => "mac_iceland".to_string(),
+            CloudWatchLogsEncoding::MacLatin2 => "mac_latin2".to_string(),
+            CloudWatchLogsEncoding::MacRoman => "mac_roman".to_string(),
+            CloudWatchLogsEncoding::MacTurkish => "mac_turkish".to_string(),
+            CloudWatchLogsEncoding::Ptcp154 => "ptcp154".to_string(),
+            CloudWatchLogsEncoding::ShiftJis => "shift_jis".to_string(),
+            CloudWatchLogsEncoding::ShiftJis2004 => "shift_jis_2004".to_string(),
+            CloudWatchLogsEncoding::ShiftJisx0213 => "shift_jisx0213".to_string(),
+            CloudWatchLogsEncoding::Utf16 => "utf_16".to_string(),
+            CloudWatchLogsEncoding::Utf16Be => "utf_16_be".to_string(),
+            CloudWatchLogsEncoding::Utf16Le => "utf_16_le".to_string(),
+            CloudWatchLogsEncoding::Utf32 => "utf_32".to_string(),
+            CloudWatchLogsEncoding::Utf32Be => "utf_32_be".to_string(),
+            CloudWatchLogsEncoding::Utf32Le => "utf_32_le".to_string(),
+            CloudWatchLogsEncoding::Utf7 => "utf_7".to_string(),
+            CloudWatchLogsEncoding::Utf8 => "utf_8".to_string(),
+            CloudWatchLogsEncoding::Utf8Sig => "utf_8_sig".to_string(),
+            CloudWatchLogsEncoding::UnknownVariant(UnknownCloudWatchLogsEncoding {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudWatchLogsEncoding {
+    fn into(self) -> &'a str {
+        match self {
+            CloudWatchLogsEncoding::Ascii => &"ascii",
+            CloudWatchLogsEncoding::Big5 => &"big5",
+            CloudWatchLogsEncoding::Big5Hkscs => &"big5hkscs",
+            CloudWatchLogsEncoding::Cp037 => &"cp037",
+            CloudWatchLogsEncoding::Cp1006 => &"cp1006",
+            CloudWatchLogsEncoding::Cp1026 => &"cp1026",
+            CloudWatchLogsEncoding::Cp1140 => &"cp1140",
+            CloudWatchLogsEncoding::Cp1250 => &"cp1250",
+            CloudWatchLogsEncoding::Cp1251 => &"cp1251",
+            CloudWatchLogsEncoding::Cp1252 => &"cp1252",
+            CloudWatchLogsEncoding::Cp1253 => &"cp1253",
+            CloudWatchLogsEncoding::Cp1254 => &"cp1254",
+            CloudWatchLogsEncoding::Cp1255 => &"cp1255",
+            CloudWatchLogsEncoding::Cp1256 => &"cp1256",
+            CloudWatchLogsEncoding::Cp1257 => &"cp1257",
+            CloudWatchLogsEncoding::Cp1258 => &"cp1258",
+            CloudWatchLogsEncoding::Cp424 => &"cp424",
+            CloudWatchLogsEncoding::Cp437 => &"cp437",
+            CloudWatchLogsEncoding::Cp500 => &"cp500",
+            CloudWatchLogsEncoding::Cp720 => &"cp720",
+            CloudWatchLogsEncoding::Cp737 => &"cp737",
+            CloudWatchLogsEncoding::Cp775 => &"cp775",
+            CloudWatchLogsEncoding::Cp850 => &"cp850",
+            CloudWatchLogsEncoding::Cp852 => &"cp852",
+            CloudWatchLogsEncoding::Cp855 => &"cp855",
+            CloudWatchLogsEncoding::Cp856 => &"cp856",
+            CloudWatchLogsEncoding::Cp857 => &"cp857",
+            CloudWatchLogsEncoding::Cp858 => &"cp858",
+            CloudWatchLogsEncoding::Cp860 => &"cp860",
+            CloudWatchLogsEncoding::Cp861 => &"cp861",
+            CloudWatchLogsEncoding::Cp862 => &"cp862",
+            CloudWatchLogsEncoding::Cp863 => &"cp863",
+            CloudWatchLogsEncoding::Cp864 => &"cp864",
+            CloudWatchLogsEncoding::Cp865 => &"cp865",
+            CloudWatchLogsEncoding::Cp866 => &"cp866",
+            CloudWatchLogsEncoding::Cp869 => &"cp869",
+            CloudWatchLogsEncoding::Cp874 => &"cp874",
+            CloudWatchLogsEncoding::Cp875 => &"cp875",
+            CloudWatchLogsEncoding::Cp932 => &"cp932",
+            CloudWatchLogsEncoding::Cp949 => &"cp949",
+            CloudWatchLogsEncoding::Cp950 => &"cp950",
+            CloudWatchLogsEncoding::EucJis2004 => &"euc_jis_2004",
+            CloudWatchLogsEncoding::EucJisx0213 => &"euc_jisx0213",
+            CloudWatchLogsEncoding::EucJp => &"euc_jp",
+            CloudWatchLogsEncoding::EucKr => &"euc_kr",
+            CloudWatchLogsEncoding::Gb18030 => &"gb18030",
+            CloudWatchLogsEncoding::Gb2312 => &"gb2312",
+            CloudWatchLogsEncoding::Gbk => &"gbk",
+            CloudWatchLogsEncoding::Hz => &"hz",
+            CloudWatchLogsEncoding::Iso2022Jp => &"iso2022_jp",
+            CloudWatchLogsEncoding::Iso2022Jp1 => &"iso2022_jp_1",
+            CloudWatchLogsEncoding::Iso2022Jp2 => &"iso2022_jp_2",
+            CloudWatchLogsEncoding::Iso2022Jp2004 => &"iso2022_jp_2004",
+            CloudWatchLogsEncoding::Iso2022Jp3 => &"iso2022_jp_3",
+            CloudWatchLogsEncoding::Iso2022JpExt => &"iso2022_jp_ext",
+            CloudWatchLogsEncoding::Iso2022Kr => &"iso2022_kr",
+            CloudWatchLogsEncoding::Iso885910 => &"iso8859_10",
+            CloudWatchLogsEncoding::Iso885913 => &"iso8859_13",
+            CloudWatchLogsEncoding::Iso885914 => &"iso8859_14",
+            CloudWatchLogsEncoding::Iso885915 => &"iso8859_15",
+            CloudWatchLogsEncoding::Iso885916 => &"iso8859_16",
+            CloudWatchLogsEncoding::Iso88592 => &"iso8859_2",
+            CloudWatchLogsEncoding::Iso88593 => &"iso8859_3",
+            CloudWatchLogsEncoding::Iso88594 => &"iso8859_4",
+            CloudWatchLogsEncoding::Iso88595 => &"iso8859_5",
+            CloudWatchLogsEncoding::Iso88596 => &"iso8859_6",
+            CloudWatchLogsEncoding::Iso88597 => &"iso8859_7",
+            CloudWatchLogsEncoding::Iso88598 => &"iso8859_8",
+            CloudWatchLogsEncoding::Iso88599 => &"iso8859_9",
+            CloudWatchLogsEncoding::Johab => &"johab",
+            CloudWatchLogsEncoding::Koi8R => &"koi8_r",
+            CloudWatchLogsEncoding::Koi8U => &"koi8_u",
+            CloudWatchLogsEncoding::Latin1 => &"latin_1",
+            CloudWatchLogsEncoding::MacCyrillic => &"mac_cyrillic",
+            CloudWatchLogsEncoding::MacGreek => &"mac_greek",
+            CloudWatchLogsEncoding::MacIceland => &"mac_iceland",
+            CloudWatchLogsEncoding::MacLatin2 => &"mac_latin2",
+            CloudWatchLogsEncoding::MacRoman => &"mac_roman",
+            CloudWatchLogsEncoding::MacTurkish => &"mac_turkish",
+            CloudWatchLogsEncoding::Ptcp154 => &"ptcp154",
+            CloudWatchLogsEncoding::ShiftJis => &"shift_jis",
+            CloudWatchLogsEncoding::ShiftJis2004 => &"shift_jis_2004",
+            CloudWatchLogsEncoding::ShiftJisx0213 => &"shift_jisx0213",
+            CloudWatchLogsEncoding::Utf16 => &"utf_16",
+            CloudWatchLogsEncoding::Utf16Be => &"utf_16_be",
+            CloudWatchLogsEncoding::Utf16Le => &"utf_16_le",
+            CloudWatchLogsEncoding::Utf32 => &"utf_32",
+            CloudWatchLogsEncoding::Utf32Be => &"utf_32_be",
+            CloudWatchLogsEncoding::Utf32Le => &"utf_32_le",
+            CloudWatchLogsEncoding::Utf7 => &"utf_7",
+            CloudWatchLogsEncoding::Utf8 => &"utf_8",
+            CloudWatchLogsEncoding::Utf8Sig => &"utf_8_sig",
+            CloudWatchLogsEncoding::UnknownVariant(UnknownCloudWatchLogsEncoding {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CloudWatchLogsEncoding {
+    fn from(name: &str) -> Self {
+        match name {
+            "ascii" => CloudWatchLogsEncoding::Ascii,
+            "big5" => CloudWatchLogsEncoding::Big5,
+            "big5hkscs" => CloudWatchLogsEncoding::Big5Hkscs,
+            "cp037" => CloudWatchLogsEncoding::Cp037,
+            "cp1006" => CloudWatchLogsEncoding::Cp1006,
+            "cp1026" => CloudWatchLogsEncoding::Cp1026,
+            "cp1140" => CloudWatchLogsEncoding::Cp1140,
+            "cp1250" => CloudWatchLogsEncoding::Cp1250,
+            "cp1251" => CloudWatchLogsEncoding::Cp1251,
+            "cp1252" => CloudWatchLogsEncoding::Cp1252,
+            "cp1253" => CloudWatchLogsEncoding::Cp1253,
+            "cp1254" => CloudWatchLogsEncoding::Cp1254,
+            "cp1255" => CloudWatchLogsEncoding::Cp1255,
+            "cp1256" => CloudWatchLogsEncoding::Cp1256,
+            "cp1257" => CloudWatchLogsEncoding::Cp1257,
+            "cp1258" => CloudWatchLogsEncoding::Cp1258,
+            "cp424" => CloudWatchLogsEncoding::Cp424,
+            "cp437" => CloudWatchLogsEncoding::Cp437,
+            "cp500" => CloudWatchLogsEncoding::Cp500,
+            "cp720" => CloudWatchLogsEncoding::Cp720,
+            "cp737" => CloudWatchLogsEncoding::Cp737,
+            "cp775" => CloudWatchLogsEncoding::Cp775,
+            "cp850" => CloudWatchLogsEncoding::Cp850,
+            "cp852" => CloudWatchLogsEncoding::Cp852,
+            "cp855" => CloudWatchLogsEncoding::Cp855,
+            "cp856" => CloudWatchLogsEncoding::Cp856,
+            "cp857" => CloudWatchLogsEncoding::Cp857,
+            "cp858" => CloudWatchLogsEncoding::Cp858,
+            "cp860" => CloudWatchLogsEncoding::Cp860,
+            "cp861" => CloudWatchLogsEncoding::Cp861,
+            "cp862" => CloudWatchLogsEncoding::Cp862,
+            "cp863" => CloudWatchLogsEncoding::Cp863,
+            "cp864" => CloudWatchLogsEncoding::Cp864,
+            "cp865" => CloudWatchLogsEncoding::Cp865,
+            "cp866" => CloudWatchLogsEncoding::Cp866,
+            "cp869" => CloudWatchLogsEncoding::Cp869,
+            "cp874" => CloudWatchLogsEncoding::Cp874,
+            "cp875" => CloudWatchLogsEncoding::Cp875,
+            "cp932" => CloudWatchLogsEncoding::Cp932,
+            "cp949" => CloudWatchLogsEncoding::Cp949,
+            "cp950" => CloudWatchLogsEncoding::Cp950,
+            "euc_jis_2004" => CloudWatchLogsEncoding::EucJis2004,
+            "euc_jisx0213" => CloudWatchLogsEncoding::EucJisx0213,
+            "euc_jp" => CloudWatchLogsEncoding::EucJp,
+            "euc_kr" => CloudWatchLogsEncoding::EucKr,
+            "gb18030" => CloudWatchLogsEncoding::Gb18030,
+            "gb2312" => CloudWatchLogsEncoding::Gb2312,
+            "gbk" => CloudWatchLogsEncoding::Gbk,
+            "hz" => CloudWatchLogsEncoding::Hz,
+            "iso2022_jp" => CloudWatchLogsEncoding::Iso2022Jp,
+            "iso2022_jp_1" => CloudWatchLogsEncoding::Iso2022Jp1,
+            "iso2022_jp_2" => CloudWatchLogsEncoding::Iso2022Jp2,
+            "iso2022_jp_2004" => CloudWatchLogsEncoding::Iso2022Jp2004,
+            "iso2022_jp_3" => CloudWatchLogsEncoding::Iso2022Jp3,
+            "iso2022_jp_ext" => CloudWatchLogsEncoding::Iso2022JpExt,
+            "iso2022_kr" => CloudWatchLogsEncoding::Iso2022Kr,
+            "iso8859_10" => CloudWatchLogsEncoding::Iso885910,
+            "iso8859_13" => CloudWatchLogsEncoding::Iso885913,
+            "iso8859_14" => CloudWatchLogsEncoding::Iso885914,
+            "iso8859_15" => CloudWatchLogsEncoding::Iso885915,
+            "iso8859_16" => CloudWatchLogsEncoding::Iso885916,
+            "iso8859_2" => CloudWatchLogsEncoding::Iso88592,
+            "iso8859_3" => CloudWatchLogsEncoding::Iso88593,
+            "iso8859_4" => CloudWatchLogsEncoding::Iso88594,
+            "iso8859_5" => CloudWatchLogsEncoding::Iso88595,
+            "iso8859_6" => CloudWatchLogsEncoding::Iso88596,
+            "iso8859_7" => CloudWatchLogsEncoding::Iso88597,
+            "iso8859_8" => CloudWatchLogsEncoding::Iso88598,
+            "iso8859_9" => CloudWatchLogsEncoding::Iso88599,
+            "johab" => CloudWatchLogsEncoding::Johab,
+            "koi8_r" => CloudWatchLogsEncoding::Koi8R,
+            "koi8_u" => CloudWatchLogsEncoding::Koi8U,
+            "latin_1" => CloudWatchLogsEncoding::Latin1,
+            "mac_cyrillic" => CloudWatchLogsEncoding::MacCyrillic,
+            "mac_greek" => CloudWatchLogsEncoding::MacGreek,
+            "mac_iceland" => CloudWatchLogsEncoding::MacIceland,
+            "mac_latin2" => CloudWatchLogsEncoding::MacLatin2,
+            "mac_roman" => CloudWatchLogsEncoding::MacRoman,
+            "mac_turkish" => CloudWatchLogsEncoding::MacTurkish,
+            "ptcp154" => CloudWatchLogsEncoding::Ptcp154,
+            "shift_jis" => CloudWatchLogsEncoding::ShiftJis,
+            "shift_jis_2004" => CloudWatchLogsEncoding::ShiftJis2004,
+            "shift_jisx0213" => CloudWatchLogsEncoding::ShiftJisx0213,
+            "utf_16" => CloudWatchLogsEncoding::Utf16,
+            "utf_16_be" => CloudWatchLogsEncoding::Utf16Be,
+            "utf_16_le" => CloudWatchLogsEncoding::Utf16Le,
+            "utf_32" => CloudWatchLogsEncoding::Utf32,
+            "utf_32_be" => CloudWatchLogsEncoding::Utf32Be,
+            "utf_32_le" => CloudWatchLogsEncoding::Utf32Le,
+            "utf_7" => CloudWatchLogsEncoding::Utf7,
+            "utf_8" => CloudWatchLogsEncoding::Utf8,
+            "utf_8_sig" => CloudWatchLogsEncoding::Utf8Sig,
+            _ => CloudWatchLogsEncoding::UnknownVariant(UnknownCloudWatchLogsEncoding {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CloudWatchLogsEncoding {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ascii" => CloudWatchLogsEncoding::Ascii,
+            "big5" => CloudWatchLogsEncoding::Big5,
+            "big5hkscs" => CloudWatchLogsEncoding::Big5Hkscs,
+            "cp037" => CloudWatchLogsEncoding::Cp037,
+            "cp1006" => CloudWatchLogsEncoding::Cp1006,
+            "cp1026" => CloudWatchLogsEncoding::Cp1026,
+            "cp1140" => CloudWatchLogsEncoding::Cp1140,
+            "cp1250" => CloudWatchLogsEncoding::Cp1250,
+            "cp1251" => CloudWatchLogsEncoding::Cp1251,
+            "cp1252" => CloudWatchLogsEncoding::Cp1252,
+            "cp1253" => CloudWatchLogsEncoding::Cp1253,
+            "cp1254" => CloudWatchLogsEncoding::Cp1254,
+            "cp1255" => CloudWatchLogsEncoding::Cp1255,
+            "cp1256" => CloudWatchLogsEncoding::Cp1256,
+            "cp1257" => CloudWatchLogsEncoding::Cp1257,
+            "cp1258" => CloudWatchLogsEncoding::Cp1258,
+            "cp424" => CloudWatchLogsEncoding::Cp424,
+            "cp437" => CloudWatchLogsEncoding::Cp437,
+            "cp500" => CloudWatchLogsEncoding::Cp500,
+            "cp720" => CloudWatchLogsEncoding::Cp720,
+            "cp737" => CloudWatchLogsEncoding::Cp737,
+            "cp775" => CloudWatchLogsEncoding::Cp775,
+            "cp850" => CloudWatchLogsEncoding::Cp850,
+            "cp852" => CloudWatchLogsEncoding::Cp852,
+            "cp855" => CloudWatchLogsEncoding::Cp855,
+            "cp856" => CloudWatchLogsEncoding::Cp856,
+            "cp857" => CloudWatchLogsEncoding::Cp857,
+            "cp858" => CloudWatchLogsEncoding::Cp858,
+            "cp860" => CloudWatchLogsEncoding::Cp860,
+            "cp861" => CloudWatchLogsEncoding::Cp861,
+            "cp862" => CloudWatchLogsEncoding::Cp862,
+            "cp863" => CloudWatchLogsEncoding::Cp863,
+            "cp864" => CloudWatchLogsEncoding::Cp864,
+            "cp865" => CloudWatchLogsEncoding::Cp865,
+            "cp866" => CloudWatchLogsEncoding::Cp866,
+            "cp869" => CloudWatchLogsEncoding::Cp869,
+            "cp874" => CloudWatchLogsEncoding::Cp874,
+            "cp875" => CloudWatchLogsEncoding::Cp875,
+            "cp932" => CloudWatchLogsEncoding::Cp932,
+            "cp949" => CloudWatchLogsEncoding::Cp949,
+            "cp950" => CloudWatchLogsEncoding::Cp950,
+            "euc_jis_2004" => CloudWatchLogsEncoding::EucJis2004,
+            "euc_jisx0213" => CloudWatchLogsEncoding::EucJisx0213,
+            "euc_jp" => CloudWatchLogsEncoding::EucJp,
+            "euc_kr" => CloudWatchLogsEncoding::EucKr,
+            "gb18030" => CloudWatchLogsEncoding::Gb18030,
+            "gb2312" => CloudWatchLogsEncoding::Gb2312,
+            "gbk" => CloudWatchLogsEncoding::Gbk,
+            "hz" => CloudWatchLogsEncoding::Hz,
+            "iso2022_jp" => CloudWatchLogsEncoding::Iso2022Jp,
+            "iso2022_jp_1" => CloudWatchLogsEncoding::Iso2022Jp1,
+            "iso2022_jp_2" => CloudWatchLogsEncoding::Iso2022Jp2,
+            "iso2022_jp_2004" => CloudWatchLogsEncoding::Iso2022Jp2004,
+            "iso2022_jp_3" => CloudWatchLogsEncoding::Iso2022Jp3,
+            "iso2022_jp_ext" => CloudWatchLogsEncoding::Iso2022JpExt,
+            "iso2022_kr" => CloudWatchLogsEncoding::Iso2022Kr,
+            "iso8859_10" => CloudWatchLogsEncoding::Iso885910,
+            "iso8859_13" => CloudWatchLogsEncoding::Iso885913,
+            "iso8859_14" => CloudWatchLogsEncoding::Iso885914,
+            "iso8859_15" => CloudWatchLogsEncoding::Iso885915,
+            "iso8859_16" => CloudWatchLogsEncoding::Iso885916,
+            "iso8859_2" => CloudWatchLogsEncoding::Iso88592,
+            "iso8859_3" => CloudWatchLogsEncoding::Iso88593,
+            "iso8859_4" => CloudWatchLogsEncoding::Iso88594,
+            "iso8859_5" => CloudWatchLogsEncoding::Iso88595,
+            "iso8859_6" => CloudWatchLogsEncoding::Iso88596,
+            "iso8859_7" => CloudWatchLogsEncoding::Iso88597,
+            "iso8859_8" => CloudWatchLogsEncoding::Iso88598,
+            "iso8859_9" => CloudWatchLogsEncoding::Iso88599,
+            "johab" => CloudWatchLogsEncoding::Johab,
+            "koi8_r" => CloudWatchLogsEncoding::Koi8R,
+            "koi8_u" => CloudWatchLogsEncoding::Koi8U,
+            "latin_1" => CloudWatchLogsEncoding::Latin1,
+            "mac_cyrillic" => CloudWatchLogsEncoding::MacCyrillic,
+            "mac_greek" => CloudWatchLogsEncoding::MacGreek,
+            "mac_iceland" => CloudWatchLogsEncoding::MacIceland,
+            "mac_latin2" => CloudWatchLogsEncoding::MacLatin2,
+            "mac_roman" => CloudWatchLogsEncoding::MacRoman,
+            "mac_turkish" => CloudWatchLogsEncoding::MacTurkish,
+            "ptcp154" => CloudWatchLogsEncoding::Ptcp154,
+            "shift_jis" => CloudWatchLogsEncoding::ShiftJis,
+            "shift_jis_2004" => CloudWatchLogsEncoding::ShiftJis2004,
+            "shift_jisx0213" => CloudWatchLogsEncoding::ShiftJisx0213,
+            "utf_16" => CloudWatchLogsEncoding::Utf16,
+            "utf_16_be" => CloudWatchLogsEncoding::Utf16Be,
+            "utf_16_le" => CloudWatchLogsEncoding::Utf16Le,
+            "utf_32" => CloudWatchLogsEncoding::Utf32,
+            "utf_32_be" => CloudWatchLogsEncoding::Utf32Be,
+            "utf_32_le" => CloudWatchLogsEncoding::Utf32Le,
+            "utf_7" => CloudWatchLogsEncoding::Utf7,
+            "utf_8" => CloudWatchLogsEncoding::Utf8,
+            "utf_8_sig" => CloudWatchLogsEncoding::Utf8Sig,
+            _ => CloudWatchLogsEncoding::UnknownVariant(UnknownCloudWatchLogsEncoding { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchLogsEncoding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CloudWatchLogsEncoding {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloudWatchLogsEncoding {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Specifies where to start to read data (start_of_file or end_of_file). The default is start_of_file. It's only used if there is no state persisted for that log stream.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudWatchLogsInitialPosition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudWatchLogsInitialPosition {
+    EndOfFile,
+    StartOfFile,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudWatchLogsInitialPosition),
+}
+
+impl Default for CloudWatchLogsInitialPosition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudWatchLogsInitialPosition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudWatchLogsInitialPosition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudWatchLogsInitialPosition {
+    fn into(self) -> String {
+        match self {
+            CloudWatchLogsInitialPosition::EndOfFile => "end_of_file".to_string(),
+            CloudWatchLogsInitialPosition::StartOfFile => "start_of_file".to_string(),
+            CloudWatchLogsInitialPosition::UnknownVariant(
+                UnknownCloudWatchLogsInitialPosition { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudWatchLogsInitialPosition {
+    fn into(self) -> &'a str {
+        match self {
+            CloudWatchLogsInitialPosition::EndOfFile => &"end_of_file",
+            CloudWatchLogsInitialPosition::StartOfFile => &"start_of_file",
+            CloudWatchLogsInitialPosition::UnknownVariant(
+                UnknownCloudWatchLogsInitialPosition { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CloudWatchLogsInitialPosition {
+    fn from(name: &str) -> Self {
+        match name {
+            "end_of_file" => CloudWatchLogsInitialPosition::EndOfFile,
+            "start_of_file" => CloudWatchLogsInitialPosition::StartOfFile,
+            _ => CloudWatchLogsInitialPosition::UnknownVariant(
+                UnknownCloudWatchLogsInitialPosition {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CloudWatchLogsInitialPosition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "end_of_file" => CloudWatchLogsInitialPosition::EndOfFile,
+            "start_of_file" => CloudWatchLogsInitialPosition::StartOfFile,
+            _ => CloudWatchLogsInitialPosition::UnknownVariant(
+                UnknownCloudWatchLogsInitialPosition { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchLogsInitialPosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CloudWatchLogsInitialPosition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloudWatchLogsInitialPosition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the Amazon CloudWatch logs configuration for a layer. For detailed information about members of this data type, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html">CloudWatch Logs Agent Reference</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogsLogStream {
@@ -375,7 +1480,7 @@ pub struct CloudWatchLogsLogStream {
     /// <p>Specifies the encoding of the log file so that the file can be read correctly. The default is <code>utf_8</code>. Encodings supported by Python <code>codecs.decode()</code> can be used here.</p>
     #[serde(rename = "Encoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encoding: Option<String>,
+    pub encoding: Option<CloudWatchLogsEncoding>,
     /// <p>Specifies log files that you want to push to CloudWatch Logs.</p> <p> <code>File</code> can point to a specific file or multiple files (by using wild card characters such as <code>/var/log/system.log*</code>). Only the latest file is pushed to CloudWatch Logs, based on file modification time. We recommend that you use wild card characters to specify a series of files of the same type, such as <code>access_log.2014-06-01-01</code>, <code>access_log.2014-06-01-02</code>, and so on by using a pattern like <code>access_log.*</code>. Don't use a wildcard to match multiple file types, such as <code>access_log_80</code> and <code>access_log_443</code>. To specify multiple, different file types, add another log stream entry to the configuration file, so that each log file type is stored in a different log group.</p> <p>Zipped files are not supported.</p>
     #[serde(rename = "File")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -387,7 +1492,7 @@ pub struct CloudWatchLogsLogStream {
     /// <p>Specifies where to start to read data (start_of_file or end_of_file). The default is start_of_file. This setting is only used if there is no state persisted for that log stream.</p>
     #[serde(rename = "InitialPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub initial_position: Option<String>,
+    pub initial_position: Option<CloudWatchLogsInitialPosition>,
     /// <p>Specifies the destination log group. A log group is created automatically if it doesn't already exist. Log group names can be between 1 and 512 characters long. Allowed characters include a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p>
     #[serde(rename = "LogGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -399,7 +1504,113 @@ pub struct CloudWatchLogsLogStream {
     /// <p>Specifies the time zone of log event time stamps.</p>
     #[serde(rename = "TimeZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_zone: Option<String>,
+    pub time_zone: Option<CloudWatchLogsTimeZone>,
+}
+
+/// <p>The preferred time zone for logs streamed to CloudWatch Logs. Valid values are <code>LOCAL</code> and <code>UTC</code>, for Coordinated Universal Time.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudWatchLogsTimeZone {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudWatchLogsTimeZone {
+    Local,
+    Utc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudWatchLogsTimeZone),
+}
+
+impl Default for CloudWatchLogsTimeZone {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudWatchLogsTimeZone {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudWatchLogsTimeZone {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudWatchLogsTimeZone {
+    fn into(self) -> String {
+        match self {
+            CloudWatchLogsTimeZone::Local => "LOCAL".to_string(),
+            CloudWatchLogsTimeZone::Utc => "UTC".to_string(),
+            CloudWatchLogsTimeZone::UnknownVariant(UnknownCloudWatchLogsTimeZone {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudWatchLogsTimeZone {
+    fn into(self) -> &'a str {
+        match self {
+            CloudWatchLogsTimeZone::Local => &"LOCAL",
+            CloudWatchLogsTimeZone::Utc => &"UTC",
+            CloudWatchLogsTimeZone::UnknownVariant(UnknownCloudWatchLogsTimeZone {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CloudWatchLogsTimeZone {
+    fn from(name: &str) -> Self {
+        match name {
+            "LOCAL" => CloudWatchLogsTimeZone::Local,
+            "UTC" => CloudWatchLogsTimeZone::Utc,
+            _ => CloudWatchLogsTimeZone::UnknownVariant(UnknownCloudWatchLogsTimeZone {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CloudWatchLogsTimeZone {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LOCAL" => CloudWatchLogsTimeZone::Local,
+            "UTC" => CloudWatchLogsTimeZone::Utc,
+            _ => CloudWatchLogsTimeZone::UnknownVariant(UnknownCloudWatchLogsTimeZone { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchLogsTimeZone {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CloudWatchLogsTimeZone {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloudWatchLogsTimeZone {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a command.</p>
@@ -458,7 +1669,7 @@ pub struct CreateAppRequest {
     /// <p>One or more user-defined key/value pairs to be added to the stack attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<AppAttributesKeys, String>>,
     /// <p>The app's data source.</p>
     #[serde(rename = "DataSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -495,7 +1706,7 @@ pub struct CreateAppRequest {
     pub stack_id: String,
     /// <p>The app type. Each supported type is associated with a particular layer. For example, PHP applications are associated with a PHP layer. AWS OpsWorks Stacks deploys an application to those instances that are members of the corresponding layer. If your app isn't one of the standard types, or you prefer to implement your own Deploy recipes, specify <code>other</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: AppType,
 }
 
 /// <p>Contains the response to a <code>CreateApp</code> request.</p>
@@ -563,11 +1774,11 @@ pub struct CreateInstanceRequest {
     /// <p>The instance architecture. The default option is <code>x86_64</code>. Instance types do not necessarily support both architectures. For a list of the architectures that are supported by the different instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Families and Types</a>.</p>
     #[serde(rename = "Architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>For load-based or time-based instances, the type. Windows stacks can use only time-based instances.</p>
     #[serde(rename = "AutoScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_scaling_type: Option<String>,
+    pub auto_scaling_type: Option<AutoScalingType>,
     /// <p>The instance Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -601,7 +1812,7 @@ pub struct CreateInstanceRequest {
     /// <p>The instance root device type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device">Storage for the Root Device</a>.</p>
     #[serde(rename = "RootDeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_device_type: Option<String>,
+    pub root_device_type: Option<RootDeviceType>,
     /// <p>The instance's Amazon EC2 key-pair name.</p>
     #[serde(rename = "SshKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -639,7 +1850,7 @@ pub struct CreateLayerRequest {
     /// <p>One or more user-defined key-value pairs to be added to the stack attributes.</p> <p>To create a cluster layer, set the <code>EcsClusterArn</code> attribute to the cluster's ARN.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<LayerAttributesKeys, String>>,
     /// <p>Whether to automatically assign an <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP address</a> to the layer's instances. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-edit.html">How to Edit a Layer</a>.</p>
     #[serde(rename = "AutoAssignElasticIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -695,7 +1906,7 @@ pub struct CreateLayerRequest {
     pub stack_id: String,
     /// <p>The layer type. A stack cannot have more than one built-in layer of the same type. It can have any number of custom layers. Built-in layers are not available in Chef 12 stacks.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: LayerType,
     /// <p>Whether to use Amazon EBS-optimized instances.</p>
     #[serde(rename = "UseEbsOptimizedInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -726,7 +1937,7 @@ pub struct CreateStackRequest {
     /// <p>One or more user-defined key-value pairs to be added to the stack attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<StackAttributesKeys, String>>,
     /// <p>A <code>ChefConfiguration</code> object that specifies whether to enable Berkshelf and the Berkshelf version on Chef 11.10 stacks. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-creating.html">Create a New Stack</a>.</p>
     #[serde(rename = "ChefConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -757,7 +1968,7 @@ pub struct CreateStackRequest {
     /// <p>The default root device type. This value is the default for all instances in the stack, but you can override it when you create an instance. The default option is <code>instance-store</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device">Storage for the Root Device</a>.</p>
     #[serde(rename = "DefaultRootDeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_root_device_type: Option<String>,
+    pub default_root_device_type: Option<RootDeviceType>,
     /// <p>A default Amazon EC2 key pair name. The default value is none. If you specify a key pair name, AWS OpsWorks installs the public key on the instance and you can use the private key with an SSH client to log in to the instance. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-ssh.html"> Using SSH to Communicate with an Instance</a> and <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html"> Managing SSH Access</a>. You can override this setting by specifying a different key pair, or no key pair, when you <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html"> create an instance</a>. </p>
     #[serde(rename = "DefaultSshKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -961,7 +2172,161 @@ pub struct DeploymentCommand {
     pub args: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p><p>Specifies the operation. You can specify only one command.</p> <p>For stacks, the following commands are available:</p> <ul> <li> <p> <code>execute<em>recipes</code>: Execute one or more recipes. To specify the recipes, set an <code>Args</code> parameter named <code>recipes</code> to the list of recipes to be executed. For example, to execute <code>phpapp::appsetup</code>, set <code>Args</code> to <code>{&quot;recipes&quot;:[&quot;phpapp::appsetup&quot;]}</code>.</p> </li> <li> <p> <code>install</em>dependencies</code>: Install the stack&#39;s dependencies.</p> </li> <li> <p> <code>update<em>custom</em>cookbooks</code>: Update the stack&#39;s custom cookbooks.</p> </li> <li> <p> <code>update<em>dependencies</code>: Update the stack&#39;s dependencies.</p> </li> </ul> <note> <p>The update</em>dependencies and install_dependencies commands are supported only for Linux instances. You can run the commands successfully on Windows instances, but they do nothing.</p> </note> <p>For apps, the following commands are available:</p> <ul> <li> <p> <code>deploy</code>: Deploy an app. Ruby on Rails apps have an optional <code>Args</code> parameter named <code>migrate</code>. Set <code>Args</code> to {&quot;migrate&quot;:[&quot;true&quot;]} to migrate the database. The default setting is {&quot;migrate&quot;:[&quot;false&quot;]}.</p> </li> <li> <p> <code>rollback</code> Roll the app back to the previous version. When you update an app, AWS OpsWorks Stacks stores the previous version, up to a maximum of five versions. You can use this command to roll an app back as many as four versions.</p> </li> <li> <p> <code>start</code>: Start the app&#39;s web or application server.</p> </li> <li> <p> <code>stop</code>: Stop the app&#39;s web or application server.</p> </li> <li> <p> <code>restart</code>: Restart the app&#39;s web or application server.</p> </li> <li> <p> <code>undeploy</code>: Undeploy the app.</p> </li> </ul></p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: DeploymentCommandName,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentCommandName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentCommandName {
+    Configure,
+    Deploy,
+    ExecuteRecipes,
+    InstallDependencies,
+    Restart,
+    Rollback,
+    Setup,
+    Start,
+    Stop,
+    Undeploy,
+    UpdateCustomCookbooks,
+    UpdateDependencies,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentCommandName),
+}
+
+impl Default for DeploymentCommandName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentCommandName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentCommandName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentCommandName {
+    fn into(self) -> String {
+        match self {
+            DeploymentCommandName::Configure => "configure".to_string(),
+            DeploymentCommandName::Deploy => "deploy".to_string(),
+            DeploymentCommandName::ExecuteRecipes => "execute_recipes".to_string(),
+            DeploymentCommandName::InstallDependencies => "install_dependencies".to_string(),
+            DeploymentCommandName::Restart => "restart".to_string(),
+            DeploymentCommandName::Rollback => "rollback".to_string(),
+            DeploymentCommandName::Setup => "setup".to_string(),
+            DeploymentCommandName::Start => "start".to_string(),
+            DeploymentCommandName::Stop => "stop".to_string(),
+            DeploymentCommandName::Undeploy => "undeploy".to_string(),
+            DeploymentCommandName::UpdateCustomCookbooks => "update_custom_cookbooks".to_string(),
+            DeploymentCommandName::UpdateDependencies => "update_dependencies".to_string(),
+            DeploymentCommandName::UnknownVariant(UnknownDeploymentCommandName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentCommandName {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentCommandName::Configure => &"configure",
+            DeploymentCommandName::Deploy => &"deploy",
+            DeploymentCommandName::ExecuteRecipes => &"execute_recipes",
+            DeploymentCommandName::InstallDependencies => &"install_dependencies",
+            DeploymentCommandName::Restart => &"restart",
+            DeploymentCommandName::Rollback => &"rollback",
+            DeploymentCommandName::Setup => &"setup",
+            DeploymentCommandName::Start => &"start",
+            DeploymentCommandName::Stop => &"stop",
+            DeploymentCommandName::Undeploy => &"undeploy",
+            DeploymentCommandName::UpdateCustomCookbooks => &"update_custom_cookbooks",
+            DeploymentCommandName::UpdateDependencies => &"update_dependencies",
+            DeploymentCommandName::UnknownVariant(UnknownDeploymentCommandName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentCommandName {
+    fn from(name: &str) -> Self {
+        match name {
+            "configure" => DeploymentCommandName::Configure,
+            "deploy" => DeploymentCommandName::Deploy,
+            "execute_recipes" => DeploymentCommandName::ExecuteRecipes,
+            "install_dependencies" => DeploymentCommandName::InstallDependencies,
+            "restart" => DeploymentCommandName::Restart,
+            "rollback" => DeploymentCommandName::Rollback,
+            "setup" => DeploymentCommandName::Setup,
+            "start" => DeploymentCommandName::Start,
+            "stop" => DeploymentCommandName::Stop,
+            "undeploy" => DeploymentCommandName::Undeploy,
+            "update_custom_cookbooks" => DeploymentCommandName::UpdateCustomCookbooks,
+            "update_dependencies" => DeploymentCommandName::UpdateDependencies,
+            _ => DeploymentCommandName::UnknownVariant(UnknownDeploymentCommandName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentCommandName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "configure" => DeploymentCommandName::Configure,
+            "deploy" => DeploymentCommandName::Deploy,
+            "execute_recipes" => DeploymentCommandName::ExecuteRecipes,
+            "install_dependencies" => DeploymentCommandName::InstallDependencies,
+            "restart" => DeploymentCommandName::Restart,
+            "rollback" => DeploymentCommandName::Rollback,
+            "setup" => DeploymentCommandName::Setup,
+            "start" => DeploymentCommandName::Start,
+            "stop" => DeploymentCommandName::Stop,
+            "undeploy" => DeploymentCommandName::Undeploy,
+            "update_custom_cookbooks" => DeploymentCommandName::UpdateCustomCookbooks,
+            "update_dependencies" => DeploymentCommandName::UpdateDependencies,
+            _ => DeploymentCommandName::UnknownVariant(UnknownDeploymentCommandName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentCommandName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentCommandName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentCommandName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1544,7 +2909,7 @@ pub struct EbsBlockDevice {
     /// <p>The volume type. <code>gp2</code> for General Purpose (SSD) volumes, <code>io1</code> for Provisioned IOPS (SSD) volumes, <code>st1</code> for Throughput Optimized hard disk drives (HDD), <code>sc1</code> for Cold HDD,and <code>standard</code> for Magnetic volumes.</p> <p>If you specify the <code>io1</code> volume type, you must also specify a value for the <code>Iops</code> attribute. The maximum ratio of provisioned IOPS to requested volume size (in GiB) is 50:1. AWS uses the default volume size (in GiB) specified in the AMI attributes to set IOPS to 50 x (volume size).</p>
     #[serde(rename = "VolumeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub volume_type: Option<String>,
+    pub volume_type: Option<VolumeType>,
 }
 
 /// <p>Describes a registered Amazon ECS cluster.</p>
@@ -1711,7 +3076,7 @@ pub struct Instance {
     /// <p>The instance architecture: "i386" or "x86_64".</p>
     #[serde(rename = "Architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>The instance's Amazon Resource Number (ARN).</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1719,7 +3084,7 @@ pub struct Instance {
     /// <p>For load-based or time-based instances, the type.</p>
     #[serde(rename = "AutoScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_scaling_type: Option<String>,
+    pub auto_scaling_type: Option<AutoScalingType>,
     /// <p>The instance Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1823,7 +3188,7 @@ pub struct Instance {
     /// <p>The instance's root device type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device">Storage for the Root Device</a>.</p>
     #[serde(rename = "RootDeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_device_type: Option<String>,
+    pub root_device_type: Option<RootDeviceType>,
     /// <p>The root device volume ID.</p>
     #[serde(rename = "RootDeviceVolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1863,7 +3228,7 @@ pub struct Instance {
     /// <p>The instance's virtualization type: <code>paravirtual</code> or <code>hvm</code>.</p>
     #[serde(rename = "VirtualizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub virtualization_type: Option<String>,
+    pub virtualization_type: Option<VirtualizationType>,
 }
 
 /// <p>Contains a description of an Amazon EC2 instance from the Amazon EC2 metadata service. For more information, see <a href="https://docs.aws.amazon.com/sdkfornet/latest/apidocs/Index.html">Instance Metadata and User Data</a>.</p>
@@ -1977,7 +3342,7 @@ pub struct Layer {
     /// <p>The layer attributes.</p> <p>For the <code>HaproxyStatsPassword</code>, <code>MysqlRootPassword</code>, and <code>GangliaPassword</code> attributes, AWS OpsWorks Stacks returns <code>*****FILTERED*****</code> instead of the actual value</p> <p>For an ECS Cluster layer, AWS OpsWorks Stacks the <code>EcsClusterArn</code> attribute is set to the cluster's ARN.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<LayerAttributesKeys, String>>,
     /// <p>Whether to automatically assign an <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP address</a> to the layer's instances. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-edit.html">How to Edit a Layer</a>.</p>
     #[serde(rename = "AutoAssignElasticIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2053,7 +3418,7 @@ pub struct Layer {
     /// <p>The layer type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<LayerType>,
     /// <p>Whether the layer uses Amazon EBS-optimized instances.</p>
     #[serde(rename = "UseEbsOptimizedInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2062,6 +3427,377 @@ pub struct Layer {
     #[serde(rename = "VolumeConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_configurations: Option<Vec<VolumeConfiguration>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLayerAttributesKeys {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LayerAttributesKeys {
+    BundlerVersion,
+    EcsClusterArn,
+    EnableHaproxyStats,
+    GangliaPassword,
+    GangliaUrl,
+    GangliaUser,
+    HaproxyHealthCheckMethod,
+    HaproxyHealthCheckUrl,
+    HaproxyStatsPassword,
+    HaproxyStatsUrl,
+    HaproxyStatsUser,
+    JavaAppServer,
+    JavaAppServerVersion,
+    Jvm,
+    JvmOptions,
+    JvmVersion,
+    ManageBundler,
+    MemcachedMemory,
+    MysqlRootPassword,
+    MysqlRootPasswordUbiquitous,
+    NodejsVersion,
+    PassengerVersion,
+    RailsStack,
+    RubyVersion,
+    RubygemsVersion,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLayerAttributesKeys),
+}
+
+impl Default for LayerAttributesKeys {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LayerAttributesKeys {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LayerAttributesKeys {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LayerAttributesKeys {
+    fn into(self) -> String {
+        match self {
+            LayerAttributesKeys::BundlerVersion => "BundlerVersion".to_string(),
+            LayerAttributesKeys::EcsClusterArn => "EcsClusterArn".to_string(),
+            LayerAttributesKeys::EnableHaproxyStats => "EnableHaproxyStats".to_string(),
+            LayerAttributesKeys::GangliaPassword => "GangliaPassword".to_string(),
+            LayerAttributesKeys::GangliaUrl => "GangliaUrl".to_string(),
+            LayerAttributesKeys::GangliaUser => "GangliaUser".to_string(),
+            LayerAttributesKeys::HaproxyHealthCheckMethod => "HaproxyHealthCheckMethod".to_string(),
+            LayerAttributesKeys::HaproxyHealthCheckUrl => "HaproxyHealthCheckUrl".to_string(),
+            LayerAttributesKeys::HaproxyStatsPassword => "HaproxyStatsPassword".to_string(),
+            LayerAttributesKeys::HaproxyStatsUrl => "HaproxyStatsUrl".to_string(),
+            LayerAttributesKeys::HaproxyStatsUser => "HaproxyStatsUser".to_string(),
+            LayerAttributesKeys::JavaAppServer => "JavaAppServer".to_string(),
+            LayerAttributesKeys::JavaAppServerVersion => "JavaAppServerVersion".to_string(),
+            LayerAttributesKeys::Jvm => "Jvm".to_string(),
+            LayerAttributesKeys::JvmOptions => "JvmOptions".to_string(),
+            LayerAttributesKeys::JvmVersion => "JvmVersion".to_string(),
+            LayerAttributesKeys::ManageBundler => "ManageBundler".to_string(),
+            LayerAttributesKeys::MemcachedMemory => "MemcachedMemory".to_string(),
+            LayerAttributesKeys::MysqlRootPassword => "MysqlRootPassword".to_string(),
+            LayerAttributesKeys::MysqlRootPasswordUbiquitous => {
+                "MysqlRootPasswordUbiquitous".to_string()
+            }
+            LayerAttributesKeys::NodejsVersion => "NodejsVersion".to_string(),
+            LayerAttributesKeys::PassengerVersion => "PassengerVersion".to_string(),
+            LayerAttributesKeys::RailsStack => "RailsStack".to_string(),
+            LayerAttributesKeys::RubyVersion => "RubyVersion".to_string(),
+            LayerAttributesKeys::RubygemsVersion => "RubygemsVersion".to_string(),
+            LayerAttributesKeys::UnknownVariant(UnknownLayerAttributesKeys { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LayerAttributesKeys {
+    fn into(self) -> &'a str {
+        match self {
+            LayerAttributesKeys::BundlerVersion => &"BundlerVersion",
+            LayerAttributesKeys::EcsClusterArn => &"EcsClusterArn",
+            LayerAttributesKeys::EnableHaproxyStats => &"EnableHaproxyStats",
+            LayerAttributesKeys::GangliaPassword => &"GangliaPassword",
+            LayerAttributesKeys::GangliaUrl => &"GangliaUrl",
+            LayerAttributesKeys::GangliaUser => &"GangliaUser",
+            LayerAttributesKeys::HaproxyHealthCheckMethod => &"HaproxyHealthCheckMethod",
+            LayerAttributesKeys::HaproxyHealthCheckUrl => &"HaproxyHealthCheckUrl",
+            LayerAttributesKeys::HaproxyStatsPassword => &"HaproxyStatsPassword",
+            LayerAttributesKeys::HaproxyStatsUrl => &"HaproxyStatsUrl",
+            LayerAttributesKeys::HaproxyStatsUser => &"HaproxyStatsUser",
+            LayerAttributesKeys::JavaAppServer => &"JavaAppServer",
+            LayerAttributesKeys::JavaAppServerVersion => &"JavaAppServerVersion",
+            LayerAttributesKeys::Jvm => &"Jvm",
+            LayerAttributesKeys::JvmOptions => &"JvmOptions",
+            LayerAttributesKeys::JvmVersion => &"JvmVersion",
+            LayerAttributesKeys::ManageBundler => &"ManageBundler",
+            LayerAttributesKeys::MemcachedMemory => &"MemcachedMemory",
+            LayerAttributesKeys::MysqlRootPassword => &"MysqlRootPassword",
+            LayerAttributesKeys::MysqlRootPasswordUbiquitous => &"MysqlRootPasswordUbiquitous",
+            LayerAttributesKeys::NodejsVersion => &"NodejsVersion",
+            LayerAttributesKeys::PassengerVersion => &"PassengerVersion",
+            LayerAttributesKeys::RailsStack => &"RailsStack",
+            LayerAttributesKeys::RubyVersion => &"RubyVersion",
+            LayerAttributesKeys::RubygemsVersion => &"RubygemsVersion",
+            LayerAttributesKeys::UnknownVariant(UnknownLayerAttributesKeys { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LayerAttributesKeys {
+    fn from(name: &str) -> Self {
+        match name {
+            "BundlerVersion" => LayerAttributesKeys::BundlerVersion,
+            "EcsClusterArn" => LayerAttributesKeys::EcsClusterArn,
+            "EnableHaproxyStats" => LayerAttributesKeys::EnableHaproxyStats,
+            "GangliaPassword" => LayerAttributesKeys::GangliaPassword,
+            "GangliaUrl" => LayerAttributesKeys::GangliaUrl,
+            "GangliaUser" => LayerAttributesKeys::GangliaUser,
+            "HaproxyHealthCheckMethod" => LayerAttributesKeys::HaproxyHealthCheckMethod,
+            "HaproxyHealthCheckUrl" => LayerAttributesKeys::HaproxyHealthCheckUrl,
+            "HaproxyStatsPassword" => LayerAttributesKeys::HaproxyStatsPassword,
+            "HaproxyStatsUrl" => LayerAttributesKeys::HaproxyStatsUrl,
+            "HaproxyStatsUser" => LayerAttributesKeys::HaproxyStatsUser,
+            "JavaAppServer" => LayerAttributesKeys::JavaAppServer,
+            "JavaAppServerVersion" => LayerAttributesKeys::JavaAppServerVersion,
+            "Jvm" => LayerAttributesKeys::Jvm,
+            "JvmOptions" => LayerAttributesKeys::JvmOptions,
+            "JvmVersion" => LayerAttributesKeys::JvmVersion,
+            "ManageBundler" => LayerAttributesKeys::ManageBundler,
+            "MemcachedMemory" => LayerAttributesKeys::MemcachedMemory,
+            "MysqlRootPassword" => LayerAttributesKeys::MysqlRootPassword,
+            "MysqlRootPasswordUbiquitous" => LayerAttributesKeys::MysqlRootPasswordUbiquitous,
+            "NodejsVersion" => LayerAttributesKeys::NodejsVersion,
+            "PassengerVersion" => LayerAttributesKeys::PassengerVersion,
+            "RailsStack" => LayerAttributesKeys::RailsStack,
+            "RubyVersion" => LayerAttributesKeys::RubyVersion,
+            "RubygemsVersion" => LayerAttributesKeys::RubygemsVersion,
+            _ => LayerAttributesKeys::UnknownVariant(UnknownLayerAttributesKeys {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LayerAttributesKeys {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BundlerVersion" => LayerAttributesKeys::BundlerVersion,
+            "EcsClusterArn" => LayerAttributesKeys::EcsClusterArn,
+            "EnableHaproxyStats" => LayerAttributesKeys::EnableHaproxyStats,
+            "GangliaPassword" => LayerAttributesKeys::GangliaPassword,
+            "GangliaUrl" => LayerAttributesKeys::GangliaUrl,
+            "GangliaUser" => LayerAttributesKeys::GangliaUser,
+            "HaproxyHealthCheckMethod" => LayerAttributesKeys::HaproxyHealthCheckMethod,
+            "HaproxyHealthCheckUrl" => LayerAttributesKeys::HaproxyHealthCheckUrl,
+            "HaproxyStatsPassword" => LayerAttributesKeys::HaproxyStatsPassword,
+            "HaproxyStatsUrl" => LayerAttributesKeys::HaproxyStatsUrl,
+            "HaproxyStatsUser" => LayerAttributesKeys::HaproxyStatsUser,
+            "JavaAppServer" => LayerAttributesKeys::JavaAppServer,
+            "JavaAppServerVersion" => LayerAttributesKeys::JavaAppServerVersion,
+            "Jvm" => LayerAttributesKeys::Jvm,
+            "JvmOptions" => LayerAttributesKeys::JvmOptions,
+            "JvmVersion" => LayerAttributesKeys::JvmVersion,
+            "ManageBundler" => LayerAttributesKeys::ManageBundler,
+            "MemcachedMemory" => LayerAttributesKeys::MemcachedMemory,
+            "MysqlRootPassword" => LayerAttributesKeys::MysqlRootPassword,
+            "MysqlRootPasswordUbiquitous" => LayerAttributesKeys::MysqlRootPasswordUbiquitous,
+            "NodejsVersion" => LayerAttributesKeys::NodejsVersion,
+            "PassengerVersion" => LayerAttributesKeys::PassengerVersion,
+            "RailsStack" => LayerAttributesKeys::RailsStack,
+            "RubyVersion" => LayerAttributesKeys::RubyVersion,
+            "RubygemsVersion" => LayerAttributesKeys::RubygemsVersion,
+            _ => LayerAttributesKeys::UnknownVariant(UnknownLayerAttributesKeys { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerAttributesKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LayerAttributesKeys {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LayerAttributesKeys {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLayerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LayerType {
+    AwsFlowRuby,
+    Custom,
+    DbMaster,
+    EcsCluster,
+    JavaApp,
+    Lb,
+    Memcached,
+    MonitoringMaster,
+    NodejsApp,
+    PhpApp,
+    RailsApp,
+    Web,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLayerType),
+}
+
+impl Default for LayerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LayerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LayerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LayerType {
+    fn into(self) -> String {
+        match self {
+            LayerType::AwsFlowRuby => "aws-flow-ruby".to_string(),
+            LayerType::Custom => "custom".to_string(),
+            LayerType::DbMaster => "db-master".to_string(),
+            LayerType::EcsCluster => "ecs-cluster".to_string(),
+            LayerType::JavaApp => "java-app".to_string(),
+            LayerType::Lb => "lb".to_string(),
+            LayerType::Memcached => "memcached".to_string(),
+            LayerType::MonitoringMaster => "monitoring-master".to_string(),
+            LayerType::NodejsApp => "nodejs-app".to_string(),
+            LayerType::PhpApp => "php-app".to_string(),
+            LayerType::RailsApp => "rails-app".to_string(),
+            LayerType::Web => "web".to_string(),
+            LayerType::UnknownVariant(UnknownLayerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LayerType {
+    fn into(self) -> &'a str {
+        match self {
+            LayerType::AwsFlowRuby => &"aws-flow-ruby",
+            LayerType::Custom => &"custom",
+            LayerType::DbMaster => &"db-master",
+            LayerType::EcsCluster => &"ecs-cluster",
+            LayerType::JavaApp => &"java-app",
+            LayerType::Lb => &"lb",
+            LayerType::Memcached => &"memcached",
+            LayerType::MonitoringMaster => &"monitoring-master",
+            LayerType::NodejsApp => &"nodejs-app",
+            LayerType::PhpApp => &"php-app",
+            LayerType::RailsApp => &"rails-app",
+            LayerType::Web => &"web",
+            LayerType::UnknownVariant(UnknownLayerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LayerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "aws-flow-ruby" => LayerType::AwsFlowRuby,
+            "custom" => LayerType::Custom,
+            "db-master" => LayerType::DbMaster,
+            "ecs-cluster" => LayerType::EcsCluster,
+            "java-app" => LayerType::JavaApp,
+            "lb" => LayerType::Lb,
+            "memcached" => LayerType::Memcached,
+            "monitoring-master" => LayerType::MonitoringMaster,
+            "nodejs-app" => LayerType::NodejsApp,
+            "php-app" => LayerType::PhpApp,
+            "rails-app" => LayerType::RailsApp,
+            "web" => LayerType::Web,
+            _ => LayerType::UnknownVariant(UnknownLayerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LayerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aws-flow-ruby" => LayerType::AwsFlowRuby,
+            "custom" => LayerType::Custom,
+            "db-master" => LayerType::DbMaster,
+            "ecs-cluster" => LayerType::EcsCluster,
+            "java-app" => LayerType::JavaApp,
+            "lb" => LayerType::Lb,
+            "memcached" => LayerType::Memcached,
+            "monitoring-master" => LayerType::MonitoringMaster,
+            "nodejs-app" => LayerType::NodejsApp,
+            "php-app" => LayerType::PhpApp,
+            "rails-app" => LayerType::RailsApp,
+            "web" => LayerType::Web,
+            _ => LayerType::UnknownVariant(UnknownLayerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LayerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LayerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the lifecycle event configuration</p>
@@ -2473,6 +4209,106 @@ pub struct ReportedOs {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRootDeviceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RootDeviceType {
+    Ebs,
+    InstanceStore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRootDeviceType),
+}
+
+impl Default for RootDeviceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RootDeviceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RootDeviceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RootDeviceType {
+    fn into(self) -> String {
+        match self {
+            RootDeviceType::Ebs => "ebs".to_string(),
+            RootDeviceType::InstanceStore => "instance-store".to_string(),
+            RootDeviceType::UnknownVariant(UnknownRootDeviceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RootDeviceType {
+    fn into(self) -> &'a str {
+        match self {
+            RootDeviceType::Ebs => &"ebs",
+            RootDeviceType::InstanceStore => &"instance-store",
+            RootDeviceType::UnknownVariant(UnknownRootDeviceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RootDeviceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ebs" => RootDeviceType::Ebs,
+            "instance-store" => RootDeviceType::InstanceStore,
+            _ => RootDeviceType::UnknownVariant(UnknownRootDeviceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RootDeviceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ebs" => RootDeviceType::Ebs,
+            "instance-store" => RootDeviceType::InstanceStore,
+            _ => RootDeviceType::UnknownVariant(UnknownRootDeviceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RootDeviceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RootDeviceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RootDeviceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a user's SSH information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2611,7 +4447,7 @@ pub struct Source {
     /// <p>The repository type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SourceType>,
     /// <p>The source URL. The following is an example of an Amazon S3 source URL: <code>https://s3.amazonaws.com/opsworks-demo-bucket/opsworks_cookbook_demo.tar.gz</code>.</p>
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2620,6 +4456,116 @@ pub struct Source {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Archive,
+    Git,
+    S3,
+    Svn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Archive => "archive".to_string(),
+            SourceType::Git => "git".to_string(),
+            SourceType::S3 => "s3".to_string(),
+            SourceType::Svn => "svn".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Archive => &"archive",
+            SourceType::Git => &"git",
+            SourceType::S3 => &"s3",
+            SourceType::Svn => &"svn",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "archive" => SourceType::Archive,
+            "git" => SourceType::Git,
+            "s3" => SourceType::S3,
+            "svn" => SourceType::Svn,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "archive" => SourceType::Archive,
+            "git" => SourceType::Git,
+            "s3" => SourceType::S3,
+            "svn" => SourceType::Svn,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes an app's SSL configuration.</p>
@@ -2652,7 +4598,7 @@ pub struct Stack {
     /// <p>The stack's attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<StackAttributesKeys, String>>,
     /// <p>A <code>ChefConfiguration</code> object that specifies whether to enable Berkshelf and the Berkshelf version. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-creating.html">Create a New Stack</a>.</p>
     #[serde(rename = "ChefConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2688,7 +4634,7 @@ pub struct Stack {
     /// <p>The default root device type. This value is used by default for all instances in the stack, but you can override it when you create an instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device">Storage for the Root Device</a>.</p>
     #[serde(rename = "DefaultRootDeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_root_device_type: Option<String>,
+    pub default_root_device_type: Option<RootDeviceType>,
     /// <p>A default Amazon EC2 key pair for the stack's instances. You can override this value when you create or update an instance.</p>
     #[serde(rename = "DefaultSshKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2729,6 +4675,105 @@ pub struct Stack {
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStackAttributesKeys {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StackAttributesKeys {
+    Color,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStackAttributesKeys),
+}
+
+impl Default for StackAttributesKeys {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StackAttributesKeys {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StackAttributesKeys {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StackAttributesKeys {
+    fn into(self) -> String {
+        match self {
+            StackAttributesKeys::Color => "Color".to_string(),
+            StackAttributesKeys::UnknownVariant(UnknownStackAttributesKeys { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StackAttributesKeys {
+    fn into(self) -> &'a str {
+        match self {
+            StackAttributesKeys::Color => &"Color",
+            StackAttributesKeys::UnknownVariant(UnknownStackAttributesKeys { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StackAttributesKeys {
+    fn from(name: &str) -> Self {
+        match name {
+            "Color" => StackAttributesKeys::Color,
+            _ => StackAttributesKeys::UnknownVariant(UnknownStackAttributesKeys {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StackAttributesKeys {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Color" => StackAttributesKeys::Color,
+            _ => StackAttributesKeys::UnknownVariant(UnknownStackAttributesKeys { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackAttributesKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StackAttributesKeys {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StackAttributesKeys {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the configuration manager.</p>
@@ -2897,7 +4942,7 @@ pub struct UpdateAppRequest {
     /// <p>One or more user-defined key/value pairs to be added to the stack attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<AppAttributesKeys, String>>,
     /// <p>The app's data sources.</p>
     #[serde(rename = "DataSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2929,7 +4974,7 @@ pub struct UpdateAppRequest {
     /// <p>The app type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<AppType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2958,11 +5003,11 @@ pub struct UpdateInstanceRequest {
     /// <p>The instance architecture. Instance types do not necessarily support both architectures. For a list of the architectures that are supported by the different instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Families and Types</a>.</p>
     #[serde(rename = "Architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>For load-based or time-based instances, the type. Windows stacks can use only time-based instances.</p>
     #[serde(rename = "AutoScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_scaling_type: Option<String>,
+    pub auto_scaling_type: Option<AutoScalingType>,
     /// <p>This property cannot be updated.</p>
     #[serde(rename = "EbsOptimized")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3002,7 +5047,7 @@ pub struct UpdateLayerRequest {
     /// <p>One or more user-defined key/value pairs to be added to the stack attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<LayerAttributesKeys, String>>,
     /// <p>Whether to automatically assign an <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP address</a> to the layer's instances. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-edit.html">How to Edit a Layer</a>.</p>
     #[serde(rename = "AutoAssignElasticIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3103,7 +5148,7 @@ pub struct UpdateStackRequest {
     /// <p>One or more user-defined key-value pairs to be added to the stack attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    pub attributes: Option<::std::collections::HashMap<StackAttributesKeys, String>>,
     /// <p>A <code>ChefConfiguration</code> object that specifies whether to enable Berkshelf and the Berkshelf version on Chef 11.10 stacks. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-creating.html">Create a New Stack</a>.</p>
     #[serde(rename = "ChefConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3135,7 +5180,7 @@ pub struct UpdateStackRequest {
     /// <p>The default root device type. This value is used by default for all instances in the stack, but you can override it when you create an instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device">Storage for the Root Device</a>.</p>
     #[serde(rename = "DefaultRootDeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_root_device_type: Option<String>,
+    pub default_root_device_type: Option<RootDeviceType>,
     /// <p>A default Amazon EC2 key-pair name. The default value is <code>none</code>. If you specify a key-pair name, AWS OpsWorks Stacks installs the public key on the instance and you can use the private key with an SSH client to log in to the instance. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-ssh.html"> Using SSH to Communicate with an Instance</a> and <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html"> Managing SSH Access</a>. You can override this setting by specifying a different key pair, or no key pair, when you <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html"> create an instance</a>. </p>
     #[serde(rename = "DefaultSshKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3231,6 +5276,111 @@ pub struct UserProfile {
     pub ssh_username: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualizationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualizationType {
+    Hvm,
+    Paravirtual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualizationType),
+}
+
+impl Default for VirtualizationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualizationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualizationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualizationType {
+    fn into(self) -> String {
+        match self {
+            VirtualizationType::Hvm => "hvm".to_string(),
+            VirtualizationType::Paravirtual => "paravirtual".to_string(),
+            VirtualizationType::UnknownVariant(UnknownVirtualizationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualizationType {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualizationType::Hvm => &"hvm",
+            VirtualizationType::Paravirtual => &"paravirtual",
+            VirtualizationType::UnknownVariant(UnknownVirtualizationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for VirtualizationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "hvm" => VirtualizationType::Hvm,
+            "paravirtual" => VirtualizationType::Paravirtual,
+            _ => VirtualizationType::UnknownVariant(UnknownVirtualizationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualizationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "hvm" => VirtualizationType::Hvm,
+            "paravirtual" => VirtualizationType::Paravirtual,
+            _ => VirtualizationType::UnknownVariant(UnknownVirtualizationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualizationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VirtualizationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualizationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes an instance's Amazon EBS volume.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3321,6 +5471,111 @@ pub struct VolumeConfiguration {
     #[serde(rename = "VolumeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVolumeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VolumeType {
+    Gp2,
+    Io1,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVolumeType),
+}
+
+impl Default for VolumeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VolumeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VolumeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VolumeType {
+    fn into(self) -> String {
+        match self {
+            VolumeType::Gp2 => "gp2".to_string(),
+            VolumeType::Io1 => "io1".to_string(),
+            VolumeType::Standard => "standard".to_string(),
+            VolumeType::UnknownVariant(UnknownVolumeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VolumeType {
+    fn into(self) -> &'a str {
+        match self {
+            VolumeType::Gp2 => &"gp2",
+            VolumeType::Io1 => &"io1",
+            VolumeType::Standard => &"standard",
+            VolumeType::UnknownVariant(UnknownVolumeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VolumeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "gp2" => VolumeType::Gp2,
+            "io1" => VolumeType::Io1,
+            "standard" => VolumeType::Standard,
+            _ => VolumeType::UnknownVariant(UnknownVolumeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VolumeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "gp2" => VolumeType::Gp2,
+            "io1" => VolumeType::Io1,
+            "standard" => VolumeType::Standard,
+            _ => VolumeType::UnknownVariant(UnknownVolumeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VolumeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VolumeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a time-based instance's auto scaling schedule. The schedule consists of a set of key-value pairs.</p> <ul> <li> <p>The key is the time period (a UTC hour) and must be an integer from 0 - 23.</p> </li> <li> <p>The value indicates whether the instance should be online or offline for the specified period, and must be set to "on" or "off"</p> </li> </ul> <p>The default setting for all time periods is off, so you use the following parameters primarily to specify the online periods. You don't have to explicitly specify offline periods unless you want to change an online period to an offline period.</p> <p>The following example specifies that the instance should be online for four hours, from UTC 1200 - 1600. It will be off for the remainder of the day.</p> <p> <code> { "12":"on", "13":"on", "14":"on", "15":"on" } </code> </p>

@@ -186,6 +186,111 @@ pub struct CreateServiceResponse {
     pub service: Option<Service>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomHealthStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomHealthStatus {
+    Healthy,
+    Unhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomHealthStatus),
+}
+
+impl Default for CustomHealthStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomHealthStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomHealthStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomHealthStatus {
+    fn into(self) -> String {
+        match self {
+            CustomHealthStatus::Healthy => "HEALTHY".to_string(),
+            CustomHealthStatus::Unhealthy => "UNHEALTHY".to_string(),
+            CustomHealthStatus::UnknownVariant(UnknownCustomHealthStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomHealthStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CustomHealthStatus::Healthy => &"HEALTHY",
+            CustomHealthStatus::Unhealthy => &"UNHEALTHY",
+            CustomHealthStatus::UnknownVariant(UnknownCustomHealthStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CustomHealthStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => CustomHealthStatus::Healthy,
+            "UNHEALTHY" => CustomHealthStatus::Unhealthy,
+            _ => CustomHealthStatus::UnknownVariant(UnknownCustomHealthStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CustomHealthStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => CustomHealthStatus::Healthy,
+            "UNHEALTHY" => CustomHealthStatus::Unhealthy,
+            _ => CustomHealthStatus::UnknownVariant(UnknownCustomHealthStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomHealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CustomHealthStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CustomHealthStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {
@@ -241,7 +346,7 @@ pub struct DiscoverInstancesRequest {
     /// <p>The health status of the instances that you want to discover.</p>
     #[serde(rename = "HealthStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_status: Option<String>,
+    pub health_status: Option<HealthStatusFilter>,
     /// <p>The maximum number of instances that you want AWS Cloud Map to return in the response to a <code>DiscoverInstances</code> request. If you don't specify a value for <code>MaxResults</code>, AWS Cloud Map returns up to 100 instances.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -280,7 +385,7 @@ pub struct DnsConfig {
     /// <p>The routing policy that you want to apply to all Route 53 DNS records that AWS Cloud Map creates when you register an instance and specify this service.</p> <note> <p>If you want to use this service to register instances that create alias records, specify <code>WEIGHTED</code> for the routing policy.</p> </note> <p>You can specify the following values:</p> <p> <b>MULTIVALUE</b> </p> <p>If you define a health check for the service and the health check is healthy, Route 53 returns the applicable value for up to eight instances.</p> <p>For example, suppose the service includes configurations for one <code>A</code> record and a health check, and you use the service to register 10 instances. Route 53 responds to DNS queries with IP addresses for up to eight healthy instances. If fewer than eight instances are healthy, Route 53 responds to every DNS query with the IP addresses for all of the healthy instances.</p> <p>If you don't define a health check for the service, Route 53 assumes that all instances are healthy and returns the values for up to eight instances.</p> <p>For more information about the multivalue routing policy, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-multivalue">Multivalue Answer Routing</a> in the <i>Route 53 Developer Guide</i>.</p> <p> <b>WEIGHTED</b> </p> <p>Route 53 returns the applicable value from one randomly selected instance from among the instances that you registered using the same service. Currently, all records have the same weight, so you can't route more or less traffic to any instances.</p> <p>For example, suppose the service includes configurations for one <code>A</code> record and a health check, and you use the service to register 10 instances. Route 53 responds to DNS queries with the IP address for one randomly selected instance from among the healthy instances. If no instances are healthy, Route 53 responds to DNS queries as if all of the instances were healthy.</p> <p>If you don't define a health check for the service, Route 53 assumes that all instances are healthy and returns the applicable value for one randomly selected instance.</p> <p>For more information about the weighted routing policy, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted">Weighted Routing</a> in the <i>Route 53 Developer Guide</i>.</p>
     #[serde(rename = "RoutingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub routing_policy: Option<String>,
+    pub routing_policy: Option<RoutingPolicy>,
 }
 
 /// <p>A complex type that contains information about changes to the Route 53 DNS records that AWS Cloud Map creates when you register an instance.</p>
@@ -310,7 +415,113 @@ pub struct DnsRecord {
     pub ttl: i64,
     /// <p><p>The type of the resource, which indicates the type of value that Route 53 returns in response to DNS queries. You can specify values for <code>Type</code> in the following combinations:</p> <ul> <li> <p> <code>A</code> </p> </li> <li> <p> <code>AAAA</code> </p> </li> <li> <p> <code>A</code> and <code>AAAA</code> </p> </li> <li> <p> <code>SRV</code> </p> </li> <li> <p> <code>CNAME</code> </p> </li> </ul> <p>If you want AWS Cloud Map to create a Route 53 alias record when you register an instance, specify <code>A</code> or <code>AAAA</code> for <code>Type</code>.</p> <p>You specify other settings, such as the IP address for <code>A</code> and <code>AAAA</code> records, when you register an instance. For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_RegisterInstance.html">RegisterInstance</a>.</p> <p>The following values are supported:</p> <p> <code>A</code> <b> <code/> </b> </p> <p>Route 53 returns the IP address of the resource in IPv4 format, such as 192.0.2.44.</p> <p> <code>AAAA</code> <b> <code/> </b> </p> <p>Route 53 returns the IP address of the resource in IPv6 format, such as 2001:0db8:85a3:0000:0000:abcd:0001:2345.</p> <p> <code>CNAME</code> <b> <code/> </b> </p> <p>Route 53 returns the domain name of the resource, such as www.example.com. Note the following:</p> <ul> <li> <p>You specify the domain name that you want to route traffic to when you register an instance. For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_RegisterInstance.html#cloudmap-RegisterInstance-request-Attributes">Attributes</a> in the topic <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_RegisterInstance.html">RegisterInstance</a>.</p> </li> <li> <p>You must specify <code>WEIGHTED</code> for the value of <code>RoutingPolicy</code>.</p> </li> <li> <p>You can&#39;t specify both <code>CNAME</code> for <code>Type</code> and settings for <code>HealthCheckConfig</code>. If you do, the request will fail with an <code>InvalidInput</code> error.</p> </li> </ul> <p> <b>SRV</b> </p> <p>Route 53 returns the value for an <code>SRV</code> record. The value for an <code>SRV</code> record uses the following values:</p> <p> <code>priority weight port service-hostname</code> </p> <p>Note the following about the values:</p> <ul> <li> <p>The values of <code>priority</code> and <code>weight</code> are both set to <code>1</code> and can&#39;t be changed. </p> </li> <li> <p>The value of <code>port</code> comes from the value that you specify for the <code>AWS<em>INSTANCE</em>PORT</code> attribute when you submit a <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_RegisterInstance.html">RegisterInstance</a> request. </p> </li> <li> <p>The value of <code>service-hostname</code> is a concatenation of the following values:</p> <ul> <li> <p>The value that you specify for <code>InstanceId</code> when you register an instance.</p> </li> <li> <p>The name of the service.</p> </li> <li> <p>The name of the namespace. </p> </li> </ul> <p>For example, if the value of <code>InstanceId</code> is <code>test</code>, the name of the service is <code>backend</code>, and the name of the namespace is <code>example.com</code>, the value of <code>service-hostname</code> is:</p> <p> <code>test.backend.example.com</code> </p> </li> </ul> <p>If you specify settings for an <code>SRV</code> record, note the following:</p> <ul> <li> <p>If you specify values for <code>AWS<em>INSTANCE</em>IPV4</code>, <code>AWS<em>INSTANCE</em>IPV6</code>, or both in the <code>RegisterInstance</code> request, AWS Cloud Map automatically creates <code>A</code> and/or <code>AAAA</code> records that have the same name as the value of <code>service-hostname</code> in the <code>SRV</code> record. You can ignore these records.</p> </li> <li> <p>If you&#39;re using a system that requires a specific <code>SRV</code> format, such as HAProxy, see the <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_CreateService.html#cloudmap-CreateService-request-Name">Name</a> element in the documentation about <code>CreateService</code> for information about how to specify the correct name format.</p> </li> </ul></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: RecordType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterCondition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterCondition {
+    Between,
+    Eq,
+    In,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterCondition),
+}
+
+impl Default for FilterCondition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterCondition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterCondition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterCondition {
+    fn into(self) -> String {
+        match self {
+            FilterCondition::Between => "BETWEEN".to_string(),
+            FilterCondition::Eq => "EQ".to_string(),
+            FilterCondition::In => "IN".to_string(),
+            FilterCondition::UnknownVariant(UnknownFilterCondition { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterCondition {
+    fn into(self) -> &'a str {
+        match self {
+            FilterCondition::Between => &"BETWEEN",
+            FilterCondition::Eq => &"EQ",
+            FilterCondition::In => &"IN",
+            FilterCondition::UnknownVariant(UnknownFilterCondition { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterCondition {
+    fn from(name: &str) -> Self {
+        match name {
+            "BETWEEN" => FilterCondition::Between,
+            "EQ" => FilterCondition::Eq,
+            "IN" => FilterCondition::In,
+            _ => FilterCondition::UnknownVariant(UnknownFilterCondition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterCondition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BETWEEN" => FilterCondition::Between,
+            "EQ" => FilterCondition::Eq,
+            "IN" => FilterCondition::In,
+            _ => FilterCondition::UnknownVariant(UnknownFilterCondition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterCondition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterCondition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterCondition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -363,7 +574,7 @@ pub struct GetInstancesHealthStatusResponse {
     /// <p>A complex type that contains the IDs and the health status of the instances that you specified in the <code>GetInstancesHealthStatus</code> request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<::std::collections::HashMap<String, String>>,
+    pub status: Option<::std::collections::HashMap<String, HealthStatus>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -430,7 +641,7 @@ pub struct HealthCheckConfig {
     pub resource_path: Option<String>,
     /// <p>The type of health check that you want to create, which indicates how Route 53 determines whether an endpoint is healthy.</p> <important> <p>You can't change the value of <code>Type</code> after you create a health check.</p> </important> <p>You can create the following types of health checks:</p> <ul> <li> <p> <b>HTTP</b>: Route 53 tries to establish a TCP connection. If successful, Route 53 submits an HTTP request and waits for an HTTP status code of 200 or greater and less than 400.</p> </li> <li> <p> <b>HTTPS</b>: Route 53 tries to establish a TCP connection. If successful, Route 53 submits an HTTPS request and waits for an HTTP status code of 200 or greater and less than 400.</p> <important> <p>If you specify HTTPS for the value of <code>Type</code>, the endpoint must support TLS v1.0 or later.</p> </important> </li> <li> <p> <b>TCP</b>: Route 53 tries to establish a TCP connection.</p> <p>If you specify <code>TCP</code> for <code>Type</code>, don't specify a value for <code>ResourcePath</code>.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html">How Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Route 53 Developer Guide</i>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: HealthCheckType,
 }
 
 /// <p><p>A complex type that contains information about an optional custom health check. A custom health check, which requires that you use a third-party health checker to evaluate the health of your resources, is useful in the following circumstances:</p> <ul> <li> <p>You can&#39;t use a health check that is defined by <code>HealthCheckConfig</code> because the resource isn&#39;t available over the internet. For example, you can use a custom health check when the instance is in an Amazon VPC. (To check the health of resources in a VPC, the health checker must also be in the VPC.)</p> </li> <li> <p>You want to use a third-party health checker regardless of where your resources are.</p> </li> </ul> <important> <p>If you specify a health check configuration, you can specify either <code>HealthCheckCustomConfig</code> or <code>HealthCheckConfig</code> but not both.</p> </important> <p>To change the status of a custom health check, submit an <code>UpdateInstanceCustomHealthStatus</code> request. AWS Cloud Map doesn&#39;t monitor the status of the resource, it just keeps a record of the status specified in the most recent <code>UpdateInstanceCustomHealthStatus</code> request.</p> <p>Here&#39;s how custom health checks work:</p> <ol> <li> <p>You create a service and specify a value for <code>FailureThreshold</code>. </p> <p>The failure threshold indicates the number of 30-second intervals you want AWS Cloud Map to wait between the time that your application sends an <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_UpdateInstanceCustomHealthStatus.html">UpdateInstanceCustomHealthStatus</a> request and the time that AWS Cloud Map stops routing internet traffic to the corresponding resource.</p> </li> <li> <p>You register an instance.</p> </li> <li> <p>You configure a third-party health checker to monitor the resource that is associated with the new instance. </p> <note> <p>AWS Cloud Map doesn&#39;t check the health of the resource directly. </p> </note> </li> <li> <p>The third-party health-checker determines that the resource is unhealthy and notifies your application.</p> </li> <li> <p>Your application submits an <code>UpdateInstanceCustomHealthStatus</code> request.</p> </li> <li> <p>AWS Cloud Map waits for (<code>FailureThreshold</code> x 30) seconds.</p> </li> <li> <p>If another <code>UpdateInstanceCustomHealthStatus</code> request doesn&#39;t arrive during that time to change the status back to healthy, AWS Cloud Map stops routing traffic to the resource.</p> </li> </ol></p>
@@ -440,6 +651,327 @@ pub struct HealthCheckCustomConfig {
     #[serde(rename = "FailureThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_threshold: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthCheckType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthCheckType {
+    Http,
+    Https,
+    Tcp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthCheckType),
+}
+
+impl Default for HealthCheckType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthCheckType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthCheckType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthCheckType {
+    fn into(self) -> String {
+        match self {
+            HealthCheckType::Http => "HTTP".to_string(),
+            HealthCheckType::Https => "HTTPS".to_string(),
+            HealthCheckType::Tcp => "TCP".to_string(),
+            HealthCheckType::UnknownVariant(UnknownHealthCheckType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthCheckType {
+    fn into(self) -> &'a str {
+        match self {
+            HealthCheckType::Http => &"HTTP",
+            HealthCheckType::Https => &"HTTPS",
+            HealthCheckType::Tcp => &"TCP",
+            HealthCheckType::UnknownVariant(UnknownHealthCheckType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HealthCheckType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP" => HealthCheckType::Http,
+            "HTTPS" => HealthCheckType::Https,
+            "TCP" => HealthCheckType::Tcp,
+            _ => HealthCheckType::UnknownVariant(UnknownHealthCheckType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthCheckType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP" => HealthCheckType::Http,
+            "HTTPS" => HealthCheckType::Https,
+            "TCP" => HealthCheckType::Tcp,
+            _ => HealthCheckType::UnknownVariant(UnknownHealthCheckType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthCheckType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HealthCheckType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HealthCheckType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthStatus {
+    Healthy,
+    Unhealthy,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthStatus),
+}
+
+impl Default for HealthStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthStatus {
+    fn into(self) -> String {
+        match self {
+            HealthStatus::Healthy => "HEALTHY".to_string(),
+            HealthStatus::Unhealthy => "UNHEALTHY".to_string(),
+            HealthStatus::Unknown => "UNKNOWN".to_string(),
+            HealthStatus::UnknownVariant(UnknownHealthStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HealthStatus::Healthy => &"HEALTHY",
+            HealthStatus::Unhealthy => &"UNHEALTHY",
+            HealthStatus::Unknown => &"UNKNOWN",
+            HealthStatus::UnknownVariant(UnknownHealthStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HealthStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => HealthStatus::Healthy,
+            "UNHEALTHY" => HealthStatus::Unhealthy,
+            "UNKNOWN" => HealthStatus::Unknown,
+            _ => HealthStatus::UnknownVariant(UnknownHealthStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => HealthStatus::Healthy,
+            "UNHEALTHY" => HealthStatus::Unhealthy,
+            "UNKNOWN" => HealthStatus::Unknown,
+            _ => HealthStatus::UnknownVariant(UnknownHealthStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HealthStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HealthStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthStatusFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthStatusFilter {
+    All,
+    Healthy,
+    Unhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthStatusFilter),
+}
+
+impl Default for HealthStatusFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthStatusFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthStatusFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthStatusFilter {
+    fn into(self) -> String {
+        match self {
+            HealthStatusFilter::All => "ALL".to_string(),
+            HealthStatusFilter::Healthy => "HEALTHY".to_string(),
+            HealthStatusFilter::Unhealthy => "UNHEALTHY".to_string(),
+            HealthStatusFilter::UnknownVariant(UnknownHealthStatusFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthStatusFilter {
+    fn into(self) -> &'a str {
+        match self {
+            HealthStatusFilter::All => &"ALL",
+            HealthStatusFilter::Healthy => &"HEALTHY",
+            HealthStatusFilter::Unhealthy => &"UNHEALTHY",
+            HealthStatusFilter::UnknownVariant(UnknownHealthStatusFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HealthStatusFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => HealthStatusFilter::All,
+            "HEALTHY" => HealthStatusFilter::Healthy,
+            "UNHEALTHY" => HealthStatusFilter::Unhealthy,
+            _ => HealthStatusFilter::UnknownVariant(UnknownHealthStatusFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthStatusFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => HealthStatusFilter::All,
+            "HEALTHY" => HealthStatusFilter::Healthy,
+            "UNHEALTHY" => HealthStatusFilter::Unhealthy,
+            _ => HealthStatusFilter::UnknownVariant(UnknownHealthStatusFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthStatusFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HealthStatusFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HealthStatusFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>In a response to a <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a> request, <code>HttpInstanceSummary</code> contains information about one instance that matches the values that you specified in the request.</p>
@@ -453,7 +985,7 @@ pub struct HttpInstanceSummary {
     /// <p>If you configured health checking in the service, the current health status of the service instance.</p>
     #[serde(rename = "HealthStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_status: Option<String>,
+    pub health_status: Option<HealthStatus>,
     /// <p>The ID of an instance that matches the values that you specified in the request.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -684,7 +1216,7 @@ pub struct Namespace {
     /// <p><p>The type of the namespace. The methods for discovering instances depends on the value that you specify:</p> <ul> <li> <p> <code>HTTP</code>: Instances can be discovered only programmatically, using the AWS Cloud Map <code>DiscoverInstances</code> API.</p> </li> <li> <p> <code>DNS<em>PUBLIC</code>: Instances can be discovered using public DNS queries and using the <code>DiscoverInstances</code> API.</p> </li> <li> <p> <code>DNS</em>PRIVATE</code>: Instances can be discovered using DNS queries in VPCs and using the <code>DiscoverInstances</code> API.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<NamespaceType>,
 }
 
 /// <p>A complex type that identifies the namespaces that you want to list. You can choose to list public or private namespaces.</p>
@@ -694,13 +1226,113 @@ pub struct NamespaceFilter {
     /// <p><p>The operator that you want to use to determine whether <code>ListNamespaces</code> returns a namespace. Valid values for <code>condition</code> include:</p> <ul> <li> <p> <code>EQ</code>: When you specify <code>EQ</code> for the condition, you can choose to list only public namespaces or private namespaces, but not both. <code>EQ</code> is the default condition and can be omitted.</p> </li> <li> <p> <code>IN</code>: When you specify <code>IN</code> for the condition, you can choose to list public namespaces, private namespaces, or both. </p> </li> <li> <p> <code>BETWEEN</code>: Not applicable</p> </li> </ul></p>
     #[serde(rename = "Condition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub condition: Option<String>,
+    pub condition: Option<FilterCondition>,
     /// <p>Specify <code>TYPE</code>.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: NamespaceFilterName,
     /// <p>If you specify <code>EQ</code> for <code>Condition</code>, specify either <code>DNS_PUBLIC</code> or <code>DNS_PRIVATE</code>.</p> <p>If you specify <code>IN</code> for <code>Condition</code>, you can specify <code>DNS_PUBLIC</code>, <code>DNS_PRIVATE</code>, or both.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNamespaceFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NamespaceFilterName {
+    Type,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNamespaceFilterName),
+}
+
+impl Default for NamespaceFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NamespaceFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NamespaceFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NamespaceFilterName {
+    fn into(self) -> String {
+        match self {
+            NamespaceFilterName::Type => "TYPE".to_string(),
+            NamespaceFilterName::UnknownVariant(UnknownNamespaceFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NamespaceFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            NamespaceFilterName::Type => &"TYPE",
+            NamespaceFilterName::UnknownVariant(UnknownNamespaceFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NamespaceFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "TYPE" => NamespaceFilterName::Type,
+            _ => NamespaceFilterName::UnknownVariant(UnknownNamespaceFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NamespaceFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TYPE" => NamespaceFilterName::Type,
+            _ => NamespaceFilterName::UnknownVariant(UnknownNamespaceFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NamespaceFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NamespaceFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NamespaceFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex type that contains information that is specific to the namespace type.</p>
@@ -751,7 +1383,113 @@ pub struct NamespaceSummary {
     /// <p>The type of the namespace, either public or private.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<NamespaceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNamespaceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NamespaceType {
+    DnsPrivate,
+    DnsPublic,
+    Http,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNamespaceType),
+}
+
+impl Default for NamespaceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NamespaceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NamespaceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NamespaceType {
+    fn into(self) -> String {
+        match self {
+            NamespaceType::DnsPrivate => "DNS_PRIVATE".to_string(),
+            NamespaceType::DnsPublic => "DNS_PUBLIC".to_string(),
+            NamespaceType::Http => "HTTP".to_string(),
+            NamespaceType::UnknownVariant(UnknownNamespaceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NamespaceType {
+    fn into(self) -> &'a str {
+        match self {
+            NamespaceType::DnsPrivate => &"DNS_PRIVATE",
+            NamespaceType::DnsPublic => &"DNS_PUBLIC",
+            NamespaceType::Http => &"HTTP",
+            NamespaceType::UnknownVariant(UnknownNamespaceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NamespaceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DNS_PRIVATE" => NamespaceType::DnsPrivate,
+            "DNS_PUBLIC" => NamespaceType::DnsPublic,
+            "HTTP" => NamespaceType::Http,
+            _ => NamespaceType::UnknownVariant(UnknownNamespaceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NamespaceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DNS_PRIVATE" => NamespaceType::DnsPrivate,
+            "DNS_PUBLIC" => NamespaceType::DnsPublic,
+            "HTTP" => NamespaceType::Http,
+            _ => NamespaceType::UnknownVariant(UnknownNamespaceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NamespaceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NamespaceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NamespaceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex type that contains information about a specified operation.</p>
@@ -777,15 +1515,15 @@ pub struct Operation {
     /// <p><p>The status of the operation. Values include the following:</p> <ul> <li> <p> <b>SUBMITTED</b>: This is the initial state immediately after you submit a request.</p> </li> <li> <p> <b>PENDING</b>: AWS Cloud Map is performing the operation.</p> </li> <li> <p> <b>SUCCESS</b>: The operation succeeded.</p> </li> <li> <p> <b>FAIL</b>: The operation failed. For the failure reason, see <code>ErrorMessage</code>.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OperationStatus>,
     /// <p><p>The name of the target entity that is associated with the operation:</p> <ul> <li> <p> <b>NAMESPACE</b>: The namespace ID is returned in the <code>ResourceId</code> property.</p> </li> <li> <p> <b>SERVICE</b>: The service ID is returned in the <code>ResourceId</code> property.</p> </li> <li> <p> <b>INSTANCE</b>: The instance ID is returned in the <code>ResourceId</code> property.</p> </li> </ul></p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub targets: Option<::std::collections::HashMap<String, String>>,
+    pub targets: Option<::std::collections::HashMap<OperationTargetType, String>>,
     /// <p>The name of the operation that is associated with the specified ID.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<OperationType>,
     /// <p>The date and time that the value of <code>Status</code> changed to the current value, in Unix date/time format and Coordinated Universal Time (UTC). The value of <code>UpdateDate</code> is accurate to milliseconds. For example, the value <code>1516925490.087</code> represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "UpdateDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -799,13 +1537,244 @@ pub struct OperationFilter {
     /// <p><p>The operator that you want to use to determine whether an operation matches the specified value. Valid values for condition include:</p> <ul> <li> <p> <code>EQ</code>: When you specify <code>EQ</code> for the condition, you can specify only one value. <code>EQ</code> is supported for <code>NAMESPACE<em>ID</code>, <code>SERVICE</em>ID</code>, <code>STATUS</code>, and <code>TYPE</code>. <code>EQ</code> is the default condition and can be omitted.</p> </li> <li> <p> <code>IN</code>: When you specify <code>IN</code> for the condition, you can specify a list of one or more values. <code>IN</code> is supported for <code>STATUS</code> and <code>TYPE</code>. An operation must match one of the specified values to be returned in the response.</p> </li> <li> <p> <code>BETWEEN</code>: Specify a start date and an end date in Unix date/time format and Coordinated Universal Time (UTC). The start date must be the first value. <code>BETWEEN</code> is supported for <code>UPDATE_DATE</code>. </p> </li> </ul></p>
     #[serde(rename = "Condition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub condition: Option<String>,
+    pub condition: Option<FilterCondition>,
     /// <p><p>Specify the operations that you want to get:</p> <ul> <li> <p> <b>NAMESPACE<em>ID</b>: Gets operations related to specified namespaces.</p> </li> <li> <p> <b>SERVICE</em>ID</b>: Gets operations related to specified services.</p> </li> <li> <p> <b>STATUS</b>: Gets operations based on the status of the operations: <code>SUBMITTED</code>, <code>PENDING</code>, <code>SUCCEED</code>, or <code>FAIL</code>.</p> </li> <li> <p> <b>TYPE</b>: Gets specified types of operation.</p> </li> <li> <p> <b>UPDATE_DATE</b>: Gets operations that changed status during a specified date/time range. </p> </li> </ul></p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: OperationFilterName,
     /// <p><p>Specify values that are applicable to the value that you specify for <code>Name</code>: </p> <ul> <li> <p> <b>NAMESPACE<em>ID</b>: Specify one namespace ID.</p> </li> <li> <p> <b>SERVICE</em>ID</b>: Specify one service ID.</p> </li> <li> <p> <b>STATUS</b>: Specify one or more statuses: <code>SUBMITTED</code>, <code>PENDING</code>, <code>SUCCEED</code>, or <code>FAIL</code>.</p> </li> <li> <p> <b>TYPE</b>: Specify one or more of the following types: <code>CREATE<em>NAMESPACE</code>, <code>DELETE</em>NAMESPACE</code>, <code>UPDATE<em>SERVICE</code>, <code>REGISTER</em>INSTANCE</code>, or <code>DEREGISTER<em>INSTANCE</code>.</p> </li> <li> <p> <b>UPDATE</em>DATE</b>: Specify a start date and an end date in Unix date/time format and Coordinated Universal Time (UTC). The start date must be the first value.</p> </li> </ul></p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationFilterName {
+    NamespaceId,
+    ServiceId,
+    Status,
+    Type,
+    UpdateDate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationFilterName),
+}
+
+impl Default for OperationFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationFilterName {
+    fn into(self) -> String {
+        match self {
+            OperationFilterName::NamespaceId => "NAMESPACE_ID".to_string(),
+            OperationFilterName::ServiceId => "SERVICE_ID".to_string(),
+            OperationFilterName::Status => "STATUS".to_string(),
+            OperationFilterName::Type => "TYPE".to_string(),
+            OperationFilterName::UpdateDate => "UPDATE_DATE".to_string(),
+            OperationFilterName::UnknownVariant(UnknownOperationFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            OperationFilterName::NamespaceId => &"NAMESPACE_ID",
+            OperationFilterName::ServiceId => &"SERVICE_ID",
+            OperationFilterName::Status => &"STATUS",
+            OperationFilterName::Type => &"TYPE",
+            OperationFilterName::UpdateDate => &"UPDATE_DATE",
+            OperationFilterName::UnknownVariant(UnknownOperationFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OperationFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "NAMESPACE_ID" => OperationFilterName::NamespaceId,
+            "SERVICE_ID" => OperationFilterName::ServiceId,
+            "STATUS" => OperationFilterName::Status,
+            "TYPE" => OperationFilterName::Type,
+            "UPDATE_DATE" => OperationFilterName::UpdateDate,
+            _ => OperationFilterName::UnknownVariant(UnknownOperationFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NAMESPACE_ID" => OperationFilterName::NamespaceId,
+            "SERVICE_ID" => OperationFilterName::ServiceId,
+            "STATUS" => OperationFilterName::Status,
+            "TYPE" => OperationFilterName::Type,
+            "UPDATE_DATE" => OperationFilterName::UpdateDate,
+            _ => OperationFilterName::UnknownVariant(UnknownOperationFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OperationFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OperationFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationStatus {
+    Fail,
+    Pending,
+    Submitted,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationStatus),
+}
+
+impl Default for OperationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationStatus {
+    fn into(self) -> String {
+        match self {
+            OperationStatus::Fail => "FAIL".to_string(),
+            OperationStatus::Pending => "PENDING".to_string(),
+            OperationStatus::Submitted => "SUBMITTED".to_string(),
+            OperationStatus::Success => "SUCCESS".to_string(),
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OperationStatus::Fail => &"FAIL",
+            OperationStatus::Pending => &"PENDING",
+            OperationStatus::Submitted => &"SUBMITTED",
+            OperationStatus::Success => &"SUCCESS",
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAIL" => OperationStatus::Fail,
+            "PENDING" => OperationStatus::Pending,
+            "SUBMITTED" => OperationStatus::Submitted,
+            "SUCCESS" => OperationStatus::Success,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAIL" => OperationStatus::Fail,
+            "PENDING" => OperationStatus::Pending,
+            "SUBMITTED" => OperationStatus::Submitted,
+            "SUCCESS" => OperationStatus::Success,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex type that contains information about an operation that matches the criteria that you specified in a <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_ListOperations.html">ListOperations</a> request.</p>
@@ -819,7 +1788,343 @@ pub struct OperationSummary {
     /// <p><p>The status of the operation. Values include the following:</p> <ul> <li> <p> <b>SUBMITTED</b>: This is the initial state immediately after you submit a request.</p> </li> <li> <p> <b>PENDING</b>: AWS Cloud Map is performing the operation.</p> </li> <li> <p> <b>SUCCESS</b>: The operation succeeded.</p> </li> <li> <p> <b>FAIL</b>: The operation failed. For the failure reason, see <code>ErrorMessage</code>.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OperationStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationTargetType {
+    Instance,
+    Namespace,
+    Service,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationTargetType),
+}
+
+impl Default for OperationTargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationTargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationTargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationTargetType {
+    fn into(self) -> String {
+        match self {
+            OperationTargetType::Instance => "INSTANCE".to_string(),
+            OperationTargetType::Namespace => "NAMESPACE".to_string(),
+            OperationTargetType::Service => "SERVICE".to_string(),
+            OperationTargetType::UnknownVariant(UnknownOperationTargetType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationTargetType {
+    fn into(self) -> &'a str {
+        match self {
+            OperationTargetType::Instance => &"INSTANCE",
+            OperationTargetType::Namespace => &"NAMESPACE",
+            OperationTargetType::Service => &"SERVICE",
+            OperationTargetType::UnknownVariant(UnknownOperationTargetType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OperationTargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSTANCE" => OperationTargetType::Instance,
+            "NAMESPACE" => OperationTargetType::Namespace,
+            "SERVICE" => OperationTargetType::Service,
+            _ => OperationTargetType::UnknownVariant(UnknownOperationTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationTargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSTANCE" => OperationTargetType::Instance,
+            "NAMESPACE" => OperationTargetType::Namespace,
+            "SERVICE" => OperationTargetType::Service,
+            _ => OperationTargetType::UnknownVariant(UnknownOperationTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationTargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationTargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationTargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationType {
+    CreateNamespace,
+    DeleteNamespace,
+    DeregisterInstance,
+    RegisterInstance,
+    UpdateService,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationType),
+}
+
+impl Default for OperationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        match self {
+            OperationType::CreateNamespace => "CREATE_NAMESPACE".to_string(),
+            OperationType::DeleteNamespace => "DELETE_NAMESPACE".to_string(),
+            OperationType::DeregisterInstance => "DEREGISTER_INSTANCE".to_string(),
+            OperationType::RegisterInstance => "REGISTER_INSTANCE".to_string(),
+            OperationType::UpdateService => "UPDATE_SERVICE".to_string(),
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationType {
+    fn into(self) -> &'a str {
+        match self {
+            OperationType::CreateNamespace => &"CREATE_NAMESPACE",
+            OperationType::DeleteNamespace => &"DELETE_NAMESPACE",
+            OperationType::DeregisterInstance => &"DEREGISTER_INSTANCE",
+            OperationType::RegisterInstance => &"REGISTER_INSTANCE",
+            OperationType::UpdateService => &"UPDATE_SERVICE",
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_NAMESPACE" => OperationType::CreateNamespace,
+            "DELETE_NAMESPACE" => OperationType::DeleteNamespace,
+            "DEREGISTER_INSTANCE" => OperationType::DeregisterInstance,
+            "REGISTER_INSTANCE" => OperationType::RegisterInstance,
+            "UPDATE_SERVICE" => OperationType::UpdateService,
+            _ => OperationType::UnknownVariant(UnknownOperationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_NAMESPACE" => OperationType::CreateNamespace,
+            "DELETE_NAMESPACE" => OperationType::DeleteNamespace,
+            "DEREGISTER_INSTANCE" => OperationType::DeregisterInstance,
+            "REGISTER_INSTANCE" => OperationType::RegisterInstance,
+            "UPDATE_SERVICE" => OperationType::UpdateService,
+            _ => OperationType::UnknownVariant(UnknownOperationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecordType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecordType {
+    A,
+    Aaaa,
+    Cname,
+    Srv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecordType),
+}
+
+impl Default for RecordType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecordType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecordType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecordType {
+    fn into(self) -> String {
+        match self {
+            RecordType::A => "A".to_string(),
+            RecordType::Aaaa => "AAAA".to_string(),
+            RecordType::Cname => "CNAME".to_string(),
+            RecordType::Srv => "SRV".to_string(),
+            RecordType::UnknownVariant(UnknownRecordType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecordType {
+    fn into(self) -> &'a str {
+        match self {
+            RecordType::A => &"A",
+            RecordType::Aaaa => &"AAAA",
+            RecordType::Cname => &"CNAME",
+            RecordType::Srv => &"SRV",
+            RecordType::UnknownVariant(UnknownRecordType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecordType {
+    fn from(name: &str) -> Self {
+        match name {
+            "A" => RecordType::A,
+            "AAAA" => RecordType::Aaaa,
+            "CNAME" => RecordType::Cname,
+            "SRV" => RecordType::Srv,
+            _ => RecordType::UnknownVariant(UnknownRecordType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecordType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "A" => RecordType::A,
+            "AAAA" => RecordType::Aaaa,
+            "CNAME" => RecordType::Cname,
+            "SRV" => RecordType::Srv,
+            _ => RecordType::UnknownVariant(UnknownRecordType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecordType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecordType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -847,6 +2152,106 @@ pub struct RegisterInstanceResponse {
     #[serde(rename = "OperationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRoutingPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RoutingPolicy {
+    Multivalue,
+    Weighted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRoutingPolicy),
+}
+
+impl Default for RoutingPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RoutingPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RoutingPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RoutingPolicy {
+    fn into(self) -> String {
+        match self {
+            RoutingPolicy::Multivalue => "MULTIVALUE".to_string(),
+            RoutingPolicy::Weighted => "WEIGHTED".to_string(),
+            RoutingPolicy::UnknownVariant(UnknownRoutingPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RoutingPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            RoutingPolicy::Multivalue => &"MULTIVALUE",
+            RoutingPolicy::Weighted => &"WEIGHTED",
+            RoutingPolicy::UnknownVariant(UnknownRoutingPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RoutingPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "MULTIVALUE" => RoutingPolicy::Multivalue,
+            "WEIGHTED" => RoutingPolicy::Weighted,
+            _ => RoutingPolicy::UnknownVariant(UnknownRoutingPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RoutingPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MULTIVALUE" => RoutingPolicy::Multivalue,
+            "WEIGHTED" => RoutingPolicy::Weighted,
+            _ => RoutingPolicy::UnknownVariant(UnknownRoutingPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoutingPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RoutingPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RoutingPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex type that contains information about the specified service.</p>
@@ -923,13 +2328,113 @@ pub struct ServiceFilter {
     /// <p><p>The operator that you want to use to determine whether a service is returned by <code>ListServices</code>. Valid values for <code>Condition</code> include the following:</p> <ul> <li> <p> <code>EQ</code>: When you specify <code>EQ</code>, specify one namespace ID for <code>Values</code>. <code>EQ</code> is the default condition and can be omitted.</p> </li> <li> <p> <code>IN</code>: When you specify <code>IN</code>, specify a list of the IDs for the namespaces that you want <code>ListServices</code> to return a list of services for.</p> </li> <li> <p> <code>BETWEEN</code>: Not applicable.</p> </li> </ul></p>
     #[serde(rename = "Condition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub condition: Option<String>,
+    pub condition: Option<FilterCondition>,
     /// <p>Specify <code>NAMESPACE_ID</code>.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: ServiceFilterName,
     /// <p>The values that are applicable to the value that you specify for <code>Condition</code> to filter the list of services.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceFilterName {
+    NamespaceId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceFilterName),
+}
+
+impl Default for ServiceFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceFilterName {
+    fn into(self) -> String {
+        match self {
+            ServiceFilterName::NamespaceId => "NAMESPACE_ID".to_string(),
+            ServiceFilterName::UnknownVariant(UnknownServiceFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceFilterName::NamespaceId => &"NAMESPACE_ID",
+            ServiceFilterName::UnknownVariant(UnknownServiceFilterName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ServiceFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "NAMESPACE_ID" => ServiceFilterName::NamespaceId,
+            _ => ServiceFilterName::UnknownVariant(UnknownServiceFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NAMESPACE_ID" => ServiceFilterName::NamespaceId,
+            _ => ServiceFilterName::UnknownVariant(UnknownServiceFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServiceFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex type that contains information about a specified service.</p>
@@ -1023,7 +2528,7 @@ pub struct UpdateInstanceCustomHealthStatusRequest {
     pub service_id: String,
     /// <p>The new status of the instance, <code>HEALTHY</code> or <code>UNHEALTHY</code>.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: CustomHealthStatus,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

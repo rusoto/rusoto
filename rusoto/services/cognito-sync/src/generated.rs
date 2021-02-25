@@ -44,6 +44,121 @@ pub struct BulkPublishResponse {
     pub identity_pool_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBulkPublishStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BulkPublishStatus {
+    Failed,
+    InProgress,
+    NotStarted,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBulkPublishStatus),
+}
+
+impl Default for BulkPublishStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BulkPublishStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BulkPublishStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BulkPublishStatus {
+    fn into(self) -> String {
+        match self {
+            BulkPublishStatus::Failed => "FAILED".to_string(),
+            BulkPublishStatus::InProgress => "IN_PROGRESS".to_string(),
+            BulkPublishStatus::NotStarted => "NOT_STARTED".to_string(),
+            BulkPublishStatus::Succeeded => "SUCCEEDED".to_string(),
+            BulkPublishStatus::UnknownVariant(UnknownBulkPublishStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BulkPublishStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BulkPublishStatus::Failed => &"FAILED",
+            BulkPublishStatus::InProgress => &"IN_PROGRESS",
+            BulkPublishStatus::NotStarted => &"NOT_STARTED",
+            BulkPublishStatus::Succeeded => &"SUCCEEDED",
+            BulkPublishStatus::UnknownVariant(UnknownBulkPublishStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BulkPublishStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => BulkPublishStatus::Failed,
+            "IN_PROGRESS" => BulkPublishStatus::InProgress,
+            "NOT_STARTED" => BulkPublishStatus::NotStarted,
+            "SUCCEEDED" => BulkPublishStatus::Succeeded,
+            _ => BulkPublishStatus::UnknownVariant(UnknownBulkPublishStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BulkPublishStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => BulkPublishStatus::Failed,
+            "IN_PROGRESS" => BulkPublishStatus::InProgress,
+            "NOT_STARTED" => BulkPublishStatus::NotStarted,
+            "SUCCEEDED" => BulkPublishStatus::Succeeded,
+            _ => BulkPublishStatus::UnknownVariant(UnknownBulkPublishStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BulkPublishStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BulkPublishStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BulkPublishStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration options for configure Cognito streams.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoStreams {
@@ -58,7 +173,7 @@ pub struct CognitoStreams {
     /// <p>Status of the Cognito streams. Valid values are: <p>ENABLED - Streaming of updates to identity pool is enabled.</p> <p>DISABLED - Streaming of updates to identity pool is disabled. Bulk publish will also fail if StreamingStatus is DISABLED.</p></p>
     #[serde(rename = "StreamingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub streaming_status: Option<String>,
+    pub streaming_status: Option<StreamingStatus>,
 }
 
 /// <p>A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
@@ -210,7 +325,7 @@ pub struct GetBulkPublishDetailsResponse {
     /// <p>Status of the last bulk publish operation, valid values are: <p>NOT<em>STARTED - No bulk publish has been requested for this identity pool</p> <p>IN</em>PROGRESS - Data is being published to the configured stream</p> <p>SUCCEEDED - All data for the identity pool has been published to the configured stream</p> <p>FAILED - Some portion of the data has failed to publish, check FailureMessage for the cause.</p></p>
     #[serde(rename = "BulkPublishStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bulk_publish_status: Option<String>,
+    pub bulk_publish_status: Option<BulkPublishStatus>,
     /// <p>If BulkPublishStatus is FAILED this field will contain the error message that caused the bulk publish to fail.</p>
     #[serde(rename = "FailureMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -462,6 +577,218 @@ pub struct ListRecordsResponse {
     pub sync_session_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Operation {
+    Remove,
+    Replace,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperation),
+}
+
+impl Default for Operation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Operation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Operation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Operation {
+    fn into(self) -> String {
+        match self {
+            Operation::Remove => "remove".to_string(),
+            Operation::Replace => "replace".to_string(),
+            Operation::UnknownVariant(UnknownOperation { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Operation {
+    fn into(self) -> &'a str {
+        match self {
+            Operation::Remove => &"remove",
+            Operation::Replace => &"replace",
+            Operation::UnknownVariant(UnknownOperation { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Operation {
+    fn from(name: &str) -> Self {
+        match name {
+            "remove" => Operation::Remove,
+            "replace" => Operation::Replace,
+            _ => Operation::UnknownVariant(UnknownOperation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Operation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "remove" => Operation::Remove,
+            "replace" => Operation::Replace,
+            _ => Operation::UnknownVariant(UnknownOperation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Operation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Operation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Operation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Platform {
+    Adm,
+    Apns,
+    ApnsSandbox,
+    Gcm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatform),
+}
+
+impl Default for Platform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Platform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Platform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Platform {
+    fn into(self) -> String {
+        match self {
+            Platform::Adm => "ADM".to_string(),
+            Platform::Apns => "APNS".to_string(),
+            Platform::ApnsSandbox => "APNS_SANDBOX".to_string(),
+            Platform::Gcm => "GCM".to_string(),
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Platform {
+    fn into(self) -> &'a str {
+        match self {
+            Platform::Adm => &"ADM",
+            Platform::Apns => &"APNS",
+            Platform::ApnsSandbox => &"APNS_SANDBOX",
+            Platform::Gcm => &"GCM",
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Platform {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADM" => Platform::Adm,
+            "APNS" => Platform::Apns,
+            "APNS_SANDBOX" => Platform::ApnsSandbox,
+            "GCM" => Platform::Gcm,
+            _ => Platform::UnknownVariant(UnknownPlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Platform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADM" => Platform::Adm,
+            "APNS" => Platform::Apns,
+            "APNS_SANDBOX" => Platform::ApnsSandbox,
+            "GCM" => Platform::Gcm,
+            _ => Platform::UnknownVariant(UnknownPlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Platform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Platform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Platform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration options to be applied to the identity pool.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PushSync {
@@ -518,7 +845,7 @@ pub struct RecordPatch {
     pub key: String,
     /// <p>An operation, either replace or remove.</p>
     #[serde(rename = "Op")]
-    pub op: String,
+    pub op: Operation,
     /// <p>Last known server sync count for this record. Set to 0 if unknown.</p>
     #[serde(rename = "SyncCount")]
     pub sync_count: i64,
@@ -540,7 +867,7 @@ pub struct RegisterDeviceRequest {
     pub identity_pool_id: String,
     /// <p>The SNS platform type (e.g. GCM, SDM, APNS, APNS_SANDBOX).</p>
     #[serde(rename = "Platform")]
-    pub platform: String,
+    pub platform: Platform,
     /// <p>The push token.</p>
     #[serde(rename = "Token")]
     pub token: String,
@@ -601,6 +928,106 @@ pub struct SetIdentityPoolConfigurationResponse {
     #[serde(rename = "PushSync")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub push_sync: Option<PushSync>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamingStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamingStatus),
+}
+
+impl Default for StreamingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamingStatus {
+    fn into(self) -> String {
+        match self {
+            StreamingStatus::Disabled => "DISABLED".to_string(),
+            StreamingStatus::Enabled => "ENABLED".to_string(),
+            StreamingStatus::UnknownVariant(UnknownStreamingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StreamingStatus::Disabled => &"DISABLED",
+            StreamingStatus::Enabled => &"ENABLED",
+            StreamingStatus::UnknownVariant(UnknownStreamingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => StreamingStatus::Disabled,
+            "ENABLED" => StreamingStatus::Enabled,
+            _ => StreamingStatus::UnknownVariant(UnknownStreamingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => StreamingStatus::Disabled,
+            "ENABLED" => StreamingStatus::Enabled,
+            _ => StreamingStatus::UnknownVariant(UnknownStreamingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StreamingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A request to SubscribeToDatasetRequest.</p>

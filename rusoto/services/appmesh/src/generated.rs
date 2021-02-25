@@ -709,11 +709,111 @@ pub struct Duration {
     /// <p>A unit of time.</p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<DurationUnit>,
     /// <p>A number of time units.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDurationUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DurationUnit {
+    Ms,
+    S,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDurationUnit),
+}
+
+impl Default for DurationUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DurationUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DurationUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DurationUnit {
+    fn into(self) -> String {
+        match self {
+            DurationUnit::Ms => "ms".to_string(),
+            DurationUnit::S => "s".to_string(),
+            DurationUnit::UnknownVariant(UnknownDurationUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DurationUnit {
+    fn into(self) -> &'a str {
+        match self {
+            DurationUnit::Ms => &"ms",
+            DurationUnit::S => &"s",
+            DurationUnit::UnknownVariant(UnknownDurationUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DurationUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "ms" => DurationUnit::Ms,
+            "s" => DurationUnit::S,
+            _ => DurationUnit::UnknownVariant(UnknownDurationUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DurationUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ms" => DurationUnit::Ms,
+            "s" => DurationUnit::S,
+            _ => DurationUnit::UnknownVariant(UnknownDurationUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DurationUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DurationUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DurationUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the egress filter rules for a service mesh.</p>
@@ -721,7 +821,111 @@ pub struct Duration {
 pub struct EgressFilter {
     /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows egress only from virtual nodes to other defined resources in the service mesh (and any traffic to <code>*.amazonaws.com</code> for AWS API calls). You can set the egress filter type to <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the service mesh.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: EgressFilterType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEgressFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EgressFilterType {
+    AllowAll,
+    DropAll,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEgressFilterType),
+}
+
+impl Default for EgressFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EgressFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EgressFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EgressFilterType {
+    fn into(self) -> String {
+        match self {
+            EgressFilterType::AllowAll => "ALLOW_ALL".to_string(),
+            EgressFilterType::DropAll => "DROP_ALL".to_string(),
+            EgressFilterType::UnknownVariant(UnknownEgressFilterType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EgressFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            EgressFilterType::AllowAll => &"ALLOW_ALL",
+            EgressFilterType::DropAll => &"DROP_ALL",
+            EgressFilterType::UnknownVariant(UnknownEgressFilterType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EgressFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW_ALL" => EgressFilterType::AllowAll,
+            "DROP_ALL" => EgressFilterType::DropAll,
+            _ => EgressFilterType::UnknownVariant(UnknownEgressFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EgressFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW_ALL" => EgressFilterType::AllowAll,
+            "DROP_ALL" => EgressFilterType::DropAll,
+            _ => EgressFilterType::UnknownVariant(UnknownEgressFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EgressFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EgressFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EgressFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents an access log file.</p>
@@ -811,7 +1015,117 @@ pub struct GatewayRouteSpec {
 pub struct GatewayRouteStatus {
     /// <p>The current status for the gateway route.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: GatewayRouteStatusCode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGatewayRouteStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GatewayRouteStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGatewayRouteStatusCode),
+}
+
+impl Default for GatewayRouteStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GatewayRouteStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GatewayRouteStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GatewayRouteStatusCode {
+    fn into(self) -> String {
+        match self {
+            GatewayRouteStatusCode::Active => "ACTIVE".to_string(),
+            GatewayRouteStatusCode::Deleted => "DELETED".to_string(),
+            GatewayRouteStatusCode::Inactive => "INACTIVE".to_string(),
+            GatewayRouteStatusCode::UnknownVariant(UnknownGatewayRouteStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GatewayRouteStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            GatewayRouteStatusCode::Active => &"ACTIVE",
+            GatewayRouteStatusCode::Deleted => &"DELETED",
+            GatewayRouteStatusCode::Inactive => &"INACTIVE",
+            GatewayRouteStatusCode::UnknownVariant(UnknownGatewayRouteStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GatewayRouteStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => GatewayRouteStatusCode::Active,
+            "DELETED" => GatewayRouteStatusCode::Deleted,
+            "INACTIVE" => GatewayRouteStatusCode::Inactive,
+            _ => GatewayRouteStatusCode::UnknownVariant(UnknownGatewayRouteStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GatewayRouteStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => GatewayRouteStatusCode::Active,
+            "DELETED" => GatewayRouteStatusCode::Deleted,
+            "INACTIVE" => GatewayRouteStatusCode::Inactive,
+            _ => GatewayRouteStatusCode::UnknownVariant(UnknownGatewayRouteStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GatewayRouteStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GatewayRouteStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GatewayRouteStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a gateway route target.</p>
@@ -864,7 +1178,7 @@ pub struct GrpcRetryPolicy {
     /// <p>Specify at least one of the valid values.</p>
     #[serde(rename = "grpcRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub grpc_retry_events: Option<Vec<String>>,
+    pub grpc_retry_events: Option<Vec<GrpcRetryPolicyEvent>>,
     /// <p><p>Specify at least one of the following values.</p> <ul> <li> <p> <b>server-error</b> – HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511</p> </li> <li> <p> <b>gateway-error</b> – HTTP status codes 502, 503, and 504</p> </li> <li> <p> <b>client-error</b> – HTTP status code 409</p> </li> <li> <p> <b>stream-error</b> – Retry on refused stream</p> </li> </ul></p>
     #[serde(rename = "httpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -878,7 +1192,126 @@ pub struct GrpcRetryPolicy {
     /// <p>Specify a valid value. The event occurs before any processing of a request has started and is encountered when the upstream is temporarily or permanently unavailable.</p>
     #[serde(rename = "tcpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tcp_retry_events: Option<Vec<String>>,
+    pub tcp_retry_events: Option<Vec<TcpRetryPolicyEvent>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGrpcRetryPolicyEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GrpcRetryPolicyEvent {
+    Cancelled,
+    DeadlineExceeded,
+    Internal,
+    ResourceExhausted,
+    Unavailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGrpcRetryPolicyEvent),
+}
+
+impl Default for GrpcRetryPolicyEvent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GrpcRetryPolicyEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GrpcRetryPolicyEvent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GrpcRetryPolicyEvent {
+    fn into(self) -> String {
+        match self {
+            GrpcRetryPolicyEvent::Cancelled => "cancelled".to_string(),
+            GrpcRetryPolicyEvent::DeadlineExceeded => "deadline-exceeded".to_string(),
+            GrpcRetryPolicyEvent::Internal => "internal".to_string(),
+            GrpcRetryPolicyEvent::ResourceExhausted => "resource-exhausted".to_string(),
+            GrpcRetryPolicyEvent::Unavailable => "unavailable".to_string(),
+            GrpcRetryPolicyEvent::UnknownVariant(UnknownGrpcRetryPolicyEvent {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GrpcRetryPolicyEvent {
+    fn into(self) -> &'a str {
+        match self {
+            GrpcRetryPolicyEvent::Cancelled => &"cancelled",
+            GrpcRetryPolicyEvent::DeadlineExceeded => &"deadline-exceeded",
+            GrpcRetryPolicyEvent::Internal => &"internal",
+            GrpcRetryPolicyEvent::ResourceExhausted => &"resource-exhausted",
+            GrpcRetryPolicyEvent::Unavailable => &"unavailable",
+            GrpcRetryPolicyEvent::UnknownVariant(UnknownGrpcRetryPolicyEvent {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GrpcRetryPolicyEvent {
+    fn from(name: &str) -> Self {
+        match name {
+            "cancelled" => GrpcRetryPolicyEvent::Cancelled,
+            "deadline-exceeded" => GrpcRetryPolicyEvent::DeadlineExceeded,
+            "internal" => GrpcRetryPolicyEvent::Internal,
+            "resource-exhausted" => GrpcRetryPolicyEvent::ResourceExhausted,
+            "unavailable" => GrpcRetryPolicyEvent::Unavailable,
+            _ => GrpcRetryPolicyEvent::UnknownVariant(UnknownGrpcRetryPolicyEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GrpcRetryPolicyEvent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cancelled" => GrpcRetryPolicyEvent::Cancelled,
+            "deadline-exceeded" => GrpcRetryPolicyEvent::DeadlineExceeded,
+            "internal" => GrpcRetryPolicyEvent::Internal,
+            "resource-exhausted" => GrpcRetryPolicyEvent::ResourceExhausted,
+            "unavailable" => GrpcRetryPolicyEvent::Unavailable,
+            _ => GrpcRetryPolicyEvent::UnknownVariant(UnknownGrpcRetryPolicyEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GrpcRetryPolicyEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GrpcRetryPolicyEvent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GrpcRetryPolicyEvent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a gRPC route type.</p>
@@ -1023,7 +1456,7 @@ pub struct HealthCheckPolicy {
     pub port: Option<i64>,
     /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health Checking Protocol</a>.</p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: PortProtocol,
     /// <p>The amount of time to wait when receiving a response from the health check, in milliseconds.</p>
     #[serde(rename = "timeoutMillis")]
     pub timeout_millis: i64,
@@ -1059,6 +1492,141 @@ pub struct HttpGatewayRouteMatch {
     pub prefix: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHttpMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HttpMethod {
+    Connect,
+    Delete,
+    Get,
+    Head,
+    Options,
+    Patch,
+    Post,
+    Put,
+    Trace,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHttpMethod),
+}
+
+impl Default for HttpMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HttpMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HttpMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HttpMethod {
+    fn into(self) -> String {
+        match self {
+            HttpMethod::Connect => "CONNECT".to_string(),
+            HttpMethod::Delete => "DELETE".to_string(),
+            HttpMethod::Get => "GET".to_string(),
+            HttpMethod::Head => "HEAD".to_string(),
+            HttpMethod::Options => "OPTIONS".to_string(),
+            HttpMethod::Patch => "PATCH".to_string(),
+            HttpMethod::Post => "POST".to_string(),
+            HttpMethod::Put => "PUT".to_string(),
+            HttpMethod::Trace => "TRACE".to_string(),
+            HttpMethod::UnknownVariant(UnknownHttpMethod { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HttpMethod {
+    fn into(self) -> &'a str {
+        match self {
+            HttpMethod::Connect => &"CONNECT",
+            HttpMethod::Delete => &"DELETE",
+            HttpMethod::Get => &"GET",
+            HttpMethod::Head => &"HEAD",
+            HttpMethod::Options => &"OPTIONS",
+            HttpMethod::Patch => &"PATCH",
+            HttpMethod::Post => &"POST",
+            HttpMethod::Put => &"PUT",
+            HttpMethod::Trace => &"TRACE",
+            HttpMethod::UnknownVariant(UnknownHttpMethod { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HttpMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECT" => HttpMethod::Connect,
+            "DELETE" => HttpMethod::Delete,
+            "GET" => HttpMethod::Get,
+            "HEAD" => HttpMethod::Head,
+            "OPTIONS" => HttpMethod::Options,
+            "PATCH" => HttpMethod::Patch,
+            "POST" => HttpMethod::Post,
+            "PUT" => HttpMethod::Put,
+            "TRACE" => HttpMethod::Trace,
+            _ => HttpMethod::UnknownVariant(UnknownHttpMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HttpMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECT" => HttpMethod::Connect,
+            "DELETE" => HttpMethod::Delete,
+            "GET" => HttpMethod::Get,
+            "HEAD" => HttpMethod::Head,
+            "OPTIONS" => HttpMethod::Options,
+            "PATCH" => HttpMethod::Patch,
+            "POST" => HttpMethod::Post,
+            "PUT" => HttpMethod::Put,
+            "TRACE" => HttpMethod::Trace,
+            _ => HttpMethod::UnknownVariant(UnknownHttpMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HttpMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HttpMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HttpMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRetryPolicy {
@@ -1075,7 +1643,7 @@ pub struct HttpRetryPolicy {
     /// <p>Specify a valid value. The event occurs before any processing of a request has started and is encountered when the upstream is temporarily or permanently unavailable.</p>
     #[serde(rename = "tcpRetryEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tcp_retry_events: Option<Vec<String>>,
+    pub tcp_retry_events: Option<Vec<TcpRetryPolicyEvent>>,
 }
 
 /// <p>An object that represents an HTTP or HTTP/2 route type.</p>
@@ -1131,14 +1699,114 @@ pub struct HttpRouteMatch {
     /// <p>The client request method to match on. Specify only one.</p>
     #[serde(rename = "method")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub method: Option<String>,
+    pub method: Option<HttpMethod>,
     /// <p>Specifies the path to match requests with. This parameter must always start with <code>/</code>, which by itself matches all requests to the virtual service name. You can also match for path-based routing of requests. For example, if your virtual service name is <code>my-service.local</code> and you want the route to match requests to <code>my-service.local/metrics</code>, your prefix should be <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
     pub prefix: String,
     /// <p>The client request scheme to match on. Specify only one.</p>
     #[serde(rename = "scheme")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scheme: Option<String>,
+    pub scheme: Option<HttpScheme>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHttpScheme {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HttpScheme {
+    Http,
+    Https,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHttpScheme),
+}
+
+impl Default for HttpScheme {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HttpScheme {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HttpScheme {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HttpScheme {
+    fn into(self) -> String {
+        match self {
+            HttpScheme::Http => "http".to_string(),
+            HttpScheme::Https => "https".to_string(),
+            HttpScheme::UnknownVariant(UnknownHttpScheme { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HttpScheme {
+    fn into(self) -> &'a str {
+        match self {
+            HttpScheme::Http => &"http",
+            HttpScheme::Https => &"https",
+            HttpScheme::UnknownVariant(UnknownHttpScheme { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HttpScheme {
+    fn from(name: &str) -> Self {
+        match name {
+            "http" => HttpScheme::Http,
+            "https" => HttpScheme::Https,
+            _ => HttpScheme::UnknownVariant(UnknownHttpScheme {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HttpScheme {
+    fn from(name: String) -> Self {
+        match &*name {
+            "http" => HttpScheme::Http,
+            "https" => HttpScheme::Https,
+            _ => HttpScheme::UnknownVariant(UnknownHttpScheme { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HttpScheme {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HttpScheme {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HttpScheme {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents types of timeouts. </p>
@@ -1473,7 +2141,7 @@ pub struct ListenerTls {
     pub certificate: ListenerTlsCertificate,
     /// <p><p>Specify one of the following modes.</p> <ul> <li> <p> <b/>STRICT – Listener only accepts connections with TLS enabled. </p> </li> <li> <p> <b/>PERMISSIVE – Listener accepts connections with or without TLS enabled.</p> </li> <li> <p> <b/>DISABLED – Listener only accepts connections without TLS. </p> </li> </ul></p>
     #[serde(rename = "mode")]
-    pub mode: String,
+    pub mode: ListenerTlsMode,
 }
 
 /// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
@@ -1506,6 +2174,111 @@ pub struct ListenerTlsFileCertificate {
     /// <p>The private key for a certificate stored on the file system of the virtual node that the proxy is running on.</p>
     #[serde(rename = "privateKey")]
     pub private_key: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListenerTlsMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListenerTlsMode {
+    Disabled,
+    Permissive,
+    Strict,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListenerTlsMode),
+}
+
+impl Default for ListenerTlsMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListenerTlsMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListenerTlsMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListenerTlsMode {
+    fn into(self) -> String {
+        match self {
+            ListenerTlsMode::Disabled => "DISABLED".to_string(),
+            ListenerTlsMode::Permissive => "PERMISSIVE".to_string(),
+            ListenerTlsMode::Strict => "STRICT".to_string(),
+            ListenerTlsMode::UnknownVariant(UnknownListenerTlsMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListenerTlsMode {
+    fn into(self) -> &'a str {
+        match self {
+            ListenerTlsMode::Disabled => &"DISABLED",
+            ListenerTlsMode::Permissive => &"PERMISSIVE",
+            ListenerTlsMode::Strict => &"STRICT",
+            ListenerTlsMode::UnknownVariant(UnknownListenerTlsMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListenerTlsMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ListenerTlsMode::Disabled,
+            "PERMISSIVE" => ListenerTlsMode::Permissive,
+            "STRICT" => ListenerTlsMode::Strict,
+            _ => ListenerTlsMode::UnknownVariant(UnknownListenerTlsMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListenerTlsMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ListenerTlsMode::Disabled,
+            "PERMISSIVE" => ListenerTlsMode::Permissive,
+            "STRICT" => ListenerTlsMode::Strict,
+            _ => ListenerTlsMode::UnknownVariant(UnknownListenerTlsMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListenerTlsMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListenerTlsMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ListenerTlsMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the logging information for a virtual node.</p>
@@ -1589,7 +2362,113 @@ pub struct MeshStatus {
     /// <p>The current mesh status.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MeshStatusCode>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMeshStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MeshStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMeshStatusCode),
+}
+
+impl Default for MeshStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MeshStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MeshStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MeshStatusCode {
+    fn into(self) -> String {
+        match self {
+            MeshStatusCode::Active => "ACTIVE".to_string(),
+            MeshStatusCode::Deleted => "DELETED".to_string(),
+            MeshStatusCode::Inactive => "INACTIVE".to_string(),
+            MeshStatusCode::UnknownVariant(UnknownMeshStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MeshStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            MeshStatusCode::Active => &"ACTIVE",
+            MeshStatusCode::Deleted => &"DELETED",
+            MeshStatusCode::Inactive => &"INACTIVE",
+            MeshStatusCode::UnknownVariant(UnknownMeshStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MeshStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => MeshStatusCode::Active,
+            "DELETED" => MeshStatusCode::Deleted,
+            "INACTIVE" => MeshStatusCode::Inactive,
+            _ => MeshStatusCode::UnknownVariant(UnknownMeshStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MeshStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => MeshStatusCode::Active,
+            "DELETED" => MeshStatusCode::Deleted,
+            "INACTIVE" => MeshStatusCode::Inactive,
+            _ => MeshStatusCode::UnknownVariant(UnknownMeshStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MeshStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MeshStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MeshStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the outlier detection for a virtual node's listener.</p>
@@ -1617,7 +2496,117 @@ pub struct PortMapping {
     pub port: i64,
     /// <p>The protocol used for the port mapping. Specify one protocol.</p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: PortProtocol,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPortProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PortProtocol {
+    Grpc,
+    Http,
+    Http2,
+    Tcp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPortProtocol),
+}
+
+impl Default for PortProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PortProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PortProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PortProtocol {
+    fn into(self) -> String {
+        match self {
+            PortProtocol::Grpc => "grpc".to_string(),
+            PortProtocol::Http => "http".to_string(),
+            PortProtocol::Http2 => "http2".to_string(),
+            PortProtocol::Tcp => "tcp".to_string(),
+            PortProtocol::UnknownVariant(UnknownPortProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PortProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            PortProtocol::Grpc => &"grpc",
+            PortProtocol::Http => &"http",
+            PortProtocol::Http2 => &"http2",
+            PortProtocol::Tcp => &"tcp",
+            PortProtocol::UnknownVariant(UnknownPortProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PortProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "grpc" => PortProtocol::Grpc,
+            "http" => PortProtocol::Http,
+            "http2" => PortProtocol::Http2,
+            "tcp" => PortProtocol::Tcp,
+            _ => PortProtocol::UnknownVariant(UnknownPortProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PortProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "grpc" => PortProtocol::Grpc,
+            "http" => PortProtocol::Http,
+            "http2" => PortProtocol::Http2,
+            "tcp" => PortProtocol::Tcp,
+            _ => PortProtocol::UnknownVariant(UnknownPortProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PortProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PortProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PortProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents metadata for a resource.</p>
@@ -1735,7 +2724,113 @@ pub struct RouteSpec {
 pub struct RouteStatus {
     /// <p>The current status for the route.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: RouteStatusCode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRouteStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RouteStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRouteStatusCode),
+}
+
+impl Default for RouteStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RouteStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RouteStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RouteStatusCode {
+    fn into(self) -> String {
+        match self {
+            RouteStatusCode::Active => "ACTIVE".to_string(),
+            RouteStatusCode::Deleted => "DELETED".to_string(),
+            RouteStatusCode::Inactive => "INACTIVE".to_string(),
+            RouteStatusCode::UnknownVariant(UnknownRouteStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RouteStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            RouteStatusCode::Active => &"ACTIVE",
+            RouteStatusCode::Deleted => &"DELETED",
+            RouteStatusCode::Inactive => &"INACTIVE",
+            RouteStatusCode::UnknownVariant(UnknownRouteStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RouteStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => RouteStatusCode::Active,
+            "DELETED" => RouteStatusCode::Deleted,
+            "INACTIVE" => RouteStatusCode::Inactive,
+            _ => RouteStatusCode::UnknownVariant(UnknownRouteStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RouteStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => RouteStatusCode::Active,
+            "DELETED" => RouteStatusCode::Deleted,
+            "INACTIVE" => RouteStatusCode::Inactive,
+            _ => RouteStatusCode::UnknownVariant(UnknownRouteStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RouteStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RouteStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RouteStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the service discovery information for a virtual node.</p>
@@ -1778,6 +2873,105 @@ pub struct TagResourceInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTcpRetryPolicyEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TcpRetryPolicyEvent {
+    ConnectionError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTcpRetryPolicyEvent),
+}
+
+impl Default for TcpRetryPolicyEvent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TcpRetryPolicyEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TcpRetryPolicyEvent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TcpRetryPolicyEvent {
+    fn into(self) -> String {
+        match self {
+            TcpRetryPolicyEvent::ConnectionError => "connection-error".to_string(),
+            TcpRetryPolicyEvent::UnknownVariant(UnknownTcpRetryPolicyEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TcpRetryPolicyEvent {
+    fn into(self) -> &'a str {
+        match self {
+            TcpRetryPolicyEvent::ConnectionError => &"connection-error",
+            TcpRetryPolicyEvent::UnknownVariant(UnknownTcpRetryPolicyEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TcpRetryPolicyEvent {
+    fn from(name: &str) -> Self {
+        match name {
+            "connection-error" => TcpRetryPolicyEvent::ConnectionError,
+            _ => TcpRetryPolicyEvent::UnknownVariant(UnknownTcpRetryPolicyEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TcpRetryPolicyEvent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "connection-error" => TcpRetryPolicyEvent::ConnectionError,
+            _ => TcpRetryPolicyEvent::UnknownVariant(UnknownTcpRetryPolicyEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TcpRetryPolicyEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TcpRetryPolicyEvent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TcpRetryPolicyEvent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>An object that represents a TCP route type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -2196,7 +3390,7 @@ pub struct VirtualGatewayHealthCheckPolicy {
     pub port: Option<i64>,
     /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health Checking Protocol</a>.</p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: VirtualGatewayPortProtocol,
     /// <p>The amount of time to wait when receiving a response from the health check, in milliseconds.</p>
     #[serde(rename = "timeoutMillis")]
     pub timeout_millis: i64,
@@ -2253,7 +3447,7 @@ pub struct VirtualGatewayListenerTls {
     pub certificate: VirtualGatewayListenerTlsCertificate,
     /// <p><p>Specify one of the following modes.</p> <ul> <li> <p> <b/>STRICT – Listener only accepts connections with TLS enabled. </p> </li> <li> <p> <b/>PERMISSIVE – Listener accepts connections with or without TLS enabled.</p> </li> <li> <p> <b/>DISABLED – Listener only accepts connections without TLS. </p> </li> </ul></p>
     #[serde(rename = "mode")]
-    pub mode: String,
+    pub mode: VirtualGatewayListenerTlsMode,
 }
 
 /// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
@@ -2288,6 +3482,119 @@ pub struct VirtualGatewayListenerTlsFileCertificate {
     pub private_key: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualGatewayListenerTlsMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualGatewayListenerTlsMode {
+    Disabled,
+    Permissive,
+    Strict,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualGatewayListenerTlsMode),
+}
+
+impl Default for VirtualGatewayListenerTlsMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualGatewayListenerTlsMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualGatewayListenerTlsMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualGatewayListenerTlsMode {
+    fn into(self) -> String {
+        match self {
+            VirtualGatewayListenerTlsMode::Disabled => "DISABLED".to_string(),
+            VirtualGatewayListenerTlsMode::Permissive => "PERMISSIVE".to_string(),
+            VirtualGatewayListenerTlsMode::Strict => "STRICT".to_string(),
+            VirtualGatewayListenerTlsMode::UnknownVariant(
+                UnknownVirtualGatewayListenerTlsMode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualGatewayListenerTlsMode {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualGatewayListenerTlsMode::Disabled => &"DISABLED",
+            VirtualGatewayListenerTlsMode::Permissive => &"PERMISSIVE",
+            VirtualGatewayListenerTlsMode::Strict => &"STRICT",
+            VirtualGatewayListenerTlsMode::UnknownVariant(
+                UnknownVirtualGatewayListenerTlsMode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualGatewayListenerTlsMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => VirtualGatewayListenerTlsMode::Disabled,
+            "PERMISSIVE" => VirtualGatewayListenerTlsMode::Permissive,
+            "STRICT" => VirtualGatewayListenerTlsMode::Strict,
+            _ => VirtualGatewayListenerTlsMode::UnknownVariant(
+                UnknownVirtualGatewayListenerTlsMode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for VirtualGatewayListenerTlsMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => VirtualGatewayListenerTlsMode::Disabled,
+            "PERMISSIVE" => VirtualGatewayListenerTlsMode::Permissive,
+            "STRICT" => VirtualGatewayListenerTlsMode::Strict,
+            _ => VirtualGatewayListenerTlsMode::UnknownVariant(
+                UnknownVirtualGatewayListenerTlsMode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualGatewayListenerTlsMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VirtualGatewayListenerTlsMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualGatewayListenerTlsMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that represents logging information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayLogging {
@@ -2305,7 +3612,118 @@ pub struct VirtualGatewayPortMapping {
     pub port: i64,
     /// <p>The protocol used for the port mapping.</p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: VirtualGatewayPortProtocol,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualGatewayPortProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualGatewayPortProtocol {
+    Grpc,
+    Http,
+    Http2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualGatewayPortProtocol),
+}
+
+impl Default for VirtualGatewayPortProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualGatewayPortProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualGatewayPortProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualGatewayPortProtocol {
+    fn into(self) -> String {
+        match self {
+            VirtualGatewayPortProtocol::Grpc => "grpc".to_string(),
+            VirtualGatewayPortProtocol::Http => "http".to_string(),
+            VirtualGatewayPortProtocol::Http2 => "http2".to_string(),
+            VirtualGatewayPortProtocol::UnknownVariant(UnknownVirtualGatewayPortProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualGatewayPortProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualGatewayPortProtocol::Grpc => &"grpc",
+            VirtualGatewayPortProtocol::Http => &"http",
+            VirtualGatewayPortProtocol::Http2 => &"http2",
+            VirtualGatewayPortProtocol::UnknownVariant(UnknownVirtualGatewayPortProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualGatewayPortProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "grpc" => VirtualGatewayPortProtocol::Grpc,
+            "http" => VirtualGatewayPortProtocol::Http,
+            "http2" => VirtualGatewayPortProtocol::Http2,
+            _ => VirtualGatewayPortProtocol::UnknownVariant(UnknownVirtualGatewayPortProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualGatewayPortProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "grpc" => VirtualGatewayPortProtocol::Grpc,
+            "http" => VirtualGatewayPortProtocol::Http,
+            "http2" => VirtualGatewayPortProtocol::Http2,
+            _ => VirtualGatewayPortProtocol::UnknownVariant(UnknownVirtualGatewayPortProtocol {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualGatewayPortProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VirtualGatewayPortProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualGatewayPortProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a virtual gateway returned by a list operation.</p>
@@ -2359,7 +3777,117 @@ pub struct VirtualGatewaySpec {
 pub struct VirtualGatewayStatus {
     /// <p>The current status.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: VirtualGatewayStatusCode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualGatewayStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualGatewayStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualGatewayStatusCode),
+}
+
+impl Default for VirtualGatewayStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualGatewayStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualGatewayStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualGatewayStatusCode {
+    fn into(self) -> String {
+        match self {
+            VirtualGatewayStatusCode::Active => "ACTIVE".to_string(),
+            VirtualGatewayStatusCode::Deleted => "DELETED".to_string(),
+            VirtualGatewayStatusCode::Inactive => "INACTIVE".to_string(),
+            VirtualGatewayStatusCode::UnknownVariant(UnknownVirtualGatewayStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualGatewayStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualGatewayStatusCode::Active => &"ACTIVE",
+            VirtualGatewayStatusCode::Deleted => &"DELETED",
+            VirtualGatewayStatusCode::Inactive => &"INACTIVE",
+            VirtualGatewayStatusCode::UnknownVariant(UnknownVirtualGatewayStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualGatewayStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => VirtualGatewayStatusCode::Active,
+            "DELETED" => VirtualGatewayStatusCode::Deleted,
+            "INACTIVE" => VirtualGatewayStatusCode::Inactive,
+            _ => VirtualGatewayStatusCode::UnknownVariant(UnknownVirtualGatewayStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualGatewayStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => VirtualGatewayStatusCode::Active,
+            "DELETED" => VirtualGatewayStatusCode::Deleted,
+            "INACTIVE" => VirtualGatewayStatusCode::Inactive,
+            _ => VirtualGatewayStatusCode::UnknownVariant(UnknownVirtualGatewayStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualGatewayStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VirtualGatewayStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualGatewayStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
@@ -2538,7 +4066,117 @@ pub struct VirtualNodeSpec {
 pub struct VirtualNodeStatus {
     /// <p>The current status of the virtual node.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: VirtualNodeStatusCode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualNodeStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualNodeStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualNodeStatusCode),
+}
+
+impl Default for VirtualNodeStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualNodeStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualNodeStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualNodeStatusCode {
+    fn into(self) -> String {
+        match self {
+            VirtualNodeStatusCode::Active => "ACTIVE".to_string(),
+            VirtualNodeStatusCode::Deleted => "DELETED".to_string(),
+            VirtualNodeStatusCode::Inactive => "INACTIVE".to_string(),
+            VirtualNodeStatusCode::UnknownVariant(UnknownVirtualNodeStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualNodeStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualNodeStatusCode::Active => &"ACTIVE",
+            VirtualNodeStatusCode::Deleted => &"DELETED",
+            VirtualNodeStatusCode::Inactive => &"INACTIVE",
+            VirtualNodeStatusCode::UnknownVariant(UnknownVirtualNodeStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualNodeStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => VirtualNodeStatusCode::Active,
+            "DELETED" => VirtualNodeStatusCode::Deleted,
+            "INACTIVE" => VirtualNodeStatusCode::Inactive,
+            _ => VirtualNodeStatusCode::UnknownVariant(UnknownVirtualNodeStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualNodeStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => VirtualNodeStatusCode::Active,
+            "DELETED" => VirtualNodeStatusCode::Deleted,
+            "INACTIVE" => VirtualNodeStatusCode::Inactive,
+            _ => VirtualNodeStatusCode::UnknownVariant(UnknownVirtualNodeStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualNodeStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VirtualNodeStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualNodeStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a type of connection pool.</p>
@@ -2630,7 +4268,117 @@ pub struct VirtualRouterSpec {
 pub struct VirtualRouterStatus {
     /// <p>The current status of the virtual router.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: VirtualRouterStatusCode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualRouterStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualRouterStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualRouterStatusCode),
+}
+
+impl Default for VirtualRouterStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualRouterStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualRouterStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualRouterStatusCode {
+    fn into(self) -> String {
+        match self {
+            VirtualRouterStatusCode::Active => "ACTIVE".to_string(),
+            VirtualRouterStatusCode::Deleted => "DELETED".to_string(),
+            VirtualRouterStatusCode::Inactive => "INACTIVE".to_string(),
+            VirtualRouterStatusCode::UnknownVariant(UnknownVirtualRouterStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualRouterStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualRouterStatusCode::Active => &"ACTIVE",
+            VirtualRouterStatusCode::Deleted => &"DELETED",
+            VirtualRouterStatusCode::Inactive => &"INACTIVE",
+            VirtualRouterStatusCode::UnknownVariant(UnknownVirtualRouterStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualRouterStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => VirtualRouterStatusCode::Active,
+            "DELETED" => VirtualRouterStatusCode::Deleted,
+            "INACTIVE" => VirtualRouterStatusCode::Inactive,
+            _ => VirtualRouterStatusCode::UnknownVariant(UnknownVirtualRouterStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualRouterStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => VirtualRouterStatusCode::Active,
+            "DELETED" => VirtualRouterStatusCode::Deleted,
+            "INACTIVE" => VirtualRouterStatusCode::Inactive,
+            _ => VirtualRouterStatusCode::UnknownVariant(UnknownVirtualRouterStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualRouterStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VirtualRouterStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualRouterStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a virtual service backend for a virtual node.</p>
@@ -2723,7 +4471,117 @@ pub struct VirtualServiceSpec {
 pub struct VirtualServiceStatus {
     /// <p>The current status of the virtual service.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: VirtualServiceStatusCode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualServiceStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualServiceStatusCode {
+    Active,
+    Deleted,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualServiceStatusCode),
+}
+
+impl Default for VirtualServiceStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualServiceStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualServiceStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualServiceStatusCode {
+    fn into(self) -> String {
+        match self {
+            VirtualServiceStatusCode::Active => "ACTIVE".to_string(),
+            VirtualServiceStatusCode::Deleted => "DELETED".to_string(),
+            VirtualServiceStatusCode::Inactive => "INACTIVE".to_string(),
+            VirtualServiceStatusCode::UnknownVariant(UnknownVirtualServiceStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualServiceStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualServiceStatusCode::Active => &"ACTIVE",
+            VirtualServiceStatusCode::Deleted => &"DELETED",
+            VirtualServiceStatusCode::Inactive => &"INACTIVE",
+            VirtualServiceStatusCode::UnknownVariant(UnknownVirtualServiceStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualServiceStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => VirtualServiceStatusCode::Active,
+            "DELETED" => VirtualServiceStatusCode::Deleted,
+            "INACTIVE" => VirtualServiceStatusCode::Inactive,
+            _ => VirtualServiceStatusCode::UnknownVariant(UnknownVirtualServiceStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualServiceStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => VirtualServiceStatusCode::Active,
+            "DELETED" => VirtualServiceStatusCode::Deleted,
+            "INACTIVE" => VirtualServiceStatusCode::Inactive,
+            _ => VirtualServiceStatusCode::UnknownVariant(UnknownVirtualServiceStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualServiceStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VirtualServiceStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualServiceStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents a target and its relative weight. Traffic is distributed across targets according to their relative weight. For example, a weighted target with a relative weight of 50 receives five times as much traffic as one with a relative weight of 10. The total weight for all targets combined must be less than or equal to 100.</p>

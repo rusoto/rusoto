@@ -91,7 +91,7 @@ pub struct ChangeSetSummaryListItem {
     /// <p>Returned if the change set is in <code>FAILED</code> status. Can be either <code>CLIENT_ERROR</code>, which means that there are issues with the request (see the <code>ErrorDetailList</code> of <code>DescribeChangeSet</code>), or <code>SERVER_FAULT</code>, which means that there is a problem in the system, and you should retry your request.</p>
     #[serde(rename = "FailureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<FailureCode>,
     /// <p>The time, in ISO 8601 format (2018-02-27T13:45:22Z), when the change set was started.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,7 +99,123 @@ pub struct ChangeSetSummaryListItem {
     /// <p>The current status of the change set.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ChangeStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeStatus {
+    Applying,
+    Cancelled,
+    Failed,
+    Preparing,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeStatus),
+}
+
+impl Default for ChangeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeStatus {
+    fn into(self) -> String {
+        match self {
+            ChangeStatus::Applying => "APPLYING".to_string(),
+            ChangeStatus::Cancelled => "CANCELLED".to_string(),
+            ChangeStatus::Failed => "FAILED".to_string(),
+            ChangeStatus::Preparing => "PREPARING".to_string(),
+            ChangeStatus::Succeeded => "SUCCEEDED".to_string(),
+            ChangeStatus::UnknownVariant(UnknownChangeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeStatus::Applying => &"APPLYING",
+            ChangeStatus::Cancelled => &"CANCELLED",
+            ChangeStatus::Failed => &"FAILED",
+            ChangeStatus::Preparing => &"PREPARING",
+            ChangeStatus::Succeeded => &"SUCCEEDED",
+            ChangeStatus::UnknownVariant(UnknownChangeStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLYING" => ChangeStatus::Applying,
+            "CANCELLED" => ChangeStatus::Cancelled,
+            "FAILED" => ChangeStatus::Failed,
+            "PREPARING" => ChangeStatus::Preparing,
+            "SUCCEEDED" => ChangeStatus::Succeeded,
+            _ => ChangeStatus::UnknownVariant(UnknownChangeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLYING" => ChangeStatus::Applying,
+            "CANCELLED" => ChangeStatus::Cancelled,
+            "FAILED" => ChangeStatus::Failed,
+            "PREPARING" => ChangeStatus::Preparing,
+            "SUCCEEDED" => ChangeStatus::Succeeded,
+            _ => ChangeStatus::UnknownVariant(UnknownChangeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChangeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChangeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This object is a container for common summary information about the change. The summary doesn't contain the whole change structure.</p>
@@ -161,7 +277,7 @@ pub struct DescribeChangeSetResponse {
     /// <p>Returned if the change set is in <code>FAILED</code> status. Can be either <code>CLIENT_ERROR</code>, which means that there are issues with the request (see the <code>ErrorDetailList</code>), or <code>SERVER_FAULT</code>, which means that there is a problem in the system, and you should retry your request.</p>
     #[serde(rename = "FailureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<FailureCode>,
     /// <p>Returned if there is a failure on the change set, but that failure is not related to any of the changes in the request.</p>
     #[serde(rename = "FailureDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -173,7 +289,7 @@ pub struct DescribeChangeSetResponse {
     /// <p>The status of the change request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ChangeStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -266,6 +382,107 @@ pub struct ErrorDetail {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailureCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailureCode {
+    ClientError,
+    ServerFault,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailureCode),
+}
+
+impl Default for FailureCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailureCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailureCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailureCode {
+    fn into(self) -> String {
+        match self {
+            FailureCode::ClientError => "CLIENT_ERROR".to_string(),
+            FailureCode::ServerFault => "SERVER_FAULT".to_string(),
+            FailureCode::UnknownVariant(UnknownFailureCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailureCode {
+    fn into(self) -> &'a str {
+        match self {
+            FailureCode::ClientError => &"CLIENT_ERROR",
+            FailureCode::ServerFault => &"SERVER_FAULT",
+            FailureCode::UnknownVariant(UnknownFailureCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FailureCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLIENT_ERROR" => FailureCode::ClientError,
+            "SERVER_FAULT" => FailureCode::ServerFault,
+            _ => FailureCode::UnknownVariant(UnknownFailureCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FailureCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLIENT_ERROR" => FailureCode::ClientError,
+            "SERVER_FAULT" => FailureCode::ServerFault,
+            _ => FailureCode::UnknownVariant(UnknownFailureCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FailureCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FailureCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A filter object, used to optionally filter results from calls to the <code>ListEntities</code> and <code>ListChangeSets</code> actions.</p>
@@ -370,7 +587,108 @@ pub struct Sort {
     /// <p>The sorting order. Can be <code>ASCENDING</code> or <code>DESCENDING</code>. The default value is <code>DESCENDING</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "ASCENDING".to_string(),
+            SortOrder::Descending => "DESCENDING".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"ASCENDING",
+            SortOrder::Descending => &"DESCENDING",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

@@ -239,7 +239,7 @@ pub struct CreateStateMachineInput {
     /// <p>Determines whether a Standard or Express state machine is created. The default is <code>STANDARD</code>. You cannot update the <code>type</code> of a state machine once it has been created.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<StateMachineType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -339,7 +339,7 @@ pub struct DescribeExecutionOutput {
     pub state_machine_arn: String,
     /// <p>The current status of the execution.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: ExecutionStatus,
     /// <p>If the execution has already ended, the date the execution stopped.</p>
     #[serde(rename = "stopDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -417,14 +417,14 @@ pub struct DescribeStateMachineOutput {
     /// <p>The current status of the state machine.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StateMachineStatus>,
     /// <p>Selects whether AWS X-Ray tracing is enabled.</p>
     #[serde(rename = "tracingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracing_configuration: Option<TracingConfiguration>,
     /// <p>The <code>type</code> of the state machine (<code>STANDARD</code> or <code>EXPRESS</code>).</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: StateMachineType,
 }
 
 /// <p>Contains details about an abort of an execution.</p>
@@ -473,7 +473,7 @@ pub struct ExecutionListItem {
     pub state_machine_arn: String,
     /// <p>The current status of the execution.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: ExecutionStatus,
     /// <p>If the execution already ended, the date the execution stopped.</p>
     #[serde(rename = "stopDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -496,6 +496,121 @@ pub struct ExecutionStartedEventDetails {
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExecutionStatus {
+    Aborted,
+    Failed,
+    Running,
+    Succeeded,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExecutionStatus),
+}
+
+impl Default for ExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            ExecutionStatus::Aborted => "ABORTED".to_string(),
+            ExecutionStatus::Failed => "FAILED".to_string(),
+            ExecutionStatus::Running => "RUNNING".to_string(),
+            ExecutionStatus::Succeeded => "SUCCEEDED".to_string(),
+            ExecutionStatus::TimedOut => "TIMED_OUT".to_string(),
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExecutionStatus::Aborted => &"ABORTED",
+            ExecutionStatus::Failed => &"FAILED",
+            ExecutionStatus::Running => &"RUNNING",
+            ExecutionStatus::Succeeded => &"SUCCEEDED",
+            ExecutionStatus::TimedOut => &"TIMED_OUT",
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABORTED" => ExecutionStatus::Aborted,
+            "FAILED" => ExecutionStatus::Failed,
+            "RUNNING" => ExecutionStatus::Running,
+            "SUCCEEDED" => ExecutionStatus::Succeeded,
+            "TIMED_OUT" => ExecutionStatus::TimedOut,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABORTED" => ExecutionStatus::Aborted,
+            "FAILED" => ExecutionStatus::Failed,
+            "RUNNING" => ExecutionStatus::Running,
+            "SUCCEEDED" => ExecutionStatus::Succeeded,
+            "TIMED_OUT" => ExecutionStatus::TimedOut,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains details about the successful termination of the execution.</p>
@@ -716,7 +831,7 @@ pub struct HistoryEvent {
     pub timestamp: f64,
     /// <p>The type of the event.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: HistoryEventType,
 }
 
 /// <p>Provides details about input or output in an execution history event.</p>
@@ -727,6 +842,378 @@ pub struct HistoryEventExecutionDataDetails {
     #[serde(rename = "truncated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub truncated: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHistoryEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HistoryEventType {
+    ActivityFailed,
+    ActivityScheduleFailed,
+    ActivityScheduled,
+    ActivityStarted,
+    ActivitySucceeded,
+    ActivityTimedOut,
+    ChoiceStateEntered,
+    ChoiceStateExited,
+    ExecutionAborted,
+    ExecutionFailed,
+    ExecutionStarted,
+    ExecutionSucceeded,
+    ExecutionTimedOut,
+    FailStateEntered,
+    LambdaFunctionFailed,
+    LambdaFunctionScheduleFailed,
+    LambdaFunctionScheduled,
+    LambdaFunctionStartFailed,
+    LambdaFunctionStarted,
+    LambdaFunctionSucceeded,
+    LambdaFunctionTimedOut,
+    MapIterationAborted,
+    MapIterationFailed,
+    MapIterationStarted,
+    MapIterationSucceeded,
+    MapStateAborted,
+    MapStateEntered,
+    MapStateExited,
+    MapStateFailed,
+    MapStateStarted,
+    MapStateSucceeded,
+    ParallelStateAborted,
+    ParallelStateEntered,
+    ParallelStateExited,
+    ParallelStateFailed,
+    ParallelStateStarted,
+    ParallelStateSucceeded,
+    PassStateEntered,
+    PassStateExited,
+    SucceedStateEntered,
+    SucceedStateExited,
+    TaskFailed,
+    TaskScheduled,
+    TaskStartFailed,
+    TaskStarted,
+    TaskStateAborted,
+    TaskStateEntered,
+    TaskStateExited,
+    TaskSubmitFailed,
+    TaskSubmitted,
+    TaskSucceeded,
+    TaskTimedOut,
+    WaitStateAborted,
+    WaitStateEntered,
+    WaitStateExited,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHistoryEventType),
+}
+
+impl Default for HistoryEventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HistoryEventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HistoryEventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HistoryEventType {
+    fn into(self) -> String {
+        match self {
+            HistoryEventType::ActivityFailed => "ActivityFailed".to_string(),
+            HistoryEventType::ActivityScheduleFailed => "ActivityScheduleFailed".to_string(),
+            HistoryEventType::ActivityScheduled => "ActivityScheduled".to_string(),
+            HistoryEventType::ActivityStarted => "ActivityStarted".to_string(),
+            HistoryEventType::ActivitySucceeded => "ActivitySucceeded".to_string(),
+            HistoryEventType::ActivityTimedOut => "ActivityTimedOut".to_string(),
+            HistoryEventType::ChoiceStateEntered => "ChoiceStateEntered".to_string(),
+            HistoryEventType::ChoiceStateExited => "ChoiceStateExited".to_string(),
+            HistoryEventType::ExecutionAborted => "ExecutionAborted".to_string(),
+            HistoryEventType::ExecutionFailed => "ExecutionFailed".to_string(),
+            HistoryEventType::ExecutionStarted => "ExecutionStarted".to_string(),
+            HistoryEventType::ExecutionSucceeded => "ExecutionSucceeded".to_string(),
+            HistoryEventType::ExecutionTimedOut => "ExecutionTimedOut".to_string(),
+            HistoryEventType::FailStateEntered => "FailStateEntered".to_string(),
+            HistoryEventType::LambdaFunctionFailed => "LambdaFunctionFailed".to_string(),
+            HistoryEventType::LambdaFunctionScheduleFailed => {
+                "LambdaFunctionScheduleFailed".to_string()
+            }
+            HistoryEventType::LambdaFunctionScheduled => "LambdaFunctionScheduled".to_string(),
+            HistoryEventType::LambdaFunctionStartFailed => "LambdaFunctionStartFailed".to_string(),
+            HistoryEventType::LambdaFunctionStarted => "LambdaFunctionStarted".to_string(),
+            HistoryEventType::LambdaFunctionSucceeded => "LambdaFunctionSucceeded".to_string(),
+            HistoryEventType::LambdaFunctionTimedOut => "LambdaFunctionTimedOut".to_string(),
+            HistoryEventType::MapIterationAborted => "MapIterationAborted".to_string(),
+            HistoryEventType::MapIterationFailed => "MapIterationFailed".to_string(),
+            HistoryEventType::MapIterationStarted => "MapIterationStarted".to_string(),
+            HistoryEventType::MapIterationSucceeded => "MapIterationSucceeded".to_string(),
+            HistoryEventType::MapStateAborted => "MapStateAborted".to_string(),
+            HistoryEventType::MapStateEntered => "MapStateEntered".to_string(),
+            HistoryEventType::MapStateExited => "MapStateExited".to_string(),
+            HistoryEventType::MapStateFailed => "MapStateFailed".to_string(),
+            HistoryEventType::MapStateStarted => "MapStateStarted".to_string(),
+            HistoryEventType::MapStateSucceeded => "MapStateSucceeded".to_string(),
+            HistoryEventType::ParallelStateAborted => "ParallelStateAborted".to_string(),
+            HistoryEventType::ParallelStateEntered => "ParallelStateEntered".to_string(),
+            HistoryEventType::ParallelStateExited => "ParallelStateExited".to_string(),
+            HistoryEventType::ParallelStateFailed => "ParallelStateFailed".to_string(),
+            HistoryEventType::ParallelStateStarted => "ParallelStateStarted".to_string(),
+            HistoryEventType::ParallelStateSucceeded => "ParallelStateSucceeded".to_string(),
+            HistoryEventType::PassStateEntered => "PassStateEntered".to_string(),
+            HistoryEventType::PassStateExited => "PassStateExited".to_string(),
+            HistoryEventType::SucceedStateEntered => "SucceedStateEntered".to_string(),
+            HistoryEventType::SucceedStateExited => "SucceedStateExited".to_string(),
+            HistoryEventType::TaskFailed => "TaskFailed".to_string(),
+            HistoryEventType::TaskScheduled => "TaskScheduled".to_string(),
+            HistoryEventType::TaskStartFailed => "TaskStartFailed".to_string(),
+            HistoryEventType::TaskStarted => "TaskStarted".to_string(),
+            HistoryEventType::TaskStateAborted => "TaskStateAborted".to_string(),
+            HistoryEventType::TaskStateEntered => "TaskStateEntered".to_string(),
+            HistoryEventType::TaskStateExited => "TaskStateExited".to_string(),
+            HistoryEventType::TaskSubmitFailed => "TaskSubmitFailed".to_string(),
+            HistoryEventType::TaskSubmitted => "TaskSubmitted".to_string(),
+            HistoryEventType::TaskSucceeded => "TaskSucceeded".to_string(),
+            HistoryEventType::TaskTimedOut => "TaskTimedOut".to_string(),
+            HistoryEventType::WaitStateAborted => "WaitStateAborted".to_string(),
+            HistoryEventType::WaitStateEntered => "WaitStateEntered".to_string(),
+            HistoryEventType::WaitStateExited => "WaitStateExited".to_string(),
+            HistoryEventType::UnknownVariant(UnknownHistoryEventType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HistoryEventType {
+    fn into(self) -> &'a str {
+        match self {
+            HistoryEventType::ActivityFailed => &"ActivityFailed",
+            HistoryEventType::ActivityScheduleFailed => &"ActivityScheduleFailed",
+            HistoryEventType::ActivityScheduled => &"ActivityScheduled",
+            HistoryEventType::ActivityStarted => &"ActivityStarted",
+            HistoryEventType::ActivitySucceeded => &"ActivitySucceeded",
+            HistoryEventType::ActivityTimedOut => &"ActivityTimedOut",
+            HistoryEventType::ChoiceStateEntered => &"ChoiceStateEntered",
+            HistoryEventType::ChoiceStateExited => &"ChoiceStateExited",
+            HistoryEventType::ExecutionAborted => &"ExecutionAborted",
+            HistoryEventType::ExecutionFailed => &"ExecutionFailed",
+            HistoryEventType::ExecutionStarted => &"ExecutionStarted",
+            HistoryEventType::ExecutionSucceeded => &"ExecutionSucceeded",
+            HistoryEventType::ExecutionTimedOut => &"ExecutionTimedOut",
+            HistoryEventType::FailStateEntered => &"FailStateEntered",
+            HistoryEventType::LambdaFunctionFailed => &"LambdaFunctionFailed",
+            HistoryEventType::LambdaFunctionScheduleFailed => &"LambdaFunctionScheduleFailed",
+            HistoryEventType::LambdaFunctionScheduled => &"LambdaFunctionScheduled",
+            HistoryEventType::LambdaFunctionStartFailed => &"LambdaFunctionStartFailed",
+            HistoryEventType::LambdaFunctionStarted => &"LambdaFunctionStarted",
+            HistoryEventType::LambdaFunctionSucceeded => &"LambdaFunctionSucceeded",
+            HistoryEventType::LambdaFunctionTimedOut => &"LambdaFunctionTimedOut",
+            HistoryEventType::MapIterationAborted => &"MapIterationAborted",
+            HistoryEventType::MapIterationFailed => &"MapIterationFailed",
+            HistoryEventType::MapIterationStarted => &"MapIterationStarted",
+            HistoryEventType::MapIterationSucceeded => &"MapIterationSucceeded",
+            HistoryEventType::MapStateAborted => &"MapStateAborted",
+            HistoryEventType::MapStateEntered => &"MapStateEntered",
+            HistoryEventType::MapStateExited => &"MapStateExited",
+            HistoryEventType::MapStateFailed => &"MapStateFailed",
+            HistoryEventType::MapStateStarted => &"MapStateStarted",
+            HistoryEventType::MapStateSucceeded => &"MapStateSucceeded",
+            HistoryEventType::ParallelStateAborted => &"ParallelStateAborted",
+            HistoryEventType::ParallelStateEntered => &"ParallelStateEntered",
+            HistoryEventType::ParallelStateExited => &"ParallelStateExited",
+            HistoryEventType::ParallelStateFailed => &"ParallelStateFailed",
+            HistoryEventType::ParallelStateStarted => &"ParallelStateStarted",
+            HistoryEventType::ParallelStateSucceeded => &"ParallelStateSucceeded",
+            HistoryEventType::PassStateEntered => &"PassStateEntered",
+            HistoryEventType::PassStateExited => &"PassStateExited",
+            HistoryEventType::SucceedStateEntered => &"SucceedStateEntered",
+            HistoryEventType::SucceedStateExited => &"SucceedStateExited",
+            HistoryEventType::TaskFailed => &"TaskFailed",
+            HistoryEventType::TaskScheduled => &"TaskScheduled",
+            HistoryEventType::TaskStartFailed => &"TaskStartFailed",
+            HistoryEventType::TaskStarted => &"TaskStarted",
+            HistoryEventType::TaskStateAborted => &"TaskStateAborted",
+            HistoryEventType::TaskStateEntered => &"TaskStateEntered",
+            HistoryEventType::TaskStateExited => &"TaskStateExited",
+            HistoryEventType::TaskSubmitFailed => &"TaskSubmitFailed",
+            HistoryEventType::TaskSubmitted => &"TaskSubmitted",
+            HistoryEventType::TaskSucceeded => &"TaskSucceeded",
+            HistoryEventType::TaskTimedOut => &"TaskTimedOut",
+            HistoryEventType::WaitStateAborted => &"WaitStateAborted",
+            HistoryEventType::WaitStateEntered => &"WaitStateEntered",
+            HistoryEventType::WaitStateExited => &"WaitStateExited",
+            HistoryEventType::UnknownVariant(UnknownHistoryEventType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HistoryEventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActivityFailed" => HistoryEventType::ActivityFailed,
+            "ActivityScheduleFailed" => HistoryEventType::ActivityScheduleFailed,
+            "ActivityScheduled" => HistoryEventType::ActivityScheduled,
+            "ActivityStarted" => HistoryEventType::ActivityStarted,
+            "ActivitySucceeded" => HistoryEventType::ActivitySucceeded,
+            "ActivityTimedOut" => HistoryEventType::ActivityTimedOut,
+            "ChoiceStateEntered" => HistoryEventType::ChoiceStateEntered,
+            "ChoiceStateExited" => HistoryEventType::ChoiceStateExited,
+            "ExecutionAborted" => HistoryEventType::ExecutionAborted,
+            "ExecutionFailed" => HistoryEventType::ExecutionFailed,
+            "ExecutionStarted" => HistoryEventType::ExecutionStarted,
+            "ExecutionSucceeded" => HistoryEventType::ExecutionSucceeded,
+            "ExecutionTimedOut" => HistoryEventType::ExecutionTimedOut,
+            "FailStateEntered" => HistoryEventType::FailStateEntered,
+            "LambdaFunctionFailed" => HistoryEventType::LambdaFunctionFailed,
+            "LambdaFunctionScheduleFailed" => HistoryEventType::LambdaFunctionScheduleFailed,
+            "LambdaFunctionScheduled" => HistoryEventType::LambdaFunctionScheduled,
+            "LambdaFunctionStartFailed" => HistoryEventType::LambdaFunctionStartFailed,
+            "LambdaFunctionStarted" => HistoryEventType::LambdaFunctionStarted,
+            "LambdaFunctionSucceeded" => HistoryEventType::LambdaFunctionSucceeded,
+            "LambdaFunctionTimedOut" => HistoryEventType::LambdaFunctionTimedOut,
+            "MapIterationAborted" => HistoryEventType::MapIterationAborted,
+            "MapIterationFailed" => HistoryEventType::MapIterationFailed,
+            "MapIterationStarted" => HistoryEventType::MapIterationStarted,
+            "MapIterationSucceeded" => HistoryEventType::MapIterationSucceeded,
+            "MapStateAborted" => HistoryEventType::MapStateAborted,
+            "MapStateEntered" => HistoryEventType::MapStateEntered,
+            "MapStateExited" => HistoryEventType::MapStateExited,
+            "MapStateFailed" => HistoryEventType::MapStateFailed,
+            "MapStateStarted" => HistoryEventType::MapStateStarted,
+            "MapStateSucceeded" => HistoryEventType::MapStateSucceeded,
+            "ParallelStateAborted" => HistoryEventType::ParallelStateAborted,
+            "ParallelStateEntered" => HistoryEventType::ParallelStateEntered,
+            "ParallelStateExited" => HistoryEventType::ParallelStateExited,
+            "ParallelStateFailed" => HistoryEventType::ParallelStateFailed,
+            "ParallelStateStarted" => HistoryEventType::ParallelStateStarted,
+            "ParallelStateSucceeded" => HistoryEventType::ParallelStateSucceeded,
+            "PassStateEntered" => HistoryEventType::PassStateEntered,
+            "PassStateExited" => HistoryEventType::PassStateExited,
+            "SucceedStateEntered" => HistoryEventType::SucceedStateEntered,
+            "SucceedStateExited" => HistoryEventType::SucceedStateExited,
+            "TaskFailed" => HistoryEventType::TaskFailed,
+            "TaskScheduled" => HistoryEventType::TaskScheduled,
+            "TaskStartFailed" => HistoryEventType::TaskStartFailed,
+            "TaskStarted" => HistoryEventType::TaskStarted,
+            "TaskStateAborted" => HistoryEventType::TaskStateAborted,
+            "TaskStateEntered" => HistoryEventType::TaskStateEntered,
+            "TaskStateExited" => HistoryEventType::TaskStateExited,
+            "TaskSubmitFailed" => HistoryEventType::TaskSubmitFailed,
+            "TaskSubmitted" => HistoryEventType::TaskSubmitted,
+            "TaskSucceeded" => HistoryEventType::TaskSucceeded,
+            "TaskTimedOut" => HistoryEventType::TaskTimedOut,
+            "WaitStateAborted" => HistoryEventType::WaitStateAborted,
+            "WaitStateEntered" => HistoryEventType::WaitStateEntered,
+            "WaitStateExited" => HistoryEventType::WaitStateExited,
+            _ => HistoryEventType::UnknownVariant(UnknownHistoryEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HistoryEventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActivityFailed" => HistoryEventType::ActivityFailed,
+            "ActivityScheduleFailed" => HistoryEventType::ActivityScheduleFailed,
+            "ActivityScheduled" => HistoryEventType::ActivityScheduled,
+            "ActivityStarted" => HistoryEventType::ActivityStarted,
+            "ActivitySucceeded" => HistoryEventType::ActivitySucceeded,
+            "ActivityTimedOut" => HistoryEventType::ActivityTimedOut,
+            "ChoiceStateEntered" => HistoryEventType::ChoiceStateEntered,
+            "ChoiceStateExited" => HistoryEventType::ChoiceStateExited,
+            "ExecutionAborted" => HistoryEventType::ExecutionAborted,
+            "ExecutionFailed" => HistoryEventType::ExecutionFailed,
+            "ExecutionStarted" => HistoryEventType::ExecutionStarted,
+            "ExecutionSucceeded" => HistoryEventType::ExecutionSucceeded,
+            "ExecutionTimedOut" => HistoryEventType::ExecutionTimedOut,
+            "FailStateEntered" => HistoryEventType::FailStateEntered,
+            "LambdaFunctionFailed" => HistoryEventType::LambdaFunctionFailed,
+            "LambdaFunctionScheduleFailed" => HistoryEventType::LambdaFunctionScheduleFailed,
+            "LambdaFunctionScheduled" => HistoryEventType::LambdaFunctionScheduled,
+            "LambdaFunctionStartFailed" => HistoryEventType::LambdaFunctionStartFailed,
+            "LambdaFunctionStarted" => HistoryEventType::LambdaFunctionStarted,
+            "LambdaFunctionSucceeded" => HistoryEventType::LambdaFunctionSucceeded,
+            "LambdaFunctionTimedOut" => HistoryEventType::LambdaFunctionTimedOut,
+            "MapIterationAborted" => HistoryEventType::MapIterationAborted,
+            "MapIterationFailed" => HistoryEventType::MapIterationFailed,
+            "MapIterationStarted" => HistoryEventType::MapIterationStarted,
+            "MapIterationSucceeded" => HistoryEventType::MapIterationSucceeded,
+            "MapStateAborted" => HistoryEventType::MapStateAborted,
+            "MapStateEntered" => HistoryEventType::MapStateEntered,
+            "MapStateExited" => HistoryEventType::MapStateExited,
+            "MapStateFailed" => HistoryEventType::MapStateFailed,
+            "MapStateStarted" => HistoryEventType::MapStateStarted,
+            "MapStateSucceeded" => HistoryEventType::MapStateSucceeded,
+            "ParallelStateAborted" => HistoryEventType::ParallelStateAborted,
+            "ParallelStateEntered" => HistoryEventType::ParallelStateEntered,
+            "ParallelStateExited" => HistoryEventType::ParallelStateExited,
+            "ParallelStateFailed" => HistoryEventType::ParallelStateFailed,
+            "ParallelStateStarted" => HistoryEventType::ParallelStateStarted,
+            "ParallelStateSucceeded" => HistoryEventType::ParallelStateSucceeded,
+            "PassStateEntered" => HistoryEventType::PassStateEntered,
+            "PassStateExited" => HistoryEventType::PassStateExited,
+            "SucceedStateEntered" => HistoryEventType::SucceedStateEntered,
+            "SucceedStateExited" => HistoryEventType::SucceedStateExited,
+            "TaskFailed" => HistoryEventType::TaskFailed,
+            "TaskScheduled" => HistoryEventType::TaskScheduled,
+            "TaskStartFailed" => HistoryEventType::TaskStartFailed,
+            "TaskStarted" => HistoryEventType::TaskStarted,
+            "TaskStateAborted" => HistoryEventType::TaskStateAborted,
+            "TaskStateEntered" => HistoryEventType::TaskStateEntered,
+            "TaskStateExited" => HistoryEventType::TaskStateExited,
+            "TaskSubmitFailed" => HistoryEventType::TaskSubmitFailed,
+            "TaskSubmitted" => HistoryEventType::TaskSubmitted,
+            "TaskSucceeded" => HistoryEventType::TaskSucceeded,
+            "TaskTimedOut" => HistoryEventType::TaskTimedOut,
+            "WaitStateAborted" => HistoryEventType::WaitStateAborted,
+            "WaitStateEntered" => HistoryEventType::WaitStateEntered,
+            "WaitStateExited" => HistoryEventType::WaitStateExited,
+            _ => HistoryEventType::UnknownVariant(UnknownHistoryEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HistoryEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HistoryEventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HistoryEventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains details about a lambda function that failed during an execution.</p>
@@ -862,7 +1349,7 @@ pub struct ListExecutionsInput {
     /// <p>If specified, only list the executions whose current execution status matches the given filter.</p>
     #[serde(rename = "statusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_filter: Option<String>,
+    pub status_filter: Option<ExecutionStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -927,6 +1414,116 @@ pub struct LogDestination {
     pub cloud_watch_logs_log_group: Option<CloudWatchLogsLogGroup>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogLevel {
+    All,
+    Error,
+    Fatal,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogLevel),
+}
+
+impl Default for LogLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogLevel {
+    fn into(self) -> String {
+        match self {
+            LogLevel::All => "ALL".to_string(),
+            LogLevel::Error => "ERROR".to_string(),
+            LogLevel::Fatal => "FATAL".to_string(),
+            LogLevel::Off => "OFF".to_string(),
+            LogLevel::UnknownVariant(UnknownLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LogLevel::All => &"ALL",
+            LogLevel::Error => &"ERROR",
+            LogLevel::Fatal => &"FATAL",
+            LogLevel::Off => &"OFF",
+            LogLevel::UnknownVariant(UnknownLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => LogLevel::All,
+            "ERROR" => LogLevel::Error,
+            "FATAL" => LogLevel::Fatal,
+            "OFF" => LogLevel::Off,
+            _ => LogLevel::UnknownVariant(UnknownLogLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => LogLevel::All,
+            "ERROR" => LogLevel::Error,
+            "FATAL" => LogLevel::Fatal,
+            "OFF" => LogLevel::Off,
+            _ => LogLevel::UnknownVariant(UnknownLogLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The <code>LoggingConfiguration</code> data type is used to set CloudWatch Logs options.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingConfiguration {
@@ -941,7 +1538,7 @@ pub struct LoggingConfiguration {
     /// <p>Defines which category of execution history events are logged.</p>
     #[serde(rename = "level")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub level: Option<String>,
+    pub level: Option<LogLevel>,
 }
 
 /// <p>Contains details about an iteration of a Map state.</p>
@@ -1111,7 +1708,7 @@ pub struct StartSyncExecutionOutput {
     pub state_machine_arn: Option<String>,
     /// <p>The current status of the execution.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: SyncExecutionStatus,
     /// <p>If the execution has already ended, the date the execution stopped.</p>
     #[serde(rename = "stopDate")]
     pub stop_date: f64,
@@ -1170,7 +1767,216 @@ pub struct StateMachineListItem {
     pub state_machine_arn: String,
     /// <p><p/></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: StateMachineType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStateMachineStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StateMachineStatus {
+    Active,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStateMachineStatus),
+}
+
+impl Default for StateMachineStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StateMachineStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StateMachineStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StateMachineStatus {
+    fn into(self) -> String {
+        match self {
+            StateMachineStatus::Active => "ACTIVE".to_string(),
+            StateMachineStatus::Deleting => "DELETING".to_string(),
+            StateMachineStatus::UnknownVariant(UnknownStateMachineStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StateMachineStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StateMachineStatus::Active => &"ACTIVE",
+            StateMachineStatus::Deleting => &"DELETING",
+            StateMachineStatus::UnknownVariant(UnknownStateMachineStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StateMachineStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => StateMachineStatus::Active,
+            "DELETING" => StateMachineStatus::Deleting,
+            _ => StateMachineStatus::UnknownVariant(UnknownStateMachineStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StateMachineStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => StateMachineStatus::Active,
+            "DELETING" => StateMachineStatus::Deleting,
+            _ => StateMachineStatus::UnknownVariant(UnknownStateMachineStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateMachineStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StateMachineStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StateMachineStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStateMachineType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StateMachineType {
+    Express,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStateMachineType),
+}
+
+impl Default for StateMachineType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StateMachineType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StateMachineType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StateMachineType {
+    fn into(self) -> String {
+        match self {
+            StateMachineType::Express => "EXPRESS".to_string(),
+            StateMachineType::Standard => "STANDARD".to_string(),
+            StateMachineType::UnknownVariant(UnknownStateMachineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StateMachineType {
+    fn into(self) -> &'a str {
+        match self {
+            StateMachineType::Express => &"EXPRESS",
+            StateMachineType::Standard => &"STANDARD",
+            StateMachineType::UnknownVariant(UnknownStateMachineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StateMachineType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPRESS" => StateMachineType::Express,
+            "STANDARD" => StateMachineType::Standard,
+            _ => StateMachineType::UnknownVariant(UnknownStateMachineType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StateMachineType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPRESS" => StateMachineType::Express,
+            "STANDARD" => StateMachineType::Standard,
+            _ => StateMachineType::UnknownVariant(UnknownStateMachineType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StateMachineType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StateMachineType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StateMachineType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1195,6 +2001,116 @@ pub struct StopExecutionOutput {
     /// <p>The date the execution is stopped.</p>
     #[serde(rename = "stopDate")]
     pub stop_date: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSyncExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SyncExecutionStatus {
+    Failed,
+    Succeeded,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSyncExecutionStatus),
+}
+
+impl Default for SyncExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SyncExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SyncExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SyncExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            SyncExecutionStatus::Failed => "FAILED".to_string(),
+            SyncExecutionStatus::Succeeded => "SUCCEEDED".to_string(),
+            SyncExecutionStatus::TimedOut => "TIMED_OUT".to_string(),
+            SyncExecutionStatus::UnknownVariant(UnknownSyncExecutionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SyncExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SyncExecutionStatus::Failed => &"FAILED",
+            SyncExecutionStatus::Succeeded => &"SUCCEEDED",
+            SyncExecutionStatus::TimedOut => &"TIMED_OUT",
+            SyncExecutionStatus::UnknownVariant(UnknownSyncExecutionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SyncExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => SyncExecutionStatus::Failed,
+            "SUCCEEDED" => SyncExecutionStatus::Succeeded,
+            "TIMED_OUT" => SyncExecutionStatus::TimedOut,
+            _ => SyncExecutionStatus::UnknownVariant(UnknownSyncExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SyncExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => SyncExecutionStatus::Failed,
+            "SUCCEEDED" => SyncExecutionStatus::Succeeded,
+            "TIMED_OUT" => SyncExecutionStatus::TimedOut,
+            _ => SyncExecutionStatus::UnknownVariant(UnknownSyncExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SyncExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SyncExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SyncExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Tags are key-value pairs that can be associated with Step Functions state machines and activities.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>

@@ -64,6 +64,219 @@ pub struct Button {
     pub value: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfirmationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfirmationStatus {
+    Confirmed,
+    Denied,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfirmationStatus),
+}
+
+impl Default for ConfirmationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfirmationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfirmationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfirmationStatus {
+    fn into(self) -> String {
+        match self {
+            ConfirmationStatus::Confirmed => "Confirmed".to_string(),
+            ConfirmationStatus::Denied => "Denied".to_string(),
+            ConfirmationStatus::None => "None".to_string(),
+            ConfirmationStatus::UnknownVariant(UnknownConfirmationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfirmationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConfirmationStatus::Confirmed => &"Confirmed",
+            ConfirmationStatus::Denied => &"Denied",
+            ConfirmationStatus::None => &"None",
+            ConfirmationStatus::UnknownVariant(UnknownConfirmationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConfirmationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Confirmed" => ConfirmationStatus::Confirmed,
+            "Denied" => ConfirmationStatus::Denied,
+            "None" => ConfirmationStatus::None,
+            _ => ConfirmationStatus::UnknownVariant(UnknownConfirmationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfirmationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Confirmed" => ConfirmationStatus::Confirmed,
+            "Denied" => ConfirmationStatus::Denied,
+            "None" => ConfirmationStatus::None,
+            _ => ConfirmationStatus::UnknownVariant(UnknownConfirmationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfirmationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfirmationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfirmationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentType {
+    ApplicationVndAmazonawsCardGeneric,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentType),
+}
+
+impl Default for ContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        match self {
+            ContentType::ApplicationVndAmazonawsCardGeneric => {
+                "application/vnd.amazonaws.card.generic".to_string()
+            }
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentType {
+    fn into(self) -> &'a str {
+        match self {
+            ContentType::ApplicationVndAmazonawsCardGeneric => {
+                &"application/vnd.amazonaws.card.generic"
+            }
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "application/vnd.amazonaws.card.generic" => {
+                ContentType::ApplicationVndAmazonawsCardGeneric
+            }
+            _ => ContentType::UnknownVariant(UnknownContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "application/vnd.amazonaws.card.generic" => {
+                ContentType::ApplicationVndAmazonawsCardGeneric
+            }
+            _ => ContentType::UnknownVariant(UnknownContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSessionRequest {
@@ -105,7 +318,7 @@ pub struct DialogAction {
     /// <p><p>The fulfillment state of the intent. The possible values are:</p> <ul> <li> <p> <code>Failed</code> - The Lambda function associated with the intent failed to fulfill the intent.</p> </li> <li> <p> <code>Fulfilled</code> - The intent has fulfilled by the Lambda function associated with the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - All of the information necessary for the intent is present and the intent ready to be fulfilled by the client application.</p> </li> </ul></p>
     #[serde(rename = "fulfillmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fulfillment_state: Option<String>,
+    pub fulfillment_state: Option<FulfillmentState>,
     /// <p>The name of the intent.</p>
     #[serde(rename = "intentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +330,7 @@ pub struct DialogAction {
     /// <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/howitworks-manage-prompts.html">Message Groups</a>. </p> </li> </ul>
     #[serde(rename = "messageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_format: Option<String>,
+    pub message_format: Option<MessageFormatType>,
     /// <p>The name of the slot that should be elicited from the user.</p>
     #[serde(rename = "slotToElicit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -128,7 +341,356 @@ pub struct DialogAction {
     pub slots: Option<::std::collections::HashMap<String, String>>,
     /// <p><p>The next action that the bot should take in its interaction with the user. The possible values are:</p> <ul> <li> <p> <code>ConfirmIntent</code> - The next action is asking the user if the intent is complete and ready to be fulfilled. This is a yes/no question such as &quot;Place the order?&quot;</p> </li> <li> <p> <code>Close</code> - Indicates that the there will not be a response from the user. For example, the statement &quot;Your order has been placed&quot; does not require a response.</p> </li> <li> <p> <code>Delegate</code> - The next action is determined by Amazon Lex.</p> </li> <li> <p> <code>ElicitIntent</code> - The next action is to determine the intent that the user wants to fulfill.</p> </li> <li> <p> <code>ElicitSlot</code> - The next action is to elicit a slot value from the user.</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: DialogActionType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDialogActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DialogActionType {
+    Close,
+    ConfirmIntent,
+    Delegate,
+    ElicitIntent,
+    ElicitSlot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDialogActionType),
+}
+
+impl Default for DialogActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DialogActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DialogActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DialogActionType {
+    fn into(self) -> String {
+        match self {
+            DialogActionType::Close => "Close".to_string(),
+            DialogActionType::ConfirmIntent => "ConfirmIntent".to_string(),
+            DialogActionType::Delegate => "Delegate".to_string(),
+            DialogActionType::ElicitIntent => "ElicitIntent".to_string(),
+            DialogActionType::ElicitSlot => "ElicitSlot".to_string(),
+            DialogActionType::UnknownVariant(UnknownDialogActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DialogActionType {
+    fn into(self) -> &'a str {
+        match self {
+            DialogActionType::Close => &"Close",
+            DialogActionType::ConfirmIntent => &"ConfirmIntent",
+            DialogActionType::Delegate => &"Delegate",
+            DialogActionType::ElicitIntent => &"ElicitIntent",
+            DialogActionType::ElicitSlot => &"ElicitSlot",
+            DialogActionType::UnknownVariant(UnknownDialogActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DialogActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Close" => DialogActionType::Close,
+            "ConfirmIntent" => DialogActionType::ConfirmIntent,
+            "Delegate" => DialogActionType::Delegate,
+            "ElicitIntent" => DialogActionType::ElicitIntent,
+            "ElicitSlot" => DialogActionType::ElicitSlot,
+            _ => DialogActionType::UnknownVariant(UnknownDialogActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DialogActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Close" => DialogActionType::Close,
+            "ConfirmIntent" => DialogActionType::ConfirmIntent,
+            "Delegate" => DialogActionType::Delegate,
+            "ElicitIntent" => DialogActionType::ElicitIntent,
+            "ElicitSlot" => DialogActionType::ElicitSlot,
+            _ => DialogActionType::UnknownVariant(UnknownDialogActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DialogActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DialogActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DialogActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDialogState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DialogState {
+    ConfirmIntent,
+    ElicitIntent,
+    ElicitSlot,
+    Failed,
+    Fulfilled,
+    ReadyForFulfillment,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDialogState),
+}
+
+impl Default for DialogState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DialogState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DialogState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DialogState {
+    fn into(self) -> String {
+        match self {
+            DialogState::ConfirmIntent => "ConfirmIntent".to_string(),
+            DialogState::ElicitIntent => "ElicitIntent".to_string(),
+            DialogState::ElicitSlot => "ElicitSlot".to_string(),
+            DialogState::Failed => "Failed".to_string(),
+            DialogState::Fulfilled => "Fulfilled".to_string(),
+            DialogState::ReadyForFulfillment => "ReadyForFulfillment".to_string(),
+            DialogState::UnknownVariant(UnknownDialogState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DialogState {
+    fn into(self) -> &'a str {
+        match self {
+            DialogState::ConfirmIntent => &"ConfirmIntent",
+            DialogState::ElicitIntent => &"ElicitIntent",
+            DialogState::ElicitSlot => &"ElicitSlot",
+            DialogState::Failed => &"Failed",
+            DialogState::Fulfilled => &"Fulfilled",
+            DialogState::ReadyForFulfillment => &"ReadyForFulfillment",
+            DialogState::UnknownVariant(UnknownDialogState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DialogState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ConfirmIntent" => DialogState::ConfirmIntent,
+            "ElicitIntent" => DialogState::ElicitIntent,
+            "ElicitSlot" => DialogState::ElicitSlot,
+            "Failed" => DialogState::Failed,
+            "Fulfilled" => DialogState::Fulfilled,
+            "ReadyForFulfillment" => DialogState::ReadyForFulfillment,
+            _ => DialogState::UnknownVariant(UnknownDialogState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DialogState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ConfirmIntent" => DialogState::ConfirmIntent,
+            "ElicitIntent" => DialogState::ElicitIntent,
+            "ElicitSlot" => DialogState::ElicitSlot,
+            "Failed" => DialogState::Failed,
+            "Fulfilled" => DialogState::Fulfilled,
+            "ReadyForFulfillment" => DialogState::ReadyForFulfillment,
+            _ => DialogState::UnknownVariant(UnknownDialogState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DialogState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DialogState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DialogState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFulfillmentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FulfillmentState {
+    Failed,
+    Fulfilled,
+    ReadyForFulfillment,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFulfillmentState),
+}
+
+impl Default for FulfillmentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FulfillmentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FulfillmentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FulfillmentState {
+    fn into(self) -> String {
+        match self {
+            FulfillmentState::Failed => "Failed".to_string(),
+            FulfillmentState::Fulfilled => "Fulfilled".to_string(),
+            FulfillmentState::ReadyForFulfillment => "ReadyForFulfillment".to_string(),
+            FulfillmentState::UnknownVariant(UnknownFulfillmentState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FulfillmentState {
+    fn into(self) -> &'a str {
+        match self {
+            FulfillmentState::Failed => &"Failed",
+            FulfillmentState::Fulfilled => &"Fulfilled",
+            FulfillmentState::ReadyForFulfillment => &"ReadyForFulfillment",
+            FulfillmentState::UnknownVariant(UnknownFulfillmentState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FulfillmentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => FulfillmentState::Failed,
+            "Fulfilled" => FulfillmentState::Fulfilled,
+            "ReadyForFulfillment" => FulfillmentState::ReadyForFulfillment,
+            _ => FulfillmentState::UnknownVariant(UnknownFulfillmentState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FulfillmentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => FulfillmentState::Failed,
+            "Fulfilled" => FulfillmentState::Fulfilled,
+            "ReadyForFulfillment" => FulfillmentState::ReadyForFulfillment,
+            _ => FulfillmentState::UnknownVariant(UnknownFulfillmentState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FulfillmentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FulfillmentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FulfillmentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents an option rendered to the user when a prompt is shown. It could be an image, a button, a link, or text. </p>
@@ -220,14 +782,14 @@ pub struct IntentSummary {
     /// <p><p>The status of the intent after the user responds to the confirmation prompt. If the user confirms the intent, Amazon Lex sets this field to <code>Confirmed</code>. If the user denies the intent, Amazon Lex sets this value to <code>Denied</code>. The possible values are:</p> <ul> <li> <p> <code>Confirmed</code> - The user has responded &quot;Yes&quot; to the confirmation prompt, confirming that the intent is complete and that it is ready to be fulfilled.</p> </li> <li> <p> <code>Denied</code> - The user has responded &quot;No&quot; to the confirmation prompt.</p> </li> <li> <p> <code>None</code> - The user has never been prompted for confirmation; or, the user was prompted but did not confirm or deny the prompt.</p> </li> </ul></p>
     #[serde(rename = "confirmationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub confirmation_status: Option<String>,
+    pub confirmation_status: Option<ConfirmationStatus>,
     /// <p><p>The next action that the bot should take in its interaction with the user. The possible values are:</p> <ul> <li> <p> <code>ConfirmIntent</code> - The next action is asking the user if the intent is complete and ready to be fulfilled. This is a yes/no question such as &quot;Place the order?&quot;</p> </li> <li> <p> <code>Close</code> - Indicates that the there will not be a response from the user. For example, the statement &quot;Your order has been placed&quot; does not require a response.</p> </li> <li> <p> <code>ElicitIntent</code> - The next action is to determine the intent that the user wants to fulfill.</p> </li> <li> <p> <code>ElicitSlot</code> - The next action is to elicit a slot value from the user.</p> </li> </ul></p>
     #[serde(rename = "dialogActionType")]
-    pub dialog_action_type: String,
+    pub dialog_action_type: DialogActionType,
     /// <p><p>The fulfillment state of the intent. The possible values are:</p> <ul> <li> <p> <code>Failed</code> - The Lambda function associated with the intent failed to fulfill the intent.</p> </li> <li> <p> <code>Fulfilled</code> - The intent has fulfilled by the Lambda function associated with the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - All of the information necessary for the intent is present and the intent ready to be fulfilled by the client application.</p> </li> </ul></p>
     #[serde(rename = "fulfillmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fulfillment_state: Option<String>,
+    pub fulfillment_state: Option<FulfillmentState>,
     /// <p>The name of the intent.</p>
     #[serde(rename = "intentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,6 +802,120 @@ pub struct IntentSummary {
     #[serde(rename = "slots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slots: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageFormatType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageFormatType {
+    Composite,
+    CustomPayload,
+    PlainText,
+    Ssml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageFormatType),
+}
+
+impl Default for MessageFormatType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageFormatType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageFormatType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageFormatType {
+    fn into(self) -> String {
+        match self {
+            MessageFormatType::Composite => "Composite".to_string(),
+            MessageFormatType::CustomPayload => "CustomPayload".to_string(),
+            MessageFormatType::PlainText => "PlainText".to_string(),
+            MessageFormatType::Ssml => "SSML".to_string(),
+            MessageFormatType::UnknownVariant(UnknownMessageFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageFormatType {
+    fn into(self) -> &'a str {
+        match self {
+            MessageFormatType::Composite => &"Composite",
+            MessageFormatType::CustomPayload => &"CustomPayload",
+            MessageFormatType::PlainText => &"PlainText",
+            MessageFormatType::Ssml => &"SSML",
+            MessageFormatType::UnknownVariant(UnknownMessageFormatType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MessageFormatType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Composite" => MessageFormatType::Composite,
+            "CustomPayload" => MessageFormatType::CustomPayload,
+            "PlainText" => MessageFormatType::PlainText,
+            "SSML" => MessageFormatType::Ssml,
+            _ => MessageFormatType::UnknownVariant(UnknownMessageFormatType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MessageFormatType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Composite" => MessageFormatType::Composite,
+            "CustomPayload" => MessageFormatType::CustomPayload,
+            "PlainText" => MessageFormatType::PlainText,
+            "SSML" => MessageFormatType::Ssml,
+            _ => MessageFormatType::UnknownVariant(UnknownMessageFormatType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MessageFormatType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MessageFormatType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -296,7 +972,7 @@ pub struct PostContentResponse {
     /// <p>Content type as specified in the <code>Accept</code> HTTP header in the request.</p>
     pub content_type: Option<String>,
     /// <p><p>Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit the user&#39;s intent. Consider the following examples: </p> <p> For example, a user might utter an intent (&quot;I want to order a pizza&quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialog state. </p> </li> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response. </p> <p>For example, Amazon Lex wants user confirmation before fulfilling an intent. Instead of a simple &quot;yes&quot; or &quot;no&quot; response, a user might respond with additional information. For example, &quot;yes, but make it a thick crust pizza&quot; or &quot;no, I want to order a drink.&quot; Amazon Lex can process such additional information (in these examples, update the crust type slot or change the intent from OrderPizza to OrderDrink). </p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting the value of a slot for the current intent. </p> <p> For example, suppose that in the response Amazon Lex sends this message: &quot;What size pizza would you like?&quot;. A user might reply with the slot value (e.g., &quot;medium&quot;). The user might also provide additional information in the response (e.g., &quot;medium thick crust pizza&quot;). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the request. </p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons, including that the user does not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or if the Lambda function fails to fulfill the intent. </p> </li> </ul></p>
-    pub dialog_state: Option<String>,
+    pub dialog_state: Option<DialogState>,
     /// <p>The text used to process the request.</p> <p>If the input was an audio stream, the <code>inputTranscript</code> field contains the text extracted from the audio stream. This is the text that is actually processed to recognize intents and slot values. You can use this information to determine if Amazon Lex is correctly processing the audio that you send.</p>
     pub input_transcript: Option<String>,
     /// <p>Current user intent that Amazon Lex is aware of.</p>
@@ -304,7 +980,7 @@ pub struct PostContentResponse {
     /// <p>The message to convey to the user. The message can come from the bot's configuration or from a Lambda function.</p> <p>If the intent is not configured with a Lambda function, or if the Lambda function returned <code>Delegate</code> as the <code>dialogAction.type</code> in its response, Amazon Lex decides on the next course of action and selects an appropriate message from the bot's configuration based on the current interaction context. For example, if Amazon Lex isn't able to understand user input, it uses a clarification prompt message.</p> <p>When you create an intent you can assign messages to groups. When messages are assigned to groups Amazon Lex returns one message from each group in the response. The message field is an escaped JSON string containing the messages. For more information about the structure of the JSON string returned, see <a>msg-prompts-formats</a>.</p> <p>If the Lambda function returns a message, Amazon Lex passes it to the client in its response.</p>
     pub message: Option<String>,
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
-    pub message_format: Option<String>,
+    pub message_format: Option<MessageFormatType>,
     /// <p>Provides a score that indicates how confident Amazon Lex is that the returned intent is the one that matches the user's intent. The score is between 0.0 and 1.0.</p> <p>The score is a relative score, not an absolute score. The score may change based on improvements to Amazon Lex. </p>
     pub nlu_intent_confidence: Option<String>,
     /// <p>The sentiment expressed in an utterance.</p> <p>When the bot is configured to send utterances to Amazon Comprehend for sentiment analysis, this field contains the result of the analysis.</p>
@@ -366,7 +1042,7 @@ pub struct PostTextResponse {
     /// <p><p> Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit user intent. </p> <p>For example, a user might utter an intent (&quot;I want to order a pizza&quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialogState.</p> </li> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response. </p> <p> For example, Amazon Lex wants user confirmation before fulfilling an intent. </p> <p>Instead of a simple &quot;yes&quot; or &quot;no,&quot; a user might respond with additional information. For example, &quot;yes, but make it thick crust pizza&quot; or &quot;no, I want to order a drink&quot;. Amazon Lex can process such additional information (in these examples, update the crust type slot value, or change intent from OrderPizza to OrderDrink).</p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting a slot value for the current intent. </p> <p>For example, suppose that in the response Amazon Lex sends this message: &quot;What size pizza would you like?&quot;. A user might reply with the slot value (e.g., &quot;medium&quot;). The user might also provide additional information in the response (e.g., &quot;medium thick crust pizza&quot;). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function configured for the intent has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the intent. </p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons including that the user did not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or the Lambda function failed to fulfill the intent. </p> </li> </ul></p>
     #[serde(rename = "dialogState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dialog_state: Option<String>,
+    pub dialog_state: Option<DialogState>,
     /// <p>The current user intent that Amazon Lex is aware of.</p>
     #[serde(rename = "intentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -378,7 +1054,7 @@ pub struct PostTextResponse {
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format defined by the Lambda function.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
     #[serde(rename = "messageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_format: Option<String>,
+    pub message_format: Option<MessageFormatType>,
     /// <p>Provides a score that indicates how confident Amazon Lex is that the returned intent is the one that matches the user's intent. The score is between 0.0 and 1.0. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/confidence-scores.html">Confidence Scores</a>.</p> <p>The score is a relative score, not an absolute score. The score may change based on improvements to Amazon Lex.</p>
     #[serde(rename = "nluIntentConfidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -470,13 +1146,13 @@ pub struct PutSessionResponse {
     /// <p>Content type as specified in the <code>Accept</code> HTTP header in the request.</p>
     pub content_type: Option<String>,
     /// <p><p/> <ul> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response to confirm the intent before fulfilling an intent.</p> </li> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit the user&#39;s intent.</p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting the value of a slot for the current intent.</p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user has failed. This can happen for various reasons, including the user does not provide an appropriate response to prompts from the service, or if the Lambda function fails to fulfill the intent.</p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function has sucessfully fulfilled the intent.</p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the intent.</p> </li> </ul></p>
-    pub dialog_state: Option<String>,
+    pub dialog_state: Option<DialogState>,
     /// <p>The name of the current intent.</p>
     pub intent_name: Option<String>,
     /// <p>The next message that should be presented to the user.</p>
     pub message: Option<String>,
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
-    pub message_format: Option<String>,
+    pub message_format: Option<MessageFormatType>,
     /// <p>Map of key/value pairs representing session-specific context information.</p>
     pub session_attributes: Option<String>,
     /// <p>A unique identifier for the session.</p>
@@ -494,7 +1170,7 @@ pub struct ResponseCard {
     /// <p>The content type of the response.</p>
     #[serde(rename = "contentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_type: Option<String>,
+    pub content_type: Option<ContentType>,
     /// <p>An array of attachment objects representing options.</p>
     #[serde(rename = "genericAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1050,11 +1726,17 @@ impl LexRuntime for LexRuntimeClient {
             result.alternative_intents = response.headers.remove("x-amz-lex-alternative-intents");
             result.bot_version = response.headers.remove("x-amz-lex-bot-version");
             result.content_type = response.headers.remove("Content-Type");
-            result.dialog_state = response.headers.remove("x-amz-lex-dialog-state");
+            result.dialog_state = response
+                .headers
+                .remove("x-amz-lex-dialog-state")
+                .map(|value| value.into());
             result.input_transcript = response.headers.remove("x-amz-lex-input-transcript");
             result.intent_name = response.headers.remove("x-amz-lex-intent-name");
             result.message = response.headers.remove("x-amz-lex-message");
-            result.message_format = response.headers.remove("x-amz-lex-message-format");
+            result.message_format = response
+                .headers
+                .remove("x-amz-lex-message-format")
+                .map(|value| value.into());
             result.nlu_intent_confidence =
                 response.headers.remove("x-amz-lex-nlu-intent-confidence");
             result.sentiment_response = response.headers.remove("x-amz-lex-sentiment");
@@ -1141,10 +1823,16 @@ impl LexRuntime for LexRuntimeClient {
 
             result.active_contexts = response.headers.remove("x-amz-lex-active-contexts");
             result.content_type = response.headers.remove("Content-Type");
-            result.dialog_state = response.headers.remove("x-amz-lex-dialog-state");
+            result.dialog_state = response
+                .headers
+                .remove("x-amz-lex-dialog-state")
+                .map(|value| value.into());
             result.intent_name = response.headers.remove("x-amz-lex-intent-name");
             result.message = response.headers.remove("x-amz-lex-message");
-            result.message_format = response.headers.remove("x-amz-lex-message-format");
+            result.message_format = response
+                .headers
+                .remove("x-amz-lex-message-format")
+                .map(|value| value.into());
             result.session_attributes = response.headers.remove("x-amz-lex-session-attributes");
             result.session_id = response.headers.remove("x-amz-lex-session-id");
             result.slot_to_elicit = response.headers.remove("x-amz-lex-slot-to-elicit");

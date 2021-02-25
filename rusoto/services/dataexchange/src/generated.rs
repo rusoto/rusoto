@@ -60,7 +60,7 @@ pub struct AssetEntry {
     pub asset_details: AssetDetails,
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
-    pub asset_type: String,
+    pub asset_type: AssetType,
     /// <p>The date and time that the asset was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: f64,
@@ -96,6 +96,103 @@ pub struct AssetSourceEntry {
     pub key: String,
 }
 
+/// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssetType {
+    S3Snapshot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssetType),
+}
+
+impl Default for AssetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssetType {
+    fn into(self) -> String {
+        match self {
+            AssetType::S3Snapshot => "S3_SNAPSHOT".to_string(),
+            AssetType::UnknownVariant(UnknownAssetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssetType {
+    fn into(self) -> &'a str {
+        match self {
+            AssetType::S3Snapshot => &"S3_SNAPSHOT",
+            AssetType::UnknownVariant(UnknownAssetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "S3_SNAPSHOT" => AssetType::S3Snapshot,
+            _ => AssetType::UnknownVariant(UnknownAssetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "S3_SNAPSHOT" => AssetType::S3Snapshot,
+            _ => AssetType::UnknownVariant(UnknownAssetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -104,13 +201,139 @@ pub struct CancelJobRequest {
     pub job_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Code {
+    AccessDeniedException,
+    InternalServerException,
+    MalwareDetected,
+    MalwareScanEncryptedFile,
+    ResourceNotFoundException,
+    ServiceQuotaExceededException,
+    ValidationException,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCode),
+}
+
+impl Default for Code {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Code {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Code {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Code {
+    fn into(self) -> String {
+        match self {
+            Code::AccessDeniedException => "ACCESS_DENIED_EXCEPTION".to_string(),
+            Code::InternalServerException => "INTERNAL_SERVER_EXCEPTION".to_string(),
+            Code::MalwareDetected => "MALWARE_DETECTED".to_string(),
+            Code::MalwareScanEncryptedFile => "MALWARE_SCAN_ENCRYPTED_FILE".to_string(),
+            Code::ResourceNotFoundException => "RESOURCE_NOT_FOUND_EXCEPTION".to_string(),
+            Code::ServiceQuotaExceededException => "SERVICE_QUOTA_EXCEEDED_EXCEPTION".to_string(),
+            Code::ValidationException => "VALIDATION_EXCEPTION".to_string(),
+            Code::UnknownVariant(UnknownCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Code {
+    fn into(self) -> &'a str {
+        match self {
+            Code::AccessDeniedException => &"ACCESS_DENIED_EXCEPTION",
+            Code::InternalServerException => &"INTERNAL_SERVER_EXCEPTION",
+            Code::MalwareDetected => &"MALWARE_DETECTED",
+            Code::MalwareScanEncryptedFile => &"MALWARE_SCAN_ENCRYPTED_FILE",
+            Code::ResourceNotFoundException => &"RESOURCE_NOT_FOUND_EXCEPTION",
+            Code::ServiceQuotaExceededException => &"SERVICE_QUOTA_EXCEEDED_EXCEPTION",
+            Code::ValidationException => &"VALIDATION_EXCEPTION",
+            Code::UnknownVariant(UnknownCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Code {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED_EXCEPTION" => Code::AccessDeniedException,
+            "INTERNAL_SERVER_EXCEPTION" => Code::InternalServerException,
+            "MALWARE_DETECTED" => Code::MalwareDetected,
+            "MALWARE_SCAN_ENCRYPTED_FILE" => Code::MalwareScanEncryptedFile,
+            "RESOURCE_NOT_FOUND_EXCEPTION" => Code::ResourceNotFoundException,
+            "SERVICE_QUOTA_EXCEEDED_EXCEPTION" => Code::ServiceQuotaExceededException,
+            "VALIDATION_EXCEPTION" => Code::ValidationException,
+            _ => Code::UnknownVariant(UnknownCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Code {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED_EXCEPTION" => Code::AccessDeniedException,
+            "INTERNAL_SERVER_EXCEPTION" => Code::InternalServerException,
+            "MALWARE_DETECTED" => Code::MalwareDetected,
+            "MALWARE_SCAN_ENCRYPTED_FILE" => Code::MalwareScanEncryptedFile,
+            "RESOURCE_NOT_FOUND_EXCEPTION" => Code::ResourceNotFoundException,
+            "SERVICE_QUOTA_EXCEEDED_EXCEPTION" => Code::ServiceQuotaExceededException,
+            "VALIDATION_EXCEPTION" => Code::ValidationException,
+            _ => Code::UnknownVariant(UnknownCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Code {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Code {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Code {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The request body for CreateDataSet.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSetRequest {
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
-    pub asset_type: String,
+    pub asset_type: AssetType,
     /// <p>A description for the data set. This value can be up to 16,348 characters long.</p>
     #[serde(rename = "Description")]
     pub description: String,
@@ -133,7 +356,7 @@ pub struct CreateDataSetResponse {
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_type: Option<String>,
+    pub asset_type: Option<AssetType>,
     /// <p>The date and time that the data set was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -153,7 +376,7 @@ pub struct CreateDataSetResponse {
     /// <p>A property that defines the data set as OWNED by the account (for providers) or ENTITLED to the account (for subscribers).</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin: Option<String>,
+    pub origin: Option<Origin>,
     /// <p>If the origin of this data set is ENTITLED, includes the details for the product on AWS Marketplace.</p>
     #[serde(rename = "OriginDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -181,7 +404,7 @@ pub struct CreateJobRequest {
     pub details: RequestDetails,
     /// <p>The type of job to be created.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -210,11 +433,11 @@ pub struct CreateJobResponse {
     /// <p>The state of the job.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<State>,
     /// <p>The job type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
     /// <p>The date and time that the job was last updated, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -288,7 +511,7 @@ pub struct DataSetEntry {
     pub arn: String,
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
-    pub asset_type: String,
+    pub asset_type: AssetType,
     /// <p>The date and time that the data set was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: f64,
@@ -303,7 +526,7 @@ pub struct DataSetEntry {
     pub name: String,
     /// <p>A property that defines the data set as OWNED by the account (for providers) or ENTITLED to the account (for subscribers).</p>
     #[serde(rename = "Origin")]
-    pub origin: String,
+    pub origin: Origin,
     /// <p>If the origin of this data set is ENTITLED, includes the details for the product on AWS Marketplace.</p>
     #[serde(rename = "OriginDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,7 +670,7 @@ pub struct ExportServerSideEncryption {
     pub kms_key_arn: Option<String>,
     /// <p>The type of server side encryption used for encrypting the objects in Amazon S3.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ServerSideEncryptionTypes,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -478,7 +701,7 @@ pub struct GetAssetResponse {
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_type: Option<String>,
+    pub asset_type: Option<AssetType>,
     /// <p>The date and time that the asset was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -527,7 +750,7 @@ pub struct GetDataSetResponse {
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_type: Option<String>,
+    pub asset_type: Option<AssetType>,
     /// <p>The date and time that the data set was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -547,7 +770,7 @@ pub struct GetDataSetResponse {
     /// <p>A property that defines the data set as OWNED by the account (for providers) or ENTITLED to the account (for subscribers).</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin: Option<String>,
+    pub origin: Option<Origin>,
     /// <p>If the origin of this data set is ENTITLED, includes the details for the product on AWS Marketplace.</p>
     #[serde(rename = "OriginDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -600,11 +823,11 @@ pub struct GetJobResponse {
     /// <p>The state of the job.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<State>,
     /// <p>The job type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
     /// <p>The date and time that the job was last updated, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -767,10 +990,10 @@ pub struct JobEntry {
     pub id: String,
     /// <p>The state of the job.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: State,
     /// <p>The job type.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
     /// <p>The date and time that the job was last updated, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: f64,
@@ -782,14 +1005,14 @@ pub struct JobEntry {
 pub struct JobError {
     /// <p>The code for the job error.</p>
     #[serde(rename = "Code")]
-    pub code: String,
+    pub code: Code,
     #[serde(rename = "Details")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<Details>,
     /// <p>The name of the limit that was reached.</p>
     #[serde(rename = "LimitName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub limit_name: Option<String>,
+    pub limit_name: Option<JobErrorLimitName>,
     /// <p>The value of the exceeded limit.</p>
     #[serde(rename = "LimitValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -804,7 +1027,409 @@ pub struct JobError {
     /// <p>The type of resource related to the error.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<JobErrorResourceTypes>,
+}
+
+/// <p>The name of the limit that was reached.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobErrorLimitName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobErrorLimitName {
+    AssetSizeInGB,
+    AssetsPerRevision,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobErrorLimitName),
+}
+
+impl Default for JobErrorLimitName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobErrorLimitName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobErrorLimitName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobErrorLimitName {
+    fn into(self) -> String {
+        match self {
+            JobErrorLimitName::AssetSizeInGB => "Asset size in GB".to_string(),
+            JobErrorLimitName::AssetsPerRevision => "Assets per revision".to_string(),
+            JobErrorLimitName::UnknownVariant(UnknownJobErrorLimitName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobErrorLimitName {
+    fn into(self) -> &'a str {
+        match self {
+            JobErrorLimitName::AssetSizeInGB => &"Asset size in GB",
+            JobErrorLimitName::AssetsPerRevision => &"Assets per revision",
+            JobErrorLimitName::UnknownVariant(UnknownJobErrorLimitName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for JobErrorLimitName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Asset size in GB" => JobErrorLimitName::AssetSizeInGB,
+            "Assets per revision" => JobErrorLimitName::AssetsPerRevision,
+            _ => JobErrorLimitName::UnknownVariant(UnknownJobErrorLimitName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobErrorLimitName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Asset size in GB" => JobErrorLimitName::AssetSizeInGB,
+            "Assets per revision" => JobErrorLimitName::AssetsPerRevision,
+            _ => JobErrorLimitName::UnknownVariant(UnknownJobErrorLimitName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobErrorLimitName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobErrorLimitName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobErrorLimitName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The types of resource which the job error can apply to.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobErrorResourceTypes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobErrorResourceTypes {
+    Asset,
+    Revision,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobErrorResourceTypes),
+}
+
+impl Default for JobErrorResourceTypes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobErrorResourceTypes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobErrorResourceTypes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobErrorResourceTypes {
+    fn into(self) -> String {
+        match self {
+            JobErrorResourceTypes::Asset => "ASSET".to_string(),
+            JobErrorResourceTypes::Revision => "REVISION".to_string(),
+            JobErrorResourceTypes::UnknownVariant(UnknownJobErrorResourceTypes {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobErrorResourceTypes {
+    fn into(self) -> &'a str {
+        match self {
+            JobErrorResourceTypes::Asset => &"ASSET",
+            JobErrorResourceTypes::Revision => &"REVISION",
+            JobErrorResourceTypes::UnknownVariant(UnknownJobErrorResourceTypes {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobErrorResourceTypes {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSET" => JobErrorResourceTypes::Asset,
+            "REVISION" => JobErrorResourceTypes::Revision,
+            _ => JobErrorResourceTypes::UnknownVariant(UnknownJobErrorResourceTypes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobErrorResourceTypes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSET" => JobErrorResourceTypes::Asset,
+            "REVISION" => JobErrorResourceTypes::Revision,
+            _ => JobErrorResourceTypes::UnknownVariant(UnknownJobErrorResourceTypes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobErrorResourceTypes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobErrorResourceTypes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobErrorResourceTypes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLimitName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LimitName {
+    AssetPerExportJobFromAmazonS3,
+    AssetSizeInGB,
+    AssetsPerImportJobFromAmazonS3,
+    AssetsPerRevision,
+    ConcurrentInProgressJobsToExportAssetsToAmazonS3,
+    ConcurrentInProgressJobsToExportAssetsToASignedURL,
+    ConcurrentInProgressJobsToImportAssetsFromAmazonS3,
+    ConcurrentInProgressJobsToImportAssetsFromASignedURL,
+    DataSetsPerAccount,
+    DataSetsPerProduct,
+    ProductsPerAccount,
+    RevisionsPerDataSet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLimitName),
+}
+
+impl Default for LimitName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LimitName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LimitName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LimitName {
+    fn into(self) -> String {
+        match self {
+            LimitName::AssetPerExportJobFromAmazonS3 => {
+                "Asset per export job from Amazon S3".to_string()
+            }
+            LimitName::AssetSizeInGB => "Asset size in GB".to_string(),
+            LimitName::AssetsPerImportJobFromAmazonS3 => {
+                "Assets per import job from Amazon S3".to_string()
+            }
+            LimitName::AssetsPerRevision => "Assets per revision".to_string(),
+            LimitName::ConcurrentInProgressJobsToExportAssetsToAmazonS3 => {
+                "Concurrent in progress jobs to export assets to Amazon S3".to_string()
+            }
+            LimitName::ConcurrentInProgressJobsToExportAssetsToASignedURL => {
+                "Concurrent in progress jobs to export assets to a signed URL".to_string()
+            }
+            LimitName::ConcurrentInProgressJobsToImportAssetsFromAmazonS3 => {
+                "Concurrent in progress jobs to import assets from Amazon S3".to_string()
+            }
+            LimitName::ConcurrentInProgressJobsToImportAssetsFromASignedURL => {
+                "Concurrent in progress jobs to import assets from a signed URL".to_string()
+            }
+            LimitName::DataSetsPerAccount => "Data sets per account".to_string(),
+            LimitName::DataSetsPerProduct => "Data sets per product".to_string(),
+            LimitName::ProductsPerAccount => "Products per account".to_string(),
+            LimitName::RevisionsPerDataSet => "Revisions per data set".to_string(),
+            LimitName::UnknownVariant(UnknownLimitName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LimitName {
+    fn into(self) -> &'a str {
+        match self {
+            LimitName::AssetPerExportJobFromAmazonS3 => &"Asset per export job from Amazon S3",
+            LimitName::AssetSizeInGB => &"Asset size in GB",
+            LimitName::AssetsPerImportJobFromAmazonS3 => &"Assets per import job from Amazon S3",
+            LimitName::AssetsPerRevision => &"Assets per revision",
+            LimitName::ConcurrentInProgressJobsToExportAssetsToAmazonS3 => {
+                &"Concurrent in progress jobs to export assets to Amazon S3"
+            }
+            LimitName::ConcurrentInProgressJobsToExportAssetsToASignedURL => {
+                &"Concurrent in progress jobs to export assets to a signed URL"
+            }
+            LimitName::ConcurrentInProgressJobsToImportAssetsFromAmazonS3 => {
+                &"Concurrent in progress jobs to import assets from Amazon S3"
+            }
+            LimitName::ConcurrentInProgressJobsToImportAssetsFromASignedURL => {
+                &"Concurrent in progress jobs to import assets from a signed URL"
+            }
+            LimitName::DataSetsPerAccount => &"Data sets per account",
+            LimitName::DataSetsPerProduct => &"Data sets per product",
+            LimitName::ProductsPerAccount => &"Products per account",
+            LimitName::RevisionsPerDataSet => &"Revisions per data set",
+            LimitName::UnknownVariant(UnknownLimitName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LimitName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Asset per export job from Amazon S3" => LimitName::AssetPerExportJobFromAmazonS3,
+            "Asset size in GB" => LimitName::AssetSizeInGB,
+            "Assets per import job from Amazon S3" => LimitName::AssetsPerImportJobFromAmazonS3,
+            "Assets per revision" => LimitName::AssetsPerRevision,
+            "Concurrent in progress jobs to export assets to Amazon S3" => {
+                LimitName::ConcurrentInProgressJobsToExportAssetsToAmazonS3
+            }
+            "Concurrent in progress jobs to export assets to a signed URL" => {
+                LimitName::ConcurrentInProgressJobsToExportAssetsToASignedURL
+            }
+            "Concurrent in progress jobs to import assets from Amazon S3" => {
+                LimitName::ConcurrentInProgressJobsToImportAssetsFromAmazonS3
+            }
+            "Concurrent in progress jobs to import assets from a signed URL" => {
+                LimitName::ConcurrentInProgressJobsToImportAssetsFromASignedURL
+            }
+            "Data sets per account" => LimitName::DataSetsPerAccount,
+            "Data sets per product" => LimitName::DataSetsPerProduct,
+            "Products per account" => LimitName::ProductsPerAccount,
+            "Revisions per data set" => LimitName::RevisionsPerDataSet,
+            _ => LimitName::UnknownVariant(UnknownLimitName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LimitName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Asset per export job from Amazon S3" => LimitName::AssetPerExportJobFromAmazonS3,
+            "Asset size in GB" => LimitName::AssetSizeInGB,
+            "Assets per import job from Amazon S3" => LimitName::AssetsPerImportJobFromAmazonS3,
+            "Assets per revision" => LimitName::AssetsPerRevision,
+            "Concurrent in progress jobs to export assets to Amazon S3" => {
+                LimitName::ConcurrentInProgressJobsToExportAssetsToAmazonS3
+            }
+            "Concurrent in progress jobs to export assets to a signed URL" => {
+                LimitName::ConcurrentInProgressJobsToExportAssetsToASignedURL
+            }
+            "Concurrent in progress jobs to import assets from Amazon S3" => {
+                LimitName::ConcurrentInProgressJobsToImportAssetsFromAmazonS3
+            }
+            "Concurrent in progress jobs to import assets from a signed URL" => {
+                LimitName::ConcurrentInProgressJobsToImportAssetsFromASignedURL
+            }
+            "Data sets per account" => LimitName::DataSetsPerAccount,
+            "Data sets per product" => LimitName::DataSetsPerProduct,
+            "Products per account" => LimitName::ProductsPerAccount,
+            "Revisions per data set" => LimitName::RevisionsPerDataSet,
+            _ => LimitName::UnknownVariant(UnknownLimitName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LimitName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for LimitName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LimitName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -949,6 +1574,109 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>A property that defines the data set as OWNED by the account (for providers) or ENTITLED to the account (for subscribers). When an owned data set is published in a product, AWS Data Exchange creates a copy of the data set. Subscribers can access that copy of the data set as an entitled data set.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrigin {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Origin {
+    Entitled,
+    Owned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrigin),
+}
+
+impl Default for Origin {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Origin {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Origin {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Origin {
+    fn into(self) -> String {
+        match self {
+            Origin::Entitled => "ENTITLED".to_string(),
+            Origin::Owned => "OWNED".to_string(),
+            Origin::UnknownVariant(UnknownOrigin { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Origin {
+    fn into(self) -> &'a str {
+        match self {
+            Origin::Entitled => &"ENTITLED",
+            Origin::Owned => &"OWNED",
+            Origin::UnknownVariant(UnknownOrigin { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Origin {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENTITLED" => Origin::Entitled,
+            "OWNED" => Origin::Owned,
+            _ => Origin::UnknownVariant(UnknownOrigin {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Origin {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENTITLED" => Origin::Entitled,
+            "OWNED" => Origin::Owned,
+            _ => Origin::UnknownVariant(UnknownOrigin { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Origin {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Origin {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Origin {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OriginDetails {
@@ -976,6 +1704,118 @@ pub struct RequestDetails {
     #[serde(rename = "ImportAssetsFromS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub import_assets_from_s3: Option<ImportAssetsFromS3RequestDetails>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Asset,
+    DataSet,
+    Job,
+    Revision,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Asset => "ASSET".to_string(),
+            ResourceType::DataSet => "DATA_SET".to_string(),
+            ResourceType::Job => "JOB".to_string(),
+            ResourceType::Revision => "REVISION".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Asset => &"ASSET",
+            ResourceType::DataSet => &"DATA_SET",
+            ResourceType::Job => &"JOB",
+            ResourceType::Revision => &"REVISION",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSET" => ResourceType::Asset,
+            "DATA_SET" => ResourceType::DataSet,
+            "JOB" => ResourceType::Job,
+            "REVISION" => ResourceType::Revision,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSET" => ResourceType::Asset,
+            "DATA_SET" => ResourceType::DataSet,
+            "JOB" => ResourceType::Job,
+            "REVISION" => ResourceType::Revision,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details for the response.</p>
@@ -1042,6 +1882,114 @@ pub struct S3SnapshotAsset {
     pub size: f64,
 }
 
+/// <p>The types of encryption supported in export jobs to Amazon S3.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerSideEncryptionTypes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerSideEncryptionTypes {
+    Aes256,
+    AwsKms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerSideEncryptionTypes),
+}
+
+impl Default for ServerSideEncryptionTypes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerSideEncryptionTypes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerSideEncryptionTypes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerSideEncryptionTypes {
+    fn into(self) -> String {
+        match self {
+            ServerSideEncryptionTypes::Aes256 => "AES256".to_string(),
+            ServerSideEncryptionTypes::AwsKms => "aws:kms".to_string(),
+            ServerSideEncryptionTypes::UnknownVariant(UnknownServerSideEncryptionTypes {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerSideEncryptionTypes {
+    fn into(self) -> &'a str {
+        match self {
+            ServerSideEncryptionTypes::Aes256 => &"AES256",
+            ServerSideEncryptionTypes::AwsKms => &"aws:kms",
+            ServerSideEncryptionTypes::UnknownVariant(UnknownServerSideEncryptionTypes {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServerSideEncryptionTypes {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES256" => ServerSideEncryptionTypes::Aes256,
+            "aws:kms" => ServerSideEncryptionTypes::AwsKms,
+            _ => ServerSideEncryptionTypes::UnknownVariant(UnknownServerSideEncryptionTypes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerSideEncryptionTypes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES256" => ServerSideEncryptionTypes::Aes256,
+            "aws:kms" => ServerSideEncryptionTypes::AwsKms,
+            _ => {
+                ServerSideEncryptionTypes::UnknownVariant(UnknownServerSideEncryptionTypes { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerSideEncryptionTypes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServerSideEncryptionTypes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServerSideEncryptionTypes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRequest {
@@ -1054,6 +2002,127 @@ pub struct StartJobRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum State {
+    Cancelled,
+    Completed,
+    Error,
+    InProgress,
+    TimedOut,
+    Waiting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownState),
+}
+
+impl Default for State {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for State {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for State {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for State {
+    fn into(self) -> String {
+        match self {
+            State::Cancelled => "CANCELLED".to_string(),
+            State::Completed => "COMPLETED".to_string(),
+            State::Error => "ERROR".to_string(),
+            State::InProgress => "IN_PROGRESS".to_string(),
+            State::TimedOut => "TIMED_OUT".to_string(),
+            State::Waiting => "WAITING".to_string(),
+            State::UnknownVariant(UnknownState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a State {
+    fn into(self) -> &'a str {
+        match self {
+            State::Cancelled => &"CANCELLED",
+            State::Completed => &"COMPLETED",
+            State::Error => &"ERROR",
+            State::InProgress => &"IN_PROGRESS",
+            State::TimedOut => &"TIMED_OUT",
+            State::Waiting => &"WAITING",
+            State::UnknownVariant(UnknownState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for State {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => State::Cancelled,
+            "COMPLETED" => State::Completed,
+            "ERROR" => State::Error,
+            "IN_PROGRESS" => State::InProgress,
+            "TIMED_OUT" => State::TimedOut,
+            "WAITING" => State::Waiting,
+            _ => State::UnknownVariant(UnknownState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for State {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => State::Cancelled,
+            "COMPLETED" => State::Completed,
+            "ERROR" => State::Error,
+            "IN_PROGRESS" => State::InProgress,
+            "TIMED_OUT" => State::TimedOut,
+            "WAITING" => State::Waiting,
+            _ => State::UnknownVariant(UnknownState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for State {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for State {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for State {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The request body for TagResource.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1064,6 +2133,116 @@ pub struct TagResourceRequest {
     /// <p>A label that consists of a customer-defined key and an optional value.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    ExportAssetsToS3,
+    ExportAssetToSignedUrl,
+    ImportAssetsFromS3,
+    ImportAssetFromSignedUrl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::ExportAssetsToS3 => "EXPORT_ASSETS_TO_S3".to_string(),
+            Type::ExportAssetToSignedUrl => "EXPORT_ASSET_TO_SIGNED_URL".to_string(),
+            Type::ImportAssetsFromS3 => "IMPORT_ASSETS_FROM_S3".to_string(),
+            Type::ImportAssetFromSignedUrl => "IMPORT_ASSET_FROM_SIGNED_URL".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::ExportAssetsToS3 => &"EXPORT_ASSETS_TO_S3",
+            Type::ExportAssetToSignedUrl => &"EXPORT_ASSET_TO_SIGNED_URL",
+            Type::ImportAssetsFromS3 => &"IMPORT_ASSETS_FROM_S3",
+            Type::ImportAssetFromSignedUrl => &"IMPORT_ASSET_FROM_SIGNED_URL",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPORT_ASSETS_TO_S3" => Type::ExportAssetsToS3,
+            "EXPORT_ASSET_TO_SIGNED_URL" => Type::ExportAssetToSignedUrl,
+            "IMPORT_ASSETS_FROM_S3" => Type::ImportAssetsFromS3,
+            "IMPORT_ASSET_FROM_SIGNED_URL" => Type::ImportAssetFromSignedUrl,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPORT_ASSETS_TO_S3" => Type::ExportAssetsToS3,
+            "EXPORT_ASSET_TO_SIGNED_URL" => Type::ExportAssetToSignedUrl,
+            "IMPORT_ASSETS_FROM_S3" => Type::ImportAssetsFromS3,
+            "IMPORT_ASSET_FROM_SIGNED_URL" => Type::ImportAssetFromSignedUrl,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1109,7 +2288,7 @@ pub struct UpdateAssetResponse {
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_type: Option<String>,
+    pub asset_type: Option<AssetType>,
     /// <p>The date and time that the asset was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1167,7 +2346,7 @@ pub struct UpdateDataSetResponse {
     /// <p>The type of file your data is stored in. Currently, the supported asset type is S3_SNAPSHOT.</p>
     #[serde(rename = "AssetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_type: Option<String>,
+    pub asset_type: Option<AssetType>,
     /// <p>The date and time that the data set was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1187,7 +2366,7 @@ pub struct UpdateDataSetResponse {
     /// <p>A property that defines the data set as OWNED by the account (for providers) or ENTITLED to the account (for subscribers).</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin: Option<String>,
+    pub origin: Option<Origin>,
     /// <p>If the origin of this data set is ENTITLED, includes the details for the product on AWS Marketplace.</p>
     #[serde(rename = "OriginDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]

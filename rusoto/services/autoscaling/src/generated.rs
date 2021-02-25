@@ -131,7 +131,7 @@ pub struct Activity {
     /// <p>The start time of the activity.</p>
     pub start_time: String,
     /// <p>The current status of the activity.</p>
-    pub status_code: String,
+    pub status_code: ScalingActivityStatusCode,
     /// <p>A friendly, more verbose description of the activity status.</p>
     pub status_message: Option<String>,
 }
@@ -195,7 +195,7 @@ impl ActivityIdsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -360,7 +360,7 @@ impl AttachInstancesQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(
@@ -413,7 +413,7 @@ impl AttachLoadBalancerTargetGroupsTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         TargetGroupARNsSerializer::serialize(
             params,
@@ -464,7 +464,7 @@ impl AttachLoadBalancersTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         LoadBalancerNamesSerializer::serialize(
             params,
@@ -731,7 +731,7 @@ impl AutoScalingGroupNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -767,7 +767,10 @@ impl AutoScalingGroupNamesTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1013,7 +1016,7 @@ impl AutoScalingNotificationTypesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1045,7 +1048,7 @@ impl AvailabilityZonesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1105,7 +1108,7 @@ impl BatchDeleteScheduledActionTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         ScheduledActionNamesSerializer::serialize(
             params,
@@ -1172,7 +1175,7 @@ impl BatchPutScheduledUpdateGroupActionTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         ScheduledUpdateGroupActionRequestsSerializer::serialize(
             params,
@@ -1279,7 +1282,10 @@ impl BlockDeviceMappingSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DeviceName"), &obj.device_name);
+        params.put(
+            &format!("{}{}", prefix, "DeviceName"),
+            &obj.device_name.to_string(),
+        );
         if let Some(ref field_value) = obj.ebs {
             EbsSerializer::serialize(params, &format!("{}{}", prefix, "Ebs"), field_value);
         }
@@ -1287,7 +1293,10 @@ impl BlockDeviceMappingSerializer {
             params.put(&format!("{}{}", prefix, "NoDevice"), &field_value);
         }
         if let Some(ref field_value) = obj.virtual_name {
-            params.put(&format!("{}{}", prefix, "VirtualName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VirtualName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1376,7 +1385,7 @@ impl CancelInstanceRefreshTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
     }
 }
@@ -1416,7 +1425,7 @@ impl ClassicLinkVPCSecurityGroupsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -1468,24 +1477,27 @@ impl CompleteLifecycleActionTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InstanceId"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "LifecycleActionResult"),
-            &obj.lifecycle_action_result,
+            &obj.lifecycle_action_result.to_string(),
         );
         if let Some(ref field_value) = obj.lifecycle_action_token {
             params.put(
                 &format!("{}{}", prefix, "LifecycleActionToken"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "LifecycleHookName"),
-            &obj.lifecycle_hook_name,
+            &obj.lifecycle_hook_name.to_string(),
         );
     }
 }
@@ -1560,7 +1572,7 @@ impl CreateAutoScalingGroupTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
@@ -1585,15 +1597,21 @@ impl CreateAutoScalingGroupTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.health_check_type {
-            params.put(&format!("{}{}", prefix, "HealthCheckType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HealthCheckType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InstanceId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.launch_configuration_name {
             params.put(
                 &format!("{}{}", prefix, "LaunchConfigurationName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.launch_template {
@@ -1639,12 +1657,15 @@ impl CreateAutoScalingGroupTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.placement_group {
-            params.put(&format!("{}{}", prefix, "PlacementGroup"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlacementGroup"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.service_linked_role_arn {
             params.put(
                 &format!("{}{}", prefix, "ServiceLinkedRoleARN"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.tags {
@@ -1665,7 +1686,10 @@ impl CreateAutoScalingGroupTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.vpc_zone_identifier {
-            params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VPCZoneIdentifier"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1736,7 +1760,10 @@ impl CreateLaunchConfigurationTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.classic_link_vpc_id {
-            params.put(&format!("{}{}", prefix, "ClassicLinkVPCId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClassicLinkVPCId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.classic_link_vpc_security_groups {
             ClassicLinkVPCSecurityGroupsSerializer::serialize(
@@ -1749,13 +1776,22 @@ impl CreateLaunchConfigurationTypeSerializer {
             params.put(&format!("{}{}", prefix, "EbsOptimized"), &field_value);
         }
         if let Some(ref field_value) = obj.iam_instance_profile {
-            params.put(&format!("{}{}", prefix, "IamInstanceProfile"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "IamInstanceProfile"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.image_id {
-            params.put(&format!("{}{}", prefix, "ImageId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ImageId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InstanceId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.instance_monitoring {
             InstanceMonitoringSerializer::serialize(
@@ -1765,17 +1801,26 @@ impl CreateLaunchConfigurationTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.instance_type {
-            params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InstanceType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.kernel_id {
-            params.put(&format!("{}{}", prefix, "KernelId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KernelId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.key_name {
-            params.put(&format!("{}{}", prefix, "KeyName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KeyName"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "LaunchConfigurationName"),
-            &obj.launch_configuration_name,
+            &obj.launch_configuration_name.to_string(),
         );
         if let Some(ref field_value) = obj.metadata_options {
             InstanceMetadataOptionsSerializer::serialize(
@@ -1785,10 +1830,16 @@ impl CreateLaunchConfigurationTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.placement_tenancy {
-            params.put(&format!("{}{}", prefix, "PlacementTenancy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlacementTenancy"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.ramdisk_id {
-            params.put(&format!("{}{}", prefix, "RamdiskId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RamdiskId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.security_groups {
             SecurityGroupsSerializer::serialize(
@@ -1798,10 +1849,16 @@ impl CreateLaunchConfigurationTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.spot_price {
-            params.put(&format!("{}{}", prefix, "SpotPrice"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SpotPrice"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.user_data {
-            params.put(&format!("{}{}", prefix, "UserData"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UserData"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1838,7 +1895,7 @@ pub struct CustomizedMetricSpecification {
     /// <p>The namespace of the metric.</p>
     pub namespace: String,
     /// <p>The statistic of the metric.</p>
-    pub statistic: String,
+    pub statistic: MetricStatistic,
     /// <p>The unit of the metric.</p>
     pub unit: Option<String>,
 }
@@ -1899,11 +1956,20 @@ impl CustomizedMetricSpecificationSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
-        params.put(&format!("{}{}", prefix, "Statistic"), &obj.statistic);
+        params.put(
+            &format!("{}{}", prefix, "MetricName"),
+            &obj.metric_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Namespace"),
+            &obj.namespace.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Statistic"),
+            &obj.statistic.to_string(),
+        );
         if let Some(ref field_value) = obj.unit {
-            params.put(&format!("{}{}", prefix, "Unit"), &field_value);
+            params.put(&format!("{}{}", prefix, "Unit"), &field_value.to_string());
         }
     }
 }
@@ -1928,7 +1994,7 @@ impl DeleteAutoScalingGroupTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.force_delete {
             params.put(&format!("{}{}", prefix, "ForceDelete"), &field_value);
@@ -1977,11 +2043,11 @@ impl DeleteLifecycleHookTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "LifecycleHookName"),
-            &obj.lifecycle_hook_name,
+            &obj.lifecycle_hook_name.to_string(),
         );
     }
 }
@@ -2006,9 +2072,12 @@ impl DeleteNotificationConfigurationTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicARN"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -2033,10 +2102,13 @@ impl DeletePolicyTypeSerializer {
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(
                 &format!("{}{}", prefix, "AutoScalingGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -2060,11 +2132,11 @@ impl DeleteScheduledActionTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ScheduledActionName"),
-            &obj.scheduled_action_name,
+            &obj.scheduled_action_name.to_string(),
         );
     }
 }
@@ -2213,7 +2285,10 @@ impl DescribeAutoScalingInstancesTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2315,7 +2390,7 @@ impl DescribeInstanceRefreshesTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_refresh_ids {
             InstanceRefreshIdsSerializer::serialize(
@@ -2328,7 +2403,10 @@ impl DescribeInstanceRefreshesTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2420,7 +2498,7 @@ impl DescribeLifecycleHooksTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.lifecycle_hook_names {
             LifecycleHookNamesSerializer::serialize(
@@ -2454,13 +2532,16 @@ impl DescribeLoadBalancerTargetGroupsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2528,13 +2609,16 @@ impl DescribeLoadBalancersRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2691,7 +2775,10 @@ impl DescribeNotificationConfigurationsTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2723,14 +2810,17 @@ impl DescribePoliciesTypeSerializer {
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(
                 &format!("{}{}", prefix, "AutoScalingGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.policy_names {
             PolicyNamesSerializer::serialize(
@@ -2781,14 +2871,17 @@ impl DescribeScalingActivitiesTypeSerializer {
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(
                 &format!("{}{}", prefix, "AutoScalingGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2822,7 +2915,7 @@ impl DescribeScheduledActionsTypeSerializer {
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(
                 &format!("{}{}", prefix, "AutoScalingGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.end_time {
@@ -2832,7 +2925,10 @@ impl DescribeScheduledActionsTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.scheduled_action_names {
             ScheduledActionNamesSerializer::serialize(
@@ -2874,7 +2970,10 @@ impl DescribeTagsTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2964,7 +3063,7 @@ impl DetachInstancesQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(
@@ -3021,7 +3120,7 @@ impl DetachLoadBalancerTargetGroupsTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         TargetGroupARNsSerializer::serialize(
             params,
@@ -3072,7 +3171,7 @@ impl DetachLoadBalancersTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         LoadBalancerNamesSerializer::serialize(
             params,
@@ -3102,7 +3201,7 @@ impl DisableMetricsCollectionQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.metrics {
             MetricsSerializer::serialize(params, &format!("{}{}", prefix, "Metrics"), field_value);
@@ -3207,13 +3306,19 @@ impl EbsSerializer {
             params.put(&format!("{}{}", prefix, "Iops"), &field_value);
         }
         if let Some(ref field_value) = obj.snapshot_id {
-            params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.volume_size {
             params.put(&format!("{}{}", prefix, "VolumeSize"), &field_value);
         }
         if let Some(ref field_value) = obj.volume_type {
-            params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VolumeType"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3248,9 +3353,12 @@ impl EnableMetricsCollectionQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Granularity"), &obj.granularity);
+        params.put(
+            &format!("{}{}", prefix, "Granularity"),
+            &obj.granularity.to_string(),
+        );
         if let Some(ref field_value) = obj.metrics {
             MetricsSerializer::serialize(params, &format!("{}{}", prefix, "Metrics"), field_value);
         }
@@ -3362,7 +3470,7 @@ impl EnterStandbyQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(
@@ -3413,7 +3521,7 @@ impl ExecutePolicyTypeSerializer {
         if let Some(ref field_value) = obj.auto_scaling_group_name {
             params.put(
                 &format!("{}{}", prefix, "AutoScalingGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.breach_threshold {
@@ -3425,7 +3533,10 @@ impl ExecutePolicyTypeSerializer {
         if let Some(ref field_value) = obj.metric_value {
             params.put(&format!("{}{}", prefix, "MetricValue"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -3477,7 +3588,7 @@ impl ExitStandbyQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_ids {
             InstanceIdsSerializer::serialize(
@@ -3579,7 +3690,7 @@ impl FilterSerializer {
         }
 
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+            params.put(&format!("{}{}", prefix, "Name"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.values {
             ValuesSerializer::serialize(params, &format!("{}{}", prefix, "Values"), field_value);
@@ -3639,7 +3750,7 @@ pub struct Instance {
     /// <p>The launch template for the instance.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>A description of the current lifecycle state. The <code>Quarantined</code> state is not used.</p>
-    pub lifecycle_state: String,
+    pub lifecycle_state: LifecycleState,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
     /// <p>The number of capacity units contributed by the instance based on its instance type.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
@@ -3715,8 +3826,118 @@ impl InstanceIdsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceMetadataEndpointState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceMetadataEndpointState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceMetadataEndpointState),
+}
+
+impl Default for InstanceMetadataEndpointState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceMetadataEndpointState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceMetadataEndpointState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceMetadataEndpointState {
+    fn into(self) -> String {
+        match self {
+            InstanceMetadataEndpointState::Disabled => "disabled".to_string(),
+            InstanceMetadataEndpointState::Enabled => "enabled".to_string(),
+            InstanceMetadataEndpointState::UnknownVariant(
+                UnknownInstanceMetadataEndpointState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceMetadataEndpointState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceMetadataEndpointState::Disabled => &"disabled",
+            InstanceMetadataEndpointState::Enabled => &"enabled",
+            InstanceMetadataEndpointState::UnknownVariant(
+                UnknownInstanceMetadataEndpointState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceMetadataEndpointState {
+    fn from(name: &str) -> Self {
+        match name {
+            "disabled" => InstanceMetadataEndpointState::Disabled,
+            "enabled" => InstanceMetadataEndpointState::Enabled,
+            _ => InstanceMetadataEndpointState::UnknownVariant(
+                UnknownInstanceMetadataEndpointState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InstanceMetadataEndpointState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "disabled" => InstanceMetadataEndpointState::Disabled,
+            "enabled" => InstanceMetadataEndpointState::Enabled,
+            _ => InstanceMetadataEndpointState::UnknownVariant(
+                UnknownInstanceMetadataEndpointState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceMetadataEndpointState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InstanceMetadataEndpointState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstanceMetadataEndpointState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -3724,8 +3945,11 @@ impl InstanceIdsSerializer {
 struct InstanceMetadataEndpointStateDeserializer;
 impl InstanceMetadataEndpointStateDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceMetadataEndpointState, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3736,12 +3960,126 @@ impl InstanceMetadataHttpPutResponseHopLimitDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceMetadataHttpTokensState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceMetadataHttpTokensState {
+    Optional,
+    Required,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceMetadataHttpTokensState),
+}
+
+impl Default for InstanceMetadataHttpTokensState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceMetadataHttpTokensState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceMetadataHttpTokensState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceMetadataHttpTokensState {
+    fn into(self) -> String {
+        match self {
+            InstanceMetadataHttpTokensState::Optional => "optional".to_string(),
+            InstanceMetadataHttpTokensState::Required => "required".to_string(),
+            InstanceMetadataHttpTokensState::UnknownVariant(
+                UnknownInstanceMetadataHttpTokensState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceMetadataHttpTokensState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceMetadataHttpTokensState::Optional => &"optional",
+            InstanceMetadataHttpTokensState::Required => &"required",
+            InstanceMetadataHttpTokensState::UnknownVariant(
+                UnknownInstanceMetadataHttpTokensState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceMetadataHttpTokensState {
+    fn from(name: &str) -> Self {
+        match name {
+            "optional" => InstanceMetadataHttpTokensState::Optional,
+            "required" => InstanceMetadataHttpTokensState::Required,
+            _ => InstanceMetadataHttpTokensState::UnknownVariant(
+                UnknownInstanceMetadataHttpTokensState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InstanceMetadataHttpTokensState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "optional" => InstanceMetadataHttpTokensState::Optional,
+            "required" => InstanceMetadataHttpTokensState::Required,
+            _ => InstanceMetadataHttpTokensState::UnknownVariant(
+                UnknownInstanceMetadataHttpTokensState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceMetadataHttpTokensState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InstanceMetadataHttpTokensState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstanceMetadataHttpTokensState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct InstanceMetadataHttpTokensStateDeserializer;
 impl InstanceMetadataHttpTokensStateDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceMetadataHttpTokensState, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The metadata options for the instances. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-config.html#launch-configurations-imds">Configuring the Instance Metadata Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -3750,11 +4088,11 @@ impl InstanceMetadataHttpTokensStateDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceMetadataOptions {
     /// <p><p>This parameter enables or disables the HTTP metadata endpoint on your instances. If the parameter is not specified, the default state is <code>enabled</code>.</p> <note> <p>If you specify a value of <code>disabled</code>, you will not be able to access your instance metadata. </p> </note></p>
-    pub http_endpoint: Option<String>,
+    pub http_endpoint: Option<InstanceMetadataEndpointState>,
     /// <p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p> <p>Possible values: Integers from 1 to 64</p>
     pub http_put_response_hop_limit: Option<i64>,
     /// <p>The state of token usage for your instance metadata requests. If the parameter is not specified in the request, the default state is <code>optional</code>.</p> <p>If the state is <code>optional</code>, you can choose to retrieve instance metadata with or without a signed token header on your request. If you retrieve the IAM role credentials without a token, the version 1.0 role credentials are returned. If you retrieve the IAM role credentials using a valid signed token, the version 2.0 role credentials are returned.</p> <p>If the state is <code>required</code>, you must send a signed token header with any instance metadata retrieval requests. In this state, retrieving the IAM role credentials always returns the version 2.0 credentials; the version 1.0 credentials are not available.</p>
-    pub http_tokens: Option<String>,
+    pub http_tokens: Option<InstanceMetadataHttpTokensState>,
 }
 
 #[allow(dead_code)]
@@ -3810,7 +4148,10 @@ impl InstanceMetadataOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.http_endpoint {
-            params.put(&format!("{}{}", prefix, "HttpEndpoint"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HttpEndpoint"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.http_put_response_hop_limit {
             params.put(
@@ -3819,7 +4160,10 @@ impl InstanceMetadataOptionsSerializer {
             );
         }
         if let Some(ref field_value) = obj.http_tokens {
-            params.put(&format!("{}{}", prefix, "HttpTokens"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HttpTokens"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3895,7 +4239,7 @@ pub struct InstanceRefresh {
     /// <p>The date and time at which the instance refresh began.</p>
     pub start_time: Option<String>,
     /// <p><p>The current status for the instance refresh operation:</p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<InstanceRefreshStatus>,
     /// <p>Provides more details about the current status of the instance refresh. </p>
     pub status_reason: Option<String>,
 }
@@ -3964,8 +4308,134 @@ impl InstanceRefreshIdsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceRefreshStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceRefreshStatus {
+    Cancelled,
+    Cancelling,
+    Failed,
+    InProgress,
+    Pending,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceRefreshStatus),
+}
+
+impl Default for InstanceRefreshStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceRefreshStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceRefreshStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceRefreshStatus {
+    fn into(self) -> String {
+        match self {
+            InstanceRefreshStatus::Cancelled => "Cancelled".to_string(),
+            InstanceRefreshStatus::Cancelling => "Cancelling".to_string(),
+            InstanceRefreshStatus::Failed => "Failed".to_string(),
+            InstanceRefreshStatus::InProgress => "InProgress".to_string(),
+            InstanceRefreshStatus::Pending => "Pending".to_string(),
+            InstanceRefreshStatus::Successful => "Successful".to_string(),
+            InstanceRefreshStatus::UnknownVariant(UnknownInstanceRefreshStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceRefreshStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceRefreshStatus::Cancelled => &"Cancelled",
+            InstanceRefreshStatus::Cancelling => &"Cancelling",
+            InstanceRefreshStatus::Failed => &"Failed",
+            InstanceRefreshStatus::InProgress => &"InProgress",
+            InstanceRefreshStatus::Pending => &"Pending",
+            InstanceRefreshStatus::Successful => &"Successful",
+            InstanceRefreshStatus::UnknownVariant(UnknownInstanceRefreshStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceRefreshStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => InstanceRefreshStatus::Cancelled,
+            "Cancelling" => InstanceRefreshStatus::Cancelling,
+            "Failed" => InstanceRefreshStatus::Failed,
+            "InProgress" => InstanceRefreshStatus::InProgress,
+            "Pending" => InstanceRefreshStatus::Pending,
+            "Successful" => InstanceRefreshStatus::Successful,
+            _ => InstanceRefreshStatus::UnknownVariant(UnknownInstanceRefreshStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceRefreshStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => InstanceRefreshStatus::Cancelled,
+            "Cancelling" => InstanceRefreshStatus::Cancelling,
+            "Failed" => InstanceRefreshStatus::Failed,
+            "InProgress" => InstanceRefreshStatus::InProgress,
+            "Pending" => InstanceRefreshStatus::Pending,
+            "Successful" => InstanceRefreshStatus::Successful,
+            _ => InstanceRefreshStatus::UnknownVariant(UnknownInstanceRefreshStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceRefreshStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InstanceRefreshStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstanceRefreshStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -3973,8 +4443,11 @@ impl InstanceRefreshIdsSerializer {
 struct InstanceRefreshStatusDeserializer;
 impl InstanceRefreshStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceRefreshStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -4100,7 +4573,7 @@ impl InstancesDistributionSerializer {
         if let Some(ref field_value) = obj.on_demand_allocation_strategy {
             params.put(
                 &format!("{}{}", prefix, "OnDemandAllocationStrategy"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.on_demand_base_capacity {
@@ -4118,14 +4591,17 @@ impl InstancesDistributionSerializer {
         if let Some(ref field_value) = obj.spot_allocation_strategy {
             params.put(
                 &format!("{}{}", prefix, "SpotAllocationStrategy"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.spot_instance_pools {
             params.put(&format!("{}{}", prefix, "SpotInstancePools"), &field_value);
         }
         if let Some(ref field_value) = obj.spot_max_price {
-            params.put(&format!("{}{}", prefix, "SpotMaxPrice"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SpotMaxPrice"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4334,7 +4810,7 @@ impl LaunchConfigurationNameTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LaunchConfigurationName"),
-            &obj.launch_configuration_name,
+            &obj.launch_configuration_name.to_string(),
         );
     }
 }
@@ -4345,7 +4821,7 @@ impl LaunchConfigurationNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4381,7 +4857,10 @@ impl LaunchConfigurationNamesTypeSerializer {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4584,7 +5063,10 @@ impl LaunchTemplateOverridesSerializer {
         }
 
         if let Some(ref field_value) = obj.instance_type {
-            params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InstanceType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.launch_template_specification {
             LaunchTemplateSpecificationSerializer::serialize(
@@ -4594,7 +5076,10 @@ impl LaunchTemplateOverridesSerializer {
             );
         }
         if let Some(ref field_value) = obj.weighted_capacity {
-            params.put(&format!("{}{}", prefix, "WeightedCapacity"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "WeightedCapacity"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4661,13 +5146,22 @@ impl LaunchTemplateSpecificationSerializer {
         }
 
         if let Some(ref field_value) = obj.launch_template_id {
-            params.put(&format!("{}{}", prefix, "LaunchTemplateId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.launch_template_name {
-            params.put(&format!("{}{}", prefix, "LaunchTemplateName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.version {
-            params.put(&format!("{}{}", prefix, "Version"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Version"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4780,7 +5274,7 @@ impl LifecycleHookNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4815,33 +5309,39 @@ impl LifecycleHookSpecificationSerializer {
         }
 
         if let Some(ref field_value) = obj.default_result {
-            params.put(&format!("{}{}", prefix, "DefaultResult"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultResult"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.heartbeat_timeout {
             params.put(&format!("{}{}", prefix, "HeartbeatTimeout"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "LifecycleHookName"),
-            &obj.lifecycle_hook_name,
+            &obj.lifecycle_hook_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "LifecycleTransition"),
-            &obj.lifecycle_transition,
+            &obj.lifecycle_transition.to_string(),
         );
         if let Some(ref field_value) = obj.notification_metadata {
             params.put(
                 &format!("{}{}", prefix, "NotificationMetadata"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.notification_target_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTargetARN"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4875,12 +5375,173 @@ impl LifecycleHooksDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLifecycleState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LifecycleState {
+    Detached,
+    Detaching,
+    EnteringStandby,
+    InService,
+    Pending,
+    PendingProceed,
+    PendingWait,
+    Quarantined,
+    Standby,
+    Terminated,
+    Terminating,
+    TerminatingProceed,
+    TerminatingWait,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLifecycleState),
+}
+
+impl Default for LifecycleState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LifecycleState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LifecycleState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LifecycleState {
+    fn into(self) -> String {
+        match self {
+            LifecycleState::Detached => "Detached".to_string(),
+            LifecycleState::Detaching => "Detaching".to_string(),
+            LifecycleState::EnteringStandby => "EnteringStandby".to_string(),
+            LifecycleState::InService => "InService".to_string(),
+            LifecycleState::Pending => "Pending".to_string(),
+            LifecycleState::PendingProceed => "Pending:Proceed".to_string(),
+            LifecycleState::PendingWait => "Pending:Wait".to_string(),
+            LifecycleState::Quarantined => "Quarantined".to_string(),
+            LifecycleState::Standby => "Standby".to_string(),
+            LifecycleState::Terminated => "Terminated".to_string(),
+            LifecycleState::Terminating => "Terminating".to_string(),
+            LifecycleState::TerminatingProceed => "Terminating:Proceed".to_string(),
+            LifecycleState::TerminatingWait => "Terminating:Wait".to_string(),
+            LifecycleState::UnknownVariant(UnknownLifecycleState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LifecycleState {
+    fn into(self) -> &'a str {
+        match self {
+            LifecycleState::Detached => &"Detached",
+            LifecycleState::Detaching => &"Detaching",
+            LifecycleState::EnteringStandby => &"EnteringStandby",
+            LifecycleState::InService => &"InService",
+            LifecycleState::Pending => &"Pending",
+            LifecycleState::PendingProceed => &"Pending:Proceed",
+            LifecycleState::PendingWait => &"Pending:Wait",
+            LifecycleState::Quarantined => &"Quarantined",
+            LifecycleState::Standby => &"Standby",
+            LifecycleState::Terminated => &"Terminated",
+            LifecycleState::Terminating => &"Terminating",
+            LifecycleState::TerminatingProceed => &"Terminating:Proceed",
+            LifecycleState::TerminatingWait => &"Terminating:Wait",
+            LifecycleState::UnknownVariant(UnknownLifecycleState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LifecycleState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Detached" => LifecycleState::Detached,
+            "Detaching" => LifecycleState::Detaching,
+            "EnteringStandby" => LifecycleState::EnteringStandby,
+            "InService" => LifecycleState::InService,
+            "Pending" => LifecycleState::Pending,
+            "Pending:Proceed" => LifecycleState::PendingProceed,
+            "Pending:Wait" => LifecycleState::PendingWait,
+            "Quarantined" => LifecycleState::Quarantined,
+            "Standby" => LifecycleState::Standby,
+            "Terminated" => LifecycleState::Terminated,
+            "Terminating" => LifecycleState::Terminating,
+            "Terminating:Proceed" => LifecycleState::TerminatingProceed,
+            "Terminating:Wait" => LifecycleState::TerminatingWait,
+            _ => LifecycleState::UnknownVariant(UnknownLifecycleState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LifecycleState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Detached" => LifecycleState::Detached,
+            "Detaching" => LifecycleState::Detaching,
+            "EnteringStandby" => LifecycleState::EnteringStandby,
+            "InService" => LifecycleState::InService,
+            "Pending" => LifecycleState::Pending,
+            "Pending:Proceed" => LifecycleState::PendingProceed,
+            "Pending:Wait" => LifecycleState::PendingWait,
+            "Quarantined" => LifecycleState::Quarantined,
+            "Standby" => LifecycleState::Standby,
+            "Terminated" => LifecycleState::Terminated,
+            "Terminating" => LifecycleState::Terminating,
+            "Terminating:Proceed" => LifecycleState::TerminatingProceed,
+            "Terminating:Wait" => LifecycleState::TerminatingWait,
+            _ => LifecycleState::UnknownVariant(UnknownLifecycleState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecycleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for LifecycleState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LifecycleState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct LifecycleStateDeserializer;
 impl LifecycleStateDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LifecycleState, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -4918,7 +5579,7 @@ impl LoadBalancerNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5153,8 +5814,8 @@ impl MetricDimensionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -5278,20 +5939,257 @@ impl MetricScaleDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricStatistic),
+}
+
+impl Default for MetricStatistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricStatistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricStatistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        match self {
+            MetricStatistic::Average => "Average".to_string(),
+            MetricStatistic::Maximum => "Maximum".to_string(),
+            MetricStatistic::Minimum => "Minimum".to_string(),
+            MetricStatistic::SampleCount => "SampleCount".to_string(),
+            MetricStatistic::Sum => "Sum".to_string(),
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricStatistic {
+    fn into(self) -> &'a str {
+        match self {
+            MetricStatistic::Average => &"Average",
+            MetricStatistic::Maximum => &"Maximum",
+            MetricStatistic::Minimum => &"Minimum",
+            MetricStatistic::SampleCount => &"SampleCount",
+            MetricStatistic::Sum => &"Sum",
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricStatistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            "Minimum" => MetricStatistic::Minimum,
+            "SampleCount" => MetricStatistic::SampleCount,
+            "Sum" => MetricStatistic::Sum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricStatistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            "Minimum" => MetricStatistic::Minimum,
+            "SampleCount" => MetricStatistic::SampleCount,
+            "Sum" => MetricStatistic::Sum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MetricStatistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MetricStatistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct MetricStatisticDeserializer;
 impl MetricStatisticDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricStatistic, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricType {
+    AlbrequestCountPerTarget,
+    AsgaverageCPUUtilization,
+    AsgaverageNetworkIn,
+    AsgaverageNetworkOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricType),
+}
+
+impl Default for MetricType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricType {
+    fn into(self) -> String {
+        match self {
+            MetricType::AlbrequestCountPerTarget => "ALBRequestCountPerTarget".to_string(),
+            MetricType::AsgaverageCPUUtilization => "ASGAverageCPUUtilization".to_string(),
+            MetricType::AsgaverageNetworkIn => "ASGAverageNetworkIn".to_string(),
+            MetricType::AsgaverageNetworkOut => "ASGAverageNetworkOut".to_string(),
+            MetricType::UnknownVariant(UnknownMetricType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricType {
+    fn into(self) -> &'a str {
+        match self {
+            MetricType::AlbrequestCountPerTarget => &"ALBRequestCountPerTarget",
+            MetricType::AsgaverageCPUUtilization => &"ASGAverageCPUUtilization",
+            MetricType::AsgaverageNetworkIn => &"ASGAverageNetworkIn",
+            MetricType::AsgaverageNetworkOut => &"ASGAverageNetworkOut",
+            MetricType::UnknownVariant(UnknownMetricType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALBRequestCountPerTarget" => MetricType::AlbrequestCountPerTarget,
+            "ASGAverageCPUUtilization" => MetricType::AsgaverageCPUUtilization,
+            "ASGAverageNetworkIn" => MetricType::AsgaverageNetworkIn,
+            "ASGAverageNetworkOut" => MetricType::AsgaverageNetworkOut,
+            _ => MetricType::UnknownVariant(UnknownMetricType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALBRequestCountPerTarget" => MetricType::AlbrequestCountPerTarget,
+            "ASGAverageCPUUtilization" => MetricType::AsgaverageCPUUtilization,
+            "ASGAverageNetworkIn" => MetricType::AsgaverageNetworkIn,
+            "ASGAverageNetworkOut" => MetricType::AsgaverageNetworkOut,
+            _ => MetricType::UnknownVariant(UnknownMetricType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MetricType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MetricType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct MetricTypeDeserializer;
 impl MetricTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -5309,7 +6207,7 @@ impl MetricsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5646,7 +6544,7 @@ impl PolicyNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5657,7 +6555,7 @@ impl PolicyTypesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5668,7 +6566,7 @@ impl PolicyTypesSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PredefinedMetricSpecification {
     /// <p><p>The metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer target group.</p> </li> </ul></p>
-    pub predefined_metric_type: String,
+    pub predefined_metric_type: MetricType,
     /// <p>Identifies the resource associated with the metric type. You can't specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group attached to the Auto Scaling group.</p> <p>You create the resource label by appending the final portion of the load balancer ARN and the final portion of the target group ARN into a single value, separated by a forward slash (/). The format is app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt;/targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt;, where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul> <p>This is an example: app/EC2Co-EcsEl-1TKLTMITMM0EO/f37c06a68c1748aa/targetgroup/EC2Co-Defau-LDNM7Q3ZH1ZN/6d4ea56ca2d6a18d.</p> <p>To find the ARN for an Application Load Balancer, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> API operation. To find the ARN for the target group, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroups.html">DescribeTargetGroups</a> API operation.</p>
     pub resource_label: Option<String>,
 }
@@ -5715,10 +6613,13 @@ impl PredefinedMetricSpecificationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "PredefinedMetricType"),
-            &obj.predefined_metric_type,
+            &obj.predefined_metric_type.to_string(),
         );
         if let Some(ref field_value) = obj.resource_label {
-            params.put(&format!("{}{}", prefix, "ResourceLabel"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceLabel"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5729,7 +6630,7 @@ impl ProcessNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5877,38 +6778,44 @@ impl PutLifecycleHookTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.default_result {
-            params.put(&format!("{}{}", prefix, "DefaultResult"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultResult"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.heartbeat_timeout {
             params.put(&format!("{}{}", prefix, "HeartbeatTimeout"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "LifecycleHookName"),
-            &obj.lifecycle_hook_name,
+            &obj.lifecycle_hook_name.to_string(),
         );
         if let Some(ref field_value) = obj.lifecycle_transition {
             params.put(
                 &format!("{}{}", prefix, "LifecycleTransition"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.notification_metadata {
             params.put(
                 &format!("{}{}", prefix, "NotificationMetadata"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.notification_target_arn {
             params.put(
                 &format!("{}{}", prefix, "NotificationTargetARN"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.role_arn {
-            params.put(&format!("{}{}", prefix, "RoleARN"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RoleARN"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5935,14 +6842,17 @@ impl PutNotificationConfigurationTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         AutoScalingNotificationTypesSerializer::serialize(
             params,
             &format!("{}{}", prefix, "NotificationTypes"),
             &obj.notification_types,
         );
-        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicARN"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -5987,11 +6897,14 @@ impl PutScalingPolicyTypeSerializer {
         }
 
         if let Some(ref field_value) = obj.adjustment_type {
-            params.put(&format!("{}{}", prefix, "AdjustmentType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AdjustmentType"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.cooldown {
             params.put(&format!("{}{}", prefix, "Cooldown"), &field_value);
@@ -6008,7 +6921,7 @@ impl PutScalingPolicyTypeSerializer {
         if let Some(ref field_value) = obj.metric_aggregation_type {
             params.put(
                 &format!("{}{}", prefix, "MetricAggregationType"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.min_adjustment_magnitude {
@@ -6020,9 +6933,15 @@ impl PutScalingPolicyTypeSerializer {
         if let Some(ref field_value) = obj.min_adjustment_step {
             params.put(&format!("{}{}", prefix, "MinAdjustmentStep"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
         if let Some(ref field_value) = obj.policy_type {
-            params.put(&format!("{}{}", prefix, "PolicyType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PolicyType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.scaling_adjustment {
             params.put(&format!("{}{}", prefix, "ScalingAdjustment"), &field_value);
@@ -6078,7 +6997,7 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.desired_capacity {
             params.put(&format!("{}{}", prefix, "DesiredCapacity"), &field_value);
@@ -6093,11 +7012,14 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
             params.put(&format!("{}{}", prefix, "MinSize"), &field_value);
         }
         if let Some(ref field_value) = obj.recurrence {
-            params.put(&format!("{}{}", prefix, "Recurrence"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Recurrence"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "ScheduledActionName"),
-            &obj.scheduled_action_name,
+            &obj.scheduled_action_name.to_string(),
         );
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -6153,20 +7075,23 @@ impl RecordLifecycleActionHeartbeatTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.instance_id {
-            params.put(&format!("{}{}", prefix, "InstanceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InstanceId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.lifecycle_action_token {
             params.put(
                 &format!("{}{}", prefix, "LifecycleActionToken"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "LifecycleHookName"),
-            &obj.lifecycle_hook_name,
+            &obj.lifecycle_hook_name.to_string(),
         );
     }
 }
@@ -6202,6 +7127,103 @@ impl RefreshPreferencesSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRefreshStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RefreshStrategy {
+    Rolling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRefreshStrategy),
+}
+
+impl Default for RefreshStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RefreshStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RefreshStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RefreshStrategy {
+    fn into(self) -> String {
+        match self {
+            RefreshStrategy::Rolling => "Rolling".to_string(),
+            RefreshStrategy::UnknownVariant(UnknownRefreshStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RefreshStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            RefreshStrategy::Rolling => &"Rolling",
+            RefreshStrategy::UnknownVariant(UnknownRefreshStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RefreshStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "Rolling" => RefreshStrategy::Rolling,
+            _ => RefreshStrategy::UnknownVariant(UnknownRefreshStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RefreshStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Rolling" => RefreshStrategy::Rolling,
+            _ => RefreshStrategy::UnknownVariant(UnknownRefreshStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RefreshStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RefreshStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RefreshStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
@@ -6210,12 +7232,196 @@ impl ResourceNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingActivityStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingActivityStatusCode {
+    Cancelled,
+    Failed,
+    InProgress,
+    MidLifecycleAction,
+    PendingSpotBidPlacement,
+    PreInService,
+    Successful,
+    WaitingForELBConnectionDraining,
+    WaitingForInstanceId,
+    WaitingForInstanceWarmup,
+    WaitingForSpotInstanceId,
+    WaitingForSpotInstanceRequestId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingActivityStatusCode),
+}
+
+impl Default for ScalingActivityStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingActivityStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingActivityStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingActivityStatusCode {
+    fn into(self) -> String {
+        match self {
+            ScalingActivityStatusCode::Cancelled => "Cancelled".to_string(),
+            ScalingActivityStatusCode::Failed => "Failed".to_string(),
+            ScalingActivityStatusCode::InProgress => "InProgress".to_string(),
+            ScalingActivityStatusCode::MidLifecycleAction => "MidLifecycleAction".to_string(),
+            ScalingActivityStatusCode::PendingSpotBidPlacement => {
+                "PendingSpotBidPlacement".to_string()
+            }
+            ScalingActivityStatusCode::PreInService => "PreInService".to_string(),
+            ScalingActivityStatusCode::Successful => "Successful".to_string(),
+            ScalingActivityStatusCode::WaitingForELBConnectionDraining => {
+                "WaitingForELBConnectionDraining".to_string()
+            }
+            ScalingActivityStatusCode::WaitingForInstanceId => "WaitingForInstanceId".to_string(),
+            ScalingActivityStatusCode::WaitingForInstanceWarmup => {
+                "WaitingForInstanceWarmup".to_string()
+            }
+            ScalingActivityStatusCode::WaitingForSpotInstanceId => {
+                "WaitingForSpotInstanceId".to_string()
+            }
+            ScalingActivityStatusCode::WaitingForSpotInstanceRequestId => {
+                "WaitingForSpotInstanceRequestId".to_string()
+            }
+            ScalingActivityStatusCode::UnknownVariant(UnknownScalingActivityStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingActivityStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingActivityStatusCode::Cancelled => &"Cancelled",
+            ScalingActivityStatusCode::Failed => &"Failed",
+            ScalingActivityStatusCode::InProgress => &"InProgress",
+            ScalingActivityStatusCode::MidLifecycleAction => &"MidLifecycleAction",
+            ScalingActivityStatusCode::PendingSpotBidPlacement => &"PendingSpotBidPlacement",
+            ScalingActivityStatusCode::PreInService => &"PreInService",
+            ScalingActivityStatusCode::Successful => &"Successful",
+            ScalingActivityStatusCode::WaitingForELBConnectionDraining => {
+                &"WaitingForELBConnectionDraining"
+            }
+            ScalingActivityStatusCode::WaitingForInstanceId => &"WaitingForInstanceId",
+            ScalingActivityStatusCode::WaitingForInstanceWarmup => &"WaitingForInstanceWarmup",
+            ScalingActivityStatusCode::WaitingForSpotInstanceId => &"WaitingForSpotInstanceId",
+            ScalingActivityStatusCode::WaitingForSpotInstanceRequestId => {
+                &"WaitingForSpotInstanceRequestId"
+            }
+            ScalingActivityStatusCode::UnknownVariant(UnknownScalingActivityStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScalingActivityStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => ScalingActivityStatusCode::Cancelled,
+            "Failed" => ScalingActivityStatusCode::Failed,
+            "InProgress" => ScalingActivityStatusCode::InProgress,
+            "MidLifecycleAction" => ScalingActivityStatusCode::MidLifecycleAction,
+            "PendingSpotBidPlacement" => ScalingActivityStatusCode::PendingSpotBidPlacement,
+            "PreInService" => ScalingActivityStatusCode::PreInService,
+            "Successful" => ScalingActivityStatusCode::Successful,
+            "WaitingForELBConnectionDraining" => {
+                ScalingActivityStatusCode::WaitingForELBConnectionDraining
+            }
+            "WaitingForInstanceId" => ScalingActivityStatusCode::WaitingForInstanceId,
+            "WaitingForInstanceWarmup" => ScalingActivityStatusCode::WaitingForInstanceWarmup,
+            "WaitingForSpotInstanceId" => ScalingActivityStatusCode::WaitingForSpotInstanceId,
+            "WaitingForSpotInstanceRequestId" => {
+                ScalingActivityStatusCode::WaitingForSpotInstanceRequestId
+            }
+            _ => ScalingActivityStatusCode::UnknownVariant(UnknownScalingActivityStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingActivityStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => ScalingActivityStatusCode::Cancelled,
+            "Failed" => ScalingActivityStatusCode::Failed,
+            "InProgress" => ScalingActivityStatusCode::InProgress,
+            "MidLifecycleAction" => ScalingActivityStatusCode::MidLifecycleAction,
+            "PendingSpotBidPlacement" => ScalingActivityStatusCode::PendingSpotBidPlacement,
+            "PreInService" => ScalingActivityStatusCode::PreInService,
+            "Successful" => ScalingActivityStatusCode::Successful,
+            "WaitingForELBConnectionDraining" => {
+                ScalingActivityStatusCode::WaitingForELBConnectionDraining
+            }
+            "WaitingForInstanceId" => ScalingActivityStatusCode::WaitingForInstanceId,
+            "WaitingForInstanceWarmup" => ScalingActivityStatusCode::WaitingForInstanceWarmup,
+            "WaitingForSpotInstanceId" => ScalingActivityStatusCode::WaitingForSpotInstanceId,
+            "WaitingForSpotInstanceRequestId" => {
+                ScalingActivityStatusCode::WaitingForSpotInstanceRequestId
+            }
+            _ => {
+                ScalingActivityStatusCode::UnknownVariant(UnknownScalingActivityStatusCode { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingActivityStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ScalingActivityStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScalingActivityStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ScalingActivityStatusCodeDeserializer;
 impl ScalingActivityStatusCodeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScalingActivityStatusCode, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6400,7 +7606,7 @@ impl ScalingProcessQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.scaling_processes {
             ProcessNamesSerializer::serialize(
@@ -6418,7 +7624,7 @@ impl ScheduledActionNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6601,11 +7807,14 @@ impl ScheduledUpdateGroupActionRequestSerializer {
             params.put(&format!("{}{}", prefix, "MinSize"), &field_value);
         }
         if let Some(ref field_value) = obj.recurrence {
-            params.put(&format!("{}{}", prefix, "Recurrence"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Recurrence"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "ScheduledActionName"),
-            &obj.scheduled_action_name,
+            &obj.scheduled_action_name.to_string(),
         );
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -6669,7 +7878,7 @@ impl SecurityGroupsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6696,7 +7905,7 @@ impl SetDesiredCapacityTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "DesiredCapacity"),
@@ -6728,8 +7937,14 @@ impl SetInstanceHealthQuerySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "HealthStatus"), &obj.health_status);
-        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+        params.put(
+            &format!("{}{}", prefix, "HealthStatus"),
+            &obj.health_status.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "InstanceId"),
+            &obj.instance_id.to_string(),
+        );
         if let Some(ref field_value) = obj.should_respect_grace_period {
             params.put(
                 &format!("{}{}", prefix, "ShouldRespectGracePeriod"),
@@ -6782,7 +7997,7 @@ impl SetInstanceProtectionQuerySerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         InstanceIdsSerializer::serialize(
             params,
@@ -6854,7 +8069,7 @@ pub struct StartInstanceRefreshType {
     /// <p>Set of preferences associated with the instance refresh request.</p> <p>If not provided, the default values are used. For <code>MinHealthyPercentage</code>, the default value is <code>90</code>. For <code>InstanceWarmup</code>, the default is to use the value specified for the health check grace period for the Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_RefreshPreferences.html">RefreshPreferences</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p>
     pub preferences: Option<RefreshPreferences>,
     /// <p>The strategy to use for the instance refresh. The only valid value is <code>Rolling</code>.</p> <p>A rolling update is an update that is applied to all instances in an Auto Scaling group until all instances have been updated. A rolling update can fail due to failed health checks or if instances are on standby or are protected from scale in. If the rolling update process fails, any instances that were already replaced are not rolled back to their previous configuration. </p>
-    pub strategy: Option<String>,
+    pub strategy: Option<RefreshStrategy>,
 }
 
 /// Serialize `StartInstanceRefreshType` contents to a `SignedRequest`.
@@ -6868,7 +8083,7 @@ impl StartInstanceRefreshTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.preferences {
             RefreshPreferencesSerializer::serialize(
@@ -6878,7 +8093,10 @@ impl StartInstanceRefreshTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.strategy {
-            params.put(&format!("{}{}", prefix, "Strategy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Strategy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7068,18 +8286,24 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
         if let Some(ref field_value) = obj.propagate_at_launch {
             params.put(&format!("{}{}", prefix, "PropagateAtLaunch"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_id {
-            params.put(&format!("{}{}", prefix, "ResourceId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_type {
-            params.put(&format!("{}{}", prefix, "ResourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -7242,7 +8466,7 @@ impl TargetGroupARNsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7355,7 +8579,10 @@ impl TerminateInstanceInAutoScalingGroupTypeSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+        params.put(
+            &format!("{}{}", prefix, "InstanceId"),
+            &obj.instance_id.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ShouldDecrementDesiredCapacity"),
             &obj.should_decrement_desired_capacity,
@@ -7390,7 +8617,7 @@ impl TerminationPoliciesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -7455,7 +8682,7 @@ impl UpdateAutoScalingGroupTypeSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
+            &obj.auto_scaling_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
@@ -7480,12 +8707,15 @@ impl UpdateAutoScalingGroupTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.health_check_type {
-            params.put(&format!("{}{}", prefix, "HealthCheckType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HealthCheckType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.launch_configuration_name {
             params.put(
                 &format!("{}{}", prefix, "LaunchConfigurationName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.launch_template {
@@ -7521,12 +8751,15 @@ impl UpdateAutoScalingGroupTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.placement_group {
-            params.put(&format!("{}{}", prefix, "PlacementGroup"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PlacementGroup"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.service_linked_role_arn {
             params.put(
                 &format!("{}{}", prefix, "ServiceLinkedRoleARN"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.termination_policies {
@@ -7537,7 +8770,10 @@ impl UpdateAutoScalingGroupTypeSerializer {
             );
         }
         if let Some(ref field_value) = obj.vpc_zone_identifier {
-            params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "VPCZoneIdentifier"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7548,7 +8784,7 @@ impl ValuesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }

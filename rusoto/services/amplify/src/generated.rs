@@ -94,7 +94,7 @@ pub struct App {
     pub name: String,
     /// <p> The platform for the Amplify app. </p>
     #[serde(rename = "platform")]
-    pub platform: String,
+    pub platform: Platform,
     /// <p> Describes the information about a production branch of the Amplify app. </p>
     #[serde(rename = "productionBranch")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -165,7 +165,7 @@ pub struct AutoBranchCreationConfig {
     /// <p> Describes the current stage for the autocreated branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stage: Option<String>,
+    pub stage: Option<Stage>,
 }
 
 /// <p> Describes the backend environment for an Amplify app. </p>
@@ -271,7 +271,7 @@ pub struct Branch {
     pub source_branch: Option<String>,
     /// <p> The current stage for the branch that is part of an Amplify app. </p>
     #[serde(rename = "stage")]
-    pub stage: String,
+    pub stage: Stage,
     /// <p> The tag for the branch of an Amplify app. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -361,7 +361,7 @@ pub struct CreateAppRequest {
     /// <p> The platform or framework for an Amplify app. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p> The repository for an Amplify app. </p>
     #[serde(rename = "repository")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -473,7 +473,7 @@ pub struct CreateBranchRequest {
     /// <p> Describes the current stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stage: Option<String>,
+    pub stage: Option<Stage>,
     /// <p> The tag for the branch. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -748,7 +748,7 @@ pub struct DomainAssociation {
     pub domain_name: String,
     /// <p> The current status of the domain association. </p>
     #[serde(rename = "domainStatus")]
-    pub domain_status: String,
+    pub domain_status: DomainStatus,
     /// <p> Enables the automated creation of subdomains for branches. </p>
     #[serde(rename = "enableAutoSubDomain")]
     pub enable_auto_sub_domain: bool,
@@ -758,6 +758,137 @@ pub struct DomainAssociation {
     /// <p> The subdomains for the domain association. </p>
     #[serde(rename = "subDomains")]
     pub sub_domains: Vec<SubDomain>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainStatus {
+    Available,
+    Creating,
+    Failed,
+    InProgress,
+    PendingDeployment,
+    PendingVerification,
+    RequestingCertificate,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainStatus),
+}
+
+impl Default for DomainStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainStatus {
+    fn into(self) -> String {
+        match self {
+            DomainStatus::Available => "AVAILABLE".to_string(),
+            DomainStatus::Creating => "CREATING".to_string(),
+            DomainStatus::Failed => "FAILED".to_string(),
+            DomainStatus::InProgress => "IN_PROGRESS".to_string(),
+            DomainStatus::PendingDeployment => "PENDING_DEPLOYMENT".to_string(),
+            DomainStatus::PendingVerification => "PENDING_VERIFICATION".to_string(),
+            DomainStatus::RequestingCertificate => "REQUESTING_CERTIFICATE".to_string(),
+            DomainStatus::Updating => "UPDATING".to_string(),
+            DomainStatus::UnknownVariant(UnknownDomainStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainStatus::Available => &"AVAILABLE",
+            DomainStatus::Creating => &"CREATING",
+            DomainStatus::Failed => &"FAILED",
+            DomainStatus::InProgress => &"IN_PROGRESS",
+            DomainStatus::PendingDeployment => &"PENDING_DEPLOYMENT",
+            DomainStatus::PendingVerification => &"PENDING_VERIFICATION",
+            DomainStatus::RequestingCertificate => &"REQUESTING_CERTIFICATE",
+            DomainStatus::Updating => &"UPDATING",
+            DomainStatus::UnknownVariant(UnknownDomainStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DomainStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => DomainStatus::Available,
+            "CREATING" => DomainStatus::Creating,
+            "FAILED" => DomainStatus::Failed,
+            "IN_PROGRESS" => DomainStatus::InProgress,
+            "PENDING_DEPLOYMENT" => DomainStatus::PendingDeployment,
+            "PENDING_VERIFICATION" => DomainStatus::PendingVerification,
+            "REQUESTING_CERTIFICATE" => DomainStatus::RequestingCertificate,
+            "UPDATING" => DomainStatus::Updating,
+            _ => DomainStatus::UnknownVariant(UnknownDomainStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => DomainStatus::Available,
+            "CREATING" => DomainStatus::Creating,
+            "FAILED" => DomainStatus::Failed,
+            "IN_PROGRESS" => DomainStatus::InProgress,
+            "PENDING_DEPLOYMENT" => DomainStatus::PendingDeployment,
+            "PENDING_VERIFICATION" => DomainStatus::PendingVerification,
+            "REQUESTING_CERTIFICATE" => DomainStatus::RequestingCertificate,
+            "UPDATING" => DomainStatus::Updating,
+            _ => DomainStatus::UnknownVariant(UnknownDomainStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The request structure for the generate access logs request. </p>
@@ -940,6 +1071,132 @@ pub struct Job {
     pub summary: JobSummary,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Cancelled,
+    Cancelling,
+    Failed,
+    Pending,
+    Provisioning,
+    Running,
+    Succeed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Cancelled => "CANCELLED".to_string(),
+            JobStatus::Cancelling => "CANCELLING".to_string(),
+            JobStatus::Failed => "FAILED".to_string(),
+            JobStatus::Pending => "PENDING".to_string(),
+            JobStatus::Provisioning => "PROVISIONING".to_string(),
+            JobStatus::Running => "RUNNING".to_string(),
+            JobStatus::Succeed => "SUCCEED".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Cancelled => &"CANCELLED",
+            JobStatus::Cancelling => &"CANCELLING",
+            JobStatus::Failed => &"FAILED",
+            JobStatus::Pending => &"PENDING",
+            JobStatus::Provisioning => &"PROVISIONING",
+            JobStatus::Running => &"RUNNING",
+            JobStatus::Succeed => &"SUCCEED",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => JobStatus::Cancelled,
+            "CANCELLING" => JobStatus::Cancelling,
+            "FAILED" => JobStatus::Failed,
+            "PENDING" => JobStatus::Pending,
+            "PROVISIONING" => JobStatus::Provisioning,
+            "RUNNING" => JobStatus::Running,
+            "SUCCEED" => JobStatus::Succeed,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => JobStatus::Cancelled,
+            "CANCELLING" => JobStatus::Cancelling,
+            "FAILED" => JobStatus::Failed,
+            "PENDING" => JobStatus::Pending,
+            "PROVISIONING" => JobStatus::Provisioning,
+            "RUNNING" => JobStatus::Running,
+            "SUCCEED" => JobStatus::Succeed,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Describes the summary for an execution job for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -965,13 +1222,123 @@ pub struct JobSummary {
     pub job_id: String,
     /// <p> The type for the job. If the value is <code>RELEASE</code>, the job was manually released from its source by using the <code>StartJob</code> API. If the value is <code>RETRY</code>, the job was manually retried using the <code>StartJob</code> API. If the value is <code>WEB_HOOK</code>, the job was automatically triggered by webhooks. </p>
     #[serde(rename = "jobType")]
-    pub job_type: String,
+    pub job_type: JobType,
     /// <p> The start date and time for the job. </p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
     /// <p> The current status for the job. </p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: JobStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobType {
+    Manual,
+    Release,
+    Retry,
+    WebHook,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobType),
+}
+
+impl Default for JobType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobType {
+    fn into(self) -> String {
+        match self {
+            JobType::Manual => "MANUAL".to_string(),
+            JobType::Release => "RELEASE".to_string(),
+            JobType::Retry => "RETRY".to_string(),
+            JobType::WebHook => "WEB_HOOK".to_string(),
+            JobType::UnknownVariant(UnknownJobType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobType {
+    fn into(self) -> &'a str {
+        match self {
+            JobType::Manual => &"MANUAL",
+            JobType::Release => &"RELEASE",
+            JobType::Retry => &"RETRY",
+            JobType::WebHook => &"WEB_HOOK",
+            JobType::UnknownVariant(UnknownJobType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MANUAL" => JobType::Manual,
+            "RELEASE" => JobType::Release,
+            "RETRY" => JobType::Retry,
+            "WEB_HOOK" => JobType::WebHook,
+            _ => JobType::UnknownVariant(UnknownJobType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MANUAL" => JobType::Manual,
+            "RELEASE" => JobType::Release,
+            "RETRY" => JobType::Retry,
+            "WEB_HOOK" => JobType::WebHook,
+            _ => JobType::UnknownVariant(UnknownJobType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The request structure for the list apps request. </p>
@@ -1213,6 +1580,101 @@ pub struct ListWebhooksResult {
     pub webhooks: Vec<Webhook>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Platform {
+    Web,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatform),
+}
+
+impl Default for Platform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Platform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Platform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Platform {
+    fn into(self) -> String {
+        match self {
+            Platform::Web => "WEB".to_string(),
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Platform {
+    fn into(self) -> &'a str {
+        match self {
+            Platform::Web => &"WEB",
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Platform {
+    fn from(name: &str) -> Self {
+        match name {
+            "WEB" => Platform::Web,
+            _ => Platform::UnknownVariant(UnknownPlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Platform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "WEB" => Platform::Web,
+            _ => Platform::UnknownVariant(UnknownPlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Platform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Platform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Platform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Describes the information about a production branch for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1233,6 +1695,121 @@ pub struct ProductionBranch {
     #[serde(rename = "thumbnailUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Stage {
+    Beta,
+    Development,
+    Experimental,
+    Production,
+    PullRequest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStage),
+}
+
+impl Default for Stage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Stage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Stage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Stage {
+    fn into(self) -> String {
+        match self {
+            Stage::Beta => "BETA".to_string(),
+            Stage::Development => "DEVELOPMENT".to_string(),
+            Stage::Experimental => "EXPERIMENTAL".to_string(),
+            Stage::Production => "PRODUCTION".to_string(),
+            Stage::PullRequest => "PULL_REQUEST".to_string(),
+            Stage::UnknownVariant(UnknownStage { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Stage {
+    fn into(self) -> &'a str {
+        match self {
+            Stage::Beta => &"BETA",
+            Stage::Development => &"DEVELOPMENT",
+            Stage::Experimental => &"EXPERIMENTAL",
+            Stage::Production => &"PRODUCTION",
+            Stage::PullRequest => &"PULL_REQUEST",
+            Stage::UnknownVariant(UnknownStage { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Stage {
+    fn from(name: &str) -> Self {
+        match name {
+            "BETA" => Stage::Beta,
+            "DEVELOPMENT" => Stage::Development,
+            "EXPERIMENTAL" => Stage::Experimental,
+            "PRODUCTION" => Stage::Production,
+            "PULL_REQUEST" => Stage::PullRequest,
+            _ => Stage::UnknownVariant(UnknownStage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Stage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BETA" => Stage::Beta,
+            "DEVELOPMENT" => Stage::Development,
+            "EXPERIMENTAL" => Stage::Experimental,
+            "PRODUCTION" => Stage::Production,
+            "PULL_REQUEST" => Stage::PullRequest,
+            _ => Stage::UnknownVariant(UnknownStage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Stage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Stage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Stage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The request structure for the start a deployment request. </p>
@@ -1296,7 +1873,7 @@ pub struct StartJobRequest {
     pub job_reason: Option<String>,
     /// <p> Describes the type for the job. The job type <code>RELEASE</code> starts a new job with the latest change from the specified branch. This value is available only for apps that are connected to a repository. The job type <code>RETRY</code> retries an existing job. If the job type value is <code>RETRY</code>, the <code>jobId</code> is also required. </p>
     #[serde(rename = "jobType")]
-    pub job_type: String,
+    pub job_type: JobType,
 }
 
 /// <p> The result structure for the run job request. </p>
@@ -1336,7 +1913,7 @@ pub struct Step {
     pub start_time: f64,
     /// <p> The status of the execution step. </p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: JobStatus,
     /// <p> The reason for the current step status. </p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1512,7 +2089,7 @@ pub struct UpdateAppRequest {
     /// <p> The platform for an Amplify app. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p> The name of the repository for an Amplify app </p>
     #[serde(rename = "repository")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1593,7 +2170,7 @@ pub struct UpdateBranchRequest {
     /// <p> Describes the current stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stage: Option<String>,
+    pub stage: Option<Stage>,
     /// <p> The content Time to Live (TTL) for the website in seconds. </p>
     #[serde(rename = "ttl")]
     #[serde(skip_serializing_if = "Option::is_none")]

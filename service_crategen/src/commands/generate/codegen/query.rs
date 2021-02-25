@@ -427,8 +427,8 @@ fn required_primitive_field_serializer(
 
 fn serialize_primitive_expression(shape_type: ShapeType, var_name: &str) -> String {
     match shape_type {
-        ShapeType::String
-        | ShapeType::Timestamp
+        ShapeType::String => format!("&{}.to_string()", var_name),
+        ShapeType::Timestamp
         | ShapeType::Integer
         | ShapeType::Double
         | ShapeType::Long

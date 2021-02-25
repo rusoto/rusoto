@@ -24,6 +24,133 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAPIName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum APIName {
+    GetClip,
+    GetDashStreamingSessionUrl,
+    GetHlsStreamingSessionUrl,
+    GetMedia,
+    GetMediaForFragmentList,
+    ListFragments,
+    PutMedia,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAPIName),
+}
+
+impl Default for APIName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for APIName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for APIName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for APIName {
+    fn into(self) -> String {
+        match self {
+            APIName::GetClip => "GET_CLIP".to_string(),
+            APIName::GetDashStreamingSessionUrl => "GET_DASH_STREAMING_SESSION_URL".to_string(),
+            APIName::GetHlsStreamingSessionUrl => "GET_HLS_STREAMING_SESSION_URL".to_string(),
+            APIName::GetMedia => "GET_MEDIA".to_string(),
+            APIName::GetMediaForFragmentList => "GET_MEDIA_FOR_FRAGMENT_LIST".to_string(),
+            APIName::ListFragments => "LIST_FRAGMENTS".to_string(),
+            APIName::PutMedia => "PUT_MEDIA".to_string(),
+            APIName::UnknownVariant(UnknownAPIName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a APIName {
+    fn into(self) -> &'a str {
+        match self {
+            APIName::GetClip => &"GET_CLIP",
+            APIName::GetDashStreamingSessionUrl => &"GET_DASH_STREAMING_SESSION_URL",
+            APIName::GetHlsStreamingSessionUrl => &"GET_HLS_STREAMING_SESSION_URL",
+            APIName::GetMedia => &"GET_MEDIA",
+            APIName::GetMediaForFragmentList => &"GET_MEDIA_FOR_FRAGMENT_LIST",
+            APIName::ListFragments => &"LIST_FRAGMENTS",
+            APIName::PutMedia => &"PUT_MEDIA",
+            APIName::UnknownVariant(UnknownAPIName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for APIName {
+    fn from(name: &str) -> Self {
+        match name {
+            "GET_CLIP" => APIName::GetClip,
+            "GET_DASH_STREAMING_SESSION_URL" => APIName::GetDashStreamingSessionUrl,
+            "GET_HLS_STREAMING_SESSION_URL" => APIName::GetHlsStreamingSessionUrl,
+            "GET_MEDIA" => APIName::GetMedia,
+            "GET_MEDIA_FOR_FRAGMENT_LIST" => APIName::GetMediaForFragmentList,
+            "LIST_FRAGMENTS" => APIName::ListFragments,
+            "PUT_MEDIA" => APIName::PutMedia,
+            _ => APIName::UnknownVariant(UnknownAPIName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for APIName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GET_CLIP" => APIName::GetClip,
+            "GET_DASH_STREAMING_SESSION_URL" => APIName::GetDashStreamingSessionUrl,
+            "GET_HLS_STREAMING_SESSION_URL" => APIName::GetHlsStreamingSessionUrl,
+            "GET_MEDIA" => APIName::GetMedia,
+            "GET_MEDIA_FOR_FRAGMENT_LIST" => APIName::GetMediaForFragmentList,
+            "LIST_FRAGMENTS" => APIName::ListFragments,
+            "PUT_MEDIA" => APIName::PutMedia,
+            _ => APIName::UnknownVariant(UnknownAPIName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for APIName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for APIName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for APIName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A structure that encapsulates a signaling channel's metadata and properties.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -39,11 +166,11 @@ pub struct ChannelInfo {
     /// <p>Current status of the signaling channel.</p>
     #[serde(rename = "ChannelStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_status: Option<String>,
+    pub channel_status: Option<Status>,
     /// <p>The type of the signaling channel.</p>
     #[serde(rename = "ChannelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_type: Option<String>,
+    pub channel_type: Option<ChannelType>,
     /// <p>The time at which the signaling channel was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -65,11 +192,407 @@ pub struct ChannelNameCondition {
     /// <p>A comparison operator. Currently, you can only specify the <code>BEGINS_WITH</code> operator, which finds signaling channels whose names begin with a given prefix.</p>
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperator>,
     /// <p>A value to compare.</p>
     #[serde(rename = "ComparisonValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison_value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelProtocol {
+    Https,
+    Wss,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelProtocol),
+}
+
+impl Default for ChannelProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelProtocol {
+    fn into(self) -> String {
+        match self {
+            ChannelProtocol::Https => "HTTPS".to_string(),
+            ChannelProtocol::Wss => "WSS".to_string(),
+            ChannelProtocol::UnknownVariant(UnknownChannelProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelProtocol::Https => &"HTTPS",
+            ChannelProtocol::Wss => &"WSS",
+            ChannelProtocol::UnknownVariant(UnknownChannelProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTPS" => ChannelProtocol::Https,
+            "WSS" => ChannelProtocol::Wss,
+            _ => ChannelProtocol::UnknownVariant(UnknownChannelProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTPS" => ChannelProtocol::Https,
+            "WSS" => ChannelProtocol::Wss,
+            _ => ChannelProtocol::UnknownVariant(UnknownChannelProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelRole {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelRole {
+    Master,
+    Viewer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelRole),
+}
+
+impl Default for ChannelRole {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelRole {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelRole {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelRole {
+    fn into(self) -> String {
+        match self {
+            ChannelRole::Master => "MASTER".to_string(),
+            ChannelRole::Viewer => "VIEWER".to_string(),
+            ChannelRole::UnknownVariant(UnknownChannelRole { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelRole {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelRole::Master => &"MASTER",
+            ChannelRole::Viewer => &"VIEWER",
+            ChannelRole::UnknownVariant(UnknownChannelRole { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelRole {
+    fn from(name: &str) -> Self {
+        match name {
+            "MASTER" => ChannelRole::Master,
+            "VIEWER" => ChannelRole::Viewer,
+            _ => ChannelRole::UnknownVariant(UnknownChannelRole {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelRole {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MASTER" => ChannelRole::Master,
+            "VIEWER" => ChannelRole::Viewer,
+            _ => ChannelRole::UnknownVariant(UnknownChannelRole { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelRole {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelRole {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChannelRole {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelType {
+    SingleMaster,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelType),
+}
+
+impl Default for ChannelType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelType {
+    fn into(self) -> String {
+        match self {
+            ChannelType::SingleMaster => "SINGLE_MASTER".to_string(),
+            ChannelType::UnknownVariant(UnknownChannelType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelType {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelType::SingleMaster => &"SINGLE_MASTER",
+            ChannelType::UnknownVariant(UnknownChannelType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SINGLE_MASTER" => ChannelType::SingleMaster,
+            _ => ChannelType::UnknownVariant(UnknownChannelType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SINGLE_MASTER" => ChannelType::SingleMaster,
+            _ => ChannelType::UnknownVariant(UnknownChannelType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChannelType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    BeginsWith,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::BeginsWith => "BEGINS_WITH".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::BeginsWith => &"BEGINS_WITH",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEGINS_WITH" => ComparisonOperator::BeginsWith,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEGINS_WITH" => ComparisonOperator::BeginsWith,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -81,7 +604,7 @@ pub struct CreateSignalingChannelInput {
     /// <p>A type of the signaling channel that you are creating. Currently, <code>SINGLE_MASTER</code> is the only supported channel type. </p>
     #[serde(rename = "ChannelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_type: Option<String>,
+    pub channel_type: Option<ChannelType>,
     /// <p>A structure containing the configuration for the <code>SINGLE_MASTER</code> channel type. </p>
     #[serde(rename = "SingleMasterConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -219,7 +742,7 @@ pub struct DescribeStreamOutput {
 pub struct GetDataEndpointInput {
     /// <p>The name of the API action for which to get an endpoint.</p>
     #[serde(rename = "APIName")]
-    pub api_name: String,
+    pub api_name: APIName,
     /// <p>The Amazon Resource Name (ARN) of the stream that you want to get the endpoint for. You must specify either this parameter or a <code>StreamName</code> in the request. </p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,7 +906,7 @@ pub struct ResourceEndpointListItem {
     /// <p>The protocol of the signaling channel returned by the <code>GetSignalingChannelEndpoint</code> API.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<ChannelProtocol>,
     /// <p>The endpoint of the signaling channel returned by the <code>GetSignalingChannelEndpoint</code> API.</p>
     #[serde(rename = "ResourceEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -397,11 +920,11 @@ pub struct SingleMasterChannelEndpointConfiguration {
     /// <p>This property is used to determine the nature of communication over this <code>SINGLE_MASTER</code> signaling channel. If <code>WSS</code> is specified, this API returns a websocket endpoint. If <code>HTTPS</code> is specified, this API returns an <code>HTTPS</code> endpoint.</p>
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocols: Option<Vec<String>>,
+    pub protocols: Option<Vec<ChannelProtocol>>,
     /// <p>This property is used to determine messaging permissions in this <code>SINGLE_MASTER</code> signaling channel. If <code>MASTER</code> is specified, this API returns an endpoint that a client can use to receive offers from and send answers to any of the viewers on this signaling channel. If <code>VIEWER</code> is specified, this API returns an endpoint that a client can use only to send offers to another <code>MASTER</code> client on this signaling channel. </p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<ChannelRole>,
 }
 
 /// <p>A structure that contains the configuration for the <code>SINGLE_MASTER</code> channel type.</p>
@@ -411,6 +934,117 @@ pub struct SingleMasterConfiguration {
     #[serde(rename = "MessageTtlSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_ttl_seconds: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Active => "ACTIVE".to_string(),
+            Status::Creating => "CREATING".to_string(),
+            Status::Deleting => "DELETING".to_string(),
+            Status::Updating => "UPDATING".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Active => &"ACTIVE",
+            Status::Creating => &"CREATING",
+            Status::Deleting => &"DELETING",
+            Status::Updating => &"UPDATING",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => Status::Active,
+            "CREATING" => Status::Creating,
+            "DELETING" => Status::Deleting,
+            "UPDATING" => Status::Updating,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => Status::Active,
+            "CREATING" => Status::Creating,
+            "DELETING" => Status::Deleting,
+            "UPDATING" => Status::Updating,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object describing a Kinesis video stream.</p>
@@ -440,7 +1074,7 @@ pub struct StreamInfo {
     /// <p>The status of the stream.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The Amazon Resource Name (ARN) of the stream.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -462,7 +1096,7 @@ pub struct StreamNameCondition {
     /// <p>A comparison operator. Currently, you can specify only the <code>BEGINS_WITH</code> operator, which finds streams whose names start with a given prefix.</p>
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperator>,
     /// <p>A value to compare.</p>
     #[serde(rename = "ComparisonValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -562,7 +1196,7 @@ pub struct UpdateDataRetentionInput {
     pub data_retention_change_in_hours: i64,
     /// <p>Indicates whether you want to increase or decrease the retention period.</p>
     #[serde(rename = "Operation")]
-    pub operation: String,
+    pub operation: UpdateDataRetentionOperation,
     /// <p>The Amazon Resource Name (ARN) of the stream whose retention period you want to change.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -571,6 +1205,121 @@ pub struct UpdateDataRetentionInput {
     #[serde(rename = "StreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateDataRetentionOperation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateDataRetentionOperation {
+    DecreaseDataRetention,
+    IncreaseDataRetention,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateDataRetentionOperation),
+}
+
+impl Default for UpdateDataRetentionOperation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateDataRetentionOperation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateDataRetentionOperation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateDataRetentionOperation {
+    fn into(self) -> String {
+        match self {
+            UpdateDataRetentionOperation::DecreaseDataRetention => {
+                "DECREASE_DATA_RETENTION".to_string()
+            }
+            UpdateDataRetentionOperation::IncreaseDataRetention => {
+                "INCREASE_DATA_RETENTION".to_string()
+            }
+            UpdateDataRetentionOperation::UnknownVariant(UnknownUpdateDataRetentionOperation {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateDataRetentionOperation {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateDataRetentionOperation::DecreaseDataRetention => &"DECREASE_DATA_RETENTION",
+            UpdateDataRetentionOperation::IncreaseDataRetention => &"INCREASE_DATA_RETENTION",
+            UpdateDataRetentionOperation::UnknownVariant(UnknownUpdateDataRetentionOperation {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpdateDataRetentionOperation {
+    fn from(name: &str) -> Self {
+        match name {
+            "DECREASE_DATA_RETENTION" => UpdateDataRetentionOperation::DecreaseDataRetention,
+            "INCREASE_DATA_RETENTION" => UpdateDataRetentionOperation::IncreaseDataRetention,
+            _ => {
+                UpdateDataRetentionOperation::UnknownVariant(UnknownUpdateDataRetentionOperation {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for UpdateDataRetentionOperation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DECREASE_DATA_RETENTION" => UpdateDataRetentionOperation::DecreaseDataRetention,
+            "INCREASE_DATA_RETENTION" => UpdateDataRetentionOperation::IncreaseDataRetention,
+            _ => {
+                UpdateDataRetentionOperation::UnknownVariant(UnknownUpdateDataRetentionOperation {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateDataRetentionOperation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UpdateDataRetentionOperation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UpdateDataRetentionOperation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

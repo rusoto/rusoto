@@ -25,6 +25,112 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdMarkers {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdMarkers {
+    None,
+    Passthrough,
+    Scte35Enhanced,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdMarkers),
+}
+
+impl Default for AdMarkers {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdMarkers {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdMarkers {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdMarkers {
+    fn into(self) -> String {
+        match self {
+            AdMarkers::None => "NONE".to_string(),
+            AdMarkers::Passthrough => "PASSTHROUGH".to_string(),
+            AdMarkers::Scte35Enhanced => "SCTE35_ENHANCED".to_string(),
+            AdMarkers::UnknownVariant(UnknownAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdMarkers {
+    fn into(self) -> &'a str {
+        match self {
+            AdMarkers::None => &"NONE",
+            AdMarkers::Passthrough => &"PASSTHROUGH",
+            AdMarkers::Scte35Enhanced => &"SCTE35_ENHANCED",
+            AdMarkers::UnknownVariant(UnknownAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdMarkers {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => AdMarkers::None,
+            "PASSTHROUGH" => AdMarkers::Passthrough,
+            "SCTE35_ENHANCED" => AdMarkers::Scte35Enhanced,
+            _ => AdMarkers::UnknownVariant(UnknownAdMarkers {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdMarkers {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => AdMarkers::None,
+            "PASSTHROUGH" => AdMarkers::Passthrough,
+            "SCTE35_ENHANCED" => AdMarkers::Scte35Enhanced,
+            _ => AdMarkers::UnknownVariant(UnknownAdMarkers { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdMarkers {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AdMarkers {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdMarkers {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A MediaPackage VOD Asset resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -271,7 +377,7 @@ pub struct DashManifest {
     /// <p>Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level.</p>
     #[serde(rename = "ManifestLayout")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub manifest_layout: Option<String>,
+    pub manifest_layout: Option<ManifestLayout>,
     /// <p>An optional string to include in the name of the manifest.</p>
     #[serde(rename = "ManifestName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -283,7 +389,7 @@ pub struct DashManifest {
     /// <p>The Dynamic Adaptive Streaming over HTTP (DASH) profile type.  When set to &quot;HBBTV<em>1</em>5&quot;, HbbTV 1.5 compliant output is enabled.</p>
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub profile: Option<String>,
+    pub profile: Option<Profile>,
     #[serde(rename = "StreamSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_selection: Option<StreamSelection>,
@@ -304,7 +410,7 @@ pub struct DashPackage {
     /// the Asset contains SCTE-35 ad markers.</p>
     #[serde(rename = "PeriodTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub period_triggers: Option<Vec<String>>,
+    pub period_triggers: Option<Vec<PeriodTriggersElement>>,
     /// <p>Duration (in seconds) of each segment. Actual segments will be
     /// rounded to the nearest multiple of the source segment duration.</p>
     #[serde(rename = "SegmentDurationSeconds")]
@@ -313,7 +419,7 @@ pub struct DashPackage {
     /// <p>Determines the type of SegmentTemplate included in the Media Presentation Description (MPD).  When set to NUMBER<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs. When set to NUMBER<em>WITH</em>DURATION, only a duration is included in each SegmentTemplate, with $Number$ media URLs.</p>
     #[serde(rename = "SegmentTemplateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segment_template_format: Option<String>,
+    pub segment_template_format: Option<SegmentTemplateFormat>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -485,6 +591,110 @@ pub struct EgressEndpoint {
     pub url: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionMethod {
+    Aes128,
+    SampleAes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionMethod),
+}
+
+impl Default for EncryptionMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionMethod {
+    fn into(self) -> String {
+        match self {
+            EncryptionMethod::Aes128 => "AES_128".to_string(),
+            EncryptionMethod::SampleAes => "SAMPLE_AES".to_string(),
+            EncryptionMethod::UnknownVariant(UnknownEncryptionMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionMethod {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionMethod::Aes128 => &"AES_128",
+            EncryptionMethod::SampleAes => &"SAMPLE_AES",
+            EncryptionMethod::UnknownVariant(UnknownEncryptionMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES_128" => EncryptionMethod::Aes128,
+            "SAMPLE_AES" => EncryptionMethod::SampleAes,
+            _ => EncryptionMethod::UnknownVariant(UnknownEncryptionMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES_128" => EncryptionMethod::Aes128,
+            "SAMPLE_AES" => EncryptionMethod::SampleAes,
+            _ => EncryptionMethod::UnknownVariant(UnknownEncryptionMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsEncryption {
@@ -496,7 +706,7 @@ pub struct HlsEncryption {
     /// <p>The encryption method to use.</p>
     #[serde(rename = "EncryptionMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_method: Option<String>,
+    pub encryption_method: Option<EncryptionMethod>,
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
@@ -512,7 +722,7 @@ pub struct HlsManifest {
     /// messages in the input source.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_markers: Option<String>,
+    pub ad_markers: Option<AdMarkers>,
     /// <p>When enabled, an I-Frame only stream will be included in the output.</p>
     #[serde(rename = "IncludeIframeOnlyStream")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -665,6 +875,106 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownManifestLayout {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ManifestLayout {
+    Compact,
+    Full,
+    #[doc(hidden)]
+    UnknownVariant(UnknownManifestLayout),
+}
+
+impl Default for ManifestLayout {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ManifestLayout {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ManifestLayout {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ManifestLayout {
+    fn into(self) -> String {
+        match self {
+            ManifestLayout::Compact => "COMPACT".to_string(),
+            ManifestLayout::Full => "FULL".to_string(),
+            ManifestLayout::UnknownVariant(UnknownManifestLayout { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ManifestLayout {
+    fn into(self) -> &'a str {
+        match self {
+            ManifestLayout::Compact => &"COMPACT",
+            ManifestLayout::Full => &"FULL",
+            ManifestLayout::UnknownVariant(UnknownManifestLayout { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ManifestLayout {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPACT" => ManifestLayout::Compact,
+            "FULL" => ManifestLayout::Full,
+            _ => ManifestLayout::UnknownVariant(UnknownManifestLayout {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ManifestLayout {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPACT" => ManifestLayout::Compact,
+            "FULL" => ManifestLayout::Full,
+            _ => ManifestLayout::UnknownVariant(UnknownManifestLayout { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ManifestLayout {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ManifestLayout {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ManifestLayout {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssEncryption {
@@ -756,6 +1066,215 @@ pub struct PackagingGroup {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProfile {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Profile {
+    Hbbtv15,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProfile),
+}
+
+impl Default for Profile {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Profile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Profile {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Profile {
+    fn into(self) -> String {
+        match self {
+            Profile::Hbbtv15 => "HBBTV_1_5".to_string(),
+            Profile::None => "NONE".to_string(),
+            Profile::UnknownVariant(UnknownProfile { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Profile {
+    fn into(self) -> &'a str {
+        match self {
+            Profile::Hbbtv15 => &"HBBTV_1_5",
+            Profile::None => &"NONE",
+            Profile::UnknownVariant(UnknownProfile { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Profile {
+    fn from(name: &str) -> Self {
+        match name {
+            "HBBTV_1_5" => Profile::Hbbtv15,
+            "NONE" => Profile::None,
+            _ => Profile::UnknownVariant(UnknownProfile {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Profile {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HBBTV_1_5" => Profile::Hbbtv15,
+            "NONE" => Profile::None,
+            _ => Profile::UnknownVariant(UnknownProfile { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Profile {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Profile {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Profile {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSegmentTemplateFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SegmentTemplateFormat {
+    NumberWithDuration,
+    NumberWithTimeline,
+    TimeWithTimeline,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSegmentTemplateFormat),
+}
+
+impl Default for SegmentTemplateFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SegmentTemplateFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SegmentTemplateFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SegmentTemplateFormat {
+    fn into(self) -> String {
+        match self {
+            SegmentTemplateFormat::NumberWithDuration => "NUMBER_WITH_DURATION".to_string(),
+            SegmentTemplateFormat::NumberWithTimeline => "NUMBER_WITH_TIMELINE".to_string(),
+            SegmentTemplateFormat::TimeWithTimeline => "TIME_WITH_TIMELINE".to_string(),
+            SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SegmentTemplateFormat {
+    fn into(self) -> &'a str {
+        match self {
+            SegmentTemplateFormat::NumberWithDuration => &"NUMBER_WITH_DURATION",
+            SegmentTemplateFormat::NumberWithTimeline => &"NUMBER_WITH_TIMELINE",
+            SegmentTemplateFormat::TimeWithTimeline => &"TIME_WITH_TIMELINE",
+            SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SegmentTemplateFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "NUMBER_WITH_DURATION" => SegmentTemplateFormat::NumberWithDuration,
+            "NUMBER_WITH_TIMELINE" => SegmentTemplateFormat::NumberWithTimeline,
+            "TIME_WITH_TIMELINE" => SegmentTemplateFormat::TimeWithTimeline,
+            _ => SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SegmentTemplateFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NUMBER_WITH_DURATION" => SegmentTemplateFormat::NumberWithDuration,
+            "NUMBER_WITH_TIMELINE" => SegmentTemplateFormat::NumberWithTimeline,
+            "TIME_WITH_TIMELINE" => SegmentTemplateFormat::TimeWithTimeline,
+            _ => SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SegmentTemplateFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SegmentTemplateFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SegmentTemplateFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpekeKeyProvider {
@@ -769,6 +1288,111 @@ pub struct SpekeKeyProvider {
     /// <p>The URL of the external key provider service.</p>
     #[serde(rename = "Url")]
     pub url: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamOrder {
+    Original,
+    VideoBitrateAscending,
+    VideoBitrateDescending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamOrder),
+}
+
+impl Default for StreamOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamOrder {
+    fn into(self) -> String {
+        match self {
+            StreamOrder::Original => "ORIGINAL".to_string(),
+            StreamOrder::VideoBitrateAscending => "VIDEO_BITRATE_ASCENDING".to_string(),
+            StreamOrder::VideoBitrateDescending => "VIDEO_BITRATE_DESCENDING".to_string(),
+            StreamOrder::UnknownVariant(UnknownStreamOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamOrder {
+    fn into(self) -> &'a str {
+        match self {
+            StreamOrder::Original => &"ORIGINAL",
+            StreamOrder::VideoBitrateAscending => &"VIDEO_BITRATE_ASCENDING",
+            StreamOrder::VideoBitrateDescending => &"VIDEO_BITRATE_DESCENDING",
+            StreamOrder::UnknownVariant(UnknownStreamOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ORIGINAL" => StreamOrder::Original,
+            "VIDEO_BITRATE_ASCENDING" => StreamOrder::VideoBitrateAscending,
+            "VIDEO_BITRATE_DESCENDING" => StreamOrder::VideoBitrateDescending,
+            _ => StreamOrder::UnknownVariant(UnknownStreamOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ORIGINAL" => StreamOrder::Original,
+            "VIDEO_BITRATE_ASCENDING" => StreamOrder::VideoBitrateAscending,
+            "VIDEO_BITRATE_DESCENDING" => StreamOrder::VideoBitrateDescending,
+            _ => StreamOrder::UnknownVariant(UnknownStreamOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StreamOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A StreamSelection configuration.</p>
@@ -785,7 +1409,7 @@ pub struct StreamSelection {
     /// <p>A directive that determines the order of streams in the output.</p>
     #[serde(rename = "StreamOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_order: Option<String>,
+    pub stream_order: Option<StreamOrder>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -843,6 +1467,105 @@ pub struct UpdatePackagingGroupResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPeriodTriggersElement {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PeriodTriggersElement {
+    Ads,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPeriodTriggersElement),
+}
+
+impl Default for PeriodTriggersElement {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PeriodTriggersElement {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PeriodTriggersElement {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PeriodTriggersElement {
+    fn into(self) -> String {
+        match self {
+            PeriodTriggersElement::Ads => "ADS".to_string(),
+            PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PeriodTriggersElement {
+    fn into(self) -> &'a str {
+        match self {
+            PeriodTriggersElement::Ads => &"ADS",
+            PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PeriodTriggersElement {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADS" => PeriodTriggersElement::Ads,
+            _ => PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PeriodTriggersElement {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADS" => PeriodTriggersElement::Ads,
+            _ => PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PeriodTriggersElement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PeriodTriggersElement {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PeriodTriggersElement {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateAsset

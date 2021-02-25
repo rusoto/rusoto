@@ -227,7 +227,122 @@ pub struct ActivityTaskTimedOutEventAttributes {
     pub started_event_id: i64,
     /// <p>The type of the timeout that caused this event.</p>
     #[serde(rename = "timeoutType")]
-    pub timeout_type: String,
+    pub timeout_type: ActivityTaskTimeoutType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActivityTaskTimeoutType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActivityTaskTimeoutType {
+    Heartbeat,
+    ScheduleToClose,
+    ScheduleToStart,
+    StartToClose,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActivityTaskTimeoutType),
+}
+
+impl Default for ActivityTaskTimeoutType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActivityTaskTimeoutType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActivityTaskTimeoutType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActivityTaskTimeoutType {
+    fn into(self) -> String {
+        match self {
+            ActivityTaskTimeoutType::Heartbeat => "HEARTBEAT".to_string(),
+            ActivityTaskTimeoutType::ScheduleToClose => "SCHEDULE_TO_CLOSE".to_string(),
+            ActivityTaskTimeoutType::ScheduleToStart => "SCHEDULE_TO_START".to_string(),
+            ActivityTaskTimeoutType::StartToClose => "START_TO_CLOSE".to_string(),
+            ActivityTaskTimeoutType::UnknownVariant(UnknownActivityTaskTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActivityTaskTimeoutType {
+    fn into(self) -> &'a str {
+        match self {
+            ActivityTaskTimeoutType::Heartbeat => &"HEARTBEAT",
+            ActivityTaskTimeoutType::ScheduleToClose => &"SCHEDULE_TO_CLOSE",
+            ActivityTaskTimeoutType::ScheduleToStart => &"SCHEDULE_TO_START",
+            ActivityTaskTimeoutType::StartToClose => &"START_TO_CLOSE",
+            ActivityTaskTimeoutType::UnknownVariant(UnknownActivityTaskTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActivityTaskTimeoutType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEARTBEAT" => ActivityTaskTimeoutType::Heartbeat,
+            "SCHEDULE_TO_CLOSE" => ActivityTaskTimeoutType::ScheduleToClose,
+            "SCHEDULE_TO_START" => ActivityTaskTimeoutType::ScheduleToStart,
+            "START_TO_CLOSE" => ActivityTaskTimeoutType::StartToClose,
+            _ => ActivityTaskTimeoutType::UnknownVariant(UnknownActivityTaskTimeoutType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActivityTaskTimeoutType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEARTBEAT" => ActivityTaskTimeoutType::Heartbeat,
+            "SCHEDULE_TO_CLOSE" => ActivityTaskTimeoutType::ScheduleToClose,
+            "SCHEDULE_TO_START" => ActivityTaskTimeoutType::ScheduleToStart,
+            "START_TO_CLOSE" => ActivityTaskTimeoutType::StartToClose,
+            _ => ActivityTaskTimeoutType::UnknownVariant(UnknownActivityTaskTimeoutType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActivityTaskTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ActivityTaskTimeoutType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActivityTaskTimeoutType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents an activity type.</p>
@@ -303,7 +418,7 @@ pub struct ActivityTypeInfo {
     pub description: Option<String>,
     /// <p>The current status of the activity type.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: RegistrationStatus,
 }
 
 /// <p>Contains a paginated list of activity type information structures.</p>
@@ -328,13 +443,118 @@ pub struct CancelTimerDecisionAttributes {
     pub timer_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCancelTimerFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CancelTimerFailedCause {
+    OperationNotPermitted,
+    TimerIdUnknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCancelTimerFailedCause),
+}
+
+impl Default for CancelTimerFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CancelTimerFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CancelTimerFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CancelTimerFailedCause {
+    fn into(self) -> String {
+        match self {
+            CancelTimerFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+            CancelTimerFailedCause::TimerIdUnknown => "TIMER_ID_UNKNOWN".to_string(),
+            CancelTimerFailedCause::UnknownVariant(UnknownCancelTimerFailedCause {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CancelTimerFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            CancelTimerFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+            CancelTimerFailedCause::TimerIdUnknown => &"TIMER_ID_UNKNOWN",
+            CancelTimerFailedCause::UnknownVariant(UnknownCancelTimerFailedCause {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CancelTimerFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPERATION_NOT_PERMITTED" => CancelTimerFailedCause::OperationNotPermitted,
+            "TIMER_ID_UNKNOWN" => CancelTimerFailedCause::TimerIdUnknown,
+            _ => CancelTimerFailedCause::UnknownVariant(UnknownCancelTimerFailedCause {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CancelTimerFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPERATION_NOT_PERMITTED" => CancelTimerFailedCause::OperationNotPermitted,
+            "TIMER_ID_UNKNOWN" => CancelTimerFailedCause::TimerIdUnknown,
+            _ => CancelTimerFailedCause::UnknownVariant(UnknownCancelTimerFailedCause { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelTimerFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CancelTimerFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CancelTimerFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>CancelTimerFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelTimerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: CancelTimerFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelTimer</code> decision to cancel this timer. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -353,16 +573,234 @@ pub struct CancelWorkflowExecutionDecisionAttributes {
     pub details: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCancelWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CancelWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    UnhandledDecision,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCancelWorkflowExecutionFailedCause),
+}
+
+impl Default for CancelWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CancelWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CancelWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CancelWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+            CancelWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED".to_string()
+            }
+            CancelWorkflowExecutionFailedCause::UnhandledDecision => {
+                "UNHANDLED_DECISION".to_string()
+            }
+            CancelWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCancelWorkflowExecutionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CancelWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            CancelWorkflowExecutionFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+            CancelWorkflowExecutionFailedCause::UnhandledDecision => &"UNHANDLED_DECISION",
+            CancelWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCancelWorkflowExecutionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CancelWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPERATION_NOT_PERMITTED" => CancelWorkflowExecutionFailedCause::OperationNotPermitted,
+            "UNHANDLED_DECISION" => CancelWorkflowExecutionFailedCause::UnhandledDecision,
+            _ => CancelWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCancelWorkflowExecutionFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CancelWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPERATION_NOT_PERMITTED" => CancelWorkflowExecutionFailedCause::OperationNotPermitted,
+            "UNHANDLED_DECISION" => CancelWorkflowExecutionFailedCause::UnhandledDecision,
+            _ => CancelWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCancelWorkflowExecutionFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CancelWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CancelWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>CancelWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: CancelWorkflowExecutionFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelWorkflowExecution</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChildPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChildPolicy {
+    Abandon,
+    RequestCancel,
+    Terminate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChildPolicy),
+}
+
+impl Default for ChildPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChildPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChildPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChildPolicy {
+    fn into(self) -> String {
+        match self {
+            ChildPolicy::Abandon => "ABANDON".to_string(),
+            ChildPolicy::RequestCancel => "REQUEST_CANCEL".to_string(),
+            ChildPolicy::Terminate => "TERMINATE".to_string(),
+            ChildPolicy::UnknownVariant(UnknownChildPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChildPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            ChildPolicy::Abandon => &"ABANDON",
+            ChildPolicy::RequestCancel => &"REQUEST_CANCEL",
+            ChildPolicy::Terminate => &"TERMINATE",
+            ChildPolicy::UnknownVariant(UnknownChildPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChildPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABANDON" => ChildPolicy::Abandon,
+            "REQUEST_CANCEL" => ChildPolicy::RequestCancel,
+            "TERMINATE" => ChildPolicy::Terminate,
+            _ => ChildPolicy::UnknownVariant(UnknownChildPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChildPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABANDON" => ChildPolicy::Abandon,
+            "REQUEST_CANCEL" => ChildPolicy::RequestCancel,
+            "TERMINATE" => ChildPolicy::Terminate,
+            _ => ChildPolicy::UnknownVariant(UnknownChildPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChildPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChildPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChildPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provide details of the <code>ChildWorkflowExecutionCanceled</code> event.</p>
@@ -480,7 +918,7 @@ pub struct ChildWorkflowExecutionTimedOutEventAttributes {
     pub started_event_id: i64,
     /// <p>The type of the timeout that caused the child workflow execution to time out.</p>
     #[serde(rename = "timeoutType")]
-    pub timeout_type: String,
+    pub timeout_type: WorkflowExecutionTimeoutType,
     /// <p>The child workflow execution that timed out.</p>
     #[serde(rename = "workflowExecution")]
     pub workflow_execution: WorkflowExecution,
@@ -489,13 +927,133 @@ pub struct ChildWorkflowExecutionTimedOutEventAttributes {
     pub workflow_type: WorkflowType,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloseStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloseStatus {
+    Canceled,
+    Completed,
+    ContinuedAsNew,
+    Failed,
+    Terminated,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloseStatus),
+}
+
+impl Default for CloseStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloseStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloseStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloseStatus {
+    fn into(self) -> String {
+        match self {
+            CloseStatus::Canceled => "CANCELED".to_string(),
+            CloseStatus::Completed => "COMPLETED".to_string(),
+            CloseStatus::ContinuedAsNew => "CONTINUED_AS_NEW".to_string(),
+            CloseStatus::Failed => "FAILED".to_string(),
+            CloseStatus::Terminated => "TERMINATED".to_string(),
+            CloseStatus::TimedOut => "TIMED_OUT".to_string(),
+            CloseStatus::UnknownVariant(UnknownCloseStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloseStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CloseStatus::Canceled => &"CANCELED",
+            CloseStatus::Completed => &"COMPLETED",
+            CloseStatus::ContinuedAsNew => &"CONTINUED_AS_NEW",
+            CloseStatus::Failed => &"FAILED",
+            CloseStatus::Terminated => &"TERMINATED",
+            CloseStatus::TimedOut => &"TIMED_OUT",
+            CloseStatus::UnknownVariant(UnknownCloseStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CloseStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELED" => CloseStatus::Canceled,
+            "COMPLETED" => CloseStatus::Completed,
+            "CONTINUED_AS_NEW" => CloseStatus::ContinuedAsNew,
+            "FAILED" => CloseStatus::Failed,
+            "TERMINATED" => CloseStatus::Terminated,
+            "TIMED_OUT" => CloseStatus::TimedOut,
+            _ => CloseStatus::UnknownVariant(UnknownCloseStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CloseStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELED" => CloseStatus::Canceled,
+            "COMPLETED" => CloseStatus::Completed,
+            "CONTINUED_AS_NEW" => CloseStatus::ContinuedAsNew,
+            "FAILED" => CloseStatus::Failed,
+            "TERMINATED" => CloseStatus::Terminated,
+            "TIMED_OUT" => CloseStatus::TimedOut,
+            _ => CloseStatus::UnknownVariant(UnknownCloseStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloseStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CloseStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloseStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Used to filter the closed workflow executions in visibility APIs by their close status.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseStatusFilter {
     /// <p> The close status that must match the close status of an execution for it to meet the criteria of this filter.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: CloseStatus,
 }
 
 /// <p>Provides the details of the <code>CompleteWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -508,13 +1066,132 @@ pub struct CompleteWorkflowExecutionDecisionAttributes {
     pub result: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompleteWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompleteWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    UnhandledDecision,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompleteWorkflowExecutionFailedCause),
+}
+
+impl Default for CompleteWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompleteWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompleteWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompleteWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+            CompleteWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED".to_string()
+            }
+            CompleteWorkflowExecutionFailedCause::UnhandledDecision => {
+                "UNHANDLED_DECISION".to_string()
+            }
+            CompleteWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCompleteWorkflowExecutionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompleteWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            CompleteWorkflowExecutionFailedCause::OperationNotPermitted => {
+                &"OPERATION_NOT_PERMITTED"
+            }
+            CompleteWorkflowExecutionFailedCause::UnhandledDecision => &"UNHANDLED_DECISION",
+            CompleteWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCompleteWorkflowExecutionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CompleteWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPERATION_NOT_PERMITTED" => {
+                CompleteWorkflowExecutionFailedCause::OperationNotPermitted
+            }
+            "UNHANDLED_DECISION" => CompleteWorkflowExecutionFailedCause::UnhandledDecision,
+            _ => CompleteWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCompleteWorkflowExecutionFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CompleteWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPERATION_NOT_PERMITTED" => {
+                CompleteWorkflowExecutionFailedCause::OperationNotPermitted
+            }
+            "UNHANDLED_DECISION" => CompleteWorkflowExecutionFailedCause::UnhandledDecision,
+            _ => CompleteWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownCompleteWorkflowExecutionFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompleteWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CompleteWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CompleteWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>CompleteWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompleteWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: CompleteWorkflowExecutionFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CompleteWorkflowExecution</code> decision to complete this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -527,7 +1204,7 @@ pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub child_policy: Option<String>,
+    pub child_policy: Option<ChildPolicy>,
     /// <p><p>If set, specifies the total duration for this workflow execution. This overrides the <code>defaultExecutionStartToCloseTimeout</code> specified when registering the workflow type.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p> <note> <p>An execution start-to-close timeout for this workflow execution must be specified either as a default for the workflow type or through this field. If neither this field is set nor a default execution start-to-close timeout was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "executionStartToCloseTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -562,13 +1239,147 @@ pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
     pub workflow_type_version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContinueAsNewWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContinueAsNewWorkflowExecutionFailedCause {
+    ContinueAsNewWorkflowExecutionRateExceeded,
+    DefaultChildPolicyUndefined,
+    DefaultExecutionStartToCloseTimeoutUndefined,
+    DefaultTaskListUndefined,
+    DefaultTaskStartToCloseTimeoutUndefined,
+    OperationNotPermitted,
+    UnhandledDecision,
+    WorkflowTypeDeprecated,
+    WorkflowTypeDoesNotExist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContinueAsNewWorkflowExecutionFailedCause),
+}
+
+impl Default for ContinueAsNewWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContinueAsNewWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContinueAsNewWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContinueAsNewWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+                    ContinueAsNewWorkflowExecutionFailedCause::ContinueAsNewWorkflowExecutionRateExceeded => "CONTINUE_AS_NEW_WORKFLOW_EXECUTION_RATE_EXCEEDED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::DefaultChildPolicyUndefined => "DEFAULT_CHILD_POLICY_UNDEFINED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined => "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskListUndefined => "DEFAULT_TASK_LIST_UNDEFINED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined => "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::UnhandledDecision => "UNHANDLED_DECISION".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDeprecated => "WORKFLOW_TYPE_DEPRECATED".to_string(),
+ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist => "WORKFLOW_TYPE_DOES_NOT_EXIST".to_string(),
+                    ContinueAsNewWorkflowExecutionFailedCause::UnknownVariant(UnknownContinueAsNewWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContinueAsNewWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+                    ContinueAsNewWorkflowExecutionFailedCause::ContinueAsNewWorkflowExecutionRateExceeded => &"CONTINUE_AS_NEW_WORKFLOW_EXECUTION_RATE_EXCEEDED",
+ContinueAsNewWorkflowExecutionFailedCause::DefaultChildPolicyUndefined => &"DEFAULT_CHILD_POLICY_UNDEFINED",
+ContinueAsNewWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined => &"DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED",
+ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskListUndefined => &"DEFAULT_TASK_LIST_UNDEFINED",
+ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined => &"DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED",
+ContinueAsNewWorkflowExecutionFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+ContinueAsNewWorkflowExecutionFailedCause::UnhandledDecision => &"UNHANDLED_DECISION",
+ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDeprecated => &"WORKFLOW_TYPE_DEPRECATED",
+ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist => &"WORKFLOW_TYPE_DOES_NOT_EXIST",
+                    ContinueAsNewWorkflowExecutionFailedCause::UnknownVariant(UnknownContinueAsNewWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for ContinueAsNewWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+                    "CONTINUE_AS_NEW_WORKFLOW_EXECUTION_RATE_EXCEEDED" => ContinueAsNewWorkflowExecutionFailedCause::ContinueAsNewWorkflowExecutionRateExceeded,
+"DEFAULT_CHILD_POLICY_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultChildPolicyUndefined,
+"DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined,
+"DEFAULT_TASK_LIST_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskListUndefined,
+"DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined,
+"OPERATION_NOT_PERMITTED" => ContinueAsNewWorkflowExecutionFailedCause::OperationNotPermitted,
+"UNHANDLED_DECISION" => ContinueAsNewWorkflowExecutionFailedCause::UnhandledDecision,
+"WORKFLOW_TYPE_DEPRECATED" => ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDeprecated,
+"WORKFLOW_TYPE_DOES_NOT_EXIST" => ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist,
+                    _ => ContinueAsNewWorkflowExecutionFailedCause::UnknownVariant(UnknownContinueAsNewWorkflowExecutionFailedCause{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for ContinueAsNewWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "CONTINUE_AS_NEW_WORKFLOW_EXECUTION_RATE_EXCEEDED" => ContinueAsNewWorkflowExecutionFailedCause::ContinueAsNewWorkflowExecutionRateExceeded,
+"DEFAULT_CHILD_POLICY_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultChildPolicyUndefined,
+"DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined,
+"DEFAULT_TASK_LIST_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskListUndefined,
+"DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED" => ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined,
+"OPERATION_NOT_PERMITTED" => ContinueAsNewWorkflowExecutionFailedCause::OperationNotPermitted,
+"UNHANDLED_DECISION" => ContinueAsNewWorkflowExecutionFailedCause::UnhandledDecision,
+"WORKFLOW_TYPE_DEPRECATED" => ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDeprecated,
+"WORKFLOW_TYPE_DOES_NOT_EXIST" => ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist,
+                    _ => ContinueAsNewWorkflowExecutionFailedCause::UnknownVariant(UnknownContinueAsNewWorkflowExecutionFailedCause{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for ContinueAsNewWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContinueAsNewWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContinueAsNewWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>ContinueAsNewWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContinueAsNewWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: ContinueAsNewWorkflowExecutionFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>ContinueAsNewWorkflowExecution</code> decision that started this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -676,7 +1487,7 @@ pub struct Decision {
         Option<ContinueAsNewWorkflowExecutionDecisionAttributes>,
     /// <p>Specifies the type of the decision.</p>
     #[serde(rename = "decisionType")]
-    pub decision_type: String,
+    pub decision_type: DecisionType,
     /// <p>Provides the details of the <code>FailWorkflowExecution</code> decision. It isn't set for other decision types.</p>
     #[serde(rename = "failWorkflowExecutionDecisionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -808,7 +1619,275 @@ pub struct DecisionTaskTimedOutEventAttributes {
     pub started_event_id: i64,
     /// <p>The type of timeout that expired before the decision task could be completed.</p>
     #[serde(rename = "timeoutType")]
-    pub timeout_type: String,
+    pub timeout_type: DecisionTaskTimeoutType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDecisionTaskTimeoutType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DecisionTaskTimeoutType {
+    StartToClose,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDecisionTaskTimeoutType),
+}
+
+impl Default for DecisionTaskTimeoutType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DecisionTaskTimeoutType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DecisionTaskTimeoutType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DecisionTaskTimeoutType {
+    fn into(self) -> String {
+        match self {
+            DecisionTaskTimeoutType::StartToClose => "START_TO_CLOSE".to_string(),
+            DecisionTaskTimeoutType::UnknownVariant(UnknownDecisionTaskTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DecisionTaskTimeoutType {
+    fn into(self) -> &'a str {
+        match self {
+            DecisionTaskTimeoutType::StartToClose => &"START_TO_CLOSE",
+            DecisionTaskTimeoutType::UnknownVariant(UnknownDecisionTaskTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DecisionTaskTimeoutType {
+    fn from(name: &str) -> Self {
+        match name {
+            "START_TO_CLOSE" => DecisionTaskTimeoutType::StartToClose,
+            _ => DecisionTaskTimeoutType::UnknownVariant(UnknownDecisionTaskTimeoutType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DecisionTaskTimeoutType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "START_TO_CLOSE" => DecisionTaskTimeoutType::StartToClose,
+            _ => DecisionTaskTimeoutType::UnknownVariant(UnknownDecisionTaskTimeoutType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DecisionTaskTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DecisionTaskTimeoutType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DecisionTaskTimeoutType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDecisionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DecisionType {
+    CancelTimer,
+    CancelWorkflowExecution,
+    CompleteWorkflowExecution,
+    ContinueAsNewWorkflowExecution,
+    FailWorkflowExecution,
+    RecordMarker,
+    RequestCancelActivityTask,
+    RequestCancelExternalWorkflowExecution,
+    ScheduleActivityTask,
+    ScheduleLambdaFunction,
+    SignalExternalWorkflowExecution,
+    StartChildWorkflowExecution,
+    StartTimer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDecisionType),
+}
+
+impl Default for DecisionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DecisionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DecisionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DecisionType {
+    fn into(self) -> String {
+        match self {
+            DecisionType::CancelTimer => "CancelTimer".to_string(),
+            DecisionType::CancelWorkflowExecution => "CancelWorkflowExecution".to_string(),
+            DecisionType::CompleteWorkflowExecution => "CompleteWorkflowExecution".to_string(),
+            DecisionType::ContinueAsNewWorkflowExecution => {
+                "ContinueAsNewWorkflowExecution".to_string()
+            }
+            DecisionType::FailWorkflowExecution => "FailWorkflowExecution".to_string(),
+            DecisionType::RecordMarker => "RecordMarker".to_string(),
+            DecisionType::RequestCancelActivityTask => "RequestCancelActivityTask".to_string(),
+            DecisionType::RequestCancelExternalWorkflowExecution => {
+                "RequestCancelExternalWorkflowExecution".to_string()
+            }
+            DecisionType::ScheduleActivityTask => "ScheduleActivityTask".to_string(),
+            DecisionType::ScheduleLambdaFunction => "ScheduleLambdaFunction".to_string(),
+            DecisionType::SignalExternalWorkflowExecution => {
+                "SignalExternalWorkflowExecution".to_string()
+            }
+            DecisionType::StartChildWorkflowExecution => "StartChildWorkflowExecution".to_string(),
+            DecisionType::StartTimer => "StartTimer".to_string(),
+            DecisionType::UnknownVariant(UnknownDecisionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DecisionType {
+    fn into(self) -> &'a str {
+        match self {
+            DecisionType::CancelTimer => &"CancelTimer",
+            DecisionType::CancelWorkflowExecution => &"CancelWorkflowExecution",
+            DecisionType::CompleteWorkflowExecution => &"CompleteWorkflowExecution",
+            DecisionType::ContinueAsNewWorkflowExecution => &"ContinueAsNewWorkflowExecution",
+            DecisionType::FailWorkflowExecution => &"FailWorkflowExecution",
+            DecisionType::RecordMarker => &"RecordMarker",
+            DecisionType::RequestCancelActivityTask => &"RequestCancelActivityTask",
+            DecisionType::RequestCancelExternalWorkflowExecution => {
+                &"RequestCancelExternalWorkflowExecution"
+            }
+            DecisionType::ScheduleActivityTask => &"ScheduleActivityTask",
+            DecisionType::ScheduleLambdaFunction => &"ScheduleLambdaFunction",
+            DecisionType::SignalExternalWorkflowExecution => &"SignalExternalWorkflowExecution",
+            DecisionType::StartChildWorkflowExecution => &"StartChildWorkflowExecution",
+            DecisionType::StartTimer => &"StartTimer",
+            DecisionType::UnknownVariant(UnknownDecisionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DecisionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CancelTimer" => DecisionType::CancelTimer,
+            "CancelWorkflowExecution" => DecisionType::CancelWorkflowExecution,
+            "CompleteWorkflowExecution" => DecisionType::CompleteWorkflowExecution,
+            "ContinueAsNewWorkflowExecution" => DecisionType::ContinueAsNewWorkflowExecution,
+            "FailWorkflowExecution" => DecisionType::FailWorkflowExecution,
+            "RecordMarker" => DecisionType::RecordMarker,
+            "RequestCancelActivityTask" => DecisionType::RequestCancelActivityTask,
+            "RequestCancelExternalWorkflowExecution" => {
+                DecisionType::RequestCancelExternalWorkflowExecution
+            }
+            "ScheduleActivityTask" => DecisionType::ScheduleActivityTask,
+            "ScheduleLambdaFunction" => DecisionType::ScheduleLambdaFunction,
+            "SignalExternalWorkflowExecution" => DecisionType::SignalExternalWorkflowExecution,
+            "StartChildWorkflowExecution" => DecisionType::StartChildWorkflowExecution,
+            "StartTimer" => DecisionType::StartTimer,
+            _ => DecisionType::UnknownVariant(UnknownDecisionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DecisionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CancelTimer" => DecisionType::CancelTimer,
+            "CancelWorkflowExecution" => DecisionType::CancelWorkflowExecution,
+            "CompleteWorkflowExecution" => DecisionType::CompleteWorkflowExecution,
+            "ContinueAsNewWorkflowExecution" => DecisionType::ContinueAsNewWorkflowExecution,
+            "FailWorkflowExecution" => DecisionType::FailWorkflowExecution,
+            "RecordMarker" => DecisionType::RecordMarker,
+            "RequestCancelActivityTask" => DecisionType::RequestCancelActivityTask,
+            "RequestCancelExternalWorkflowExecution" => {
+                DecisionType::RequestCancelExternalWorkflowExecution
+            }
+            "ScheduleActivityTask" => DecisionType::ScheduleActivityTask,
+            "ScheduleLambdaFunction" => DecisionType::ScheduleLambdaFunction,
+            "SignalExternalWorkflowExecution" => DecisionType::SignalExternalWorkflowExecution,
+            "StartChildWorkflowExecution" => DecisionType::StartChildWorkflowExecution,
+            "StartTimer" => DecisionType::StartTimer,
+            _ => DecisionType::UnknownVariant(UnknownDecisionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DecisionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DecisionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DecisionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -920,7 +1999,7 @@ pub struct DomainInfo {
     pub name: String,
     /// <p><p>The status of the domain:</p> <ul> <li> <p> <code>REGISTERED</code> – The domain is properly registered and available. You can use this domain for registering types and creating new workflow executions. </p> </li> <li> <p> <code>DEPRECATED</code> – The domain was deprecated using <a>DeprecateDomain</a>, but is still in use. You should not create new workflow executions in this domain. </p> </li> </ul></p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: RegistrationStatus,
 }
 
 /// <p>Contains a paginated collection of DomainInfo structures.</p>
@@ -934,6 +2013,544 @@ pub struct DomainInfos {
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    ActivityTaskCancelRequested,
+    ActivityTaskCanceled,
+    ActivityTaskCompleted,
+    ActivityTaskFailed,
+    ActivityTaskScheduled,
+    ActivityTaskStarted,
+    ActivityTaskTimedOut,
+    CancelTimerFailed,
+    CancelWorkflowExecutionFailed,
+    ChildWorkflowExecutionCanceled,
+    ChildWorkflowExecutionCompleted,
+    ChildWorkflowExecutionFailed,
+    ChildWorkflowExecutionStarted,
+    ChildWorkflowExecutionTerminated,
+    ChildWorkflowExecutionTimedOut,
+    CompleteWorkflowExecutionFailed,
+    ContinueAsNewWorkflowExecutionFailed,
+    DecisionTaskCompleted,
+    DecisionTaskScheduled,
+    DecisionTaskStarted,
+    DecisionTaskTimedOut,
+    ExternalWorkflowExecutionCancelRequested,
+    ExternalWorkflowExecutionSignaled,
+    FailWorkflowExecutionFailed,
+    LambdaFunctionCompleted,
+    LambdaFunctionFailed,
+    LambdaFunctionScheduled,
+    LambdaFunctionStarted,
+    LambdaFunctionTimedOut,
+    MarkerRecorded,
+    RecordMarkerFailed,
+    RequestCancelActivityTaskFailed,
+    RequestCancelExternalWorkflowExecutionFailed,
+    RequestCancelExternalWorkflowExecutionInitiated,
+    ScheduleActivityTaskFailed,
+    ScheduleLambdaFunctionFailed,
+    SignalExternalWorkflowExecutionFailed,
+    SignalExternalWorkflowExecutionInitiated,
+    StartChildWorkflowExecutionFailed,
+    StartChildWorkflowExecutionInitiated,
+    StartLambdaFunctionFailed,
+    StartTimerFailed,
+    TimerCanceled,
+    TimerFired,
+    TimerStarted,
+    WorkflowExecutionCancelRequested,
+    WorkflowExecutionCanceled,
+    WorkflowExecutionCompleted,
+    WorkflowExecutionContinuedAsNew,
+    WorkflowExecutionFailed,
+    WorkflowExecutionSignaled,
+    WorkflowExecutionStarted,
+    WorkflowExecutionTerminated,
+    WorkflowExecutionTimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::ActivityTaskCancelRequested => "ActivityTaskCancelRequested".to_string(),
+            EventType::ActivityTaskCanceled => "ActivityTaskCanceled".to_string(),
+            EventType::ActivityTaskCompleted => "ActivityTaskCompleted".to_string(),
+            EventType::ActivityTaskFailed => "ActivityTaskFailed".to_string(),
+            EventType::ActivityTaskScheduled => "ActivityTaskScheduled".to_string(),
+            EventType::ActivityTaskStarted => "ActivityTaskStarted".to_string(),
+            EventType::ActivityTaskTimedOut => "ActivityTaskTimedOut".to_string(),
+            EventType::CancelTimerFailed => "CancelTimerFailed".to_string(),
+            EventType::CancelWorkflowExecutionFailed => "CancelWorkflowExecutionFailed".to_string(),
+            EventType::ChildWorkflowExecutionCanceled => {
+                "ChildWorkflowExecutionCanceled".to_string()
+            }
+            EventType::ChildWorkflowExecutionCompleted => {
+                "ChildWorkflowExecutionCompleted".to_string()
+            }
+            EventType::ChildWorkflowExecutionFailed => "ChildWorkflowExecutionFailed".to_string(),
+            EventType::ChildWorkflowExecutionStarted => "ChildWorkflowExecutionStarted".to_string(),
+            EventType::ChildWorkflowExecutionTerminated => {
+                "ChildWorkflowExecutionTerminated".to_string()
+            }
+            EventType::ChildWorkflowExecutionTimedOut => {
+                "ChildWorkflowExecutionTimedOut".to_string()
+            }
+            EventType::CompleteWorkflowExecutionFailed => {
+                "CompleteWorkflowExecutionFailed".to_string()
+            }
+            EventType::ContinueAsNewWorkflowExecutionFailed => {
+                "ContinueAsNewWorkflowExecutionFailed".to_string()
+            }
+            EventType::DecisionTaskCompleted => "DecisionTaskCompleted".to_string(),
+            EventType::DecisionTaskScheduled => "DecisionTaskScheduled".to_string(),
+            EventType::DecisionTaskStarted => "DecisionTaskStarted".to_string(),
+            EventType::DecisionTaskTimedOut => "DecisionTaskTimedOut".to_string(),
+            EventType::ExternalWorkflowExecutionCancelRequested => {
+                "ExternalWorkflowExecutionCancelRequested".to_string()
+            }
+            EventType::ExternalWorkflowExecutionSignaled => {
+                "ExternalWorkflowExecutionSignaled".to_string()
+            }
+            EventType::FailWorkflowExecutionFailed => "FailWorkflowExecutionFailed".to_string(),
+            EventType::LambdaFunctionCompleted => "LambdaFunctionCompleted".to_string(),
+            EventType::LambdaFunctionFailed => "LambdaFunctionFailed".to_string(),
+            EventType::LambdaFunctionScheduled => "LambdaFunctionScheduled".to_string(),
+            EventType::LambdaFunctionStarted => "LambdaFunctionStarted".to_string(),
+            EventType::LambdaFunctionTimedOut => "LambdaFunctionTimedOut".to_string(),
+            EventType::MarkerRecorded => "MarkerRecorded".to_string(),
+            EventType::RecordMarkerFailed => "RecordMarkerFailed".to_string(),
+            EventType::RequestCancelActivityTaskFailed => {
+                "RequestCancelActivityTaskFailed".to_string()
+            }
+            EventType::RequestCancelExternalWorkflowExecutionFailed => {
+                "RequestCancelExternalWorkflowExecutionFailed".to_string()
+            }
+            EventType::RequestCancelExternalWorkflowExecutionInitiated => {
+                "RequestCancelExternalWorkflowExecutionInitiated".to_string()
+            }
+            EventType::ScheduleActivityTaskFailed => "ScheduleActivityTaskFailed".to_string(),
+            EventType::ScheduleLambdaFunctionFailed => "ScheduleLambdaFunctionFailed".to_string(),
+            EventType::SignalExternalWorkflowExecutionFailed => {
+                "SignalExternalWorkflowExecutionFailed".to_string()
+            }
+            EventType::SignalExternalWorkflowExecutionInitiated => {
+                "SignalExternalWorkflowExecutionInitiated".to_string()
+            }
+            EventType::StartChildWorkflowExecutionFailed => {
+                "StartChildWorkflowExecutionFailed".to_string()
+            }
+            EventType::StartChildWorkflowExecutionInitiated => {
+                "StartChildWorkflowExecutionInitiated".to_string()
+            }
+            EventType::StartLambdaFunctionFailed => "StartLambdaFunctionFailed".to_string(),
+            EventType::StartTimerFailed => "StartTimerFailed".to_string(),
+            EventType::TimerCanceled => "TimerCanceled".to_string(),
+            EventType::TimerFired => "TimerFired".to_string(),
+            EventType::TimerStarted => "TimerStarted".to_string(),
+            EventType::WorkflowExecutionCancelRequested => {
+                "WorkflowExecutionCancelRequested".to_string()
+            }
+            EventType::WorkflowExecutionCanceled => "WorkflowExecutionCanceled".to_string(),
+            EventType::WorkflowExecutionCompleted => "WorkflowExecutionCompleted".to_string(),
+            EventType::WorkflowExecutionContinuedAsNew => {
+                "WorkflowExecutionContinuedAsNew".to_string()
+            }
+            EventType::WorkflowExecutionFailed => "WorkflowExecutionFailed".to_string(),
+            EventType::WorkflowExecutionSignaled => "WorkflowExecutionSignaled".to_string(),
+            EventType::WorkflowExecutionStarted => "WorkflowExecutionStarted".to_string(),
+            EventType::WorkflowExecutionTerminated => "WorkflowExecutionTerminated".to_string(),
+            EventType::WorkflowExecutionTimedOut => "WorkflowExecutionTimedOut".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::ActivityTaskCancelRequested => &"ActivityTaskCancelRequested",
+            EventType::ActivityTaskCanceled => &"ActivityTaskCanceled",
+            EventType::ActivityTaskCompleted => &"ActivityTaskCompleted",
+            EventType::ActivityTaskFailed => &"ActivityTaskFailed",
+            EventType::ActivityTaskScheduled => &"ActivityTaskScheduled",
+            EventType::ActivityTaskStarted => &"ActivityTaskStarted",
+            EventType::ActivityTaskTimedOut => &"ActivityTaskTimedOut",
+            EventType::CancelTimerFailed => &"CancelTimerFailed",
+            EventType::CancelWorkflowExecutionFailed => &"CancelWorkflowExecutionFailed",
+            EventType::ChildWorkflowExecutionCanceled => &"ChildWorkflowExecutionCanceled",
+            EventType::ChildWorkflowExecutionCompleted => &"ChildWorkflowExecutionCompleted",
+            EventType::ChildWorkflowExecutionFailed => &"ChildWorkflowExecutionFailed",
+            EventType::ChildWorkflowExecutionStarted => &"ChildWorkflowExecutionStarted",
+            EventType::ChildWorkflowExecutionTerminated => &"ChildWorkflowExecutionTerminated",
+            EventType::ChildWorkflowExecutionTimedOut => &"ChildWorkflowExecutionTimedOut",
+            EventType::CompleteWorkflowExecutionFailed => &"CompleteWorkflowExecutionFailed",
+            EventType::ContinueAsNewWorkflowExecutionFailed => {
+                &"ContinueAsNewWorkflowExecutionFailed"
+            }
+            EventType::DecisionTaskCompleted => &"DecisionTaskCompleted",
+            EventType::DecisionTaskScheduled => &"DecisionTaskScheduled",
+            EventType::DecisionTaskStarted => &"DecisionTaskStarted",
+            EventType::DecisionTaskTimedOut => &"DecisionTaskTimedOut",
+            EventType::ExternalWorkflowExecutionCancelRequested => {
+                &"ExternalWorkflowExecutionCancelRequested"
+            }
+            EventType::ExternalWorkflowExecutionSignaled => &"ExternalWorkflowExecutionSignaled",
+            EventType::FailWorkflowExecutionFailed => &"FailWorkflowExecutionFailed",
+            EventType::LambdaFunctionCompleted => &"LambdaFunctionCompleted",
+            EventType::LambdaFunctionFailed => &"LambdaFunctionFailed",
+            EventType::LambdaFunctionScheduled => &"LambdaFunctionScheduled",
+            EventType::LambdaFunctionStarted => &"LambdaFunctionStarted",
+            EventType::LambdaFunctionTimedOut => &"LambdaFunctionTimedOut",
+            EventType::MarkerRecorded => &"MarkerRecorded",
+            EventType::RecordMarkerFailed => &"RecordMarkerFailed",
+            EventType::RequestCancelActivityTaskFailed => &"RequestCancelActivityTaskFailed",
+            EventType::RequestCancelExternalWorkflowExecutionFailed => {
+                &"RequestCancelExternalWorkflowExecutionFailed"
+            }
+            EventType::RequestCancelExternalWorkflowExecutionInitiated => {
+                &"RequestCancelExternalWorkflowExecutionInitiated"
+            }
+            EventType::ScheduleActivityTaskFailed => &"ScheduleActivityTaskFailed",
+            EventType::ScheduleLambdaFunctionFailed => &"ScheduleLambdaFunctionFailed",
+            EventType::SignalExternalWorkflowExecutionFailed => {
+                &"SignalExternalWorkflowExecutionFailed"
+            }
+            EventType::SignalExternalWorkflowExecutionInitiated => {
+                &"SignalExternalWorkflowExecutionInitiated"
+            }
+            EventType::StartChildWorkflowExecutionFailed => &"StartChildWorkflowExecutionFailed",
+            EventType::StartChildWorkflowExecutionInitiated => {
+                &"StartChildWorkflowExecutionInitiated"
+            }
+            EventType::StartLambdaFunctionFailed => &"StartLambdaFunctionFailed",
+            EventType::StartTimerFailed => &"StartTimerFailed",
+            EventType::TimerCanceled => &"TimerCanceled",
+            EventType::TimerFired => &"TimerFired",
+            EventType::TimerStarted => &"TimerStarted",
+            EventType::WorkflowExecutionCancelRequested => &"WorkflowExecutionCancelRequested",
+            EventType::WorkflowExecutionCanceled => &"WorkflowExecutionCanceled",
+            EventType::WorkflowExecutionCompleted => &"WorkflowExecutionCompleted",
+            EventType::WorkflowExecutionContinuedAsNew => &"WorkflowExecutionContinuedAsNew",
+            EventType::WorkflowExecutionFailed => &"WorkflowExecutionFailed",
+            EventType::WorkflowExecutionSignaled => &"WorkflowExecutionSignaled",
+            EventType::WorkflowExecutionStarted => &"WorkflowExecutionStarted",
+            EventType::WorkflowExecutionTerminated => &"WorkflowExecutionTerminated",
+            EventType::WorkflowExecutionTimedOut => &"WorkflowExecutionTimedOut",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActivityTaskCancelRequested" => EventType::ActivityTaskCancelRequested,
+            "ActivityTaskCanceled" => EventType::ActivityTaskCanceled,
+            "ActivityTaskCompleted" => EventType::ActivityTaskCompleted,
+            "ActivityTaskFailed" => EventType::ActivityTaskFailed,
+            "ActivityTaskScheduled" => EventType::ActivityTaskScheduled,
+            "ActivityTaskStarted" => EventType::ActivityTaskStarted,
+            "ActivityTaskTimedOut" => EventType::ActivityTaskTimedOut,
+            "CancelTimerFailed" => EventType::CancelTimerFailed,
+            "CancelWorkflowExecutionFailed" => EventType::CancelWorkflowExecutionFailed,
+            "ChildWorkflowExecutionCanceled" => EventType::ChildWorkflowExecutionCanceled,
+            "ChildWorkflowExecutionCompleted" => EventType::ChildWorkflowExecutionCompleted,
+            "ChildWorkflowExecutionFailed" => EventType::ChildWorkflowExecutionFailed,
+            "ChildWorkflowExecutionStarted" => EventType::ChildWorkflowExecutionStarted,
+            "ChildWorkflowExecutionTerminated" => EventType::ChildWorkflowExecutionTerminated,
+            "ChildWorkflowExecutionTimedOut" => EventType::ChildWorkflowExecutionTimedOut,
+            "CompleteWorkflowExecutionFailed" => EventType::CompleteWorkflowExecutionFailed,
+            "ContinueAsNewWorkflowExecutionFailed" => {
+                EventType::ContinueAsNewWorkflowExecutionFailed
+            }
+            "DecisionTaskCompleted" => EventType::DecisionTaskCompleted,
+            "DecisionTaskScheduled" => EventType::DecisionTaskScheduled,
+            "DecisionTaskStarted" => EventType::DecisionTaskStarted,
+            "DecisionTaskTimedOut" => EventType::DecisionTaskTimedOut,
+            "ExternalWorkflowExecutionCancelRequested" => {
+                EventType::ExternalWorkflowExecutionCancelRequested
+            }
+            "ExternalWorkflowExecutionSignaled" => EventType::ExternalWorkflowExecutionSignaled,
+            "FailWorkflowExecutionFailed" => EventType::FailWorkflowExecutionFailed,
+            "LambdaFunctionCompleted" => EventType::LambdaFunctionCompleted,
+            "LambdaFunctionFailed" => EventType::LambdaFunctionFailed,
+            "LambdaFunctionScheduled" => EventType::LambdaFunctionScheduled,
+            "LambdaFunctionStarted" => EventType::LambdaFunctionStarted,
+            "LambdaFunctionTimedOut" => EventType::LambdaFunctionTimedOut,
+            "MarkerRecorded" => EventType::MarkerRecorded,
+            "RecordMarkerFailed" => EventType::RecordMarkerFailed,
+            "RequestCancelActivityTaskFailed" => EventType::RequestCancelActivityTaskFailed,
+            "RequestCancelExternalWorkflowExecutionFailed" => {
+                EventType::RequestCancelExternalWorkflowExecutionFailed
+            }
+            "RequestCancelExternalWorkflowExecutionInitiated" => {
+                EventType::RequestCancelExternalWorkflowExecutionInitiated
+            }
+            "ScheduleActivityTaskFailed" => EventType::ScheduleActivityTaskFailed,
+            "ScheduleLambdaFunctionFailed" => EventType::ScheduleLambdaFunctionFailed,
+            "SignalExternalWorkflowExecutionFailed" => {
+                EventType::SignalExternalWorkflowExecutionFailed
+            }
+            "SignalExternalWorkflowExecutionInitiated" => {
+                EventType::SignalExternalWorkflowExecutionInitiated
+            }
+            "StartChildWorkflowExecutionFailed" => EventType::StartChildWorkflowExecutionFailed,
+            "StartChildWorkflowExecutionInitiated" => {
+                EventType::StartChildWorkflowExecutionInitiated
+            }
+            "StartLambdaFunctionFailed" => EventType::StartLambdaFunctionFailed,
+            "StartTimerFailed" => EventType::StartTimerFailed,
+            "TimerCanceled" => EventType::TimerCanceled,
+            "TimerFired" => EventType::TimerFired,
+            "TimerStarted" => EventType::TimerStarted,
+            "WorkflowExecutionCancelRequested" => EventType::WorkflowExecutionCancelRequested,
+            "WorkflowExecutionCanceled" => EventType::WorkflowExecutionCanceled,
+            "WorkflowExecutionCompleted" => EventType::WorkflowExecutionCompleted,
+            "WorkflowExecutionContinuedAsNew" => EventType::WorkflowExecutionContinuedAsNew,
+            "WorkflowExecutionFailed" => EventType::WorkflowExecutionFailed,
+            "WorkflowExecutionSignaled" => EventType::WorkflowExecutionSignaled,
+            "WorkflowExecutionStarted" => EventType::WorkflowExecutionStarted,
+            "WorkflowExecutionTerminated" => EventType::WorkflowExecutionTerminated,
+            "WorkflowExecutionTimedOut" => EventType::WorkflowExecutionTimedOut,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActivityTaskCancelRequested" => EventType::ActivityTaskCancelRequested,
+            "ActivityTaskCanceled" => EventType::ActivityTaskCanceled,
+            "ActivityTaskCompleted" => EventType::ActivityTaskCompleted,
+            "ActivityTaskFailed" => EventType::ActivityTaskFailed,
+            "ActivityTaskScheduled" => EventType::ActivityTaskScheduled,
+            "ActivityTaskStarted" => EventType::ActivityTaskStarted,
+            "ActivityTaskTimedOut" => EventType::ActivityTaskTimedOut,
+            "CancelTimerFailed" => EventType::CancelTimerFailed,
+            "CancelWorkflowExecutionFailed" => EventType::CancelWorkflowExecutionFailed,
+            "ChildWorkflowExecutionCanceled" => EventType::ChildWorkflowExecutionCanceled,
+            "ChildWorkflowExecutionCompleted" => EventType::ChildWorkflowExecutionCompleted,
+            "ChildWorkflowExecutionFailed" => EventType::ChildWorkflowExecutionFailed,
+            "ChildWorkflowExecutionStarted" => EventType::ChildWorkflowExecutionStarted,
+            "ChildWorkflowExecutionTerminated" => EventType::ChildWorkflowExecutionTerminated,
+            "ChildWorkflowExecutionTimedOut" => EventType::ChildWorkflowExecutionTimedOut,
+            "CompleteWorkflowExecutionFailed" => EventType::CompleteWorkflowExecutionFailed,
+            "ContinueAsNewWorkflowExecutionFailed" => {
+                EventType::ContinueAsNewWorkflowExecutionFailed
+            }
+            "DecisionTaskCompleted" => EventType::DecisionTaskCompleted,
+            "DecisionTaskScheduled" => EventType::DecisionTaskScheduled,
+            "DecisionTaskStarted" => EventType::DecisionTaskStarted,
+            "DecisionTaskTimedOut" => EventType::DecisionTaskTimedOut,
+            "ExternalWorkflowExecutionCancelRequested" => {
+                EventType::ExternalWorkflowExecutionCancelRequested
+            }
+            "ExternalWorkflowExecutionSignaled" => EventType::ExternalWorkflowExecutionSignaled,
+            "FailWorkflowExecutionFailed" => EventType::FailWorkflowExecutionFailed,
+            "LambdaFunctionCompleted" => EventType::LambdaFunctionCompleted,
+            "LambdaFunctionFailed" => EventType::LambdaFunctionFailed,
+            "LambdaFunctionScheduled" => EventType::LambdaFunctionScheduled,
+            "LambdaFunctionStarted" => EventType::LambdaFunctionStarted,
+            "LambdaFunctionTimedOut" => EventType::LambdaFunctionTimedOut,
+            "MarkerRecorded" => EventType::MarkerRecorded,
+            "RecordMarkerFailed" => EventType::RecordMarkerFailed,
+            "RequestCancelActivityTaskFailed" => EventType::RequestCancelActivityTaskFailed,
+            "RequestCancelExternalWorkflowExecutionFailed" => {
+                EventType::RequestCancelExternalWorkflowExecutionFailed
+            }
+            "RequestCancelExternalWorkflowExecutionInitiated" => {
+                EventType::RequestCancelExternalWorkflowExecutionInitiated
+            }
+            "ScheduleActivityTaskFailed" => EventType::ScheduleActivityTaskFailed,
+            "ScheduleLambdaFunctionFailed" => EventType::ScheduleLambdaFunctionFailed,
+            "SignalExternalWorkflowExecutionFailed" => {
+                EventType::SignalExternalWorkflowExecutionFailed
+            }
+            "SignalExternalWorkflowExecutionInitiated" => {
+                EventType::SignalExternalWorkflowExecutionInitiated
+            }
+            "StartChildWorkflowExecutionFailed" => EventType::StartChildWorkflowExecutionFailed,
+            "StartChildWorkflowExecutionInitiated" => {
+                EventType::StartChildWorkflowExecutionInitiated
+            }
+            "StartLambdaFunctionFailed" => EventType::StartLambdaFunctionFailed,
+            "StartTimerFailed" => EventType::StartTimerFailed,
+            "TimerCanceled" => EventType::TimerCanceled,
+            "TimerFired" => EventType::TimerFired,
+            "TimerStarted" => EventType::TimerStarted,
+            "WorkflowExecutionCancelRequested" => EventType::WorkflowExecutionCancelRequested,
+            "WorkflowExecutionCanceled" => EventType::WorkflowExecutionCanceled,
+            "WorkflowExecutionCompleted" => EventType::WorkflowExecutionCompleted,
+            "WorkflowExecutionContinuedAsNew" => EventType::WorkflowExecutionContinuedAsNew,
+            "WorkflowExecutionFailed" => EventType::WorkflowExecutionFailed,
+            "WorkflowExecutionSignaled" => EventType::WorkflowExecutionSignaled,
+            "WorkflowExecutionStarted" => EventType::WorkflowExecutionStarted,
+            "WorkflowExecutionTerminated" => EventType::WorkflowExecutionTerminated,
+            "WorkflowExecutionTimedOut" => EventType::WorkflowExecutionTimedOut,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExecutionStatus {
+    Closed,
+    Open,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExecutionStatus),
+}
+
+impl Default for ExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            ExecutionStatus::Closed => "CLOSED".to_string(),
+            ExecutionStatus::Open => "OPEN".to_string(),
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExecutionStatus::Closed => &"CLOSED",
+            ExecutionStatus::Open => &"OPEN",
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOSED" => ExecutionStatus::Closed,
+            "OPEN" => ExecutionStatus::Open,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOSED" => ExecutionStatus::Closed,
+            "OPEN" => ExecutionStatus::Open,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Used to filter the workflow executions in visibility APIs by various time-based rules. Each parameter, if specified, defines a rule that must be satisfied by each returned query result. The parameter values are in the <a href="https://en.wikipedia.org/wiki/Unix_time">Unix Time format</a>. For example: <code>"oldestDate": 1325376070.</code> </p>
@@ -987,13 +2604,124 @@ pub struct FailWorkflowExecutionDecisionAttributes {
     pub reason: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    UnhandledDecision,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailWorkflowExecutionFailedCause),
+}
+
+impl Default for FailWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+            FailWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED".to_string()
+            }
+            FailWorkflowExecutionFailedCause::UnhandledDecision => "UNHANDLED_DECISION".to_string(),
+            FailWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownFailWorkflowExecutionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            FailWorkflowExecutionFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+            FailWorkflowExecutionFailedCause::UnhandledDecision => &"UNHANDLED_DECISION",
+            FailWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownFailWorkflowExecutionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for FailWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPERATION_NOT_PERMITTED" => FailWorkflowExecutionFailedCause::OperationNotPermitted,
+            "UNHANDLED_DECISION" => FailWorkflowExecutionFailedCause::UnhandledDecision,
+            _ => FailWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownFailWorkflowExecutionFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for FailWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPERATION_NOT_PERMITTED" => FailWorkflowExecutionFailedCause::OperationNotPermitted,
+            "UNHANDLED_DECISION" => FailWorkflowExecutionFailedCause::UnhandledDecision,
+            _ => FailWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownFailWorkflowExecutionFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FailWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FailWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>FailWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: FailWorkflowExecutionFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>FailWorkflowExecution</code> decision to fail this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -1141,7 +2869,7 @@ pub struct HistoryEvent {
     pub event_timestamp: f64,
     /// <p>The type of the history event.</p>
     #[serde(rename = "eventType")]
-    pub event_type: String,
+    pub event_type: EventType,
     /// <p>If the event is of type <code>ExternalWorkflowExecutionCancelRequested</code> then this member is set and provides detailed information about the event. It isn't set for other event types. </p>
     #[serde(rename = "externalWorkflowExecutionCancelRequestedEventAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1382,7 +3110,109 @@ pub struct LambdaFunctionTimedOutEventAttributes {
     /// <p>The type of the timeout that caused this event.</p>
     #[serde(rename = "timeoutType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timeout_type: Option<String>,
+    pub timeout_type: Option<LambdaFunctionTimeoutType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLambdaFunctionTimeoutType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LambdaFunctionTimeoutType {
+    StartToClose,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLambdaFunctionTimeoutType),
+}
+
+impl Default for LambdaFunctionTimeoutType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LambdaFunctionTimeoutType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LambdaFunctionTimeoutType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LambdaFunctionTimeoutType {
+    fn into(self) -> String {
+        match self {
+            LambdaFunctionTimeoutType::StartToClose => "START_TO_CLOSE".to_string(),
+            LambdaFunctionTimeoutType::UnknownVariant(UnknownLambdaFunctionTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LambdaFunctionTimeoutType {
+    fn into(self) -> &'a str {
+        match self {
+            LambdaFunctionTimeoutType::StartToClose => &"START_TO_CLOSE",
+            LambdaFunctionTimeoutType::UnknownVariant(UnknownLambdaFunctionTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LambdaFunctionTimeoutType {
+    fn from(name: &str) -> Self {
+        match name {
+            "START_TO_CLOSE" => LambdaFunctionTimeoutType::StartToClose,
+            _ => LambdaFunctionTimeoutType::UnknownVariant(UnknownLambdaFunctionTimeoutType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LambdaFunctionTimeoutType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "START_TO_CLOSE" => LambdaFunctionTimeoutType::StartToClose,
+            _ => {
+                LambdaFunctionTimeoutType::UnknownVariant(UnknownLambdaFunctionTimeoutType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for LambdaFunctionTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LambdaFunctionTimeoutType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LambdaFunctionTimeoutType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1405,7 +3235,7 @@ pub struct ListActivityTypesInput {
     pub next_page_token: Option<String>,
     /// <p>Specifies the registration status of the activity types to list.</p>
     #[serde(rename = "registrationStatus")]
-    pub registration_status: String,
+    pub registration_status: RegistrationStatus,
     /// <p>When set to <code>true</code>, returns the results in reverse order. By default, the results are returned in ascending alphabetical order by <code>name</code> of the activity types.</p>
     #[serde(rename = "reverseOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1469,7 +3299,7 @@ pub struct ListDomainsInput {
     pub next_page_token: Option<String>,
     /// <p>Specifies the registration status of the domains to list.</p>
     #[serde(rename = "registrationStatus")]
-    pub registration_status: String,
+    pub registration_status: RegistrationStatus,
     /// <p>When set to <code>true</code>, returns the results in reverse order. By default, the results are returned in ascending alphabetical order by <code>name</code> of the domains.</p>
     #[serde(rename = "reverseOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1548,7 +3378,7 @@ pub struct ListWorkflowTypesInput {
     pub next_page_token: Option<String>,
     /// <p>Specifies the registration status of the workflow types to list.</p>
     #[serde(rename = "registrationStatus")]
-    pub registration_status: String,
+    pub registration_status: RegistrationStatus,
     /// <p>When set to <code>true</code>, returns the results in reverse order. By default the results are returned in ascending alphabetical order of the <code>name</code> of the workflow types.</p>
     #[serde(rename = "reverseOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1651,13 +3481,113 @@ pub struct RecordMarkerDecisionAttributes {
     pub marker_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecordMarkerFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecordMarkerFailedCause {
+    OperationNotPermitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecordMarkerFailedCause),
+}
+
+impl Default for RecordMarkerFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecordMarkerFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecordMarkerFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecordMarkerFailedCause {
+    fn into(self) -> String {
+        match self {
+            RecordMarkerFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+            RecordMarkerFailedCause::UnknownVariant(UnknownRecordMarkerFailedCause {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecordMarkerFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            RecordMarkerFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+            RecordMarkerFailedCause::UnknownVariant(UnknownRecordMarkerFailedCause {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecordMarkerFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPERATION_NOT_PERMITTED" => RecordMarkerFailedCause::OperationNotPermitted,
+            _ => RecordMarkerFailedCause::UnknownVariant(UnknownRecordMarkerFailedCause {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecordMarkerFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPERATION_NOT_PERMITTED" => RecordMarkerFailedCause::OperationNotPermitted,
+            _ => RecordMarkerFailedCause::UnknownVariant(UnknownRecordMarkerFailedCause { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordMarkerFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RecordMarkerFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecordMarkerFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>RecordMarkerFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecordMarkerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: RecordMarkerFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>RecordMarkerFailed</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -1733,7 +3663,7 @@ pub struct RegisterWorkflowTypeInput {
     /// <p><p>If set, specifies the default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "defaultChildPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_child_policy: Option<String>,
+    pub default_child_policy: Option<ChildPolicy>,
     /// <p>If set, specifies the default maximum duration for executions of this workflow type. You can override this default when starting an execution through the <a>StartWorkflowExecution</a> Action or <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. Unlike some of the other timeout parameters in Amazon SWF, you cannot specify a value of "NONE" for <code>defaultExecutionStartToCloseTimeout</code>; there is a one-year max limit on the time that a workflow execution can run. Exceeding this limit always causes the workflow execution to time out.</p>
     #[serde(rename = "defaultExecutionStartToCloseTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1769,6 +3699,110 @@ pub struct RegisterWorkflowTypeInput {
     pub version: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegistrationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegistrationStatus {
+    Deprecated,
+    Registered,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegistrationStatus),
+}
+
+impl Default for RegistrationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegistrationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegistrationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegistrationStatus {
+    fn into(self) -> String {
+        match self {
+            RegistrationStatus::Deprecated => "DEPRECATED".to_string(),
+            RegistrationStatus::Registered => "REGISTERED".to_string(),
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegistrationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RegistrationStatus::Deprecated => &"DEPRECATED",
+            RegistrationStatus::Registered => &"REGISTERED",
+            RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RegistrationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPRECATED" => RegistrationStatus::Deprecated,
+            "REGISTERED" => RegistrationStatus::Registered,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegistrationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPRECATED" => RegistrationStatus::Deprecated,
+            "REGISTERED" => RegistrationStatus::Registered,
+            _ => RegistrationStatus::UnknownVariant(UnknownRegistrationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RegistrationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RegistrationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>RequestCancelActivityTask</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1776,6 +3810,125 @@ pub struct RequestCancelActivityTaskDecisionAttributes {
     /// <p>The <code>activityId</code> of the activity task to be canceled.</p>
     #[serde(rename = "activityId")]
     pub activity_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequestCancelActivityTaskFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequestCancelActivityTaskFailedCause {
+    ActivityIdUnknown,
+    OperationNotPermitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequestCancelActivityTaskFailedCause),
+}
+
+impl Default for RequestCancelActivityTaskFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequestCancelActivityTaskFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequestCancelActivityTaskFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequestCancelActivityTaskFailedCause {
+    fn into(self) -> String {
+        match self {
+            RequestCancelActivityTaskFailedCause::ActivityIdUnknown => {
+                "ACTIVITY_ID_UNKNOWN".to_string()
+            }
+            RequestCancelActivityTaskFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED".to_string()
+            }
+            RequestCancelActivityTaskFailedCause::UnknownVariant(
+                UnknownRequestCancelActivityTaskFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequestCancelActivityTaskFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            RequestCancelActivityTaskFailedCause::ActivityIdUnknown => &"ACTIVITY_ID_UNKNOWN",
+            RequestCancelActivityTaskFailedCause::OperationNotPermitted => {
+                &"OPERATION_NOT_PERMITTED"
+            }
+            RequestCancelActivityTaskFailedCause::UnknownVariant(
+                UnknownRequestCancelActivityTaskFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RequestCancelActivityTaskFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVITY_ID_UNKNOWN" => RequestCancelActivityTaskFailedCause::ActivityIdUnknown,
+            "OPERATION_NOT_PERMITTED" => {
+                RequestCancelActivityTaskFailedCause::OperationNotPermitted
+            }
+            _ => RequestCancelActivityTaskFailedCause::UnknownVariant(
+                UnknownRequestCancelActivityTaskFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RequestCancelActivityTaskFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVITY_ID_UNKNOWN" => RequestCancelActivityTaskFailedCause::ActivityIdUnknown,
+            "OPERATION_NOT_PERMITTED" => {
+                RequestCancelActivityTaskFailedCause::OperationNotPermitted
+            }
+            _ => RequestCancelActivityTaskFailedCause::UnknownVariant(
+                UnknownRequestCancelActivityTaskFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestCancelActivityTaskFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RequestCancelActivityTaskFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RequestCancelActivityTaskFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides the details of the <code>RequestCancelActivityTaskFailed</code> event.</p>
@@ -1787,7 +3940,7 @@ pub struct RequestCancelActivityTaskFailedEventAttributes {
     pub activity_id: String,
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: RequestCancelActivityTaskFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>RequestCancelActivityTask</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -1810,13 +3963,117 @@ pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
     pub workflow_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequestCancelExternalWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequestCancelExternalWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    RequestCancelExternalWorkflowExecutionRateExceeded,
+    UnknownExternalWorkflowExecution,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequestCancelExternalWorkflowExecutionFailedCause),
+}
+
+impl Default for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+                    RequestCancelExternalWorkflowExecutionFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+RequestCancelExternalWorkflowExecutionFailedCause::RequestCancelExternalWorkflowExecutionRateExceeded => "REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED".to_string(),
+RequestCancelExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution => "UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION".to_string(),
+                    RequestCancelExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownRequestCancelExternalWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequestCancelExternalWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+                    RequestCancelExternalWorkflowExecutionFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+RequestCancelExternalWorkflowExecutionFailedCause::RequestCancelExternalWorkflowExecutionRateExceeded => &"REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED",
+RequestCancelExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution => &"UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION",
+                    RequestCancelExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownRequestCancelExternalWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+                    "OPERATION_NOT_PERMITTED" => RequestCancelExternalWorkflowExecutionFailedCause::OperationNotPermitted,
+"REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED" => RequestCancelExternalWorkflowExecutionFailedCause::RequestCancelExternalWorkflowExecutionRateExceeded,
+"UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION" => RequestCancelExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution,
+                    _ => RequestCancelExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownRequestCancelExternalWorkflowExecutionFailedCause{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "OPERATION_NOT_PERMITTED" => RequestCancelExternalWorkflowExecutionFailedCause::OperationNotPermitted,
+"REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED" => RequestCancelExternalWorkflowExecutionFailedCause::RequestCancelExternalWorkflowExecutionRateExceeded,
+"UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION" => RequestCancelExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution,
+                    _ => RequestCancelExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownRequestCancelExternalWorkflowExecutionFailedCause{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for RequestCancelExternalWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: RequestCancelExternalWorkflowExecutionFailedCause,
     /// <p>The data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the workflow execution.</p>
     #[serde(rename = "control")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1994,6 +4251,232 @@ pub struct ScheduleActivityTaskDecisionAttributes {
     pub task_priority: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduleActivityTaskFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduleActivityTaskFailedCause {
+    ActivityCreationRateExceeded,
+    ActivityIdAlreadyInUse,
+    ActivityTypeDeprecated,
+    ActivityTypeDoesNotExist,
+    DefaultHeartbeatTimeoutUndefined,
+    DefaultScheduleToCloseTimeoutUndefined,
+    DefaultScheduleToStartTimeoutUndefined,
+    DefaultStartToCloseTimeoutUndefined,
+    DefaultTaskListUndefined,
+    OpenActivitiesLimitExceeded,
+    OperationNotPermitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduleActivityTaskFailedCause),
+}
+
+impl Default for ScheduleActivityTaskFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduleActivityTaskFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduleActivityTaskFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduleActivityTaskFailedCause {
+    fn into(self) -> String {
+        match self {
+            ScheduleActivityTaskFailedCause::ActivityCreationRateExceeded => {
+                "ACTIVITY_CREATION_RATE_EXCEEDED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::ActivityIdAlreadyInUse => {
+                "ACTIVITY_ID_ALREADY_IN_USE".to_string()
+            }
+            ScheduleActivityTaskFailedCause::ActivityTypeDeprecated => {
+                "ACTIVITY_TYPE_DEPRECATED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::ActivityTypeDoesNotExist => {
+                "ACTIVITY_TYPE_DOES_NOT_EXIST".to_string()
+            }
+            ScheduleActivityTaskFailedCause::DefaultHeartbeatTimeoutUndefined => {
+                "DEFAULT_HEARTBEAT_TIMEOUT_UNDEFINED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::DefaultScheduleToCloseTimeoutUndefined => {
+                "DEFAULT_SCHEDULE_TO_CLOSE_TIMEOUT_UNDEFINED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::DefaultScheduleToStartTimeoutUndefined => {
+                "DEFAULT_SCHEDULE_TO_START_TIMEOUT_UNDEFINED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::DefaultStartToCloseTimeoutUndefined => {
+                "DEFAULT_START_TO_CLOSE_TIMEOUT_UNDEFINED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::DefaultTaskListUndefined => {
+                "DEFAULT_TASK_LIST_UNDEFINED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::OpenActivitiesLimitExceeded => {
+                "OPEN_ACTIVITIES_LIMIT_EXCEEDED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED".to_string()
+            }
+            ScheduleActivityTaskFailedCause::UnknownVariant(
+                UnknownScheduleActivityTaskFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduleActivityTaskFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduleActivityTaskFailedCause::ActivityCreationRateExceeded => {
+                &"ACTIVITY_CREATION_RATE_EXCEEDED"
+            }
+            ScheduleActivityTaskFailedCause::ActivityIdAlreadyInUse => {
+                &"ACTIVITY_ID_ALREADY_IN_USE"
+            }
+            ScheduleActivityTaskFailedCause::ActivityTypeDeprecated => &"ACTIVITY_TYPE_DEPRECATED",
+            ScheduleActivityTaskFailedCause::ActivityTypeDoesNotExist => {
+                &"ACTIVITY_TYPE_DOES_NOT_EXIST"
+            }
+            ScheduleActivityTaskFailedCause::DefaultHeartbeatTimeoutUndefined => {
+                &"DEFAULT_HEARTBEAT_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultScheduleToCloseTimeoutUndefined => {
+                &"DEFAULT_SCHEDULE_TO_CLOSE_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultScheduleToStartTimeoutUndefined => {
+                &"DEFAULT_SCHEDULE_TO_START_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultStartToCloseTimeoutUndefined => {
+                &"DEFAULT_START_TO_CLOSE_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultTaskListUndefined => {
+                &"DEFAULT_TASK_LIST_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::OpenActivitiesLimitExceeded => {
+                &"OPEN_ACTIVITIES_LIMIT_EXCEEDED"
+            }
+            ScheduleActivityTaskFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+            ScheduleActivityTaskFailedCause::UnknownVariant(
+                UnknownScheduleActivityTaskFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduleActivityTaskFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVITY_CREATION_RATE_EXCEEDED" => {
+                ScheduleActivityTaskFailedCause::ActivityCreationRateExceeded
+            }
+            "ACTIVITY_ID_ALREADY_IN_USE" => ScheduleActivityTaskFailedCause::ActivityIdAlreadyInUse,
+            "ACTIVITY_TYPE_DEPRECATED" => ScheduleActivityTaskFailedCause::ActivityTypeDeprecated,
+            "ACTIVITY_TYPE_DOES_NOT_EXIST" => {
+                ScheduleActivityTaskFailedCause::ActivityTypeDoesNotExist
+            }
+            "DEFAULT_HEARTBEAT_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultHeartbeatTimeoutUndefined
+            }
+            "DEFAULT_SCHEDULE_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultScheduleToCloseTimeoutUndefined
+            }
+            "DEFAULT_SCHEDULE_TO_START_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultScheduleToStartTimeoutUndefined
+            }
+            "DEFAULT_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultStartToCloseTimeoutUndefined
+            }
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultTaskListUndefined
+            }
+            "OPEN_ACTIVITIES_LIMIT_EXCEEDED" => {
+                ScheduleActivityTaskFailedCause::OpenActivitiesLimitExceeded
+            }
+            "OPERATION_NOT_PERMITTED" => ScheduleActivityTaskFailedCause::OperationNotPermitted,
+            _ => ScheduleActivityTaskFailedCause::UnknownVariant(
+                UnknownScheduleActivityTaskFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ScheduleActivityTaskFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVITY_CREATION_RATE_EXCEEDED" => {
+                ScheduleActivityTaskFailedCause::ActivityCreationRateExceeded
+            }
+            "ACTIVITY_ID_ALREADY_IN_USE" => ScheduleActivityTaskFailedCause::ActivityIdAlreadyInUse,
+            "ACTIVITY_TYPE_DEPRECATED" => ScheduleActivityTaskFailedCause::ActivityTypeDeprecated,
+            "ACTIVITY_TYPE_DOES_NOT_EXIST" => {
+                ScheduleActivityTaskFailedCause::ActivityTypeDoesNotExist
+            }
+            "DEFAULT_HEARTBEAT_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultHeartbeatTimeoutUndefined
+            }
+            "DEFAULT_SCHEDULE_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultScheduleToCloseTimeoutUndefined
+            }
+            "DEFAULT_SCHEDULE_TO_START_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultScheduleToStartTimeoutUndefined
+            }
+            "DEFAULT_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultStartToCloseTimeoutUndefined
+            }
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                ScheduleActivityTaskFailedCause::DefaultTaskListUndefined
+            }
+            "OPEN_ACTIVITIES_LIMIT_EXCEEDED" => {
+                ScheduleActivityTaskFailedCause::OpenActivitiesLimitExceeded
+            }
+            "OPERATION_NOT_PERMITTED" => ScheduleActivityTaskFailedCause::OperationNotPermitted,
+            _ => ScheduleActivityTaskFailedCause::UnknownVariant(
+                UnknownScheduleActivityTaskFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleActivityTaskFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScheduleActivityTaskFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScheduleActivityTaskFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>ScheduleActivityTaskFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2006,7 +4489,7 @@ pub struct ScheduleActivityTaskFailedEventAttributes {
     pub activity_type: ActivityType,
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: ScheduleActivityTaskFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision that resulted in the scheduling of this activity task. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -2036,13 +4519,156 @@ pub struct ScheduleLambdaFunctionDecisionAttributes {
     pub start_to_close_timeout: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduleLambdaFunctionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduleLambdaFunctionFailedCause {
+    IdAlreadyInUse,
+    LambdaFunctionCreationRateExceeded,
+    LambdaServiceNotAvailableInRegion,
+    OpenLambdaFunctionsLimitExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduleLambdaFunctionFailedCause),
+}
+
+impl Default for ScheduleLambdaFunctionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduleLambdaFunctionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduleLambdaFunctionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduleLambdaFunctionFailedCause {
+    fn into(self) -> String {
+        match self {
+            ScheduleLambdaFunctionFailedCause::IdAlreadyInUse => "ID_ALREADY_IN_USE".to_string(),
+            ScheduleLambdaFunctionFailedCause::LambdaFunctionCreationRateExceeded => {
+                "LAMBDA_FUNCTION_CREATION_RATE_EXCEEDED".to_string()
+            }
+            ScheduleLambdaFunctionFailedCause::LambdaServiceNotAvailableInRegion => {
+                "LAMBDA_SERVICE_NOT_AVAILABLE_IN_REGION".to_string()
+            }
+            ScheduleLambdaFunctionFailedCause::OpenLambdaFunctionsLimitExceeded => {
+                "OPEN_LAMBDA_FUNCTIONS_LIMIT_EXCEEDED".to_string()
+            }
+            ScheduleLambdaFunctionFailedCause::UnknownVariant(
+                UnknownScheduleLambdaFunctionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduleLambdaFunctionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduleLambdaFunctionFailedCause::IdAlreadyInUse => &"ID_ALREADY_IN_USE",
+            ScheduleLambdaFunctionFailedCause::LambdaFunctionCreationRateExceeded => {
+                &"LAMBDA_FUNCTION_CREATION_RATE_EXCEEDED"
+            }
+            ScheduleLambdaFunctionFailedCause::LambdaServiceNotAvailableInRegion => {
+                &"LAMBDA_SERVICE_NOT_AVAILABLE_IN_REGION"
+            }
+            ScheduleLambdaFunctionFailedCause::OpenLambdaFunctionsLimitExceeded => {
+                &"OPEN_LAMBDA_FUNCTIONS_LIMIT_EXCEEDED"
+            }
+            ScheduleLambdaFunctionFailedCause::UnknownVariant(
+                UnknownScheduleLambdaFunctionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduleLambdaFunctionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "ID_ALREADY_IN_USE" => ScheduleLambdaFunctionFailedCause::IdAlreadyInUse,
+            "LAMBDA_FUNCTION_CREATION_RATE_EXCEEDED" => {
+                ScheduleLambdaFunctionFailedCause::LambdaFunctionCreationRateExceeded
+            }
+            "LAMBDA_SERVICE_NOT_AVAILABLE_IN_REGION" => {
+                ScheduleLambdaFunctionFailedCause::LambdaServiceNotAvailableInRegion
+            }
+            "OPEN_LAMBDA_FUNCTIONS_LIMIT_EXCEEDED" => {
+                ScheduleLambdaFunctionFailedCause::OpenLambdaFunctionsLimitExceeded
+            }
+            _ => ScheduleLambdaFunctionFailedCause::UnknownVariant(
+                UnknownScheduleLambdaFunctionFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ScheduleLambdaFunctionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ID_ALREADY_IN_USE" => ScheduleLambdaFunctionFailedCause::IdAlreadyInUse,
+            "LAMBDA_FUNCTION_CREATION_RATE_EXCEEDED" => {
+                ScheduleLambdaFunctionFailedCause::LambdaFunctionCreationRateExceeded
+            }
+            "LAMBDA_SERVICE_NOT_AVAILABLE_IN_REGION" => {
+                ScheduleLambdaFunctionFailedCause::LambdaServiceNotAvailableInRegion
+            }
+            "OPEN_LAMBDA_FUNCTIONS_LIMIT_EXCEEDED" => {
+                ScheduleLambdaFunctionFailedCause::OpenLambdaFunctionsLimitExceeded
+            }
+            _ => ScheduleLambdaFunctionFailedCause::UnknownVariant(
+                UnknownScheduleLambdaFunctionFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleLambdaFunctionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScheduleLambdaFunctionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScheduleLambdaFunctionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>ScheduleLambdaFunctionFailed</code> event. It isn't set for other event types.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduleLambdaFunctionFailedEventAttributes {
     /// <p><p>The cause of the failure. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: ScheduleLambdaFunctionFailedCause,
     /// <p>The ID of the <code>LambdaFunctionCompleted</code> event corresponding to the decision that resulted in scheduling this Lambda task. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -2078,13 +4704,117 @@ pub struct SignalExternalWorkflowExecutionDecisionAttributes {
     pub workflow_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSignalExternalWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SignalExternalWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    SignalExternalWorkflowExecutionRateExceeded,
+    UnknownExternalWorkflowExecution,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSignalExternalWorkflowExecutionFailedCause),
+}
+
+impl Default for SignalExternalWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SignalExternalWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SignalExternalWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SignalExternalWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+                    SignalExternalWorkflowExecutionFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+SignalExternalWorkflowExecutionFailedCause::SignalExternalWorkflowExecutionRateExceeded => "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED".to_string(),
+SignalExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution => "UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION".to_string(),
+                    SignalExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownSignalExternalWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SignalExternalWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+                    SignalExternalWorkflowExecutionFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+SignalExternalWorkflowExecutionFailedCause::SignalExternalWorkflowExecutionRateExceeded => &"SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED",
+SignalExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution => &"UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION",
+                    SignalExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownSignalExternalWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for SignalExternalWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+                    "OPERATION_NOT_PERMITTED" => SignalExternalWorkflowExecutionFailedCause::OperationNotPermitted,
+"SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED" => SignalExternalWorkflowExecutionFailedCause::SignalExternalWorkflowExecutionRateExceeded,
+"UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION" => SignalExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution,
+                    _ => SignalExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownSignalExternalWorkflowExecutionFailedCause{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for SignalExternalWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "OPERATION_NOT_PERMITTED" => SignalExternalWorkflowExecutionFailedCause::OperationNotPermitted,
+"SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED" => SignalExternalWorkflowExecutionFailedCause::SignalExternalWorkflowExecutionRateExceeded,
+"UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION" => SignalExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution,
+                    _ => SignalExternalWorkflowExecutionFailedCause::UnknownVariant(UnknownSignalExternalWorkflowExecutionFailedCause{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for SignalExternalWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SignalExternalWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SignalExternalWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: SignalExternalWorkflowExecutionFailedCause,
     /// <p>The data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the workflow execution.</p>
     #[serde(rename = "control")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2160,7 +4890,7 @@ pub struct StartChildWorkflowExecutionDecisionAttributes {
     /// <p><p> If set, specifies the policy to use for the child workflow executions if the workflow execution being started is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub child_policy: Option<String>,
+    pub child_policy: Option<ChildPolicy>,
     /// <p>The data attached to the event that can be used by the decider in subsequent workflow tasks. This data isn't sent to the child workflow execution.</p>
     #[serde(rename = "control")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2201,13 +4931,207 @@ pub struct StartChildWorkflowExecutionDecisionAttributes {
     pub workflow_type: WorkflowType,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStartChildWorkflowExecutionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StartChildWorkflowExecutionFailedCause {
+    ChildCreationRateExceeded,
+    DefaultChildPolicyUndefined,
+    DefaultExecutionStartToCloseTimeoutUndefined,
+    DefaultTaskListUndefined,
+    DefaultTaskStartToCloseTimeoutUndefined,
+    OpenChildrenLimitExceeded,
+    OpenWorkflowsLimitExceeded,
+    OperationNotPermitted,
+    WorkflowAlreadyRunning,
+    WorkflowTypeDeprecated,
+    WorkflowTypeDoesNotExist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStartChildWorkflowExecutionFailedCause),
+}
+
+impl Default for StartChildWorkflowExecutionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StartChildWorkflowExecutionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StartChildWorkflowExecutionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StartChildWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        match self {
+                    StartChildWorkflowExecutionFailedCause::ChildCreationRateExceeded => "CHILD_CREATION_RATE_EXCEEDED".to_string(),
+StartChildWorkflowExecutionFailedCause::DefaultChildPolicyUndefined => "DEFAULT_CHILD_POLICY_UNDEFINED".to_string(),
+StartChildWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined => "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED".to_string(),
+StartChildWorkflowExecutionFailedCause::DefaultTaskListUndefined => "DEFAULT_TASK_LIST_UNDEFINED".to_string(),
+StartChildWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined => "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED".to_string(),
+StartChildWorkflowExecutionFailedCause::OpenChildrenLimitExceeded => "OPEN_CHILDREN_LIMIT_EXCEEDED".to_string(),
+StartChildWorkflowExecutionFailedCause::OpenWorkflowsLimitExceeded => "OPEN_WORKFLOWS_LIMIT_EXCEEDED".to_string(),
+StartChildWorkflowExecutionFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+StartChildWorkflowExecutionFailedCause::WorkflowAlreadyRunning => "WORKFLOW_ALREADY_RUNNING".to_string(),
+StartChildWorkflowExecutionFailedCause::WorkflowTypeDeprecated => "WORKFLOW_TYPE_DEPRECATED".to_string(),
+StartChildWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist => "WORKFLOW_TYPE_DOES_NOT_EXIST".to_string(),
+                    StartChildWorkflowExecutionFailedCause::UnknownVariant(UnknownStartChildWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StartChildWorkflowExecutionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+                    StartChildWorkflowExecutionFailedCause::ChildCreationRateExceeded => &"CHILD_CREATION_RATE_EXCEEDED",
+StartChildWorkflowExecutionFailedCause::DefaultChildPolicyUndefined => &"DEFAULT_CHILD_POLICY_UNDEFINED",
+StartChildWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined => &"DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED",
+StartChildWorkflowExecutionFailedCause::DefaultTaskListUndefined => &"DEFAULT_TASK_LIST_UNDEFINED",
+StartChildWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined => &"DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED",
+StartChildWorkflowExecutionFailedCause::OpenChildrenLimitExceeded => &"OPEN_CHILDREN_LIMIT_EXCEEDED",
+StartChildWorkflowExecutionFailedCause::OpenWorkflowsLimitExceeded => &"OPEN_WORKFLOWS_LIMIT_EXCEEDED",
+StartChildWorkflowExecutionFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+StartChildWorkflowExecutionFailedCause::WorkflowAlreadyRunning => &"WORKFLOW_ALREADY_RUNNING",
+StartChildWorkflowExecutionFailedCause::WorkflowTypeDeprecated => &"WORKFLOW_TYPE_DEPRECATED",
+StartChildWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist => &"WORKFLOW_TYPE_DOES_NOT_EXIST",
+                    StartChildWorkflowExecutionFailedCause::UnknownVariant(UnknownStartChildWorkflowExecutionFailedCause{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for StartChildWorkflowExecutionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHILD_CREATION_RATE_EXCEEDED" => {
+                StartChildWorkflowExecutionFailedCause::ChildCreationRateExceeded
+            }
+            "DEFAULT_CHILD_POLICY_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultChildPolicyUndefined
+            }
+            "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined
+            }
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultTaskListUndefined
+            }
+            "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined
+            }
+            "OPEN_CHILDREN_LIMIT_EXCEEDED" => {
+                StartChildWorkflowExecutionFailedCause::OpenChildrenLimitExceeded
+            }
+            "OPEN_WORKFLOWS_LIMIT_EXCEEDED" => {
+                StartChildWorkflowExecutionFailedCause::OpenWorkflowsLimitExceeded
+            }
+            "OPERATION_NOT_PERMITTED" => {
+                StartChildWorkflowExecutionFailedCause::OperationNotPermitted
+            }
+            "WORKFLOW_ALREADY_RUNNING" => {
+                StartChildWorkflowExecutionFailedCause::WorkflowAlreadyRunning
+            }
+            "WORKFLOW_TYPE_DEPRECATED" => {
+                StartChildWorkflowExecutionFailedCause::WorkflowTypeDeprecated
+            }
+            "WORKFLOW_TYPE_DOES_NOT_EXIST" => {
+                StartChildWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist
+            }
+            _ => StartChildWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownStartChildWorkflowExecutionFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for StartChildWorkflowExecutionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHILD_CREATION_RATE_EXCEEDED" => {
+                StartChildWorkflowExecutionFailedCause::ChildCreationRateExceeded
+            }
+            "DEFAULT_CHILD_POLICY_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultChildPolicyUndefined
+            }
+            "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined
+            }
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultTaskListUndefined
+            }
+            "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                StartChildWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined
+            }
+            "OPEN_CHILDREN_LIMIT_EXCEEDED" => {
+                StartChildWorkflowExecutionFailedCause::OpenChildrenLimitExceeded
+            }
+            "OPEN_WORKFLOWS_LIMIT_EXCEEDED" => {
+                StartChildWorkflowExecutionFailedCause::OpenWorkflowsLimitExceeded
+            }
+            "OPERATION_NOT_PERMITTED" => {
+                StartChildWorkflowExecutionFailedCause::OperationNotPermitted
+            }
+            "WORKFLOW_ALREADY_RUNNING" => {
+                StartChildWorkflowExecutionFailedCause::WorkflowAlreadyRunning
+            }
+            "WORKFLOW_TYPE_DEPRECATED" => {
+                StartChildWorkflowExecutionFailedCause::WorkflowTypeDeprecated
+            }
+            "WORKFLOW_TYPE_DOES_NOT_EXIST" => {
+                StartChildWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist
+            }
+            _ => StartChildWorkflowExecutionFailedCause::UnknownVariant(
+                UnknownStartChildWorkflowExecutionFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartChildWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StartChildWorkflowExecutionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StartChildWorkflowExecutionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>StartChildWorkflowExecutionFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChildWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>When <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision fails because it lacks sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html"> Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: StartChildWorkflowExecutionFailedCause,
     /// <p>The data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the child workflow execution.</p>
     #[serde(rename = "control")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2232,7 +5156,7 @@ pub struct StartChildWorkflowExecutionFailedEventAttributes {
 pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
     /// <p><p>The policy to use for the child workflow executions if this execution gets terminated by explicitly calling the <a>TerminateWorkflowExecution</a> action or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
-    pub child_policy: String,
+    pub child_policy: ChildPolicy,
     /// <p>Data attached to the event that can be used by the decider in subsequent decision tasks. This data isn't sent to the activity.</p>
     #[serde(rename = "control")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2275,6 +5199,110 @@ pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
     pub workflow_type: WorkflowType,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStartLambdaFunctionFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StartLambdaFunctionFailedCause {
+    AssumeRoleFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStartLambdaFunctionFailedCause),
+}
+
+impl Default for StartLambdaFunctionFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StartLambdaFunctionFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StartLambdaFunctionFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StartLambdaFunctionFailedCause {
+    fn into(self) -> String {
+        match self {
+            StartLambdaFunctionFailedCause::AssumeRoleFailed => "ASSUME_ROLE_FAILED".to_string(),
+            StartLambdaFunctionFailedCause::UnknownVariant(
+                UnknownStartLambdaFunctionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StartLambdaFunctionFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            StartLambdaFunctionFailedCause::AssumeRoleFailed => &"ASSUME_ROLE_FAILED",
+            StartLambdaFunctionFailedCause::UnknownVariant(
+                UnknownStartLambdaFunctionFailedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for StartLambdaFunctionFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSUME_ROLE_FAILED" => StartLambdaFunctionFailedCause::AssumeRoleFailed,
+            _ => StartLambdaFunctionFailedCause::UnknownVariant(
+                UnknownStartLambdaFunctionFailedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for StartLambdaFunctionFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSUME_ROLE_FAILED" => StartLambdaFunctionFailedCause::AssumeRoleFailed,
+            _ => StartLambdaFunctionFailedCause::UnknownVariant(
+                UnknownStartLambdaFunctionFailedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartLambdaFunctionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StartLambdaFunctionFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StartLambdaFunctionFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>StartLambdaFunctionFailed</code> event. It isn't set for other event types.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2282,7 +5310,7 @@ pub struct StartLambdaFunctionFailedEventAttributes {
     /// <p><p>The cause of the failure. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because the IAM role attached to the execution lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/lambda-task.html">Lambda Tasks</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cause: Option<String>,
+    pub cause: Option<StartLambdaFunctionFailedCause>,
     /// <p>A description that can help diagnose the cause of the fault.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2309,13 +5337,132 @@ pub struct StartTimerDecisionAttributes {
     pub timer_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStartTimerFailedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StartTimerFailedCause {
+    OpenTimersLimitExceeded,
+    OperationNotPermitted,
+    TimerCreationRateExceeded,
+    TimerIdAlreadyInUse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStartTimerFailedCause),
+}
+
+impl Default for StartTimerFailedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StartTimerFailedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StartTimerFailedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StartTimerFailedCause {
+    fn into(self) -> String {
+        match self {
+            StartTimerFailedCause::OpenTimersLimitExceeded => {
+                "OPEN_TIMERS_LIMIT_EXCEEDED".to_string()
+            }
+            StartTimerFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED".to_string(),
+            StartTimerFailedCause::TimerCreationRateExceeded => {
+                "TIMER_CREATION_RATE_EXCEEDED".to_string()
+            }
+            StartTimerFailedCause::TimerIdAlreadyInUse => "TIMER_ID_ALREADY_IN_USE".to_string(),
+            StartTimerFailedCause::UnknownVariant(UnknownStartTimerFailedCause {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StartTimerFailedCause {
+    fn into(self) -> &'a str {
+        match self {
+            StartTimerFailedCause::OpenTimersLimitExceeded => &"OPEN_TIMERS_LIMIT_EXCEEDED",
+            StartTimerFailedCause::OperationNotPermitted => &"OPERATION_NOT_PERMITTED",
+            StartTimerFailedCause::TimerCreationRateExceeded => &"TIMER_CREATION_RATE_EXCEEDED",
+            StartTimerFailedCause::TimerIdAlreadyInUse => &"TIMER_ID_ALREADY_IN_USE",
+            StartTimerFailedCause::UnknownVariant(UnknownStartTimerFailedCause {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StartTimerFailedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "OPEN_TIMERS_LIMIT_EXCEEDED" => StartTimerFailedCause::OpenTimersLimitExceeded,
+            "OPERATION_NOT_PERMITTED" => StartTimerFailedCause::OperationNotPermitted,
+            "TIMER_CREATION_RATE_EXCEEDED" => StartTimerFailedCause::TimerCreationRateExceeded,
+            "TIMER_ID_ALREADY_IN_USE" => StartTimerFailedCause::TimerIdAlreadyInUse,
+            _ => StartTimerFailedCause::UnknownVariant(UnknownStartTimerFailedCause {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StartTimerFailedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OPEN_TIMERS_LIMIT_EXCEEDED" => StartTimerFailedCause::OpenTimersLimitExceeded,
+            "OPERATION_NOT_PERMITTED" => StartTimerFailedCause::OperationNotPermitted,
+            "TIMER_CREATION_RATE_EXCEEDED" => StartTimerFailedCause::TimerCreationRateExceeded,
+            "TIMER_ID_ALREADY_IN_USE" => StartTimerFailedCause::TimerIdAlreadyInUse,
+            _ => StartTimerFailedCause::UnknownVariant(UnknownStartTimerFailedCause { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartTimerFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StartTimerFailedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StartTimerFailedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>StartTimerFailed</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTimerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
-    pub cause: String,
+    pub cause: StartTimerFailedCause,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>StartTimer</code> decision for this activity task. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -2330,7 +5477,7 @@ pub struct StartWorkflowExecutionInput {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of this workflow execution if it is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub child_policy: Option<String>,
+    pub child_policy: Option<ChildPolicy>,
     /// <p>The name of the domain in which the workflow execution is created.</p>
     #[serde(rename = "domain")]
     pub domain: String,
@@ -2404,7 +5551,7 @@ pub struct TerminateWorkflowExecutionInput {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of the workflow execution being terminated. This policy overrides the child policy specified for the workflow execution at registration time or when starting the execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub child_policy: Option<String>,
+    pub child_policy: Option<ChildPolicy>,
     /// <p> Details for terminating the workflow execution.</p>
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2523,6 +5670,112 @@ pub struct WorkflowExecution {
     pub workflow_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkflowExecutionCancelRequestedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkflowExecutionCancelRequestedCause {
+    ChildPolicyApplied,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkflowExecutionCancelRequestedCause),
+}
+
+impl Default for WorkflowExecutionCancelRequestedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkflowExecutionCancelRequestedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkflowExecutionCancelRequestedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkflowExecutionCancelRequestedCause {
+    fn into(self) -> String {
+        match self {
+            WorkflowExecutionCancelRequestedCause::ChildPolicyApplied => {
+                "CHILD_POLICY_APPLIED".to_string()
+            }
+            WorkflowExecutionCancelRequestedCause::UnknownVariant(
+                UnknownWorkflowExecutionCancelRequestedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkflowExecutionCancelRequestedCause {
+    fn into(self) -> &'a str {
+        match self {
+            WorkflowExecutionCancelRequestedCause::ChildPolicyApplied => &"CHILD_POLICY_APPLIED",
+            WorkflowExecutionCancelRequestedCause::UnknownVariant(
+                UnknownWorkflowExecutionCancelRequestedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkflowExecutionCancelRequestedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHILD_POLICY_APPLIED" => WorkflowExecutionCancelRequestedCause::ChildPolicyApplied,
+            _ => WorkflowExecutionCancelRequestedCause::UnknownVariant(
+                UnknownWorkflowExecutionCancelRequestedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for WorkflowExecutionCancelRequestedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHILD_POLICY_APPLIED" => WorkflowExecutionCancelRequestedCause::ChildPolicyApplied,
+            _ => WorkflowExecutionCancelRequestedCause::UnknownVariant(
+                UnknownWorkflowExecutionCancelRequestedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkflowExecutionCancelRequestedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkflowExecutionCancelRequestedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkflowExecutionCancelRequestedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>WorkflowExecutionCancelRequested</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2530,7 +5783,7 @@ pub struct WorkflowExecutionCancelRequestedEventAttributes {
     /// <p>If set, indicates that the request to cancel the workflow execution was automatically generated, and specifies the cause. This happens if the parent workflow execution times out or is terminated, and the child policy is set to cancel child executions.</p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cause: Option<String>,
+    pub cause: Option<WorkflowExecutionCancelRequestedCause>,
     /// <p>The ID of the <code>RequestCancelExternalWorkflowExecutionInitiated</code> event corresponding to the <code>RequestCancelExternalWorkflowExecution</code> decision to cancel this workflow execution.The source event with this ID can be found in the history of the source workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "externalInitiatedEventId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2573,7 +5826,7 @@ pub struct WorkflowExecutionCompletedEventAttributes {
 pub struct WorkflowExecutionConfiguration {
     /// <p><p>The policy to use for the child workflow executions if this workflow execution is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
-    pub child_policy: String,
+    pub child_policy: ChildPolicy,
     /// <p>The total duration for this workflow execution.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "executionStartToCloseTimeout")]
     pub execution_start_to_close_timeout: String,
@@ -2599,7 +5852,7 @@ pub struct WorkflowExecutionConfiguration {
 pub struct WorkflowExecutionContinuedAsNewEventAttributes {
     /// <p><p>The policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
-    pub child_policy: String,
+    pub child_policy: ChildPolicy,
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>ContinueAsNewWorkflowExecution</code> decision that started this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
@@ -2711,7 +5964,7 @@ pub struct WorkflowExecutionInfo {
     /// <p><p>If the execution status is closed then this specifies how the execution was closed:</p> <ul> <li> <p> <code>COMPLETED</code> – the execution was successfully completed.</p> </li> <li> <p> <code>CANCELED</code> – the execution was canceled.Cancellation allows the implementation to gracefully clean up before the execution is closed.</p> </li> <li> <p> <code>TERMINATED</code> – the execution was force terminated.</p> </li> <li> <p> <code>FAILED</code> – the execution failed to complete.</p> </li> <li> <p> <code>TIMED<em>OUT</code> – the execution did not complete in the alloted time and was automatically timed out.</p> </li> <li> <p> <code>CONTINUED</em>AS_NEW</code> – the execution is logically continued. This means the current execution was completed and a new execution was started to carry on the workflow.</p> </li> </ul></p>
     #[serde(rename = "closeStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub close_status: Option<String>,
+    pub close_status: Option<CloseStatus>,
     /// <p>The time when the workflow execution was closed. Set only if the execution status is CLOSED.</p>
     #[serde(rename = "closeTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2721,7 +5974,7 @@ pub struct WorkflowExecutionInfo {
     pub execution: WorkflowExecution,
     /// <p>The current status of the execution.</p>
     #[serde(rename = "executionStatus")]
-    pub execution_status: String,
+    pub execution_status: ExecutionStatus,
     /// <p>If this workflow execution is a child of another execution then contains the workflow execution that started this execution.</p>
     #[serde(rename = "parent")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2800,7 +6053,7 @@ pub struct WorkflowExecutionSignaledEventAttributes {
 pub struct WorkflowExecutionStartedEventAttributes {
     /// <p><p>The policy to use for the child workflow executions if this workflow execution is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
-    pub child_policy: String,
+    pub child_policy: ChildPolicy,
     /// <p>If this workflow execution was started due to a <code>ContinueAsNewWorkflowExecution</code> decision, then it contains the <code>runId</code> of the previous workflow execution that was closed and continued as this execution.</p>
     #[serde(rename = "continuedExecutionRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2845,6 +6098,124 @@ pub struct WorkflowExecutionStartedEventAttributes {
     pub workflow_type: WorkflowType,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkflowExecutionTerminatedCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkflowExecutionTerminatedCause {
+    ChildPolicyApplied,
+    EventLimitExceeded,
+    OperatorInitiated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkflowExecutionTerminatedCause),
+}
+
+impl Default for WorkflowExecutionTerminatedCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkflowExecutionTerminatedCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkflowExecutionTerminatedCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkflowExecutionTerminatedCause {
+    fn into(self) -> String {
+        match self {
+            WorkflowExecutionTerminatedCause::ChildPolicyApplied => {
+                "CHILD_POLICY_APPLIED".to_string()
+            }
+            WorkflowExecutionTerminatedCause::EventLimitExceeded => {
+                "EVENT_LIMIT_EXCEEDED".to_string()
+            }
+            WorkflowExecutionTerminatedCause::OperatorInitiated => "OPERATOR_INITIATED".to_string(),
+            WorkflowExecutionTerminatedCause::UnknownVariant(
+                UnknownWorkflowExecutionTerminatedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkflowExecutionTerminatedCause {
+    fn into(self) -> &'a str {
+        match self {
+            WorkflowExecutionTerminatedCause::ChildPolicyApplied => &"CHILD_POLICY_APPLIED",
+            WorkflowExecutionTerminatedCause::EventLimitExceeded => &"EVENT_LIMIT_EXCEEDED",
+            WorkflowExecutionTerminatedCause::OperatorInitiated => &"OPERATOR_INITIATED",
+            WorkflowExecutionTerminatedCause::UnknownVariant(
+                UnknownWorkflowExecutionTerminatedCause { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkflowExecutionTerminatedCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHILD_POLICY_APPLIED" => WorkflowExecutionTerminatedCause::ChildPolicyApplied,
+            "EVENT_LIMIT_EXCEEDED" => WorkflowExecutionTerminatedCause::EventLimitExceeded,
+            "OPERATOR_INITIATED" => WorkflowExecutionTerminatedCause::OperatorInitiated,
+            _ => WorkflowExecutionTerminatedCause::UnknownVariant(
+                UnknownWorkflowExecutionTerminatedCause {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for WorkflowExecutionTerminatedCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHILD_POLICY_APPLIED" => WorkflowExecutionTerminatedCause::ChildPolicyApplied,
+            "EVENT_LIMIT_EXCEEDED" => WorkflowExecutionTerminatedCause::EventLimitExceeded,
+            "OPERATOR_INITIATED" => WorkflowExecutionTerminatedCause::OperatorInitiated,
+            _ => WorkflowExecutionTerminatedCause::UnknownVariant(
+                UnknownWorkflowExecutionTerminatedCause { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkflowExecutionTerminatedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkflowExecutionTerminatedCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkflowExecutionTerminatedCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides the details of the <code>WorkflowExecutionTerminated</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2852,10 +6223,10 @@ pub struct WorkflowExecutionTerminatedEventAttributes {
     /// <p>If set, indicates that the workflow execution was automatically terminated, and specifies the cause. This happens if the parent workflow execution times out or is terminated and the child policy is set to terminate child executions.</p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cause: Option<String>,
+    pub cause: Option<WorkflowExecutionTerminatedCause>,
     /// <p><p>The policy used for the child workflow executions of this workflow execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
-    pub child_policy: String,
+    pub child_policy: ChildPolicy,
     /// <p>The details provided for the termination.</p>
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2872,10 +6243,116 @@ pub struct WorkflowExecutionTerminatedEventAttributes {
 pub struct WorkflowExecutionTimedOutEventAttributes {
     /// <p><p>The policy used for the child workflow executions of this workflow execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
-    pub child_policy: String,
+    pub child_policy: ChildPolicy,
     /// <p>The type of timeout that caused this event.</p>
     #[serde(rename = "timeoutType")]
-    pub timeout_type: String,
+    pub timeout_type: WorkflowExecutionTimeoutType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkflowExecutionTimeoutType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkflowExecutionTimeoutType {
+    StartToClose,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkflowExecutionTimeoutType),
+}
+
+impl Default for WorkflowExecutionTimeoutType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkflowExecutionTimeoutType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkflowExecutionTimeoutType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkflowExecutionTimeoutType {
+    fn into(self) -> String {
+        match self {
+            WorkflowExecutionTimeoutType::StartToClose => "START_TO_CLOSE".to_string(),
+            WorkflowExecutionTimeoutType::UnknownVariant(UnknownWorkflowExecutionTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkflowExecutionTimeoutType {
+    fn into(self) -> &'a str {
+        match self {
+            WorkflowExecutionTimeoutType::StartToClose => &"START_TO_CLOSE",
+            WorkflowExecutionTimeoutType::UnknownVariant(UnknownWorkflowExecutionTimeoutType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkflowExecutionTimeoutType {
+    fn from(name: &str) -> Self {
+        match name {
+            "START_TO_CLOSE" => WorkflowExecutionTimeoutType::StartToClose,
+            _ => {
+                WorkflowExecutionTimeoutType::UnknownVariant(UnknownWorkflowExecutionTimeoutType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for WorkflowExecutionTimeoutType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "START_TO_CLOSE" => WorkflowExecutionTimeoutType::StartToClose,
+            _ => {
+                WorkflowExecutionTimeoutType::UnknownVariant(UnknownWorkflowExecutionTimeoutType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkflowExecutionTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorkflowExecutionTimeoutType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkflowExecutionTimeoutType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a workflow type.</p>
@@ -2896,7 +6373,7 @@ pub struct WorkflowTypeConfiguration {
     /// <p><p> The default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "defaultChildPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_child_policy: Option<String>,
+    pub default_child_policy: Option<ChildPolicy>,
     /// <p> The default maximum duration, specified when registering the workflow type, for executions of this workflow type. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "defaultExecutionStartToCloseTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2961,7 +6438,7 @@ pub struct WorkflowTypeInfo {
     pub description: Option<String>,
     /// <p>The current status of the workflow type.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: RegistrationStatus,
     /// <p>The workflow type this information is about.</p>
     #[serde(rename = "workflowType")]
     pub workflow_type: WorkflowType,

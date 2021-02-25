@@ -77,6 +77,106 @@ pub struct AcceptDirectConnectGatewayAssociationProposalResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAddressFamily {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AddressFamily {
+    Ipv4,
+    Ipv6,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAddressFamily),
+}
+
+impl Default for AddressFamily {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AddressFamily {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AddressFamily {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AddressFamily {
+    fn into(self) -> String {
+        match self {
+            AddressFamily::Ipv4 => "ipv4".to_string(),
+            AddressFamily::Ipv6 => "ipv6".to_string(),
+            AddressFamily::UnknownVariant(UnknownAddressFamily { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AddressFamily {
+    fn into(self) -> &'a str {
+        match self {
+            AddressFamily::Ipv4 => &"ipv4",
+            AddressFamily::Ipv6 => &"ipv6",
+            AddressFamily::UnknownVariant(UnknownAddressFamily { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AddressFamily {
+    fn from(name: &str) -> Self {
+        match name {
+            "ipv4" => AddressFamily::Ipv4,
+            "ipv6" => AddressFamily::Ipv6,
+            _ => AddressFamily::UnknownVariant(UnknownAddressFamily {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AddressFamily {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ipv4" => AddressFamily::Ipv4,
+            "ipv6" => AddressFamily::Ipv6,
+            _ => AddressFamily::UnknownVariant(UnknownAddressFamily { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AddressFamily {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AddressFamily {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AddressFamily {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateConnectionOnInterconnectRequest {
@@ -223,7 +323,7 @@ pub struct AssociatedGateway {
     /// <p>The type of associated gateway.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<GatewayType>,
 }
 
 /// <p>Information about a BGP peer.</p>
@@ -233,7 +333,7 @@ pub struct BGPPeer {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -257,15 +357,237 @@ pub struct BGPPeer {
     /// <p><p>The state of the BGP peer. The following are the possible values:</p> <ul> <li> <p> <code>verifying</code>: The BGP peering addresses or ASN require validation before the BGP peer can be created. This state applies only to public virtual interfaces.</p> </li> <li> <p> <code>pending</code>: The BGP peer is created, and remains in this state until it is ready to be established.</p> </li> <li> <p> <code>available</code>: The BGP peer is ready to be established.</p> </li> <li> <p> <code>deleting</code>: The BGP peer is being deleted.</p> </li> <li> <p> <code>deleted</code>: The BGP peer is deleted and cannot be established.</p> </li> </ul></p>
     #[serde(rename = "bgpPeerState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bgp_peer_state: Option<String>,
+    pub bgp_peer_state: Option<BGPPeerState>,
     /// <p><p>The status of the BGP peer. The following are the possible values:</p> <ul> <li> <p> <code>up</code>: The BGP peer is established. This state does not indicate the state of the routing function. Ensure that you are receiving routes over the BGP session.</p> </li> <li> <p> <code>down</code>: The BGP peer is down.</p> </li> <li> <p> <code>unknown</code>: The BGP peer status is not available.</p> </li> </ul></p>
     #[serde(rename = "bgpStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bgp_status: Option<String>,
+    pub bgp_status: Option<BGPStatus>,
     /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBGPPeerState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BGPPeerState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+    Verifying,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBGPPeerState),
+}
+
+impl Default for BGPPeerState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BGPPeerState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BGPPeerState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BGPPeerState {
+    fn into(self) -> String {
+        match self {
+            BGPPeerState::Available => "available".to_string(),
+            BGPPeerState::Deleted => "deleted".to_string(),
+            BGPPeerState::Deleting => "deleting".to_string(),
+            BGPPeerState::Pending => "pending".to_string(),
+            BGPPeerState::Verifying => "verifying".to_string(),
+            BGPPeerState::UnknownVariant(UnknownBGPPeerState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BGPPeerState {
+    fn into(self) -> &'a str {
+        match self {
+            BGPPeerState::Available => &"available",
+            BGPPeerState::Deleted => &"deleted",
+            BGPPeerState::Deleting => &"deleting",
+            BGPPeerState::Pending => &"pending",
+            BGPPeerState::Verifying => &"verifying",
+            BGPPeerState::UnknownVariant(UnknownBGPPeerState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BGPPeerState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => BGPPeerState::Available,
+            "deleted" => BGPPeerState::Deleted,
+            "deleting" => BGPPeerState::Deleting,
+            "pending" => BGPPeerState::Pending,
+            "verifying" => BGPPeerState::Verifying,
+            _ => BGPPeerState::UnknownVariant(UnknownBGPPeerState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BGPPeerState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => BGPPeerState::Available,
+            "deleted" => BGPPeerState::Deleted,
+            "deleting" => BGPPeerState::Deleting,
+            "pending" => BGPPeerState::Pending,
+            "verifying" => BGPPeerState::Verifying,
+            _ => BGPPeerState::UnknownVariant(UnknownBGPPeerState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BGPPeerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BGPPeerState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BGPPeerState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBGPStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BGPStatus {
+    Down,
+    Unknown,
+    Up,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBGPStatus),
+}
+
+impl Default for BGPStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BGPStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BGPStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BGPStatus {
+    fn into(self) -> String {
+        match self {
+            BGPStatus::Down => "down".to_string(),
+            BGPStatus::Unknown => "unknown".to_string(),
+            BGPStatus::Up => "up".to_string(),
+            BGPStatus::UnknownVariant(UnknownBGPStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BGPStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BGPStatus::Down => &"down",
+            BGPStatus::Unknown => &"unknown",
+            BGPStatus::Up => &"up",
+            BGPStatus::UnknownVariant(UnknownBGPStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BGPStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "down" => BGPStatus::Down,
+            "unknown" => BGPStatus::Unknown,
+            "up" => BGPStatus::Up,
+            _ => BGPStatus::UnknownVariant(UnknownBGPStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BGPStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "down" => BGPStatus::Down,
+            "unknown" => BGPStatus::Unknown,
+            "up" => BGPStatus::Up,
+            _ => BGPStatus::UnknownVariant(UnknownBGPStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BGPStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BGPStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BGPStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -282,7 +604,7 @@ pub struct ConfirmConnectionResponse {
     /// <p><p>The state of the connection. The following are the possible values:</p> <ul> <li> <p> <code>ordering</code>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <code>requested</code>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The connection has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up and the connection is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The connection is being deleted.</p> </li> <li> <p> <code>deleted</code>: The connection has been deleted.</p> </li> <li> <p> <code>rejected</code>: A hosted connection in the <code>ordering</code> state enters the <code>rejected</code> state if it is deleted by the customer.</p> </li> <li> <p> <code>unknown</code>: The state of the connection is not available.</p> </li> </ul></p>
     #[serde(rename = "connectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<ConnectionState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -307,7 +629,7 @@ pub struct ConfirmPrivateVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub virtual_interface_state: Option<String>,
+    pub virtual_interface_state: Option<VirtualInterfaceState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -324,7 +646,7 @@ pub struct ConfirmPublicVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub virtual_interface_state: Option<String>,
+    pub virtual_interface_state: Option<VirtualInterfaceState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -344,7 +666,7 @@ pub struct ConfirmTransitVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub virtual_interface_state: Option<String>,
+    pub virtual_interface_state: Option<VirtualInterfaceState>,
 }
 
 /// <p>Information about an AWS Direct Connect connection.</p>
@@ -374,11 +696,11 @@ pub struct Connection {
     /// <p><p>The state of the connection. The following are the possible values:</p> <ul> <li> <p> <code>ordering</code>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <code>requested</code>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The connection has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up and the connection is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The connection is being deleted.</p> </li> <li> <p> <code>deleted</code>: The connection has been deleted.</p> </li> <li> <p> <code>rejected</code>: A hosted connection in the <code>ordering</code> state enters the <code>rejected</code> state if it is deleted by the customer.</p> </li> <li> <p> <code>unknown</code>: The state of the connection is not available.</p> </li> </ul></p>
     #[serde(rename = "connectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_state: Option<String>,
+    pub connection_state: Option<ConnectionState>,
     /// <p>Indicates whether the connection supports a secondary BGP peer in the same address family (IPv4/IPv6).</p>
     #[serde(rename = "hasLogicalRedundancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_logical_redundancy: Option<String>,
+    pub has_logical_redundancy: Option<HasLogicalRedundancy>,
     /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
     #[serde(rename = "jumboFrameCapable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -419,6 +741,142 @@ pub struct Connection {
     #[serde(rename = "vlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionState {
+    Available,
+    Deleted,
+    Deleting,
+    Down,
+    Ordering,
+    Pending,
+    Rejected,
+    Requested,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionState),
+}
+
+impl Default for ConnectionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionState {
+    fn into(self) -> String {
+        match self {
+            ConnectionState::Available => "available".to_string(),
+            ConnectionState::Deleted => "deleted".to_string(),
+            ConnectionState::Deleting => "deleting".to_string(),
+            ConnectionState::Down => "down".to_string(),
+            ConnectionState::Ordering => "ordering".to_string(),
+            ConnectionState::Pending => "pending".to_string(),
+            ConnectionState::Rejected => "rejected".to_string(),
+            ConnectionState::Requested => "requested".to_string(),
+            ConnectionState::Unknown => "unknown".to_string(),
+            ConnectionState::UnknownVariant(UnknownConnectionState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionState {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionState::Available => &"available",
+            ConnectionState::Deleted => &"deleted",
+            ConnectionState::Deleting => &"deleting",
+            ConnectionState::Down => &"down",
+            ConnectionState::Ordering => &"ordering",
+            ConnectionState::Pending => &"pending",
+            ConnectionState::Rejected => &"rejected",
+            ConnectionState::Requested => &"requested",
+            ConnectionState::Unknown => &"unknown",
+            ConnectionState::UnknownVariant(UnknownConnectionState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => ConnectionState::Available,
+            "deleted" => ConnectionState::Deleted,
+            "deleting" => ConnectionState::Deleting,
+            "down" => ConnectionState::Down,
+            "ordering" => ConnectionState::Ordering,
+            "pending" => ConnectionState::Pending,
+            "rejected" => ConnectionState::Rejected,
+            "requested" => ConnectionState::Requested,
+            "unknown" => ConnectionState::Unknown,
+            _ => ConnectionState::UnknownVariant(UnknownConnectionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => ConnectionState::Available,
+            "deleted" => ConnectionState::Deleted,
+            "deleting" => ConnectionState::Deleting,
+            "down" => ConnectionState::Down,
+            "ordering" => ConnectionState::Ordering,
+            "pending" => ConnectionState::Pending,
+            "rejected" => ConnectionState::Rejected,
+            "requested" => ConnectionState::Requested,
+            "unknown" => ConnectionState::Unknown,
+            _ => ConnectionState::UnknownVariant(UnknownConnectionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -773,7 +1231,7 @@ pub struct DeleteInterconnectResponse {
     /// <p><p>The state of the interconnect. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The interconnect is approved, and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The interconnect is being deleted.</p> </li> <li> <p> <code>deleted</code>: The interconnect is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the interconnect is not available.</p> </li> </ul></p>
     #[serde(rename = "interconnectState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub interconnect_state: Option<String>,
+    pub interconnect_state: Option<InterconnectState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -798,7 +1256,7 @@ pub struct DeleteVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub virtual_interface_state: Option<String>,
+    pub virtual_interface_state: Option<VirtualInterfaceState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -810,7 +1268,7 @@ pub struct DescribeConnectionLoaRequest {
     /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub loa_content_type: Option<String>,
+    pub loa_content_type: Option<LoaContentType>,
     /// <p>The name of the APN partner or service provider who establishes connectivity on your behalf. If you specify this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1005,7 +1463,7 @@ pub struct DescribeInterconnectLoaRequest {
     /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub loa_content_type: Option<String>,
+    pub loa_content_type: Option<LoaContentType>,
     /// <p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1048,7 +1506,7 @@ pub struct DescribeLoaRequest {
     /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub loa_content_type: Option<String>,
+    pub loa_content_type: Option<LoaContentType>,
     /// <p>The name of the service provider who establishes connectivity on your behalf. If you specify this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,7 +1562,7 @@ pub struct DirectConnectGateway {
     /// <p><p>The state of the Direct Connect gateway. The following are the possible values:</p> <ul> <li> <p> <code>pending</code>: The initial state after calling <a>CreateDirectConnectGateway</a>.</p> </li> <li> <p> <code>available</code>: The Direct Connect gateway is ready for use.</p> </li> <li> <p> <code>deleting</code>: The initial state after calling <a>DeleteDirectConnectGateway</a>.</p> </li> <li> <p> <code>deleted</code>: The Direct Connect gateway is deleted and cannot pass traffic.</p> </li> </ul></p>
     #[serde(rename = "directConnectGatewayState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub direct_connect_gateway_state: Option<String>,
+    pub direct_connect_gateway_state: Option<DirectConnectGatewayState>,
     /// <p>The ID of the AWS account that owns the Direct Connect gateway.</p>
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1134,7 +1592,7 @@ pub struct DirectConnectGatewayAssociation {
     /// <p><p>The state of the association. The following are the possible values:</p> <ul> <li> <p> <code>associating</code>: The initial state after calling <a>CreateDirectConnectGatewayAssociation</a>.</p> </li> <li> <p> <code>associated</code>: The Direct Connect gateway and virtual private gateway or transit gateway are successfully associated and ready to pass traffic.</p> </li> <li> <p> <code>disassociating</code>: The initial state after calling <a>DeleteDirectConnectGatewayAssociation</a>.</p> </li> <li> <p> <code>disassociated</code>: The virtual private gateway or transit gateway is disassociated from the Direct Connect gateway. Traffic flow between the Direct Connect gateway and virtual private gateway or transit gateway is stopped.</p> </li> </ul></p>
     #[serde(rename = "associationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_state: Option<String>,
+    pub association_state: Option<DirectConnectGatewayAssociationState>,
     /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1188,11 +1646,249 @@ pub struct DirectConnectGatewayAssociationProposal {
     /// <p><p>The state of the proposal. The following are possible values:</p> <ul> <li> <p> <code>accepted</code>: The proposal has been accepted. The Direct Connect gateway association is available to use in this state.</p> </li> <li> <p> <code>deleted</code>: The proposal has been deleted by the owner that made the proposal. The Direct Connect gateway association cannot be used in this state.</p> </li> <li> <p> <code>requested</code>: The proposal has been requested. The Direct Connect gateway association cannot be used in this state.</p> </li> </ul></p>
     #[serde(rename = "proposalState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub proposal_state: Option<String>,
+    pub proposal_state: Option<DirectConnectGatewayAssociationProposalState>,
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway.</p>
     #[serde(rename = "requestedAllowedPrefixesToDirectConnectGateway")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectConnectGatewayAssociationProposalState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectConnectGatewayAssociationProposalState {
+    Accepted,
+    Deleted,
+    Requested,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectConnectGatewayAssociationProposalState),
+}
+
+impl Default for DirectConnectGatewayAssociationProposalState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectConnectGatewayAssociationProposalState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectConnectGatewayAssociationProposalState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectConnectGatewayAssociationProposalState {
+    fn into(self) -> String {
+        match self {
+            DirectConnectGatewayAssociationProposalState::Accepted => "accepted".to_string(),
+            DirectConnectGatewayAssociationProposalState::Deleted => "deleted".to_string(),
+            DirectConnectGatewayAssociationProposalState::Requested => "requested".to_string(),
+            DirectConnectGatewayAssociationProposalState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationProposalState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectConnectGatewayAssociationProposalState {
+    fn into(self) -> &'a str {
+        match self {
+            DirectConnectGatewayAssociationProposalState::Accepted => &"accepted",
+            DirectConnectGatewayAssociationProposalState::Deleted => &"deleted",
+            DirectConnectGatewayAssociationProposalState::Requested => &"requested",
+            DirectConnectGatewayAssociationProposalState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationProposalState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectConnectGatewayAssociationProposalState {
+    fn from(name: &str) -> Self {
+        match name {
+            "accepted" => DirectConnectGatewayAssociationProposalState::Accepted,
+            "deleted" => DirectConnectGatewayAssociationProposalState::Deleted,
+            "requested" => DirectConnectGatewayAssociationProposalState::Requested,
+            _ => DirectConnectGatewayAssociationProposalState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationProposalState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DirectConnectGatewayAssociationProposalState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "accepted" => DirectConnectGatewayAssociationProposalState::Accepted,
+            "deleted" => DirectConnectGatewayAssociationProposalState::Deleted,
+            "requested" => DirectConnectGatewayAssociationProposalState::Requested,
+            _ => DirectConnectGatewayAssociationProposalState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationProposalState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectConnectGatewayAssociationProposalState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectConnectGatewayAssociationProposalState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectConnectGatewayAssociationProposalState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectConnectGatewayAssociationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectConnectGatewayAssociationState {
+    Associated,
+    Associating,
+    Disassociated,
+    Disassociating,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectConnectGatewayAssociationState),
+}
+
+impl Default for DirectConnectGatewayAssociationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectConnectGatewayAssociationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectConnectGatewayAssociationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectConnectGatewayAssociationState {
+    fn into(self) -> String {
+        match self {
+            DirectConnectGatewayAssociationState::Associated => "associated".to_string(),
+            DirectConnectGatewayAssociationState::Associating => "associating".to_string(),
+            DirectConnectGatewayAssociationState::Disassociated => "disassociated".to_string(),
+            DirectConnectGatewayAssociationState::Disassociating => "disassociating".to_string(),
+            DirectConnectGatewayAssociationState::Updating => "updating".to_string(),
+            DirectConnectGatewayAssociationState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectConnectGatewayAssociationState {
+    fn into(self) -> &'a str {
+        match self {
+            DirectConnectGatewayAssociationState::Associated => &"associated",
+            DirectConnectGatewayAssociationState::Associating => &"associating",
+            DirectConnectGatewayAssociationState::Disassociated => &"disassociated",
+            DirectConnectGatewayAssociationState::Disassociating => &"disassociating",
+            DirectConnectGatewayAssociationState::Updating => &"updating",
+            DirectConnectGatewayAssociationState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectConnectGatewayAssociationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "associated" => DirectConnectGatewayAssociationState::Associated,
+            "associating" => DirectConnectGatewayAssociationState::Associating,
+            "disassociated" => DirectConnectGatewayAssociationState::Disassociated,
+            "disassociating" => DirectConnectGatewayAssociationState::Disassociating,
+            "updating" => DirectConnectGatewayAssociationState::Updating,
+            _ => DirectConnectGatewayAssociationState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DirectConnectGatewayAssociationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "associated" => DirectConnectGatewayAssociationState::Associated,
+            "associating" => DirectConnectGatewayAssociationState::Associating,
+            "disassociated" => DirectConnectGatewayAssociationState::Disassociated,
+            "disassociating" => DirectConnectGatewayAssociationState::Disassociating,
+            "updating" => DirectConnectGatewayAssociationState::Updating,
+            _ => DirectConnectGatewayAssociationState::UnknownVariant(
+                UnknownDirectConnectGatewayAssociationState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectConnectGatewayAssociationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectConnectGatewayAssociationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectConnectGatewayAssociationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an attachment between a Direct Connect gateway and a virtual interface.</p>
@@ -1202,11 +1898,11 @@ pub struct DirectConnectGatewayAttachment {
     /// <p><p>The state of the attachment. The following are the possible values:</p> <ul> <li> <p> <code>attaching</code>: The initial state after a virtual interface is created using the Direct Connect gateway.</p> </li> <li> <p> <code>attached</code>: The Direct Connect gateway and virtual interface are attached and ready to pass traffic.</p> </li> <li> <p> <code>detaching</code>: The initial state after calling <a>DeleteVirtualInterface</a>.</p> </li> <li> <p> <code>detached</code>: The virtual interface is detached from the Direct Connect gateway. Traffic flow between the Direct Connect gateway and virtual interface is stopped.</p> </li> </ul></p>
     #[serde(rename = "attachmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attachment_state: Option<String>,
+    pub attachment_state: Option<DirectConnectGatewayAttachmentState>,
     /// <p>The type of attachment.</p>
     #[serde(rename = "attachmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attachment_type: Option<String>,
+    pub attachment_type: Option<DirectConnectGatewayAttachmentType>,
     /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1229,6 +1925,367 @@ pub struct DirectConnectGatewayAttachment {
     pub virtual_interface_region: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectConnectGatewayAttachmentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectConnectGatewayAttachmentState {
+    Attached,
+    Attaching,
+    Detached,
+    Detaching,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectConnectGatewayAttachmentState),
+}
+
+impl Default for DirectConnectGatewayAttachmentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectConnectGatewayAttachmentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectConnectGatewayAttachmentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectConnectGatewayAttachmentState {
+    fn into(self) -> String {
+        match self {
+            DirectConnectGatewayAttachmentState::Attached => "attached".to_string(),
+            DirectConnectGatewayAttachmentState::Attaching => "attaching".to_string(),
+            DirectConnectGatewayAttachmentState::Detached => "detached".to_string(),
+            DirectConnectGatewayAttachmentState::Detaching => "detaching".to_string(),
+            DirectConnectGatewayAttachmentState::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectConnectGatewayAttachmentState {
+    fn into(self) -> &'a str {
+        match self {
+            DirectConnectGatewayAttachmentState::Attached => &"attached",
+            DirectConnectGatewayAttachmentState::Attaching => &"attaching",
+            DirectConnectGatewayAttachmentState::Detached => &"detached",
+            DirectConnectGatewayAttachmentState::Detaching => &"detaching",
+            DirectConnectGatewayAttachmentState::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectConnectGatewayAttachmentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "attached" => DirectConnectGatewayAttachmentState::Attached,
+            "attaching" => DirectConnectGatewayAttachmentState::Attaching,
+            "detached" => DirectConnectGatewayAttachmentState::Detached,
+            "detaching" => DirectConnectGatewayAttachmentState::Detaching,
+            _ => DirectConnectGatewayAttachmentState::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DirectConnectGatewayAttachmentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "attached" => DirectConnectGatewayAttachmentState::Attached,
+            "attaching" => DirectConnectGatewayAttachmentState::Attaching,
+            "detached" => DirectConnectGatewayAttachmentState::Detached,
+            "detaching" => DirectConnectGatewayAttachmentState::Detaching,
+            _ => DirectConnectGatewayAttachmentState::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectConnectGatewayAttachmentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectConnectGatewayAttachmentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectConnectGatewayAttachmentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectConnectGatewayAttachmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectConnectGatewayAttachmentType {
+    PrivateVirtualInterface,
+    TransitVirtualInterface,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectConnectGatewayAttachmentType),
+}
+
+impl Default for DirectConnectGatewayAttachmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectConnectGatewayAttachmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectConnectGatewayAttachmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectConnectGatewayAttachmentType {
+    fn into(self) -> String {
+        match self {
+            DirectConnectGatewayAttachmentType::PrivateVirtualInterface => {
+                "PrivateVirtualInterface".to_string()
+            }
+            DirectConnectGatewayAttachmentType::TransitVirtualInterface => {
+                "TransitVirtualInterface".to_string()
+            }
+            DirectConnectGatewayAttachmentType::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectConnectGatewayAttachmentType {
+    fn into(self) -> &'a str {
+        match self {
+            DirectConnectGatewayAttachmentType::PrivateVirtualInterface => {
+                &"PrivateVirtualInterface"
+            }
+            DirectConnectGatewayAttachmentType::TransitVirtualInterface => {
+                &"TransitVirtualInterface"
+            }
+            DirectConnectGatewayAttachmentType::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectConnectGatewayAttachmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PrivateVirtualInterface" => {
+                DirectConnectGatewayAttachmentType::PrivateVirtualInterface
+            }
+            "TransitVirtualInterface" => {
+                DirectConnectGatewayAttachmentType::TransitVirtualInterface
+            }
+            _ => DirectConnectGatewayAttachmentType::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DirectConnectGatewayAttachmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PrivateVirtualInterface" => {
+                DirectConnectGatewayAttachmentType::PrivateVirtualInterface
+            }
+            "TransitVirtualInterface" => {
+                DirectConnectGatewayAttachmentType::TransitVirtualInterface
+            }
+            _ => DirectConnectGatewayAttachmentType::UnknownVariant(
+                UnknownDirectConnectGatewayAttachmentType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectConnectGatewayAttachmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectConnectGatewayAttachmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectConnectGatewayAttachmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectConnectGatewayState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectConnectGatewayState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectConnectGatewayState),
+}
+
+impl Default for DirectConnectGatewayState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectConnectGatewayState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectConnectGatewayState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectConnectGatewayState {
+    fn into(self) -> String {
+        match self {
+            DirectConnectGatewayState::Available => "available".to_string(),
+            DirectConnectGatewayState::Deleted => "deleted".to_string(),
+            DirectConnectGatewayState::Deleting => "deleting".to_string(),
+            DirectConnectGatewayState::Pending => "pending".to_string(),
+            DirectConnectGatewayState::UnknownVariant(UnknownDirectConnectGatewayState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectConnectGatewayState {
+    fn into(self) -> &'a str {
+        match self {
+            DirectConnectGatewayState::Available => &"available",
+            DirectConnectGatewayState::Deleted => &"deleted",
+            DirectConnectGatewayState::Deleting => &"deleting",
+            DirectConnectGatewayState::Pending => &"pending",
+            DirectConnectGatewayState::UnknownVariant(UnknownDirectConnectGatewayState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectConnectGatewayState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => DirectConnectGatewayState::Available,
+            "deleted" => DirectConnectGatewayState::Deleted,
+            "deleting" => DirectConnectGatewayState::Deleting,
+            "pending" => DirectConnectGatewayState::Pending,
+            _ => DirectConnectGatewayState::UnknownVariant(UnknownDirectConnectGatewayState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectConnectGatewayState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => DirectConnectGatewayState::Available,
+            "deleted" => DirectConnectGatewayState::Deleted,
+            "deleting" => DirectConnectGatewayState::Deleting,
+            "pending" => DirectConnectGatewayState::Pending,
+            _ => {
+                DirectConnectGatewayState::UnknownVariant(UnknownDirectConnectGatewayState { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectConnectGatewayState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DirectConnectGatewayState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectConnectGatewayState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectionFromLagRequest {
@@ -1238,6 +2295,217 @@ pub struct DisassociateConnectionFromLagRequest {
     /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     pub lag_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGatewayType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GatewayType {
+    TransitGateway,
+    VirtualPrivateGateway,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGatewayType),
+}
+
+impl Default for GatewayType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GatewayType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GatewayType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GatewayType {
+    fn into(self) -> String {
+        match self {
+            GatewayType::TransitGateway => "transitGateway".to_string(),
+            GatewayType::VirtualPrivateGateway => "virtualPrivateGateway".to_string(),
+            GatewayType::UnknownVariant(UnknownGatewayType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GatewayType {
+    fn into(self) -> &'a str {
+        match self {
+            GatewayType::TransitGateway => &"transitGateway",
+            GatewayType::VirtualPrivateGateway => &"virtualPrivateGateway",
+            GatewayType::UnknownVariant(UnknownGatewayType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GatewayType {
+    fn from(name: &str) -> Self {
+        match name {
+            "transitGateway" => GatewayType::TransitGateway,
+            "virtualPrivateGateway" => GatewayType::VirtualPrivateGateway,
+            _ => GatewayType::UnknownVariant(UnknownGatewayType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GatewayType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "transitGateway" => GatewayType::TransitGateway,
+            "virtualPrivateGateway" => GatewayType::VirtualPrivateGateway,
+            _ => GatewayType::UnknownVariant(UnknownGatewayType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GatewayType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GatewayType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GatewayType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHasLogicalRedundancy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HasLogicalRedundancy {
+    No,
+    Unknown,
+    Yes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHasLogicalRedundancy),
+}
+
+impl Default for HasLogicalRedundancy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HasLogicalRedundancy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HasLogicalRedundancy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HasLogicalRedundancy {
+    fn into(self) -> String {
+        match self {
+            HasLogicalRedundancy::No => "no".to_string(),
+            HasLogicalRedundancy::Unknown => "unknown".to_string(),
+            HasLogicalRedundancy::Yes => "yes".to_string(),
+            HasLogicalRedundancy::UnknownVariant(UnknownHasLogicalRedundancy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HasLogicalRedundancy {
+    fn into(self) -> &'a str {
+        match self {
+            HasLogicalRedundancy::No => &"no",
+            HasLogicalRedundancy::Unknown => &"unknown",
+            HasLogicalRedundancy::Yes => &"yes",
+            HasLogicalRedundancy::UnknownVariant(UnknownHasLogicalRedundancy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HasLogicalRedundancy {
+    fn from(name: &str) -> Self {
+        match name {
+            "no" => HasLogicalRedundancy::No,
+            "unknown" => HasLogicalRedundancy::Unknown,
+            "yes" => HasLogicalRedundancy::Yes,
+            _ => HasLogicalRedundancy::UnknownVariant(UnknownHasLogicalRedundancy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HasLogicalRedundancy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "no" => HasLogicalRedundancy::No,
+            "unknown" => HasLogicalRedundancy::Unknown,
+            "yes" => HasLogicalRedundancy::Yes,
+            _ => HasLogicalRedundancy::UnknownVariant(UnknownHasLogicalRedundancy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HasLogicalRedundancy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HasLogicalRedundancy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HasLogicalRedundancy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an interconnect.</p>
@@ -1259,7 +2527,7 @@ pub struct Interconnect {
     /// <p>Indicates whether the interconnect supports a secondary BGP in the same address family (IPv4/IPv6).</p>
     #[serde(rename = "hasLogicalRedundancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_logical_redundancy: Option<String>,
+    pub has_logical_redundancy: Option<HasLogicalRedundancy>,
     /// <p>The ID of the interconnect.</p>
     #[serde(rename = "interconnectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1271,7 +2539,7 @@ pub struct Interconnect {
     /// <p><p>The state of the interconnect. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The interconnect is approved, and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The interconnect is being deleted.</p> </li> <li> <p> <code>deleted</code>: The interconnect is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the interconnect is not available.</p> </li> </ul></p>
     #[serde(rename = "interconnectState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub interconnect_state: Option<String>,
+    pub interconnect_state: Option<InterconnectState>,
     /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
     #[serde(rename = "jumboFrameCapable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1300,6 +2568,136 @@ pub struct Interconnect {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInterconnectState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InterconnectState {
+    Available,
+    Deleted,
+    Deleting,
+    Down,
+    Pending,
+    Requested,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInterconnectState),
+}
+
+impl Default for InterconnectState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InterconnectState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InterconnectState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InterconnectState {
+    fn into(self) -> String {
+        match self {
+            InterconnectState::Available => "available".to_string(),
+            InterconnectState::Deleted => "deleted".to_string(),
+            InterconnectState::Deleting => "deleting".to_string(),
+            InterconnectState::Down => "down".to_string(),
+            InterconnectState::Pending => "pending".to_string(),
+            InterconnectState::Requested => "requested".to_string(),
+            InterconnectState::Unknown => "unknown".to_string(),
+            InterconnectState::UnknownVariant(UnknownInterconnectState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InterconnectState {
+    fn into(self) -> &'a str {
+        match self {
+            InterconnectState::Available => &"available",
+            InterconnectState::Deleted => &"deleted",
+            InterconnectState::Deleting => &"deleting",
+            InterconnectState::Down => &"down",
+            InterconnectState::Pending => &"pending",
+            InterconnectState::Requested => &"requested",
+            InterconnectState::Unknown => &"unknown",
+            InterconnectState::UnknownVariant(UnknownInterconnectState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InterconnectState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => InterconnectState::Available,
+            "deleted" => InterconnectState::Deleted,
+            "deleting" => InterconnectState::Deleting,
+            "down" => InterconnectState::Down,
+            "pending" => InterconnectState::Pending,
+            "requested" => InterconnectState::Requested,
+            "unknown" => InterconnectState::Unknown,
+            _ => InterconnectState::UnknownVariant(UnknownInterconnectState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InterconnectState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => InterconnectState::Available,
+            "deleted" => InterconnectState::Deleted,
+            "deleting" => InterconnectState::Deleting,
+            "down" => InterconnectState::Down,
+            "pending" => InterconnectState::Pending,
+            "requested" => InterconnectState::Requested,
+            "unknown" => InterconnectState::Unknown,
+            _ => InterconnectState::UnknownVariant(UnknownInterconnectState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InterconnectState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InterconnectState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InterconnectState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1338,7 +2736,7 @@ pub struct Lag {
     /// <p>Indicates whether the LAG supports a secondary BGP peer in the same address family (IPv4/IPv6).</p>
     #[serde(rename = "hasLogicalRedundancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub has_logical_redundancy: Option<String>,
+    pub has_logical_redundancy: Option<HasLogicalRedundancy>,
     /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
     #[serde(rename = "jumboFrameCapable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1354,7 +2752,7 @@ pub struct Lag {
     /// <p><p>The state of the LAG. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of a LAG. The LAG stays in the requested state until the Letter of Authorization (LOA) is available.</p> </li> <li> <p> <code>pending</code>: The LAG has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is established and the LAG is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The LAG is being deleted.</p> </li> <li> <p> <code>deleted</code>: The LAG is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the LAG is not available.</p> </li> </ul></p>
     #[serde(rename = "lagState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lag_state: Option<String>,
+    pub lag_state: Option<LagState>,
     /// <p>The location of the LAG.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1383,6 +2781,132 @@ pub struct Lag {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLagState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LagState {
+    Available,
+    Deleted,
+    Deleting,
+    Down,
+    Pending,
+    Requested,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLagState),
+}
+
+impl Default for LagState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LagState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LagState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LagState {
+    fn into(self) -> String {
+        match self {
+            LagState::Available => "available".to_string(),
+            LagState::Deleted => "deleted".to_string(),
+            LagState::Deleting => "deleting".to_string(),
+            LagState::Down => "down".to_string(),
+            LagState::Pending => "pending".to_string(),
+            LagState::Requested => "requested".to_string(),
+            LagState::Unknown => "unknown".to_string(),
+            LagState::UnknownVariant(UnknownLagState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LagState {
+    fn into(self) -> &'a str {
+        match self {
+            LagState::Available => &"available",
+            LagState::Deleted => &"deleted",
+            LagState::Deleting => &"deleting",
+            LagState::Down => &"down",
+            LagState::Pending => &"pending",
+            LagState::Requested => &"requested",
+            LagState::Unknown => &"unknown",
+            LagState::UnknownVariant(UnknownLagState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LagState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => LagState::Available,
+            "deleted" => LagState::Deleted,
+            "deleting" => LagState::Deleting,
+            "down" => LagState::Down,
+            "pending" => LagState::Pending,
+            "requested" => LagState::Requested,
+            "unknown" => LagState::Unknown,
+            _ => LagState::UnknownVariant(UnknownLagState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LagState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => LagState::Available,
+            "deleted" => LagState::Deleted,
+            "deleting" => LagState::Deleting,
+            "down" => LagState::Down,
+            "pending" => LagState::Pending,
+            "requested" => LagState::Requested,
+            "unknown" => LagState::Unknown,
+            _ => LagState::UnknownVariant(UnknownLagState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LagState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LagState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LagState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1452,7 +2976,102 @@ pub struct Loa {
     /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub loa_content_type: Option<String>,
+    pub loa_content_type: Option<LoaContentType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoaContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoaContentType {
+    ApplicationPdf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoaContentType),
+}
+
+impl Default for LoaContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoaContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoaContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoaContentType {
+    fn into(self) -> String {
+        match self {
+            LoaContentType::ApplicationPdf => "application/pdf".to_string(),
+            LoaContentType::UnknownVariant(UnknownLoaContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoaContentType {
+    fn into(self) -> &'a str {
+        match self {
+            LoaContentType::ApplicationPdf => &"application/pdf",
+            LoaContentType::UnknownVariant(UnknownLoaContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoaContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "application/pdf" => LoaContentType::ApplicationPdf,
+            _ => LoaContentType::UnknownVariant(UnknownLoaContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoaContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "application/pdf" => LoaContentType::ApplicationPdf,
+            _ => LoaContentType::UnknownVariant(UnknownLoaContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoaContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoaContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoaContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an AWS Direct Connect location.</p>
@@ -1497,7 +3116,7 @@ pub struct NewBGPPeer {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1523,7 +3142,7 @@ pub struct NewPrivateVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1570,7 +3189,7 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1609,7 +3228,7 @@ pub struct NewPublicVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1648,7 +3267,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1687,7 +3306,7 @@ pub struct NewTransitVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1733,7 +3352,7 @@ pub struct NewTransitVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1958,7 +3577,7 @@ pub struct VirtualInterface {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub address_family: Option<String>,
+    pub address_family: Option<AddressFamily>,
     /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2042,7 +3661,7 @@ pub struct VirtualInterface {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub virtual_interface_state: Option<String>,
+    pub virtual_interface_state: Option<VirtualInterfaceState>,
     /// <p>The type of virtual interface. The possible values are <code>private</code> and <code>public</code>.</p>
     #[serde(rename = "virtualInterfaceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2051,6 +3670,146 @@ pub struct VirtualInterface {
     #[serde(rename = "vlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVirtualInterfaceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VirtualInterfaceState {
+    Available,
+    Confirming,
+    Deleted,
+    Deleting,
+    Down,
+    Pending,
+    Rejected,
+    Unknown,
+    Verifying,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVirtualInterfaceState),
+}
+
+impl Default for VirtualInterfaceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VirtualInterfaceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VirtualInterfaceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VirtualInterfaceState {
+    fn into(self) -> String {
+        match self {
+            VirtualInterfaceState::Available => "available".to_string(),
+            VirtualInterfaceState::Confirming => "confirming".to_string(),
+            VirtualInterfaceState::Deleted => "deleted".to_string(),
+            VirtualInterfaceState::Deleting => "deleting".to_string(),
+            VirtualInterfaceState::Down => "down".to_string(),
+            VirtualInterfaceState::Pending => "pending".to_string(),
+            VirtualInterfaceState::Rejected => "rejected".to_string(),
+            VirtualInterfaceState::Unknown => "unknown".to_string(),
+            VirtualInterfaceState::Verifying => "verifying".to_string(),
+            VirtualInterfaceState::UnknownVariant(UnknownVirtualInterfaceState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VirtualInterfaceState {
+    fn into(self) -> &'a str {
+        match self {
+            VirtualInterfaceState::Available => &"available",
+            VirtualInterfaceState::Confirming => &"confirming",
+            VirtualInterfaceState::Deleted => &"deleted",
+            VirtualInterfaceState::Deleting => &"deleting",
+            VirtualInterfaceState::Down => &"down",
+            VirtualInterfaceState::Pending => &"pending",
+            VirtualInterfaceState::Rejected => &"rejected",
+            VirtualInterfaceState::Unknown => &"unknown",
+            VirtualInterfaceState::Verifying => &"verifying",
+            VirtualInterfaceState::UnknownVariant(UnknownVirtualInterfaceState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VirtualInterfaceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => VirtualInterfaceState::Available,
+            "confirming" => VirtualInterfaceState::Confirming,
+            "deleted" => VirtualInterfaceState::Deleted,
+            "deleting" => VirtualInterfaceState::Deleting,
+            "down" => VirtualInterfaceState::Down,
+            "pending" => VirtualInterfaceState::Pending,
+            "rejected" => VirtualInterfaceState::Rejected,
+            "unknown" => VirtualInterfaceState::Unknown,
+            "verifying" => VirtualInterfaceState::Verifying,
+            _ => VirtualInterfaceState::UnknownVariant(UnknownVirtualInterfaceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VirtualInterfaceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => VirtualInterfaceState::Available,
+            "confirming" => VirtualInterfaceState::Confirming,
+            "deleted" => VirtualInterfaceState::Deleted,
+            "deleting" => VirtualInterfaceState::Deleting,
+            "down" => VirtualInterfaceState::Down,
+            "pending" => VirtualInterfaceState::Pending,
+            "rejected" => VirtualInterfaceState::Rejected,
+            "unknown" => VirtualInterfaceState::Unknown,
+            "verifying" => VirtualInterfaceState::Verifying,
+            _ => VirtualInterfaceState::UnknownVariant(UnknownVirtualInterfaceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualInterfaceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VirtualInterfaceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VirtualInterfaceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the virtual interface failover test.</p>

@@ -174,7 +174,7 @@ pub struct GetShardIteratorInput {
     pub shard_id: String,
     /// <p><p>Determines how the shard iterator is used to start reading stream records from the shard:</p> <ul> <li> <p> <code>AT<em>SEQUENCE</em>NUMBER</code> - Start reading exactly from the position denoted by a specific sequence number.</p> </li> <li> <p> <code>AFTER<em>SEQUENCE</em>NUMBER</code> - Start reading right after the position denoted by a specific sequence number.</p> </li> <li> <p> <code>TRIM_HORIZON</code> - Start reading at the last (untrimmed) stream record, which is the oldest record in the shard. In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream.</p> </li> <li> <p> <code>LATEST</code> - Start reading just after the most recent stream record in the shard, so that you always read the most recent data in the shard.</p> </li> </ul></p>
     #[serde(rename = "ShardIteratorType")]
-    pub shard_iterator_type: String,
+    pub shard_iterator_type: ShardIteratorType,
     /// <p>The Amazon Resource Name (ARN) for the stream.</p>
     #[serde(rename = "StreamArn")]
     pub stream_arn: String,
@@ -213,7 +213,108 @@ pub struct KeySchemaElement {
     pub attribute_name: String,
     /// <p><p>The role that this key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeyType")]
-    pub key_type: String,
+    pub key_type: KeyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyType {
+    Hash,
+    Range,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyType),
+}
+
+impl Default for KeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyType {
+    fn into(self) -> String {
+        match self {
+            KeyType::Hash => "HASH".to_string(),
+            KeyType::Range => "RANGE".to_string(),
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyType {
+    fn into(self) -> &'a str {
+        match self {
+            KeyType::Hash => &"HASH",
+            KeyType::Range => &"RANGE",
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HASH" => KeyType::Hash,
+            "RANGE" => KeyType::Range,
+            _ => KeyType::UnknownVariant(UnknownKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HASH" => KeyType::Hash,
+            "RANGE" => KeyType::Range,
+            _ => KeyType::UnknownVariant(UnknownKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for KeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a <code>ListStreams</code> operation.</p>
@@ -248,6 +349,112 @@ pub struct ListStreamsOutput {
     pub streams: Option<Vec<Stream>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationType {
+    Insert,
+    Modify,
+    Remove,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationType),
+}
+
+impl Default for OperationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        match self {
+            OperationType::Insert => "INSERT".to_string(),
+            OperationType::Modify => "MODIFY".to_string(),
+            OperationType::Remove => "REMOVE".to_string(),
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationType {
+    fn into(self) -> &'a str {
+        match self {
+            OperationType::Insert => &"INSERT",
+            OperationType::Modify => &"MODIFY",
+            OperationType::Remove => &"REMOVE",
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSERT" => OperationType::Insert,
+            "MODIFY" => OperationType::Modify,
+            "REMOVE" => OperationType::Remove,
+            _ => OperationType::UnknownVariant(UnknownOperationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSERT" => OperationType::Insert,
+            "MODIFY" => OperationType::Modify,
+            "REMOVE" => OperationType::Remove,
+            _ => OperationType::UnknownVariant(UnknownOperationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A description of a unique event within a stream.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -267,7 +474,7 @@ pub struct Record {
     /// <p><p>The type of data modification that was performed on the DynamoDB table:</p> <ul> <li> <p> <code>INSERT</code> - a new item was added to the table.</p> </li> <li> <p> <code>MODIFY</code> - one or more of an existing item&#39;s attributes were modified.</p> </li> <li> <p> <code>REMOVE</code> - the item was deleted from the table</p> </li> </ul></p>
     #[serde(rename = "eventName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_name: Option<String>,
+    pub event_name: Option<OperationType>,
     /// <p>The AWS service from which the stream record originated. For DynamoDB Streams, this is <code>aws:dynamodb</code>.</p>
     #[serde(rename = "eventSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -312,6 +519,121 @@ pub struct Shard {
     #[serde(rename = "ShardId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shard_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShardIteratorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShardIteratorType {
+    AfterSequenceNumber,
+    AtSequenceNumber,
+    Latest,
+    TrimHorizon,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShardIteratorType),
+}
+
+impl Default for ShardIteratorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShardIteratorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShardIteratorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShardIteratorType {
+    fn into(self) -> String {
+        match self {
+            ShardIteratorType::AfterSequenceNumber => "AFTER_SEQUENCE_NUMBER".to_string(),
+            ShardIteratorType::AtSequenceNumber => "AT_SEQUENCE_NUMBER".to_string(),
+            ShardIteratorType::Latest => "LATEST".to_string(),
+            ShardIteratorType::TrimHorizon => "TRIM_HORIZON".to_string(),
+            ShardIteratorType::UnknownVariant(UnknownShardIteratorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShardIteratorType {
+    fn into(self) -> &'a str {
+        match self {
+            ShardIteratorType::AfterSequenceNumber => &"AFTER_SEQUENCE_NUMBER",
+            ShardIteratorType::AtSequenceNumber => &"AT_SEQUENCE_NUMBER",
+            ShardIteratorType::Latest => &"LATEST",
+            ShardIteratorType::TrimHorizon => &"TRIM_HORIZON",
+            ShardIteratorType::UnknownVariant(UnknownShardIteratorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ShardIteratorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFTER_SEQUENCE_NUMBER" => ShardIteratorType::AfterSequenceNumber,
+            "AT_SEQUENCE_NUMBER" => ShardIteratorType::AtSequenceNumber,
+            "LATEST" => ShardIteratorType::Latest,
+            "TRIM_HORIZON" => ShardIteratorType::TrimHorizon,
+            _ => ShardIteratorType::UnknownVariant(UnknownShardIteratorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShardIteratorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFTER_SEQUENCE_NUMBER" => ShardIteratorType::AfterSequenceNumber,
+            "AT_SEQUENCE_NUMBER" => ShardIteratorType::AtSequenceNumber,
+            "LATEST" => ShardIteratorType::Latest,
+            "TRIM_HORIZON" => ShardIteratorType::TrimHorizon,
+            _ => ShardIteratorType::UnknownVariant(UnknownShardIteratorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShardIteratorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ShardIteratorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ShardIteratorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents all of the data describing a particular stream.</p>
@@ -363,11 +685,11 @@ pub struct StreamDescription {
     /// <p><p>Indicates the current status of the stream:</p> <ul> <li> <p> <code>ENABLING</code> - Streams is currently being enabled on the DynamoDB table.</p> </li> <li> <p> <code>ENABLED</code> - the stream is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Streams is currently being disabled on the DynamoDB table.</p> </li> <li> <p> <code>DISABLED</code> - the stream is disabled.</p> </li> </ul></p>
     #[serde(rename = "StreamStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_status: Option<String>,
+    pub stream_status: Option<StreamStatus>,
     /// <p><p>Indicates the format of the records within this stream:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - only the key attributes of items that were modified in the DynamoDB table.</p> </li> <li> <p> <code>NEW</em>IMAGE</code> - entire items from the table, as they appeared after they were modified.</p> </li> <li> <p> <code>OLD<em>IMAGE</code> - entire items from the table, as they appeared before they were modified.</p> </li> <li> <p> <code>NEW</em>AND<em>OLD</em>IMAGES</code> - both the new and the old images of the items from the table.</p> </li> </ul></p>
     #[serde(rename = "StreamViewType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_view_type: Option<String>,
+    pub stream_view_type: Option<StreamViewType>,
     /// <p>The DynamoDB table with which the stream is associated.</p>
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -405,7 +727,229 @@ pub struct StreamRecord {
     /// <p><p>The type of data from the modified DynamoDB item that was captured in this stream record:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - only the key attributes of the modified item.</p> </li> <li> <p> <code>NEW</em>IMAGE</code> - the entire item, as it appeared after it was modified.</p> </li> <li> <p> <code>OLD<em>IMAGE</code> - the entire item, as it appeared before it was modified.</p> </li> <li> <p> <code>NEW</em>AND<em>OLD</em>IMAGES</code> - both the new and the old item images of the item.</p> </li> </ul></p>
     #[serde(rename = "StreamViewType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_view_type: Option<String>,
+    pub stream_view_type: Option<StreamViewType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamStatus),
+}
+
+impl Default for StreamStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamStatus {
+    fn into(self) -> String {
+        match self {
+            StreamStatus::Disabled => "DISABLED".to_string(),
+            StreamStatus::Disabling => "DISABLING".to_string(),
+            StreamStatus::Enabled => "ENABLED".to_string(),
+            StreamStatus::Enabling => "ENABLING".to_string(),
+            StreamStatus::UnknownVariant(UnknownStreamStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StreamStatus::Disabled => &"DISABLED",
+            StreamStatus::Disabling => &"DISABLING",
+            StreamStatus::Enabled => &"ENABLED",
+            StreamStatus::Enabling => &"ENABLING",
+            StreamStatus::UnknownVariant(UnknownStreamStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => StreamStatus::Disabled,
+            "DISABLING" => StreamStatus::Disabling,
+            "ENABLED" => StreamStatus::Enabled,
+            "ENABLING" => StreamStatus::Enabling,
+            _ => StreamStatus::UnknownVariant(UnknownStreamStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => StreamStatus::Disabled,
+            "DISABLING" => StreamStatus::Disabling,
+            "ENABLED" => StreamStatus::Enabled,
+            "ENABLING" => StreamStatus::Enabling,
+            _ => StreamStatus::UnknownVariant(UnknownStreamStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StreamStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamViewType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamViewType {
+    KeysOnly,
+    NewAndOldImages,
+    NewImage,
+    OldImage,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamViewType),
+}
+
+impl Default for StreamViewType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamViewType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamViewType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamViewType {
+    fn into(self) -> String {
+        match self {
+            StreamViewType::KeysOnly => "KEYS_ONLY".to_string(),
+            StreamViewType::NewAndOldImages => "NEW_AND_OLD_IMAGES".to_string(),
+            StreamViewType::NewImage => "NEW_IMAGE".to_string(),
+            StreamViewType::OldImage => "OLD_IMAGE".to_string(),
+            StreamViewType::UnknownVariant(UnknownStreamViewType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamViewType {
+    fn into(self) -> &'a str {
+        match self {
+            StreamViewType::KeysOnly => &"KEYS_ONLY",
+            StreamViewType::NewAndOldImages => &"NEW_AND_OLD_IMAGES",
+            StreamViewType::NewImage => &"NEW_IMAGE",
+            StreamViewType::OldImage => &"OLD_IMAGE",
+            StreamViewType::UnknownVariant(UnknownStreamViewType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamViewType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEYS_ONLY" => StreamViewType::KeysOnly,
+            "NEW_AND_OLD_IMAGES" => StreamViewType::NewAndOldImages,
+            "NEW_IMAGE" => StreamViewType::NewImage,
+            "OLD_IMAGE" => StreamViewType::OldImage,
+            _ => StreamViewType::UnknownVariant(UnknownStreamViewType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamViewType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEYS_ONLY" => StreamViewType::KeysOnly,
+            "NEW_AND_OLD_IMAGES" => StreamViewType::NewAndOldImages,
+            "NEW_IMAGE" => StreamViewType::NewImage,
+            "OLD_IMAGE" => StreamViewType::OldImage,
+            _ => StreamViewType::UnknownVariant(UnknownStreamViewType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamViewType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StreamViewType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamViewType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by DescribeStream

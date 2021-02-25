@@ -118,7 +118,7 @@ pub struct AddTagsToResourceRequest {
     pub resource_id: String,
     /// <p><p>Specifies the type of resource you are tagging.</p> <note> <p>The ManagedInstance type for this API action is for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceTypeForTagging,
     /// <p><p> One or more tags. The value parameter is required, but if you don&#39;t want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
@@ -174,6 +174,129 @@ pub struct Association {
     pub targets: Option<Vec<Target>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationComplianceSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationComplianceSeverity {
+    Critical,
+    High,
+    Low,
+    Medium,
+    Unspecified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationComplianceSeverity),
+}
+
+impl Default for AssociationComplianceSeverity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationComplianceSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationComplianceSeverity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationComplianceSeverity {
+    fn into(self) -> String {
+        match self {
+            AssociationComplianceSeverity::Critical => "CRITICAL".to_string(),
+            AssociationComplianceSeverity::High => "HIGH".to_string(),
+            AssociationComplianceSeverity::Low => "LOW".to_string(),
+            AssociationComplianceSeverity::Medium => "MEDIUM".to_string(),
+            AssociationComplianceSeverity::Unspecified => "UNSPECIFIED".to_string(),
+            AssociationComplianceSeverity::UnknownVariant(
+                UnknownAssociationComplianceSeverity { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationComplianceSeverity {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationComplianceSeverity::Critical => &"CRITICAL",
+            AssociationComplianceSeverity::High => &"HIGH",
+            AssociationComplianceSeverity::Low => &"LOW",
+            AssociationComplianceSeverity::Medium => &"MEDIUM",
+            AssociationComplianceSeverity::Unspecified => &"UNSPECIFIED",
+            AssociationComplianceSeverity::UnknownVariant(
+                UnknownAssociationComplianceSeverity { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationComplianceSeverity {
+    fn from(name: &str) -> Self {
+        match name {
+            "CRITICAL" => AssociationComplianceSeverity::Critical,
+            "HIGH" => AssociationComplianceSeverity::High,
+            "LOW" => AssociationComplianceSeverity::Low,
+            "MEDIUM" => AssociationComplianceSeverity::Medium,
+            "UNSPECIFIED" => AssociationComplianceSeverity::Unspecified,
+            _ => AssociationComplianceSeverity::UnknownVariant(
+                UnknownAssociationComplianceSeverity {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AssociationComplianceSeverity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CRITICAL" => AssociationComplianceSeverity::Critical,
+            "HIGH" => AssociationComplianceSeverity::High,
+            "LOW" => AssociationComplianceSeverity::Low,
+            "MEDIUM" => AssociationComplianceSeverity::Medium,
+            "UNSPECIFIED" => AssociationComplianceSeverity::Unspecified,
+            _ => AssociationComplianceSeverity::UnknownVariant(
+                UnknownAssociationComplianceSeverity { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationComplianceSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationComplianceSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssociationComplianceSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the parameters for a document.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -201,7 +324,7 @@ pub struct AssociationDescription {
     /// <p>The severity level that is assigned to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_severity: Option<String>,
+    pub compliance_severity: Option<AssociationComplianceSeverity>,
     /// <p>The date when the association was made.</p>
     #[serde(rename = "Date")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,7 +384,7 @@ pub struct AssociationDescription {
     /// <p>The mode for generating association compliance. You can specify <code>AUTO</code> or <code>MANUAL</code>. In <code>AUTO</code> mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is <code>COMPLIANT</code>. If the association execution doesn't run successfully, the association is <code>NON-COMPLIANT</code>.</p> <p>In <code>MANUAL</code> mode, you must specify the <code>AssociationId</code> as a parameter for the <a>PutComplianceItems</a> API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the <a>PutComplianceItems</a> API action.</p> <p>By default, all associations use <code>AUTO</code> mode.</p>
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sync_compliance: Option<String>,
+    pub sync_compliance: Option<AssociationSyncCompliance>,
     /// <p>The combination of AWS Regions and AWS accounts where you want to run the association.</p>
     #[serde(rename = "TargetLocations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -316,13 +439,127 @@ pub struct AssociationExecution {
 pub struct AssociationExecutionFilter {
     /// <p>The key value used in the request.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: AssociationExecutionFilterKey,
     /// <p>The filter type specified in the request.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: AssociationFilterOperatorType,
     /// <p>The value specified for the key.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationExecutionFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationExecutionFilterKey {
+    CreatedTime,
+    ExecutionId,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationExecutionFilterKey),
+}
+
+impl Default for AssociationExecutionFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationExecutionFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationExecutionFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationExecutionFilterKey {
+    fn into(self) -> String {
+        match self {
+            AssociationExecutionFilterKey::CreatedTime => "CreatedTime".to_string(),
+            AssociationExecutionFilterKey::ExecutionId => "ExecutionId".to_string(),
+            AssociationExecutionFilterKey::Status => "Status".to_string(),
+            AssociationExecutionFilterKey::UnknownVariant(
+                UnknownAssociationExecutionFilterKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationExecutionFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationExecutionFilterKey::CreatedTime => &"CreatedTime",
+            AssociationExecutionFilterKey::ExecutionId => &"ExecutionId",
+            AssociationExecutionFilterKey::Status => &"Status",
+            AssociationExecutionFilterKey::UnknownVariant(
+                UnknownAssociationExecutionFilterKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationExecutionFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreatedTime" => AssociationExecutionFilterKey::CreatedTime,
+            "ExecutionId" => AssociationExecutionFilterKey::ExecutionId,
+            "Status" => AssociationExecutionFilterKey::Status,
+            _ => AssociationExecutionFilterKey::UnknownVariant(
+                UnknownAssociationExecutionFilterKey {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AssociationExecutionFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreatedTime" => AssociationExecutionFilterKey::CreatedTime,
+            "ExecutionId" => AssociationExecutionFilterKey::ExecutionId,
+            "Status" => AssociationExecutionFilterKey::Status,
+            _ => AssociationExecutionFilterKey::UnknownVariant(
+                UnknownAssociationExecutionFilterKey { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationExecutionFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationExecutionFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AssociationExecutionFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Includes information about the specified association execution.</p>
@@ -373,10 +610,124 @@ pub struct AssociationExecutionTarget {
 pub struct AssociationExecutionTargetsFilter {
     /// <p>The key value used in the request.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: AssociationExecutionTargetsFilterKey,
     /// <p>The value specified for the key.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationExecutionTargetsFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationExecutionTargetsFilterKey {
+    ResourceId,
+    ResourceType,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationExecutionTargetsFilterKey),
+}
+
+impl Default for AssociationExecutionTargetsFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationExecutionTargetsFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationExecutionTargetsFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationExecutionTargetsFilterKey {
+    fn into(self) -> String {
+        match self {
+            AssociationExecutionTargetsFilterKey::ResourceId => "ResourceId".to_string(),
+            AssociationExecutionTargetsFilterKey::ResourceType => "ResourceType".to_string(),
+            AssociationExecutionTargetsFilterKey::Status => "Status".to_string(),
+            AssociationExecutionTargetsFilterKey::UnknownVariant(
+                UnknownAssociationExecutionTargetsFilterKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationExecutionTargetsFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationExecutionTargetsFilterKey::ResourceId => &"ResourceId",
+            AssociationExecutionTargetsFilterKey::ResourceType => &"ResourceType",
+            AssociationExecutionTargetsFilterKey::Status => &"Status",
+            AssociationExecutionTargetsFilterKey::UnknownVariant(
+                UnknownAssociationExecutionTargetsFilterKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationExecutionTargetsFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "ResourceId" => AssociationExecutionTargetsFilterKey::ResourceId,
+            "ResourceType" => AssociationExecutionTargetsFilterKey::ResourceType,
+            "Status" => AssociationExecutionTargetsFilterKey::Status,
+            _ => AssociationExecutionTargetsFilterKey::UnknownVariant(
+                UnknownAssociationExecutionTargetsFilterKey {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AssociationExecutionTargetsFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ResourceId" => AssociationExecutionTargetsFilterKey::ResourceId,
+            "ResourceType" => AssociationExecutionTargetsFilterKey::ResourceType,
+            "Status" => AssociationExecutionTargetsFilterKey::Status,
+            _ => AssociationExecutionTargetsFilterKey::UnknownVariant(
+                UnknownAssociationExecutionTargetsFilterKey { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationExecutionTargetsFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationExecutionTargetsFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AssociationExecutionTargetsFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a filter.</p>
@@ -385,10 +736,259 @@ pub struct AssociationExecutionTargetsFilter {
 pub struct AssociationFilter {
     /// <p><p>The name of the filter.</p> <note> <p> <code>InstanceId</code> has been deprecated.</p> </note></p>
     #[serde(rename = "key")]
-    pub key: String,
+    pub key: AssociationFilterKey,
     /// <p>The filter value.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationFilterKey {
+    AssociationId,
+    AssociationName,
+    AssociationStatusName,
+    InstanceId,
+    LastExecutedAfter,
+    LastExecutedBefore,
+    Name,
+    ResourceGroupName,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationFilterKey),
+}
+
+impl Default for AssociationFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationFilterKey {
+    fn into(self) -> String {
+        match self {
+            AssociationFilterKey::AssociationId => "AssociationId".to_string(),
+            AssociationFilterKey::AssociationName => "AssociationName".to_string(),
+            AssociationFilterKey::AssociationStatusName => "AssociationStatusName".to_string(),
+            AssociationFilterKey::InstanceId => "InstanceId".to_string(),
+            AssociationFilterKey::LastExecutedAfter => "LastExecutedAfter".to_string(),
+            AssociationFilterKey::LastExecutedBefore => "LastExecutedBefore".to_string(),
+            AssociationFilterKey::Name => "Name".to_string(),
+            AssociationFilterKey::ResourceGroupName => "ResourceGroupName".to_string(),
+            AssociationFilterKey::UnknownVariant(UnknownAssociationFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationFilterKey::AssociationId => &"AssociationId",
+            AssociationFilterKey::AssociationName => &"AssociationName",
+            AssociationFilterKey::AssociationStatusName => &"AssociationStatusName",
+            AssociationFilterKey::InstanceId => &"InstanceId",
+            AssociationFilterKey::LastExecutedAfter => &"LastExecutedAfter",
+            AssociationFilterKey::LastExecutedBefore => &"LastExecutedBefore",
+            AssociationFilterKey::Name => &"Name",
+            AssociationFilterKey::ResourceGroupName => &"ResourceGroupName",
+            AssociationFilterKey::UnknownVariant(UnknownAssociationFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "AssociationId" => AssociationFilterKey::AssociationId,
+            "AssociationName" => AssociationFilterKey::AssociationName,
+            "AssociationStatusName" => AssociationFilterKey::AssociationStatusName,
+            "InstanceId" => AssociationFilterKey::InstanceId,
+            "LastExecutedAfter" => AssociationFilterKey::LastExecutedAfter,
+            "LastExecutedBefore" => AssociationFilterKey::LastExecutedBefore,
+            "Name" => AssociationFilterKey::Name,
+            "ResourceGroupName" => AssociationFilterKey::ResourceGroupName,
+            _ => AssociationFilterKey::UnknownVariant(UnknownAssociationFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssociationFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AssociationId" => AssociationFilterKey::AssociationId,
+            "AssociationName" => AssociationFilterKey::AssociationName,
+            "AssociationStatusName" => AssociationFilterKey::AssociationStatusName,
+            "InstanceId" => AssociationFilterKey::InstanceId,
+            "LastExecutedAfter" => AssociationFilterKey::LastExecutedAfter,
+            "LastExecutedBefore" => AssociationFilterKey::LastExecutedBefore,
+            "Name" => AssociationFilterKey::Name,
+            "ResourceGroupName" => AssociationFilterKey::ResourceGroupName,
+            _ => AssociationFilterKey::UnknownVariant(UnknownAssociationFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AssociationFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationFilterOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationFilterOperatorType {
+    Equal,
+    GreaterThan,
+    LessThan,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationFilterOperatorType),
+}
+
+impl Default for AssociationFilterOperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationFilterOperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationFilterOperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationFilterOperatorType {
+    fn into(self) -> String {
+        match self {
+            AssociationFilterOperatorType::Equal => "EQUAL".to_string(),
+            AssociationFilterOperatorType::GreaterThan => "GREATER_THAN".to_string(),
+            AssociationFilterOperatorType::LessThan => "LESS_THAN".to_string(),
+            AssociationFilterOperatorType::UnknownVariant(
+                UnknownAssociationFilterOperatorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationFilterOperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationFilterOperatorType::Equal => &"EQUAL",
+            AssociationFilterOperatorType::GreaterThan => &"GREATER_THAN",
+            AssociationFilterOperatorType::LessThan => &"LESS_THAN",
+            AssociationFilterOperatorType::UnknownVariant(
+                UnknownAssociationFilterOperatorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationFilterOperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EQUAL" => AssociationFilterOperatorType::Equal,
+            "GREATER_THAN" => AssociationFilterOperatorType::GreaterThan,
+            "LESS_THAN" => AssociationFilterOperatorType::LessThan,
+            _ => AssociationFilterOperatorType::UnknownVariant(
+                UnknownAssociationFilterOperatorType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AssociationFilterOperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EQUAL" => AssociationFilterOperatorType::Equal,
+            "GREATER_THAN" => AssociationFilterOperatorType::GreaterThan,
+            "LESS_THAN" => AssociationFilterOperatorType::LessThan,
+            _ => AssociationFilterOperatorType::UnknownVariant(
+                UnknownAssociationFilterOperatorType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationFilterOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationFilterOperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AssociationFilterOperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the association.</p>
@@ -424,7 +1024,222 @@ pub struct AssociationStatus {
     pub message: String,
     /// <p>The status.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: AssociationStatusName,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationStatusName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationStatusName {
+    Failed,
+    Pending,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationStatusName),
+}
+
+impl Default for AssociationStatusName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationStatusName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationStatusName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationStatusName {
+    fn into(self) -> String {
+        match self {
+            AssociationStatusName::Failed => "Failed".to_string(),
+            AssociationStatusName::Pending => "Pending".to_string(),
+            AssociationStatusName::Success => "Success".to_string(),
+            AssociationStatusName::UnknownVariant(UnknownAssociationStatusName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationStatusName {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationStatusName::Failed => &"Failed",
+            AssociationStatusName::Pending => &"Pending",
+            AssociationStatusName::Success => &"Success",
+            AssociationStatusName::UnknownVariant(UnknownAssociationStatusName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationStatusName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => AssociationStatusName::Failed,
+            "Pending" => AssociationStatusName::Pending,
+            "Success" => AssociationStatusName::Success,
+            _ => AssociationStatusName::UnknownVariant(UnknownAssociationStatusName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssociationStatusName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => AssociationStatusName::Failed,
+            "Pending" => AssociationStatusName::Pending,
+            "Success" => AssociationStatusName::Success,
+            _ => AssociationStatusName::UnknownVariant(UnknownAssociationStatusName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationStatusName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationStatusName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssociationStatusName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationSyncCompliance {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationSyncCompliance {
+    Auto,
+    Manual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationSyncCompliance),
+}
+
+impl Default for AssociationSyncCompliance {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationSyncCompliance {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationSyncCompliance {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationSyncCompliance {
+    fn into(self) -> String {
+        match self {
+            AssociationSyncCompliance::Auto => "AUTO".to_string(),
+            AssociationSyncCompliance::Manual => "MANUAL".to_string(),
+            AssociationSyncCompliance::UnknownVariant(UnknownAssociationSyncCompliance {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationSyncCompliance {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationSyncCompliance::Auto => &"AUTO",
+            AssociationSyncCompliance::Manual => &"MANUAL",
+            AssociationSyncCompliance::UnknownVariant(UnknownAssociationSyncCompliance {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssociationSyncCompliance {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => AssociationSyncCompliance::Auto,
+            "MANUAL" => AssociationSyncCompliance::Manual,
+            _ => AssociationSyncCompliance::UnknownVariant(UnknownAssociationSyncCompliance {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssociationSyncCompliance {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => AssociationSyncCompliance::Auto,
+            "MANUAL" => AssociationSyncCompliance::Manual,
+            _ => {
+                AssociationSyncCompliance::UnknownVariant(UnknownAssociationSyncCompliance { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationSyncCompliance {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationSyncCompliance {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssociationSyncCompliance {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the association version.</p>
@@ -450,7 +1265,7 @@ pub struct AssociationVersionInfo {
     /// <p>The severity level that is assigned to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_severity: Option<String>,
+    pub compliance_severity: Option<AssociationComplianceSeverity>,
     /// <p>The date the association version was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -486,7 +1301,7 @@ pub struct AssociationVersionInfo {
     /// <p>The mode for generating association compliance. You can specify <code>AUTO</code> or <code>MANUAL</code>. In <code>AUTO</code> mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is <code>COMPLIANT</code>. If the association execution doesn't run successfully, the association is <code>NON-COMPLIANT</code>.</p> <p>In <code>MANUAL</code> mode, you must specify the <code>AssociationId</code> as a parameter for the <a>PutComplianceItems</a> API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the <a>PutComplianceItems</a> API action.</p> <p>By default, all associations use <code>AUTO</code> mode.</p>
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sync_compliance: Option<String>,
+    pub sync_compliance: Option<AssociationSyncCompliance>,
     /// <p>The combination of AWS Regions and AWS accounts where you wanted to run the association when this association version was created.</p>
     #[serde(rename = "TargetLocations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -508,7 +1323,7 @@ pub struct AttachmentContent {
     /// <p>The hash algorithm used to calculate the hash value.</p>
     #[serde(rename = "HashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hash_type: Option<String>,
+    pub hash_type: Option<AttachmentHashType>,
     /// <p>The name of an attachment.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -521,6 +1336,106 @@ pub struct AttachmentContent {
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttachmentHashType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttachmentHashType {
+    Sha256,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttachmentHashType),
+}
+
+impl Default for AttachmentHashType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttachmentHashType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttachmentHashType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttachmentHashType {
+    fn into(self) -> String {
+        match self {
+            AttachmentHashType::Sha256 => "Sha256".to_string(),
+            AttachmentHashType::UnknownVariant(UnknownAttachmentHashType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttachmentHashType {
+    fn into(self) -> &'a str {
+        match self {
+            AttachmentHashType::Sha256 => &"Sha256",
+            AttachmentHashType::UnknownVariant(UnknownAttachmentHashType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AttachmentHashType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Sha256" => AttachmentHashType::Sha256,
+            _ => AttachmentHashType::UnknownVariant(UnknownAttachmentHashType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttachmentHashType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Sha256" => AttachmentHashType::Sha256,
+            _ => AttachmentHashType::UnknownVariant(UnknownAttachmentHashType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttachmentHashType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AttachmentHashType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AttachmentHashType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An attribute of an attachment, such as the attachment name.</p>
@@ -540,7 +1455,7 @@ pub struct AttachmentsSource {
     /// <p>The key of a key-value pair that identifies the location of an attachment to a document.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: Option<AttachmentsSourceKey>,
     /// <p>The name of the document attachment file.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -549,6 +1464,116 @@ pub struct AttachmentsSource {
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttachmentsSourceKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttachmentsSourceKey {
+    AttachmentReference,
+    S3FileUrl,
+    SourceUrl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttachmentsSourceKey),
+}
+
+impl Default for AttachmentsSourceKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttachmentsSourceKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttachmentsSourceKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttachmentsSourceKey {
+    fn into(self) -> String {
+        match self {
+            AttachmentsSourceKey::AttachmentReference => "AttachmentReference".to_string(),
+            AttachmentsSourceKey::S3FileUrl => "S3FileUrl".to_string(),
+            AttachmentsSourceKey::SourceUrl => "SourceUrl".to_string(),
+            AttachmentsSourceKey::UnknownVariant(UnknownAttachmentsSourceKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttachmentsSourceKey {
+    fn into(self) -> &'a str {
+        match self {
+            AttachmentsSourceKey::AttachmentReference => &"AttachmentReference",
+            AttachmentsSourceKey::S3FileUrl => &"S3FileUrl",
+            AttachmentsSourceKey::SourceUrl => &"SourceUrl",
+            AttachmentsSourceKey::UnknownVariant(UnknownAttachmentsSourceKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AttachmentsSourceKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "AttachmentReference" => AttachmentsSourceKey::AttachmentReference,
+            "S3FileUrl" => AttachmentsSourceKey::S3FileUrl,
+            "SourceUrl" => AttachmentsSourceKey::SourceUrl,
+            _ => AttachmentsSourceKey::UnknownVariant(UnknownAttachmentsSourceKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttachmentsSourceKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AttachmentReference" => AttachmentsSourceKey::AttachmentReference,
+            "S3FileUrl" => AttachmentsSourceKey::S3FileUrl,
+            "SourceUrl" => AttachmentsSourceKey::SourceUrl,
+            _ => AttachmentsSourceKey::UnknownVariant(UnknownAttachmentsSourceKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttachmentsSourceKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AttachmentsSourceKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AttachmentsSourceKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Detailed information about the current state of an individual Automation execution.</p>
@@ -566,11 +1591,11 @@ pub struct AutomationExecution {
     /// <p>The execution status of the Automation.</p>
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub automation_execution_status: Option<String>,
+    pub automation_execution_status: Option<AutomationExecutionStatus>,
     /// <p>The subtype of the Automation operation. Currently, the only supported value is <code>ChangeRequest</code>.</p>
     #[serde(rename = "AutomationSubtype")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub automation_subtype: Option<String>,
+    pub automation_subtype: Option<AutomationSubtype>,
     /// <p>The name of the Change Manager change request.</p>
     #[serde(rename = "ChangeRequestName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -618,7 +1643,7 @@ pub struct AutomationExecution {
     /// <p>The automation execution mode.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ExecutionMode>,
     /// <p>The ID of an OpsItem that is created to represent a Change Manager change request.</p>
     #[serde(rename = "OpsItemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -687,10 +1712,171 @@ pub struct AutomationExecution {
 pub struct AutomationExecutionFilter {
     /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter, TargetResourceGroup.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: AutomationExecutionFilterKey,
     /// <p>The values used to limit the execution information associated with the filter's key.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutomationExecutionFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutomationExecutionFilterKey {
+    AutomationSubtype,
+    AutomationType,
+    CurrentAction,
+    DocumentNamePrefix,
+    ExecutionId,
+    ExecutionStatus,
+    OpsItemId,
+    ParentExecutionId,
+    StartTimeAfter,
+    StartTimeBefore,
+    TagKey,
+    TargetResourceGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutomationExecutionFilterKey),
+}
+
+impl Default for AutomationExecutionFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutomationExecutionFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutomationExecutionFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutomationExecutionFilterKey {
+    fn into(self) -> String {
+        match self {
+            AutomationExecutionFilterKey::AutomationSubtype => "AutomationSubtype".to_string(),
+            AutomationExecutionFilterKey::AutomationType => "AutomationType".to_string(),
+            AutomationExecutionFilterKey::CurrentAction => "CurrentAction".to_string(),
+            AutomationExecutionFilterKey::DocumentNamePrefix => "DocumentNamePrefix".to_string(),
+            AutomationExecutionFilterKey::ExecutionId => "ExecutionId".to_string(),
+            AutomationExecutionFilterKey::ExecutionStatus => "ExecutionStatus".to_string(),
+            AutomationExecutionFilterKey::OpsItemId => "OpsItemId".to_string(),
+            AutomationExecutionFilterKey::ParentExecutionId => "ParentExecutionId".to_string(),
+            AutomationExecutionFilterKey::StartTimeAfter => "StartTimeAfter".to_string(),
+            AutomationExecutionFilterKey::StartTimeBefore => "StartTimeBefore".to_string(),
+            AutomationExecutionFilterKey::TagKey => "TagKey".to_string(),
+            AutomationExecutionFilterKey::TargetResourceGroup => "TargetResourceGroup".to_string(),
+            AutomationExecutionFilterKey::UnknownVariant(UnknownAutomationExecutionFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutomationExecutionFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            AutomationExecutionFilterKey::AutomationSubtype => &"AutomationSubtype",
+            AutomationExecutionFilterKey::AutomationType => &"AutomationType",
+            AutomationExecutionFilterKey::CurrentAction => &"CurrentAction",
+            AutomationExecutionFilterKey::DocumentNamePrefix => &"DocumentNamePrefix",
+            AutomationExecutionFilterKey::ExecutionId => &"ExecutionId",
+            AutomationExecutionFilterKey::ExecutionStatus => &"ExecutionStatus",
+            AutomationExecutionFilterKey::OpsItemId => &"OpsItemId",
+            AutomationExecutionFilterKey::ParentExecutionId => &"ParentExecutionId",
+            AutomationExecutionFilterKey::StartTimeAfter => &"StartTimeAfter",
+            AutomationExecutionFilterKey::StartTimeBefore => &"StartTimeBefore",
+            AutomationExecutionFilterKey::TagKey => &"TagKey",
+            AutomationExecutionFilterKey::TargetResourceGroup => &"TargetResourceGroup",
+            AutomationExecutionFilterKey::UnknownVariant(UnknownAutomationExecutionFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutomationExecutionFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "AutomationSubtype" => AutomationExecutionFilterKey::AutomationSubtype,
+            "AutomationType" => AutomationExecutionFilterKey::AutomationType,
+            "CurrentAction" => AutomationExecutionFilterKey::CurrentAction,
+            "DocumentNamePrefix" => AutomationExecutionFilterKey::DocumentNamePrefix,
+            "ExecutionId" => AutomationExecutionFilterKey::ExecutionId,
+            "ExecutionStatus" => AutomationExecutionFilterKey::ExecutionStatus,
+            "OpsItemId" => AutomationExecutionFilterKey::OpsItemId,
+            "ParentExecutionId" => AutomationExecutionFilterKey::ParentExecutionId,
+            "StartTimeAfter" => AutomationExecutionFilterKey::StartTimeAfter,
+            "StartTimeBefore" => AutomationExecutionFilterKey::StartTimeBefore,
+            "TagKey" => AutomationExecutionFilterKey::TagKey,
+            "TargetResourceGroup" => AutomationExecutionFilterKey::TargetResourceGroup,
+            _ => {
+                AutomationExecutionFilterKey::UnknownVariant(UnknownAutomationExecutionFilterKey {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for AutomationExecutionFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AutomationSubtype" => AutomationExecutionFilterKey::AutomationSubtype,
+            "AutomationType" => AutomationExecutionFilterKey::AutomationType,
+            "CurrentAction" => AutomationExecutionFilterKey::CurrentAction,
+            "DocumentNamePrefix" => AutomationExecutionFilterKey::DocumentNamePrefix,
+            "ExecutionId" => AutomationExecutionFilterKey::ExecutionId,
+            "ExecutionStatus" => AutomationExecutionFilterKey::ExecutionStatus,
+            "OpsItemId" => AutomationExecutionFilterKey::OpsItemId,
+            "ParentExecutionId" => AutomationExecutionFilterKey::ParentExecutionId,
+            "StartTimeAfter" => AutomationExecutionFilterKey::StartTimeAfter,
+            "StartTimeBefore" => AutomationExecutionFilterKey::StartTimeBefore,
+            "TagKey" => AutomationExecutionFilterKey::TagKey,
+            "TargetResourceGroup" => AutomationExecutionFilterKey::TargetResourceGroup,
+            _ => {
+                AutomationExecutionFilterKey::UnknownVariant(UnknownAutomationExecutionFilterKey {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomationExecutionFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutomationExecutionFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AutomationExecutionFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about a specific Automation execution.</p>
@@ -708,15 +1894,15 @@ pub struct AutomationExecutionMetadata {
     /// <p>The status of the execution.</p>
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub automation_execution_status: Option<String>,
+    pub automation_execution_status: Option<AutomationExecutionStatus>,
     /// <p>The subtype of the Automation operation. Currently, the only supported value is <code>ChangeRequest</code>.</p>
     #[serde(rename = "AutomationSubtype")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub automation_subtype: Option<String>,
+    pub automation_subtype: Option<AutomationSubtype>,
     /// <p>Use this filter with <a>DescribeAutomationExecutions</a>. Specify either Local or CrossAccount. CrossAccount is an Automation that runs in multiple AWS Regions and accounts. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation-multiple-accounts-and-regions.html">Running Automation workflows in multiple AWS Regions and accounts</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     #[serde(rename = "AutomationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub automation_type: Option<String>,
+    pub automation_type: Option<AutomationType>,
     /// <p>The name of the Change Manager change request.</p>
     #[serde(rename = "ChangeRequestName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -768,7 +1954,7 @@ pub struct AutomationExecutionMetadata {
     /// <p>The Automation execution mode.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ExecutionMode>,
     /// <p>The ID of an OpsItem that is created to represent a Change Manager change request.</p>
     #[serde(rename = "OpsItemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -809,6 +1995,519 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutomationExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutomationExecutionStatus {
+    Approved,
+    Cancelled,
+    Cancelling,
+    ChangeCalendarOverrideApproved,
+    ChangeCalendarOverrideRejected,
+    CompletedWithFailure,
+    CompletedWithSuccess,
+    Failed,
+    InProgress,
+    Pending,
+    PendingApproval,
+    PendingChangeCalendarOverride,
+    Rejected,
+    RunbookInProgress,
+    Scheduled,
+    Success,
+    TimedOut,
+    Waiting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutomationExecutionStatus),
+}
+
+impl Default for AutomationExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutomationExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutomationExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutomationExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            AutomationExecutionStatus::Approved => "Approved".to_string(),
+            AutomationExecutionStatus::Cancelled => "Cancelled".to_string(),
+            AutomationExecutionStatus::Cancelling => "Cancelling".to_string(),
+            AutomationExecutionStatus::ChangeCalendarOverrideApproved => {
+                "ChangeCalendarOverrideApproved".to_string()
+            }
+            AutomationExecutionStatus::ChangeCalendarOverrideRejected => {
+                "ChangeCalendarOverrideRejected".to_string()
+            }
+            AutomationExecutionStatus::CompletedWithFailure => "CompletedWithFailure".to_string(),
+            AutomationExecutionStatus::CompletedWithSuccess => "CompletedWithSuccess".to_string(),
+            AutomationExecutionStatus::Failed => "Failed".to_string(),
+            AutomationExecutionStatus::InProgress => "InProgress".to_string(),
+            AutomationExecutionStatus::Pending => "Pending".to_string(),
+            AutomationExecutionStatus::PendingApproval => "PendingApproval".to_string(),
+            AutomationExecutionStatus::PendingChangeCalendarOverride => {
+                "PendingChangeCalendarOverride".to_string()
+            }
+            AutomationExecutionStatus::Rejected => "Rejected".to_string(),
+            AutomationExecutionStatus::RunbookInProgress => "RunbookInProgress".to_string(),
+            AutomationExecutionStatus::Scheduled => "Scheduled".to_string(),
+            AutomationExecutionStatus::Success => "Success".to_string(),
+            AutomationExecutionStatus::TimedOut => "TimedOut".to_string(),
+            AutomationExecutionStatus::Waiting => "Waiting".to_string(),
+            AutomationExecutionStatus::UnknownVariant(UnknownAutomationExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutomationExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AutomationExecutionStatus::Approved => &"Approved",
+            AutomationExecutionStatus::Cancelled => &"Cancelled",
+            AutomationExecutionStatus::Cancelling => &"Cancelling",
+            AutomationExecutionStatus::ChangeCalendarOverrideApproved => {
+                &"ChangeCalendarOverrideApproved"
+            }
+            AutomationExecutionStatus::ChangeCalendarOverrideRejected => {
+                &"ChangeCalendarOverrideRejected"
+            }
+            AutomationExecutionStatus::CompletedWithFailure => &"CompletedWithFailure",
+            AutomationExecutionStatus::CompletedWithSuccess => &"CompletedWithSuccess",
+            AutomationExecutionStatus::Failed => &"Failed",
+            AutomationExecutionStatus::InProgress => &"InProgress",
+            AutomationExecutionStatus::Pending => &"Pending",
+            AutomationExecutionStatus::PendingApproval => &"PendingApproval",
+            AutomationExecutionStatus::PendingChangeCalendarOverride => {
+                &"PendingChangeCalendarOverride"
+            }
+            AutomationExecutionStatus::Rejected => &"Rejected",
+            AutomationExecutionStatus::RunbookInProgress => &"RunbookInProgress",
+            AutomationExecutionStatus::Scheduled => &"Scheduled",
+            AutomationExecutionStatus::Success => &"Success",
+            AutomationExecutionStatus::TimedOut => &"TimedOut",
+            AutomationExecutionStatus::Waiting => &"Waiting",
+            AutomationExecutionStatus::UnknownVariant(UnknownAutomationExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutomationExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approved" => AutomationExecutionStatus::Approved,
+            "Cancelled" => AutomationExecutionStatus::Cancelled,
+            "Cancelling" => AutomationExecutionStatus::Cancelling,
+            "ChangeCalendarOverrideApproved" => {
+                AutomationExecutionStatus::ChangeCalendarOverrideApproved
+            }
+            "ChangeCalendarOverrideRejected" => {
+                AutomationExecutionStatus::ChangeCalendarOverrideRejected
+            }
+            "CompletedWithFailure" => AutomationExecutionStatus::CompletedWithFailure,
+            "CompletedWithSuccess" => AutomationExecutionStatus::CompletedWithSuccess,
+            "Failed" => AutomationExecutionStatus::Failed,
+            "InProgress" => AutomationExecutionStatus::InProgress,
+            "Pending" => AutomationExecutionStatus::Pending,
+            "PendingApproval" => AutomationExecutionStatus::PendingApproval,
+            "PendingChangeCalendarOverride" => {
+                AutomationExecutionStatus::PendingChangeCalendarOverride
+            }
+            "Rejected" => AutomationExecutionStatus::Rejected,
+            "RunbookInProgress" => AutomationExecutionStatus::RunbookInProgress,
+            "Scheduled" => AutomationExecutionStatus::Scheduled,
+            "Success" => AutomationExecutionStatus::Success,
+            "TimedOut" => AutomationExecutionStatus::TimedOut,
+            "Waiting" => AutomationExecutionStatus::Waiting,
+            _ => AutomationExecutionStatus::UnknownVariant(UnknownAutomationExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutomationExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approved" => AutomationExecutionStatus::Approved,
+            "Cancelled" => AutomationExecutionStatus::Cancelled,
+            "Cancelling" => AutomationExecutionStatus::Cancelling,
+            "ChangeCalendarOverrideApproved" => {
+                AutomationExecutionStatus::ChangeCalendarOverrideApproved
+            }
+            "ChangeCalendarOverrideRejected" => {
+                AutomationExecutionStatus::ChangeCalendarOverrideRejected
+            }
+            "CompletedWithFailure" => AutomationExecutionStatus::CompletedWithFailure,
+            "CompletedWithSuccess" => AutomationExecutionStatus::CompletedWithSuccess,
+            "Failed" => AutomationExecutionStatus::Failed,
+            "InProgress" => AutomationExecutionStatus::InProgress,
+            "Pending" => AutomationExecutionStatus::Pending,
+            "PendingApproval" => AutomationExecutionStatus::PendingApproval,
+            "PendingChangeCalendarOverride" => {
+                AutomationExecutionStatus::PendingChangeCalendarOverride
+            }
+            "Rejected" => AutomationExecutionStatus::Rejected,
+            "RunbookInProgress" => AutomationExecutionStatus::RunbookInProgress,
+            "Scheduled" => AutomationExecutionStatus::Scheduled,
+            "Success" => AutomationExecutionStatus::Success,
+            "TimedOut" => AutomationExecutionStatus::TimedOut,
+            "Waiting" => AutomationExecutionStatus::Waiting,
+            _ => {
+                AutomationExecutionStatus::UnknownVariant(UnknownAutomationExecutionStatus { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomationExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutomationExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutomationExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutomationSubtype {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutomationSubtype {
+    ChangeRequest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutomationSubtype),
+}
+
+impl Default for AutomationSubtype {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutomationSubtype {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutomationSubtype {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutomationSubtype {
+    fn into(self) -> String {
+        match self {
+            AutomationSubtype::ChangeRequest => "ChangeRequest".to_string(),
+            AutomationSubtype::UnknownVariant(UnknownAutomationSubtype { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutomationSubtype {
+    fn into(self) -> &'a str {
+        match self {
+            AutomationSubtype::ChangeRequest => &"ChangeRequest",
+            AutomationSubtype::UnknownVariant(UnknownAutomationSubtype { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AutomationSubtype {
+    fn from(name: &str) -> Self {
+        match name {
+            "ChangeRequest" => AutomationSubtype::ChangeRequest,
+            _ => AutomationSubtype::UnknownVariant(UnknownAutomationSubtype {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutomationSubtype {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ChangeRequest" => AutomationSubtype::ChangeRequest,
+            _ => AutomationSubtype::UnknownVariant(UnknownAutomationSubtype { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomationSubtype {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutomationSubtype {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutomationSubtype {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutomationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutomationType {
+    CrossAccount,
+    Local,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutomationType),
+}
+
+impl Default for AutomationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutomationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutomationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutomationType {
+    fn into(self) -> String {
+        match self {
+            AutomationType::CrossAccount => "CrossAccount".to_string(),
+            AutomationType::Local => "Local".to_string(),
+            AutomationType::UnknownVariant(UnknownAutomationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutomationType {
+    fn into(self) -> &'a str {
+        match self {
+            AutomationType::CrossAccount => &"CrossAccount",
+            AutomationType::Local => &"Local",
+            AutomationType::UnknownVariant(UnknownAutomationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutomationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CrossAccount" => AutomationType::CrossAccount,
+            "Local" => AutomationType::Local,
+            _ => AutomationType::UnknownVariant(UnknownAutomationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutomationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CrossAccount" => AutomationType::CrossAccount,
+            "Local" => AutomationType::Local,
+            _ => AutomationType::UnknownVariant(UnknownAutomationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutomationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutomationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCalendarState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CalendarState {
+    Closed,
+    Open,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCalendarState),
+}
+
+impl Default for CalendarState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CalendarState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CalendarState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CalendarState {
+    fn into(self) -> String {
+        match self {
+            CalendarState::Closed => "CLOSED".to_string(),
+            CalendarState::Open => "OPEN".to_string(),
+            CalendarState::UnknownVariant(UnknownCalendarState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CalendarState {
+    fn into(self) -> &'a str {
+        match self {
+            CalendarState::Closed => &"CLOSED",
+            CalendarState::Open => &"OPEN",
+            CalendarState::UnknownVariant(UnknownCalendarState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CalendarState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOSED" => CalendarState::Closed,
+            "OPEN" => CalendarState::Open,
+            _ => CalendarState::UnknownVariant(UnknownCalendarState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CalendarState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOSED" => CalendarState::Closed,
+            "OPEN" => CalendarState::Open,
+            _ => CalendarState::UnknownVariant(UnknownCalendarState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CalendarState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CalendarState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CalendarState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -942,7 +2641,7 @@ pub struct Command {
     /// <p>The status of the command.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CommandStatus>,
     /// <p><p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding command statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully ran on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before running it on any instance. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -967,10 +2666,130 @@ pub struct Command {
 pub struct CommandFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
-    pub key: String,
+    pub key: CommandFilterKey,
     /// <p><p>The filter value. Valid values for each filter key are as follows:</p> <ul> <li> <p> <b>InvokedAfter</b>: Specify a timestamp to limit your results. For example, specify <code>2018-07-07T00:00:00Z</code> to see a list of command executions occurring July 7, 2018, and later.</p> </li> <li> <p> <b>InvokedBefore</b>: Specify a timestamp to limit your results. For example, specify <code>2018-07-07T00:00:00Z</code> to see a list of command executions from before July 7, 2018.</p> </li> <li> <p> <b>Status</b>: Specify a valid command status to see a list of all command executions with that status. Status values you can specify include:</p> <ul> <li> <p> <code>Pending</code> </p> </li> <li> <p> <code>InProgress</code> </p> </li> <li> <p> <code>Success</code> </p> </li> <li> <p> <code>Cancelled</code> </p> </li> <li> <p> <code>Failed</code> </p> </li> <li> <p> <code>TimedOut</code> </p> </li> <li> <p> <code>Cancelling</code> </p> </li> </ul> </li> <li> <p> <b>DocumentName</b>: Specify name of the SSM document for which you want to see command execution results. For example, specify <code>AWS-RunPatchBaseline</code> to see command executions that used this SSM document to perform security patching operations on instances. </p> </li> <li> <p> <b>ExecutionStage</b>: Specify one of the following values:</p> <ul> <li> <p> <code>Executing</code>: Returns a list of command executions that are currently still running.</p> </li> <li> <p> <code>Complete</code>: Returns a list of command executions that have already completed. </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCommandFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CommandFilterKey {
+    DocumentName,
+    ExecutionStage,
+    InvokedAfter,
+    InvokedBefore,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCommandFilterKey),
+}
+
+impl Default for CommandFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CommandFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CommandFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CommandFilterKey {
+    fn into(self) -> String {
+        match self {
+            CommandFilterKey::DocumentName => "DocumentName".to_string(),
+            CommandFilterKey::ExecutionStage => "ExecutionStage".to_string(),
+            CommandFilterKey::InvokedAfter => "InvokedAfter".to_string(),
+            CommandFilterKey::InvokedBefore => "InvokedBefore".to_string(),
+            CommandFilterKey::Status => "Status".to_string(),
+            CommandFilterKey::UnknownVariant(UnknownCommandFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CommandFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            CommandFilterKey::DocumentName => &"DocumentName",
+            CommandFilterKey::ExecutionStage => &"ExecutionStage",
+            CommandFilterKey::InvokedAfter => &"InvokedAfter",
+            CommandFilterKey::InvokedBefore => &"InvokedBefore",
+            CommandFilterKey::Status => &"Status",
+            CommandFilterKey::UnknownVariant(UnknownCommandFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CommandFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "DocumentName" => CommandFilterKey::DocumentName,
+            "ExecutionStage" => CommandFilterKey::ExecutionStage,
+            "InvokedAfter" => CommandFilterKey::InvokedAfter,
+            "InvokedBefore" => CommandFilterKey::InvokedBefore,
+            "Status" => CommandFilterKey::Status,
+            _ => CommandFilterKey::UnknownVariant(UnknownCommandFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CommandFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DocumentName" => CommandFilterKey::DocumentName,
+            "ExecutionStage" => CommandFilterKey::ExecutionStage,
+            "InvokedAfter" => CommandFilterKey::InvokedAfter,
+            "InvokedBefore" => CommandFilterKey::InvokedBefore,
+            "Status" => CommandFilterKey::Status,
+            _ => CommandFilterKey::UnknownVariant(UnknownCommandFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CommandFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CommandFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user runs SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you ran. </p>
@@ -1031,7 +2850,7 @@ pub struct CommandInvocation {
     /// <p>Whether or not the invocation succeeded, failed, or is pending.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CommandInvocationStatus>,
     /// <p><p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding command statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1040,6 +2859,141 @@ pub struct CommandInvocation {
     #[serde(rename = "TraceOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trace_output: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCommandInvocationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CommandInvocationStatus {
+    Cancelled,
+    Cancelling,
+    Delayed,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCommandInvocationStatus),
+}
+
+impl Default for CommandInvocationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CommandInvocationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CommandInvocationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CommandInvocationStatus {
+    fn into(self) -> String {
+        match self {
+            CommandInvocationStatus::Cancelled => "Cancelled".to_string(),
+            CommandInvocationStatus::Cancelling => "Cancelling".to_string(),
+            CommandInvocationStatus::Delayed => "Delayed".to_string(),
+            CommandInvocationStatus::Failed => "Failed".to_string(),
+            CommandInvocationStatus::InProgress => "InProgress".to_string(),
+            CommandInvocationStatus::Pending => "Pending".to_string(),
+            CommandInvocationStatus::Success => "Success".to_string(),
+            CommandInvocationStatus::TimedOut => "TimedOut".to_string(),
+            CommandInvocationStatus::UnknownVariant(UnknownCommandInvocationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CommandInvocationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CommandInvocationStatus::Cancelled => &"Cancelled",
+            CommandInvocationStatus::Cancelling => &"Cancelling",
+            CommandInvocationStatus::Delayed => &"Delayed",
+            CommandInvocationStatus::Failed => &"Failed",
+            CommandInvocationStatus::InProgress => &"InProgress",
+            CommandInvocationStatus::Pending => &"Pending",
+            CommandInvocationStatus::Success => &"Success",
+            CommandInvocationStatus::TimedOut => &"TimedOut",
+            CommandInvocationStatus::UnknownVariant(UnknownCommandInvocationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CommandInvocationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => CommandInvocationStatus::Cancelled,
+            "Cancelling" => CommandInvocationStatus::Cancelling,
+            "Delayed" => CommandInvocationStatus::Delayed,
+            "Failed" => CommandInvocationStatus::Failed,
+            "InProgress" => CommandInvocationStatus::InProgress,
+            "Pending" => CommandInvocationStatus::Pending,
+            "Success" => CommandInvocationStatus::Success,
+            "TimedOut" => CommandInvocationStatus::TimedOut,
+            _ => CommandInvocationStatus::UnknownVariant(UnknownCommandInvocationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CommandInvocationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => CommandInvocationStatus::Cancelled,
+            "Cancelling" => CommandInvocationStatus::Cancelling,
+            "Delayed" => CommandInvocationStatus::Delayed,
+            "Failed" => CommandInvocationStatus::Failed,
+            "InProgress" => CommandInvocationStatus::InProgress,
+            "Pending" => CommandInvocationStatus::Pending,
+            "Success" => CommandInvocationStatus::Success,
+            "TimedOut" => CommandInvocationStatus::TimedOut,
+            _ => CommandInvocationStatus::UnknownVariant(UnknownCommandInvocationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandInvocationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CommandInvocationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CommandInvocationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes plugin details.</p>
@@ -1089,11 +3043,262 @@ pub struct CommandPlugin {
     /// <p>The status of this plugin. You can run a document with multiple plugins.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CommandPluginStatus>,
     /// <p><p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding command statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit, and they don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCommandPluginStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CommandPluginStatus {
+    Cancelled,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCommandPluginStatus),
+}
+
+impl Default for CommandPluginStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CommandPluginStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CommandPluginStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CommandPluginStatus {
+    fn into(self) -> String {
+        match self {
+            CommandPluginStatus::Cancelled => "Cancelled".to_string(),
+            CommandPluginStatus::Failed => "Failed".to_string(),
+            CommandPluginStatus::InProgress => "InProgress".to_string(),
+            CommandPluginStatus::Pending => "Pending".to_string(),
+            CommandPluginStatus::Success => "Success".to_string(),
+            CommandPluginStatus::TimedOut => "TimedOut".to_string(),
+            CommandPluginStatus::UnknownVariant(UnknownCommandPluginStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CommandPluginStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CommandPluginStatus::Cancelled => &"Cancelled",
+            CommandPluginStatus::Failed => &"Failed",
+            CommandPluginStatus::InProgress => &"InProgress",
+            CommandPluginStatus::Pending => &"Pending",
+            CommandPluginStatus::Success => &"Success",
+            CommandPluginStatus::TimedOut => &"TimedOut",
+            CommandPluginStatus::UnknownVariant(UnknownCommandPluginStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CommandPluginStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => CommandPluginStatus::Cancelled,
+            "Failed" => CommandPluginStatus::Failed,
+            "InProgress" => CommandPluginStatus::InProgress,
+            "Pending" => CommandPluginStatus::Pending,
+            "Success" => CommandPluginStatus::Success,
+            "TimedOut" => CommandPluginStatus::TimedOut,
+            _ => CommandPluginStatus::UnknownVariant(UnknownCommandPluginStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CommandPluginStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => CommandPluginStatus::Cancelled,
+            "Failed" => CommandPluginStatus::Failed,
+            "InProgress" => CommandPluginStatus::InProgress,
+            "Pending" => CommandPluginStatus::Pending,
+            "Success" => CommandPluginStatus::Success,
+            "TimedOut" => CommandPluginStatus::TimedOut,
+            _ => CommandPluginStatus::UnknownVariant(UnknownCommandPluginStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandPluginStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CommandPluginStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CommandPluginStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCommandStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CommandStatus {
+    Cancelled,
+    Cancelling,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCommandStatus),
+}
+
+impl Default for CommandStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CommandStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CommandStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CommandStatus {
+    fn into(self) -> String {
+        match self {
+            CommandStatus::Cancelled => "Cancelled".to_string(),
+            CommandStatus::Cancelling => "Cancelling".to_string(),
+            CommandStatus::Failed => "Failed".to_string(),
+            CommandStatus::InProgress => "InProgress".to_string(),
+            CommandStatus::Pending => "Pending".to_string(),
+            CommandStatus::Success => "Success".to_string(),
+            CommandStatus::TimedOut => "TimedOut".to_string(),
+            CommandStatus::UnknownVariant(UnknownCommandStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CommandStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CommandStatus::Cancelled => &"Cancelled",
+            CommandStatus::Cancelling => &"Cancelling",
+            CommandStatus::Failed => &"Failed",
+            CommandStatus::InProgress => &"InProgress",
+            CommandStatus::Pending => &"Pending",
+            CommandStatus::Success => &"Success",
+            CommandStatus::TimedOut => &"TimedOut",
+            CommandStatus::UnknownVariant(UnknownCommandStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CommandStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => CommandStatus::Cancelled,
+            "Cancelling" => CommandStatus::Cancelling,
+            "Failed" => CommandStatus::Failed,
+            "InProgress" => CommandStatus::InProgress,
+            "Pending" => CommandStatus::Pending,
+            "Success" => CommandStatus::Success,
+            "TimedOut" => CommandStatus::TimedOut,
+            _ => CommandStatus::UnknownVariant(UnknownCommandStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CommandStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => CommandStatus::Cancelled,
+            "Cancelling" => CommandStatus::Cancelling,
+            "Failed" => CommandStatus::Failed,
+            "InProgress" => CommandStatus::InProgress,
+            "Pending" => CommandStatus::Pending,
+            "Success" => CommandStatus::Success,
+            "TimedOut" => CommandStatus::TimedOut,
+            _ => CommandStatus::UnknownVariant(UnknownCommandStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CommandStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CommandStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>
@@ -1143,11 +3348,11 @@ pub struct ComplianceItem {
     /// <p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>
     #[serde(rename = "Severity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub severity: Option<String>,
+    pub severity: Option<ComplianceSeverity>,
     /// <p>The status of the compliance item. An item is either COMPLIANT, NON_COMPLIANT, or an empty string (for Windows patches that aren't applicable).</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ComplianceStatus>,
     /// <p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch; for example: Security Update for Active Directory Federation Services.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1168,14 +3373,364 @@ pub struct ComplianceItemEntry {
     pub id: Option<String>,
     /// <p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>
     #[serde(rename = "Severity")]
-    pub severity: String,
+    pub severity: ComplianceSeverity,
     /// <p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: ComplianceStatus,
     /// <p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch; for example: Security Update for Active Directory Federation Services. </p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComplianceQueryOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComplianceQueryOperatorType {
+    BeginWith,
+    Equal,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComplianceQueryOperatorType),
+}
+
+impl Default for ComplianceQueryOperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComplianceQueryOperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComplianceQueryOperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComplianceQueryOperatorType {
+    fn into(self) -> String {
+        match self {
+            ComplianceQueryOperatorType::BeginWith => "BEGIN_WITH".to_string(),
+            ComplianceQueryOperatorType::Equal => "EQUAL".to_string(),
+            ComplianceQueryOperatorType::GreaterThan => "GREATER_THAN".to_string(),
+            ComplianceQueryOperatorType::LessThan => "LESS_THAN".to_string(),
+            ComplianceQueryOperatorType::NotEqual => "NOT_EQUAL".to_string(),
+            ComplianceQueryOperatorType::UnknownVariant(UnknownComplianceQueryOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComplianceQueryOperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            ComplianceQueryOperatorType::BeginWith => &"BEGIN_WITH",
+            ComplianceQueryOperatorType::Equal => &"EQUAL",
+            ComplianceQueryOperatorType::GreaterThan => &"GREATER_THAN",
+            ComplianceQueryOperatorType::LessThan => &"LESS_THAN",
+            ComplianceQueryOperatorType::NotEqual => &"NOT_EQUAL",
+            ComplianceQueryOperatorType::UnknownVariant(UnknownComplianceQueryOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComplianceQueryOperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEGIN_WITH" => ComplianceQueryOperatorType::BeginWith,
+            "EQUAL" => ComplianceQueryOperatorType::Equal,
+            "GREATER_THAN" => ComplianceQueryOperatorType::GreaterThan,
+            "LESS_THAN" => ComplianceQueryOperatorType::LessThan,
+            "NOT_EQUAL" => ComplianceQueryOperatorType::NotEqual,
+            _ => ComplianceQueryOperatorType::UnknownVariant(UnknownComplianceQueryOperatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComplianceQueryOperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEGIN_WITH" => ComplianceQueryOperatorType::BeginWith,
+            "EQUAL" => ComplianceQueryOperatorType::Equal,
+            "GREATER_THAN" => ComplianceQueryOperatorType::GreaterThan,
+            "LESS_THAN" => ComplianceQueryOperatorType::LessThan,
+            "NOT_EQUAL" => ComplianceQueryOperatorType::NotEqual,
+            _ => ComplianceQueryOperatorType::UnknownVariant(UnknownComplianceQueryOperatorType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceQueryOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComplianceQueryOperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComplianceQueryOperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComplianceSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComplianceSeverity {
+    Critical,
+    High,
+    Informational,
+    Low,
+    Medium,
+    Unspecified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComplianceSeverity),
+}
+
+impl Default for ComplianceSeverity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComplianceSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComplianceSeverity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComplianceSeverity {
+    fn into(self) -> String {
+        match self {
+            ComplianceSeverity::Critical => "CRITICAL".to_string(),
+            ComplianceSeverity::High => "HIGH".to_string(),
+            ComplianceSeverity::Informational => "INFORMATIONAL".to_string(),
+            ComplianceSeverity::Low => "LOW".to_string(),
+            ComplianceSeverity::Medium => "MEDIUM".to_string(),
+            ComplianceSeverity::Unspecified => "UNSPECIFIED".to_string(),
+            ComplianceSeverity::UnknownVariant(UnknownComplianceSeverity { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComplianceSeverity {
+    fn into(self) -> &'a str {
+        match self {
+            ComplianceSeverity::Critical => &"CRITICAL",
+            ComplianceSeverity::High => &"HIGH",
+            ComplianceSeverity::Informational => &"INFORMATIONAL",
+            ComplianceSeverity::Low => &"LOW",
+            ComplianceSeverity::Medium => &"MEDIUM",
+            ComplianceSeverity::Unspecified => &"UNSPECIFIED",
+            ComplianceSeverity::UnknownVariant(UnknownComplianceSeverity { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComplianceSeverity {
+    fn from(name: &str) -> Self {
+        match name {
+            "CRITICAL" => ComplianceSeverity::Critical,
+            "HIGH" => ComplianceSeverity::High,
+            "INFORMATIONAL" => ComplianceSeverity::Informational,
+            "LOW" => ComplianceSeverity::Low,
+            "MEDIUM" => ComplianceSeverity::Medium,
+            "UNSPECIFIED" => ComplianceSeverity::Unspecified,
+            _ => ComplianceSeverity::UnknownVariant(UnknownComplianceSeverity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComplianceSeverity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CRITICAL" => ComplianceSeverity::Critical,
+            "HIGH" => ComplianceSeverity::High,
+            "INFORMATIONAL" => ComplianceSeverity::Informational,
+            "LOW" => ComplianceSeverity::Low,
+            "MEDIUM" => ComplianceSeverity::Medium,
+            "UNSPECIFIED" => ComplianceSeverity::Unspecified,
+            _ => ComplianceSeverity::UnknownVariant(UnknownComplianceSeverity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComplianceSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComplianceSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComplianceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComplianceStatus {
+    Compliant,
+    NonCompliant,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComplianceStatus),
+}
+
+impl Default for ComplianceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComplianceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComplianceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComplianceStatus {
+    fn into(self) -> String {
+        match self {
+            ComplianceStatus::Compliant => "COMPLIANT".to_string(),
+            ComplianceStatus::NonCompliant => "NON_COMPLIANT".to_string(),
+            ComplianceStatus::UnknownVariant(UnknownComplianceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComplianceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ComplianceStatus::Compliant => &"COMPLIANT",
+            ComplianceStatus::NonCompliant => &"NON_COMPLIANT",
+            ComplianceStatus::UnknownVariant(UnknownComplianceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComplianceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANT" => ComplianceStatus::Compliant,
+            "NON_COMPLIANT" => ComplianceStatus::NonCompliant,
+            _ => ComplianceStatus::UnknownVariant(UnknownComplianceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComplianceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANT" => ComplianceStatus::Compliant,
+            "NON_COMPLIANT" => ComplianceStatus::NonCompliant,
+            _ => ComplianceStatus::UnknownVariant(UnknownComplianceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComplianceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComplianceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
@@ -1189,7 +3744,7 @@ pub struct ComplianceStringFilter {
     /// <p>The type of comparison that should be performed for the value: Equal, NotEqual, BeginWith, LessThan, or GreaterThan.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ComplianceQueryOperatorType>,
     /// <p>The value for which to search.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1214,6 +3769,111 @@ pub struct ComplianceSummaryItem {
     pub non_compliant_summary: Option<NonCompliantSummary>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComplianceUploadType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComplianceUploadType {
+    Complete,
+    Partial,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComplianceUploadType),
+}
+
+impl Default for ComplianceUploadType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComplianceUploadType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComplianceUploadType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComplianceUploadType {
+    fn into(self) -> String {
+        match self {
+            ComplianceUploadType::Complete => "COMPLETE".to_string(),
+            ComplianceUploadType::Partial => "PARTIAL".to_string(),
+            ComplianceUploadType::UnknownVariant(UnknownComplianceUploadType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComplianceUploadType {
+    fn into(self) -> &'a str {
+        match self {
+            ComplianceUploadType::Complete => &"COMPLETE",
+            ComplianceUploadType::Partial => &"PARTIAL",
+            ComplianceUploadType::UnknownVariant(UnknownComplianceUploadType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComplianceUploadType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ComplianceUploadType::Complete,
+            "PARTIAL" => ComplianceUploadType::Partial,
+            _ => ComplianceUploadType::UnknownVariant(UnknownComplianceUploadType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComplianceUploadType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ComplianceUploadType::Complete,
+            "PARTIAL" => ComplianceUploadType::Partial,
+            _ => ComplianceUploadType::UnknownVariant(UnknownComplianceUploadType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceUploadType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComplianceUploadType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComplianceUploadType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1226,6 +3886,111 @@ pub struct CompliantSummary {
     #[serde(rename = "SeveritySummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub severity_summary: Option<SeveritySummary>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionStatus {
+    Connected,
+    NotConnected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionStatus),
+}
+
+impl Default for ConnectionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionStatus {
+    fn into(self) -> String {
+        match self {
+            ConnectionStatus::Connected => "Connected".to_string(),
+            ConnectionStatus::NotConnected => "NotConnected".to_string(),
+            ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionStatus::Connected => &"Connected",
+            ConnectionStatus::NotConnected => &"NotConnected",
+            ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConnectionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Connected" => ConnectionStatus::Connected,
+            "NotConnected" => ConnectionStatus::NotConnected,
+            _ => ConnectionStatus::UnknownVariant(UnknownConnectionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Connected" => ConnectionStatus::Connected,
+            "NotConnected" => ConnectionStatus::NotConnected,
+            _ => ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1295,7 +4060,7 @@ pub struct CreateAssociationBatchRequestEntry {
     /// <p>The severity level to assign to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_severity: Option<String>,
+    pub compliance_severity: Option<AssociationComplianceSeverity>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1330,7 +4095,7 @@ pub struct CreateAssociationBatchRequestEntry {
     /// <p>The mode for generating association compliance. You can specify <code>AUTO</code> or <code>MANUAL</code>. In <code>AUTO</code> mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is <code>COMPLIANT</code>. If the association execution doesn't run successfully, the association is <code>NON-COMPLIANT</code>. </p> <p>In <code>MANUAL</code> mode, you must specify the <code>AssociationId</code> as a parameter for the <a>PutComplianceItems</a> API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the <a>PutComplianceItems</a> API action.</p> <p>By default, all associations use <code>AUTO</code> mode.</p>
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sync_compliance: Option<String>,
+    pub sync_compliance: Option<AssociationSyncCompliance>,
     /// <p>Use this action to create an association in multiple Regions and multiple accounts.</p>
     #[serde(rename = "TargetLocations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1372,7 +4137,7 @@ pub struct CreateAssociationRequest {
     /// <p>The severity level to assign to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_severity: Option<String>,
+    pub compliance_severity: Option<AssociationComplianceSeverity>,
     /// <p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1407,7 +4172,7 @@ pub struct CreateAssociationRequest {
     /// <p>The mode for generating association compliance. You can specify <code>AUTO</code> or <code>MANUAL</code>. In <code>AUTO</code> mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is <code>COMPLIANT</code>. If the association execution doesn't run successfully, the association is <code>NON-COMPLIANT</code>.</p> <p>In <code>MANUAL</code> mode, you must specify the <code>AssociationId</code> as a parameter for the <a>PutComplianceItems</a> API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the <a>PutComplianceItems</a> API action.</p> <p>By default, all associations use <code>AUTO</code> mode.</p>
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sync_compliance: Option<String>,
+    pub sync_compliance: Option<AssociationSyncCompliance>,
     /// <p>A location is a combination of AWS Regions and AWS accounts where you want to run the association. Use this action to create an association in multiple Regions and multiple accounts.</p>
     #[serde(rename = "TargetLocations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1440,11 +4205,11 @@ pub struct CreateDocumentRequest {
     /// <p>Specify the document format for the request. The document format can be JSON, YAML, or TEXT. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>The type of document to create.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_type: Option<String>,
+    pub document_type: Option<DocumentType>,
     /// <p><p>A name for the Systems Manager document.</p> <important> <p>You can&#39;t use the following strings as document name prefixes. These are reserved by AWS for use as document name prefixes:</p> <ul> <li> <p> <code>aws-</code> </p> </li> <li> <p> <code>amazon</code> </p> </li> <li> <p> <code>amzn</code> </p> </li> </ul> </important></p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1638,7 +4403,7 @@ pub struct CreatePatchBaselineRequest {
     /// <p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. The default value is UNSPECIFIED.</p>
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub approved_patches_compliance_level: Option<String>,
+    pub approved_patches_compliance_level: Option<PatchComplianceLevel>,
     /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
     #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1661,7 +4426,7 @@ pub struct CreatePatchBaselineRequest {
     /// <p>Defines the operating system the patch baseline applies to. The Default value is WINDOWS.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>A list of explicitly rejected patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">About package name formats for approved and rejected patch lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1669,7 +4434,7 @@ pub struct CreatePatchBaselineRequest {
     /// <p><p>The action for Patch Manager to take on patches included in the RejectedPackages list.</p> <ul> <li> <p> <b>ALLOW<em>AS</em>DEPENDENCY</b>: A package in the Rejected patches list is installed only if it is a dependency of another package. It is considered compliant with the patch baseline, and its status is reported as <i>InstalledOther</i>. This is the default action if no option is specified.</p> </li> <li> <p> <b>BLOCK</b>: Packages in the RejectedPatches list, and packages that include them as dependencies, are not installed under any circumstances. If a package was installed before it was added to the Rejected patches list, it is considered non-compliant with the patch baseline, and its status is reported as <i>InstalledRejected</i>.</p> </li> </ul></p>
     #[serde(rename = "RejectedPatchesAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rejected_patches_action: Option<String>,
+    pub rejected_patches_action: Option<PatchAction>,
     /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1784,7 +4549,7 @@ pub struct DeleteInventoryRequest {
     /// <p>Use the <code>SchemaDeleteOption</code> to delete a custom inventory type (schema). If you don't choose this option, the system only deletes existing inventory data associated with the custom inventory type. Choose one of the following options:</p> <p>DisableSchema: If you choose this option, the system ignores all inventory data for the specified version, and any earlier versions. To enable this schema again, you must call the <code>PutInventory</code> action for a version greater than the disabled version.</p> <p>DeleteSchema: This option deletes the specified custom type from the Inventory service. You can recreate the schema later, if you want.</p>
     #[serde(rename = "SchemaDeleteOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub schema_delete_option: Option<String>,
+    pub schema_delete_option: Option<InventorySchemaDeleteOption>,
     /// <p>The name of the custom inventory type for which you want to delete either all previously collected data or the inventory type itself. </p>
     #[serde(rename = "TypeName")]
     pub type_name: String,
@@ -1997,11 +4762,125 @@ pub struct DescribeActivationsFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "FilterKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter_key: Option<String>,
+    pub filter_key: Option<DescribeActivationsFilterKeys>,
     /// <p>The filter values.</p>
     #[serde(rename = "FilterValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDescribeActivationsFilterKeys {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DescribeActivationsFilterKeys {
+    ActivationIds,
+    DefaultInstanceName,
+    IamRole,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDescribeActivationsFilterKeys),
+}
+
+impl Default for DescribeActivationsFilterKeys {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DescribeActivationsFilterKeys {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DescribeActivationsFilterKeys {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DescribeActivationsFilterKeys {
+    fn into(self) -> String {
+        match self {
+            DescribeActivationsFilterKeys::ActivationIds => "ActivationIds".to_string(),
+            DescribeActivationsFilterKeys::DefaultInstanceName => "DefaultInstanceName".to_string(),
+            DescribeActivationsFilterKeys::IamRole => "IamRole".to_string(),
+            DescribeActivationsFilterKeys::UnknownVariant(
+                UnknownDescribeActivationsFilterKeys { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DescribeActivationsFilterKeys {
+    fn into(self) -> &'a str {
+        match self {
+            DescribeActivationsFilterKeys::ActivationIds => &"ActivationIds",
+            DescribeActivationsFilterKeys::DefaultInstanceName => &"DefaultInstanceName",
+            DescribeActivationsFilterKeys::IamRole => &"IamRole",
+            DescribeActivationsFilterKeys::UnknownVariant(
+                UnknownDescribeActivationsFilterKeys { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DescribeActivationsFilterKeys {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActivationIds" => DescribeActivationsFilterKeys::ActivationIds,
+            "DefaultInstanceName" => DescribeActivationsFilterKeys::DefaultInstanceName,
+            "IamRole" => DescribeActivationsFilterKeys::IamRole,
+            _ => DescribeActivationsFilterKeys::UnknownVariant(
+                UnknownDescribeActivationsFilterKeys {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DescribeActivationsFilterKeys {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActivationIds" => DescribeActivationsFilterKeys::ActivationIds,
+            "DefaultInstanceName" => DescribeActivationsFilterKeys::DefaultInstanceName,
+            "IamRole" => DescribeActivationsFilterKeys::IamRole,
+            _ => DescribeActivationsFilterKeys::UnknownVariant(
+                UnknownDescribeActivationsFilterKeys { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DescribeActivationsFilterKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DescribeActivationsFilterKeys {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DescribeActivationsFilterKeys {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2238,7 +5117,7 @@ pub struct DescribeDocumentPermissionRequest {
     pub name: String,
     /// <p>The permission type for the document. The permission type can be <i>Share</i>.</p>
     #[serde(rename = "PermissionType")]
-    pub permission_type: String,
+    pub permission_type: DocumentPermissionType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2646,7 +5525,7 @@ pub struct DescribeMaintenanceWindowScheduleRequest {
     /// <p>The type of resource you want to retrieve information about. For example, "INSTANCE".</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<MaintenanceWindowResourceType>,
     /// <p>The instance ID or key/value pair to retrieve information about.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2749,7 +5628,7 @@ pub struct DescribeMaintenanceWindowsForTargetRequest {
     pub next_token: Option<String>,
     /// <p>The type of resource you want to retrieve information about. For example, "INSTANCE".</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: MaintenanceWindowResourceType,
     /// <p>The instance ID or key/value pair to retrieve information about.</p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
@@ -2984,14 +5863,14 @@ pub struct DescribePatchPropertiesRequest {
     pub next_token: Option<String>,
     /// <p>The operating system type for which to list patches.</p>
     #[serde(rename = "OperatingSystem")]
-    pub operating_system: String,
+    pub operating_system: OperatingSystem,
     /// <p>Indicates whether to list patches for the Windows operating system or for Microsoft applications. Not applicable for the Linux or macOS operating systems.</p>
     #[serde(rename = "PatchSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub patch_set: Option<String>,
+    pub patch_set: Option<PatchSet>,
     /// <p>The patch property for which you want to view patch details. </p>
     #[serde(rename = "Property")]
-    pub property: String,
+    pub property: PatchProperty,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3024,7 +5903,7 @@ pub struct DescribeSessionsRequest {
     pub next_token: Option<String>,
     /// <p>The session status to retrieve a list of sessions for. For example, "Active".</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: SessionState,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3089,11 +5968,11 @@ pub struct DocumentDescription {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>The type of document.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_type: Option<String>,
+    pub document_type: Option<DocumentType>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3105,7 +5984,7 @@ pub struct DocumentDescription {
     /// <p><p>The hash type of the document. Valid values include <code>Sha256</code> or <code>Sha1</code>.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "HashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hash_type: Option<String>,
+    pub hash_type: Option<DocumentHashType>,
     /// <p>The latest version of the document.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3129,7 +6008,7 @@ pub struct DocumentDescription {
     /// <p>The list of OS platforms compatible with this Systems Manager document. </p>
     #[serde(rename = "PlatformTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_types: Option<Vec<String>>,
+    pub platform_types: Option<Vec<PlatformType>>,
     /// <p>A list of SSM documents required by a document. For example, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document.</p>
     #[serde(rename = "Requires")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3141,7 +6020,7 @@ pub struct DocumentDescription {
     /// <p>The current status of the review.</p>
     #[serde(rename = "ReviewStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub review_status: Option<String>,
+    pub review_status: Option<ReviewStatus>,
     /// <p>The schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3153,7 +6032,7 @@ pub struct DocumentDescription {
     /// <p>The status of the Systems Manager document.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DocumentStatus>,
     /// <p>A message returned by AWS Systems Manager that explains the <code>Status</code> value. For example, a <code>Failed</code> status might be explained by the <code>StatusInformation</code> message, "The specified S3 bucket does not exist. Verify that the URL of the S3 bucket is correct."</p>
     #[serde(rename = "StatusInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3178,10 +6057,334 @@ pub struct DocumentDescription {
 pub struct DocumentFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
-    pub key: String,
+    pub key: DocumentFilterKey,
     /// <p>The value of the filter.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentFilterKey {
+    DocumentType,
+    Name,
+    Owner,
+    PlatformTypes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentFilterKey),
+}
+
+impl Default for DocumentFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentFilterKey {
+    fn into(self) -> String {
+        match self {
+            DocumentFilterKey::DocumentType => "DocumentType".to_string(),
+            DocumentFilterKey::Name => "Name".to_string(),
+            DocumentFilterKey::Owner => "Owner".to_string(),
+            DocumentFilterKey::PlatformTypes => "PlatformTypes".to_string(),
+            DocumentFilterKey::UnknownVariant(UnknownDocumentFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentFilterKey::DocumentType => &"DocumentType",
+            DocumentFilterKey::Name => &"Name",
+            DocumentFilterKey::Owner => &"Owner",
+            DocumentFilterKey::PlatformTypes => &"PlatformTypes",
+            DocumentFilterKey::UnknownVariant(UnknownDocumentFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DocumentFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "DocumentType" => DocumentFilterKey::DocumentType,
+            "Name" => DocumentFilterKey::Name,
+            "Owner" => DocumentFilterKey::Owner,
+            "PlatformTypes" => DocumentFilterKey::PlatformTypes,
+            _ => DocumentFilterKey::UnknownVariant(UnknownDocumentFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DocumentType" => DocumentFilterKey::DocumentType,
+            "Name" => DocumentFilterKey::Name,
+            "Owner" => DocumentFilterKey::Owner,
+            "PlatformTypes" => DocumentFilterKey::PlatformTypes,
+            _ => DocumentFilterKey::UnknownVariant(UnknownDocumentFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DocumentFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentFormat {
+    Json,
+    Text,
+    Yaml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentFormat),
+}
+
+impl Default for DocumentFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentFormat {
+    fn into(self) -> String {
+        match self {
+            DocumentFormat::Json => "JSON".to_string(),
+            DocumentFormat::Text => "TEXT".to_string(),
+            DocumentFormat::Yaml => "YAML".to_string(),
+            DocumentFormat::UnknownVariant(UnknownDocumentFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentFormat {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentFormat::Json => &"JSON",
+            DocumentFormat::Text => &"TEXT",
+            DocumentFormat::Yaml => &"YAML",
+            DocumentFormat::UnknownVariant(UnknownDocumentFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => DocumentFormat::Json,
+            "TEXT" => DocumentFormat::Text,
+            "YAML" => DocumentFormat::Yaml,
+            _ => DocumentFormat::UnknownVariant(UnknownDocumentFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => DocumentFormat::Json,
+            "TEXT" => DocumentFormat::Text,
+            "YAML" => DocumentFormat::Yaml,
+            _ => DocumentFormat::UnknownVariant(UnknownDocumentFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentHashType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentHashType {
+    Sha1,
+    Sha256,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentHashType),
+}
+
+impl Default for DocumentHashType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentHashType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentHashType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentHashType {
+    fn into(self) -> String {
+        match self {
+            DocumentHashType::Sha1 => "Sha1".to_string(),
+            DocumentHashType::Sha256 => "Sha256".to_string(),
+            DocumentHashType::UnknownVariant(UnknownDocumentHashType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentHashType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentHashType::Sha1 => &"Sha1",
+            DocumentHashType::Sha256 => &"Sha256",
+            DocumentHashType::UnknownVariant(UnknownDocumentHashType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DocumentHashType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Sha1" => DocumentHashType::Sha1,
+            "Sha256" => DocumentHashType::Sha256,
+            _ => DocumentHashType::UnknownVariant(UnknownDocumentHashType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentHashType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Sha1" => DocumentHashType::Sha1,
+            "Sha256" => DocumentHashType::Sha256,
+            _ => DocumentHashType::UnknownVariant(UnknownDocumentHashType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentHashType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentHashType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentHashType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the name of a Systems Manager document.</p>
@@ -3195,11 +6398,11 @@ pub struct DocumentIdentifier {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>The document type.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_type: Option<String>,
+    pub document_type: Option<DocumentType>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3215,7 +6418,7 @@ pub struct DocumentIdentifier {
     /// <p>The operating system platform. </p>
     #[serde(rename = "PlatformTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_types: Option<Vec<String>>,
+    pub platform_types: Option<Vec<PlatformType>>,
     /// <p>A list of SSM documents required by a document. For example, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document.</p>
     #[serde(rename = "Requires")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3223,7 +6426,7 @@ pub struct DocumentIdentifier {
     /// <p>The current status of a document review.</p>
     #[serde(rename = "ReviewStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub review_status: Option<String>,
+    pub review_status: Option<ReviewStatus>,
     /// <p>The schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3256,6 +6459,106 @@ pub struct DocumentKeyValuesFilter {
     pub values: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentMetadataEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentMetadataEnum {
+    DocumentReviews,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentMetadataEnum),
+}
+
+impl Default for DocumentMetadataEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentMetadataEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentMetadataEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentMetadataEnum {
+    fn into(self) -> String {
+        match self {
+            DocumentMetadataEnum::DocumentReviews => "DocumentReviews".to_string(),
+            DocumentMetadataEnum::UnknownVariant(UnknownDocumentMetadataEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentMetadataEnum {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentMetadataEnum::DocumentReviews => &"DocumentReviews",
+            DocumentMetadataEnum::UnknownVariant(UnknownDocumentMetadataEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentMetadataEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "DocumentReviews" => DocumentMetadataEnum::DocumentReviews,
+            _ => DocumentMetadataEnum::UnknownVariant(UnknownDocumentMetadataEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentMetadataEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DocumentReviews" => DocumentMetadataEnum::DocumentReviews,
+            _ => DocumentMetadataEnum::UnknownVariant(UnknownDocumentMetadataEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentMetadataEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentMetadataEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DocumentMetadataEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details about the response to a document review request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3285,7 +6588,212 @@ pub struct DocumentParameter {
     /// <p>The type of parameter. The type can be either String or StringList.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DocumentParameterType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentParameterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentParameterType {
+    String,
+    StringList,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentParameterType),
+}
+
+impl Default for DocumentParameterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentParameterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentParameterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentParameterType {
+    fn into(self) -> String {
+        match self {
+            DocumentParameterType::String => "String".to_string(),
+            DocumentParameterType::StringList => "StringList".to_string(),
+            DocumentParameterType::UnknownVariant(UnknownDocumentParameterType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentParameterType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentParameterType::String => &"String",
+            DocumentParameterType::StringList => &"StringList",
+            DocumentParameterType::UnknownVariant(UnknownDocumentParameterType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentParameterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "String" => DocumentParameterType::String,
+            "StringList" => DocumentParameterType::StringList,
+            _ => DocumentParameterType::UnknownVariant(UnknownDocumentParameterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentParameterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "String" => DocumentParameterType::String,
+            "StringList" => DocumentParameterType::StringList,
+            _ => DocumentParameterType::UnknownVariant(UnknownDocumentParameterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DocumentParameterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentParameterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentPermissionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentPermissionType {
+    Share,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentPermissionType),
+}
+
+impl Default for DocumentPermissionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentPermissionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentPermissionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentPermissionType {
+    fn into(self) -> String {
+        match self {
+            DocumentPermissionType::Share => "Share".to_string(),
+            DocumentPermissionType::UnknownVariant(UnknownDocumentPermissionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentPermissionType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentPermissionType::Share => &"Share",
+            DocumentPermissionType::UnknownVariant(UnknownDocumentPermissionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentPermissionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Share" => DocumentPermissionType::Share,
+            _ => DocumentPermissionType::UnknownVariant(UnknownDocumentPermissionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentPermissionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Share" => DocumentPermissionType::Share,
+            _ => DocumentPermissionType::UnknownVariant(UnknownDocumentPermissionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentPermissionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentPermissionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DocumentPermissionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An SSM document required by the current document.</p>
@@ -3300,6 +6808,121 @@ pub struct DocumentRequires {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentReviewAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentReviewAction {
+    Approve,
+    Reject,
+    SendForReview,
+    UpdateReview,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentReviewAction),
+}
+
+impl Default for DocumentReviewAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentReviewAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentReviewAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentReviewAction {
+    fn into(self) -> String {
+        match self {
+            DocumentReviewAction::Approve => "Approve".to_string(),
+            DocumentReviewAction::Reject => "Reject".to_string(),
+            DocumentReviewAction::SendForReview => "SendForReview".to_string(),
+            DocumentReviewAction::UpdateReview => "UpdateReview".to_string(),
+            DocumentReviewAction::UnknownVariant(UnknownDocumentReviewAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentReviewAction {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentReviewAction::Approve => &"Approve",
+            DocumentReviewAction::Reject => &"Reject",
+            DocumentReviewAction::SendForReview => &"SendForReview",
+            DocumentReviewAction::UpdateReview => &"UpdateReview",
+            DocumentReviewAction::UnknownVariant(UnknownDocumentReviewAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentReviewAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approve" => DocumentReviewAction::Approve,
+            "Reject" => DocumentReviewAction::Reject,
+            "SendForReview" => DocumentReviewAction::SendForReview,
+            "UpdateReview" => DocumentReviewAction::UpdateReview,
+            _ => DocumentReviewAction::UnknownVariant(UnknownDocumentReviewAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentReviewAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approve" => DocumentReviewAction::Approve,
+            "Reject" => DocumentReviewAction::Reject,
+            "SendForReview" => DocumentReviewAction::SendForReview,
+            "UpdateReview" => DocumentReviewAction::UpdateReview,
+            _ => DocumentReviewAction::UnknownVariant(UnknownDocumentReviewAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentReviewAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentReviewAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DocumentReviewAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about comments added to a document review request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentReviewCommentSource {
@@ -3310,7 +6933,108 @@ pub struct DocumentReviewCommentSource {
     /// <p>The type of information added to a review request. Currently, only the value <code>Comment</code> is supported.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DocumentReviewCommentType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentReviewCommentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentReviewCommentType {
+    Comment,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentReviewCommentType),
+}
+
+impl Default for DocumentReviewCommentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentReviewCommentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentReviewCommentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentReviewCommentType {
+    fn into(self) -> String {
+        match self {
+            DocumentReviewCommentType::Comment => "Comment".to_string(),
+            DocumentReviewCommentType::UnknownVariant(UnknownDocumentReviewCommentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentReviewCommentType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentReviewCommentType::Comment => &"Comment",
+            DocumentReviewCommentType::UnknownVariant(UnknownDocumentReviewCommentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentReviewCommentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Comment" => DocumentReviewCommentType::Comment,
+            _ => DocumentReviewCommentType::UnknownVariant(UnknownDocumentReviewCommentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentReviewCommentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Comment" => DocumentReviewCommentType::Comment,
+            _ => {
+                DocumentReviewCommentType::UnknownVariant(UnknownDocumentReviewCommentType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentReviewCommentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentReviewCommentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentReviewCommentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a reviewer's response to a document review request.</p>
@@ -3328,7 +7052,7 @@ pub struct DocumentReviewerResponseSource {
     /// <p>The current review status of a new custom SSM document created by a member of your organization, or of the latest version of an existing SSM document.</p> <p>Only one version of a document can be in the APPROVED state at a time. When a new version is approved, the status of the previous version changes to REJECTED.</p> <p>Only one version of a document can be in review, or PENDING, at a time.</p>
     #[serde(rename = "ReviewStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub review_status: Option<String>,
+    pub review_status: Option<ReviewStatus>,
     /// <p>The user in your organization assigned to review a document request.</p>
     #[serde(rename = "Reviewer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3345,11 +7069,271 @@ pub struct DocumentReviewerResponseSource {
 pub struct DocumentReviews {
     /// <p>The action to take on a document approval review request.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: DocumentReviewAction,
     /// <p>A comment entered by a user in your organization about the document review request.</p>
     #[serde(rename = "Comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<Vec<DocumentReviewCommentSource>>,
+}
+
+/// <p>The status of a document.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentStatus {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentStatus),
+}
+
+impl Default for DocumentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentStatus {
+    fn into(self) -> String {
+        match self {
+            DocumentStatus::Active => "Active".to_string(),
+            DocumentStatus::Creating => "Creating".to_string(),
+            DocumentStatus::Deleting => "Deleting".to_string(),
+            DocumentStatus::Failed => "Failed".to_string(),
+            DocumentStatus::Updating => "Updating".to_string(),
+            DocumentStatus::UnknownVariant(UnknownDocumentStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentStatus::Active => &"Active",
+            DocumentStatus::Creating => &"Creating",
+            DocumentStatus::Deleting => &"Deleting",
+            DocumentStatus::Failed => &"Failed",
+            DocumentStatus::Updating => &"Updating",
+            DocumentStatus::UnknownVariant(UnknownDocumentStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => DocumentStatus::Active,
+            "Creating" => DocumentStatus::Creating,
+            "Deleting" => DocumentStatus::Deleting,
+            "Failed" => DocumentStatus::Failed,
+            "Updating" => DocumentStatus::Updating,
+            _ => DocumentStatus::UnknownVariant(UnknownDocumentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => DocumentStatus::Active,
+            "Creating" => DocumentStatus::Creating,
+            "Deleting" => DocumentStatus::Deleting,
+            "Failed" => DocumentStatus::Failed,
+            "Updating" => DocumentStatus::Updating,
+            _ => DocumentStatus::UnknownVariant(UnknownDocumentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DocumentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentType {
+    ApplicationConfiguration,
+    ApplicationConfigurationSchema,
+    Automation,
+    AutomationChangeTemplate,
+    ChangeCalendar,
+    Command,
+    DeploymentStrategy,
+    Package,
+    Policy,
+    Session,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentType),
+}
+
+impl Default for DocumentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentType {
+    fn into(self) -> String {
+        match self {
+            DocumentType::ApplicationConfiguration => "ApplicationConfiguration".to_string(),
+            DocumentType::ApplicationConfigurationSchema => {
+                "ApplicationConfigurationSchema".to_string()
+            }
+            DocumentType::Automation => "Automation".to_string(),
+            DocumentType::AutomationChangeTemplate => "Automation.ChangeTemplate".to_string(),
+            DocumentType::ChangeCalendar => "ChangeCalendar".to_string(),
+            DocumentType::Command => "Command".to_string(),
+            DocumentType::DeploymentStrategy => "DeploymentStrategy".to_string(),
+            DocumentType::Package => "Package".to_string(),
+            DocumentType::Policy => "Policy".to_string(),
+            DocumentType::Session => "Session".to_string(),
+            DocumentType::UnknownVariant(UnknownDocumentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentType::ApplicationConfiguration => &"ApplicationConfiguration",
+            DocumentType::ApplicationConfigurationSchema => &"ApplicationConfigurationSchema",
+            DocumentType::Automation => &"Automation",
+            DocumentType::AutomationChangeTemplate => &"Automation.ChangeTemplate",
+            DocumentType::ChangeCalendar => &"ChangeCalendar",
+            DocumentType::Command => &"Command",
+            DocumentType::DeploymentStrategy => &"DeploymentStrategy",
+            DocumentType::Package => &"Package",
+            DocumentType::Policy => &"Policy",
+            DocumentType::Session => &"Session",
+            DocumentType::UnknownVariant(UnknownDocumentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ApplicationConfiguration" => DocumentType::ApplicationConfiguration,
+            "ApplicationConfigurationSchema" => DocumentType::ApplicationConfigurationSchema,
+            "Automation" => DocumentType::Automation,
+            "Automation.ChangeTemplate" => DocumentType::AutomationChangeTemplate,
+            "ChangeCalendar" => DocumentType::ChangeCalendar,
+            "Command" => DocumentType::Command,
+            "DeploymentStrategy" => DocumentType::DeploymentStrategy,
+            "Package" => DocumentType::Package,
+            "Policy" => DocumentType::Policy,
+            "Session" => DocumentType::Session,
+            _ => DocumentType::UnknownVariant(UnknownDocumentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ApplicationConfiguration" => DocumentType::ApplicationConfiguration,
+            "ApplicationConfigurationSchema" => DocumentType::ApplicationConfigurationSchema,
+            "Automation" => DocumentType::Automation,
+            "Automation.ChangeTemplate" => DocumentType::AutomationChangeTemplate,
+            "ChangeCalendar" => DocumentType::ChangeCalendar,
+            "Command" => DocumentType::Command,
+            "DeploymentStrategy" => DocumentType::DeploymentStrategy,
+            "Package" => DocumentType::Package,
+            "Policy" => DocumentType::Policy,
+            "Session" => DocumentType::Session,
+            _ => DocumentType::UnknownVariant(UnknownDocumentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Version information about the document.</p>
@@ -3363,7 +7347,7 @@ pub struct DocumentVersionInfo {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3379,11 +7363,11 @@ pub struct DocumentVersionInfo {
     /// <p>The current status of the approval review for the latest version of the document.</p>
     #[serde(rename = "ReviewStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub review_status: Option<String>,
+    pub review_status: Option<ReviewStatus>,
     /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DocumentStatus>,
     /// <p>A message returned by AWS Systems Manager that explains the <code>Status</code> value. For example, a <code>Failed</code> status might be explained by the <code>StatusInformation</code> message, "The specified S3 bucket does not exist. Verify that the URL of the S3 bucket is correct."</p>
     #[serde(rename = "StatusInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3408,6 +7392,106 @@ pub struct EffectivePatch {
     pub patch_status: Option<PatchStatus>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExecutionMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExecutionMode {
+    Auto,
+    Interactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExecutionMode),
+}
+
+impl Default for ExecutionMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExecutionMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExecutionMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExecutionMode {
+    fn into(self) -> String {
+        match self {
+            ExecutionMode::Auto => "Auto".to_string(),
+            ExecutionMode::Interactive => "Interactive".to_string(),
+            ExecutionMode::UnknownVariant(UnknownExecutionMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExecutionMode {
+    fn into(self) -> &'a str {
+        match self {
+            ExecutionMode::Auto => &"Auto",
+            ExecutionMode::Interactive => &"Interactive",
+            ExecutionMode::UnknownVariant(UnknownExecutionMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExecutionMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Auto" => ExecutionMode::Auto,
+            "Interactive" => ExecutionMode::Interactive,
+            _ => ExecutionMode::UnknownVariant(UnknownExecutionMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExecutionMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Auto" => ExecutionMode::Auto,
+            "Interactive" => ExecutionMode::Interactive,
+            _ => ExecutionMode::UnknownVariant(UnknownExecutionMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExecutionMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExecutionMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a failed association.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3419,7 +7503,7 @@ pub struct FailedCreateAssociation {
     /// <p>The source of the failure.</p>
     #[serde(rename = "Fault")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fault: Option<String>,
+    pub fault: Option<Fault>,
     /// <p>A description of the failure.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3442,6 +7526,112 @@ pub struct FailureDetails {
     #[serde(rename = "FailureType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFault {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Fault {
+    Client,
+    Server,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFault),
+}
+
+impl Default for Fault {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Fault {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Fault {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Fault {
+    fn into(self) -> String {
+        match self {
+            Fault::Client => "Client".to_string(),
+            Fault::Server => "Server".to_string(),
+            Fault::Unknown => "Unknown".to_string(),
+            Fault::UnknownVariant(UnknownFault { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Fault {
+    fn into(self) -> &'a str {
+        match self {
+            Fault::Client => &"Client",
+            Fault::Server => &"Server",
+            Fault::Unknown => &"Unknown",
+            Fault::UnknownVariant(UnknownFault { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Fault {
+    fn from(name: &str) -> Self {
+        match name {
+            "Client" => Fault::Client,
+            "Server" => Fault::Server,
+            "Unknown" => Fault::Unknown,
+            _ => Fault::UnknownVariant(UnknownFault {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Fault {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Client" => Fault::Client,
+            "Server" => Fault::Server,
+            "Unknown" => Fault::Unknown,
+            _ => Fault::UnknownVariant(UnknownFault { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Fault {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Fault {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Fault {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3487,7 +7677,7 @@ pub struct GetCalendarStateResponse {
     /// <p>The state of the calendar. An <code>OPEN</code> calendar indicates that actions are allowed to proceed, and a <code>CLOSED</code> calendar indicates that actions are not allowed to proceed.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CalendarState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3571,7 +7761,7 @@ pub struct GetCommandInvocationResult {
     /// <p>The status of this invocation plugin. This status can be different than StatusDetails.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CommandInvocationStatus>,
     /// <p><p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding command statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, because the instance was stopped, or for similar reasons. The system will try to send the command again.</p> </li> <li> <p>Success: The command or plugin ran successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to run on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn&#39;t run successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3592,7 +7782,7 @@ pub struct GetConnectionStatusResponse {
     /// <p>The status of the connection to the instance. For example, 'Connected' or 'Not Connected'.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ConnectionStatus>,
     /// <p>The ID of the instance to check connection status. </p>
     #[serde(rename = "Target")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3605,7 +7795,7 @@ pub struct GetDefaultPatchBaselineRequest {
     /// <p>Returns the default patch baseline for the specified operating system.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3618,7 +7808,7 @@ pub struct GetDefaultPatchBaselineResult {
     /// <p>The operating system for the returned patch baseline. </p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3659,7 +7849,7 @@ pub struct GetDocumentRequest {
     /// <p>Returns the document in the specified format. The document format can be either JSON or YAML. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>The document version for which you want information.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3687,11 +7877,11 @@ pub struct GetDocumentResult {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>The document type.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_type: Option<String>,
+    pub document_type: Option<DocumentType>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3707,11 +7897,11 @@ pub struct GetDocumentResult {
     /// <p>The current review status of a new custom Systems Manager document (SSM document) created by a member of your organization, or of the latest version of an existing SSM document.</p> <p>Only one version of an SSM document can be in the APPROVED state at a time. When a new version is approved, the status of the previous version changes to REJECTED.</p> <p>Only one version of an SSM document can be in review, or PENDING, at a time.</p>
     #[serde(rename = "ReviewStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub review_status: Option<String>,
+    pub review_status: Option<ReviewStatus>,
     /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Updating</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DocumentStatus>,
     /// <p>A message returned by AWS Systems Manager that explains the <code>Status</code> value. For example, a <code>Failed</code> status might be explained by the <code>StatusInformation</code> message, "The specified S3 bucket does not exist. Verify that the URL of the S3 bucket is correct."</p>
     #[serde(rename = "StatusInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3820,7 +8010,7 @@ pub struct GetMaintenanceWindowExecutionResult {
     /// <p>The status of the maintenance window execution.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MaintenanceWindowExecutionStatus>,
     /// <p>The details explaining the Status. Only available for certain status values.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3879,7 +8069,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     /// <p>The task status for an invocation.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MaintenanceWindowExecutionStatus>,
     /// <p>The details explaining the status. Details are only available for certain status values.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3891,7 +8081,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     /// <p>Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTIONS, AUTOMATION, RUN_COMMAND.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_type: Option<String>,
+    pub task_type: Option<MaintenanceWindowTaskType>,
     /// <p>The maintenance window execution ID.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3943,7 +8133,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     /// <p>The status of the task.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MaintenanceWindowExecutionStatus>,
     /// <p>The details explaining the Status. Only available for certain status values.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3965,7 +8155,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     /// <p>The type of task that was run.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<MaintenanceWindowTaskType>,
     /// <p>The ID of the maintenance window execution that includes the task.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4107,7 +8297,7 @@ pub struct GetMaintenanceWindowTaskResult {
     /// <p>The type of task to run.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_type: Option<String>,
+    pub task_type: Option<MaintenanceWindowTaskType>,
     /// <p>The retrieved maintenance window ID.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4336,7 +8526,7 @@ pub struct GetPatchBaselineForPatchGroupRequest {
     /// <p>Returns he operating system rule specified for patch groups using the patch baseline.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>The name of the patch group whose patch baseline should be retrieved.</p>
     #[serde(rename = "PatchGroup")]
     pub patch_group: String,
@@ -4352,7 +8542,7 @@ pub struct GetPatchBaselineForPatchGroupResult {
     /// <p>The operating system rule specified for patch groups using the patch baseline.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>The name of the patch group.</p>
     #[serde(rename = "PatchGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4381,7 +8571,7 @@ pub struct GetPatchBaselineResult {
     /// <p>Returns the specified compliance severity level for approved patches in the patch baseline.</p>
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub approved_patches_compliance_level: Option<String>,
+    pub approved_patches_compliance_level: Option<PatchComplianceLevel>,
     /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
     #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4413,7 +8603,7 @@ pub struct GetPatchBaselineResult {
     /// <p>Returns the operating system specified for the patch baseline.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>Patch groups included in the patch baseline.</p>
     #[serde(rename = "PatchGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4425,7 +8615,7 @@ pub struct GetPatchBaselineResult {
     /// <p>The action specified to take on patches included in the RejectedPatches list. A patch can be allowed only if it is a dependency of another package, or blocked entirely along with packages that include it as a dependency.</p>
     #[serde(rename = "RejectedPatchesAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rejected_patches_action: Option<String>,
+    pub rejected_patches_action: Option<PatchAction>,
     /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4620,7 +8810,7 @@ pub struct InstanceInformation {
     /// <p><p>Connection status of SSM Agent. </p> <note> <p>The status <code>Inactive</code> has been deprecated and is no longer in use.</p> </note></p>
     #[serde(rename = "PingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ping_status: Option<String>,
+    pub ping_status: Option<PingStatus>,
     /// <p>The name of the operating system platform running on your instance. </p>
     #[serde(rename = "PlatformName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4628,7 +8818,7 @@ pub struct InstanceInformation {
     /// <p>The operating system platform type. </p>
     #[serde(rename = "PlatformType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform_type: Option<String>,
+    pub platform_type: Option<PlatformType>,
     /// <p>The version of the OS platform running on your instance. </p>
     #[serde(rename = "PlatformVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4640,7 +8830,7 @@ pub struct InstanceInformation {
     /// <p>The type of instance. Instances are either EC2 instances or managed instances. </p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>Describes a filter for a specific list of instances. You can filter instances information by using tags. You specify tags by using a key-value mapping.</p> <p>Use this action instead of the <a>DescribeInstanceInformationRequest$InstanceInformationFilterList</a> method. The <code>InstanceInformationFilterList</code> method is a legacy method and does not support tags. </p>
@@ -4649,10 +8839,151 @@ pub struct InstanceInformation {
 pub struct InstanceInformationFilter {
     /// <p>The name of the filter. </p>
     #[serde(rename = "key")]
-    pub key: String,
+    pub key: InstanceInformationFilterKey,
     /// <p>The filter values.</p>
     #[serde(rename = "valueSet")]
     pub value_set: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceInformationFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceInformationFilterKey {
+    ActivationIds,
+    AgentVersion,
+    AssociationStatus,
+    IamRole,
+    InstanceIds,
+    PingStatus,
+    PlatformTypes,
+    ResourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceInformationFilterKey),
+}
+
+impl Default for InstanceInformationFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceInformationFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceInformationFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceInformationFilterKey {
+    fn into(self) -> String {
+        match self {
+            InstanceInformationFilterKey::ActivationIds => "ActivationIds".to_string(),
+            InstanceInformationFilterKey::AgentVersion => "AgentVersion".to_string(),
+            InstanceInformationFilterKey::AssociationStatus => "AssociationStatus".to_string(),
+            InstanceInformationFilterKey::IamRole => "IamRole".to_string(),
+            InstanceInformationFilterKey::InstanceIds => "InstanceIds".to_string(),
+            InstanceInformationFilterKey::PingStatus => "PingStatus".to_string(),
+            InstanceInformationFilterKey::PlatformTypes => "PlatformTypes".to_string(),
+            InstanceInformationFilterKey::ResourceType => "ResourceType".to_string(),
+            InstanceInformationFilterKey::UnknownVariant(UnknownInstanceInformationFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceInformationFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceInformationFilterKey::ActivationIds => &"ActivationIds",
+            InstanceInformationFilterKey::AgentVersion => &"AgentVersion",
+            InstanceInformationFilterKey::AssociationStatus => &"AssociationStatus",
+            InstanceInformationFilterKey::IamRole => &"IamRole",
+            InstanceInformationFilterKey::InstanceIds => &"InstanceIds",
+            InstanceInformationFilterKey::PingStatus => &"PingStatus",
+            InstanceInformationFilterKey::PlatformTypes => &"PlatformTypes",
+            InstanceInformationFilterKey::ResourceType => &"ResourceType",
+            InstanceInformationFilterKey::UnknownVariant(UnknownInstanceInformationFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceInformationFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActivationIds" => InstanceInformationFilterKey::ActivationIds,
+            "AgentVersion" => InstanceInformationFilterKey::AgentVersion,
+            "AssociationStatus" => InstanceInformationFilterKey::AssociationStatus,
+            "IamRole" => InstanceInformationFilterKey::IamRole,
+            "InstanceIds" => InstanceInformationFilterKey::InstanceIds,
+            "PingStatus" => InstanceInformationFilterKey::PingStatus,
+            "PlatformTypes" => InstanceInformationFilterKey::PlatformTypes,
+            "ResourceType" => InstanceInformationFilterKey::ResourceType,
+            _ => {
+                InstanceInformationFilterKey::UnknownVariant(UnknownInstanceInformationFilterKey {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for InstanceInformationFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActivationIds" => InstanceInformationFilterKey::ActivationIds,
+            "AgentVersion" => InstanceInformationFilterKey::AgentVersion,
+            "AssociationStatus" => InstanceInformationFilterKey::AssociationStatus,
+            "IamRole" => InstanceInformationFilterKey::IamRole,
+            "InstanceIds" => InstanceInformationFilterKey::InstanceIds,
+            "PingStatus" => InstanceInformationFilterKey::PingStatus,
+            "PlatformTypes" => InstanceInformationFilterKey::PlatformTypes,
+            "ResourceType" => InstanceInformationFilterKey::ResourceType,
+            _ => {
+                InstanceInformationFilterKey::UnknownVariant(UnknownInstanceInformationFilterKey {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceInformationFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceInformationFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstanceInformationFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The filters to describe or get information about your managed instances.</p>
@@ -4715,7 +9046,7 @@ pub struct InstancePatchState {
     pub not_applicable_count: Option<i64>,
     /// <p>The type of patching operation that was performed: <code>SCAN</code> (assess patch compliance state) or <code>INSTALL</code> (install missing patches).</p>
     #[serde(rename = "Operation")]
-    pub operation: String,
+    pub operation: PatchOperationType,
     /// <p>The time the most recent patching operation completed on the instance.</p>
     #[serde(rename = "OperationEndTime")]
     pub operation_end_time: f64,
@@ -4732,7 +9063,7 @@ pub struct InstancePatchState {
     /// <p><p>Indicates the reboot option specified in the patch baseline.</p> <note> <p>Reboot options apply to <code>Install</code> operations only. Reboots are not attempted for Patch Manager <code>Scan</code> operations.</p> </note> <ul> <li> <p> <b>RebootIfNeeded</b>: Patch Manager tries to reboot the instance if it installed any patches, or if any patches are detected with a status of <code>InstalledPendingReboot</code>.</p> </li> <li> <p> <b>NoReboot</b>: Patch Manager attempts to install missing packages without trying to reboot the system. Patches installed with this option are assigned a status of <code>InstalledPendingReboot</code>. These patches might not be in effect until a reboot is performed.</p> </li> </ul></p>
     #[serde(rename = "RebootOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reboot_option: Option<String>,
+    pub reboot_option: Option<RebootOption>,
     /// <p>The ID of the patch baseline snapshot used during the patching operation when this compliance data was collected.</p>
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4752,10 +9083,129 @@ pub struct InstancePatchStateFilter {
     pub key: String,
     /// <p>The type of comparison that should be performed for the value: Equal, NotEqual, LessThan or GreaterThan.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: InstancePatchStateOperatorType,
     /// <p>The value for the filter, must be an integer greater than or equal to 0.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstancePatchStateOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstancePatchStateOperatorType {
+    Equal,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstancePatchStateOperatorType),
+}
+
+impl Default for InstancePatchStateOperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstancePatchStateOperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstancePatchStateOperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstancePatchStateOperatorType {
+    fn into(self) -> String {
+        match self {
+            InstancePatchStateOperatorType::Equal => "Equal".to_string(),
+            InstancePatchStateOperatorType::GreaterThan => "GreaterThan".to_string(),
+            InstancePatchStateOperatorType::LessThan => "LessThan".to_string(),
+            InstancePatchStateOperatorType::NotEqual => "NotEqual".to_string(),
+            InstancePatchStateOperatorType::UnknownVariant(
+                UnknownInstancePatchStateOperatorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstancePatchStateOperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            InstancePatchStateOperatorType::Equal => &"Equal",
+            InstancePatchStateOperatorType::GreaterThan => &"GreaterThan",
+            InstancePatchStateOperatorType::LessThan => &"LessThan",
+            InstancePatchStateOperatorType::NotEqual => &"NotEqual",
+            InstancePatchStateOperatorType::UnknownVariant(
+                UnknownInstancePatchStateOperatorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InstancePatchStateOperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Equal" => InstancePatchStateOperatorType::Equal,
+            "GreaterThan" => InstancePatchStateOperatorType::GreaterThan,
+            "LessThan" => InstancePatchStateOperatorType::LessThan,
+            "NotEqual" => InstancePatchStateOperatorType::NotEqual,
+            _ => InstancePatchStateOperatorType::UnknownVariant(
+                UnknownInstancePatchStateOperatorType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InstancePatchStateOperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Equal" => InstancePatchStateOperatorType::Equal,
+            "GreaterThan" => InstancePatchStateOperatorType::GreaterThan,
+            "LessThan" => InstancePatchStateOperatorType::LessThan,
+            "NotEqual" => InstancePatchStateOperatorType::NotEqual,
+            _ => InstancePatchStateOperatorType::UnknownVariant(
+                UnknownInstancePatchStateOperatorType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstancePatchStateOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstancePatchStateOperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InstancePatchStateOperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the inventory type and attribute for the aggregation execution.</p>
@@ -4774,6 +9224,218 @@ pub struct InventoryAggregator {
     #[serde(rename = "Groups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<InventoryGroup>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryAttributeDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryAttributeDataType {
+    Number,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryAttributeDataType),
+}
+
+impl Default for InventoryAttributeDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryAttributeDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryAttributeDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryAttributeDataType {
+    fn into(self) -> String {
+        match self {
+            InventoryAttributeDataType::Number => "number".to_string(),
+            InventoryAttributeDataType::String => "string".to_string(),
+            InventoryAttributeDataType::UnknownVariant(UnknownInventoryAttributeDataType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryAttributeDataType {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryAttributeDataType::Number => &"number",
+            InventoryAttributeDataType::String => &"string",
+            InventoryAttributeDataType::UnknownVariant(UnknownInventoryAttributeDataType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryAttributeDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "number" => InventoryAttributeDataType::Number,
+            "string" => InventoryAttributeDataType::String,
+            _ => InventoryAttributeDataType::UnknownVariant(UnknownInventoryAttributeDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryAttributeDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "number" => InventoryAttributeDataType::Number,
+            "string" => InventoryAttributeDataType::String,
+            _ => InventoryAttributeDataType::UnknownVariant(UnknownInventoryAttributeDataType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryAttributeDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InventoryAttributeDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InventoryAttributeDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryDeletionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryDeletionStatus {
+    Complete,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryDeletionStatus),
+}
+
+impl Default for InventoryDeletionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryDeletionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryDeletionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryDeletionStatus {
+    fn into(self) -> String {
+        match self {
+            InventoryDeletionStatus::Complete => "Complete".to_string(),
+            InventoryDeletionStatus::InProgress => "InProgress".to_string(),
+            InventoryDeletionStatus::UnknownVariant(UnknownInventoryDeletionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryDeletionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryDeletionStatus::Complete => &"Complete",
+            InventoryDeletionStatus::InProgress => &"InProgress",
+            InventoryDeletionStatus::UnknownVariant(UnknownInventoryDeletionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryDeletionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Complete" => InventoryDeletionStatus::Complete,
+            "InProgress" => InventoryDeletionStatus::InProgress,
+            _ => InventoryDeletionStatus::UnknownVariant(UnknownInventoryDeletionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryDeletionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Complete" => InventoryDeletionStatus::Complete,
+            "InProgress" => InventoryDeletionStatus::InProgress,
+            _ => InventoryDeletionStatus::UnknownVariant(UnknownInventoryDeletionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryDeletionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InventoryDeletionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InventoryDeletionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Status information returned by the <code>DeleteInventory</code> action.</p>
@@ -4795,7 +9457,7 @@ pub struct InventoryDeletionStatusItem {
     /// <p>The status of the operation. Possible values are InProgress and Complete.</p>
     #[serde(rename = "LastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status: Option<String>,
+    pub last_status: Option<InventoryDeletionStatus>,
     /// <p>Information about the status.</p>
     #[serde(rename = "LastStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4856,7 +9518,7 @@ pub struct InventoryFilter {
     /// <p><p>The type of filter.</p> <note> <p>The <code>Exists</code> filter must be used with aggregators. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-aggregate.html">Aggregating inventory data</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<InventoryQueryOperatorType>,
     /// <p>Inventory filter values. Example: inventory filter where instance IDs are specified as values Key=AWS:InstanceInformation.InstanceId,Values= i-a12b3c4d5e6g, i-1a2b3c4d5e6,Type=Equal </p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
@@ -4907,7 +9569,7 @@ pub struct InventoryItem {
 pub struct InventoryItemAttribute {
     /// <p>The data type of the inventory item attribute. </p>
     #[serde(rename = "DataType")]
-    pub data_type: String,
+    pub data_type: InventoryAttributeDataType,
     /// <p>Name of the inventory item attribute.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -4931,6 +9593,133 @@ pub struct InventoryItemSchema {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryQueryOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryQueryOperatorType {
+    BeginWith,
+    Equal,
+    Exists,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryQueryOperatorType),
+}
+
+impl Default for InventoryQueryOperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryQueryOperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryQueryOperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryQueryOperatorType {
+    fn into(self) -> String {
+        match self {
+            InventoryQueryOperatorType::BeginWith => "BeginWith".to_string(),
+            InventoryQueryOperatorType::Equal => "Equal".to_string(),
+            InventoryQueryOperatorType::Exists => "Exists".to_string(),
+            InventoryQueryOperatorType::GreaterThan => "GreaterThan".to_string(),
+            InventoryQueryOperatorType::LessThan => "LessThan".to_string(),
+            InventoryQueryOperatorType::NotEqual => "NotEqual".to_string(),
+            InventoryQueryOperatorType::UnknownVariant(UnknownInventoryQueryOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryQueryOperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryQueryOperatorType::BeginWith => &"BeginWith",
+            InventoryQueryOperatorType::Equal => &"Equal",
+            InventoryQueryOperatorType::Exists => &"Exists",
+            InventoryQueryOperatorType::GreaterThan => &"GreaterThan",
+            InventoryQueryOperatorType::LessThan => &"LessThan",
+            InventoryQueryOperatorType::NotEqual => &"NotEqual",
+            InventoryQueryOperatorType::UnknownVariant(UnknownInventoryQueryOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryQueryOperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BeginWith" => InventoryQueryOperatorType::BeginWith,
+            "Equal" => InventoryQueryOperatorType::Equal,
+            "Exists" => InventoryQueryOperatorType::Exists,
+            "GreaterThan" => InventoryQueryOperatorType::GreaterThan,
+            "LessThan" => InventoryQueryOperatorType::LessThan,
+            "NotEqual" => InventoryQueryOperatorType::NotEqual,
+            _ => InventoryQueryOperatorType::UnknownVariant(UnknownInventoryQueryOperatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryQueryOperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BeginWith" => InventoryQueryOperatorType::BeginWith,
+            "Equal" => InventoryQueryOperatorType::Equal,
+            "Exists" => InventoryQueryOperatorType::Exists,
+            "GreaterThan" => InventoryQueryOperatorType::GreaterThan,
+            "LessThan" => InventoryQueryOperatorType::LessThan,
+            "NotEqual" => InventoryQueryOperatorType::NotEqual,
+            _ => InventoryQueryOperatorType::UnknownVariant(UnknownInventoryQueryOperatorType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryQueryOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InventoryQueryOperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventoryQueryOperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Inventory query results.</p>
@@ -4970,6 +9759,113 @@ pub struct InventoryResultItem {
     pub type_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventorySchemaDeleteOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventorySchemaDeleteOption {
+    DeleteSchema,
+    DisableSchema,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventorySchemaDeleteOption),
+}
+
+impl Default for InventorySchemaDeleteOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventorySchemaDeleteOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventorySchemaDeleteOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventorySchemaDeleteOption {
+    fn into(self) -> String {
+        match self {
+            InventorySchemaDeleteOption::DeleteSchema => "DeleteSchema".to_string(),
+            InventorySchemaDeleteOption::DisableSchema => "DisableSchema".to_string(),
+            InventorySchemaDeleteOption::UnknownVariant(UnknownInventorySchemaDeleteOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventorySchemaDeleteOption {
+    fn into(self) -> &'a str {
+        match self {
+            InventorySchemaDeleteOption::DeleteSchema => &"DeleteSchema",
+            InventorySchemaDeleteOption::DisableSchema => &"DisableSchema",
+            InventorySchemaDeleteOption::UnknownVariant(UnknownInventorySchemaDeleteOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventorySchemaDeleteOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "DeleteSchema" => InventorySchemaDeleteOption::DeleteSchema,
+            "DisableSchema" => InventorySchemaDeleteOption::DisableSchema,
+            _ => InventorySchemaDeleteOption::UnknownVariant(UnknownInventorySchemaDeleteOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventorySchemaDeleteOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DeleteSchema" => InventorySchemaDeleteOption::DeleteSchema,
+            "DisableSchema" => InventorySchemaDeleteOption::DisableSchema,
+            _ => InventorySchemaDeleteOption::UnknownVariant(UnknownInventorySchemaDeleteOption {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventorySchemaDeleteOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InventorySchemaDeleteOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventorySchemaDeleteOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LabelParameterVersionRequest {
@@ -4996,6 +9892,118 @@ pub struct LabelParameterVersionResult {
     #[serde(rename = "ParameterVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_version: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLastResourceDataSyncStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LastResourceDataSyncStatus {
+    Failed,
+    InProgress,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLastResourceDataSyncStatus),
+}
+
+impl Default for LastResourceDataSyncStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LastResourceDataSyncStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LastResourceDataSyncStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LastResourceDataSyncStatus {
+    fn into(self) -> String {
+        match self {
+            LastResourceDataSyncStatus::Failed => "Failed".to_string(),
+            LastResourceDataSyncStatus::InProgress => "InProgress".to_string(),
+            LastResourceDataSyncStatus::Successful => "Successful".to_string(),
+            LastResourceDataSyncStatus::UnknownVariant(UnknownLastResourceDataSyncStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LastResourceDataSyncStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LastResourceDataSyncStatus::Failed => &"Failed",
+            LastResourceDataSyncStatus::InProgress => &"InProgress",
+            LastResourceDataSyncStatus::Successful => &"Successful",
+            LastResourceDataSyncStatus::UnknownVariant(UnknownLastResourceDataSyncStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LastResourceDataSyncStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => LastResourceDataSyncStatus::Failed,
+            "InProgress" => LastResourceDataSyncStatus::InProgress,
+            "Successful" => LastResourceDataSyncStatus::Successful,
+            _ => LastResourceDataSyncStatus::UnknownVariant(UnknownLastResourceDataSyncStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LastResourceDataSyncStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => LastResourceDataSyncStatus::Failed,
+            "InProgress" => LastResourceDataSyncStatus::InProgress,
+            "Successful" => LastResourceDataSyncStatus::Successful,
+            _ => LastResourceDataSyncStatus::UnknownVariant(UnknownLastResourceDataSyncStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LastResourceDataSyncStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LastResourceDataSyncStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LastResourceDataSyncStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5218,7 +10226,7 @@ pub struct ListDocumentMetadataHistoryRequest {
     pub max_results: Option<i64>,
     /// <p>The type of data for which details are being requested. Currently, the only supported value is <code>DocumentReviews</code>.</p>
     #[serde(rename = "Metadata")]
-    pub metadata: String,
+    pub metadata: DocumentMetadataEnum,
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -5496,7 +10504,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_id: String,
     /// <p>Returns a list of tags for a specific resource type.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceTypeForTagging,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5551,7 +10559,7 @@ pub struct MaintenanceWindowExecution {
     /// <p>The status of the execution.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MaintenanceWindowExecutionStatus>,
     /// <p>The details explaining the Status. Only available for certain status values.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5564,6 +10572,147 @@ pub struct MaintenanceWindowExecution {
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMaintenanceWindowExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MaintenanceWindowExecutionStatus {
+    Cancelled,
+    Cancelling,
+    Failed,
+    InProgress,
+    Pending,
+    SkippedOverlapping,
+    Success,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMaintenanceWindowExecutionStatus),
+}
+
+impl Default for MaintenanceWindowExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MaintenanceWindowExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MaintenanceWindowExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MaintenanceWindowExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            MaintenanceWindowExecutionStatus::Cancelled => "CANCELLED".to_string(),
+            MaintenanceWindowExecutionStatus::Cancelling => "CANCELLING".to_string(),
+            MaintenanceWindowExecutionStatus::Failed => "FAILED".to_string(),
+            MaintenanceWindowExecutionStatus::InProgress => "IN_PROGRESS".to_string(),
+            MaintenanceWindowExecutionStatus::Pending => "PENDING".to_string(),
+            MaintenanceWindowExecutionStatus::SkippedOverlapping => {
+                "SKIPPED_OVERLAPPING".to_string()
+            }
+            MaintenanceWindowExecutionStatus::Success => "SUCCESS".to_string(),
+            MaintenanceWindowExecutionStatus::TimedOut => "TIMED_OUT".to_string(),
+            MaintenanceWindowExecutionStatus::UnknownVariant(
+                UnknownMaintenanceWindowExecutionStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MaintenanceWindowExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MaintenanceWindowExecutionStatus::Cancelled => &"CANCELLED",
+            MaintenanceWindowExecutionStatus::Cancelling => &"CANCELLING",
+            MaintenanceWindowExecutionStatus::Failed => &"FAILED",
+            MaintenanceWindowExecutionStatus::InProgress => &"IN_PROGRESS",
+            MaintenanceWindowExecutionStatus::Pending => &"PENDING",
+            MaintenanceWindowExecutionStatus::SkippedOverlapping => &"SKIPPED_OVERLAPPING",
+            MaintenanceWindowExecutionStatus::Success => &"SUCCESS",
+            MaintenanceWindowExecutionStatus::TimedOut => &"TIMED_OUT",
+            MaintenanceWindowExecutionStatus::UnknownVariant(
+                UnknownMaintenanceWindowExecutionStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for MaintenanceWindowExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => MaintenanceWindowExecutionStatus::Cancelled,
+            "CANCELLING" => MaintenanceWindowExecutionStatus::Cancelling,
+            "FAILED" => MaintenanceWindowExecutionStatus::Failed,
+            "IN_PROGRESS" => MaintenanceWindowExecutionStatus::InProgress,
+            "PENDING" => MaintenanceWindowExecutionStatus::Pending,
+            "SKIPPED_OVERLAPPING" => MaintenanceWindowExecutionStatus::SkippedOverlapping,
+            "SUCCESS" => MaintenanceWindowExecutionStatus::Success,
+            "TIMED_OUT" => MaintenanceWindowExecutionStatus::TimedOut,
+            _ => MaintenanceWindowExecutionStatus::UnknownVariant(
+                UnknownMaintenanceWindowExecutionStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for MaintenanceWindowExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => MaintenanceWindowExecutionStatus::Cancelled,
+            "CANCELLING" => MaintenanceWindowExecutionStatus::Cancelling,
+            "FAILED" => MaintenanceWindowExecutionStatus::Failed,
+            "IN_PROGRESS" => MaintenanceWindowExecutionStatus::InProgress,
+            "PENDING" => MaintenanceWindowExecutionStatus::Pending,
+            "SKIPPED_OVERLAPPING" => MaintenanceWindowExecutionStatus::SkippedOverlapping,
+            "SUCCESS" => MaintenanceWindowExecutionStatus::Success,
+            "TIMED_OUT" => MaintenanceWindowExecutionStatus::TimedOut,
+            _ => MaintenanceWindowExecutionStatus::UnknownVariant(
+                UnknownMaintenanceWindowExecutionStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceWindowExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MaintenanceWindowExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MaintenanceWindowExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a task execution performed as part of a maintenance window execution.</p>
@@ -5581,7 +10730,7 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
     /// <p>The status of the task execution.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MaintenanceWindowExecutionStatus>,
     /// <p>The details explaining the status of the task execution. Only available for certain status values.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5597,7 +10746,7 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
     /// <p>The type of task that ran.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_type: Option<String>,
+    pub task_type: Option<MaintenanceWindowTaskType>,
     /// <p>The ID of the maintenance window execution that ran the task.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5635,7 +10784,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     /// <p>The status of the task invocation.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MaintenanceWindowExecutionStatus>,
     /// <p>The details explaining the status of the task invocation. Only available for certain Status values. </p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5647,7 +10796,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     /// <p>The task type.</p>
     #[serde(rename = "TaskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_type: Option<String>,
+    pub task_type: Option<MaintenanceWindowTaskType>,
     /// <p>The ID of the maintenance window execution that ran the task.</p>
     #[serde(rename = "WindowExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5762,6 +10911,114 @@ pub struct MaintenanceWindowLambdaParameters {
     pub qualifier: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMaintenanceWindowResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MaintenanceWindowResourceType {
+    Instance,
+    ResourceGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMaintenanceWindowResourceType),
+}
+
+impl Default for MaintenanceWindowResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MaintenanceWindowResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MaintenanceWindowResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MaintenanceWindowResourceType {
+    fn into(self) -> String {
+        match self {
+            MaintenanceWindowResourceType::Instance => "INSTANCE".to_string(),
+            MaintenanceWindowResourceType::ResourceGroup => "RESOURCE_GROUP".to_string(),
+            MaintenanceWindowResourceType::UnknownVariant(
+                UnknownMaintenanceWindowResourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MaintenanceWindowResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            MaintenanceWindowResourceType::Instance => &"INSTANCE",
+            MaintenanceWindowResourceType::ResourceGroup => &"RESOURCE_GROUP",
+            MaintenanceWindowResourceType::UnknownVariant(
+                UnknownMaintenanceWindowResourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for MaintenanceWindowResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSTANCE" => MaintenanceWindowResourceType::Instance,
+            "RESOURCE_GROUP" => MaintenanceWindowResourceType::ResourceGroup,
+            _ => MaintenanceWindowResourceType::UnknownVariant(
+                UnknownMaintenanceWindowResourceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for MaintenanceWindowResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSTANCE" => MaintenanceWindowResourceType::Instance,
+            "RESOURCE_GROUP" => MaintenanceWindowResourceType::ResourceGroup,
+            _ => MaintenanceWindowResourceType::UnknownVariant(
+                UnknownMaintenanceWindowResourceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceWindowResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MaintenanceWindowResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MaintenanceWindowResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>The parameters for a RUN_COMMAND task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Run Command tasks, Systems Manager uses specified values for <code>TaskParameters</code> and <code>LoggingInfo</code> only if no values are specified for <code>TaskInvocationParameters</code>. </p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MaintenanceWindowRunCommandParameters {
@@ -5779,7 +11036,7 @@ pub struct MaintenanceWindowRunCommandParameters {
     /// <p>SHA-256 or SHA-1. SHA-1 hashes have been deprecated.</p>
     #[serde(rename = "DocumentHashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_hash_type: Option<String>,
+    pub document_hash_type: Option<DocumentHashType>,
     /// <p>The SSM document version to use in the request. You can specify $DEFAULT, $LATEST, or a specific version number. If you run commands by using the AWS CLI, then you must escape the first two options by using a backslash. If you specify a version number, then you don't need to use the backslash. For example:</p> <p>--document-version "\$DEFAULT"</p> <p>--document-version "\$LATEST"</p> <p>--document-version "3"</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5842,7 +11099,7 @@ pub struct MaintenanceWindowTarget {
     /// <p>The type of target that is being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<MaintenanceWindowResourceType>,
     /// <p>The targets, either instances or tags.</p> <p>Specify instances using the following format:</p> <p> <code>Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;</code> </p> <p>Tags are specified using the following format:</p> <p> <code>Key=&lt;tag name&gt;,Values=&lt;tag value&gt;</code>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5905,7 +11162,7 @@ pub struct MaintenanceWindowTask {
     /// <p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTIONS.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<MaintenanceWindowTaskType>,
     /// <p>The ID of the maintenance window where the task is registered.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5946,6 +11203,122 @@ pub struct MaintenanceWindowTaskParameterValueExpression {
     pub values: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMaintenanceWindowTaskType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MaintenanceWindowTaskType {
+    Automation,
+    Lambda,
+    RunCommand,
+    StepFunctions,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMaintenanceWindowTaskType),
+}
+
+impl Default for MaintenanceWindowTaskType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MaintenanceWindowTaskType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MaintenanceWindowTaskType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MaintenanceWindowTaskType {
+    fn into(self) -> String {
+        match self {
+            MaintenanceWindowTaskType::Automation => "AUTOMATION".to_string(),
+            MaintenanceWindowTaskType::Lambda => "LAMBDA".to_string(),
+            MaintenanceWindowTaskType::RunCommand => "RUN_COMMAND".to_string(),
+            MaintenanceWindowTaskType::StepFunctions => "STEP_FUNCTIONS".to_string(),
+            MaintenanceWindowTaskType::UnknownVariant(UnknownMaintenanceWindowTaskType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MaintenanceWindowTaskType {
+    fn into(self) -> &'a str {
+        match self {
+            MaintenanceWindowTaskType::Automation => &"AUTOMATION",
+            MaintenanceWindowTaskType::Lambda => &"LAMBDA",
+            MaintenanceWindowTaskType::RunCommand => &"RUN_COMMAND",
+            MaintenanceWindowTaskType::StepFunctions => &"STEP_FUNCTIONS",
+            MaintenanceWindowTaskType::UnknownVariant(UnknownMaintenanceWindowTaskType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MaintenanceWindowTaskType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOMATION" => MaintenanceWindowTaskType::Automation,
+            "LAMBDA" => MaintenanceWindowTaskType::Lambda,
+            "RUN_COMMAND" => MaintenanceWindowTaskType::RunCommand,
+            "STEP_FUNCTIONS" => MaintenanceWindowTaskType::StepFunctions,
+            _ => MaintenanceWindowTaskType::UnknownVariant(UnknownMaintenanceWindowTaskType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MaintenanceWindowTaskType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOMATION" => MaintenanceWindowTaskType::Automation,
+            "LAMBDA" => MaintenanceWindowTaskType::Lambda,
+            "RUN_COMMAND" => MaintenanceWindowTaskType::RunCommand,
+            "STEP_FUNCTIONS" => MaintenanceWindowTaskType::StepFunctions,
+            _ => {
+                MaintenanceWindowTaskType::UnknownVariant(UnknownMaintenanceWindowTaskType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceWindowTaskType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MaintenanceWindowTaskType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MaintenanceWindowTaskType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Metadata to assign to an Application Manager application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetadataValue {
@@ -5971,7 +11344,7 @@ pub struct ModifyDocumentPermissionRequest {
     pub name: String,
     /// <p>The permission type for the document. The permission type can be <i>Share</i>.</p>
     #[serde(rename = "PermissionType")]
-    pub permission_type: String,
+    pub permission_type: DocumentPermissionType,
     /// <p>(Optional) The version of the document to share. If it's not specified, the system choose the <code>Default</code> version to share.</p>
     #[serde(rename = "SharedDocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6006,11 +11379,379 @@ pub struct NotificationConfig {
     /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitoring-sns-notifications.html">Monitoring Systems Manager status changes using Amazon SNS notifications</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "NotificationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notification_events: Option<Vec<String>>,
+    pub notification_events: Option<Vec<NotificationEvent>>,
     /// <p>Command: Receive notification when the status of a command changes. Invocation: For commands sent to multiple instances, receive notification on a per-instance basis when the status of a command changes. </p>
     #[serde(rename = "NotificationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notification_type: Option<String>,
+    pub notification_type: Option<NotificationType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotificationEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotificationEvent {
+    All,
+    Cancelled,
+    Failed,
+    InProgress,
+    Success,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotificationEvent),
+}
+
+impl Default for NotificationEvent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotificationEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotificationEvent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotificationEvent {
+    fn into(self) -> String {
+        match self {
+            NotificationEvent::All => "All".to_string(),
+            NotificationEvent::Cancelled => "Cancelled".to_string(),
+            NotificationEvent::Failed => "Failed".to_string(),
+            NotificationEvent::InProgress => "InProgress".to_string(),
+            NotificationEvent::Success => "Success".to_string(),
+            NotificationEvent::TimedOut => "TimedOut".to_string(),
+            NotificationEvent::UnknownVariant(UnknownNotificationEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotificationEvent {
+    fn into(self) -> &'a str {
+        match self {
+            NotificationEvent::All => &"All",
+            NotificationEvent::Cancelled => &"Cancelled",
+            NotificationEvent::Failed => &"Failed",
+            NotificationEvent::InProgress => &"InProgress",
+            NotificationEvent::Success => &"Success",
+            NotificationEvent::TimedOut => &"TimedOut",
+            NotificationEvent::UnknownVariant(UnknownNotificationEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NotificationEvent {
+    fn from(name: &str) -> Self {
+        match name {
+            "All" => NotificationEvent::All,
+            "Cancelled" => NotificationEvent::Cancelled,
+            "Failed" => NotificationEvent::Failed,
+            "InProgress" => NotificationEvent::InProgress,
+            "Success" => NotificationEvent::Success,
+            "TimedOut" => NotificationEvent::TimedOut,
+            _ => NotificationEvent::UnknownVariant(UnknownNotificationEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotificationEvent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All" => NotificationEvent::All,
+            "Cancelled" => NotificationEvent::Cancelled,
+            "Failed" => NotificationEvent::Failed,
+            "InProgress" => NotificationEvent::InProgress,
+            "Success" => NotificationEvent::Success,
+            "TimedOut" => NotificationEvent::TimedOut,
+            _ => NotificationEvent::UnknownVariant(UnknownNotificationEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotificationEvent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotificationEvent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotificationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotificationType {
+    Command,
+    Invocation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotificationType),
+}
+
+impl Default for NotificationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotificationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotificationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotificationType {
+    fn into(self) -> String {
+        match self {
+            NotificationType::Command => "Command".to_string(),
+            NotificationType::Invocation => "Invocation".to_string(),
+            NotificationType::UnknownVariant(UnknownNotificationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotificationType {
+    fn into(self) -> &'a str {
+        match self {
+            NotificationType::Command => &"Command",
+            NotificationType::Invocation => &"Invocation",
+            NotificationType::UnknownVariant(UnknownNotificationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NotificationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Command" => NotificationType::Command,
+            "Invocation" => NotificationType::Invocation,
+            _ => NotificationType::UnknownVariant(UnknownNotificationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotificationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Command" => NotificationType::Command,
+            "Invocation" => NotificationType::Invocation,
+            _ => NotificationType::UnknownVariant(UnknownNotificationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotificationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotificationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperatingSystem {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperatingSystem {
+    AmazonLinux,
+    AmazonLinux2,
+    Centos,
+    Debian,
+    Macos,
+    OracleLinux,
+    RedhatEnterpriseLinux,
+    Suse,
+    Ubuntu,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperatingSystem),
+}
+
+impl Default for OperatingSystem {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperatingSystem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperatingSystem {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperatingSystem {
+    fn into(self) -> String {
+        match self {
+            OperatingSystem::AmazonLinux => "AMAZON_LINUX".to_string(),
+            OperatingSystem::AmazonLinux2 => "AMAZON_LINUX_2".to_string(),
+            OperatingSystem::Centos => "CENTOS".to_string(),
+            OperatingSystem::Debian => "DEBIAN".to_string(),
+            OperatingSystem::Macos => "MACOS".to_string(),
+            OperatingSystem::OracleLinux => "ORACLE_LINUX".to_string(),
+            OperatingSystem::RedhatEnterpriseLinux => "REDHAT_ENTERPRISE_LINUX".to_string(),
+            OperatingSystem::Suse => "SUSE".to_string(),
+            OperatingSystem::Ubuntu => "UBUNTU".to_string(),
+            OperatingSystem::Windows => "WINDOWS".to_string(),
+            OperatingSystem::UnknownVariant(UnknownOperatingSystem { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperatingSystem {
+    fn into(self) -> &'a str {
+        match self {
+            OperatingSystem::AmazonLinux => &"AMAZON_LINUX",
+            OperatingSystem::AmazonLinux2 => &"AMAZON_LINUX_2",
+            OperatingSystem::Centos => &"CENTOS",
+            OperatingSystem::Debian => &"DEBIAN",
+            OperatingSystem::Macos => &"MACOS",
+            OperatingSystem::OracleLinux => &"ORACLE_LINUX",
+            OperatingSystem::RedhatEnterpriseLinux => &"REDHAT_ENTERPRISE_LINUX",
+            OperatingSystem::Suse => &"SUSE",
+            OperatingSystem::Ubuntu => &"UBUNTU",
+            OperatingSystem::Windows => &"WINDOWS",
+            OperatingSystem::UnknownVariant(UnknownOperatingSystem { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperatingSystem {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMAZON_LINUX" => OperatingSystem::AmazonLinux,
+            "AMAZON_LINUX_2" => OperatingSystem::AmazonLinux2,
+            "CENTOS" => OperatingSystem::Centos,
+            "DEBIAN" => OperatingSystem::Debian,
+            "MACOS" => OperatingSystem::Macos,
+            "ORACLE_LINUX" => OperatingSystem::OracleLinux,
+            "REDHAT_ENTERPRISE_LINUX" => OperatingSystem::RedhatEnterpriseLinux,
+            "SUSE" => OperatingSystem::Suse,
+            "UBUNTU" => OperatingSystem::Ubuntu,
+            "WINDOWS" => OperatingSystem::Windows,
+            _ => OperatingSystem::UnknownVariant(UnknownOperatingSystem {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperatingSystem {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMAZON_LINUX" => OperatingSystem::AmazonLinux,
+            "AMAZON_LINUX_2" => OperatingSystem::AmazonLinux2,
+            "CENTOS" => OperatingSystem::Centos,
+            "DEBIAN" => OperatingSystem::Debian,
+            "MACOS" => OperatingSystem::Macos,
+            "ORACLE_LINUX" => OperatingSystem::OracleLinux,
+            "REDHAT_ENTERPRISE_LINUX" => OperatingSystem::RedhatEnterpriseLinux,
+            "SUSE" => OperatingSystem::Suse,
+            "UBUNTU" => OperatingSystem::Ubuntu,
+            "WINDOWS" => OperatingSystem::Windows,
+            _ => OperatingSystem::UnknownVariant(UnknownOperatingSystem { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatingSystem {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OperatingSystem {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperatingSystem {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>One or more aggregators for viewing counts of OpsItems using different dimensions such as <code>Source</code>, <code>CreatedTime</code>, or <code>Source and CreatedTime</code>, to name a few.</p>
@@ -6081,10 +11822,135 @@ pub struct OpsFilter {
     /// <p>The type of filter.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<OpsFilterOperatorType>,
     /// <p>The filter value.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsFilterOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsFilterOperatorType {
+    BeginWith,
+    Equal,
+    Exists,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsFilterOperatorType),
+}
+
+impl Default for OpsFilterOperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsFilterOperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsFilterOperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsFilterOperatorType {
+    fn into(self) -> String {
+        match self {
+            OpsFilterOperatorType::BeginWith => "BeginWith".to_string(),
+            OpsFilterOperatorType::Equal => "Equal".to_string(),
+            OpsFilterOperatorType::Exists => "Exists".to_string(),
+            OpsFilterOperatorType::GreaterThan => "GreaterThan".to_string(),
+            OpsFilterOperatorType::LessThan => "LessThan".to_string(),
+            OpsFilterOperatorType::NotEqual => "NotEqual".to_string(),
+            OpsFilterOperatorType::UnknownVariant(UnknownOpsFilterOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsFilterOperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            OpsFilterOperatorType::BeginWith => &"BeginWith",
+            OpsFilterOperatorType::Equal => &"Equal",
+            OpsFilterOperatorType::Exists => &"Exists",
+            OpsFilterOperatorType::GreaterThan => &"GreaterThan",
+            OpsFilterOperatorType::LessThan => &"LessThan",
+            OpsFilterOperatorType::NotEqual => &"NotEqual",
+            OpsFilterOperatorType::UnknownVariant(UnknownOpsFilterOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OpsFilterOperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BeginWith" => OpsFilterOperatorType::BeginWith,
+            "Equal" => OpsFilterOperatorType::Equal,
+            "Exists" => OpsFilterOperatorType::Exists,
+            "GreaterThan" => OpsFilterOperatorType::GreaterThan,
+            "LessThan" => OpsFilterOperatorType::LessThan,
+            "NotEqual" => OpsFilterOperatorType::NotEqual,
+            _ => OpsFilterOperatorType::UnknownVariant(UnknownOpsFilterOperatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsFilterOperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BeginWith" => OpsFilterOperatorType::BeginWith,
+            "Equal" => OpsFilterOperatorType::Equal,
+            "Exists" => OpsFilterOperatorType::Exists,
+            "GreaterThan" => OpsFilterOperatorType::GreaterThan,
+            "LessThan" => OpsFilterOperatorType::LessThan,
+            "NotEqual" => OpsFilterOperatorType::NotEqual,
+            _ => OpsFilterOperatorType::UnknownVariant(UnknownOpsFilterOperatorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsFilterOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsFilterOperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OpsFilterOperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
@@ -6166,7 +12032,7 @@ pub struct OpsItem {
     /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html">Editing OpsItem details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OpsItemStatus>,
     /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6177,13 +12043,113 @@ pub struct OpsItem {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsItemDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsItemDataType {
+    SearchableString,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsItemDataType),
+}
+
+impl Default for OpsItemDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsItemDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsItemDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsItemDataType {
+    fn into(self) -> String {
+        match self {
+            OpsItemDataType::SearchableString => "SearchableString".to_string(),
+            OpsItemDataType::String => "String".to_string(),
+            OpsItemDataType::UnknownVariant(UnknownOpsItemDataType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsItemDataType {
+    fn into(self) -> &'a str {
+        match self {
+            OpsItemDataType::SearchableString => &"SearchableString",
+            OpsItemDataType::String => &"String",
+            OpsItemDataType::UnknownVariant(UnknownOpsItemDataType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OpsItemDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SearchableString" => OpsItemDataType::SearchableString,
+            "String" => OpsItemDataType::String,
+            _ => OpsItemDataType::UnknownVariant(UnknownOpsItemDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsItemDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SearchableString" => OpsItemDataType::SearchableString,
+            "String" => OpsItemDataType::String,
+            _ => OpsItemDataType::UnknownVariant(UnknownOpsItemDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsItemDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsItemDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OpsItemDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that defines the value of the key and its type in the OperationalData map.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OpsItemDataValue {
     /// <p>The type of key-value pair. Valid types include <code>SearchableString</code> and <code>String</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<OpsItemDataType>,
     /// <p>The value of the OperationalData key.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6196,13 +12162,215 @@ pub struct OpsItemDataValue {
 pub struct OpsItemEventFilter {
     /// <p>The name of the filter key. Currently, the only supported value is <code>OpsItemId</code>.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: OpsItemEventFilterKey,
     /// <p>The operator used by the filter call. Currently, the only supported value is <code>Equal</code>.</p>
     #[serde(rename = "Operator")]
-    pub operator: String,
+    pub operator: OpsItemEventFilterOperator,
     /// <p>The values for the filter, consisting of one or more OpsItem IDs.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsItemEventFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsItemEventFilterKey {
+    OpsItemId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsItemEventFilterKey),
+}
+
+impl Default for OpsItemEventFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsItemEventFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsItemEventFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsItemEventFilterKey {
+    fn into(self) -> String {
+        match self {
+            OpsItemEventFilterKey::OpsItemId => "OpsItemId".to_string(),
+            OpsItemEventFilterKey::UnknownVariant(UnknownOpsItemEventFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsItemEventFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            OpsItemEventFilterKey::OpsItemId => &"OpsItemId",
+            OpsItemEventFilterKey::UnknownVariant(UnknownOpsItemEventFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OpsItemEventFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "OpsItemId" => OpsItemEventFilterKey::OpsItemId,
+            _ => OpsItemEventFilterKey::UnknownVariant(UnknownOpsItemEventFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsItemEventFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OpsItemId" => OpsItemEventFilterKey::OpsItemId,
+            _ => OpsItemEventFilterKey::UnknownVariant(UnknownOpsItemEventFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsItemEventFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsItemEventFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OpsItemEventFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsItemEventFilterOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsItemEventFilterOperator {
+    Equal,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsItemEventFilterOperator),
+}
+
+impl Default for OpsItemEventFilterOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsItemEventFilterOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsItemEventFilterOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsItemEventFilterOperator {
+    fn into(self) -> String {
+        match self {
+            OpsItemEventFilterOperator::Equal => "Equal".to_string(),
+            OpsItemEventFilterOperator::UnknownVariant(UnknownOpsItemEventFilterOperator {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsItemEventFilterOperator {
+    fn into(self) -> &'a str {
+        match self {
+            OpsItemEventFilterOperator::Equal => &"Equal",
+            OpsItemEventFilterOperator::UnknownVariant(UnknownOpsItemEventFilterOperator {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OpsItemEventFilterOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "Equal" => OpsItemEventFilterOperator::Equal,
+            _ => OpsItemEventFilterOperator::UnknownVariant(UnknownOpsItemEventFilterOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsItemEventFilterOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Equal" => OpsItemEventFilterOperator::Equal,
+            _ => OpsItemEventFilterOperator::UnknownVariant(UnknownOpsItemEventFilterOperator {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsItemEventFilterOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsItemEventFilterOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OpsItemEventFilterOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about an OpsItem event.</p>
@@ -6245,13 +12413,369 @@ pub struct OpsItemEventSummary {
 pub struct OpsItemFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: OpsItemFilterKey,
     /// <p>The operator used by the filter call.</p>
     #[serde(rename = "Operator")]
-    pub operator: String,
+    pub operator: OpsItemFilterOperator,
     /// <p>The filter value.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsItemFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsItemFilterKey {
+    ActualEndTime,
+    ActualStartTime,
+    AutomationId,
+    Category,
+    ChangeRequestByApproverArn,
+    ChangeRequestByApproverName,
+    ChangeRequestByRequesterArn,
+    ChangeRequestByRequesterName,
+    ChangeRequestByTargetsResourceGroup,
+    ChangeRequestByTemplate,
+    CreatedBy,
+    CreatedTime,
+    LastModifiedTime,
+    OperationalData,
+    OperationalDataKey,
+    OperationalDataValue,
+    OpsItemId,
+    OpsItemType,
+    PlannedEndTime,
+    PlannedStartTime,
+    Priority,
+    ResourceId,
+    Severity,
+    Source,
+    Status,
+    Title,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsItemFilterKey),
+}
+
+impl Default for OpsItemFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsItemFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsItemFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsItemFilterKey {
+    fn into(self) -> String {
+        match self {
+            OpsItemFilterKey::ActualEndTime => "ActualEndTime".to_string(),
+            OpsItemFilterKey::ActualStartTime => "ActualStartTime".to_string(),
+            OpsItemFilterKey::AutomationId => "AutomationId".to_string(),
+            OpsItemFilterKey::Category => "Category".to_string(),
+            OpsItemFilterKey::ChangeRequestByApproverArn => {
+                "ChangeRequestByApproverArn".to_string()
+            }
+            OpsItemFilterKey::ChangeRequestByApproverName => {
+                "ChangeRequestByApproverName".to_string()
+            }
+            OpsItemFilterKey::ChangeRequestByRequesterArn => {
+                "ChangeRequestByRequesterArn".to_string()
+            }
+            OpsItemFilterKey::ChangeRequestByRequesterName => {
+                "ChangeRequestByRequesterName".to_string()
+            }
+            OpsItemFilterKey::ChangeRequestByTargetsResourceGroup => {
+                "ChangeRequestByTargetsResourceGroup".to_string()
+            }
+            OpsItemFilterKey::ChangeRequestByTemplate => "ChangeRequestByTemplate".to_string(),
+            OpsItemFilterKey::CreatedBy => "CreatedBy".to_string(),
+            OpsItemFilterKey::CreatedTime => "CreatedTime".to_string(),
+            OpsItemFilterKey::LastModifiedTime => "LastModifiedTime".to_string(),
+            OpsItemFilterKey::OperationalData => "OperationalData".to_string(),
+            OpsItemFilterKey::OperationalDataKey => "OperationalDataKey".to_string(),
+            OpsItemFilterKey::OperationalDataValue => "OperationalDataValue".to_string(),
+            OpsItemFilterKey::OpsItemId => "OpsItemId".to_string(),
+            OpsItemFilterKey::OpsItemType => "OpsItemType".to_string(),
+            OpsItemFilterKey::PlannedEndTime => "PlannedEndTime".to_string(),
+            OpsItemFilterKey::PlannedStartTime => "PlannedStartTime".to_string(),
+            OpsItemFilterKey::Priority => "Priority".to_string(),
+            OpsItemFilterKey::ResourceId => "ResourceId".to_string(),
+            OpsItemFilterKey::Severity => "Severity".to_string(),
+            OpsItemFilterKey::Source => "Source".to_string(),
+            OpsItemFilterKey::Status => "Status".to_string(),
+            OpsItemFilterKey::Title => "Title".to_string(),
+            OpsItemFilterKey::UnknownVariant(UnknownOpsItemFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsItemFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            OpsItemFilterKey::ActualEndTime => &"ActualEndTime",
+            OpsItemFilterKey::ActualStartTime => &"ActualStartTime",
+            OpsItemFilterKey::AutomationId => &"AutomationId",
+            OpsItemFilterKey::Category => &"Category",
+            OpsItemFilterKey::ChangeRequestByApproverArn => &"ChangeRequestByApproverArn",
+            OpsItemFilterKey::ChangeRequestByApproverName => &"ChangeRequestByApproverName",
+            OpsItemFilterKey::ChangeRequestByRequesterArn => &"ChangeRequestByRequesterArn",
+            OpsItemFilterKey::ChangeRequestByRequesterName => &"ChangeRequestByRequesterName",
+            OpsItemFilterKey::ChangeRequestByTargetsResourceGroup => {
+                &"ChangeRequestByTargetsResourceGroup"
+            }
+            OpsItemFilterKey::ChangeRequestByTemplate => &"ChangeRequestByTemplate",
+            OpsItemFilterKey::CreatedBy => &"CreatedBy",
+            OpsItemFilterKey::CreatedTime => &"CreatedTime",
+            OpsItemFilterKey::LastModifiedTime => &"LastModifiedTime",
+            OpsItemFilterKey::OperationalData => &"OperationalData",
+            OpsItemFilterKey::OperationalDataKey => &"OperationalDataKey",
+            OpsItemFilterKey::OperationalDataValue => &"OperationalDataValue",
+            OpsItemFilterKey::OpsItemId => &"OpsItemId",
+            OpsItemFilterKey::OpsItemType => &"OpsItemType",
+            OpsItemFilterKey::PlannedEndTime => &"PlannedEndTime",
+            OpsItemFilterKey::PlannedStartTime => &"PlannedStartTime",
+            OpsItemFilterKey::Priority => &"Priority",
+            OpsItemFilterKey::ResourceId => &"ResourceId",
+            OpsItemFilterKey::Severity => &"Severity",
+            OpsItemFilterKey::Source => &"Source",
+            OpsItemFilterKey::Status => &"Status",
+            OpsItemFilterKey::Title => &"Title",
+            OpsItemFilterKey::UnknownVariant(UnknownOpsItemFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OpsItemFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActualEndTime" => OpsItemFilterKey::ActualEndTime,
+            "ActualStartTime" => OpsItemFilterKey::ActualStartTime,
+            "AutomationId" => OpsItemFilterKey::AutomationId,
+            "Category" => OpsItemFilterKey::Category,
+            "ChangeRequestByApproverArn" => OpsItemFilterKey::ChangeRequestByApproverArn,
+            "ChangeRequestByApproverName" => OpsItemFilterKey::ChangeRequestByApproverName,
+            "ChangeRequestByRequesterArn" => OpsItemFilterKey::ChangeRequestByRequesterArn,
+            "ChangeRequestByRequesterName" => OpsItemFilterKey::ChangeRequestByRequesterName,
+            "ChangeRequestByTargetsResourceGroup" => {
+                OpsItemFilterKey::ChangeRequestByTargetsResourceGroup
+            }
+            "ChangeRequestByTemplate" => OpsItemFilterKey::ChangeRequestByTemplate,
+            "CreatedBy" => OpsItemFilterKey::CreatedBy,
+            "CreatedTime" => OpsItemFilterKey::CreatedTime,
+            "LastModifiedTime" => OpsItemFilterKey::LastModifiedTime,
+            "OperationalData" => OpsItemFilterKey::OperationalData,
+            "OperationalDataKey" => OpsItemFilterKey::OperationalDataKey,
+            "OperationalDataValue" => OpsItemFilterKey::OperationalDataValue,
+            "OpsItemId" => OpsItemFilterKey::OpsItemId,
+            "OpsItemType" => OpsItemFilterKey::OpsItemType,
+            "PlannedEndTime" => OpsItemFilterKey::PlannedEndTime,
+            "PlannedStartTime" => OpsItemFilterKey::PlannedStartTime,
+            "Priority" => OpsItemFilterKey::Priority,
+            "ResourceId" => OpsItemFilterKey::ResourceId,
+            "Severity" => OpsItemFilterKey::Severity,
+            "Source" => OpsItemFilterKey::Source,
+            "Status" => OpsItemFilterKey::Status,
+            "Title" => OpsItemFilterKey::Title,
+            _ => OpsItemFilterKey::UnknownVariant(UnknownOpsItemFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsItemFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActualEndTime" => OpsItemFilterKey::ActualEndTime,
+            "ActualStartTime" => OpsItemFilterKey::ActualStartTime,
+            "AutomationId" => OpsItemFilterKey::AutomationId,
+            "Category" => OpsItemFilterKey::Category,
+            "ChangeRequestByApproverArn" => OpsItemFilterKey::ChangeRequestByApproverArn,
+            "ChangeRequestByApproverName" => OpsItemFilterKey::ChangeRequestByApproverName,
+            "ChangeRequestByRequesterArn" => OpsItemFilterKey::ChangeRequestByRequesterArn,
+            "ChangeRequestByRequesterName" => OpsItemFilterKey::ChangeRequestByRequesterName,
+            "ChangeRequestByTargetsResourceGroup" => {
+                OpsItemFilterKey::ChangeRequestByTargetsResourceGroup
+            }
+            "ChangeRequestByTemplate" => OpsItemFilterKey::ChangeRequestByTemplate,
+            "CreatedBy" => OpsItemFilterKey::CreatedBy,
+            "CreatedTime" => OpsItemFilterKey::CreatedTime,
+            "LastModifiedTime" => OpsItemFilterKey::LastModifiedTime,
+            "OperationalData" => OpsItemFilterKey::OperationalData,
+            "OperationalDataKey" => OpsItemFilterKey::OperationalDataKey,
+            "OperationalDataValue" => OpsItemFilterKey::OperationalDataValue,
+            "OpsItemId" => OpsItemFilterKey::OpsItemId,
+            "OpsItemType" => OpsItemFilterKey::OpsItemType,
+            "PlannedEndTime" => OpsItemFilterKey::PlannedEndTime,
+            "PlannedStartTime" => OpsItemFilterKey::PlannedStartTime,
+            "Priority" => OpsItemFilterKey::Priority,
+            "ResourceId" => OpsItemFilterKey::ResourceId,
+            "Severity" => OpsItemFilterKey::Severity,
+            "Source" => OpsItemFilterKey::Source,
+            "Status" => OpsItemFilterKey::Status,
+            "Title" => OpsItemFilterKey::Title,
+            _ => OpsItemFilterKey::UnknownVariant(UnknownOpsItemFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsItemFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsItemFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OpsItemFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsItemFilterOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsItemFilterOperator {
+    Contains,
+    Equal,
+    GreaterThan,
+    LessThan,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsItemFilterOperator),
+}
+
+impl Default for OpsItemFilterOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsItemFilterOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsItemFilterOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsItemFilterOperator {
+    fn into(self) -> String {
+        match self {
+            OpsItemFilterOperator::Contains => "Contains".to_string(),
+            OpsItemFilterOperator::Equal => "Equal".to_string(),
+            OpsItemFilterOperator::GreaterThan => "GreaterThan".to_string(),
+            OpsItemFilterOperator::LessThan => "LessThan".to_string(),
+            OpsItemFilterOperator::UnknownVariant(UnknownOpsItemFilterOperator {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsItemFilterOperator {
+    fn into(self) -> &'a str {
+        match self {
+            OpsItemFilterOperator::Contains => &"Contains",
+            OpsItemFilterOperator::Equal => &"Equal",
+            OpsItemFilterOperator::GreaterThan => &"GreaterThan",
+            OpsItemFilterOperator::LessThan => &"LessThan",
+            OpsItemFilterOperator::UnknownVariant(UnknownOpsItemFilterOperator {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OpsItemFilterOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "Contains" => OpsItemFilterOperator::Contains,
+            "Equal" => OpsItemFilterOperator::Equal,
+            "GreaterThan" => OpsItemFilterOperator::GreaterThan,
+            "LessThan" => OpsItemFilterOperator::LessThan,
+            _ => OpsItemFilterOperator::UnknownVariant(UnknownOpsItemFilterOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsItemFilterOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Contains" => OpsItemFilterOperator::Contains,
+            "Equal" => OpsItemFilterOperator::Equal,
+            "GreaterThan" => OpsItemFilterOperator::GreaterThan,
+            "LessThan" => OpsItemFilterOperator::LessThan,
+            _ => OpsItemFilterOperator::UnknownVariant(UnknownOpsItemFilterOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsItemFilterOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsItemFilterOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OpsItemFilterOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the user or resource that created an OpsItem event.</p>
@@ -6271,6 +12795,192 @@ pub struct OpsItemNotification {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOpsItemStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OpsItemStatus {
+    Approved,
+    Cancelled,
+    Cancelling,
+    ChangeCalendarOverrideApproved,
+    ChangeCalendarOverrideRejected,
+    CompletedWithFailure,
+    CompletedWithSuccess,
+    Failed,
+    InProgress,
+    Open,
+    Pending,
+    PendingApproval,
+    PendingChangeCalendarOverride,
+    Rejected,
+    Resolved,
+    RunbookInProgress,
+    Scheduled,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOpsItemStatus),
+}
+
+impl Default for OpsItemStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OpsItemStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OpsItemStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OpsItemStatus {
+    fn into(self) -> String {
+        match self {
+            OpsItemStatus::Approved => "Approved".to_string(),
+            OpsItemStatus::Cancelled => "Cancelled".to_string(),
+            OpsItemStatus::Cancelling => "Cancelling".to_string(),
+            OpsItemStatus::ChangeCalendarOverrideApproved => {
+                "ChangeCalendarOverrideApproved".to_string()
+            }
+            OpsItemStatus::ChangeCalendarOverrideRejected => {
+                "ChangeCalendarOverrideRejected".to_string()
+            }
+            OpsItemStatus::CompletedWithFailure => "CompletedWithFailure".to_string(),
+            OpsItemStatus::CompletedWithSuccess => "CompletedWithSuccess".to_string(),
+            OpsItemStatus::Failed => "Failed".to_string(),
+            OpsItemStatus::InProgress => "InProgress".to_string(),
+            OpsItemStatus::Open => "Open".to_string(),
+            OpsItemStatus::Pending => "Pending".to_string(),
+            OpsItemStatus::PendingApproval => "PendingApproval".to_string(),
+            OpsItemStatus::PendingChangeCalendarOverride => {
+                "PendingChangeCalendarOverride".to_string()
+            }
+            OpsItemStatus::Rejected => "Rejected".to_string(),
+            OpsItemStatus::Resolved => "Resolved".to_string(),
+            OpsItemStatus::RunbookInProgress => "RunbookInProgress".to_string(),
+            OpsItemStatus::Scheduled => "Scheduled".to_string(),
+            OpsItemStatus::TimedOut => "TimedOut".to_string(),
+            OpsItemStatus::UnknownVariant(UnknownOpsItemStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OpsItemStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OpsItemStatus::Approved => &"Approved",
+            OpsItemStatus::Cancelled => &"Cancelled",
+            OpsItemStatus::Cancelling => &"Cancelling",
+            OpsItemStatus::ChangeCalendarOverrideApproved => &"ChangeCalendarOverrideApproved",
+            OpsItemStatus::ChangeCalendarOverrideRejected => &"ChangeCalendarOverrideRejected",
+            OpsItemStatus::CompletedWithFailure => &"CompletedWithFailure",
+            OpsItemStatus::CompletedWithSuccess => &"CompletedWithSuccess",
+            OpsItemStatus::Failed => &"Failed",
+            OpsItemStatus::InProgress => &"InProgress",
+            OpsItemStatus::Open => &"Open",
+            OpsItemStatus::Pending => &"Pending",
+            OpsItemStatus::PendingApproval => &"PendingApproval",
+            OpsItemStatus::PendingChangeCalendarOverride => &"PendingChangeCalendarOverride",
+            OpsItemStatus::Rejected => &"Rejected",
+            OpsItemStatus::Resolved => &"Resolved",
+            OpsItemStatus::RunbookInProgress => &"RunbookInProgress",
+            OpsItemStatus::Scheduled => &"Scheduled",
+            OpsItemStatus::TimedOut => &"TimedOut",
+            OpsItemStatus::UnknownVariant(UnknownOpsItemStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OpsItemStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approved" => OpsItemStatus::Approved,
+            "Cancelled" => OpsItemStatus::Cancelled,
+            "Cancelling" => OpsItemStatus::Cancelling,
+            "ChangeCalendarOverrideApproved" => OpsItemStatus::ChangeCalendarOverrideApproved,
+            "ChangeCalendarOverrideRejected" => OpsItemStatus::ChangeCalendarOverrideRejected,
+            "CompletedWithFailure" => OpsItemStatus::CompletedWithFailure,
+            "CompletedWithSuccess" => OpsItemStatus::CompletedWithSuccess,
+            "Failed" => OpsItemStatus::Failed,
+            "InProgress" => OpsItemStatus::InProgress,
+            "Open" => OpsItemStatus::Open,
+            "Pending" => OpsItemStatus::Pending,
+            "PendingApproval" => OpsItemStatus::PendingApproval,
+            "PendingChangeCalendarOverride" => OpsItemStatus::PendingChangeCalendarOverride,
+            "Rejected" => OpsItemStatus::Rejected,
+            "Resolved" => OpsItemStatus::Resolved,
+            "RunbookInProgress" => OpsItemStatus::RunbookInProgress,
+            "Scheduled" => OpsItemStatus::Scheduled,
+            "TimedOut" => OpsItemStatus::TimedOut,
+            _ => OpsItemStatus::UnknownVariant(UnknownOpsItemStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OpsItemStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approved" => OpsItemStatus::Approved,
+            "Cancelled" => OpsItemStatus::Cancelled,
+            "Cancelling" => OpsItemStatus::Cancelling,
+            "ChangeCalendarOverrideApproved" => OpsItemStatus::ChangeCalendarOverrideApproved,
+            "ChangeCalendarOverrideRejected" => OpsItemStatus::ChangeCalendarOverrideRejected,
+            "CompletedWithFailure" => OpsItemStatus::CompletedWithFailure,
+            "CompletedWithSuccess" => OpsItemStatus::CompletedWithSuccess,
+            "Failed" => OpsItemStatus::Failed,
+            "InProgress" => OpsItemStatus::InProgress,
+            "Open" => OpsItemStatus::Open,
+            "Pending" => OpsItemStatus::Pending,
+            "PendingApproval" => OpsItemStatus::PendingApproval,
+            "PendingChangeCalendarOverride" => OpsItemStatus::PendingChangeCalendarOverride,
+            "Rejected" => OpsItemStatus::Rejected,
+            "Resolved" => OpsItemStatus::Resolved,
+            "RunbookInProgress" => OpsItemStatus::RunbookInProgress,
+            "Scheduled" => OpsItemStatus::Scheduled,
+            "TimedOut" => OpsItemStatus::TimedOut,
+            _ => OpsItemStatus::UnknownVariant(UnknownOpsItemStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OpsItemStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OpsItemStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OpsItemStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A count of OpsItems.</p>
@@ -6340,7 +13050,7 @@ pub struct OpsItemSummary {
     /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OpsItemStatus>,
     /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6439,7 +13149,7 @@ pub struct Parameter {
     /// <p>The type of parameter. Valid values include the following: <code>String</code>, <code>StringList</code>, and <code>SecureString</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ParameterType>,
     /// <p>The parameter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6493,11 +13203,11 @@ pub struct ParameterHistory {
     /// <p>The parameter tier.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<ParameterTier>,
     /// <p>The type of parameter used.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ParameterType>,
     /// <p>The parameter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6565,11 +13275,11 @@ pub struct ParameterMetadata {
     /// <p>The parameter tier.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<ParameterTier>,
     /// <p>The type of parameter. Valid parameter types include the following: <code>String</code>, <code>StringList</code>, and <code>SecureString</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ParameterType>,
     /// <p>The parameter version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6593,16 +13303,336 @@ pub struct ParameterStringFilter {
     pub values: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterTier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterTier {
+    Advanced,
+    IntelligentTiering,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterTier),
+}
+
+impl Default for ParameterTier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterTier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterTier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterTier {
+    fn into(self) -> String {
+        match self {
+            ParameterTier::Advanced => "Advanced".to_string(),
+            ParameterTier::IntelligentTiering => "Intelligent-Tiering".to_string(),
+            ParameterTier::Standard => "Standard".to_string(),
+            ParameterTier::UnknownVariant(UnknownParameterTier { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterTier {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterTier::Advanced => &"Advanced",
+            ParameterTier::IntelligentTiering => &"Intelligent-Tiering",
+            ParameterTier::Standard => &"Standard",
+            ParameterTier::UnknownVariant(UnknownParameterTier { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParameterTier {
+    fn from(name: &str) -> Self {
+        match name {
+            "Advanced" => ParameterTier::Advanced,
+            "Intelligent-Tiering" => ParameterTier::IntelligentTiering,
+            "Standard" => ParameterTier::Standard,
+            _ => ParameterTier::UnknownVariant(UnknownParameterTier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterTier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Advanced" => ParameterTier::Advanced,
+            "Intelligent-Tiering" => ParameterTier::IntelligentTiering,
+            "Standard" => ParameterTier::Standard,
+            _ => ParameterTier::UnknownVariant(UnknownParameterTier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterTier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParameterTier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParameterTier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterType {
+    SecureString,
+    String,
+    StringList,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterType),
+}
+
+impl Default for ParameterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterType {
+    fn into(self) -> String {
+        match self {
+            ParameterType::SecureString => "SecureString".to_string(),
+            ParameterType::String => "String".to_string(),
+            ParameterType::StringList => "StringList".to_string(),
+            ParameterType::UnknownVariant(UnknownParameterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterType {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterType::SecureString => &"SecureString",
+            ParameterType::String => &"String",
+            ParameterType::StringList => &"StringList",
+            ParameterType::UnknownVariant(UnknownParameterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParameterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SecureString" => ParameterType::SecureString,
+            "String" => ParameterType::String,
+            "StringList" => ParameterType::StringList,
+            _ => ParameterType::UnknownVariant(UnknownParameterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SecureString" => ParameterType::SecureString,
+            "String" => ParameterType::String,
+            "StringList" => ParameterType::StringList,
+            _ => ParameterType::UnknownVariant(UnknownParameterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParameterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParameterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>This data type is deprecated. Instead, use <a>ParameterStringFilter</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParametersFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: ParametersFilterKey,
     /// <p>The filter values.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParametersFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParametersFilterKey {
+    KeyId,
+    Name,
+    Type,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParametersFilterKey),
+}
+
+impl Default for ParametersFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParametersFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParametersFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParametersFilterKey {
+    fn into(self) -> String {
+        match self {
+            ParametersFilterKey::KeyId => "KeyId".to_string(),
+            ParametersFilterKey::Name => "Name".to_string(),
+            ParametersFilterKey::Type => "Type".to_string(),
+            ParametersFilterKey::UnknownVariant(UnknownParametersFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParametersFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            ParametersFilterKey::KeyId => &"KeyId",
+            ParametersFilterKey::Name => &"Name",
+            ParametersFilterKey::Type => &"Type",
+            ParametersFilterKey::UnknownVariant(UnknownParametersFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ParametersFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "KeyId" => ParametersFilterKey::KeyId,
+            "Name" => ParametersFilterKey::Name,
+            "Type" => ParametersFilterKey::Type,
+            _ => ParametersFilterKey::UnknownVariant(UnknownParametersFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParametersFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KeyId" => ParametersFilterKey::KeyId,
+            "Name" => ParametersFilterKey::Name,
+            "Type" => ParametersFilterKey::Type,
+            _ => ParametersFilterKey::UnknownVariant(UnknownParametersFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParametersFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParametersFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ParametersFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents metadata about a patch.</p>
@@ -6703,6 +13733,106 @@ pub struct Patch {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchAction {
+    AllowAsDependency,
+    Block,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchAction),
+}
+
+impl Default for PatchAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchAction {
+    fn into(self) -> String {
+        match self {
+            PatchAction::AllowAsDependency => "ALLOW_AS_DEPENDENCY".to_string(),
+            PatchAction::Block => "BLOCK".to_string(),
+            PatchAction::UnknownVariant(UnknownPatchAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchAction {
+    fn into(self) -> &'a str {
+        match self {
+            PatchAction::AllowAsDependency => &"ALLOW_AS_DEPENDENCY",
+            PatchAction::Block => &"BLOCK",
+            PatchAction::UnknownVariant(UnknownPatchAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW_AS_DEPENDENCY" => PatchAction::AllowAsDependency,
+            "BLOCK" => PatchAction::Block,
+            _ => PatchAction::UnknownVariant(UnknownPatchAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW_AS_DEPENDENCY" => PatchAction::AllowAsDependency,
+            "BLOCK" => PatchAction::Block,
+            _ => PatchAction::UnknownVariant(UnknownPatchAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PatchAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PatchAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines the basic information about a patch baseline.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6726,7 +13856,7 @@ pub struct PatchBaselineIdentity {
     /// <p>Defines the operating system the patch baseline applies to. The Default value is WINDOWS. </p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
 }
 
 /// <p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>
@@ -6751,10 +13881,381 @@ pub struct PatchComplianceData {
     pub severity: String,
     /// <p>The state of the patch on the instance, such as INSTALLED or FAILED.</p> <p>For descriptions of each patch state, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-compliance-about.html#sysman-compliance-monitor-patch">About patch compliance</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: PatchComplianceDataState,
     /// <p>The title of the patch.</p>
     #[serde(rename = "Title")]
     pub title: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchComplianceDataState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchComplianceDataState {
+    Failed,
+    Installed,
+    InstalledOther,
+    InstalledPendingReboot,
+    InstalledRejected,
+    Missing,
+    NotApplicable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchComplianceDataState),
+}
+
+impl Default for PatchComplianceDataState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchComplianceDataState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchComplianceDataState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchComplianceDataState {
+    fn into(self) -> String {
+        match self {
+            PatchComplianceDataState::Failed => "FAILED".to_string(),
+            PatchComplianceDataState::Installed => "INSTALLED".to_string(),
+            PatchComplianceDataState::InstalledOther => "INSTALLED_OTHER".to_string(),
+            PatchComplianceDataState::InstalledPendingReboot => {
+                "INSTALLED_PENDING_REBOOT".to_string()
+            }
+            PatchComplianceDataState::InstalledRejected => "INSTALLED_REJECTED".to_string(),
+            PatchComplianceDataState::Missing => "MISSING".to_string(),
+            PatchComplianceDataState::NotApplicable => "NOT_APPLICABLE".to_string(),
+            PatchComplianceDataState::UnknownVariant(UnknownPatchComplianceDataState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchComplianceDataState {
+    fn into(self) -> &'a str {
+        match self {
+            PatchComplianceDataState::Failed => &"FAILED",
+            PatchComplianceDataState::Installed => &"INSTALLED",
+            PatchComplianceDataState::InstalledOther => &"INSTALLED_OTHER",
+            PatchComplianceDataState::InstalledPendingReboot => &"INSTALLED_PENDING_REBOOT",
+            PatchComplianceDataState::InstalledRejected => &"INSTALLED_REJECTED",
+            PatchComplianceDataState::Missing => &"MISSING",
+            PatchComplianceDataState::NotApplicable => &"NOT_APPLICABLE",
+            PatchComplianceDataState::UnknownVariant(UnknownPatchComplianceDataState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchComplianceDataState {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => PatchComplianceDataState::Failed,
+            "INSTALLED" => PatchComplianceDataState::Installed,
+            "INSTALLED_OTHER" => PatchComplianceDataState::InstalledOther,
+            "INSTALLED_PENDING_REBOOT" => PatchComplianceDataState::InstalledPendingReboot,
+            "INSTALLED_REJECTED" => PatchComplianceDataState::InstalledRejected,
+            "MISSING" => PatchComplianceDataState::Missing,
+            "NOT_APPLICABLE" => PatchComplianceDataState::NotApplicable,
+            _ => PatchComplianceDataState::UnknownVariant(UnknownPatchComplianceDataState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchComplianceDataState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => PatchComplianceDataState::Failed,
+            "INSTALLED" => PatchComplianceDataState::Installed,
+            "INSTALLED_OTHER" => PatchComplianceDataState::InstalledOther,
+            "INSTALLED_PENDING_REBOOT" => PatchComplianceDataState::InstalledPendingReboot,
+            "INSTALLED_REJECTED" => PatchComplianceDataState::InstalledRejected,
+            "MISSING" => PatchComplianceDataState::Missing,
+            "NOT_APPLICABLE" => PatchComplianceDataState::NotApplicable,
+            _ => PatchComplianceDataState::UnknownVariant(UnknownPatchComplianceDataState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchComplianceDataState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PatchComplianceDataState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PatchComplianceDataState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchComplianceLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchComplianceLevel {
+    Critical,
+    High,
+    Informational,
+    Low,
+    Medium,
+    Unspecified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchComplianceLevel),
+}
+
+impl Default for PatchComplianceLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchComplianceLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchComplianceLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchComplianceLevel {
+    fn into(self) -> String {
+        match self {
+            PatchComplianceLevel::Critical => "CRITICAL".to_string(),
+            PatchComplianceLevel::High => "HIGH".to_string(),
+            PatchComplianceLevel::Informational => "INFORMATIONAL".to_string(),
+            PatchComplianceLevel::Low => "LOW".to_string(),
+            PatchComplianceLevel::Medium => "MEDIUM".to_string(),
+            PatchComplianceLevel::Unspecified => "UNSPECIFIED".to_string(),
+            PatchComplianceLevel::UnknownVariant(UnknownPatchComplianceLevel {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchComplianceLevel {
+    fn into(self) -> &'a str {
+        match self {
+            PatchComplianceLevel::Critical => &"CRITICAL",
+            PatchComplianceLevel::High => &"HIGH",
+            PatchComplianceLevel::Informational => &"INFORMATIONAL",
+            PatchComplianceLevel::Low => &"LOW",
+            PatchComplianceLevel::Medium => &"MEDIUM",
+            PatchComplianceLevel::Unspecified => &"UNSPECIFIED",
+            PatchComplianceLevel::UnknownVariant(UnknownPatchComplianceLevel {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchComplianceLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "CRITICAL" => PatchComplianceLevel::Critical,
+            "HIGH" => PatchComplianceLevel::High,
+            "INFORMATIONAL" => PatchComplianceLevel::Informational,
+            "LOW" => PatchComplianceLevel::Low,
+            "MEDIUM" => PatchComplianceLevel::Medium,
+            "UNSPECIFIED" => PatchComplianceLevel::Unspecified,
+            _ => PatchComplianceLevel::UnknownVariant(UnknownPatchComplianceLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchComplianceLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CRITICAL" => PatchComplianceLevel::Critical,
+            "HIGH" => PatchComplianceLevel::High,
+            "INFORMATIONAL" => PatchComplianceLevel::Informational,
+            "LOW" => PatchComplianceLevel::Low,
+            "MEDIUM" => PatchComplianceLevel::Medium,
+            "UNSPECIFIED" => PatchComplianceLevel::Unspecified,
+            _ => PatchComplianceLevel::UnknownVariant(UnknownPatchComplianceLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchComplianceLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PatchComplianceLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PatchComplianceLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchDeploymentStatus {
+    Approved,
+    ExplicitApproved,
+    ExplicitRejected,
+    PendingApproval,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchDeploymentStatus),
+}
+
+impl Default for PatchDeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchDeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchDeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchDeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            PatchDeploymentStatus::Approved => "APPROVED".to_string(),
+            PatchDeploymentStatus::ExplicitApproved => "EXPLICIT_APPROVED".to_string(),
+            PatchDeploymentStatus::ExplicitRejected => "EXPLICIT_REJECTED".to_string(),
+            PatchDeploymentStatus::PendingApproval => "PENDING_APPROVAL".to_string(),
+            PatchDeploymentStatus::UnknownVariant(UnknownPatchDeploymentStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchDeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PatchDeploymentStatus::Approved => &"APPROVED",
+            PatchDeploymentStatus::ExplicitApproved => &"EXPLICIT_APPROVED",
+            PatchDeploymentStatus::ExplicitRejected => &"EXPLICIT_REJECTED",
+            PatchDeploymentStatus::PendingApproval => &"PENDING_APPROVAL",
+            PatchDeploymentStatus::UnknownVariant(UnknownPatchDeploymentStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchDeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPROVED" => PatchDeploymentStatus::Approved,
+            "EXPLICIT_APPROVED" => PatchDeploymentStatus::ExplicitApproved,
+            "EXPLICIT_REJECTED" => PatchDeploymentStatus::ExplicitRejected,
+            "PENDING_APPROVAL" => PatchDeploymentStatus::PendingApproval,
+            _ => PatchDeploymentStatus::UnknownVariant(UnknownPatchDeploymentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchDeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPROVED" => PatchDeploymentStatus::Approved,
+            "EXPLICIT_APPROVED" => PatchDeploymentStatus::ExplicitApproved,
+            "EXPLICIT_REJECTED" => PatchDeploymentStatus::ExplicitRejected,
+            "PENDING_APPROVAL" => PatchDeploymentStatus::PendingApproval,
+            _ => PatchDeploymentStatus::UnknownVariant(UnknownPatchDeploymentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchDeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PatchDeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PatchDeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Defines which patches should be included in a patch baseline.</p> <p>A patch filter consists of a key and a set of values. The filter key is a patch property. For example, the available filter keys for WINDOWS are PATCH_SET, PRODUCT, PRODUCT_FAMILY, CLASSIFICATION, and MSRC_SEVERITY. The filter values define a matching criterion for the patch property indicated by the key. For example, if the filter key is PRODUCT and the filter values are ["Office 2013", "Office 2016"], then the filter accepts all patches where product name is either "Office 2013" or "Office 2016". The filter values can be exact values for the patch property given as a key, or a wildcard (*), which matches all values.</p> <p>You can view lists of valid values for the patch properties by running the <code>DescribePatchProperties</code> command. For information about which patch properties can be used with each major operating system, see <a>DescribePatchProperties</a>.</p>
@@ -6762,7 +14263,7 @@ pub struct PatchComplianceData {
 pub struct PatchFilter {
     /// <p>The key for the filter.</p> <p>Run the <a>DescribePatchProperties</a> command to view lists of valid keys for each operating system type.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: PatchFilterKey,
     /// <p>The value for the filter key.</p> <p>Run the <a>DescribePatchProperties</a> command to view lists of valid values for each key based on operating system type.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
@@ -6774,6 +14275,191 @@ pub struct PatchFilterGroup {
     /// <p>The set of patch filters that make up the group.</p>
     #[serde(rename = "PatchFilters")]
     pub patch_filters: Vec<PatchFilter>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchFilterKey {
+    AdvisoryId,
+    Arch,
+    BugzillaId,
+    Classification,
+    CveId,
+    Epoch,
+    MsrcSeverity,
+    Name,
+    PatchId,
+    PatchSet,
+    Priority,
+    Product,
+    ProductFamily,
+    Release,
+    Repository,
+    Section,
+    Security,
+    Severity,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchFilterKey),
+}
+
+impl Default for PatchFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchFilterKey {
+    fn into(self) -> String {
+        match self {
+            PatchFilterKey::AdvisoryId => "ADVISORY_ID".to_string(),
+            PatchFilterKey::Arch => "ARCH".to_string(),
+            PatchFilterKey::BugzillaId => "BUGZILLA_ID".to_string(),
+            PatchFilterKey::Classification => "CLASSIFICATION".to_string(),
+            PatchFilterKey::CveId => "CVE_ID".to_string(),
+            PatchFilterKey::Epoch => "EPOCH".to_string(),
+            PatchFilterKey::MsrcSeverity => "MSRC_SEVERITY".to_string(),
+            PatchFilterKey::Name => "NAME".to_string(),
+            PatchFilterKey::PatchId => "PATCH_ID".to_string(),
+            PatchFilterKey::PatchSet => "PATCH_SET".to_string(),
+            PatchFilterKey::Priority => "PRIORITY".to_string(),
+            PatchFilterKey::Product => "PRODUCT".to_string(),
+            PatchFilterKey::ProductFamily => "PRODUCT_FAMILY".to_string(),
+            PatchFilterKey::Release => "RELEASE".to_string(),
+            PatchFilterKey::Repository => "REPOSITORY".to_string(),
+            PatchFilterKey::Section => "SECTION".to_string(),
+            PatchFilterKey::Security => "SECURITY".to_string(),
+            PatchFilterKey::Severity => "SEVERITY".to_string(),
+            PatchFilterKey::Version => "VERSION".to_string(),
+            PatchFilterKey::UnknownVariant(UnknownPatchFilterKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            PatchFilterKey::AdvisoryId => &"ADVISORY_ID",
+            PatchFilterKey::Arch => &"ARCH",
+            PatchFilterKey::BugzillaId => &"BUGZILLA_ID",
+            PatchFilterKey::Classification => &"CLASSIFICATION",
+            PatchFilterKey::CveId => &"CVE_ID",
+            PatchFilterKey::Epoch => &"EPOCH",
+            PatchFilterKey::MsrcSeverity => &"MSRC_SEVERITY",
+            PatchFilterKey::Name => &"NAME",
+            PatchFilterKey::PatchId => &"PATCH_ID",
+            PatchFilterKey::PatchSet => &"PATCH_SET",
+            PatchFilterKey::Priority => &"PRIORITY",
+            PatchFilterKey::Product => &"PRODUCT",
+            PatchFilterKey::ProductFamily => &"PRODUCT_FAMILY",
+            PatchFilterKey::Release => &"RELEASE",
+            PatchFilterKey::Repository => &"REPOSITORY",
+            PatchFilterKey::Section => &"SECTION",
+            PatchFilterKey::Security => &"SECURITY",
+            PatchFilterKey::Severity => &"SEVERITY",
+            PatchFilterKey::Version => &"VERSION",
+            PatchFilterKey::UnknownVariant(UnknownPatchFilterKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADVISORY_ID" => PatchFilterKey::AdvisoryId,
+            "ARCH" => PatchFilterKey::Arch,
+            "BUGZILLA_ID" => PatchFilterKey::BugzillaId,
+            "CLASSIFICATION" => PatchFilterKey::Classification,
+            "CVE_ID" => PatchFilterKey::CveId,
+            "EPOCH" => PatchFilterKey::Epoch,
+            "MSRC_SEVERITY" => PatchFilterKey::MsrcSeverity,
+            "NAME" => PatchFilterKey::Name,
+            "PATCH_ID" => PatchFilterKey::PatchId,
+            "PATCH_SET" => PatchFilterKey::PatchSet,
+            "PRIORITY" => PatchFilterKey::Priority,
+            "PRODUCT" => PatchFilterKey::Product,
+            "PRODUCT_FAMILY" => PatchFilterKey::ProductFamily,
+            "RELEASE" => PatchFilterKey::Release,
+            "REPOSITORY" => PatchFilterKey::Repository,
+            "SECTION" => PatchFilterKey::Section,
+            "SECURITY" => PatchFilterKey::Security,
+            "SEVERITY" => PatchFilterKey::Severity,
+            "VERSION" => PatchFilterKey::Version,
+            _ => PatchFilterKey::UnknownVariant(UnknownPatchFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADVISORY_ID" => PatchFilterKey::AdvisoryId,
+            "ARCH" => PatchFilterKey::Arch,
+            "BUGZILLA_ID" => PatchFilterKey::BugzillaId,
+            "CLASSIFICATION" => PatchFilterKey::Classification,
+            "CVE_ID" => PatchFilterKey::CveId,
+            "EPOCH" => PatchFilterKey::Epoch,
+            "MSRC_SEVERITY" => PatchFilterKey::MsrcSeverity,
+            "NAME" => PatchFilterKey::Name,
+            "PATCH_ID" => PatchFilterKey::PatchId,
+            "PATCH_SET" => PatchFilterKey::PatchSet,
+            "PRIORITY" => PatchFilterKey::Priority,
+            "PRODUCT" => PatchFilterKey::Product,
+            "PRODUCT_FAMILY" => PatchFilterKey::ProductFamily,
+            "RELEASE" => PatchFilterKey::Release,
+            "REPOSITORY" => PatchFilterKey::Repository,
+            "SECTION" => PatchFilterKey::Section,
+            "SECURITY" => PatchFilterKey::Security,
+            "SEVERITY" => PatchFilterKey::Severity,
+            "VERSION" => PatchFilterKey::Version,
+            _ => PatchFilterKey::UnknownVariant(UnknownPatchFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PatchFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PatchFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>
@@ -6790,6 +14476,111 @@ pub struct PatchGroupPatchBaselineMapping {
     pub patch_group: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchOperationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchOperationType {
+    Install,
+    Scan,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchOperationType),
+}
+
+impl Default for PatchOperationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchOperationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchOperationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchOperationType {
+    fn into(self) -> String {
+        match self {
+            PatchOperationType::Install => "Install".to_string(),
+            PatchOperationType::Scan => "Scan".to_string(),
+            PatchOperationType::UnknownVariant(UnknownPatchOperationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchOperationType {
+    fn into(self) -> &'a str {
+        match self {
+            PatchOperationType::Install => &"Install",
+            PatchOperationType::Scan => &"Scan",
+            PatchOperationType::UnknownVariant(UnknownPatchOperationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PatchOperationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Install" => PatchOperationType::Install,
+            "Scan" => PatchOperationType::Scan,
+            _ => PatchOperationType::UnknownVariant(UnknownPatchOperationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchOperationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Install" => PatchOperationType::Install,
+            "Scan" => PatchOperationType::Scan,
+            _ => PatchOperationType::UnknownVariant(UnknownPatchOperationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchOperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PatchOperationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PatchOperationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines a filter used in Patch Manager APIs.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -6802,6 +14593,127 @@ pub struct PatchOrchestratorFilter {
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchProperty {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchProperty {
+    Classification,
+    MsrcSeverity,
+    Priority,
+    Product,
+    ProductFamily,
+    Severity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchProperty),
+}
+
+impl Default for PatchProperty {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchProperty {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchProperty {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchProperty {
+    fn into(self) -> String {
+        match self {
+            PatchProperty::Classification => "CLASSIFICATION".to_string(),
+            PatchProperty::MsrcSeverity => "MSRC_SEVERITY".to_string(),
+            PatchProperty::Priority => "PRIORITY".to_string(),
+            PatchProperty::Product => "PRODUCT".to_string(),
+            PatchProperty::ProductFamily => "PRODUCT_FAMILY".to_string(),
+            PatchProperty::Severity => "SEVERITY".to_string(),
+            PatchProperty::UnknownVariant(UnknownPatchProperty { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchProperty {
+    fn into(self) -> &'a str {
+        match self {
+            PatchProperty::Classification => &"CLASSIFICATION",
+            PatchProperty::MsrcSeverity => &"MSRC_SEVERITY",
+            PatchProperty::Priority => &"PRIORITY",
+            PatchProperty::Product => &"PRODUCT",
+            PatchProperty::ProductFamily => &"PRODUCT_FAMILY",
+            PatchProperty::Severity => &"SEVERITY",
+            PatchProperty::UnknownVariant(UnknownPatchProperty { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchProperty {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLASSIFICATION" => PatchProperty::Classification,
+            "MSRC_SEVERITY" => PatchProperty::MsrcSeverity,
+            "PRIORITY" => PatchProperty::Priority,
+            "PRODUCT" => PatchProperty::Product,
+            "PRODUCT_FAMILY" => PatchProperty::ProductFamily,
+            "SEVERITY" => PatchProperty::Severity,
+            _ => PatchProperty::UnknownVariant(UnknownPatchProperty {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchProperty {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLASSIFICATION" => PatchProperty::Classification,
+            "MSRC_SEVERITY" => PatchProperty::MsrcSeverity,
+            "PRIORITY" => PatchProperty::Priority,
+            "PRODUCT" => PatchProperty::Product,
+            "PRODUCT_FAMILY" => PatchProperty::ProductFamily,
+            "SEVERITY" => PatchProperty::Severity,
+            _ => PatchProperty::UnknownVariant(UnknownPatchProperty { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchProperty {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PatchProperty {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PatchProperty {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Defines an approval rule for a patch baseline.</p>
@@ -6818,7 +14730,7 @@ pub struct PatchRule {
     /// <p>A compliance severity level for all approved patches in a patch baseline.</p>
     #[serde(rename = "ComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_level: Option<String>,
+    pub compliance_level: Option<PatchComplianceLevel>,
     /// <p>For instances identified by the approval rule filters, enables a patch baseline to apply non-security updates available in the specified repository. The default value is 'false'. Applies to Linux instances only.</p>
     #[serde(rename = "EnableNonSecurity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6834,6 +14746,107 @@ pub struct PatchRuleGroup {
     /// <p>The rules that make up the rule group.</p>
     #[serde(rename = "PatchRules")]
     pub patch_rules: Vec<PatchRule>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPatchSet {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PatchSet {
+    Application,
+    Os,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPatchSet),
+}
+
+impl Default for PatchSet {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PatchSet {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PatchSet {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PatchSet {
+    fn into(self) -> String {
+        match self {
+            PatchSet::Application => "APPLICATION".to_string(),
+            PatchSet::Os => "OS".to_string(),
+            PatchSet::UnknownVariant(UnknownPatchSet { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PatchSet {
+    fn into(self) -> &'a str {
+        match self {
+            PatchSet::Application => &"APPLICATION",
+            PatchSet::Os => &"OS",
+            PatchSet::UnknownVariant(UnknownPatchSet { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PatchSet {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION" => PatchSet::Application,
+            "OS" => PatchSet::Os,
+            _ => PatchSet::UnknownVariant(UnknownPatchSet {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PatchSet {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION" => PatchSet::Application,
+            "OS" => PatchSet::Os,
+            _ => PatchSet::UnknownVariant(UnknownPatchSet { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchSet {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PatchSet {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PatchSet {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the patches to use to update the instances, including target operating systems and source repository. Applies to Linux instances only.</p>
@@ -6861,11 +14874,218 @@ pub struct PatchStatus {
     /// <p>The compliance severity level for a patch.</p>
     #[serde(rename = "ComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_level: Option<String>,
+    pub compliance_level: Option<PatchComplianceLevel>,
     /// <p>The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED, EXPLICIT_REJECTED).</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_status: Option<String>,
+    pub deployment_status: Option<PatchDeploymentStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PingStatus {
+    ConnectionLost,
+    Inactive,
+    Online,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPingStatus),
+}
+
+impl Default for PingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PingStatus {
+    fn into(self) -> String {
+        match self {
+            PingStatus::ConnectionLost => "ConnectionLost".to_string(),
+            PingStatus::Inactive => "Inactive".to_string(),
+            PingStatus::Online => "Online".to_string(),
+            PingStatus::UnknownVariant(UnknownPingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PingStatus::ConnectionLost => &"ConnectionLost",
+            PingStatus::Inactive => &"Inactive",
+            PingStatus::Online => &"Online",
+            PingStatus::UnknownVariant(UnknownPingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ConnectionLost" => PingStatus::ConnectionLost,
+            "Inactive" => PingStatus::Inactive,
+            "Online" => PingStatus::Online,
+            _ => PingStatus::UnknownVariant(UnknownPingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ConnectionLost" => PingStatus::ConnectionLost,
+            "Inactive" => PingStatus::Inactive,
+            "Online" => PingStatus::Online,
+            _ => PingStatus::UnknownVariant(UnknownPingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatformType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlatformType {
+    Linux,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatformType),
+}
+
+impl Default for PlatformType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlatformType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlatformType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlatformType {
+    fn into(self) -> String {
+        match self {
+            PlatformType::Linux => "Linux".to_string(),
+            PlatformType::Windows => "Windows".to_string(),
+            PlatformType::UnknownVariant(UnknownPlatformType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlatformType {
+    fn into(self) -> &'a str {
+        match self {
+            PlatformType::Linux => &"Linux",
+            PlatformType::Windows => &"Windows",
+            PlatformType::UnknownVariant(UnknownPlatformType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlatformType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Linux" => PlatformType::Linux,
+            "Windows" => PlatformType::Windows,
+            _ => PlatformType::UnknownVariant(UnknownPlatformType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlatformType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Linux" => PlatformType::Linux,
+            "Windows" => PlatformType::Windows,
+            _ => PlatformType::UnknownVariant(UnknownPlatformType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PlatformType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlatformType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An aggregate of step execution statuses displayed in the AWS Console for a multi-Region and multi-account Automation execution.</p>
@@ -6919,7 +15139,7 @@ pub struct PutComplianceItemsRequest {
     /// <p><p>The mode for uploading compliance items. You can specify <code>COMPLETE</code> or <code>PARTIAL</code>. In <code>COMPLETE</code> mode, the system overwrites all existing compliance information for the resource. You must provide a full list of compliance items each time you send the request.</p> <p>In <code>PARTIAL</code> mode, the system overwrites compliance information for a specific association. The association must be configured with <code>SyncCompliance</code> set to <code>MANUAL</code>. By default, all requests use <code>COMPLETE</code> mode.</p> <note> <p>This attribute is only valid for association compliance.</p> </note></p>
     #[serde(rename = "UploadType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub upload_type: Option<String>,
+    pub upload_type: Option<ComplianceUploadType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -6983,11 +15203,11 @@ pub struct PutParameterRequest {
     /// <p>The parameter tier to assign to a parameter.</p> <p>Parameter Store offers a standard tier and an advanced tier for parameters. Standard parameters have a content size limit of 4 KB and can't be configured to use parameter policies. You can create a maximum of 10,000 standard parameters for each Region in an AWS account. Standard parameters are offered at no additional cost. </p> <p>Advanced parameters have a content size limit of 8 KB and can be configured to use parameter policies. You can create a maximum of 100,000 advanced parameters for each Region in an AWS account. Advanced parameters incur a charge. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html">Standard and advanced parameter tiers</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can change a standard parameter to an advanced parameter any time. But you can't revert an advanced parameter to a standard parameter. Reverting an advanced parameter to a standard parameter would result in data loss because the system would truncate the size of the parameter from 8 KB to 4 KB. Reverting would also remove any policies attached to the parameter. Lastly, advanced parameters use a different form of encryption than standard parameters. </p> <p>If you no longer need an advanced parameter, or if you no longer want to incur charges for an advanced parameter, you must delete it and recreate it as a new standard parameter. </p> <p> <b>Using the Default Tier Configuration</b> </p> <p>In <code>PutParameter</code> requests, you can specify the tier to create the parameter in. Whenever you specify a tier in the request, Parameter Store creates or updates the parameter according to that request. However, if you do not specify a tier in a request, Parameter Store assigns the tier based on the current Parameter Store default tier configuration.</p> <p>The default tier when you begin using Parameter Store is the standard-parameter tier. If you use the advanced-parameter tier, you can specify one of the following as the default:</p> <ul> <li> <p> <b>Advanced</b>: With this option, Parameter Store evaluates all requests as advanced parameters. </p> </li> <li> <p> <b>Intelligent-Tiering</b>: With this option, Parameter Store evaluates each request to determine if the parameter is standard or advanced. </p> <p>If the request doesn't include any options that require an advanced parameter, the parameter is created in the standard-parameter tier. If one or more options requiring an advanced parameter are included in the request, Parameter Store create a parameter in the advanced-parameter tier.</p> <p>This approach helps control your parameter-related costs by always creating standard parameters unless an advanced parameter is necessary. </p> </li> </ul> <p>Options that require an advanced parameter include the following:</p> <ul> <li> <p>The content size of the parameter is more than 4 KB.</p> </li> <li> <p>The parameter uses a parameter policy.</p> </li> <li> <p>More than 10,000 parameters already exist in your AWS account in the current Region.</p> </li> </ul> <p>For more information about configuring the default tier option, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-default-tier.html">Specifying a default parameter tier</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<ParameterTier>,
     /// <p><p>The type of parameter that you want to add to the system.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates.</p> </note> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <important> <p>Specifying a parameter type is not required when updating a parameter. You must specify a parameter type when creating a parameter.</p> </important></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ParameterType>,
     /// <p><p>The parameter value that you want to add to the system. Standard parameters have a value limit of 4 KB. Advanced parameters have a value limit of 8 KB.</p> <note> <p>Parameters can&#39;t be referenced or nested in the values of other parameters. You can&#39;t include <code>{{}}</code> or <code>{{ssm:<i>parameter-name</i>}}</code> in a parameter value.</p> </note></p>
     #[serde(rename = "Value")]
     pub value: String,
@@ -6999,11 +15219,112 @@ pub struct PutParameterResult {
     /// <p>The tier assigned to the parameter.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<ParameterTier>,
     /// <p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRebootOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RebootOption {
+    NoReboot,
+    RebootIfNeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRebootOption),
+}
+
+impl Default for RebootOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RebootOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RebootOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RebootOption {
+    fn into(self) -> String {
+        match self {
+            RebootOption::NoReboot => "NoReboot".to_string(),
+            RebootOption::RebootIfNeeded => "RebootIfNeeded".to_string(),
+            RebootOption::UnknownVariant(UnknownRebootOption { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RebootOption {
+    fn into(self) -> &'a str {
+        match self {
+            RebootOption::NoReboot => &"NoReboot",
+            RebootOption::RebootIfNeeded => &"RebootIfNeeded",
+            RebootOption::UnknownVariant(UnknownRebootOption { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RebootOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "NoReboot" => RebootOption::NoReboot,
+            "RebootIfNeeded" => RebootOption::RebootIfNeeded,
+            _ => RebootOption::UnknownVariant(UnknownRebootOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RebootOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NoReboot" => RebootOption::NoReboot,
+            "RebootIfNeeded" => RebootOption::RebootIfNeeded,
+            _ => RebootOption::UnknownVariant(UnknownRebootOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RebootOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RebootOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RebootOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -7068,7 +15389,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     pub owner_information: Option<String>,
     /// <p>The type of target being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: MaintenanceWindowResourceType,
     /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using instance IDs, resource group names, or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p> <b>Example 4</b>: Use resource group names</p> <p> <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> <p> <b>Example 5</b>: Use filters for resource group types</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> <note> <p>For <code>Key=resource-groups:ResourceTypeFilters</code>, specify resource types in the following format</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </note> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register targets with a maintenance window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
@@ -7139,7 +15460,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
     /// <p>The type of task being registered.</p>
     #[serde(rename = "TaskType")]
-    pub task_type: String,
+    pub task_type: MaintenanceWindowTaskType,
     /// <p>The ID of the maintenance window the task should be added to.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
@@ -7170,7 +15491,7 @@ pub struct RemoveTagsFromResourceRequest {
     pub resource_id: String,
     /// <p><p>The type of resource from which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceTypeForTagging,
     /// <p>Tag keys that you want to remove from the specified resource.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
@@ -7236,7 +15557,7 @@ pub struct ResourceComplianceSummaryItem {
     /// <p>The highest severity item found for the resource. The resource is compliant for this item.</p>
     #[serde(rename = "OverallSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub overall_severity: Option<String>,
+    pub overall_severity: Option<ComplianceSeverity>,
     /// <p>The resource ID.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7248,7 +15569,7 @@ pub struct ResourceComplianceSummaryItem {
     /// <p>The compliance status for the resource.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ComplianceStatus>,
 }
 
 /// <p>Information about the AwsOrganizationsSource resource data sync source. A sync source of this type can synchronize data from AWS Organizations or, if an AWS Organization is not present, from multiple AWS Regions.</p>
@@ -7279,7 +15600,7 @@ pub struct ResourceDataSyncItem {
     /// <p>The status reported by the last sync.</p>
     #[serde(rename = "LastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status: Option<String>,
+    pub last_status: Option<LastResourceDataSyncStatus>,
     /// <p>The last time the sync operations returned a status of <code>SUCCESSFUL</code> (UTC).</p>
     #[serde(rename = "LastSuccessfulSyncTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7350,7 +15671,106 @@ pub struct ResourceDataSyncS3Destination {
     pub region: String,
     /// <p>A supported sync format. The following format is currently supported: JsonSerDe</p>
     #[serde(rename = "SyncFormat")]
-    pub sync_format: String,
+    pub sync_format: ResourceDataSyncS3Format,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceDataSyncS3Format {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceDataSyncS3Format {
+    JsonSerDe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceDataSyncS3Format),
+}
+
+impl Default for ResourceDataSyncS3Format {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceDataSyncS3Format {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceDataSyncS3Format {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceDataSyncS3Format {
+    fn into(self) -> String {
+        match self {
+            ResourceDataSyncS3Format::JsonSerDe => "JsonSerDe".to_string(),
+            ResourceDataSyncS3Format::UnknownVariant(UnknownResourceDataSyncS3Format {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceDataSyncS3Format {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceDataSyncS3Format::JsonSerDe => &"JsonSerDe",
+            ResourceDataSyncS3Format::UnknownVariant(UnknownResourceDataSyncS3Format {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceDataSyncS3Format {
+    fn from(name: &str) -> Self {
+        match name {
+            "JsonSerDe" => ResourceDataSyncS3Format::JsonSerDe,
+            _ => ResourceDataSyncS3Format::UnknownVariant(UnknownResourceDataSyncS3Format {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceDataSyncS3Format {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JsonSerDe" => ResourceDataSyncS3Format::JsonSerDe,
+            _ => ResourceDataSyncS3Format::UnknownVariant(UnknownResourceDataSyncS3Format { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceDataSyncS3Format {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceDataSyncS3Format {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceDataSyncS3Format {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the source of the data included in the resource data sync.</p>
@@ -7397,6 +15817,237 @@ pub struct ResourceDataSyncSourceWithState {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Document,
+    Ec2Instance,
+    ManagedInstance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Document => "Document".to_string(),
+            ResourceType::Ec2Instance => "EC2Instance".to_string(),
+            ResourceType::ManagedInstance => "ManagedInstance".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Document => &"Document",
+            ResourceType::Ec2Instance => &"EC2Instance",
+            ResourceType::ManagedInstance => &"ManagedInstance",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Document" => ResourceType::Document,
+            "EC2Instance" => ResourceType::Ec2Instance,
+            "ManagedInstance" => ResourceType::ManagedInstance,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Document" => ResourceType::Document,
+            "EC2Instance" => ResourceType::Ec2Instance,
+            "ManagedInstance" => ResourceType::ManagedInstance,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceTypeForTagging {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceTypeForTagging {
+    Document,
+    MaintenanceWindow,
+    ManagedInstance,
+    OpsItem,
+    Parameter,
+    PatchBaseline,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceTypeForTagging),
+}
+
+impl Default for ResourceTypeForTagging {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceTypeForTagging {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceTypeForTagging {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceTypeForTagging {
+    fn into(self) -> String {
+        match self {
+            ResourceTypeForTagging::Document => "Document".to_string(),
+            ResourceTypeForTagging::MaintenanceWindow => "MaintenanceWindow".to_string(),
+            ResourceTypeForTagging::ManagedInstance => "ManagedInstance".to_string(),
+            ResourceTypeForTagging::OpsItem => "OpsItem".to_string(),
+            ResourceTypeForTagging::Parameter => "Parameter".to_string(),
+            ResourceTypeForTagging::PatchBaseline => "PatchBaseline".to_string(),
+            ResourceTypeForTagging::UnknownVariant(UnknownResourceTypeForTagging {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceTypeForTagging {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceTypeForTagging::Document => &"Document",
+            ResourceTypeForTagging::MaintenanceWindow => &"MaintenanceWindow",
+            ResourceTypeForTagging::ManagedInstance => &"ManagedInstance",
+            ResourceTypeForTagging::OpsItem => &"OpsItem",
+            ResourceTypeForTagging::Parameter => &"Parameter",
+            ResourceTypeForTagging::PatchBaseline => &"PatchBaseline",
+            ResourceTypeForTagging::UnknownVariant(UnknownResourceTypeForTagging {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceTypeForTagging {
+    fn from(name: &str) -> Self {
+        match name {
+            "Document" => ResourceTypeForTagging::Document,
+            "MaintenanceWindow" => ResourceTypeForTagging::MaintenanceWindow,
+            "ManagedInstance" => ResourceTypeForTagging::ManagedInstance,
+            "OpsItem" => ResourceTypeForTagging::OpsItem,
+            "Parameter" => ResourceTypeForTagging::Parameter,
+            "PatchBaseline" => ResourceTypeForTagging::PatchBaseline,
+            _ => ResourceTypeForTagging::UnknownVariant(UnknownResourceTypeForTagging {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceTypeForTagging {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Document" => ResourceTypeForTagging::Document,
+            "MaintenanceWindow" => ResourceTypeForTagging::MaintenanceWindow,
+            "ManagedInstance" => ResourceTypeForTagging::ManagedInstance,
+            "OpsItem" => ResourceTypeForTagging::OpsItem,
+            "Parameter" => ResourceTypeForTagging::Parameter,
+            "PatchBaseline" => ResourceTypeForTagging::PatchBaseline,
+            _ => ResourceTypeForTagging::UnknownVariant(UnknownResourceTypeForTagging { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceTypeForTagging {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceTypeForTagging {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceTypeForTagging {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The inventory item result attribute.</p>
@@ -7448,7 +16099,118 @@ pub struct ReviewInformation {
     /// <p>The current status of the document review request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReviewStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReviewStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReviewStatus {
+    Approved,
+    NotReviewed,
+    Pending,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReviewStatus),
+}
+
+impl Default for ReviewStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReviewStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReviewStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReviewStatus {
+    fn into(self) -> String {
+        match self {
+            ReviewStatus::Approved => "APPROVED".to_string(),
+            ReviewStatus::NotReviewed => "NOT_REVIEWED".to_string(),
+            ReviewStatus::Pending => "PENDING".to_string(),
+            ReviewStatus::Rejected => "REJECTED".to_string(),
+            ReviewStatus::UnknownVariant(UnknownReviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReviewStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReviewStatus::Approved => &"APPROVED",
+            ReviewStatus::NotReviewed => &"NOT_REVIEWED",
+            ReviewStatus::Pending => &"PENDING",
+            ReviewStatus::Rejected => &"REJECTED",
+            ReviewStatus::UnknownVariant(UnknownReviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReviewStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPROVED" => ReviewStatus::Approved,
+            "NOT_REVIEWED" => ReviewStatus::NotReviewed,
+            "PENDING" => ReviewStatus::Pending,
+            "REJECTED" => ReviewStatus::Rejected,
+            _ => ReviewStatus::UnknownVariant(UnknownReviewStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReviewStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPROVED" => ReviewStatus::Approved,
+            "NOT_REVIEWED" => ReviewStatus::NotReviewed,
+            "PENDING" => ReviewStatus::Pending,
+            "REJECTED" => ReviewStatus::Rejected,
+            _ => ReviewStatus::UnknownVariant(UnknownReviewStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReviewStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReviewStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Information about an Automation runbook (Automation document) used in a runbook workflow in Change Manager.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
@@ -7544,7 +16306,7 @@ pub struct SendAutomationSignalRequest {
     pub payload: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p>The type of signal to send to an Automation execution. </p>
     #[serde(rename = "SignalType")]
-    pub signal_type: String,
+    pub signal_type: SignalType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -7569,7 +16331,7 @@ pub struct SendCommandRequest {
     /// <p><p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "DocumentHashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_hash_type: Option<String>,
+    pub document_hash_type: Option<DocumentHashType>,
     /// <p>Required. The name of the Systems Manager document to run. This can be a public document or a custom document.</p>
     #[serde(rename = "DocumentName")]
     pub document_name: String,
@@ -7697,7 +16459,7 @@ pub struct Session {
     /// <p>The status of the session. For example, "Connected" or "Terminated".</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SessionStatus>,
     /// <p>The instance that the Session Manager session connected to.</p>
     #[serde(rename = "Target")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7710,10 +16472,135 @@ pub struct Session {
 pub struct SessionFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
-    pub key: String,
+    pub key: SessionFilterKey,
     /// <p><p>The filter value. Valid values for each filter key are as follows:</p> <ul> <li> <p>InvokedAfter: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started August 29, 2018, and later.</p> </li> <li> <p>InvokedBefore: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started before August 29, 2018.</p> </li> <li> <p>Target: Specify an instance to which session connections have been made.</p> </li> <li> <p>Owner: Specify an AWS user account to see a list of sessions started by that user.</p> </li> <li> <p>Status: Specify a valid session status to see a list of all sessions with that status. Status values you can specify include:</p> <ul> <li> <p>Connected</p> </li> <li> <p>Connecting</p> </li> <li> <p>Disconnected</p> </li> <li> <p>Terminated</p> </li> <li> <p>Terminating</p> </li> <li> <p>Failed</p> </li> </ul> </li> <li> <p>SessionId: Specify a session ID to return details about the session.</p> </li> </ul></p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSessionFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SessionFilterKey {
+    InvokedAfter,
+    InvokedBefore,
+    Owner,
+    SessionId,
+    Status,
+    Target,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSessionFilterKey),
+}
+
+impl Default for SessionFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SessionFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SessionFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SessionFilterKey {
+    fn into(self) -> String {
+        match self {
+            SessionFilterKey::InvokedAfter => "InvokedAfter".to_string(),
+            SessionFilterKey::InvokedBefore => "InvokedBefore".to_string(),
+            SessionFilterKey::Owner => "Owner".to_string(),
+            SessionFilterKey::SessionId => "SessionId".to_string(),
+            SessionFilterKey::Status => "Status".to_string(),
+            SessionFilterKey::Target => "Target".to_string(),
+            SessionFilterKey::UnknownVariant(UnknownSessionFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SessionFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            SessionFilterKey::InvokedAfter => &"InvokedAfter",
+            SessionFilterKey::InvokedBefore => &"InvokedBefore",
+            SessionFilterKey::Owner => &"Owner",
+            SessionFilterKey::SessionId => &"SessionId",
+            SessionFilterKey::Status => &"Status",
+            SessionFilterKey::Target => &"Target",
+            SessionFilterKey::UnknownVariant(UnknownSessionFilterKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SessionFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "InvokedAfter" => SessionFilterKey::InvokedAfter,
+            "InvokedBefore" => SessionFilterKey::InvokedBefore,
+            "Owner" => SessionFilterKey::Owner,
+            "SessionId" => SessionFilterKey::SessionId,
+            "Status" => SessionFilterKey::Status,
+            "Target" => SessionFilterKey::Target,
+            _ => SessionFilterKey::UnknownVariant(UnknownSessionFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SessionFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InvokedAfter" => SessionFilterKey::InvokedAfter,
+            "InvokedBefore" => SessionFilterKey::InvokedBefore,
+            "Owner" => SessionFilterKey::Owner,
+            "SessionId" => SessionFilterKey::SessionId,
+            "Status" => SessionFilterKey::Status,
+            "Target" => SessionFilterKey::Target,
+            _ => SessionFilterKey::UnknownVariant(UnknownSessionFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SessionFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SessionFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SessionFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Reserved for future use.</p>
@@ -7728,6 +16615,228 @@ pub struct SessionManagerOutputUrl {
     #[serde(rename = "S3OutputUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_output_url: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSessionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SessionState {
+    Active,
+    History,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSessionState),
+}
+
+impl Default for SessionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SessionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SessionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SessionState {
+    fn into(self) -> String {
+        match self {
+            SessionState::Active => "Active".to_string(),
+            SessionState::History => "History".to_string(),
+            SessionState::UnknownVariant(UnknownSessionState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SessionState {
+    fn into(self) -> &'a str {
+        match self {
+            SessionState::Active => &"Active",
+            SessionState::History => &"History",
+            SessionState::UnknownVariant(UnknownSessionState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SessionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => SessionState::Active,
+            "History" => SessionState::History,
+            _ => SessionState::UnknownVariant(UnknownSessionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SessionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => SessionState::Active,
+            "History" => SessionState::History,
+            _ => SessionState::UnknownVariant(UnknownSessionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SessionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SessionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SessionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSessionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SessionStatus {
+    Connected,
+    Connecting,
+    Disconnected,
+    Failed,
+    Terminated,
+    Terminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSessionStatus),
+}
+
+impl Default for SessionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SessionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SessionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SessionStatus {
+    fn into(self) -> String {
+        match self {
+            SessionStatus::Connected => "Connected".to_string(),
+            SessionStatus::Connecting => "Connecting".to_string(),
+            SessionStatus::Disconnected => "Disconnected".to_string(),
+            SessionStatus::Failed => "Failed".to_string(),
+            SessionStatus::Terminated => "Terminated".to_string(),
+            SessionStatus::Terminating => "Terminating".to_string(),
+            SessionStatus::UnknownVariant(UnknownSessionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SessionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SessionStatus::Connected => &"Connected",
+            SessionStatus::Connecting => &"Connecting",
+            SessionStatus::Disconnected => &"Disconnected",
+            SessionStatus::Failed => &"Failed",
+            SessionStatus::Terminated => &"Terminated",
+            SessionStatus::Terminating => &"Terminating",
+            SessionStatus::UnknownVariant(UnknownSessionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SessionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Connected" => SessionStatus::Connected,
+            "Connecting" => SessionStatus::Connecting,
+            "Disconnected" => SessionStatus::Disconnected,
+            "Failed" => SessionStatus::Failed,
+            "Terminated" => SessionStatus::Terminated,
+            "Terminating" => SessionStatus::Terminating,
+            _ => SessionStatus::UnknownVariant(UnknownSessionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SessionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Connected" => SessionStatus::Connected,
+            "Connecting" => SessionStatus::Connecting,
+            "Disconnected" => SessionStatus::Disconnected,
+            "Failed" => SessionStatus::Failed,
+            "Terminated" => SessionStatus::Terminated,
+            "Terminating" => SessionStatus::Terminating,
+            _ => SessionStatus::UnknownVariant(UnknownSessionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SessionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SessionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SessionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The number of managed instances found for each patch severity level defined in the request filter.</p>
@@ -7758,6 +16867,122 @@ pub struct SeveritySummary {
     #[serde(rename = "UnspecifiedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unspecified_count: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSignalType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SignalType {
+    Approve,
+    Reject,
+    Resume,
+    StartStep,
+    StopStep,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSignalType),
+}
+
+impl Default for SignalType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SignalType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SignalType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SignalType {
+    fn into(self) -> String {
+        match self {
+            SignalType::Approve => "Approve".to_string(),
+            SignalType::Reject => "Reject".to_string(),
+            SignalType::Resume => "Resume".to_string(),
+            SignalType::StartStep => "StartStep".to_string(),
+            SignalType::StopStep => "StopStep".to_string(),
+            SignalType::UnknownVariant(UnknownSignalType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SignalType {
+    fn into(self) -> &'a str {
+        match self {
+            SignalType::Approve => &"Approve",
+            SignalType::Reject => &"Reject",
+            SignalType::Resume => &"Resume",
+            SignalType::StartStep => &"StartStep",
+            SignalType::StopStep => &"StopStep",
+            SignalType::UnknownVariant(UnknownSignalType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SignalType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approve" => SignalType::Approve,
+            "Reject" => SignalType::Reject,
+            "Resume" => SignalType::Resume,
+            "StartStep" => SignalType::StartStep,
+            "StopStep" => SignalType::StopStep,
+            _ => SignalType::UnknownVariant(UnknownSignalType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SignalType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approve" => SignalType::Approve,
+            "Reject" => SignalType::Reject,
+            "Resume" => SignalType::Resume,
+            "StartStep" => SignalType::StartStep,
+            "StopStep" => SignalType::StopStep,
+            _ => SignalType::UnknownVariant(UnknownSignalType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SignalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SignalType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SignalType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -7797,7 +17022,7 @@ pub struct StartAutomationExecutionRequest {
     /// <p>The execution mode of the automation. Valid modes include the following: Auto and Interactive. The default mode is Auto.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ExecutionMode>,
     /// <p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7985,7 +17210,7 @@ pub struct StepExecution {
     /// <p>The execution status for this step.</p>
     #[serde(rename = "StepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_status: Option<String>,
+    pub step_status: Option<AutomationExecutionStatus>,
     /// <p>The combination of AWS Regions and accounts targeted by the current Automation execution.</p>
     #[serde(rename = "TargetLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8010,10 +17235,135 @@ pub struct StepExecution {
 pub struct StepExecutionFilter {
     /// <p>One or more keys to limit the results. Valid filter keys include the following: StepName, Action, StepExecutionId, StepExecutionStatus, StartTimeBefore, StartTimeAfter.</p>
     #[serde(rename = "Key")]
-    pub key: String,
+    pub key: StepExecutionFilterKey,
     /// <p>The values of the filter key.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStepExecutionFilterKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StepExecutionFilterKey {
+    Action,
+    StartTimeAfter,
+    StartTimeBefore,
+    StepExecutionId,
+    StepExecutionStatus,
+    StepName,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStepExecutionFilterKey),
+}
+
+impl Default for StepExecutionFilterKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StepExecutionFilterKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StepExecutionFilterKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StepExecutionFilterKey {
+    fn into(self) -> String {
+        match self {
+            StepExecutionFilterKey::Action => "Action".to_string(),
+            StepExecutionFilterKey::StartTimeAfter => "StartTimeAfter".to_string(),
+            StepExecutionFilterKey::StartTimeBefore => "StartTimeBefore".to_string(),
+            StepExecutionFilterKey::StepExecutionId => "StepExecutionId".to_string(),
+            StepExecutionFilterKey::StepExecutionStatus => "StepExecutionStatus".to_string(),
+            StepExecutionFilterKey::StepName => "StepName".to_string(),
+            StepExecutionFilterKey::UnknownVariant(UnknownStepExecutionFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StepExecutionFilterKey {
+    fn into(self) -> &'a str {
+        match self {
+            StepExecutionFilterKey::Action => &"Action",
+            StepExecutionFilterKey::StartTimeAfter => &"StartTimeAfter",
+            StepExecutionFilterKey::StartTimeBefore => &"StartTimeBefore",
+            StepExecutionFilterKey::StepExecutionId => &"StepExecutionId",
+            StepExecutionFilterKey::StepExecutionStatus => &"StepExecutionStatus",
+            StepExecutionFilterKey::StepName => &"StepName",
+            StepExecutionFilterKey::UnknownVariant(UnknownStepExecutionFilterKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StepExecutionFilterKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "Action" => StepExecutionFilterKey::Action,
+            "StartTimeAfter" => StepExecutionFilterKey::StartTimeAfter,
+            "StartTimeBefore" => StepExecutionFilterKey::StartTimeBefore,
+            "StepExecutionId" => StepExecutionFilterKey::StepExecutionId,
+            "StepExecutionStatus" => StepExecutionFilterKey::StepExecutionStatus,
+            "StepName" => StepExecutionFilterKey::StepName,
+            _ => StepExecutionFilterKey::UnknownVariant(UnknownStepExecutionFilterKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StepExecutionFilterKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Action" => StepExecutionFilterKey::Action,
+            "StartTimeAfter" => StepExecutionFilterKey::StartTimeAfter,
+            "StartTimeBefore" => StepExecutionFilterKey::StartTimeBefore,
+            "StepExecutionId" => StepExecutionFilterKey::StepExecutionId,
+            "StepExecutionStatus" => StepExecutionFilterKey::StepExecutionStatus,
+            "StepName" => StepExecutionFilterKey::StepName,
+            _ => StepExecutionFilterKey::UnknownVariant(UnknownStepExecutionFilterKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepExecutionFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StepExecutionFilterKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StepExecutionFilterKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8025,12 +17375,113 @@ pub struct StopAutomationExecutionRequest {
     /// <p>The stop request type. Valid types include the following: Cancel and Complete. The default type is Cancel.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<StopType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAutomationExecutionResult {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStopType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StopType {
+    Cancel,
+    Complete,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStopType),
+}
+
+impl Default for StopType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StopType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StopType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StopType {
+    fn into(self) -> String {
+        match self {
+            StopType::Cancel => "Cancel".to_string(),
+            StopType::Complete => "Complete".to_string(),
+            StopType::UnknownVariant(UnknownStopType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StopType {
+    fn into(self) -> &'a str {
+        match self {
+            StopType::Cancel => &"Cancel",
+            StopType::Complete => &"Complete",
+            StopType::UnknownVariant(UnknownStopType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StopType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancel" => StopType::Cancel,
+            "Complete" => StopType::Complete,
+            _ => StopType::UnknownVariant(UnknownStopType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StopType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancel" => StopType::Cancel,
+            "Complete" => StopType::Complete,
+            _ => StopType::UnknownVariant(UnknownStopType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StopType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StopType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StopType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -8123,7 +17574,7 @@ pub struct UpdateAssociationRequest {
     /// <p>The severity level to assign to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_severity: Option<String>,
+    pub compliance_severity: Option<AssociationComplianceSeverity>,
     /// <p>The document version you want update for the association. </p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8155,7 +17606,7 @@ pub struct UpdateAssociationRequest {
     /// <p>The mode for generating association compliance. You can specify <code>AUTO</code> or <code>MANUAL</code>. In <code>AUTO</code> mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is <code>COMPLIANT</code>. If the association execution doesn't run successfully, the association is <code>NON-COMPLIANT</code>.</p> <p>In <code>MANUAL</code> mode, you must specify the <code>AssociationId</code> as a parameter for the <a>PutComplianceItems</a> API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the <a>PutComplianceItems</a> API action.</p> <p>By default, all associations use <code>AUTO</code> mode.</p>
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sync_compliance: Option<String>,
+    pub sync_compliance: Option<AssociationSyncCompliance>,
     /// <p>A location is a combination of AWS Regions and AWS accounts where you want to run the association. Use this action to update an association in multiple Regions and multiple accounts.</p>
     #[serde(rename = "TargetLocations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8250,7 +17701,7 @@ pub struct UpdateDocumentRequest {
     /// <p>Specify the document format for the new document version. Systems Manager supports JSON and YAML documents. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_format: Option<String>,
+    pub document_format: Option<DocumentFormat>,
     /// <p>(Required) The latest version of the document that you want to update. The latest document version can be specified using the $LATEST variable or by the version number. Updating a previous version of a document is not supported.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8636,7 +18087,7 @@ pub struct UpdateOpsItemRequest {
     /// <p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems.html#OpsCenter-working-with-OpsItems-editing-details">Editing OpsItem details</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OpsItemStatus>,
     /// <p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8686,7 +18137,7 @@ pub struct UpdatePatchBaselineRequest {
     /// <p>Assigns a new compliance severity level to an existing patch baseline.</p>
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub approved_patches_compliance_level: Option<String>,
+    pub approved_patches_compliance_level: Option<PatchComplianceLevel>,
     /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
     #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8713,7 +18164,7 @@ pub struct UpdatePatchBaselineRequest {
     /// <p><p>The action for Patch Manager to take on patches included in the RejectedPackages list.</p> <ul> <li> <p> <b>ALLOW<em>AS</em>DEPENDENCY</b>: A package in the Rejected patches list is installed only if it is a dependency of another package. It is considered compliant with the patch baseline, and its status is reported as <i>InstalledOther</i>. This is the default action if no option is specified.</p> </li> <li> <p> <b>BLOCK</b>: Packages in the RejectedPatches list, and packages that include them as dependencies, are not installed under any circumstances. If a package was installed before it was added to the Rejected patches list, it is considered non-compliant with the patch baseline, and its status is reported as <i>InstalledRejected</i>.</p> </li> </ul></p>
     #[serde(rename = "RejectedPatchesAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rejected_patches_action: Option<String>,
+    pub rejected_patches_action: Option<PatchAction>,
     /// <p>If True, then all fields that are required by the CreatePatchBaseline action are also required for this API request. Optional fields that are not specified are set to null.</p>
     #[serde(rename = "Replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8738,7 +18189,7 @@ pub struct UpdatePatchBaselineResult {
     /// <p>The compliance severity level assigned to the patch baseline after the update completed.</p>
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub approved_patches_compliance_level: Option<String>,
+    pub approved_patches_compliance_level: Option<PatchComplianceLevel>,
     /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
     #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8770,7 +18221,7 @@ pub struct UpdatePatchBaselineResult {
     /// <p>The operating system rule used by the updated patch baseline.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>A list of explicitly rejected patches for the baseline.</p>
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8778,7 +18229,7 @@ pub struct UpdatePatchBaselineResult {
     /// <p>The action specified to take on patches included in the RejectedPatches list. A patch can be allowed only if it is a dependency of another package, or blocked entirely along with packages that include it as a dependency.</p>
     #[serde(rename = "RejectedPatchesAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rejected_patches_action: Option<String>,
+    pub rejected_patches_action: Option<PatchAction>,
     /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]

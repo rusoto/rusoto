@@ -320,11 +320,127 @@ pub struct Operator {
     /// <p> The logical operation to be performed: equal (<code>EQ</code>), equal reference (<code>REF_EQ</code>), less than or equal (<code>LE</code>), greater than or equal (<code>GE</code>), or between (<code>BETWEEN</code>). Equal reference (<code>REF_EQ</code>) can be used only with reference fields. The other comparison types can be used only with String fields. The comparison types you can use apply only to certain object fields, as detailed below. </p> <p> The comparison operators EQ and REF_EQ act on the following fields: </p> <ul> <li>name</li> <li>@sphere</li> <li>parent</li> <li>@componentParent</li> <li>@instanceParent</li> <li>@status</li> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p> The comparison operators <code>GE</code>, <code>LE</code>, and <code>BETWEEN</code> act on the following fields: </p> <ul> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p>Note that fields beginning with the at sign (@) are read-only and set by the web service. When you name fields, you should choose names containing only alpha-numeric values, as symbols may be reserved by AWS Data Pipeline. User-defined fields that you add to a pipeline should prefix their name with the string "my".</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<OperatorType>,
     /// <p>The value that the actual field value will be compared with.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperatorType {
+    Between,
+    Eq,
+    Ge,
+    Le,
+    RefEq,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperatorType),
+}
+
+impl Default for OperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperatorType {
+    fn into(self) -> String {
+        match self {
+            OperatorType::Between => "BETWEEN".to_string(),
+            OperatorType::Eq => "EQ".to_string(),
+            OperatorType::Ge => "GE".to_string(),
+            OperatorType::Le => "LE".to_string(),
+            OperatorType::RefEq => "REF_EQ".to_string(),
+            OperatorType::UnknownVariant(UnknownOperatorType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            OperatorType::Between => &"BETWEEN",
+            OperatorType::Eq => &"EQ",
+            OperatorType::Ge => &"GE",
+            OperatorType::Le => &"LE",
+            OperatorType::RefEq => &"REF_EQ",
+            OperatorType::UnknownVariant(UnknownOperatorType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BETWEEN" => OperatorType::Between,
+            "EQ" => OperatorType::Eq,
+            "GE" => OperatorType::Ge,
+            "LE" => OperatorType::Le,
+            "REF_EQ" => OperatorType::RefEq,
+            _ => OperatorType::UnknownVariant(UnknownOperatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BETWEEN" => OperatorType::Between,
+            "EQ" => OperatorType::Eq,
+            "GE" => OperatorType::Ge,
+            "LE" => OperatorType::Le,
+            "REF_EQ" => OperatorType::RefEq,
+            _ => OperatorType::UnknownVariant(UnknownOperatorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The attributes allowed or specified with a parameter object.</p>
@@ -641,7 +757,7 @@ pub struct SetTaskStatusInput {
     pub task_id: String,
     /// <p>If <code>FINISHED</code>, the task successfully completed. If <code>FAILED</code>, the task ended unsuccessfully. Preconditions use false.</p>
     #[serde(rename = "taskStatus")]
-    pub task_status: String,
+    pub task_status: TaskStatus,
 }
 
 /// <p>Contains the output of SetTaskStatus.</p>
@@ -680,6 +796,112 @@ pub struct TaskObject {
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskStatus {
+    Failed,
+    False,
+    Finished,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskStatus),
+}
+
+impl Default for TaskStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskStatus {
+    fn into(self) -> String {
+        match self {
+            TaskStatus::Failed => "FAILED".to_string(),
+            TaskStatus::False => "FALSE".to_string(),
+            TaskStatus::Finished => "FINISHED".to_string(),
+            TaskStatus::UnknownVariant(UnknownTaskStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TaskStatus::Failed => &"FAILED",
+            TaskStatus::False => &"FALSE",
+            TaskStatus::Finished => &"FINISHED",
+            TaskStatus::UnknownVariant(UnknownTaskStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => TaskStatus::Failed,
+            "FALSE" => TaskStatus::False,
+            "FINISHED" => TaskStatus::Finished,
+            _ => TaskStatus::UnknownVariant(UnknownTaskStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => TaskStatus::Failed,
+            "FALSE" => TaskStatus::False,
+            "FINISHED" => TaskStatus::Finished,
+            _ => TaskStatus::UnknownVariant(UnknownTaskStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TaskStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains the parameters for ValidatePipelineDefinition.</p>

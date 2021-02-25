@@ -32,7 +32,7 @@ pub struct BatchPutMessageErrorEntry {
     /// <p>The code associated with the error.</p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>More information about the error.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -67,7 +67,7 @@ pub struct BatchUpdateDetectorErrorEntry {
     /// <p>The code of the error.</p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>A message describing the error.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -214,6 +214,122 @@ pub struct DetectorSummary {
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<DetectorStateSummary>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    InternalFailureException,
+    InvalidRequestException,
+    ResourceNotFoundException,
+    ServiceUnavailableException,
+    ThrottlingException,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::InternalFailureException => "InternalFailureException".to_string(),
+            ErrorCode::InvalidRequestException => "InvalidRequestException".to_string(),
+            ErrorCode::ResourceNotFoundException => "ResourceNotFoundException".to_string(),
+            ErrorCode::ServiceUnavailableException => "ServiceUnavailableException".to_string(),
+            ErrorCode::ThrottlingException => "ThrottlingException".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::InternalFailureException => &"InternalFailureException",
+            ErrorCode::InvalidRequestException => &"InvalidRequestException",
+            ErrorCode::ResourceNotFoundException => &"ResourceNotFoundException",
+            ErrorCode::ServiceUnavailableException => &"ServiceUnavailableException",
+            ErrorCode::ThrottlingException => &"ThrottlingException",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "InternalFailureException" => ErrorCode::InternalFailureException,
+            "InvalidRequestException" => ErrorCode::InvalidRequestException,
+            "ResourceNotFoundException" => ErrorCode::ResourceNotFoundException,
+            "ServiceUnavailableException" => ErrorCode::ServiceUnavailableException,
+            "ThrottlingException" => ErrorCode::ThrottlingException,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InternalFailureException" => ErrorCode::InternalFailureException,
+            "InvalidRequestException" => ErrorCode::InvalidRequestException,
+            "ResourceNotFoundException" => ErrorCode::ResourceNotFoundException,
+            "ServiceUnavailableException" => ErrorCode::ServiceUnavailableException,
+            "ThrottlingException" => ErrorCode::ThrottlingException,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

@@ -37,7 +37,7 @@ pub struct GetIceServerConfigRequest {
     /// <p>Specifies the desired service. Currently, <code>TURN</code> is the only valid value.</p>
     #[serde(rename = "Service")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<String>,
+    pub service: Option<Service>,
     /// <p>An optional user ID to be associated with the credentials.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,6 +96,102 @@ pub struct SendAlexaOfferToMasterResponse {
     #[serde(rename = "Answer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub answer: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownService {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Service {
+    Turn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownService),
+}
+
+impl Default for Service {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Service {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Service {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Service {
+    fn into(self) -> String {
+        match self {
+            Service::Turn => "TURN".to_string(),
+            Service::UnknownVariant(UnknownService { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Service {
+    fn into(self) -> &'a str {
+        match self {
+            Service::Turn => &"TURN",
+            Service::UnknownVariant(UnknownService { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Service {
+    fn from(name: &str) -> Self {
+        match name {
+            "TURN" => Service::Turn,
+            _ => Service::UnknownVariant(UnknownService {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Service {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TURN" => Service::Turn,
+            _ => Service::UnknownVariant(UnknownService { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Service {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Service {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Service {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by GetIceServerConfig

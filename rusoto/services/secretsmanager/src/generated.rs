@@ -264,11 +264,131 @@ pub struct Filter {
     /// <p>Filters your list of secrets by a specific key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: Option<FilterNameStringType>,
     /// <p>Filters your list of secrets by a specific value.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterNameStringType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterNameStringType {
+    All,
+    Description,
+    Name,
+    TagKey,
+    TagValue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterNameStringType),
+}
+
+impl Default for FilterNameStringType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterNameStringType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterNameStringType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterNameStringType {
+    fn into(self) -> String {
+        match self {
+            FilterNameStringType::All => "all".to_string(),
+            FilterNameStringType::Description => "description".to_string(),
+            FilterNameStringType::Name => "name".to_string(),
+            FilterNameStringType::TagKey => "tag-key".to_string(),
+            FilterNameStringType::TagValue => "tag-value".to_string(),
+            FilterNameStringType::UnknownVariant(UnknownFilterNameStringType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterNameStringType {
+    fn into(self) -> &'a str {
+        match self {
+            FilterNameStringType::All => &"all",
+            FilterNameStringType::Description => &"description",
+            FilterNameStringType::Name => &"name",
+            FilterNameStringType::TagKey => &"tag-key",
+            FilterNameStringType::TagValue => &"tag-value",
+            FilterNameStringType::UnknownVariant(UnknownFilterNameStringType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterNameStringType {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => FilterNameStringType::All,
+            "description" => FilterNameStringType::Description,
+            "name" => FilterNameStringType::Name,
+            "tag-key" => FilterNameStringType::TagKey,
+            "tag-value" => FilterNameStringType::TagValue,
+            _ => FilterNameStringType::UnknownVariant(UnknownFilterNameStringType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterNameStringType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => FilterNameStringType::All,
+            "description" => FilterNameStringType::Description,
+            "name" => FilterNameStringType::Name,
+            "tag-key" => FilterNameStringType::TagKey,
+            "tag-value" => FilterNameStringType::TagValue,
+            _ => FilterNameStringType::UnknownVariant(UnknownFilterNameStringType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterNameStringType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterNameStringType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterNameStringType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -455,7 +575,7 @@ pub struct ListSecretsRequest {
     /// <p>Lists secrets in the requested order. </p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -702,6 +822,107 @@ pub struct SecretVersionsListEntry {
     #[serde(rename = "VersionStages")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_stages: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrderType {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrderType),
+}
+
+impl Default for SortOrderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrderType {
+    fn into(self) -> String {
+        match self {
+            SortOrderType::Asc => "asc".to_string(),
+            SortOrderType::Desc => "desc".to_string(),
+            SortOrderType::UnknownVariant(UnknownSortOrderType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrderType {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrderType::Asc => &"asc",
+            SortOrderType::Desc => &"desc",
+            SortOrderType::UnknownVariant(UnknownSortOrderType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "asc" => SortOrderType::Asc,
+            "desc" => SortOrderType::Desc,
+            _ => SortOrderType::UnknownVariant(UnknownSortOrderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "asc" => SortOrderType::Asc,
+            "desc" => SortOrderType::Desc,
+            _ => SortOrderType::UnknownVariant(UnknownSortOrderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A structure that contains information about a tag.</p>

@@ -68,6 +68,119 @@ pub struct AcceptHandshakeResponse {
     pub handshake: Option<Handshake>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessDeniedForDependencyExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessDeniedForDependencyExceptionReason {
+    AccessDeniedDuringCreateServiceLinkedRole,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessDeniedForDependencyExceptionReason),
+}
+
+impl Default for AccessDeniedForDependencyExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessDeniedForDependencyExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessDeniedForDependencyExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessDeniedForDependencyExceptionReason {
+    fn into(self) -> String {
+        match self {
+            AccessDeniedForDependencyExceptionReason::AccessDeniedDuringCreateServiceLinkedRole => {
+                "ACCESS_DENIED_DURING_CREATE_SERVICE_LINKED_ROLE".to_string()
+            }
+            AccessDeniedForDependencyExceptionReason::UnknownVariant(
+                UnknownAccessDeniedForDependencyExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessDeniedForDependencyExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            AccessDeniedForDependencyExceptionReason::AccessDeniedDuringCreateServiceLinkedRole => {
+                &"ACCESS_DENIED_DURING_CREATE_SERVICE_LINKED_ROLE"
+            }
+            AccessDeniedForDependencyExceptionReason::UnknownVariant(
+                UnknownAccessDeniedForDependencyExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AccessDeniedForDependencyExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED_DURING_CREATE_SERVICE_LINKED_ROLE" => {
+                AccessDeniedForDependencyExceptionReason::AccessDeniedDuringCreateServiceLinkedRole
+            }
+            _ => AccessDeniedForDependencyExceptionReason::UnknownVariant(
+                UnknownAccessDeniedForDependencyExceptionReason {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AccessDeniedForDependencyExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED_DURING_CREATE_SERVICE_LINKED_ROLE" => {
+                AccessDeniedForDependencyExceptionReason::AccessDeniedDuringCreateServiceLinkedRole
+            }
+            _ => AccessDeniedForDependencyExceptionReason::UnknownVariant(
+                UnknownAccessDeniedForDependencyExceptionReason { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessDeniedForDependencyExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AccessDeniedForDependencyExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AccessDeniedForDependencyExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about an AWS account that is a member of an organization.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -87,7 +200,7 @@ pub struct Account {
     /// <p>The method by which the account joined the organization.</p>
     #[serde(rename = "JoinedMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub joined_method: Option<String>,
+    pub joined_method: Option<AccountJoinedMethod>,
     /// <p>The date the account became a part of the organization.</p>
     #[serde(rename = "JoinedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,7 +212,331 @@ pub struct Account {
     /// <p>The status of the account in the organization.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AccountStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountJoinedMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountJoinedMethod {
+    Created,
+    Invited,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountJoinedMethod),
+}
+
+impl Default for AccountJoinedMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountJoinedMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountJoinedMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountJoinedMethod {
+    fn into(self) -> String {
+        match self {
+            AccountJoinedMethod::Created => "CREATED".to_string(),
+            AccountJoinedMethod::Invited => "INVITED".to_string(),
+            AccountJoinedMethod::UnknownVariant(UnknownAccountJoinedMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountJoinedMethod {
+    fn into(self) -> &'a str {
+        match self {
+            AccountJoinedMethod::Created => &"CREATED",
+            AccountJoinedMethod::Invited => &"INVITED",
+            AccountJoinedMethod::UnknownVariant(UnknownAccountJoinedMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AccountJoinedMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => AccountJoinedMethod::Created,
+            "INVITED" => AccountJoinedMethod::Invited,
+            _ => AccountJoinedMethod::UnknownVariant(UnknownAccountJoinedMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountJoinedMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => AccountJoinedMethod::Created,
+            "INVITED" => AccountJoinedMethod::Invited,
+            _ => AccountJoinedMethod::UnknownVariant(UnknownAccountJoinedMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountJoinedMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AccountJoinedMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccountJoinedMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountStatus {
+    Active,
+    Suspended,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountStatus),
+}
+
+impl Default for AccountStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountStatus {
+    fn into(self) -> String {
+        match self {
+            AccountStatus::Active => "ACTIVE".to_string(),
+            AccountStatus::Suspended => "SUSPENDED".to_string(),
+            AccountStatus::UnknownVariant(UnknownAccountStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AccountStatus::Active => &"ACTIVE",
+            AccountStatus::Suspended => &"SUSPENDED",
+            AccountStatus::UnknownVariant(UnknownAccountStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccountStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => AccountStatus::Active,
+            "SUSPENDED" => AccountStatus::Suspended,
+            _ => AccountStatus::UnknownVariant(UnknownAccountStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => AccountStatus::Active,
+            "SUSPENDED" => AccountStatus::Suspended,
+            _ => AccountStatus::UnknownVariant(UnknownAccountStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AccountStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccountStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionType {
+    AddOrganizationsServiceLinkedRole,
+    ApproveAllFeatures,
+    EnableAllFeatures,
+    Invite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionType),
+}
+
+impl Default for ActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionType {
+    fn into(self) -> String {
+        match self {
+            ActionType::AddOrganizationsServiceLinkedRole => {
+                "ADD_ORGANIZATIONS_SERVICE_LINKED_ROLE".to_string()
+            }
+            ActionType::ApproveAllFeatures => "APPROVE_ALL_FEATURES".to_string(),
+            ActionType::EnableAllFeatures => "ENABLE_ALL_FEATURES".to_string(),
+            ActionType::Invite => "INVITE".to_string(),
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionType {
+    fn into(self) -> &'a str {
+        match self {
+            ActionType::AddOrganizationsServiceLinkedRole => {
+                &"ADD_ORGANIZATIONS_SERVICE_LINKED_ROLE"
+            }
+            ActionType::ApproveAllFeatures => &"APPROVE_ALL_FEATURES",
+            ActionType::EnableAllFeatures => &"ENABLE_ALL_FEATURES",
+            ActionType::Invite => &"INVITE",
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADD_ORGANIZATIONS_SERVICE_LINKED_ROLE" => {
+                ActionType::AddOrganizationsServiceLinkedRole
+            }
+            "APPROVE_ALL_FEATURES" => ActionType::ApproveAllFeatures,
+            "ENABLE_ALL_FEATURES" => ActionType::EnableAllFeatures,
+            "INVITE" => ActionType::Invite,
+            _ => ActionType::UnknownVariant(UnknownActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADD_ORGANIZATIONS_SERVICE_LINKED_ROLE" => {
+                ActionType::AddOrganizationsServiceLinkedRole
+            }
+            "APPROVE_ALL_FEATURES" => ActionType::ApproveAllFeatures,
+            "ENABLE_ALL_FEATURES" => ActionType::EnableAllFeatures,
+            "INVITE" => ActionType::Invite,
+            _ => ActionType::UnknownVariant(UnknownActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -141,7 +578,501 @@ pub struct Child {
     /// <p>The type of this child entity.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChildType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChildType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChildType {
+    Account,
+    OrganizationalUnit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChildType),
+}
+
+impl Default for ChildType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChildType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChildType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChildType {
+    fn into(self) -> String {
+        match self {
+            ChildType::Account => "ACCOUNT".to_string(),
+            ChildType::OrganizationalUnit => "ORGANIZATIONAL_UNIT".to_string(),
+            ChildType::UnknownVariant(UnknownChildType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChildType {
+    fn into(self) -> &'a str {
+        match self {
+            ChildType::Account => &"ACCOUNT",
+            ChildType::OrganizationalUnit => &"ORGANIZATIONAL_UNIT",
+            ChildType::UnknownVariant(UnknownChildType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChildType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => ChildType::Account,
+            "ORGANIZATIONAL_UNIT" => ChildType::OrganizationalUnit,
+            _ => ChildType::UnknownVariant(UnknownChildType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChildType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => ChildType::Account,
+            "ORGANIZATIONAL_UNIT" => ChildType::OrganizationalUnit,
+            _ => ChildType::UnknownVariant(UnknownChildType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChildType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChildType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChildType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConstraintViolationExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConstraintViolationExceptionReason {
+    AccountCannotLeaveOrganization,
+    AccountCannotLeaveWithoutEula,
+    AccountCannotLeaveWithoutPhoneVerification,
+    AccountCreationRateLimitExceeded,
+    AccountNumberLimitExceeded,
+    CannotRegisterMasterAsDelegatedAdministrator,
+    CannotRemoveDelegatedAdministratorFromOrg,
+    CreateOrganizationInBillingModeUnsupportedRegion,
+    DelegatedAdministratorExistsForThisService,
+    EmailVerificationCodeExpired,
+    HandshakeRateLimitExceeded,
+    MasterAccountAddressDoesNotMatchMarketplace,
+    MasterAccountMissingBusinessLicense,
+    MasterAccountMissingContactInfo,
+    MasterAccountNotGovcloudEnabled,
+    MasterAccountPaymentInstrumentRequired,
+    MaxDelegatedAdministratorsForServiceLimitExceeded,
+    MaxPolicyTypeAttachmentLimitExceeded,
+    MaxTagLimitExceeded,
+    MemberAccountPaymentInstrumentRequired,
+    MinPolicyTypeAttachmentLimitExceeded,
+    OrganizationNotInAllFeaturesMode,
+    OuDepthLimitExceeded,
+    OuNumberLimitExceeded,
+    PolicyContentLimitExceeded,
+    PolicyNumberLimitExceeded,
+    TagPolicyViolation,
+    WaitPeriodActive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConstraintViolationExceptionReason),
+}
+
+impl Default for ConstraintViolationExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConstraintViolationExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConstraintViolationExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConstraintViolationExceptionReason {
+    fn into(self) -> String {
+        match self {
+                    ConstraintViolationExceptionReason::AccountCannotLeaveOrganization => "ACCOUNT_CANNOT_LEAVE_ORGANIZATION".to_string(),
+ConstraintViolationExceptionReason::AccountCannotLeaveWithoutEula => "ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA".to_string(),
+ConstraintViolationExceptionReason::AccountCannotLeaveWithoutPhoneVerification => "ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION".to_string(),
+ConstraintViolationExceptionReason::AccountCreationRateLimitExceeded => "ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::AccountNumberLimitExceeded => "ACCOUNT_NUMBER_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::CannotRegisterMasterAsDelegatedAdministrator => "CANNOT_REGISTER_MASTER_AS_DELEGATED_ADMINISTRATOR".to_string(),
+ConstraintViolationExceptionReason::CannotRemoveDelegatedAdministratorFromOrg => "CANNOT_REMOVE_DELEGATED_ADMINISTRATOR_FROM_ORG".to_string(),
+ConstraintViolationExceptionReason::CreateOrganizationInBillingModeUnsupportedRegion => "CREATE_ORGANIZATION_IN_BILLING_MODE_UNSUPPORTED_REGION".to_string(),
+ConstraintViolationExceptionReason::DelegatedAdministratorExistsForThisService => "DELEGATED_ADMINISTRATOR_EXISTS_FOR_THIS_SERVICE".to_string(),
+ConstraintViolationExceptionReason::EmailVerificationCodeExpired => "EMAIL_VERIFICATION_CODE_EXPIRED".to_string(),
+ConstraintViolationExceptionReason::HandshakeRateLimitExceeded => "HANDSHAKE_RATE_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::MasterAccountAddressDoesNotMatchMarketplace => "MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE".to_string(),
+ConstraintViolationExceptionReason::MasterAccountMissingBusinessLicense => "MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE".to_string(),
+ConstraintViolationExceptionReason::MasterAccountMissingContactInfo => "MASTER_ACCOUNT_MISSING_CONTACT_INFO".to_string(),
+ConstraintViolationExceptionReason::MasterAccountNotGovcloudEnabled => "MASTER_ACCOUNT_NOT_GOVCLOUD_ENABLED".to_string(),
+ConstraintViolationExceptionReason::MasterAccountPaymentInstrumentRequired => "MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED".to_string(),
+ConstraintViolationExceptionReason::MaxDelegatedAdministratorsForServiceLimitExceeded => "MAX_DELEGATED_ADMINISTRATORS_FOR_SERVICE_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::MaxPolicyTypeAttachmentLimitExceeded => "MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::MaxTagLimitExceeded => "MAX_TAG_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::MemberAccountPaymentInstrumentRequired => "MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED".to_string(),
+ConstraintViolationExceptionReason::MinPolicyTypeAttachmentLimitExceeded => "MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::OrganizationNotInAllFeaturesMode => "ORGANIZATION_NOT_IN_ALL_FEATURES_MODE".to_string(),
+ConstraintViolationExceptionReason::OuDepthLimitExceeded => "OU_DEPTH_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::OuNumberLimitExceeded => "OU_NUMBER_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::PolicyContentLimitExceeded => "POLICY_CONTENT_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::PolicyNumberLimitExceeded => "POLICY_NUMBER_LIMIT_EXCEEDED".to_string(),
+ConstraintViolationExceptionReason::TagPolicyViolation => "TAG_POLICY_VIOLATION".to_string(),
+ConstraintViolationExceptionReason::WaitPeriodActive => "WAIT_PERIOD_ACTIVE".to_string(),
+                    ConstraintViolationExceptionReason::UnknownVariant(UnknownConstraintViolationExceptionReason{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConstraintViolationExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+                    ConstraintViolationExceptionReason::AccountCannotLeaveOrganization => &"ACCOUNT_CANNOT_LEAVE_ORGANIZATION",
+ConstraintViolationExceptionReason::AccountCannotLeaveWithoutEula => &"ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA",
+ConstraintViolationExceptionReason::AccountCannotLeaveWithoutPhoneVerification => &"ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION",
+ConstraintViolationExceptionReason::AccountCreationRateLimitExceeded => &"ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::AccountNumberLimitExceeded => &"ACCOUNT_NUMBER_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::CannotRegisterMasterAsDelegatedAdministrator => &"CANNOT_REGISTER_MASTER_AS_DELEGATED_ADMINISTRATOR",
+ConstraintViolationExceptionReason::CannotRemoveDelegatedAdministratorFromOrg => &"CANNOT_REMOVE_DELEGATED_ADMINISTRATOR_FROM_ORG",
+ConstraintViolationExceptionReason::CreateOrganizationInBillingModeUnsupportedRegion => &"CREATE_ORGANIZATION_IN_BILLING_MODE_UNSUPPORTED_REGION",
+ConstraintViolationExceptionReason::DelegatedAdministratorExistsForThisService => &"DELEGATED_ADMINISTRATOR_EXISTS_FOR_THIS_SERVICE",
+ConstraintViolationExceptionReason::EmailVerificationCodeExpired => &"EMAIL_VERIFICATION_CODE_EXPIRED",
+ConstraintViolationExceptionReason::HandshakeRateLimitExceeded => &"HANDSHAKE_RATE_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::MasterAccountAddressDoesNotMatchMarketplace => &"MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE",
+ConstraintViolationExceptionReason::MasterAccountMissingBusinessLicense => &"MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE",
+ConstraintViolationExceptionReason::MasterAccountMissingContactInfo => &"MASTER_ACCOUNT_MISSING_CONTACT_INFO",
+ConstraintViolationExceptionReason::MasterAccountNotGovcloudEnabled => &"MASTER_ACCOUNT_NOT_GOVCLOUD_ENABLED",
+ConstraintViolationExceptionReason::MasterAccountPaymentInstrumentRequired => &"MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED",
+ConstraintViolationExceptionReason::MaxDelegatedAdministratorsForServiceLimitExceeded => &"MAX_DELEGATED_ADMINISTRATORS_FOR_SERVICE_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::MaxPolicyTypeAttachmentLimitExceeded => &"MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::MaxTagLimitExceeded => &"MAX_TAG_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::MemberAccountPaymentInstrumentRequired => &"MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED",
+ConstraintViolationExceptionReason::MinPolicyTypeAttachmentLimitExceeded => &"MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::OrganizationNotInAllFeaturesMode => &"ORGANIZATION_NOT_IN_ALL_FEATURES_MODE",
+ConstraintViolationExceptionReason::OuDepthLimitExceeded => &"OU_DEPTH_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::OuNumberLimitExceeded => &"OU_NUMBER_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::PolicyContentLimitExceeded => &"POLICY_CONTENT_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::PolicyNumberLimitExceeded => &"POLICY_NUMBER_LIMIT_EXCEEDED",
+ConstraintViolationExceptionReason::TagPolicyViolation => &"TAG_POLICY_VIOLATION",
+ConstraintViolationExceptionReason::WaitPeriodActive => &"WAIT_PERIOD_ACTIVE",
+                    ConstraintViolationExceptionReason::UnknownVariant(UnknownConstraintViolationExceptionReason{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for ConstraintViolationExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+                    "ACCOUNT_CANNOT_LEAVE_ORGANIZATION" => ConstraintViolationExceptionReason::AccountCannotLeaveOrganization,
+"ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA" => ConstraintViolationExceptionReason::AccountCannotLeaveWithoutEula,
+"ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION" => ConstraintViolationExceptionReason::AccountCannotLeaveWithoutPhoneVerification,
+"ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::AccountCreationRateLimitExceeded,
+"ACCOUNT_NUMBER_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::AccountNumberLimitExceeded,
+"CANNOT_REGISTER_MASTER_AS_DELEGATED_ADMINISTRATOR" => ConstraintViolationExceptionReason::CannotRegisterMasterAsDelegatedAdministrator,
+"CANNOT_REMOVE_DELEGATED_ADMINISTRATOR_FROM_ORG" => ConstraintViolationExceptionReason::CannotRemoveDelegatedAdministratorFromOrg,
+"CREATE_ORGANIZATION_IN_BILLING_MODE_UNSUPPORTED_REGION" => ConstraintViolationExceptionReason::CreateOrganizationInBillingModeUnsupportedRegion,
+"DELEGATED_ADMINISTRATOR_EXISTS_FOR_THIS_SERVICE" => ConstraintViolationExceptionReason::DelegatedAdministratorExistsForThisService,
+"EMAIL_VERIFICATION_CODE_EXPIRED" => ConstraintViolationExceptionReason::EmailVerificationCodeExpired,
+"HANDSHAKE_RATE_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::HandshakeRateLimitExceeded,
+"MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE" => ConstraintViolationExceptionReason::MasterAccountAddressDoesNotMatchMarketplace,
+"MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE" => ConstraintViolationExceptionReason::MasterAccountMissingBusinessLicense,
+"MASTER_ACCOUNT_MISSING_CONTACT_INFO" => ConstraintViolationExceptionReason::MasterAccountMissingContactInfo,
+"MASTER_ACCOUNT_NOT_GOVCLOUD_ENABLED" => ConstraintViolationExceptionReason::MasterAccountNotGovcloudEnabled,
+"MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED" => ConstraintViolationExceptionReason::MasterAccountPaymentInstrumentRequired,
+"MAX_DELEGATED_ADMINISTRATORS_FOR_SERVICE_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MaxDelegatedAdministratorsForServiceLimitExceeded,
+"MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MaxPolicyTypeAttachmentLimitExceeded,
+"MAX_TAG_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MaxTagLimitExceeded,
+"MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED" => ConstraintViolationExceptionReason::MemberAccountPaymentInstrumentRequired,
+"MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MinPolicyTypeAttachmentLimitExceeded,
+"ORGANIZATION_NOT_IN_ALL_FEATURES_MODE" => ConstraintViolationExceptionReason::OrganizationNotInAllFeaturesMode,
+"OU_DEPTH_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::OuDepthLimitExceeded,
+"OU_NUMBER_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::OuNumberLimitExceeded,
+"POLICY_CONTENT_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::PolicyContentLimitExceeded,
+"POLICY_NUMBER_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::PolicyNumberLimitExceeded,
+"TAG_POLICY_VIOLATION" => ConstraintViolationExceptionReason::TagPolicyViolation,
+"WAIT_PERIOD_ACTIVE" => ConstraintViolationExceptionReason::WaitPeriodActive,
+                    _ => ConstraintViolationExceptionReason::UnknownVariant(UnknownConstraintViolationExceptionReason{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for ConstraintViolationExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "ACCOUNT_CANNOT_LEAVE_ORGANIZATION" => ConstraintViolationExceptionReason::AccountCannotLeaveOrganization,
+"ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA" => ConstraintViolationExceptionReason::AccountCannotLeaveWithoutEula,
+"ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION" => ConstraintViolationExceptionReason::AccountCannotLeaveWithoutPhoneVerification,
+"ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::AccountCreationRateLimitExceeded,
+"ACCOUNT_NUMBER_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::AccountNumberLimitExceeded,
+"CANNOT_REGISTER_MASTER_AS_DELEGATED_ADMINISTRATOR" => ConstraintViolationExceptionReason::CannotRegisterMasterAsDelegatedAdministrator,
+"CANNOT_REMOVE_DELEGATED_ADMINISTRATOR_FROM_ORG" => ConstraintViolationExceptionReason::CannotRemoveDelegatedAdministratorFromOrg,
+"CREATE_ORGANIZATION_IN_BILLING_MODE_UNSUPPORTED_REGION" => ConstraintViolationExceptionReason::CreateOrganizationInBillingModeUnsupportedRegion,
+"DELEGATED_ADMINISTRATOR_EXISTS_FOR_THIS_SERVICE" => ConstraintViolationExceptionReason::DelegatedAdministratorExistsForThisService,
+"EMAIL_VERIFICATION_CODE_EXPIRED" => ConstraintViolationExceptionReason::EmailVerificationCodeExpired,
+"HANDSHAKE_RATE_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::HandshakeRateLimitExceeded,
+"MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE" => ConstraintViolationExceptionReason::MasterAccountAddressDoesNotMatchMarketplace,
+"MASTER_ACCOUNT_MISSING_BUSINESS_LICENSE" => ConstraintViolationExceptionReason::MasterAccountMissingBusinessLicense,
+"MASTER_ACCOUNT_MISSING_CONTACT_INFO" => ConstraintViolationExceptionReason::MasterAccountMissingContactInfo,
+"MASTER_ACCOUNT_NOT_GOVCLOUD_ENABLED" => ConstraintViolationExceptionReason::MasterAccountNotGovcloudEnabled,
+"MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED" => ConstraintViolationExceptionReason::MasterAccountPaymentInstrumentRequired,
+"MAX_DELEGATED_ADMINISTRATORS_FOR_SERVICE_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MaxDelegatedAdministratorsForServiceLimitExceeded,
+"MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MaxPolicyTypeAttachmentLimitExceeded,
+"MAX_TAG_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MaxTagLimitExceeded,
+"MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED" => ConstraintViolationExceptionReason::MemberAccountPaymentInstrumentRequired,
+"MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::MinPolicyTypeAttachmentLimitExceeded,
+"ORGANIZATION_NOT_IN_ALL_FEATURES_MODE" => ConstraintViolationExceptionReason::OrganizationNotInAllFeaturesMode,
+"OU_DEPTH_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::OuDepthLimitExceeded,
+"OU_NUMBER_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::OuNumberLimitExceeded,
+"POLICY_CONTENT_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::PolicyContentLimitExceeded,
+"POLICY_NUMBER_LIMIT_EXCEEDED" => ConstraintViolationExceptionReason::PolicyNumberLimitExceeded,
+"TAG_POLICY_VIOLATION" => ConstraintViolationExceptionReason::TagPolicyViolation,
+"WAIT_PERIOD_ACTIVE" => ConstraintViolationExceptionReason::WaitPeriodActive,
+                    _ => ConstraintViolationExceptionReason::UnknownVariant(UnknownConstraintViolationExceptionReason{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for ConstraintViolationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ConstraintViolationExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConstraintViolationExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCreateAccountFailureReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CreateAccountFailureReason {
+    AccountLimitExceeded,
+    ConcurrentAccountModification,
+    EmailAlreadyExists,
+    GovcloudAccountAlreadyExists,
+    InternalFailure,
+    InvalidAddress,
+    InvalidEmail,
+    MissingBusinessValidation,
+    MissingPaymentInstrument,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCreateAccountFailureReason),
+}
+
+impl Default for CreateAccountFailureReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CreateAccountFailureReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CreateAccountFailureReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CreateAccountFailureReason {
+    fn into(self) -> String {
+        match self {
+            CreateAccountFailureReason::AccountLimitExceeded => {
+                "ACCOUNT_LIMIT_EXCEEDED".to_string()
+            }
+            CreateAccountFailureReason::ConcurrentAccountModification => {
+                "CONCURRENT_ACCOUNT_MODIFICATION".to_string()
+            }
+            CreateAccountFailureReason::EmailAlreadyExists => "EMAIL_ALREADY_EXISTS".to_string(),
+            CreateAccountFailureReason::GovcloudAccountAlreadyExists => {
+                "GOVCLOUD_ACCOUNT_ALREADY_EXISTS".to_string()
+            }
+            CreateAccountFailureReason::InternalFailure => "INTERNAL_FAILURE".to_string(),
+            CreateAccountFailureReason::InvalidAddress => "INVALID_ADDRESS".to_string(),
+            CreateAccountFailureReason::InvalidEmail => "INVALID_EMAIL".to_string(),
+            CreateAccountFailureReason::MissingBusinessValidation => {
+                "MISSING_BUSINESS_VALIDATION".to_string()
+            }
+            CreateAccountFailureReason::MissingPaymentInstrument => {
+                "MISSING_PAYMENT_INSTRUMENT".to_string()
+            }
+            CreateAccountFailureReason::UnknownVariant(UnknownCreateAccountFailureReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CreateAccountFailureReason {
+    fn into(self) -> &'a str {
+        match self {
+            CreateAccountFailureReason::AccountLimitExceeded => &"ACCOUNT_LIMIT_EXCEEDED",
+            CreateAccountFailureReason::ConcurrentAccountModification => {
+                &"CONCURRENT_ACCOUNT_MODIFICATION"
+            }
+            CreateAccountFailureReason::EmailAlreadyExists => &"EMAIL_ALREADY_EXISTS",
+            CreateAccountFailureReason::GovcloudAccountAlreadyExists => {
+                &"GOVCLOUD_ACCOUNT_ALREADY_EXISTS"
+            }
+            CreateAccountFailureReason::InternalFailure => &"INTERNAL_FAILURE",
+            CreateAccountFailureReason::InvalidAddress => &"INVALID_ADDRESS",
+            CreateAccountFailureReason::InvalidEmail => &"INVALID_EMAIL",
+            CreateAccountFailureReason::MissingBusinessValidation => &"MISSING_BUSINESS_VALIDATION",
+            CreateAccountFailureReason::MissingPaymentInstrument => &"MISSING_PAYMENT_INSTRUMENT",
+            CreateAccountFailureReason::UnknownVariant(UnknownCreateAccountFailureReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CreateAccountFailureReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_LIMIT_EXCEEDED" => CreateAccountFailureReason::AccountLimitExceeded,
+            "CONCURRENT_ACCOUNT_MODIFICATION" => {
+                CreateAccountFailureReason::ConcurrentAccountModification
+            }
+            "EMAIL_ALREADY_EXISTS" => CreateAccountFailureReason::EmailAlreadyExists,
+            "GOVCLOUD_ACCOUNT_ALREADY_EXISTS" => {
+                CreateAccountFailureReason::GovcloudAccountAlreadyExists
+            }
+            "INTERNAL_FAILURE" => CreateAccountFailureReason::InternalFailure,
+            "INVALID_ADDRESS" => CreateAccountFailureReason::InvalidAddress,
+            "INVALID_EMAIL" => CreateAccountFailureReason::InvalidEmail,
+            "MISSING_BUSINESS_VALIDATION" => CreateAccountFailureReason::MissingBusinessValidation,
+            "MISSING_PAYMENT_INSTRUMENT" => CreateAccountFailureReason::MissingPaymentInstrument,
+            _ => CreateAccountFailureReason::UnknownVariant(UnknownCreateAccountFailureReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CreateAccountFailureReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_LIMIT_EXCEEDED" => CreateAccountFailureReason::AccountLimitExceeded,
+            "CONCURRENT_ACCOUNT_MODIFICATION" => {
+                CreateAccountFailureReason::ConcurrentAccountModification
+            }
+            "EMAIL_ALREADY_EXISTS" => CreateAccountFailureReason::EmailAlreadyExists,
+            "GOVCLOUD_ACCOUNT_ALREADY_EXISTS" => {
+                CreateAccountFailureReason::GovcloudAccountAlreadyExists
+            }
+            "INTERNAL_FAILURE" => CreateAccountFailureReason::InternalFailure,
+            "INVALID_ADDRESS" => CreateAccountFailureReason::InvalidAddress,
+            "INVALID_EMAIL" => CreateAccountFailureReason::InvalidEmail,
+            "MISSING_BUSINESS_VALIDATION" => CreateAccountFailureReason::MissingBusinessValidation,
+            "MISSING_PAYMENT_INSTRUMENT" => CreateAccountFailureReason::MissingPaymentInstrument,
+            _ => CreateAccountFailureReason::UnknownVariant(UnknownCreateAccountFailureReason {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CreateAccountFailureReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CreateAccountFailureReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CreateAccountFailureReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -156,7 +1087,7 @@ pub struct CreateAccountRequest {
     /// <p>If set to <code>ALLOW</code>, the new account enables IAM users to access account billing information <i>if</i> they have the required permissions. If set to <code>DENY</code>, only the root user of the new account can access account billing information. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>If you don't specify this parameter, the value defaults to <code>ALLOW</code>, and IAM users and roles with the required permissions can access billing information for the new account.</p>
     #[serde(rename = "IamUserAccessToBilling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub iam_user_access_to_billing: Option<String>,
+    pub iam_user_access_to_billing: Option<IAMUserAccessToBilling>,
     /// <p>(Optional)</p> <p>The name of an IAM role that AWS Organizations automatically preconfigures in the new member account. This role trusts the management account, allowing users in the management account to assume the role, as permitted by the management account administrator. The role has administrator permissions in the new member account.</p> <p>If you don't specify this parameter, the role name defaults to <code>OrganizationAccountAccessRole</code>.</p> <p>For more information about how to use this role to access the member account, see the following links:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role">Accessing and Administering the Member Accounts in Your Organization</a> in the <i>AWS Organizations User Guide</i> </p> </li> <li> <p>Steps 2 and 3 in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html">Tutorial: Delegate Access Across AWS Accounts Using IAM Roles</a> in the <i>IAM User Guide</i> </p> </li> </ul> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter. The pattern can include uppercase letters, lowercase letters, digits with no spaces, and any of the following characters: =,.@-</p>
     #[serde(rename = "RoleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -174,6 +1105,115 @@ pub struct CreateAccountResponse {
     #[serde(rename = "CreateAccountStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_account_status: Option<CreateAccountStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCreateAccountState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CreateAccountState {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCreateAccountState),
+}
+
+impl Default for CreateAccountState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CreateAccountState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CreateAccountState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CreateAccountState {
+    fn into(self) -> String {
+        match self {
+            CreateAccountState::Failed => "FAILED".to_string(),
+            CreateAccountState::InProgress => "IN_PROGRESS".to_string(),
+            CreateAccountState::Succeeded => "SUCCEEDED".to_string(),
+            CreateAccountState::UnknownVariant(UnknownCreateAccountState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CreateAccountState {
+    fn into(self) -> &'a str {
+        match self {
+            CreateAccountState::Failed => &"FAILED",
+            CreateAccountState::InProgress => &"IN_PROGRESS",
+            CreateAccountState::Succeeded => &"SUCCEEDED",
+            CreateAccountState::UnknownVariant(UnknownCreateAccountState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CreateAccountState {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => CreateAccountState::Failed,
+            "IN_PROGRESS" => CreateAccountState::InProgress,
+            "SUCCEEDED" => CreateAccountState::Succeeded,
+            _ => CreateAccountState::UnknownVariant(UnknownCreateAccountState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CreateAccountState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => CreateAccountState::Failed,
+            "IN_PROGRESS" => CreateAccountState::InProgress,
+            "SUCCEEDED" => CreateAccountState::Succeeded,
+            _ => CreateAccountState::UnknownVariant(UnknownCreateAccountState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CreateAccountState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CreateAccountState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CreateAccountState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains the status about a <a>CreateAccount</a> or <a>CreateGovCloudAccount</a> request to create an AWS account or an AWS GovCloud (US) account in an organization.</p>
@@ -195,7 +1235,7 @@ pub struct CreateAccountStatus {
     /// <p><p>If the request failed, a description of the reason for the failure.</p> <ul> <li> <p>ACCOUNT<em>LIMIT</em>EXCEEDED: The account could not be created because you have reached the limit on the number of accounts in your organization.</p> </li> <li> <p>CONCURRENT<em>ACCOUNT</em>MODIFICATION: You already submitted a request with the same information.</p> </li> <li> <p>EMAIL<em>ALREADY</em>EXISTS: The account could not be created because another AWS account with that email address already exists.</p> </li> <li> <p>GOVCLOUD<em>ACCOUNT</em>ALREADY<em>EXISTS: The account in the AWS GovCloud (US) Region could not be created because this Region already includes an account with that email address.</p> </li> <li> <p>INVALID</em>ADDRESS: The account could not be created because the address you provided is not valid.</p> </li> <li> <p>INVALID<em>EMAIL: The account could not be created because the email address you provided is not valid.</p> </li> <li> <p>INTERNAL</em>FAILURE: The account could not be created because of an internal failure. Try again later. If the problem persists, contact Customer Support.</p> </li> <li> <p>MISSING<em>BUSINESS</em>VALIDATION: The AWS account that owns your organization has not received Business Validation.</p> </li> <li> <p> MISSING<em>PAYMENT</em>INSTRUMENT: You must configure the management account with a valid payment method, such as a credit card.</p> </li> </ul></p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_reason: Option<String>,
+    pub failure_reason: Option<CreateAccountFailureReason>,
     /// <p>If the account was created successfully, the unique identifier (ID) of the new account in the AWS GovCloud (US) Region.</p>
     #[serde(rename = "GovCloudAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,7 +1251,7 @@ pub struct CreateAccountStatus {
     /// <p>The status of the request.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CreateAccountState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -226,7 +1266,7 @@ pub struct CreateGovCloudAccountRequest {
     /// <p>If set to <code>ALLOW</code>, the new linked account in the commercial Region enables IAM users to access account billing information <i>if</i> they have the required permissions. If set to <code>DENY</code>, only the root user of the new account can access account billing information. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide.</i> </p> <p>If you don't specify this parameter, the value defaults to <code>ALLOW</code>, and IAM users and roles with the required permissions can access billing information for the new account.</p>
     #[serde(rename = "IamUserAccessToBilling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub iam_user_access_to_billing: Option<String>,
+    pub iam_user_access_to_billing: Option<IAMUserAccessToBilling>,
     /// <p>(Optional)</p> <p>The name of an IAM role that AWS Organizations automatically preconfigures in the new member accounts in both the AWS GovCloud (US) Region and in the commercial Region. This role trusts the management account, allowing users in the management account to assume the role, as permitted by the management account administrator. The role has administrator permissions in the new member account.</p> <p>If you don't specify this parameter, the role name defaults to <code>OrganizationAccountAccessRole</code>.</p> <p>For more information about how to use this role to access the member account, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role">Accessing and Administering the Member Accounts in Your Organization</a> in the <i>AWS Organizations User Guide</i> and steps 2 and 3 in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html">Tutorial: Delegate Access Across AWS Accounts Using IAM Roles</a> in the <i>IAM User Guide.</i> </p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter. The pattern can include uppercase letters, lowercase letters, digits with no spaces, and any of the following characters: =,.@-</p>
     #[serde(rename = "RoleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,7 +1291,7 @@ pub struct CreateOrganizationRequest {
     /// <p><p>Specifies the feature set supported by the new organization. Each feature set supports different levels of functionality.</p> <ul> <li> <p> <code>CONSOLIDATED<em>BILLING</code>: All member accounts have their bills consolidated to and paid by the management account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>getting-started<em>concepts.html#feature-set-cb-only&quot;&gt;Consolidated billing</a> in the <i>AWS Organizations User Guide.</i> </p> <p> The consolidated billing feature subset isn&#39;t available for organizations in the AWS GovCloud (US) Region.</p> </li> <li> <p> <code>ALL</code>: In addition to all the features supported by the consolidated billing feature set, the management account can also apply any policy type to any member account in the organization. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>getting-started_concepts.html#feature-set-all&quot;&gt;All features</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul></p>
     #[serde(rename = "FeatureSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_set: Option<String>,
+    pub feature_set: Option<OrganizationFeatureSet>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -305,7 +1345,7 @@ pub struct CreatePolicyRequest {
     pub tags: Option<Vec<Tag>>,
     /// <p><p>The type of policy to create. You can specify one of the following values:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AISERVICES<em>OPT</em>OUT<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>backup.html&quot;&gt;BACKUP<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>scp.html&quot;&gt;SERVICE<em>CONTROL</em>POLICY</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">TAG_POLICY</a> </p> </li> </ul></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: PolicyType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -357,7 +1397,7 @@ pub struct DelegatedAdministrator {
     /// <p>The method by which the delegated administrator's account joined the organization.</p>
     #[serde(rename = "JoinedMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub joined_method: Option<String>,
+    pub joined_method: Option<AccountJoinedMethod>,
     /// <p>The date when the delegated administrator's account became a part of the organization.</p>
     #[serde(rename = "JoinedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -369,7 +1409,7 @@ pub struct DelegatedAdministrator {
     /// <p>The status of the delegated administrator's account in the organization.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AccountStatus>,
 }
 
 /// <p>Contains information about the AWS service for which the account is a delegated administrator.</p>
@@ -452,7 +1492,7 @@ pub struct DescribeCreateAccountStatusResponse {
 pub struct DescribeEffectivePolicyRequest {
     /// <p><p>The type of policy that you want information about. You can specify one of the following values:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AISERVICES<em>OPT</em>OUT<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>backup.html&quot;&gt;BACKUP<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>tag-policies.html&quot;&gt;TAG_POLICY</a> </p> </li> </ul></p>
     #[serde(rename = "PolicyType")]
-    pub policy_type: String,
+    pub policy_type: EffectivePolicyType,
     /// <p>When you're signed in as the management account, specify the ID of the account that you want details about. Specifying an organization root or organizational unit (OU) as the target is not supported.</p>
     #[serde(rename = "TargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -552,7 +1592,7 @@ pub struct DisableAWSServiceAccessRequest {
 pub struct DisablePolicyTypeRequest {
     /// <p><p>The policy type that you want to disable in this root. You can specify one of the following values:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AISERVICES<em>OPT</em>OUT<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>backup.html&quot;&gt;BACKUP<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>scp.html&quot;&gt;SERVICE<em>CONTROL</em>POLICY</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">TAG_POLICY</a> </p> </li> </ul></p>
     #[serde(rename = "PolicyType")]
-    pub policy_type: String,
+    pub policy_type: PolicyType,
     /// <p>The unique identifier (ID) of the root in which you want to disable a policy type. You can get the ID from the <a>ListRoots</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a root ID string requires "r-" followed by from 4 to 32 lowercase letters or digits.</p>
     #[serde(rename = "RootId")]
     pub root_id: String,
@@ -582,11 +1622,120 @@ pub struct EffectivePolicy {
     /// <p>The policy type.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_type: Option<String>,
+    pub policy_type: Option<EffectivePolicyType>,
     /// <p>The account ID of the policy target. </p>
     #[serde(rename = "TargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEffectivePolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EffectivePolicyType {
+    AiservicesOptOutPolicy,
+    BackupPolicy,
+    TagPolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEffectivePolicyType),
+}
+
+impl Default for EffectivePolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EffectivePolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EffectivePolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EffectivePolicyType {
+    fn into(self) -> String {
+        match self {
+            EffectivePolicyType::AiservicesOptOutPolicy => "AISERVICES_OPT_OUT_POLICY".to_string(),
+            EffectivePolicyType::BackupPolicy => "BACKUP_POLICY".to_string(),
+            EffectivePolicyType::TagPolicy => "TAG_POLICY".to_string(),
+            EffectivePolicyType::UnknownVariant(UnknownEffectivePolicyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EffectivePolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            EffectivePolicyType::AiservicesOptOutPolicy => &"AISERVICES_OPT_OUT_POLICY",
+            EffectivePolicyType::BackupPolicy => &"BACKUP_POLICY",
+            EffectivePolicyType::TagPolicy => &"TAG_POLICY",
+            EffectivePolicyType::UnknownVariant(UnknownEffectivePolicyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EffectivePolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AISERVICES_OPT_OUT_POLICY" => EffectivePolicyType::AiservicesOptOutPolicy,
+            "BACKUP_POLICY" => EffectivePolicyType::BackupPolicy,
+            "TAG_POLICY" => EffectivePolicyType::TagPolicy,
+            _ => EffectivePolicyType::UnknownVariant(UnknownEffectivePolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EffectivePolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AISERVICES_OPT_OUT_POLICY" => EffectivePolicyType::AiservicesOptOutPolicy,
+            "BACKUP_POLICY" => EffectivePolicyType::BackupPolicy,
+            "TAG_POLICY" => EffectivePolicyType::TagPolicy,
+            _ => EffectivePolicyType::UnknownVariant(UnknownEffectivePolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EffectivePolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EffectivePolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EffectivePolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -615,7 +1764,7 @@ pub struct EnableAllFeaturesResponse {
 pub struct EnablePolicyTypeRequest {
     /// <p><p>The policy type that you want to enable. You can specify one of the following values:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AISERVICES<em>OPT</em>OUT<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>backup.html&quot;&gt;BACKUP<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>scp.html&quot;&gt;SERVICE<em>CONTROL</em>POLICY</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">TAG_POLICY</a> </p> </li> </ul></p>
     #[serde(rename = "PolicyType")]
-    pub policy_type: String,
+    pub policy_type: PolicyType,
     /// <p>The unique identifier (ID) of the root in which you want to enable a policy type. You can get the ID from the <a>ListRoots</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a root ID string requires "r-" followed by from 4 to 32 lowercase letters or digits.</p>
     #[serde(rename = "RootId")]
     pub root_id: String,
@@ -651,7 +1800,7 @@ pub struct Handshake {
     /// <p><p>The type of handshake, indicating what action occurs when the recipient accepts the handshake. The following handshake types are supported:</p> <ul> <li> <p> <b>INVITE</b>: This type of handshake represents a request to join an organization. It is always sent from the management account to only non-member accounts.</p> </li> <li> <p> <b>ENABLE<em>ALL</em>FEATURES</b>: This type of handshake represents a request to enable all features in an organization. It is always sent from the management account to only <i>invited</i> member accounts. Created accounts do not receive this because those accounts were created by the organization&#39;s management account and approval is inferred.</p> </li> <li> <p> <b>APPROVE<em>ALL</em>FEATURES</b>: This type of handshake is sent from the Organizations service when all member accounts have approved the <code>ENABLE<em>ALL</em>FEATURES</code> invitation. It is sent only to the management account and signals the master that it can finalize the process to enable all features.</p> </li> </ul></p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<ActionType>,
     /// <p>The Amazon Resource Name (ARN) of a handshake.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -679,7 +1828,137 @@ pub struct Handshake {
     /// <p><p>The current state of the handshake. Use the state to trace the flow of the handshake through the process from its creation to its acceptance. The meaning of each of the valid values is as follows:</p> <ul> <li> <p> <b>REQUESTED</b>: This handshake was sent to multiple recipients (applicable to only some handshake types) and not all recipients have responded yet. The request stays in this state until all recipients respond.</p> </li> <li> <p> <b>OPEN</b>: This handshake was sent to multiple recipients (applicable to only some policy types) and all recipients have responded, allowing the originator to complete the handshake action.</p> </li> <li> <p> <b>CANCELED</b>: This handshake is no longer active because it was canceled by the originating account.</p> </li> <li> <p> <b>ACCEPTED</b>: This handshake is complete because it has been accepted by the recipient.</p> </li> <li> <p> <b>DECLINED</b>: This handshake is no longer active because it was declined by the recipient account.</p> </li> <li> <p> <b>EXPIRED</b>: This handshake is no longer active because the originator did not receive a response of any kind from the recipient before the expiration time (15 days).</p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<HandshakeState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHandshakeConstraintViolationExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HandshakeConstraintViolationExceptionReason {
+    AccountNumberLimitExceeded,
+    AlreadyInAnOrganization,
+    HandshakeRateLimitExceeded,
+    InviteDisabledDuringEnableAllFeatures,
+    OrganizationAlreadyHasAllFeatures,
+    OrganizationFromDifferentSellerOfRecord,
+    OrganizationMembershipChangeRateLimitExceeded,
+    PaymentInstrumentRequired,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHandshakeConstraintViolationExceptionReason),
+}
+
+impl Default for HandshakeConstraintViolationExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HandshakeConstraintViolationExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HandshakeConstraintViolationExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HandshakeConstraintViolationExceptionReason {
+    fn into(self) -> String {
+        match self {
+                    HandshakeConstraintViolationExceptionReason::AccountNumberLimitExceeded => "ACCOUNT_NUMBER_LIMIT_EXCEEDED".to_string(),
+HandshakeConstraintViolationExceptionReason::AlreadyInAnOrganization => "ALREADY_IN_AN_ORGANIZATION".to_string(),
+HandshakeConstraintViolationExceptionReason::HandshakeRateLimitExceeded => "HANDSHAKE_RATE_LIMIT_EXCEEDED".to_string(),
+HandshakeConstraintViolationExceptionReason::InviteDisabledDuringEnableAllFeatures => "INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES".to_string(),
+HandshakeConstraintViolationExceptionReason::OrganizationAlreadyHasAllFeatures => "ORGANIZATION_ALREADY_HAS_ALL_FEATURES".to_string(),
+HandshakeConstraintViolationExceptionReason::OrganizationFromDifferentSellerOfRecord => "ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD".to_string(),
+HandshakeConstraintViolationExceptionReason::OrganizationMembershipChangeRateLimitExceeded => "ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED".to_string(),
+HandshakeConstraintViolationExceptionReason::PaymentInstrumentRequired => "PAYMENT_INSTRUMENT_REQUIRED".to_string(),
+                    HandshakeConstraintViolationExceptionReason::UnknownVariant(UnknownHandshakeConstraintViolationExceptionReason{name: original}) => original
+                }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HandshakeConstraintViolationExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+                    HandshakeConstraintViolationExceptionReason::AccountNumberLimitExceeded => &"ACCOUNT_NUMBER_LIMIT_EXCEEDED",
+HandshakeConstraintViolationExceptionReason::AlreadyInAnOrganization => &"ALREADY_IN_AN_ORGANIZATION",
+HandshakeConstraintViolationExceptionReason::HandshakeRateLimitExceeded => &"HANDSHAKE_RATE_LIMIT_EXCEEDED",
+HandshakeConstraintViolationExceptionReason::InviteDisabledDuringEnableAllFeatures => &"INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES",
+HandshakeConstraintViolationExceptionReason::OrganizationAlreadyHasAllFeatures => &"ORGANIZATION_ALREADY_HAS_ALL_FEATURES",
+HandshakeConstraintViolationExceptionReason::OrganizationFromDifferentSellerOfRecord => &"ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD",
+HandshakeConstraintViolationExceptionReason::OrganizationMembershipChangeRateLimitExceeded => &"ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED",
+HandshakeConstraintViolationExceptionReason::PaymentInstrumentRequired => &"PAYMENT_INSTRUMENT_REQUIRED",
+                    HandshakeConstraintViolationExceptionReason::UnknownVariant(UnknownHandshakeConstraintViolationExceptionReason{name: original}) => original
+                }
+    }
+}
+
+impl From<&str> for HandshakeConstraintViolationExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+                    "ACCOUNT_NUMBER_LIMIT_EXCEEDED" => HandshakeConstraintViolationExceptionReason::AccountNumberLimitExceeded,
+"ALREADY_IN_AN_ORGANIZATION" => HandshakeConstraintViolationExceptionReason::AlreadyInAnOrganization,
+"HANDSHAKE_RATE_LIMIT_EXCEEDED" => HandshakeConstraintViolationExceptionReason::HandshakeRateLimitExceeded,
+"INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES" => HandshakeConstraintViolationExceptionReason::InviteDisabledDuringEnableAllFeatures,
+"ORGANIZATION_ALREADY_HAS_ALL_FEATURES" => HandshakeConstraintViolationExceptionReason::OrganizationAlreadyHasAllFeatures,
+"ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD" => HandshakeConstraintViolationExceptionReason::OrganizationFromDifferentSellerOfRecord,
+"ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED" => HandshakeConstraintViolationExceptionReason::OrganizationMembershipChangeRateLimitExceeded,
+"PAYMENT_INSTRUMENT_REQUIRED" => HandshakeConstraintViolationExceptionReason::PaymentInstrumentRequired,
+                    _ => HandshakeConstraintViolationExceptionReason::UnknownVariant(UnknownHandshakeConstraintViolationExceptionReason{name: name.to_owned()})
+                }
+    }
+}
+
+impl From<String> for HandshakeConstraintViolationExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+                    "ACCOUNT_NUMBER_LIMIT_EXCEEDED" => HandshakeConstraintViolationExceptionReason::AccountNumberLimitExceeded,
+"ALREADY_IN_AN_ORGANIZATION" => HandshakeConstraintViolationExceptionReason::AlreadyInAnOrganization,
+"HANDSHAKE_RATE_LIMIT_EXCEEDED" => HandshakeConstraintViolationExceptionReason::HandshakeRateLimitExceeded,
+"INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES" => HandshakeConstraintViolationExceptionReason::InviteDisabledDuringEnableAllFeatures,
+"ORGANIZATION_ALREADY_HAS_ALL_FEATURES" => HandshakeConstraintViolationExceptionReason::OrganizationAlreadyHasAllFeatures,
+"ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD" => HandshakeConstraintViolationExceptionReason::OrganizationFromDifferentSellerOfRecord,
+"ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED" => HandshakeConstraintViolationExceptionReason::OrganizationMembershipChangeRateLimitExceeded,
+"PAYMENT_INSTRUMENT_REQUIRED" => HandshakeConstraintViolationExceptionReason::PaymentInstrumentRequired,
+                    _ => HandshakeConstraintViolationExceptionReason::UnknownVariant(UnknownHandshakeConstraintViolationExceptionReason{name})
+                }
+    }
+}
+
+impl ::std::str::FromStr for HandshakeConstraintViolationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HandshakeConstraintViolationExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HandshakeConstraintViolationExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the criteria that are used to select the handshakes for the operation.</p>
@@ -689,7 +1968,7 @@ pub struct HandshakeFilter {
     /// <p>Specifies the type of handshake action.</p> <p>If you specify <code>ActionType</code>, you cannot also specify <code>ParentHandshakeId</code>.</p>
     #[serde(rename = "ActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_type: Option<String>,
+    pub action_type: Option<ActionType>,
     /// <p>Specifies the parent handshake. Only used for handshake types that are a child of another type.</p> <p>If you specify <code>ParentHandshakeId</code>, you cannot also specify <code>ActionType</code>.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lowercase letters or digits.</p>
     #[serde(rename = "ParentHandshakeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -704,7 +1983,116 @@ pub struct HandshakeParty {
     pub id: String,
     /// <p>The type of party.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: HandshakePartyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHandshakePartyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HandshakePartyType {
+    Account,
+    Email,
+    Organization,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHandshakePartyType),
+}
+
+impl Default for HandshakePartyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HandshakePartyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HandshakePartyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HandshakePartyType {
+    fn into(self) -> String {
+        match self {
+            HandshakePartyType::Account => "ACCOUNT".to_string(),
+            HandshakePartyType::Email => "EMAIL".to_string(),
+            HandshakePartyType::Organization => "ORGANIZATION".to_string(),
+            HandshakePartyType::UnknownVariant(UnknownHandshakePartyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HandshakePartyType {
+    fn into(self) -> &'a str {
+        match self {
+            HandshakePartyType::Account => &"ACCOUNT",
+            HandshakePartyType::Email => &"EMAIL",
+            HandshakePartyType::Organization => &"ORGANIZATION",
+            HandshakePartyType::UnknownVariant(UnknownHandshakePartyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HandshakePartyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => HandshakePartyType::Account,
+            "EMAIL" => HandshakePartyType::Email,
+            "ORGANIZATION" => HandshakePartyType::Organization,
+            _ => HandshakePartyType::UnknownVariant(UnknownHandshakePartyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HandshakePartyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => HandshakePartyType::Account,
+            "EMAIL" => HandshakePartyType::Email,
+            "ORGANIZATION" => HandshakePartyType::Organization,
+            _ => HandshakePartyType::UnknownVariant(UnknownHandshakePartyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakePartyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HandshakePartyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HandshakePartyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains additional data that is needed to process a handshake.</p>
@@ -718,11 +2106,629 @@ pub struct HandshakeResource {
     /// <p><p>The type of information being passed, specifying how the value is to be interpreted by the other party:</p> <ul> <li> <p> <code>ACCOUNT</code> - Specifies an AWS account ID number.</p> </li> <li> <p> <code>ORGANIZATION</code> - Specifies an organization ID number.</p> </li> <li> <p> <code>EMAIL</code> - Specifies the email address that is associated with the account that receives the handshake. </p> </li> <li> <p> <code>OWNER<em>EMAIL</code> - Specifies the email address associated with the management account. Included as information about an organization. </p> </li> <li> <p> <code>OWNER</em>NAME</code> - Specifies the name associated with the management account. Included as information about an organization. </p> </li> <li> <p> <code>NOTES</code> - Additional text provided by the handshake initiator and intended for the recipient to read.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<HandshakeResourceType>,
     /// <p>The information that is passed to the other party in the handshake. The format of the value string must match the requirements of the specified type.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHandshakeResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HandshakeResourceType {
+    Account,
+    Email,
+    MasterEmail,
+    MasterName,
+    Notes,
+    Organization,
+    OrganizationFeatureSet,
+    ParentHandshake,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHandshakeResourceType),
+}
+
+impl Default for HandshakeResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HandshakeResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HandshakeResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HandshakeResourceType {
+    fn into(self) -> String {
+        match self {
+            HandshakeResourceType::Account => "ACCOUNT".to_string(),
+            HandshakeResourceType::Email => "EMAIL".to_string(),
+            HandshakeResourceType::MasterEmail => "MASTER_EMAIL".to_string(),
+            HandshakeResourceType::MasterName => "MASTER_NAME".to_string(),
+            HandshakeResourceType::Notes => "NOTES".to_string(),
+            HandshakeResourceType::Organization => "ORGANIZATION".to_string(),
+            HandshakeResourceType::OrganizationFeatureSet => "ORGANIZATION_FEATURE_SET".to_string(),
+            HandshakeResourceType::ParentHandshake => "PARENT_HANDSHAKE".to_string(),
+            HandshakeResourceType::UnknownVariant(UnknownHandshakeResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HandshakeResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            HandshakeResourceType::Account => &"ACCOUNT",
+            HandshakeResourceType::Email => &"EMAIL",
+            HandshakeResourceType::MasterEmail => &"MASTER_EMAIL",
+            HandshakeResourceType::MasterName => &"MASTER_NAME",
+            HandshakeResourceType::Notes => &"NOTES",
+            HandshakeResourceType::Organization => &"ORGANIZATION",
+            HandshakeResourceType::OrganizationFeatureSet => &"ORGANIZATION_FEATURE_SET",
+            HandshakeResourceType::ParentHandshake => &"PARENT_HANDSHAKE",
+            HandshakeResourceType::UnknownVariant(UnknownHandshakeResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HandshakeResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => HandshakeResourceType::Account,
+            "EMAIL" => HandshakeResourceType::Email,
+            "MASTER_EMAIL" => HandshakeResourceType::MasterEmail,
+            "MASTER_NAME" => HandshakeResourceType::MasterName,
+            "NOTES" => HandshakeResourceType::Notes,
+            "ORGANIZATION" => HandshakeResourceType::Organization,
+            "ORGANIZATION_FEATURE_SET" => HandshakeResourceType::OrganizationFeatureSet,
+            "PARENT_HANDSHAKE" => HandshakeResourceType::ParentHandshake,
+            _ => HandshakeResourceType::UnknownVariant(UnknownHandshakeResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HandshakeResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => HandshakeResourceType::Account,
+            "EMAIL" => HandshakeResourceType::Email,
+            "MASTER_EMAIL" => HandshakeResourceType::MasterEmail,
+            "MASTER_NAME" => HandshakeResourceType::MasterName,
+            "NOTES" => HandshakeResourceType::Notes,
+            "ORGANIZATION" => HandshakeResourceType::Organization,
+            "ORGANIZATION_FEATURE_SET" => HandshakeResourceType::OrganizationFeatureSet,
+            "PARENT_HANDSHAKE" => HandshakeResourceType::ParentHandshake,
+            _ => HandshakeResourceType::UnknownVariant(UnknownHandshakeResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakeResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HandshakeResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HandshakeResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHandshakeState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HandshakeState {
+    Accepted,
+    Canceled,
+    Declined,
+    Expired,
+    Open,
+    Requested,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHandshakeState),
+}
+
+impl Default for HandshakeState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HandshakeState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HandshakeState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HandshakeState {
+    fn into(self) -> String {
+        match self {
+            HandshakeState::Accepted => "ACCEPTED".to_string(),
+            HandshakeState::Canceled => "CANCELED".to_string(),
+            HandshakeState::Declined => "DECLINED".to_string(),
+            HandshakeState::Expired => "EXPIRED".to_string(),
+            HandshakeState::Open => "OPEN".to_string(),
+            HandshakeState::Requested => "REQUESTED".to_string(),
+            HandshakeState::UnknownVariant(UnknownHandshakeState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HandshakeState {
+    fn into(self) -> &'a str {
+        match self {
+            HandshakeState::Accepted => &"ACCEPTED",
+            HandshakeState::Canceled => &"CANCELED",
+            HandshakeState::Declined => &"DECLINED",
+            HandshakeState::Expired => &"EXPIRED",
+            HandshakeState::Open => &"OPEN",
+            HandshakeState::Requested => &"REQUESTED",
+            HandshakeState::UnknownVariant(UnknownHandshakeState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HandshakeState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPTED" => HandshakeState::Accepted,
+            "CANCELED" => HandshakeState::Canceled,
+            "DECLINED" => HandshakeState::Declined,
+            "EXPIRED" => HandshakeState::Expired,
+            "OPEN" => HandshakeState::Open,
+            "REQUESTED" => HandshakeState::Requested,
+            _ => HandshakeState::UnknownVariant(UnknownHandshakeState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HandshakeState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPTED" => HandshakeState::Accepted,
+            "CANCELED" => HandshakeState::Canceled,
+            "DECLINED" => HandshakeState::Declined,
+            "EXPIRED" => HandshakeState::Expired,
+            "OPEN" => HandshakeState::Open,
+            "REQUESTED" => HandshakeState::Requested,
+            _ => HandshakeState::UnknownVariant(UnknownHandshakeState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakeState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HandshakeState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HandshakeState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIAMUserAccessToBilling {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IAMUserAccessToBilling {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIAMUserAccessToBilling),
+}
+
+impl Default for IAMUserAccessToBilling {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IAMUserAccessToBilling {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IAMUserAccessToBilling {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IAMUserAccessToBilling {
+    fn into(self) -> String {
+        match self {
+            IAMUserAccessToBilling::Allow => "ALLOW".to_string(),
+            IAMUserAccessToBilling::Deny => "DENY".to_string(),
+            IAMUserAccessToBilling::UnknownVariant(UnknownIAMUserAccessToBilling {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IAMUserAccessToBilling {
+    fn into(self) -> &'a str {
+        match self {
+            IAMUserAccessToBilling::Allow => &"ALLOW",
+            IAMUserAccessToBilling::Deny => &"DENY",
+            IAMUserAccessToBilling::UnknownVariant(UnknownIAMUserAccessToBilling {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IAMUserAccessToBilling {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => IAMUserAccessToBilling::Allow,
+            "DENY" => IAMUserAccessToBilling::Deny,
+            _ => IAMUserAccessToBilling::UnknownVariant(UnknownIAMUserAccessToBilling {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IAMUserAccessToBilling {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => IAMUserAccessToBilling::Allow,
+            "DENY" => IAMUserAccessToBilling::Deny,
+            _ => IAMUserAccessToBilling::UnknownVariant(UnknownIAMUserAccessToBilling { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IAMUserAccessToBilling {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IAMUserAccessToBilling {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for IAMUserAccessToBilling {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInvalidInputExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InvalidInputExceptionReason {
+    DuplicateTagKey,
+    ImmutablePolicy,
+    InputRequired,
+    InvalidEnum,
+    InvalidEnumPolicyType,
+    InvalidFullNameTarget,
+    InvalidListMember,
+    InvalidNextToken,
+    InvalidPartyTypeTarget,
+    InvalidPattern,
+    InvalidPatternTargetId,
+    InvalidRoleName,
+    InvalidSyntaxOrganizationArn,
+    InvalidSyntaxPolicyId,
+    InvalidSystemTagsParameter,
+    MaxLengthExceeded,
+    MaxLimitExceededFilter,
+    MaxValueExceeded,
+    MinLengthExceeded,
+    MinValueExceeded,
+    MovingAccountBetweenDifferentRoots,
+    TargetNotSupported,
+    UnrecognizedServicePrincipal,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInvalidInputExceptionReason),
+}
+
+impl Default for InvalidInputExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InvalidInputExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InvalidInputExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InvalidInputExceptionReason {
+    fn into(self) -> String {
+        match self {
+            InvalidInputExceptionReason::DuplicateTagKey => "DUPLICATE_TAG_KEY".to_string(),
+            InvalidInputExceptionReason::ImmutablePolicy => "IMMUTABLE_POLICY".to_string(),
+            InvalidInputExceptionReason::InputRequired => "INPUT_REQUIRED".to_string(),
+            InvalidInputExceptionReason::InvalidEnum => "INVALID_ENUM".to_string(),
+            InvalidInputExceptionReason::InvalidEnumPolicyType => {
+                "INVALID_ENUM_POLICY_TYPE".to_string()
+            }
+            InvalidInputExceptionReason::InvalidFullNameTarget => {
+                "INVALID_FULL_NAME_TARGET".to_string()
+            }
+            InvalidInputExceptionReason::InvalidListMember => "INVALID_LIST_MEMBER".to_string(),
+            InvalidInputExceptionReason::InvalidNextToken => "INVALID_NEXT_TOKEN".to_string(),
+            InvalidInputExceptionReason::InvalidPartyTypeTarget => {
+                "INVALID_PARTY_TYPE_TARGET".to_string()
+            }
+            InvalidInputExceptionReason::InvalidPattern => "INVALID_PATTERN".to_string(),
+            InvalidInputExceptionReason::InvalidPatternTargetId => {
+                "INVALID_PATTERN_TARGET_ID".to_string()
+            }
+            InvalidInputExceptionReason::InvalidRoleName => "INVALID_ROLE_NAME".to_string(),
+            InvalidInputExceptionReason::InvalidSyntaxOrganizationArn => {
+                "INVALID_SYNTAX_ORGANIZATION_ARN".to_string()
+            }
+            InvalidInputExceptionReason::InvalidSyntaxPolicyId => {
+                "INVALID_SYNTAX_POLICY_ID".to_string()
+            }
+            InvalidInputExceptionReason::InvalidSystemTagsParameter => {
+                "INVALID_SYSTEM_TAGS_PARAMETER".to_string()
+            }
+            InvalidInputExceptionReason::MaxLengthExceeded => "MAX_LENGTH_EXCEEDED".to_string(),
+            InvalidInputExceptionReason::MaxLimitExceededFilter => {
+                "MAX_LIMIT_EXCEEDED_FILTER".to_string()
+            }
+            InvalidInputExceptionReason::MaxValueExceeded => "MAX_VALUE_EXCEEDED".to_string(),
+            InvalidInputExceptionReason::MinLengthExceeded => "MIN_LENGTH_EXCEEDED".to_string(),
+            InvalidInputExceptionReason::MinValueExceeded => "MIN_VALUE_EXCEEDED".to_string(),
+            InvalidInputExceptionReason::MovingAccountBetweenDifferentRoots => {
+                "MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS".to_string()
+            }
+            InvalidInputExceptionReason::TargetNotSupported => "TARGET_NOT_SUPPORTED".to_string(),
+            InvalidInputExceptionReason::UnrecognizedServicePrincipal => {
+                "UNRECOGNIZED_SERVICE_PRINCIPAL".to_string()
+            }
+            InvalidInputExceptionReason::UnknownVariant(UnknownInvalidInputExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InvalidInputExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            InvalidInputExceptionReason::DuplicateTagKey => &"DUPLICATE_TAG_KEY",
+            InvalidInputExceptionReason::ImmutablePolicy => &"IMMUTABLE_POLICY",
+            InvalidInputExceptionReason::InputRequired => &"INPUT_REQUIRED",
+            InvalidInputExceptionReason::InvalidEnum => &"INVALID_ENUM",
+            InvalidInputExceptionReason::InvalidEnumPolicyType => &"INVALID_ENUM_POLICY_TYPE",
+            InvalidInputExceptionReason::InvalidFullNameTarget => &"INVALID_FULL_NAME_TARGET",
+            InvalidInputExceptionReason::InvalidListMember => &"INVALID_LIST_MEMBER",
+            InvalidInputExceptionReason::InvalidNextToken => &"INVALID_NEXT_TOKEN",
+            InvalidInputExceptionReason::InvalidPartyTypeTarget => &"INVALID_PARTY_TYPE_TARGET",
+            InvalidInputExceptionReason::InvalidPattern => &"INVALID_PATTERN",
+            InvalidInputExceptionReason::InvalidPatternTargetId => &"INVALID_PATTERN_TARGET_ID",
+            InvalidInputExceptionReason::InvalidRoleName => &"INVALID_ROLE_NAME",
+            InvalidInputExceptionReason::InvalidSyntaxOrganizationArn => {
+                &"INVALID_SYNTAX_ORGANIZATION_ARN"
+            }
+            InvalidInputExceptionReason::InvalidSyntaxPolicyId => &"INVALID_SYNTAX_POLICY_ID",
+            InvalidInputExceptionReason::InvalidSystemTagsParameter => {
+                &"INVALID_SYSTEM_TAGS_PARAMETER"
+            }
+            InvalidInputExceptionReason::MaxLengthExceeded => &"MAX_LENGTH_EXCEEDED",
+            InvalidInputExceptionReason::MaxLimitExceededFilter => &"MAX_LIMIT_EXCEEDED_FILTER",
+            InvalidInputExceptionReason::MaxValueExceeded => &"MAX_VALUE_EXCEEDED",
+            InvalidInputExceptionReason::MinLengthExceeded => &"MIN_LENGTH_EXCEEDED",
+            InvalidInputExceptionReason::MinValueExceeded => &"MIN_VALUE_EXCEEDED",
+            InvalidInputExceptionReason::MovingAccountBetweenDifferentRoots => {
+                &"MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS"
+            }
+            InvalidInputExceptionReason::TargetNotSupported => &"TARGET_NOT_SUPPORTED",
+            InvalidInputExceptionReason::UnrecognizedServicePrincipal => {
+                &"UNRECOGNIZED_SERVICE_PRINCIPAL"
+            }
+            InvalidInputExceptionReason::UnknownVariant(UnknownInvalidInputExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InvalidInputExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "DUPLICATE_TAG_KEY" => InvalidInputExceptionReason::DuplicateTagKey,
+            "IMMUTABLE_POLICY" => InvalidInputExceptionReason::ImmutablePolicy,
+            "INPUT_REQUIRED" => InvalidInputExceptionReason::InputRequired,
+            "INVALID_ENUM" => InvalidInputExceptionReason::InvalidEnum,
+            "INVALID_ENUM_POLICY_TYPE" => InvalidInputExceptionReason::InvalidEnumPolicyType,
+            "INVALID_FULL_NAME_TARGET" => InvalidInputExceptionReason::InvalidFullNameTarget,
+            "INVALID_LIST_MEMBER" => InvalidInputExceptionReason::InvalidListMember,
+            "INVALID_NEXT_TOKEN" => InvalidInputExceptionReason::InvalidNextToken,
+            "INVALID_PARTY_TYPE_TARGET" => InvalidInputExceptionReason::InvalidPartyTypeTarget,
+            "INVALID_PATTERN" => InvalidInputExceptionReason::InvalidPattern,
+            "INVALID_PATTERN_TARGET_ID" => InvalidInputExceptionReason::InvalidPatternTargetId,
+            "INVALID_ROLE_NAME" => InvalidInputExceptionReason::InvalidRoleName,
+            "INVALID_SYNTAX_ORGANIZATION_ARN" => {
+                InvalidInputExceptionReason::InvalidSyntaxOrganizationArn
+            }
+            "INVALID_SYNTAX_POLICY_ID" => InvalidInputExceptionReason::InvalidSyntaxPolicyId,
+            "INVALID_SYSTEM_TAGS_PARAMETER" => {
+                InvalidInputExceptionReason::InvalidSystemTagsParameter
+            }
+            "MAX_LENGTH_EXCEEDED" => InvalidInputExceptionReason::MaxLengthExceeded,
+            "MAX_LIMIT_EXCEEDED_FILTER" => InvalidInputExceptionReason::MaxLimitExceededFilter,
+            "MAX_VALUE_EXCEEDED" => InvalidInputExceptionReason::MaxValueExceeded,
+            "MIN_LENGTH_EXCEEDED" => InvalidInputExceptionReason::MinLengthExceeded,
+            "MIN_VALUE_EXCEEDED" => InvalidInputExceptionReason::MinValueExceeded,
+            "MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS" => {
+                InvalidInputExceptionReason::MovingAccountBetweenDifferentRoots
+            }
+            "TARGET_NOT_SUPPORTED" => InvalidInputExceptionReason::TargetNotSupported,
+            "UNRECOGNIZED_SERVICE_PRINCIPAL" => {
+                InvalidInputExceptionReason::UnrecognizedServicePrincipal
+            }
+            _ => InvalidInputExceptionReason::UnknownVariant(UnknownInvalidInputExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InvalidInputExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DUPLICATE_TAG_KEY" => InvalidInputExceptionReason::DuplicateTagKey,
+            "IMMUTABLE_POLICY" => InvalidInputExceptionReason::ImmutablePolicy,
+            "INPUT_REQUIRED" => InvalidInputExceptionReason::InputRequired,
+            "INVALID_ENUM" => InvalidInputExceptionReason::InvalidEnum,
+            "INVALID_ENUM_POLICY_TYPE" => InvalidInputExceptionReason::InvalidEnumPolicyType,
+            "INVALID_FULL_NAME_TARGET" => InvalidInputExceptionReason::InvalidFullNameTarget,
+            "INVALID_LIST_MEMBER" => InvalidInputExceptionReason::InvalidListMember,
+            "INVALID_NEXT_TOKEN" => InvalidInputExceptionReason::InvalidNextToken,
+            "INVALID_PARTY_TYPE_TARGET" => InvalidInputExceptionReason::InvalidPartyTypeTarget,
+            "INVALID_PATTERN" => InvalidInputExceptionReason::InvalidPattern,
+            "INVALID_PATTERN_TARGET_ID" => InvalidInputExceptionReason::InvalidPatternTargetId,
+            "INVALID_ROLE_NAME" => InvalidInputExceptionReason::InvalidRoleName,
+            "INVALID_SYNTAX_ORGANIZATION_ARN" => {
+                InvalidInputExceptionReason::InvalidSyntaxOrganizationArn
+            }
+            "INVALID_SYNTAX_POLICY_ID" => InvalidInputExceptionReason::InvalidSyntaxPolicyId,
+            "INVALID_SYSTEM_TAGS_PARAMETER" => {
+                InvalidInputExceptionReason::InvalidSystemTagsParameter
+            }
+            "MAX_LENGTH_EXCEEDED" => InvalidInputExceptionReason::MaxLengthExceeded,
+            "MAX_LIMIT_EXCEEDED_FILTER" => InvalidInputExceptionReason::MaxLimitExceededFilter,
+            "MAX_VALUE_EXCEEDED" => InvalidInputExceptionReason::MaxValueExceeded,
+            "MIN_LENGTH_EXCEEDED" => InvalidInputExceptionReason::MinLengthExceeded,
+            "MIN_VALUE_EXCEEDED" => InvalidInputExceptionReason::MinValueExceeded,
+            "MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS" => {
+                InvalidInputExceptionReason::MovingAccountBetweenDifferentRoots
+            }
+            "TARGET_NOT_SUPPORTED" => InvalidInputExceptionReason::TargetNotSupported,
+            "UNRECOGNIZED_SERVICE_PRINCIPAL" => {
+                InvalidInputExceptionReason::UnrecognizedServicePrincipal
+            }
+            _ => InvalidInputExceptionReason::UnknownVariant(UnknownInvalidInputExceptionReason {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvalidInputExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InvalidInputExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InvalidInputExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -836,7 +2842,7 @@ pub struct ListAccountsResponse {
 pub struct ListChildrenRequest {
     /// <p>Filters the output to include only the specified child type.</p>
     #[serde(rename = "ChildType")]
-    pub child_type: String,
+    pub child_type: ChildType,
     /// <p>The total number of results that you want included on each page of the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -877,7 +2883,7 @@ pub struct ListCreateAccountStatusRequest {
     /// <p>A list of one or more states that you want included in the response. If this parameter isn't present, all requests are included in the response.</p>
     #[serde(rename = "States")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub states: Option<Vec<String>>,
+    pub states: Option<Vec<CreateAccountState>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1075,7 +3081,7 @@ pub struct ListParentsResponse {
 pub struct ListPoliciesForTargetRequest {
     /// <p><p>The type of policy that you want to include in the returned list. You must specify one of the following values:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AISERVICES<em>OPT</em>OUT<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>backup.html&quot;&gt;BACKUP<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>scp.html&quot;&gt;SERVICE<em>CONTROL</em>POLICY</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">TAG_POLICY</a> </p> </li> </ul></p>
     #[serde(rename = "Filter")]
-    pub filter: String,
+    pub filter: PolicyType,
     /// <p>The total number of results that you want included on each page of the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1107,7 +3113,7 @@ pub struct ListPoliciesForTargetResponse {
 pub struct ListPoliciesRequest {
     /// <p><p>Specifies the type of policy that you want to include in the response. You must specify one of the following values:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AISERVICES<em>OPT</em>OUT<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>backup.html&quot;&gt;BACKUP<em>POLICY</a> </p> </li> <li> <p> &lt;a href=&quot;https://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>manage<em>policies</em>scp.html&quot;&gt;SERVICE<em>CONTROL</em>POLICY</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">TAG_POLICY</a> </p> </li> </ul></p>
     #[serde(rename = "Filter")]
-    pub filter: String,
+    pub filter: PolicyType,
     /// <p>The total number of results that you want included on each page of the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1240,7 +3246,7 @@ pub struct Organization {
     /// <p>Specifies the functionality that currently is available to the organization. If set to "ALL", then all features are enabled and policies can be applied to accounts in the organization. If set to "CONSOLIDATED_BILLING", then only consolidated billing functionality is available. For more information, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "FeatureSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_set: Option<String>,
+    pub feature_set: Option<OrganizationFeatureSet>,
     /// <p>The unique identifier (ID) of an organization.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organization ID string requires "o-" followed by from 10 to 32 lowercase letters or digits.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1257,6 +3263,110 @@ pub struct Organization {
     #[serde(rename = "MasterAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_account_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrganizationFeatureSet {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrganizationFeatureSet {
+    All,
+    ConsolidatedBilling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrganizationFeatureSet),
+}
+
+impl Default for OrganizationFeatureSet {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrganizationFeatureSet {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrganizationFeatureSet {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrganizationFeatureSet {
+    fn into(self) -> String {
+        match self {
+            OrganizationFeatureSet::All => "ALL".to_string(),
+            OrganizationFeatureSet::ConsolidatedBilling => "CONSOLIDATED_BILLING".to_string(),
+            OrganizationFeatureSet::UnknownVariant(UnknownOrganizationFeatureSet {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrganizationFeatureSet {
+    fn into(self) -> &'a str {
+        match self {
+            OrganizationFeatureSet::All => &"ALL",
+            OrganizationFeatureSet::ConsolidatedBilling => &"CONSOLIDATED_BILLING",
+            OrganizationFeatureSet::UnknownVariant(UnknownOrganizationFeatureSet {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrganizationFeatureSet {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => OrganizationFeatureSet::All,
+            "CONSOLIDATED_BILLING" => OrganizationFeatureSet::ConsolidatedBilling,
+            _ => OrganizationFeatureSet::UnknownVariant(UnknownOrganizationFeatureSet {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrganizationFeatureSet {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => OrganizationFeatureSet::All,
+            "CONSOLIDATED_BILLING" => OrganizationFeatureSet::ConsolidatedBilling,
+            _ => OrganizationFeatureSet::UnknownVariant(UnknownOrganizationFeatureSet { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrganizationFeatureSet {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrganizationFeatureSet {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrganizationFeatureSet {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains details about an organizational unit (OU). An OU is a container of AWS accounts within a root of an organization. Policies that are attached to an OU apply to all accounts contained in that OU and in any child OUs.</p>
@@ -1288,7 +3398,108 @@ pub struct Parent {
     /// <p>The type of the parent entity.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ParentType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParentType {
+    OrganizationalUnit,
+    Root,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParentType),
+}
+
+impl Default for ParentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParentType {
+    fn into(self) -> String {
+        match self {
+            ParentType::OrganizationalUnit => "ORGANIZATIONAL_UNIT".to_string(),
+            ParentType::Root => "ROOT".to_string(),
+            ParentType::UnknownVariant(UnknownParentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParentType {
+    fn into(self) -> &'a str {
+        match self {
+            ParentType::OrganizationalUnit => &"ORGANIZATIONAL_UNIT",
+            ParentType::Root => &"ROOT",
+            ParentType::UnknownVariant(UnknownParentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ORGANIZATIONAL_UNIT" => ParentType::OrganizationalUnit,
+            "ROOT" => ParentType::Root,
+            _ => ParentType::UnknownVariant(UnknownParentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ORGANIZATIONAL_UNIT" => ParentType::OrganizationalUnit,
+            "ROOT" => ParentType::Root,
+            _ => ParentType::UnknownVariant(UnknownParentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ParentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains rules to be applied to the affected accounts. Policies can be attached directly to accounts, or to roots and OUs to affect all accounts in those hierarchies.</p>
@@ -1332,7 +3543,7 @@ pub struct PolicySummary {
     /// <p>The type of policy.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PolicyType>,
 }
 
 /// <p>Contains information about a root, OU, or account that a policy is attached to.</p>
@@ -1354,7 +3565,227 @@ pub struct PolicyTargetSummary {
     /// <p>The type of the policy target.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TargetType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyType {
+    AiservicesOptOutPolicy,
+    BackupPolicy,
+    ServiceControlPolicy,
+    TagPolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyType),
+}
+
+impl Default for PolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyType {
+    fn into(self) -> String {
+        match self {
+            PolicyType::AiservicesOptOutPolicy => "AISERVICES_OPT_OUT_POLICY".to_string(),
+            PolicyType::BackupPolicy => "BACKUP_POLICY".to_string(),
+            PolicyType::ServiceControlPolicy => "SERVICE_CONTROL_POLICY".to_string(),
+            PolicyType::TagPolicy => "TAG_POLICY".to_string(),
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyType::AiservicesOptOutPolicy => &"AISERVICES_OPT_OUT_POLICY",
+            PolicyType::BackupPolicy => &"BACKUP_POLICY",
+            PolicyType::ServiceControlPolicy => &"SERVICE_CONTROL_POLICY",
+            PolicyType::TagPolicy => &"TAG_POLICY",
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AISERVICES_OPT_OUT_POLICY" => PolicyType::AiservicesOptOutPolicy,
+            "BACKUP_POLICY" => PolicyType::BackupPolicy,
+            "SERVICE_CONTROL_POLICY" => PolicyType::ServiceControlPolicy,
+            "TAG_POLICY" => PolicyType::TagPolicy,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AISERVICES_OPT_OUT_POLICY" => PolicyType::AiservicesOptOutPolicy,
+            "BACKUP_POLICY" => PolicyType::BackupPolicy,
+            "SERVICE_CONTROL_POLICY" => PolicyType::ServiceControlPolicy,
+            "TAG_POLICY" => PolicyType::TagPolicy,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyTypeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyTypeStatus {
+    Enabled,
+    PendingDisable,
+    PendingEnable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyTypeStatus),
+}
+
+impl Default for PolicyTypeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyTypeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyTypeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyTypeStatus {
+    fn into(self) -> String {
+        match self {
+            PolicyTypeStatus::Enabled => "ENABLED".to_string(),
+            PolicyTypeStatus::PendingDisable => "PENDING_DISABLE".to_string(),
+            PolicyTypeStatus::PendingEnable => "PENDING_ENABLE".to_string(),
+            PolicyTypeStatus::UnknownVariant(UnknownPolicyTypeStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyTypeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyTypeStatus::Enabled => &"ENABLED",
+            PolicyTypeStatus::PendingDisable => &"PENDING_DISABLE",
+            PolicyTypeStatus::PendingEnable => &"PENDING_ENABLE",
+            PolicyTypeStatus::UnknownVariant(UnknownPolicyTypeStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PolicyTypeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENABLED" => PolicyTypeStatus::Enabled,
+            "PENDING_DISABLE" => PolicyTypeStatus::PendingDisable,
+            "PENDING_ENABLE" => PolicyTypeStatus::PendingEnable,
+            _ => PolicyTypeStatus::UnknownVariant(UnknownPolicyTypeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyTypeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENABLED" => PolicyTypeStatus::Enabled,
+            "PENDING_DISABLE" => PolicyTypeStatus::PendingDisable,
+            "PENDING_ENABLE" => PolicyTypeStatus::PendingEnable,
+            _ => PolicyTypeStatus::UnknownVariant(UnknownPolicyTypeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyTypeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PolicyTypeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PolicyTypeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a policy type and its status in the associated root.</p>
@@ -1364,11 +3795,11 @@ pub struct PolicyTypeSummary {
     /// <p>The status of the policy type as it relates to the associated root. To attach a policy of the specified type to a root or to an OU or account in that root, it must be available in the organization and enabled for that root.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PolicyTypeStatus>,
     /// <p>The name of the policy type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PolicyType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1432,6 +3863,112 @@ pub struct TagResourceRequest {
     /// <p><p>A list of tags to add to the specified resource.</p> <p>You can specify any of the following taggable resources.</p> <ul> <li> <p>AWS account – specify the account ID number.</p> </li> <li> <p>Organizational unit – specify the OU ID that begins with <code>ou-</code> and looks similar to: <code>ou-<i>1a2b-34uvwxyz</i> </code> </p> </li> <li> <p>Root – specify the root ID that begins with <code>r-</code> and looks similar to: <code>r-<i>1a2b</i> </code> </p> </li> <li> <p>Policy – specify the policy ID that begins with <code>p-</code> andlooks similar to: <code>p-<i>12abcdefg3</i> </code> </p> </li> </ul> <p>For each tag in the list, you must specify both a tag key and a value. You can set the value to an empty string, but you can&#39;t set it to <code>null</code>.</p> <note> <p>If any one of the tags is invalid or if you exceed the allowed number of tags for an account user, then the entire request fails and the account is not created.</p> </note></p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetType {
+    Account,
+    OrganizationalUnit,
+    Root,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetType),
+}
+
+impl Default for TargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetType {
+    fn into(self) -> String {
+        match self {
+            TargetType::Account => "ACCOUNT".to_string(),
+            TargetType::OrganizationalUnit => "ORGANIZATIONAL_UNIT".to_string(),
+            TargetType::Root => "ROOT".to_string(),
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetType {
+    fn into(self) -> &'a str {
+        match self {
+            TargetType::Account => &"ACCOUNT",
+            TargetType::OrganizationalUnit => &"ORGANIZATIONAL_UNIT",
+            TargetType::Root => &"ROOT",
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => TargetType::Account,
+            "ORGANIZATIONAL_UNIT" => TargetType::OrganizationalUnit,
+            "ROOT" => TargetType::Root,
+            _ => TargetType::UnknownVariant(UnknownTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => TargetType::Account,
+            "ORGANIZATIONAL_UNIT" => TargetType::OrganizationalUnit,
+            "ROOT" => TargetType::Root,
+            _ => TargetType::UnknownVariant(UnknownTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

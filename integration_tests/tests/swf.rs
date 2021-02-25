@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_swf;
 
 use rusoto_core::Region;
-use rusoto_swf::{ListDomainsInput, Swf, SwfClient};
+use rusoto_swf::{ListDomainsInput, RegistrationStatus, Swf, SwfClient};
 
 #[tokio::test]
 async fn should_list_domains() {
@@ -12,7 +12,7 @@ async fn should_list_domains() {
 
     let mut request = ListDomainsInput::default();
     request.maximum_page_size = Some(10);
-    request.registration_status = "REGISTERED".to_string();
+    request.registration_status = RegistrationStatus::Registered;
 
     client.list_domains(request).await.unwrap();
 }

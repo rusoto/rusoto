@@ -49,7 +49,7 @@ pub struct AccountSettings {
     /// <p>The edition of QuickSight that you're currently subscribed to: Enterprise edition or Standard edition.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<Edition>,
     /// <p>The main notification email for your QuickSight subscription.</p>
     #[serde(rename = "NotificationEmail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -77,7 +77,7 @@ pub struct AdHocFilteringOption {
     /// <p>Availability status.</p>
     #[serde(rename = "AvailabilityStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub availability_status: Option<String>,
+    pub availability_status: Option<DashboardBehavior>,
 }
 
 /// <p>Amazon Elasticsearch Service parameters.</p>
@@ -127,7 +127,7 @@ pub struct Analysis {
     /// <p>Status associated with the analysis.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The ARN of the theme of the analysis.</p>
     #[serde(rename = "ThemeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,7 +145,256 @@ pub struct AnalysisError {
     /// <p>The type of the analysis error.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<AnalysisErrorType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnalysisErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnalysisErrorType {
+    AccessDenied,
+    ColumnGeographicRoleMismatch,
+    ColumnReplacementMissing,
+    ColumnTypeMismatch,
+    DataSetNotFound,
+    InternalFailure,
+    ParameterNotFound,
+    ParameterTypeInvalid,
+    ParameterValueIncompatible,
+    SourceNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnalysisErrorType),
+}
+
+impl Default for AnalysisErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnalysisErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnalysisErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnalysisErrorType {
+    fn into(self) -> String {
+        match self {
+            AnalysisErrorType::AccessDenied => "ACCESS_DENIED".to_string(),
+            AnalysisErrorType::ColumnGeographicRoleMismatch => {
+                "COLUMN_GEOGRAPHIC_ROLE_MISMATCH".to_string()
+            }
+            AnalysisErrorType::ColumnReplacementMissing => "COLUMN_REPLACEMENT_MISSING".to_string(),
+            AnalysisErrorType::ColumnTypeMismatch => "COLUMN_TYPE_MISMATCH".to_string(),
+            AnalysisErrorType::DataSetNotFound => "DATA_SET_NOT_FOUND".to_string(),
+            AnalysisErrorType::InternalFailure => "INTERNAL_FAILURE".to_string(),
+            AnalysisErrorType::ParameterNotFound => "PARAMETER_NOT_FOUND".to_string(),
+            AnalysisErrorType::ParameterTypeInvalid => "PARAMETER_TYPE_INVALID".to_string(),
+            AnalysisErrorType::ParameterValueIncompatible => {
+                "PARAMETER_VALUE_INCOMPATIBLE".to_string()
+            }
+            AnalysisErrorType::SourceNotFound => "SOURCE_NOT_FOUND".to_string(),
+            AnalysisErrorType::UnknownVariant(UnknownAnalysisErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnalysisErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            AnalysisErrorType::AccessDenied => &"ACCESS_DENIED",
+            AnalysisErrorType::ColumnGeographicRoleMismatch => &"COLUMN_GEOGRAPHIC_ROLE_MISMATCH",
+            AnalysisErrorType::ColumnReplacementMissing => &"COLUMN_REPLACEMENT_MISSING",
+            AnalysisErrorType::ColumnTypeMismatch => &"COLUMN_TYPE_MISMATCH",
+            AnalysisErrorType::DataSetNotFound => &"DATA_SET_NOT_FOUND",
+            AnalysisErrorType::InternalFailure => &"INTERNAL_FAILURE",
+            AnalysisErrorType::ParameterNotFound => &"PARAMETER_NOT_FOUND",
+            AnalysisErrorType::ParameterTypeInvalid => &"PARAMETER_TYPE_INVALID",
+            AnalysisErrorType::ParameterValueIncompatible => &"PARAMETER_VALUE_INCOMPATIBLE",
+            AnalysisErrorType::SourceNotFound => &"SOURCE_NOT_FOUND",
+            AnalysisErrorType::UnknownVariant(UnknownAnalysisErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AnalysisErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => AnalysisErrorType::AccessDenied,
+            "COLUMN_GEOGRAPHIC_ROLE_MISMATCH" => AnalysisErrorType::ColumnGeographicRoleMismatch,
+            "COLUMN_REPLACEMENT_MISSING" => AnalysisErrorType::ColumnReplacementMissing,
+            "COLUMN_TYPE_MISMATCH" => AnalysisErrorType::ColumnTypeMismatch,
+            "DATA_SET_NOT_FOUND" => AnalysisErrorType::DataSetNotFound,
+            "INTERNAL_FAILURE" => AnalysisErrorType::InternalFailure,
+            "PARAMETER_NOT_FOUND" => AnalysisErrorType::ParameterNotFound,
+            "PARAMETER_TYPE_INVALID" => AnalysisErrorType::ParameterTypeInvalid,
+            "PARAMETER_VALUE_INCOMPATIBLE" => AnalysisErrorType::ParameterValueIncompatible,
+            "SOURCE_NOT_FOUND" => AnalysisErrorType::SourceNotFound,
+            _ => AnalysisErrorType::UnknownVariant(UnknownAnalysisErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnalysisErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => AnalysisErrorType::AccessDenied,
+            "COLUMN_GEOGRAPHIC_ROLE_MISMATCH" => AnalysisErrorType::ColumnGeographicRoleMismatch,
+            "COLUMN_REPLACEMENT_MISSING" => AnalysisErrorType::ColumnReplacementMissing,
+            "COLUMN_TYPE_MISMATCH" => AnalysisErrorType::ColumnTypeMismatch,
+            "DATA_SET_NOT_FOUND" => AnalysisErrorType::DataSetNotFound,
+            "INTERNAL_FAILURE" => AnalysisErrorType::InternalFailure,
+            "PARAMETER_NOT_FOUND" => AnalysisErrorType::ParameterNotFound,
+            "PARAMETER_TYPE_INVALID" => AnalysisErrorType::ParameterTypeInvalid,
+            "PARAMETER_VALUE_INCOMPATIBLE" => AnalysisErrorType::ParameterValueIncompatible,
+            "SOURCE_NOT_FOUND" => AnalysisErrorType::SourceNotFound,
+            _ => AnalysisErrorType::UnknownVariant(UnknownAnalysisErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalysisErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AnalysisErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AnalysisErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnalysisFilterAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnalysisFilterAttribute {
+    QuicksightUser,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnalysisFilterAttribute),
+}
+
+impl Default for AnalysisFilterAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnalysisFilterAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnalysisFilterAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnalysisFilterAttribute {
+    fn into(self) -> String {
+        match self {
+            AnalysisFilterAttribute::QuicksightUser => "QUICKSIGHT_USER".to_string(),
+            AnalysisFilterAttribute::UnknownVariant(UnknownAnalysisFilterAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnalysisFilterAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            AnalysisFilterAttribute::QuicksightUser => &"QUICKSIGHT_USER",
+            AnalysisFilterAttribute::UnknownVariant(UnknownAnalysisFilterAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AnalysisFilterAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "QUICKSIGHT_USER" => AnalysisFilterAttribute::QuicksightUser,
+            _ => AnalysisFilterAttribute::UnknownVariant(UnknownAnalysisFilterAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnalysisFilterAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "QUICKSIGHT_USER" => AnalysisFilterAttribute::QuicksightUser,
+            _ => AnalysisFilterAttribute::UnknownVariant(UnknownAnalysisFilterAttribute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalysisFilterAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AnalysisFilterAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AnalysisFilterAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A filter that you apply when searching for one or more analyses.</p>
@@ -155,11 +404,11 @@ pub struct AnalysisSearchFilter {
     /// <p>The name of the value that you want to use as a filter, for example <code>"Name": "QUICKSIGHT_USER"</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<AnalysisFilterAttribute>,
     /// <p>The comparison operator that you want to use as a filter, for example <code>"Operator": "StringEquals"</code>.</p>
     #[serde(rename = "Operator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operator: Option<String>,
+    pub operator: Option<FilterOperator>,
     /// <p>The value of the named item, in this case <code>QUICKSIGHT_USER</code>, that you want to use as a filter, for example <code>"Value"</code>. An example is <code>"arn:aws:quicksight:us-east-1:1:user/default/UserName1"</code>.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -215,7 +464,116 @@ pub struct AnalysisSummary {
     /// <p>The last known status for the analysis.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssignmentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssignmentStatus {
+    Disabled,
+    Draft,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssignmentStatus),
+}
+
+impl Default for AssignmentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssignmentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssignmentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssignmentStatus {
+    fn into(self) -> String {
+        match self {
+            AssignmentStatus::Disabled => "DISABLED".to_string(),
+            AssignmentStatus::Draft => "DRAFT".to_string(),
+            AssignmentStatus::Enabled => "ENABLED".to_string(),
+            AssignmentStatus::UnknownVariant(UnknownAssignmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssignmentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AssignmentStatus::Disabled => &"DISABLED",
+            AssignmentStatus::Draft => &"DRAFT",
+            AssignmentStatus::Enabled => &"ENABLED",
+            AssignmentStatus::UnknownVariant(UnknownAssignmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AssignmentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => AssignmentStatus::Disabled,
+            "DRAFT" => AssignmentStatus::Draft,
+            "ENABLED" => AssignmentStatus::Enabled,
+            _ => AssignmentStatus::UnknownVariant(UnknownAssignmentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssignmentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => AssignmentStatus::Disabled,
+            "DRAFT" => AssignmentStatus::Draft,
+            "ENABLED" => AssignmentStatus::Enabled,
+            _ => AssignmentStatus::UnknownVariant(UnknownAssignmentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssignmentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssignmentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Amazon Athena parameters.</p>
@@ -333,7 +691,117 @@ pub struct CastColumnTypeOperation {
     pub format: Option<String>,
     /// <p>New column data type.</p>
     #[serde(rename = "NewColumnType")]
-    pub new_column_type: String,
+    pub new_column_type: ColumnDataType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownColumnDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ColumnDataType {
+    Datetime,
+    Decimal,
+    Integer,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownColumnDataType),
+}
+
+impl Default for ColumnDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ColumnDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ColumnDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ColumnDataType {
+    fn into(self) -> String {
+        match self {
+            ColumnDataType::Datetime => "DATETIME".to_string(),
+            ColumnDataType::Decimal => "DECIMAL".to_string(),
+            ColumnDataType::Integer => "INTEGER".to_string(),
+            ColumnDataType::String => "STRING".to_string(),
+            ColumnDataType::UnknownVariant(UnknownColumnDataType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ColumnDataType {
+    fn into(self) -> &'a str {
+        match self {
+            ColumnDataType::Datetime => &"DATETIME",
+            ColumnDataType::Decimal => &"DECIMAL",
+            ColumnDataType::Integer => &"INTEGER",
+            ColumnDataType::String => &"STRING",
+            ColumnDataType::UnknownVariant(UnknownColumnDataType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ColumnDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DATETIME" => ColumnDataType::Datetime,
+            "DECIMAL" => ColumnDataType::Decimal,
+            "INTEGER" => ColumnDataType::Integer,
+            "STRING" => ColumnDataType::String,
+            _ => ColumnDataType::UnknownVariant(UnknownColumnDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ColumnDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DATETIME" => ColumnDataType::Datetime,
+            "DECIMAL" => ColumnDataType::Decimal,
+            "INTEGER" => ColumnDataType::Integer,
+            "STRING" => ColumnDataType::String,
+            _ => ColumnDataType::UnknownVariant(UnknownColumnDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ColumnDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ColumnDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ColumnDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Metadata that contains a description for a column.</p>
@@ -419,7 +887,7 @@ pub struct ColumnTag {
     /// <p>A geospatial role for a column.</p>
     #[serde(rename = "ColumnGeographicRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub column_geographic_role: Option<String>,
+    pub column_geographic_role: Option<GeoSpatialDataRole>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -517,7 +985,7 @@ pub struct CreateAnalysisResponse {
     /// <p>The status of the creation of the analysis. </p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -587,7 +1055,7 @@ pub struct CreateDashboardResponse {
     /// <p>The status of the dashboard creation request.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The ID for the dashboard.</p>
     #[serde(rename = "DashboardId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -625,7 +1093,7 @@ pub struct CreateDataSetRequest {
     pub data_set_id: String,
     /// <p>Indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
-    pub import_mode: String,
+    pub import_mode: DataSetImportMode,
     /// <p>Configures the combination and transformation of the data from the physical tables.</p>
     #[serde(rename = "LogicalTableMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -713,7 +1181,7 @@ pub struct CreateDataSourceRequest {
     pub tags: Option<Vec<Tag>>,
     /// <p>The type of the data source. Currently, the supported types for this operation are: <code>ATHENA, AURORA, AURORA_POSTGRESQL, MARIADB, MYSQL, POSTGRESQL, PRESTO, REDSHIFT, S3, SNOWFLAKE, SPARK, SQLSERVER, TERADATA</code>. Use <code>ListDataSources</code> to return a list of all data sources.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataSourceType,
     /// <p>Use this parameter only when you want QuickSight to use a VPC connection when connecting to your underlying source.</p>
     #[serde(rename = "VpcConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -730,7 +1198,7 @@ pub struct CreateDataSourceResponse {
     /// <p>The status of creating the data source.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The ID of the data source. This ID is unique per AWS Region for each AWS account.</p>
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -824,7 +1292,7 @@ pub struct CreateIAMPolicyAssignmentRequest {
     pub assignment_name: String,
     /// <p><p>The status of the assignment. Possible values are as follows:</p> <ul> <li> <p> <code>ENABLED</code> - Anything specified in this assignment is used when creating the data source.</p> </li> <li> <p> <code>DISABLED</code> - This assignment isn&#39;t used when creating the data source.</p> </li> <li> <p> <code>DRAFT</code> - This assignment is an unfinished draft and isn&#39;t used when creating the data source.</p> </li> </ul></p>
     #[serde(rename = "AssignmentStatus")]
-    pub assignment_status: String,
+    pub assignment_status: AssignmentStatus,
     /// <p>The ID of the AWS account where you want to assign an IAM policy to QuickSight users or groups.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
@@ -855,7 +1323,7 @@ pub struct CreateIAMPolicyAssignmentResponse {
     /// <p><p>The status of the assignment. Possible values are as follows:</p> <ul> <li> <p> <code>ENABLED</code> - Anything specified in this assignment is used when creating the data source.</p> </li> <li> <p> <code>DISABLED</code> - This assignment isn&#39;t used when creating the data source.</p> </li> <li> <p> <code>DRAFT</code> - This assignment is an unfinished draft and isn&#39;t used when creating the data source.</p> </li> </ul></p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
     /// <p>The QuickSight users, groups, or both that the IAM policy is assigned to.</p>
     #[serde(rename = "Identities")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -902,7 +1370,7 @@ pub struct CreateIngestionResponse {
     /// <p>The ingestion status.</p>
     #[serde(rename = "IngestionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ingestion_status: Option<String>,
+    pub ingestion_status: Option<IngestionStatus>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -921,7 +1389,7 @@ pub struct CreateNamespaceRequest {
     pub aws_account_id: String,
     /// <p>Specifies the type of your user identity directory. Currently, this supports users with an identity type of <code>QUICKSIGHT</code>.</p>
     #[serde(rename = "IdentityStore")]
-    pub identity_store: String,
+    pub identity_store: IdentityStore,
     /// <p>The name that you want to use to describe the new namespace.</p>
     #[serde(rename = "Namespace")]
     pub namespace: String,
@@ -945,11 +1413,11 @@ pub struct CreateNamespaceResponse {
     /// <p>The status of the creation of the namespace. This is an asynchronous process. A status of <code>CREATED</code> means that your namespace is ready to use. If an error occurs, it indicates if the process is <code>retryable</code> or <code>non-retryable</code>. In the case of a non-retryable error, refer to the error message for follow-up tasks.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<NamespaceStatus>,
     /// <p>Specifies the type of your user identity directory. Currently, this supports users with an identity type of <code>QUICKSIGHT</code>.</p>
     #[serde(rename = "IdentityStore")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_store: Option<String>,
+    pub identity_store: Option<IdentityStore>,
     /// <p>The name of the new namespace that you created.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1038,7 +1506,7 @@ pub struct CreateTemplateResponse {
     /// <p>The template creation status.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1133,7 +1601,7 @@ pub struct CreateThemeResponse {
     /// <p>The theme creation status.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1220,6 +1688,111 @@ pub struct Dashboard {
     pub version: Option<DashboardVersion>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDashboardBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DashboardBehavior {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDashboardBehavior),
+}
+
+impl Default for DashboardBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DashboardBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DashboardBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DashboardBehavior {
+    fn into(self) -> String {
+        match self {
+            DashboardBehavior::Disabled => "DISABLED".to_string(),
+            DashboardBehavior::Enabled => "ENABLED".to_string(),
+            DashboardBehavior::UnknownVariant(UnknownDashboardBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DashboardBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            DashboardBehavior::Disabled => &"DISABLED",
+            DashboardBehavior::Enabled => &"ENABLED",
+            DashboardBehavior::UnknownVariant(UnknownDashboardBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DashboardBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => DashboardBehavior::Disabled,
+            "ENABLED" => DashboardBehavior::Enabled,
+            _ => DashboardBehavior::UnknownVariant(UnknownDashboardBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DashboardBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => DashboardBehavior::Disabled,
+            "ENABLED" => DashboardBehavior::Enabled,
+            _ => DashboardBehavior::UnknownVariant(UnknownDashboardBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DashboardBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DashboardBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DashboardBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Dashboard error.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1231,7 +1804,258 @@ pub struct DashboardError {
     /// <p>Type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DashboardErrorType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDashboardErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DashboardErrorType {
+    AccessDenied,
+    ColumnGeographicRoleMismatch,
+    ColumnReplacementMissing,
+    ColumnTypeMismatch,
+    DataSetNotFound,
+    InternalFailure,
+    ParameterNotFound,
+    ParameterTypeInvalid,
+    ParameterValueIncompatible,
+    SourceNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDashboardErrorType),
+}
+
+impl Default for DashboardErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DashboardErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DashboardErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DashboardErrorType {
+    fn into(self) -> String {
+        match self {
+            DashboardErrorType::AccessDenied => "ACCESS_DENIED".to_string(),
+            DashboardErrorType::ColumnGeographicRoleMismatch => {
+                "COLUMN_GEOGRAPHIC_ROLE_MISMATCH".to_string()
+            }
+            DashboardErrorType::ColumnReplacementMissing => {
+                "COLUMN_REPLACEMENT_MISSING".to_string()
+            }
+            DashboardErrorType::ColumnTypeMismatch => "COLUMN_TYPE_MISMATCH".to_string(),
+            DashboardErrorType::DataSetNotFound => "DATA_SET_NOT_FOUND".to_string(),
+            DashboardErrorType::InternalFailure => "INTERNAL_FAILURE".to_string(),
+            DashboardErrorType::ParameterNotFound => "PARAMETER_NOT_FOUND".to_string(),
+            DashboardErrorType::ParameterTypeInvalid => "PARAMETER_TYPE_INVALID".to_string(),
+            DashboardErrorType::ParameterValueIncompatible => {
+                "PARAMETER_VALUE_INCOMPATIBLE".to_string()
+            }
+            DashboardErrorType::SourceNotFound => "SOURCE_NOT_FOUND".to_string(),
+            DashboardErrorType::UnknownVariant(UnknownDashboardErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DashboardErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            DashboardErrorType::AccessDenied => &"ACCESS_DENIED",
+            DashboardErrorType::ColumnGeographicRoleMismatch => &"COLUMN_GEOGRAPHIC_ROLE_MISMATCH",
+            DashboardErrorType::ColumnReplacementMissing => &"COLUMN_REPLACEMENT_MISSING",
+            DashboardErrorType::ColumnTypeMismatch => &"COLUMN_TYPE_MISMATCH",
+            DashboardErrorType::DataSetNotFound => &"DATA_SET_NOT_FOUND",
+            DashboardErrorType::InternalFailure => &"INTERNAL_FAILURE",
+            DashboardErrorType::ParameterNotFound => &"PARAMETER_NOT_FOUND",
+            DashboardErrorType::ParameterTypeInvalid => &"PARAMETER_TYPE_INVALID",
+            DashboardErrorType::ParameterValueIncompatible => &"PARAMETER_VALUE_INCOMPATIBLE",
+            DashboardErrorType::SourceNotFound => &"SOURCE_NOT_FOUND",
+            DashboardErrorType::UnknownVariant(UnknownDashboardErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DashboardErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => DashboardErrorType::AccessDenied,
+            "COLUMN_GEOGRAPHIC_ROLE_MISMATCH" => DashboardErrorType::ColumnGeographicRoleMismatch,
+            "COLUMN_REPLACEMENT_MISSING" => DashboardErrorType::ColumnReplacementMissing,
+            "COLUMN_TYPE_MISMATCH" => DashboardErrorType::ColumnTypeMismatch,
+            "DATA_SET_NOT_FOUND" => DashboardErrorType::DataSetNotFound,
+            "INTERNAL_FAILURE" => DashboardErrorType::InternalFailure,
+            "PARAMETER_NOT_FOUND" => DashboardErrorType::ParameterNotFound,
+            "PARAMETER_TYPE_INVALID" => DashboardErrorType::ParameterTypeInvalid,
+            "PARAMETER_VALUE_INCOMPATIBLE" => DashboardErrorType::ParameterValueIncompatible,
+            "SOURCE_NOT_FOUND" => DashboardErrorType::SourceNotFound,
+            _ => DashboardErrorType::UnknownVariant(UnknownDashboardErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DashboardErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => DashboardErrorType::AccessDenied,
+            "COLUMN_GEOGRAPHIC_ROLE_MISMATCH" => DashboardErrorType::ColumnGeographicRoleMismatch,
+            "COLUMN_REPLACEMENT_MISSING" => DashboardErrorType::ColumnReplacementMissing,
+            "COLUMN_TYPE_MISMATCH" => DashboardErrorType::ColumnTypeMismatch,
+            "DATA_SET_NOT_FOUND" => DashboardErrorType::DataSetNotFound,
+            "INTERNAL_FAILURE" => DashboardErrorType::InternalFailure,
+            "PARAMETER_NOT_FOUND" => DashboardErrorType::ParameterNotFound,
+            "PARAMETER_TYPE_INVALID" => DashboardErrorType::ParameterTypeInvalid,
+            "PARAMETER_VALUE_INCOMPATIBLE" => DashboardErrorType::ParameterValueIncompatible,
+            "SOURCE_NOT_FOUND" => DashboardErrorType::SourceNotFound,
+            _ => DashboardErrorType::UnknownVariant(UnknownDashboardErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DashboardErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DashboardErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DashboardErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDashboardFilterAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DashboardFilterAttribute {
+    QuicksightUser,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDashboardFilterAttribute),
+}
+
+impl Default for DashboardFilterAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DashboardFilterAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DashboardFilterAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DashboardFilterAttribute {
+    fn into(self) -> String {
+        match self {
+            DashboardFilterAttribute::QuicksightUser => "QUICKSIGHT_USER".to_string(),
+            DashboardFilterAttribute::UnknownVariant(UnknownDashboardFilterAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DashboardFilterAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            DashboardFilterAttribute::QuicksightUser => &"QUICKSIGHT_USER",
+            DashboardFilterAttribute::UnknownVariant(UnknownDashboardFilterAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DashboardFilterAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "QUICKSIGHT_USER" => DashboardFilterAttribute::QuicksightUser,
+            _ => DashboardFilterAttribute::UnknownVariant(UnknownDashboardFilterAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DashboardFilterAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "QUICKSIGHT_USER" => DashboardFilterAttribute::QuicksightUser,
+            _ => DashboardFilterAttribute::UnknownVariant(UnknownDashboardFilterAttribute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DashboardFilterAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DashboardFilterAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DashboardFilterAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Dashboard publish options.</p>
@@ -1259,10 +2083,10 @@ pub struct DashboardSearchFilter {
     /// <p>The name of the value that you want to use as a filter, for example, <code>"Name": "QUICKSIGHT_USER"</code>. </p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<DashboardFilterAttribute>,
     /// <p>The comparison operator that you want to use as a filter, for example, <code>"Operator": "StringEquals"</code>.</p>
     #[serde(rename = "Operator")]
-    pub operator: String,
+    pub operator: FilterOperator,
     /// <p>The value of the named item, in this case <code>QUICKSIGHT_USER</code>, that you want to use as a filter, for example, <code>"Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1"</code>. </p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1325,6 +2149,111 @@ pub struct DashboardSummary {
     pub published_version_number: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDashboardUIState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DashboardUIState {
+    Collapsed,
+    Expanded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDashboardUIState),
+}
+
+impl Default for DashboardUIState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DashboardUIState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DashboardUIState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DashboardUIState {
+    fn into(self) -> String {
+        match self {
+            DashboardUIState::Collapsed => "COLLAPSED".to_string(),
+            DashboardUIState::Expanded => "EXPANDED".to_string(),
+            DashboardUIState::UnknownVariant(UnknownDashboardUIState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DashboardUIState {
+    fn into(self) -> &'a str {
+        match self {
+            DashboardUIState::Collapsed => &"COLLAPSED",
+            DashboardUIState::Expanded => &"EXPANDED",
+            DashboardUIState::UnknownVariant(UnknownDashboardUIState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DashboardUIState {
+    fn from(name: &str) -> Self {
+        match name {
+            "COLLAPSED" => DashboardUIState::Collapsed,
+            "EXPANDED" => DashboardUIState::Expanded,
+            _ => DashboardUIState::UnknownVariant(UnknownDashboardUIState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DashboardUIState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COLLAPSED" => DashboardUIState::Collapsed,
+            "EXPANDED" => DashboardUIState::Expanded,
+            _ => DashboardUIState::UnknownVariant(UnknownDashboardUIState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DashboardUIState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DashboardUIState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DashboardUIState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Dashboard version.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1360,7 +2289,7 @@ pub struct DashboardVersion {
     /// <p>The HTTP status of the request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The ARN of the theme associated with a version of the dashboard.</p>
     #[serde(rename = "ThemeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1394,7 +2323,7 @@ pub struct DashboardVersionSummary {
     /// <p>The HTTP status of the request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>Version number.</p>
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1449,7 +2378,7 @@ pub struct DataSet {
     /// <p>A value that indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub import_mode: Option<String>,
+    pub import_mode: Option<DataSetImportMode>,
     /// <p>The last time that this dataset was updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1492,6 +2421,110 @@ pub struct DataSetConfiguration {
     #[serde(rename = "Placeholder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placeholder: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSetImportMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSetImportMode {
+    DirectQuery,
+    Spice,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSetImportMode),
+}
+
+impl Default for DataSetImportMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSetImportMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSetImportMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSetImportMode {
+    fn into(self) -> String {
+        match self {
+            DataSetImportMode::DirectQuery => "DIRECT_QUERY".to_string(),
+            DataSetImportMode::Spice => "SPICE".to_string(),
+            DataSetImportMode::UnknownVariant(UnknownDataSetImportMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSetImportMode {
+    fn into(self) -> &'a str {
+        match self {
+            DataSetImportMode::DirectQuery => &"DIRECT_QUERY",
+            DataSetImportMode::Spice => &"SPICE",
+            DataSetImportMode::UnknownVariant(UnknownDataSetImportMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DataSetImportMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "DIRECT_QUERY" => DataSetImportMode::DirectQuery,
+            "SPICE" => DataSetImportMode::Spice,
+            _ => DataSetImportMode::UnknownVariant(UnknownDataSetImportMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSetImportMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DIRECT_QUERY" => DataSetImportMode::DirectQuery,
+            "SPICE" => DataSetImportMode::Spice,
+            _ => DataSetImportMode::UnknownVariant(UnknownDataSetImportMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSetImportMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSetImportMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSetImportMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Dataset reference.</p>
@@ -1539,7 +2572,7 @@ pub struct DataSetSummary {
     /// <p>A value that indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub import_mode: Option<String>,
+    pub import_mode: Option<DataSetImportMode>,
     /// <p>The last time that this dataset was updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1597,11 +2630,11 @@ pub struct DataSource {
     /// <p>The HTTP status of the request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The type of the data source. This type indicates which database engine the data source connects to.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DataSourceType>,
     /// <p>The VPC connection information. You need to use this parameter only when you want QuickSight to use a VPC connection when connecting to your underlying source.</p>
     #[serde(rename = "VpcConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1633,7 +2666,144 @@ pub struct DataSourceErrorInfo {
     /// <p>Error type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DataSourceErrorInfoType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceErrorInfoType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceErrorInfoType {
+    AccessDenied,
+    Conflict,
+    CopySourceNotFound,
+    EngineVersionNotSupported,
+    GenericSqlFailure,
+    Timeout,
+    Unknown,
+    UnknownHost,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceErrorInfoType),
+}
+
+impl Default for DataSourceErrorInfoType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceErrorInfoType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceErrorInfoType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceErrorInfoType {
+    fn into(self) -> String {
+        match self {
+            DataSourceErrorInfoType::AccessDenied => "ACCESS_DENIED".to_string(),
+            DataSourceErrorInfoType::Conflict => "CONFLICT".to_string(),
+            DataSourceErrorInfoType::CopySourceNotFound => "COPY_SOURCE_NOT_FOUND".to_string(),
+            DataSourceErrorInfoType::EngineVersionNotSupported => {
+                "ENGINE_VERSION_NOT_SUPPORTED".to_string()
+            }
+            DataSourceErrorInfoType::GenericSqlFailure => "GENERIC_SQL_FAILURE".to_string(),
+            DataSourceErrorInfoType::Timeout => "TIMEOUT".to_string(),
+            DataSourceErrorInfoType::Unknown => "UNKNOWN".to_string(),
+            DataSourceErrorInfoType::UnknownHost => "UNKNOWN_HOST".to_string(),
+            DataSourceErrorInfoType::UnknownVariant(UnknownDataSourceErrorInfoType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceErrorInfoType {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceErrorInfoType::AccessDenied => &"ACCESS_DENIED",
+            DataSourceErrorInfoType::Conflict => &"CONFLICT",
+            DataSourceErrorInfoType::CopySourceNotFound => &"COPY_SOURCE_NOT_FOUND",
+            DataSourceErrorInfoType::EngineVersionNotSupported => &"ENGINE_VERSION_NOT_SUPPORTED",
+            DataSourceErrorInfoType::GenericSqlFailure => &"GENERIC_SQL_FAILURE",
+            DataSourceErrorInfoType::Timeout => &"TIMEOUT",
+            DataSourceErrorInfoType::Unknown => &"UNKNOWN",
+            DataSourceErrorInfoType::UnknownHost => &"UNKNOWN_HOST",
+            DataSourceErrorInfoType::UnknownVariant(UnknownDataSourceErrorInfoType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSourceErrorInfoType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => DataSourceErrorInfoType::AccessDenied,
+            "CONFLICT" => DataSourceErrorInfoType::Conflict,
+            "COPY_SOURCE_NOT_FOUND" => DataSourceErrorInfoType::CopySourceNotFound,
+            "ENGINE_VERSION_NOT_SUPPORTED" => DataSourceErrorInfoType::EngineVersionNotSupported,
+            "GENERIC_SQL_FAILURE" => DataSourceErrorInfoType::GenericSqlFailure,
+            "TIMEOUT" => DataSourceErrorInfoType::Timeout,
+            "UNKNOWN" => DataSourceErrorInfoType::Unknown,
+            "UNKNOWN_HOST" => DataSourceErrorInfoType::UnknownHost,
+            _ => DataSourceErrorInfoType::UnknownVariant(UnknownDataSourceErrorInfoType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceErrorInfoType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => DataSourceErrorInfoType::AccessDenied,
+            "CONFLICT" => DataSourceErrorInfoType::Conflict,
+            "COPY_SOURCE_NOT_FOUND" => DataSourceErrorInfoType::CopySourceNotFound,
+            "ENGINE_VERSION_NOT_SUPPORTED" => DataSourceErrorInfoType::EngineVersionNotSupported,
+            "GENERIC_SQL_FAILURE" => DataSourceErrorInfoType::GenericSqlFailure,
+            "TIMEOUT" => DataSourceErrorInfoType::Timeout,
+            "UNKNOWN" => DataSourceErrorInfoType::Unknown,
+            "UNKNOWN_HOST" => DataSourceErrorInfoType::UnknownHost,
+            _ => DataSourceErrorInfoType::UnknownVariant(UnknownDataSourceErrorInfoType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceErrorInfoType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DataSourceErrorInfoType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceErrorInfoType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The parameters that Amazon QuickSight uses to connect to your underlying data source. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
@@ -1719,6 +2889,211 @@ pub struct DataSourceParameters {
     #[serde(rename = "TwitterParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub twitter_parameters: Option<TwitterParameters>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceType {
+    AdobeAnalytics,
+    AmazonElasticsearch,
+    Athena,
+    Aurora,
+    AuroraPostgresql,
+    AwsIotAnalytics,
+    Github,
+    Jira,
+    Mariadb,
+    Mysql,
+    Oracle,
+    Postgresql,
+    Presto,
+    Redshift,
+    S3,
+    Salesforce,
+    Servicenow,
+    Snowflake,
+    Spark,
+    Sqlserver,
+    Teradata,
+    Timestream,
+    Twitter,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceType),
+}
+
+impl Default for DataSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceType {
+    fn into(self) -> String {
+        match self {
+            DataSourceType::AdobeAnalytics => "ADOBE_ANALYTICS".to_string(),
+            DataSourceType::AmazonElasticsearch => "AMAZON_ELASTICSEARCH".to_string(),
+            DataSourceType::Athena => "ATHENA".to_string(),
+            DataSourceType::Aurora => "AURORA".to_string(),
+            DataSourceType::AuroraPostgresql => "AURORA_POSTGRESQL".to_string(),
+            DataSourceType::AwsIotAnalytics => "AWS_IOT_ANALYTICS".to_string(),
+            DataSourceType::Github => "GITHUB".to_string(),
+            DataSourceType::Jira => "JIRA".to_string(),
+            DataSourceType::Mariadb => "MARIADB".to_string(),
+            DataSourceType::Mysql => "MYSQL".to_string(),
+            DataSourceType::Oracle => "ORACLE".to_string(),
+            DataSourceType::Postgresql => "POSTGRESQL".to_string(),
+            DataSourceType::Presto => "PRESTO".to_string(),
+            DataSourceType::Redshift => "REDSHIFT".to_string(),
+            DataSourceType::S3 => "S3".to_string(),
+            DataSourceType::Salesforce => "SALESFORCE".to_string(),
+            DataSourceType::Servicenow => "SERVICENOW".to_string(),
+            DataSourceType::Snowflake => "SNOWFLAKE".to_string(),
+            DataSourceType::Spark => "SPARK".to_string(),
+            DataSourceType::Sqlserver => "SQLSERVER".to_string(),
+            DataSourceType::Teradata => "TERADATA".to_string(),
+            DataSourceType::Timestream => "TIMESTREAM".to_string(),
+            DataSourceType::Twitter => "TWITTER".to_string(),
+            DataSourceType::UnknownVariant(UnknownDataSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceType::AdobeAnalytics => &"ADOBE_ANALYTICS",
+            DataSourceType::AmazonElasticsearch => &"AMAZON_ELASTICSEARCH",
+            DataSourceType::Athena => &"ATHENA",
+            DataSourceType::Aurora => &"AURORA",
+            DataSourceType::AuroraPostgresql => &"AURORA_POSTGRESQL",
+            DataSourceType::AwsIotAnalytics => &"AWS_IOT_ANALYTICS",
+            DataSourceType::Github => &"GITHUB",
+            DataSourceType::Jira => &"JIRA",
+            DataSourceType::Mariadb => &"MARIADB",
+            DataSourceType::Mysql => &"MYSQL",
+            DataSourceType::Oracle => &"ORACLE",
+            DataSourceType::Postgresql => &"POSTGRESQL",
+            DataSourceType::Presto => &"PRESTO",
+            DataSourceType::Redshift => &"REDSHIFT",
+            DataSourceType::S3 => &"S3",
+            DataSourceType::Salesforce => &"SALESFORCE",
+            DataSourceType::Servicenow => &"SERVICENOW",
+            DataSourceType::Snowflake => &"SNOWFLAKE",
+            DataSourceType::Spark => &"SPARK",
+            DataSourceType::Sqlserver => &"SQLSERVER",
+            DataSourceType::Teradata => &"TERADATA",
+            DataSourceType::Timestream => &"TIMESTREAM",
+            DataSourceType::Twitter => &"TWITTER",
+            DataSourceType::UnknownVariant(UnknownDataSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADOBE_ANALYTICS" => DataSourceType::AdobeAnalytics,
+            "AMAZON_ELASTICSEARCH" => DataSourceType::AmazonElasticsearch,
+            "ATHENA" => DataSourceType::Athena,
+            "AURORA" => DataSourceType::Aurora,
+            "AURORA_POSTGRESQL" => DataSourceType::AuroraPostgresql,
+            "AWS_IOT_ANALYTICS" => DataSourceType::AwsIotAnalytics,
+            "GITHUB" => DataSourceType::Github,
+            "JIRA" => DataSourceType::Jira,
+            "MARIADB" => DataSourceType::Mariadb,
+            "MYSQL" => DataSourceType::Mysql,
+            "ORACLE" => DataSourceType::Oracle,
+            "POSTGRESQL" => DataSourceType::Postgresql,
+            "PRESTO" => DataSourceType::Presto,
+            "REDSHIFT" => DataSourceType::Redshift,
+            "S3" => DataSourceType::S3,
+            "SALESFORCE" => DataSourceType::Salesforce,
+            "SERVICENOW" => DataSourceType::Servicenow,
+            "SNOWFLAKE" => DataSourceType::Snowflake,
+            "SPARK" => DataSourceType::Spark,
+            "SQLSERVER" => DataSourceType::Sqlserver,
+            "TERADATA" => DataSourceType::Teradata,
+            "TIMESTREAM" => DataSourceType::Timestream,
+            "TWITTER" => DataSourceType::Twitter,
+            _ => DataSourceType::UnknownVariant(UnknownDataSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADOBE_ANALYTICS" => DataSourceType::AdobeAnalytics,
+            "AMAZON_ELASTICSEARCH" => DataSourceType::AmazonElasticsearch,
+            "ATHENA" => DataSourceType::Athena,
+            "AURORA" => DataSourceType::Aurora,
+            "AURORA_POSTGRESQL" => DataSourceType::AuroraPostgresql,
+            "AWS_IOT_ANALYTICS" => DataSourceType::AwsIotAnalytics,
+            "GITHUB" => DataSourceType::Github,
+            "JIRA" => DataSourceType::Jira,
+            "MARIADB" => DataSourceType::Mariadb,
+            "MYSQL" => DataSourceType::Mysql,
+            "ORACLE" => DataSourceType::Oracle,
+            "POSTGRESQL" => DataSourceType::Postgresql,
+            "PRESTO" => DataSourceType::Presto,
+            "REDSHIFT" => DataSourceType::Redshift,
+            "S3" => DataSourceType::S3,
+            "SALESFORCE" => DataSourceType::Salesforce,
+            "SERVICENOW" => DataSourceType::Servicenow,
+            "SNOWFLAKE" => DataSourceType::Snowflake,
+            "SPARK" => DataSourceType::Spark,
+            "SQLSERVER" => DataSourceType::Sqlserver,
+            "TERADATA" => DataSourceType::Teradata,
+            "TIMESTREAM" => DataSourceType::Timestream,
+            "TWITTER" => DataSourceType::Twitter,
+            _ => DataSourceType::UnknownVariant(UnknownDataSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A date-time parameter.</p>
@@ -2923,6 +4298,217 @@ pub struct DescribeUserResponse {
     pub user: Option<User>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEdition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Edition {
+    Enterprise,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEdition),
+}
+
+impl Default for Edition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Edition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Edition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Edition {
+    fn into(self) -> String {
+        match self {
+            Edition::Enterprise => "ENTERPRISE".to_string(),
+            Edition::Standard => "STANDARD".to_string(),
+            Edition::UnknownVariant(UnknownEdition { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Edition {
+    fn into(self) -> &'a str {
+        match self {
+            Edition::Enterprise => &"ENTERPRISE",
+            Edition::Standard => &"STANDARD",
+            Edition::UnknownVariant(UnknownEdition { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Edition {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENTERPRISE" => Edition::Enterprise,
+            "STANDARD" => Edition::Standard,
+            _ => Edition::UnknownVariant(UnknownEdition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Edition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENTERPRISE" => Edition::Enterprise,
+            "STANDARD" => Edition::Standard,
+            _ => Edition::UnknownVariant(UnknownEdition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Edition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Edition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Edition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEmbeddingIdentityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EmbeddingIdentityType {
+    Anonymous,
+    Iam,
+    Quicksight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEmbeddingIdentityType),
+}
+
+impl Default for EmbeddingIdentityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EmbeddingIdentityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EmbeddingIdentityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EmbeddingIdentityType {
+    fn into(self) -> String {
+        match self {
+            EmbeddingIdentityType::Anonymous => "ANONYMOUS".to_string(),
+            EmbeddingIdentityType::Iam => "IAM".to_string(),
+            EmbeddingIdentityType::Quicksight => "QUICKSIGHT".to_string(),
+            EmbeddingIdentityType::UnknownVariant(UnknownEmbeddingIdentityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EmbeddingIdentityType {
+    fn into(self) -> &'a str {
+        match self {
+            EmbeddingIdentityType::Anonymous => &"ANONYMOUS",
+            EmbeddingIdentityType::Iam => &"IAM",
+            EmbeddingIdentityType::Quicksight => &"QUICKSIGHT",
+            EmbeddingIdentityType::UnknownVariant(UnknownEmbeddingIdentityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EmbeddingIdentityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANONYMOUS" => EmbeddingIdentityType::Anonymous,
+            "IAM" => EmbeddingIdentityType::Iam,
+            "QUICKSIGHT" => EmbeddingIdentityType::Quicksight,
+            _ => EmbeddingIdentityType::UnknownVariant(UnknownEmbeddingIdentityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EmbeddingIdentityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANONYMOUS" => EmbeddingIdentityType::Anonymous,
+            "IAM" => EmbeddingIdentityType::Iam,
+            "QUICKSIGHT" => EmbeddingIdentityType::Quicksight,
+            _ => EmbeddingIdentityType::UnknownVariant(UnknownEmbeddingIdentityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmbeddingIdentityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EmbeddingIdentityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EmbeddingIdentityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Error information for the SPICE ingestion of a dataset.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2934,7 +4520,148 @@ pub struct ErrorInfo {
     /// <p>Error type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<IngestionErrorType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExceptionResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExceptionResourceType {
+    AccountSettings,
+    DataSet,
+    DataSource,
+    Group,
+    IampolicyAssignment,
+    Ingestion,
+    Namespace,
+    User,
+    VpcConnection,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExceptionResourceType),
+}
+
+impl Default for ExceptionResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExceptionResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExceptionResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExceptionResourceType {
+    fn into(self) -> String {
+        match self {
+            ExceptionResourceType::AccountSettings => "ACCOUNT_SETTINGS".to_string(),
+            ExceptionResourceType::DataSet => "DATA_SET".to_string(),
+            ExceptionResourceType::DataSource => "DATA_SOURCE".to_string(),
+            ExceptionResourceType::Group => "GROUP".to_string(),
+            ExceptionResourceType::IampolicyAssignment => "IAMPOLICY_ASSIGNMENT".to_string(),
+            ExceptionResourceType::Ingestion => "INGESTION".to_string(),
+            ExceptionResourceType::Namespace => "NAMESPACE".to_string(),
+            ExceptionResourceType::User => "USER".to_string(),
+            ExceptionResourceType::VpcConnection => "VPC_CONNECTION".to_string(),
+            ExceptionResourceType::UnknownVariant(UnknownExceptionResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExceptionResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ExceptionResourceType::AccountSettings => &"ACCOUNT_SETTINGS",
+            ExceptionResourceType::DataSet => &"DATA_SET",
+            ExceptionResourceType::DataSource => &"DATA_SOURCE",
+            ExceptionResourceType::Group => &"GROUP",
+            ExceptionResourceType::IampolicyAssignment => &"IAMPOLICY_ASSIGNMENT",
+            ExceptionResourceType::Ingestion => &"INGESTION",
+            ExceptionResourceType::Namespace => &"NAMESPACE",
+            ExceptionResourceType::User => &"USER",
+            ExceptionResourceType::VpcConnection => &"VPC_CONNECTION",
+            ExceptionResourceType::UnknownVariant(UnknownExceptionResourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExceptionResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_SETTINGS" => ExceptionResourceType::AccountSettings,
+            "DATA_SET" => ExceptionResourceType::DataSet,
+            "DATA_SOURCE" => ExceptionResourceType::DataSource,
+            "GROUP" => ExceptionResourceType::Group,
+            "IAMPOLICY_ASSIGNMENT" => ExceptionResourceType::IampolicyAssignment,
+            "INGESTION" => ExceptionResourceType::Ingestion,
+            "NAMESPACE" => ExceptionResourceType::Namespace,
+            "USER" => ExceptionResourceType::User,
+            "VPC_CONNECTION" => ExceptionResourceType::VpcConnection,
+            _ => ExceptionResourceType::UnknownVariant(UnknownExceptionResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExceptionResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_SETTINGS" => ExceptionResourceType::AccountSettings,
+            "DATA_SET" => ExceptionResourceType::DataSet,
+            "DATA_SOURCE" => ExceptionResourceType::DataSource,
+            "GROUP" => ExceptionResourceType::Group,
+            "IAMPOLICY_ASSIGNMENT" => ExceptionResourceType::IampolicyAssignment,
+            "INGESTION" => ExceptionResourceType::Ingestion,
+            "NAMESPACE" => ExceptionResourceType::Namespace,
+            "USER" => ExceptionResourceType::User,
+            "VPC_CONNECTION" => ExceptionResourceType::VpcConnection,
+            _ => ExceptionResourceType::UnknownVariant(UnknownExceptionResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExceptionResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ExceptionResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExceptionResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Export to .csv option.</p>
@@ -2944,7 +4671,127 @@ pub struct ExportToCSVOption {
     /// <p>Availability status.</p>
     #[serde(rename = "AvailabilityStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub availability_status: Option<String>,
+    pub availability_status: Option<DashboardBehavior>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileFormat {
+    Clf,
+    Csv,
+    Elf,
+    Json,
+    Tsv,
+    Xlsx,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileFormat),
+}
+
+impl Default for FileFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileFormat {
+    fn into(self) -> String {
+        match self {
+            FileFormat::Clf => "CLF".to_string(),
+            FileFormat::Csv => "CSV".to_string(),
+            FileFormat::Elf => "ELF".to_string(),
+            FileFormat::Json => "JSON".to_string(),
+            FileFormat::Tsv => "TSV".to_string(),
+            FileFormat::Xlsx => "XLSX".to_string(),
+            FileFormat::UnknownVariant(UnknownFileFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileFormat {
+    fn into(self) -> &'a str {
+        match self {
+            FileFormat::Clf => &"CLF",
+            FileFormat::Csv => &"CSV",
+            FileFormat::Elf => &"ELF",
+            FileFormat::Json => &"JSON",
+            FileFormat::Tsv => &"TSV",
+            FileFormat::Xlsx => &"XLSX",
+            FileFormat::UnknownVariant(UnknownFileFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLF" => FileFormat::Clf,
+            "CSV" => FileFormat::Csv,
+            "ELF" => FileFormat::Elf,
+            "JSON" => FileFormat::Json,
+            "TSV" => FileFormat::Tsv,
+            "XLSX" => FileFormat::Xlsx,
+            _ => FileFormat::UnknownVariant(UnknownFileFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLF" => FileFormat::Clf,
+            "CSV" => FileFormat::Csv,
+            "ELF" => FileFormat::Elf,
+            "JSON" => FileFormat::Json,
+            "TSV" => FileFormat::Tsv,
+            "XLSX" => FileFormat::Xlsx,
+            _ => FileFormat::UnknownVariant(UnknownFileFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A transform operation that filters rows based on a condition.</p>
@@ -2955,6 +4802,102 @@ pub struct FilterOperation {
     pub condition_expression: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterOperator {
+    StringEquals,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterOperator),
+}
+
+impl Default for FilterOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterOperator {
+    fn into(self) -> String {
+        match self {
+            FilterOperator::StringEquals => "StringEquals".to_string(),
+            FilterOperator::UnknownVariant(UnknownFilterOperator { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterOperator {
+    fn into(self) -> &'a str {
+        match self {
+            FilterOperator::StringEquals => &"StringEquals",
+            FilterOperator::UnknownVariant(UnknownFilterOperator { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "StringEquals" => FilterOperator::StringEquals,
+            _ => FilterOperator::UnknownVariant(UnknownFilterOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "StringEquals" => FilterOperator::StringEquals,
+            _ => FilterOperator::UnknownVariant(UnknownFilterOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Geospatial column group that denotes a hierarchy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GeoSpatialColumnGroup {
@@ -2963,10 +4906,238 @@ pub struct GeoSpatialColumnGroup {
     pub columns: Vec<String>,
     /// <p>Country code.</p>
     #[serde(rename = "CountryCode")]
-    pub country_code: String,
+    pub country_code: GeoSpatialCountryCode,
     /// <p>A display name for the hierarchy.</p>
     #[serde(rename = "Name")]
     pub name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGeoSpatialCountryCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GeoSpatialCountryCode {
+    Us,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGeoSpatialCountryCode),
+}
+
+impl Default for GeoSpatialCountryCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GeoSpatialCountryCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GeoSpatialCountryCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GeoSpatialCountryCode {
+    fn into(self) -> String {
+        match self {
+            GeoSpatialCountryCode::Us => "US".to_string(),
+            GeoSpatialCountryCode::UnknownVariant(UnknownGeoSpatialCountryCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GeoSpatialCountryCode {
+    fn into(self) -> &'a str {
+        match self {
+            GeoSpatialCountryCode::Us => &"US",
+            GeoSpatialCountryCode::UnknownVariant(UnknownGeoSpatialCountryCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GeoSpatialCountryCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "US" => GeoSpatialCountryCode::Us,
+            _ => GeoSpatialCountryCode::UnknownVariant(UnknownGeoSpatialCountryCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GeoSpatialCountryCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "US" => GeoSpatialCountryCode::Us,
+            _ => GeoSpatialCountryCode::UnknownVariant(UnknownGeoSpatialCountryCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoSpatialCountryCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GeoSpatialCountryCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GeoSpatialCountryCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGeoSpatialDataRole {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GeoSpatialDataRole {
+    City,
+    Country,
+    County,
+    Latitude,
+    Longitude,
+    Postcode,
+    State,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGeoSpatialDataRole),
+}
+
+impl Default for GeoSpatialDataRole {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GeoSpatialDataRole {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GeoSpatialDataRole {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GeoSpatialDataRole {
+    fn into(self) -> String {
+        match self {
+            GeoSpatialDataRole::City => "CITY".to_string(),
+            GeoSpatialDataRole::Country => "COUNTRY".to_string(),
+            GeoSpatialDataRole::County => "COUNTY".to_string(),
+            GeoSpatialDataRole::Latitude => "LATITUDE".to_string(),
+            GeoSpatialDataRole::Longitude => "LONGITUDE".to_string(),
+            GeoSpatialDataRole::Postcode => "POSTCODE".to_string(),
+            GeoSpatialDataRole::State => "STATE".to_string(),
+            GeoSpatialDataRole::UnknownVariant(UnknownGeoSpatialDataRole { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GeoSpatialDataRole {
+    fn into(self) -> &'a str {
+        match self {
+            GeoSpatialDataRole::City => &"CITY",
+            GeoSpatialDataRole::Country => &"COUNTRY",
+            GeoSpatialDataRole::County => &"COUNTY",
+            GeoSpatialDataRole::Latitude => &"LATITUDE",
+            GeoSpatialDataRole::Longitude => &"LONGITUDE",
+            GeoSpatialDataRole::Postcode => &"POSTCODE",
+            GeoSpatialDataRole::State => &"STATE",
+            GeoSpatialDataRole::UnknownVariant(UnknownGeoSpatialDataRole { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GeoSpatialDataRole {
+    fn from(name: &str) -> Self {
+        match name {
+            "CITY" => GeoSpatialDataRole::City,
+            "COUNTRY" => GeoSpatialDataRole::Country,
+            "COUNTY" => GeoSpatialDataRole::County,
+            "LATITUDE" => GeoSpatialDataRole::Latitude,
+            "LONGITUDE" => GeoSpatialDataRole::Longitude,
+            "POSTCODE" => GeoSpatialDataRole::Postcode,
+            "STATE" => GeoSpatialDataRole::State,
+            _ => GeoSpatialDataRole::UnknownVariant(UnknownGeoSpatialDataRole {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GeoSpatialDataRole {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CITY" => GeoSpatialDataRole::City,
+            "COUNTRY" => GeoSpatialDataRole::Country,
+            "COUNTY" => GeoSpatialDataRole::County,
+            "LATITUDE" => GeoSpatialDataRole::Latitude,
+            "LONGITUDE" => GeoSpatialDataRole::Longitude,
+            "POSTCODE" => GeoSpatialDataRole::Postcode,
+            "STATE" => GeoSpatialDataRole::State,
+            _ => GeoSpatialDataRole::UnknownVariant(UnknownGeoSpatialDataRole { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoSpatialDataRole {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GeoSpatialDataRole {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GeoSpatialDataRole {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2984,7 +5155,7 @@ pub struct GetDashboardEmbedUrlRequest {
     pub dashboard_id: String,
     /// <p>The authentication method that the user uses to sign in.</p>
     #[serde(rename = "IdentityType")]
-    pub identity_type: String,
+    pub identity_type: EmbeddingIdentityType,
     /// <p>The QuickSight namespace that contains the dashboard IDs in this request. If you're not using a custom namespace, set this to "<code>default</code>".</p>
     #[serde(rename = "Namespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3126,7 +5297,7 @@ pub struct IAMPolicyAssignment {
     /// <p>Assignment status.</p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
     /// <p>The AWS account ID.</p>
     #[serde(rename = "AwsAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3152,7 +5323,202 @@ pub struct IAMPolicyAssignmentSummary {
     /// <p>Assignment status.</p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityStore {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityStore {
+    Quicksight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityStore),
+}
+
+impl Default for IdentityStore {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityStore {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityStore {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityStore {
+    fn into(self) -> String {
+        match self {
+            IdentityStore::Quicksight => "QUICKSIGHT".to_string(),
+            IdentityStore::UnknownVariant(UnknownIdentityStore { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityStore {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityStore::Quicksight => &"QUICKSIGHT",
+            IdentityStore::UnknownVariant(UnknownIdentityStore { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityStore {
+    fn from(name: &str) -> Self {
+        match name {
+            "QUICKSIGHT" => IdentityStore::Quicksight,
+            _ => IdentityStore::UnknownVariant(UnknownIdentityStore {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityStore {
+    fn from(name: String) -> Self {
+        match &*name {
+            "QUICKSIGHT" => IdentityStore::Quicksight,
+            _ => IdentityStore::UnknownVariant(UnknownIdentityStore { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityStore {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IdentityStore {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IdentityStore {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityType {
+    Iam,
+    Quicksight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityType),
+}
+
+impl Default for IdentityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityType {
+    fn into(self) -> String {
+        match self {
+            IdentityType::Iam => "IAM".to_string(),
+            IdentityType::Quicksight => "QUICKSIGHT".to_string(),
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityType {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityType::Iam => &"IAM",
+            IdentityType::Quicksight => &"QUICKSIGHT",
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "IAM" => IdentityType::Iam,
+            "QUICKSIGHT" => IdentityType::Quicksight,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IAM" => IdentityType::Iam,
+            "QUICKSIGHT" => IdentityType::Quicksight,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IdentityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IdentityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the SPICE ingestion for a dataset.</p>
@@ -3179,7 +5545,7 @@ pub struct Ingestion {
     pub ingestion_size_in_bytes: Option<i64>,
     /// <p>Ingestion status.</p>
     #[serde(rename = "IngestionStatus")]
-    pub ingestion_status: String,
+    pub ingestion_status: IngestionStatus,
     /// <p>The time that this ingestion took, measured in seconds.</p>
     #[serde(rename = "IngestionTimeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3190,14 +5556,680 @@ pub struct Ingestion {
     /// <p>Event source for this ingestion.</p>
     #[serde(rename = "RequestSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_source: Option<String>,
+    pub request_source: Option<IngestionRequestSource>,
     /// <p>Type of this ingestion.</p>
     #[serde(rename = "RequestType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_type: Option<String>,
+    pub request_type: Option<IngestionRequestType>,
     #[serde(rename = "RowInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_info: Option<RowInfo>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIngestionErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IngestionErrorType {
+    AccountCapacityLimitExceeded,
+    ConnectionFailure,
+    CustomerError,
+    DataSetDeleted,
+    DataSetNotSpice,
+    DataSetSizeLimitExceeded,
+    DataSourceAuthFailed,
+    DataSourceConnectionFailed,
+    DataSourceNotFound,
+    DataToleranceException,
+    FailureToAssumeRole,
+    FailureToProcessJsonFile,
+    IamRoleNotAvailable,
+    IngestionCanceled,
+    IngestionSuperseded,
+    InternalServiceError,
+    InvalidDataprepSyntax,
+    InvalidDataSourceConfig,
+    InvalidDateFormat,
+    IotDataSetFileEmpty,
+    IotFileNotFound,
+    OauthTokenFailure,
+    PasswordAuthenticationFailure,
+    PermissionDenied,
+    QueryTimeout,
+    RowSizeLimitExceeded,
+    S3FileInaccessible,
+    S3ManifestError,
+    S3UploadedFileDeleted,
+    SourceApiLimitExceededFailure,
+    SourceResourceLimitExceeded,
+    SpiceTableNotFound,
+    SqlException,
+    SqlInvalidParameterValue,
+    SqlNumericOverflow,
+    SqlSchemaMismatchError,
+    SqlTableNotFound,
+    SslCertificateValidationFailure,
+    UnresolvableHost,
+    UnroutableHost,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIngestionErrorType),
+}
+
+impl Default for IngestionErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IngestionErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IngestionErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IngestionErrorType {
+    fn into(self) -> String {
+        match self {
+            IngestionErrorType::AccountCapacityLimitExceeded => {
+                "ACCOUNT_CAPACITY_LIMIT_EXCEEDED".to_string()
+            }
+            IngestionErrorType::ConnectionFailure => "CONNECTION_FAILURE".to_string(),
+            IngestionErrorType::CustomerError => "CUSTOMER_ERROR".to_string(),
+            IngestionErrorType::DataSetDeleted => "DATA_SET_DELETED".to_string(),
+            IngestionErrorType::DataSetNotSpice => "DATA_SET_NOT_SPICE".to_string(),
+            IngestionErrorType::DataSetSizeLimitExceeded => {
+                "DATA_SET_SIZE_LIMIT_EXCEEDED".to_string()
+            }
+            IngestionErrorType::DataSourceAuthFailed => "DATA_SOURCE_AUTH_FAILED".to_string(),
+            IngestionErrorType::DataSourceConnectionFailed => {
+                "DATA_SOURCE_CONNECTION_FAILED".to_string()
+            }
+            IngestionErrorType::DataSourceNotFound => "DATA_SOURCE_NOT_FOUND".to_string(),
+            IngestionErrorType::DataToleranceException => "DATA_TOLERANCE_EXCEPTION".to_string(),
+            IngestionErrorType::FailureToAssumeRole => "FAILURE_TO_ASSUME_ROLE".to_string(),
+            IngestionErrorType::FailureToProcessJsonFile => {
+                "FAILURE_TO_PROCESS_JSON_FILE".to_string()
+            }
+            IngestionErrorType::IamRoleNotAvailable => "IAM_ROLE_NOT_AVAILABLE".to_string(),
+            IngestionErrorType::IngestionCanceled => "INGESTION_CANCELED".to_string(),
+            IngestionErrorType::IngestionSuperseded => "INGESTION_SUPERSEDED".to_string(),
+            IngestionErrorType::InternalServiceError => "INTERNAL_SERVICE_ERROR".to_string(),
+            IngestionErrorType::InvalidDataprepSyntax => "INVALID_DATAPREP_SYNTAX".to_string(),
+            IngestionErrorType::InvalidDataSourceConfig => "INVALID_DATA_SOURCE_CONFIG".to_string(),
+            IngestionErrorType::InvalidDateFormat => "INVALID_DATE_FORMAT".to_string(),
+            IngestionErrorType::IotDataSetFileEmpty => "IOT_DATA_SET_FILE_EMPTY".to_string(),
+            IngestionErrorType::IotFileNotFound => "IOT_FILE_NOT_FOUND".to_string(),
+            IngestionErrorType::OauthTokenFailure => "OAUTH_TOKEN_FAILURE".to_string(),
+            IngestionErrorType::PasswordAuthenticationFailure => {
+                "PASSWORD_AUTHENTICATION_FAILURE".to_string()
+            }
+            IngestionErrorType::PermissionDenied => "PERMISSION_DENIED".to_string(),
+            IngestionErrorType::QueryTimeout => "QUERY_TIMEOUT".to_string(),
+            IngestionErrorType::RowSizeLimitExceeded => "ROW_SIZE_LIMIT_EXCEEDED".to_string(),
+            IngestionErrorType::S3FileInaccessible => "S3_FILE_INACCESSIBLE".to_string(),
+            IngestionErrorType::S3ManifestError => "S3_MANIFEST_ERROR".to_string(),
+            IngestionErrorType::S3UploadedFileDeleted => "S3_UPLOADED_FILE_DELETED".to_string(),
+            IngestionErrorType::SourceApiLimitExceededFailure => {
+                "SOURCE_API_LIMIT_EXCEEDED_FAILURE".to_string()
+            }
+            IngestionErrorType::SourceResourceLimitExceeded => {
+                "SOURCE_RESOURCE_LIMIT_EXCEEDED".to_string()
+            }
+            IngestionErrorType::SpiceTableNotFound => "SPICE_TABLE_NOT_FOUND".to_string(),
+            IngestionErrorType::SqlException => "SQL_EXCEPTION".to_string(),
+            IngestionErrorType::SqlInvalidParameterValue => {
+                "SQL_INVALID_PARAMETER_VALUE".to_string()
+            }
+            IngestionErrorType::SqlNumericOverflow => "SQL_NUMERIC_OVERFLOW".to_string(),
+            IngestionErrorType::SqlSchemaMismatchError => "SQL_SCHEMA_MISMATCH_ERROR".to_string(),
+            IngestionErrorType::SqlTableNotFound => "SQL_TABLE_NOT_FOUND".to_string(),
+            IngestionErrorType::SslCertificateValidationFailure => {
+                "SSL_CERTIFICATE_VALIDATION_FAILURE".to_string()
+            }
+            IngestionErrorType::UnresolvableHost => "UNRESOLVABLE_HOST".to_string(),
+            IngestionErrorType::UnroutableHost => "UNROUTABLE_HOST".to_string(),
+            IngestionErrorType::UnknownVariant(UnknownIngestionErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IngestionErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            IngestionErrorType::AccountCapacityLimitExceeded => &"ACCOUNT_CAPACITY_LIMIT_EXCEEDED",
+            IngestionErrorType::ConnectionFailure => &"CONNECTION_FAILURE",
+            IngestionErrorType::CustomerError => &"CUSTOMER_ERROR",
+            IngestionErrorType::DataSetDeleted => &"DATA_SET_DELETED",
+            IngestionErrorType::DataSetNotSpice => &"DATA_SET_NOT_SPICE",
+            IngestionErrorType::DataSetSizeLimitExceeded => &"DATA_SET_SIZE_LIMIT_EXCEEDED",
+            IngestionErrorType::DataSourceAuthFailed => &"DATA_SOURCE_AUTH_FAILED",
+            IngestionErrorType::DataSourceConnectionFailed => &"DATA_SOURCE_CONNECTION_FAILED",
+            IngestionErrorType::DataSourceNotFound => &"DATA_SOURCE_NOT_FOUND",
+            IngestionErrorType::DataToleranceException => &"DATA_TOLERANCE_EXCEPTION",
+            IngestionErrorType::FailureToAssumeRole => &"FAILURE_TO_ASSUME_ROLE",
+            IngestionErrorType::FailureToProcessJsonFile => &"FAILURE_TO_PROCESS_JSON_FILE",
+            IngestionErrorType::IamRoleNotAvailable => &"IAM_ROLE_NOT_AVAILABLE",
+            IngestionErrorType::IngestionCanceled => &"INGESTION_CANCELED",
+            IngestionErrorType::IngestionSuperseded => &"INGESTION_SUPERSEDED",
+            IngestionErrorType::InternalServiceError => &"INTERNAL_SERVICE_ERROR",
+            IngestionErrorType::InvalidDataprepSyntax => &"INVALID_DATAPREP_SYNTAX",
+            IngestionErrorType::InvalidDataSourceConfig => &"INVALID_DATA_SOURCE_CONFIG",
+            IngestionErrorType::InvalidDateFormat => &"INVALID_DATE_FORMAT",
+            IngestionErrorType::IotDataSetFileEmpty => &"IOT_DATA_SET_FILE_EMPTY",
+            IngestionErrorType::IotFileNotFound => &"IOT_FILE_NOT_FOUND",
+            IngestionErrorType::OauthTokenFailure => &"OAUTH_TOKEN_FAILURE",
+            IngestionErrorType::PasswordAuthenticationFailure => &"PASSWORD_AUTHENTICATION_FAILURE",
+            IngestionErrorType::PermissionDenied => &"PERMISSION_DENIED",
+            IngestionErrorType::QueryTimeout => &"QUERY_TIMEOUT",
+            IngestionErrorType::RowSizeLimitExceeded => &"ROW_SIZE_LIMIT_EXCEEDED",
+            IngestionErrorType::S3FileInaccessible => &"S3_FILE_INACCESSIBLE",
+            IngestionErrorType::S3ManifestError => &"S3_MANIFEST_ERROR",
+            IngestionErrorType::S3UploadedFileDeleted => &"S3_UPLOADED_FILE_DELETED",
+            IngestionErrorType::SourceApiLimitExceededFailure => {
+                &"SOURCE_API_LIMIT_EXCEEDED_FAILURE"
+            }
+            IngestionErrorType::SourceResourceLimitExceeded => &"SOURCE_RESOURCE_LIMIT_EXCEEDED",
+            IngestionErrorType::SpiceTableNotFound => &"SPICE_TABLE_NOT_FOUND",
+            IngestionErrorType::SqlException => &"SQL_EXCEPTION",
+            IngestionErrorType::SqlInvalidParameterValue => &"SQL_INVALID_PARAMETER_VALUE",
+            IngestionErrorType::SqlNumericOverflow => &"SQL_NUMERIC_OVERFLOW",
+            IngestionErrorType::SqlSchemaMismatchError => &"SQL_SCHEMA_MISMATCH_ERROR",
+            IngestionErrorType::SqlTableNotFound => &"SQL_TABLE_NOT_FOUND",
+            IngestionErrorType::SslCertificateValidationFailure => {
+                &"SSL_CERTIFICATE_VALIDATION_FAILURE"
+            }
+            IngestionErrorType::UnresolvableHost => &"UNRESOLVABLE_HOST",
+            IngestionErrorType::UnroutableHost => &"UNROUTABLE_HOST",
+            IngestionErrorType::UnknownVariant(UnknownIngestionErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for IngestionErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_CAPACITY_LIMIT_EXCEEDED" => IngestionErrorType::AccountCapacityLimitExceeded,
+            "CONNECTION_FAILURE" => IngestionErrorType::ConnectionFailure,
+            "CUSTOMER_ERROR" => IngestionErrorType::CustomerError,
+            "DATA_SET_DELETED" => IngestionErrorType::DataSetDeleted,
+            "DATA_SET_NOT_SPICE" => IngestionErrorType::DataSetNotSpice,
+            "DATA_SET_SIZE_LIMIT_EXCEEDED" => IngestionErrorType::DataSetSizeLimitExceeded,
+            "DATA_SOURCE_AUTH_FAILED" => IngestionErrorType::DataSourceAuthFailed,
+            "DATA_SOURCE_CONNECTION_FAILED" => IngestionErrorType::DataSourceConnectionFailed,
+            "DATA_SOURCE_NOT_FOUND" => IngestionErrorType::DataSourceNotFound,
+            "DATA_TOLERANCE_EXCEPTION" => IngestionErrorType::DataToleranceException,
+            "FAILURE_TO_ASSUME_ROLE" => IngestionErrorType::FailureToAssumeRole,
+            "FAILURE_TO_PROCESS_JSON_FILE" => IngestionErrorType::FailureToProcessJsonFile,
+            "IAM_ROLE_NOT_AVAILABLE" => IngestionErrorType::IamRoleNotAvailable,
+            "INGESTION_CANCELED" => IngestionErrorType::IngestionCanceled,
+            "INGESTION_SUPERSEDED" => IngestionErrorType::IngestionSuperseded,
+            "INTERNAL_SERVICE_ERROR" => IngestionErrorType::InternalServiceError,
+            "INVALID_DATAPREP_SYNTAX" => IngestionErrorType::InvalidDataprepSyntax,
+            "INVALID_DATA_SOURCE_CONFIG" => IngestionErrorType::InvalidDataSourceConfig,
+            "INVALID_DATE_FORMAT" => IngestionErrorType::InvalidDateFormat,
+            "IOT_DATA_SET_FILE_EMPTY" => IngestionErrorType::IotDataSetFileEmpty,
+            "IOT_FILE_NOT_FOUND" => IngestionErrorType::IotFileNotFound,
+            "OAUTH_TOKEN_FAILURE" => IngestionErrorType::OauthTokenFailure,
+            "PASSWORD_AUTHENTICATION_FAILURE" => IngestionErrorType::PasswordAuthenticationFailure,
+            "PERMISSION_DENIED" => IngestionErrorType::PermissionDenied,
+            "QUERY_TIMEOUT" => IngestionErrorType::QueryTimeout,
+            "ROW_SIZE_LIMIT_EXCEEDED" => IngestionErrorType::RowSizeLimitExceeded,
+            "S3_FILE_INACCESSIBLE" => IngestionErrorType::S3FileInaccessible,
+            "S3_MANIFEST_ERROR" => IngestionErrorType::S3ManifestError,
+            "S3_UPLOADED_FILE_DELETED" => IngestionErrorType::S3UploadedFileDeleted,
+            "SOURCE_API_LIMIT_EXCEEDED_FAILURE" => {
+                IngestionErrorType::SourceApiLimitExceededFailure
+            }
+            "SOURCE_RESOURCE_LIMIT_EXCEEDED" => IngestionErrorType::SourceResourceLimitExceeded,
+            "SPICE_TABLE_NOT_FOUND" => IngestionErrorType::SpiceTableNotFound,
+            "SQL_EXCEPTION" => IngestionErrorType::SqlException,
+            "SQL_INVALID_PARAMETER_VALUE" => IngestionErrorType::SqlInvalidParameterValue,
+            "SQL_NUMERIC_OVERFLOW" => IngestionErrorType::SqlNumericOverflow,
+            "SQL_SCHEMA_MISMATCH_ERROR" => IngestionErrorType::SqlSchemaMismatchError,
+            "SQL_TABLE_NOT_FOUND" => IngestionErrorType::SqlTableNotFound,
+            "SSL_CERTIFICATE_VALIDATION_FAILURE" => {
+                IngestionErrorType::SslCertificateValidationFailure
+            }
+            "UNRESOLVABLE_HOST" => IngestionErrorType::UnresolvableHost,
+            "UNROUTABLE_HOST" => IngestionErrorType::UnroutableHost,
+            _ => IngestionErrorType::UnknownVariant(UnknownIngestionErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IngestionErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_CAPACITY_LIMIT_EXCEEDED" => IngestionErrorType::AccountCapacityLimitExceeded,
+            "CONNECTION_FAILURE" => IngestionErrorType::ConnectionFailure,
+            "CUSTOMER_ERROR" => IngestionErrorType::CustomerError,
+            "DATA_SET_DELETED" => IngestionErrorType::DataSetDeleted,
+            "DATA_SET_NOT_SPICE" => IngestionErrorType::DataSetNotSpice,
+            "DATA_SET_SIZE_LIMIT_EXCEEDED" => IngestionErrorType::DataSetSizeLimitExceeded,
+            "DATA_SOURCE_AUTH_FAILED" => IngestionErrorType::DataSourceAuthFailed,
+            "DATA_SOURCE_CONNECTION_FAILED" => IngestionErrorType::DataSourceConnectionFailed,
+            "DATA_SOURCE_NOT_FOUND" => IngestionErrorType::DataSourceNotFound,
+            "DATA_TOLERANCE_EXCEPTION" => IngestionErrorType::DataToleranceException,
+            "FAILURE_TO_ASSUME_ROLE" => IngestionErrorType::FailureToAssumeRole,
+            "FAILURE_TO_PROCESS_JSON_FILE" => IngestionErrorType::FailureToProcessJsonFile,
+            "IAM_ROLE_NOT_AVAILABLE" => IngestionErrorType::IamRoleNotAvailable,
+            "INGESTION_CANCELED" => IngestionErrorType::IngestionCanceled,
+            "INGESTION_SUPERSEDED" => IngestionErrorType::IngestionSuperseded,
+            "INTERNAL_SERVICE_ERROR" => IngestionErrorType::InternalServiceError,
+            "INVALID_DATAPREP_SYNTAX" => IngestionErrorType::InvalidDataprepSyntax,
+            "INVALID_DATA_SOURCE_CONFIG" => IngestionErrorType::InvalidDataSourceConfig,
+            "INVALID_DATE_FORMAT" => IngestionErrorType::InvalidDateFormat,
+            "IOT_DATA_SET_FILE_EMPTY" => IngestionErrorType::IotDataSetFileEmpty,
+            "IOT_FILE_NOT_FOUND" => IngestionErrorType::IotFileNotFound,
+            "OAUTH_TOKEN_FAILURE" => IngestionErrorType::OauthTokenFailure,
+            "PASSWORD_AUTHENTICATION_FAILURE" => IngestionErrorType::PasswordAuthenticationFailure,
+            "PERMISSION_DENIED" => IngestionErrorType::PermissionDenied,
+            "QUERY_TIMEOUT" => IngestionErrorType::QueryTimeout,
+            "ROW_SIZE_LIMIT_EXCEEDED" => IngestionErrorType::RowSizeLimitExceeded,
+            "S3_FILE_INACCESSIBLE" => IngestionErrorType::S3FileInaccessible,
+            "S3_MANIFEST_ERROR" => IngestionErrorType::S3ManifestError,
+            "S3_UPLOADED_FILE_DELETED" => IngestionErrorType::S3UploadedFileDeleted,
+            "SOURCE_API_LIMIT_EXCEEDED_FAILURE" => {
+                IngestionErrorType::SourceApiLimitExceededFailure
+            }
+            "SOURCE_RESOURCE_LIMIT_EXCEEDED" => IngestionErrorType::SourceResourceLimitExceeded,
+            "SPICE_TABLE_NOT_FOUND" => IngestionErrorType::SpiceTableNotFound,
+            "SQL_EXCEPTION" => IngestionErrorType::SqlException,
+            "SQL_INVALID_PARAMETER_VALUE" => IngestionErrorType::SqlInvalidParameterValue,
+            "SQL_NUMERIC_OVERFLOW" => IngestionErrorType::SqlNumericOverflow,
+            "SQL_SCHEMA_MISMATCH_ERROR" => IngestionErrorType::SqlSchemaMismatchError,
+            "SQL_TABLE_NOT_FOUND" => IngestionErrorType::SqlTableNotFound,
+            "SSL_CERTIFICATE_VALIDATION_FAILURE" => {
+                IngestionErrorType::SslCertificateValidationFailure
+            }
+            "UNRESOLVABLE_HOST" => IngestionErrorType::UnresolvableHost,
+            "UNROUTABLE_HOST" => IngestionErrorType::UnroutableHost,
+            _ => IngestionErrorType::UnknownVariant(UnknownIngestionErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IngestionErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IngestionErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IngestionErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIngestionRequestSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IngestionRequestSource {
+    Manual,
+    Scheduled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIngestionRequestSource),
+}
+
+impl Default for IngestionRequestSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IngestionRequestSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IngestionRequestSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IngestionRequestSource {
+    fn into(self) -> String {
+        match self {
+            IngestionRequestSource::Manual => "MANUAL".to_string(),
+            IngestionRequestSource::Scheduled => "SCHEDULED".to_string(),
+            IngestionRequestSource::UnknownVariant(UnknownIngestionRequestSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IngestionRequestSource {
+    fn into(self) -> &'a str {
+        match self {
+            IngestionRequestSource::Manual => &"MANUAL",
+            IngestionRequestSource::Scheduled => &"SCHEDULED",
+            IngestionRequestSource::UnknownVariant(UnknownIngestionRequestSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IngestionRequestSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "MANUAL" => IngestionRequestSource::Manual,
+            "SCHEDULED" => IngestionRequestSource::Scheduled,
+            _ => IngestionRequestSource::UnknownVariant(UnknownIngestionRequestSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IngestionRequestSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MANUAL" => IngestionRequestSource::Manual,
+            "SCHEDULED" => IngestionRequestSource::Scheduled,
+            _ => IngestionRequestSource::UnknownVariant(UnknownIngestionRequestSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IngestionRequestSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IngestionRequestSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IngestionRequestSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIngestionRequestType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IngestionRequestType {
+    Edit,
+    FullRefresh,
+    IncrementalRefresh,
+    InitialIngestion,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIngestionRequestType),
+}
+
+impl Default for IngestionRequestType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IngestionRequestType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IngestionRequestType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IngestionRequestType {
+    fn into(self) -> String {
+        match self {
+            IngestionRequestType::Edit => "EDIT".to_string(),
+            IngestionRequestType::FullRefresh => "FULL_REFRESH".to_string(),
+            IngestionRequestType::IncrementalRefresh => "INCREMENTAL_REFRESH".to_string(),
+            IngestionRequestType::InitialIngestion => "INITIAL_INGESTION".to_string(),
+            IngestionRequestType::UnknownVariant(UnknownIngestionRequestType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IngestionRequestType {
+    fn into(self) -> &'a str {
+        match self {
+            IngestionRequestType::Edit => &"EDIT",
+            IngestionRequestType::FullRefresh => &"FULL_REFRESH",
+            IngestionRequestType::IncrementalRefresh => &"INCREMENTAL_REFRESH",
+            IngestionRequestType::InitialIngestion => &"INITIAL_INGESTION",
+            IngestionRequestType::UnknownVariant(UnknownIngestionRequestType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IngestionRequestType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EDIT" => IngestionRequestType::Edit,
+            "FULL_REFRESH" => IngestionRequestType::FullRefresh,
+            "INCREMENTAL_REFRESH" => IngestionRequestType::IncrementalRefresh,
+            "INITIAL_INGESTION" => IngestionRequestType::InitialIngestion,
+            _ => IngestionRequestType::UnknownVariant(UnknownIngestionRequestType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IngestionRequestType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EDIT" => IngestionRequestType::Edit,
+            "FULL_REFRESH" => IngestionRequestType::FullRefresh,
+            "INCREMENTAL_REFRESH" => IngestionRequestType::IncrementalRefresh,
+            "INITIAL_INGESTION" => IngestionRequestType::InitialIngestion,
+            _ => IngestionRequestType::UnknownVariant(UnknownIngestionRequestType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IngestionRequestType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IngestionRequestType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IngestionRequestType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIngestionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IngestionStatus {
+    Cancelled,
+    Completed,
+    Failed,
+    Initialized,
+    Queued,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIngestionStatus),
+}
+
+impl Default for IngestionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IngestionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IngestionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IngestionStatus {
+    fn into(self) -> String {
+        match self {
+            IngestionStatus::Cancelled => "CANCELLED".to_string(),
+            IngestionStatus::Completed => "COMPLETED".to_string(),
+            IngestionStatus::Failed => "FAILED".to_string(),
+            IngestionStatus::Initialized => "INITIALIZED".to_string(),
+            IngestionStatus::Queued => "QUEUED".to_string(),
+            IngestionStatus::Running => "RUNNING".to_string(),
+            IngestionStatus::UnknownVariant(UnknownIngestionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IngestionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            IngestionStatus::Cancelled => &"CANCELLED",
+            IngestionStatus::Completed => &"COMPLETED",
+            IngestionStatus::Failed => &"FAILED",
+            IngestionStatus::Initialized => &"INITIALIZED",
+            IngestionStatus::Queued => &"QUEUED",
+            IngestionStatus::Running => &"RUNNING",
+            IngestionStatus::UnknownVariant(UnknownIngestionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IngestionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => IngestionStatus::Cancelled,
+            "COMPLETED" => IngestionStatus::Completed,
+            "FAILED" => IngestionStatus::Failed,
+            "INITIALIZED" => IngestionStatus::Initialized,
+            "QUEUED" => IngestionStatus::Queued,
+            "RUNNING" => IngestionStatus::Running,
+            _ => IngestionStatus::UnknownVariant(UnknownIngestionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IngestionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => IngestionStatus::Cancelled,
+            "COMPLETED" => IngestionStatus::Completed,
+            "FAILED" => IngestionStatus::Failed,
+            "INITIALIZED" => IngestionStatus::Initialized,
+            "QUEUED" => IngestionStatus::Queued,
+            "RUNNING" => IngestionStatus::Running,
+            _ => IngestionStatus::UnknownVariant(UnknownIngestionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IngestionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IngestionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IngestionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Metadata for a column that is used as the input of a transform operation.</p>
@@ -3208,7 +6240,136 @@ pub struct InputColumn {
     pub name: String,
     /// <p>The data type of the column.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: InputColumnDataType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputColumnDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputColumnDataType {
+    Bit,
+    Boolean,
+    Datetime,
+    Decimal,
+    Integer,
+    Json,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputColumnDataType),
+}
+
+impl Default for InputColumnDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputColumnDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputColumnDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputColumnDataType {
+    fn into(self) -> String {
+        match self {
+            InputColumnDataType::Bit => "BIT".to_string(),
+            InputColumnDataType::Boolean => "BOOLEAN".to_string(),
+            InputColumnDataType::Datetime => "DATETIME".to_string(),
+            InputColumnDataType::Decimal => "DECIMAL".to_string(),
+            InputColumnDataType::Integer => "INTEGER".to_string(),
+            InputColumnDataType::Json => "JSON".to_string(),
+            InputColumnDataType::String => "STRING".to_string(),
+            InputColumnDataType::UnknownVariant(UnknownInputColumnDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputColumnDataType {
+    fn into(self) -> &'a str {
+        match self {
+            InputColumnDataType::Bit => &"BIT",
+            InputColumnDataType::Boolean => &"BOOLEAN",
+            InputColumnDataType::Datetime => &"DATETIME",
+            InputColumnDataType::Decimal => &"DECIMAL",
+            InputColumnDataType::Integer => &"INTEGER",
+            InputColumnDataType::Json => &"JSON",
+            InputColumnDataType::String => &"STRING",
+            InputColumnDataType::UnknownVariant(UnknownInputColumnDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InputColumnDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BIT" => InputColumnDataType::Bit,
+            "BOOLEAN" => InputColumnDataType::Boolean,
+            "DATETIME" => InputColumnDataType::Datetime,
+            "DECIMAL" => InputColumnDataType::Decimal,
+            "INTEGER" => InputColumnDataType::Integer,
+            "JSON" => InputColumnDataType::Json,
+            "STRING" => InputColumnDataType::String,
+            _ => InputColumnDataType::UnknownVariant(UnknownInputColumnDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputColumnDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BIT" => InputColumnDataType::Bit,
+            "BOOLEAN" => InputColumnDataType::Boolean,
+            "DATETIME" => InputColumnDataType::Datetime,
+            "DECIMAL" => InputColumnDataType::Decimal,
+            "INTEGER" => InputColumnDataType::Integer,
+            "JSON" => InputColumnDataType::Json,
+            "STRING" => InputColumnDataType::String,
+            _ => InputColumnDataType::UnknownVariant(UnknownInputColumnDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputColumnDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputColumnDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputColumnDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An integer parameter.</p>
@@ -3253,7 +6414,7 @@ pub struct JoinInstruction {
     pub right_operand: String,
     /// <p>The type of join that it is.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: JoinType,
 }
 
 /// <p>Properties associated with the columns participating in a join.</p>
@@ -3263,6 +6424,116 @@ pub struct JoinKeyProperties {
     #[serde(rename = "UniqueKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unique_key: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJoinType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JoinType {
+    Inner,
+    Left,
+    Outer,
+    Right,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJoinType),
+}
+
+impl Default for JoinType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JoinType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JoinType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JoinType {
+    fn into(self) -> String {
+        match self {
+            JoinType::Inner => "INNER".to_string(),
+            JoinType::Left => "LEFT".to_string(),
+            JoinType::Outer => "OUTER".to_string(),
+            JoinType::Right => "RIGHT".to_string(),
+            JoinType::UnknownVariant(UnknownJoinType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JoinType {
+    fn into(self) -> &'a str {
+        match self {
+            JoinType::Inner => &"INNER",
+            JoinType::Left => &"LEFT",
+            JoinType::Outer => &"OUTER",
+            JoinType::Right => &"RIGHT",
+            JoinType::UnknownVariant(UnknownJoinType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JoinType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INNER" => JoinType::Inner,
+            "LEFT" => JoinType::Left,
+            "OUTER" => JoinType::Outer,
+            "RIGHT" => JoinType::Right,
+            _ => JoinType::UnknownVariant(UnknownJoinType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JoinType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INNER" => JoinType::Inner,
+            "LEFT" => JoinType::Left,
+            "OUTER" => JoinType::Outer,
+            "RIGHT" => JoinType::Right,
+            _ => JoinType::UnknownVariant(UnknownJoinType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JoinType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JoinType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JoinType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3585,7 +6856,7 @@ pub struct ListIAMPolicyAssignmentsRequest {
     /// <p>The status of the assignments.</p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
     /// <p>The ID of the AWS account that contains these IAM policy assignments.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
@@ -3939,7 +7210,7 @@ pub struct ListThemesRequest {
     /// <p><p>The type of themes that you want to list. Valid options include the following:</p> <ul> <li> <p> <code>ALL (default)</code>- Display all existing themes.</p> </li> <li> <p> <code>CUSTOM</code> - Display only the themes created by people using Amazon QuickSight.</p> </li> <li> <p> <code>QUICKSIGHT</code> - Display only the starting themes defined by QuickSight.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ThemeType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -4133,7 +7404,112 @@ pub struct NamespaceError {
     /// <p>The error type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<NamespaceErrorType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNamespaceErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NamespaceErrorType {
+    InternalServiceError,
+    PermissionDenied,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNamespaceErrorType),
+}
+
+impl Default for NamespaceErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NamespaceErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NamespaceErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NamespaceErrorType {
+    fn into(self) -> String {
+        match self {
+            NamespaceErrorType::InternalServiceError => "INTERNAL_SERVICE_ERROR".to_string(),
+            NamespaceErrorType::PermissionDenied => "PERMISSION_DENIED".to_string(),
+            NamespaceErrorType::UnknownVariant(UnknownNamespaceErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NamespaceErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            NamespaceErrorType::InternalServiceError => &"INTERNAL_SERVICE_ERROR",
+            NamespaceErrorType::PermissionDenied => &"PERMISSION_DENIED",
+            NamespaceErrorType::UnknownVariant(UnknownNamespaceErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NamespaceErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERNAL_SERVICE_ERROR" => NamespaceErrorType::InternalServiceError,
+            "PERMISSION_DENIED" => NamespaceErrorType::PermissionDenied,
+            _ => NamespaceErrorType::UnknownVariant(UnknownNamespaceErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NamespaceErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERNAL_SERVICE_ERROR" => NamespaceErrorType::InternalServiceError,
+            "PERMISSION_DENIED" => NamespaceErrorType::PermissionDenied,
+            _ => NamespaceErrorType::UnknownVariant(UnknownNamespaceErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NamespaceErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NamespaceErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NamespaceErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The error type.</p>
@@ -4151,11 +7527,11 @@ pub struct NamespaceInfoV2 {
     /// <p>The creation status of a namespace that is not yet completely created.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<NamespaceStatus>,
     /// <p>The identity store used for the namespace.</p>
     #[serde(rename = "IdentityStore")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_store: Option<String>,
+    pub identity_store: Option<IdentityStore>,
     /// <p>The name of the error.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4164,6 +7540,122 @@ pub struct NamespaceInfoV2 {
     #[serde(rename = "NamespaceError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace_error: Option<NamespaceError>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNamespaceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NamespaceStatus {
+    Created,
+    Creating,
+    Deleting,
+    NonRetryableFailure,
+    RetryableFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNamespaceStatus),
+}
+
+impl Default for NamespaceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NamespaceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NamespaceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NamespaceStatus {
+    fn into(self) -> String {
+        match self {
+            NamespaceStatus::Created => "CREATED".to_string(),
+            NamespaceStatus::Creating => "CREATING".to_string(),
+            NamespaceStatus::Deleting => "DELETING".to_string(),
+            NamespaceStatus::NonRetryableFailure => "NON_RETRYABLE_FAILURE".to_string(),
+            NamespaceStatus::RetryableFailure => "RETRYABLE_FAILURE".to_string(),
+            NamespaceStatus::UnknownVariant(UnknownNamespaceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NamespaceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NamespaceStatus::Created => &"CREATED",
+            NamespaceStatus::Creating => &"CREATING",
+            NamespaceStatus::Deleting => &"DELETING",
+            NamespaceStatus::NonRetryableFailure => &"NON_RETRYABLE_FAILURE",
+            NamespaceStatus::RetryableFailure => &"RETRYABLE_FAILURE",
+            NamespaceStatus::UnknownVariant(UnknownNamespaceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NamespaceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => NamespaceStatus::Created,
+            "CREATING" => NamespaceStatus::Creating,
+            "DELETING" => NamespaceStatus::Deleting,
+            "NON_RETRYABLE_FAILURE" => NamespaceStatus::NonRetryableFailure,
+            "RETRYABLE_FAILURE" => NamespaceStatus::RetryableFailure,
+            _ => NamespaceStatus::UnknownVariant(UnknownNamespaceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NamespaceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => NamespaceStatus::Created,
+            "CREATING" => NamespaceStatus::Creating,
+            "DELETING" => NamespaceStatus::Deleting,
+            "NON_RETRYABLE_FAILURE" => NamespaceStatus::NonRetryableFailure,
+            "RETRYABLE_FAILURE" => NamespaceStatus::RetryableFailure,
+            _ => NamespaceStatus::UnknownVariant(UnknownNamespaceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NamespaceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NamespaceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NamespaceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Oracle parameters.</p>
@@ -4195,7 +7687,7 @@ pub struct OutputColumn {
     /// <p>Type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ColumnDataType>,
 }
 
 /// <p>A list of QuickSight parameters and the list's override values.</p>
@@ -4335,7 +7827,7 @@ pub struct RegisterUserRequest {
     pub iam_arn: Option<String>,
     /// <p><p>Amazon QuickSight supports several ways of managing the identity of users. This parameter accepts two values:</p> <ul> <li> <p> <code>IAM</code>: A user whose identity maps to an existing IAM user or role. </p> </li> <li> <p> <code>QUICKSIGHT</code>: A user whose identity is owned and managed internally by Amazon QuickSight. </p> </li> </ul></p>
     #[serde(rename = "IdentityType")]
-    pub identity_type: String,
+    pub identity_type: IdentityType,
     /// <p>The namespace. Currently, you should set this to <code>default</code>.</p>
     #[serde(rename = "Namespace")]
     pub namespace: String,
@@ -4349,7 +7841,7 @@ pub struct RegisterUserRequest {
     pub user_name: Option<String>,
     /// <p><p>The Amazon QuickSight role for the user. The user role can be one of the following:</p> <ul> <li> <p> <code>READER</code>: A user who has read-only access to dashboards.</p> </li> <li> <p> <code>AUTHOR</code>: A user who can create data sources, datasets, analyses, and dashboards.</p> </li> <li> <p> <code>ADMIN</code>: A user who is an author, who can also manage Amazon QuickSight settings.</p> </li> <li> <p> <code>RESTRICTED<em>READER</code>: This role isn&#39;t currently available for use.</p> </li> <li> <p> <code>RESTRICTED</em>AUTHOR</code>: This role isn&#39;t currently available for use.</p> </li> </ul></p>
     #[serde(rename = "UserRole")]
-    pub user_role: String,
+    pub user_role: UserRole,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -4417,6 +7909,132 @@ pub struct ResourcePermission {
     pub principal: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceStatus {
+    CreationFailed,
+    CreationInProgress,
+    CreationSuccessful,
+    Deleted,
+    UpdateFailed,
+    UpdateInProgress,
+    UpdateSuccessful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceStatus),
+}
+
+impl Default for ResourceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceStatus {
+    fn into(self) -> String {
+        match self {
+            ResourceStatus::CreationFailed => "CREATION_FAILED".to_string(),
+            ResourceStatus::CreationInProgress => "CREATION_IN_PROGRESS".to_string(),
+            ResourceStatus::CreationSuccessful => "CREATION_SUCCESSFUL".to_string(),
+            ResourceStatus::Deleted => "DELETED".to_string(),
+            ResourceStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            ResourceStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            ResourceStatus::UpdateSuccessful => "UPDATE_SUCCESSFUL".to_string(),
+            ResourceStatus::UnknownVariant(UnknownResourceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceStatus::CreationFailed => &"CREATION_FAILED",
+            ResourceStatus::CreationInProgress => &"CREATION_IN_PROGRESS",
+            ResourceStatus::CreationSuccessful => &"CREATION_SUCCESSFUL",
+            ResourceStatus::Deleted => &"DELETED",
+            ResourceStatus::UpdateFailed => &"UPDATE_FAILED",
+            ResourceStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            ResourceStatus::UpdateSuccessful => &"UPDATE_SUCCESSFUL",
+            ResourceStatus::UnknownVariant(UnknownResourceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATION_FAILED" => ResourceStatus::CreationFailed,
+            "CREATION_IN_PROGRESS" => ResourceStatus::CreationInProgress,
+            "CREATION_SUCCESSFUL" => ResourceStatus::CreationSuccessful,
+            "DELETED" => ResourceStatus::Deleted,
+            "UPDATE_FAILED" => ResourceStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => ResourceStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => ResourceStatus::UpdateSuccessful,
+            _ => ResourceStatus::UnknownVariant(UnknownResourceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATION_FAILED" => ResourceStatus::CreationFailed,
+            "CREATION_IN_PROGRESS" => ResourceStatus::CreationInProgress,
+            "CREATION_SUCCESSFUL" => ResourceStatus::CreationSuccessful,
+            "DELETED" => ResourceStatus::Deleted,
+            "UPDATE_FAILED" => ResourceStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => ResourceStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => ResourceStatus::UpdateSuccessful,
+            _ => ResourceStatus::UnknownVariant(UnknownResourceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreAnalysisRequest {
@@ -4475,7 +8093,111 @@ pub struct RowLevelPermissionDataSet {
     pub namespace: Option<String>,
     /// <p>Permission policy.</p>
     #[serde(rename = "PermissionPolicy")]
-    pub permission_policy: String,
+    pub permission_policy: RowLevelPermissionPolicy,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRowLevelPermissionPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RowLevelPermissionPolicy {
+    DenyAccess,
+    GrantAccess,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRowLevelPermissionPolicy),
+}
+
+impl Default for RowLevelPermissionPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RowLevelPermissionPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RowLevelPermissionPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RowLevelPermissionPolicy {
+    fn into(self) -> String {
+        match self {
+            RowLevelPermissionPolicy::DenyAccess => "DENY_ACCESS".to_string(),
+            RowLevelPermissionPolicy::GrantAccess => "GRANT_ACCESS".to_string(),
+            RowLevelPermissionPolicy::UnknownVariant(UnknownRowLevelPermissionPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RowLevelPermissionPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            RowLevelPermissionPolicy::DenyAccess => &"DENY_ACCESS",
+            RowLevelPermissionPolicy::GrantAccess => &"GRANT_ACCESS",
+            RowLevelPermissionPolicy::UnknownVariant(UnknownRowLevelPermissionPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RowLevelPermissionPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "DENY_ACCESS" => RowLevelPermissionPolicy::DenyAccess,
+            "GRANT_ACCESS" => RowLevelPermissionPolicy::GrantAccess,
+            _ => RowLevelPermissionPolicy::UnknownVariant(UnknownRowLevelPermissionPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RowLevelPermissionPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DENY_ACCESS" => RowLevelPermissionPolicy::DenyAccess,
+            "GRANT_ACCESS" => RowLevelPermissionPolicy::GrantAccess,
+            _ => RowLevelPermissionPolicy::UnknownVariant(UnknownRowLevelPermissionPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RowLevelPermissionPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RowLevelPermissionPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RowLevelPermissionPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>S3 parameters.</p>
@@ -4610,7 +8332,7 @@ pub struct SheetControlsOption {
     /// <p>Visibility state.</p>
     #[serde(rename = "VisibilityState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub visibility_state: Option<String>,
+    pub visibility_state: Option<DashboardUIState>,
 }
 
 /// <p>The theme display options for sheets. </p>
@@ -4791,7 +8513,122 @@ pub struct TemplateError {
     /// <p>Type of error.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TemplateErrorType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTemplateErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TemplateErrorType {
+    AccessDenied,
+    DataSetNotFound,
+    InternalFailure,
+    SourceNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTemplateErrorType),
+}
+
+impl Default for TemplateErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TemplateErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TemplateErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TemplateErrorType {
+    fn into(self) -> String {
+        match self {
+            TemplateErrorType::AccessDenied => "ACCESS_DENIED".to_string(),
+            TemplateErrorType::DataSetNotFound => "DATA_SET_NOT_FOUND".to_string(),
+            TemplateErrorType::InternalFailure => "INTERNAL_FAILURE".to_string(),
+            TemplateErrorType::SourceNotFound => "SOURCE_NOT_FOUND".to_string(),
+            TemplateErrorType::UnknownVariant(UnknownTemplateErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TemplateErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            TemplateErrorType::AccessDenied => &"ACCESS_DENIED",
+            TemplateErrorType::DataSetNotFound => &"DATA_SET_NOT_FOUND",
+            TemplateErrorType::InternalFailure => &"INTERNAL_FAILURE",
+            TemplateErrorType::SourceNotFound => &"SOURCE_NOT_FOUND",
+            TemplateErrorType::UnknownVariant(UnknownTemplateErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TemplateErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => TemplateErrorType::AccessDenied,
+            "DATA_SET_NOT_FOUND" => TemplateErrorType::DataSetNotFound,
+            "INTERNAL_FAILURE" => TemplateErrorType::InternalFailure,
+            "SOURCE_NOT_FOUND" => TemplateErrorType::SourceNotFound,
+            _ => TemplateErrorType::UnknownVariant(UnknownTemplateErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TemplateErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => TemplateErrorType::AccessDenied,
+            "DATA_SET_NOT_FOUND" => TemplateErrorType::DataSetNotFound,
+            "INTERNAL_FAILURE" => TemplateErrorType::InternalFailure,
+            "SOURCE_NOT_FOUND" => TemplateErrorType::SourceNotFound,
+            _ => TemplateErrorType::UnknownVariant(UnknownTemplateErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TemplateErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TemplateErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TemplateErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The source analysis of the template.</p>
@@ -4890,7 +8727,7 @@ pub struct TemplateVersion {
     /// <p>The HTTP status of the request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The ARN of the theme associated with this version of the template.</p>
     #[serde(rename = "ThemeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4920,7 +8757,7 @@ pub struct TemplateVersionSummary {
     /// <p>The status of the template version.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The version number of the template version.</p>
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4939,6 +8776,106 @@ pub struct TeradataParameters {
     /// <p>Port.</p>
     #[serde(rename = "Port")]
     pub port: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTextQualifier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TextQualifier {
+    DoubleQuote,
+    SingleQuote,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTextQualifier),
+}
+
+impl Default for TextQualifier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TextQualifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TextQualifier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TextQualifier {
+    fn into(self) -> String {
+        match self {
+            TextQualifier::DoubleQuote => "DOUBLE_QUOTE".to_string(),
+            TextQualifier::SingleQuote => "SINGLE_QUOTE".to_string(),
+            TextQualifier::UnknownVariant(UnknownTextQualifier { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TextQualifier {
+    fn into(self) -> &'a str {
+        match self {
+            TextQualifier::DoubleQuote => &"DOUBLE_QUOTE",
+            TextQualifier::SingleQuote => &"SINGLE_QUOTE",
+            TextQualifier::UnknownVariant(UnknownTextQualifier { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TextQualifier {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOUBLE_QUOTE" => TextQualifier::DoubleQuote,
+            "SINGLE_QUOTE" => TextQualifier::SingleQuote,
+            _ => TextQualifier::UnknownVariant(UnknownTextQualifier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TextQualifier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOUBLE_QUOTE" => TextQualifier::DoubleQuote,
+            "SINGLE_QUOTE" => TextQualifier::SingleQuote,
+            _ => TextQualifier::UnknownVariant(UnknownTextQualifier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextQualifier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TextQualifier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TextQualifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about a theme.</p>
@@ -4968,7 +8905,7 @@ pub struct Theme {
     /// <p>The type of theme, based on how it was created. Valid values include: <code>QUICKSIGHT</code> and <code>CUSTOM</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ThemeType>,
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<ThemeVersion>,
@@ -5020,7 +8957,103 @@ pub struct ThemeError {
     /// <p>The type of error.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ThemeErrorType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThemeErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThemeErrorType {
+    InternalFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThemeErrorType),
+}
+
+impl Default for ThemeErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThemeErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThemeErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThemeErrorType {
+    fn into(self) -> String {
+        match self {
+            ThemeErrorType::InternalFailure => "INTERNAL_FAILURE".to_string(),
+            ThemeErrorType::UnknownVariant(UnknownThemeErrorType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThemeErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            ThemeErrorType::InternalFailure => &"INTERNAL_FAILURE",
+            ThemeErrorType::UnknownVariant(UnknownThemeErrorType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThemeErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERNAL_FAILURE" => ThemeErrorType::InternalFailure,
+            _ => ThemeErrorType::UnknownVariant(UnknownThemeErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThemeErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERNAL_FAILURE" => ThemeErrorType::InternalFailure,
+            _ => ThemeErrorType::UnknownVariant(UnknownThemeErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThemeErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ThemeErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThemeErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The theme summary.</p>
@@ -5051,6 +9084,111 @@ pub struct ThemeSummary {
     #[serde(rename = "ThemeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub theme_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThemeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThemeType {
+    All,
+    Custom,
+    Quicksight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThemeType),
+}
+
+impl Default for ThemeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThemeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThemeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThemeType {
+    fn into(self) -> String {
+        match self {
+            ThemeType::All => "ALL".to_string(),
+            ThemeType::Custom => "CUSTOM".to_string(),
+            ThemeType::Quicksight => "QUICKSIGHT".to_string(),
+            ThemeType::UnknownVariant(UnknownThemeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThemeType {
+    fn into(self) -> &'a str {
+        match self {
+            ThemeType::All => &"ALL",
+            ThemeType::Custom => &"CUSTOM",
+            ThemeType::Quicksight => &"QUICKSIGHT",
+            ThemeType::UnknownVariant(UnknownThemeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThemeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => ThemeType::All,
+            "CUSTOM" => ThemeType::Custom,
+            "QUICKSIGHT" => ThemeType::Quicksight,
+            _ => ThemeType::UnknownVariant(UnknownThemeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThemeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => ThemeType::All,
+            "CUSTOM" => ThemeType::Custom,
+            "QUICKSIGHT" => ThemeType::Quicksight,
+            _ => ThemeType::UnknownVariant(UnknownThemeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThemeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ThemeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThemeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A version of a theme.</p>
@@ -5084,7 +9222,7 @@ pub struct ThemeVersion {
     /// <p>The status of the theme version.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The version number of the theme.</p>
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5110,7 +9248,7 @@ pub struct ThemeVersionSummary {
     /// <p>The status of the theme version.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResourceStatus>,
     /// <p>The version number of the theme version.</p>
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5435,7 +9573,7 @@ pub struct UpdateAnalysisResponse {
     /// <p>The update status of the last update that was made to the analysis.</p>
     #[serde(rename = "UpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_status: Option<String>,
+    pub update_status: Option<ResourceStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5560,7 +9698,7 @@ pub struct UpdateDashboardResponse {
     /// <p>The creation status of the request.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The ID for the dashboard.</p>
     #[serde(rename = "DashboardId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5638,7 +9776,7 @@ pub struct UpdateDataSetRequest {
     pub data_set_id: String,
     /// <p>Indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
-    pub import_mode: String,
+    pub import_mode: DataSetImportMode,
     /// <p>Configures the combination and transformation of the data from the physical tables.</p>
     #[serde(rename = "LogicalTableMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5776,7 +9914,7 @@ pub struct UpdateDataSourceResponse {
     /// <p>The update status of the data source's last update.</p>
     #[serde(rename = "UpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_status: Option<String>,
+    pub update_status: Option<ResourceStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5823,7 +9961,7 @@ pub struct UpdateIAMPolicyAssignmentRequest {
     /// <p><p>The status of the assignment. Possible values are as follows:</p> <ul> <li> <p> <code>ENABLED</code> - Anything specified in this assignment is used when creating the data source.</p> </li> <li> <p> <code>DISABLED</code> - This assignment isn&#39;t used when creating the data source.</p> </li> <li> <p> <code>DRAFT</code> - This assignment is an unfinished draft and isn&#39;t used when creating the data source.</p> </li> </ul></p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
     /// <p>The ID of the AWS account that contains the IAM policy assignment. </p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
@@ -5854,7 +9992,7 @@ pub struct UpdateIAMPolicyAssignmentResponse {
     /// <p><p>The status of the assignment. Possible values are as follows:</p> <ul> <li> <p> <code>ENABLED</code> - Anything specified in this assignment is used when creating the data source.</p> </li> <li> <p> <code>DISABLED</code> - This assignment isn&#39;t used when creating the data source.</p> </li> <li> <p> <code>DRAFT</code> - This assignment is an unfinished draft and isn&#39;t used when creating the data source.</p> </li> </ul></p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
     /// <p>The QuickSight users, groups, or both that the IAM policy is assigned to.</p>
     #[serde(rename = "Identities")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5983,7 +10121,7 @@ pub struct UpdateTemplateResponse {
     /// <p>The creation status of the template.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6116,7 +10254,7 @@ pub struct UpdateThemeResponse {
     /// <p>The creation status of the theme.</p>
     #[serde(rename = "CreationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_status: Option<String>,
+    pub creation_status: Option<ResourceStatus>,
     /// <p>The AWS request ID for this operation.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6153,7 +10291,7 @@ pub struct UpdateUserRequest {
     pub namespace: String,
     /// <p>The Amazon QuickSight role of the user. The role can be one of the following default security cohorts:</p> <ul> <li> <p> <code>READER</code>: A user who has read-only access to dashboards.</p> </li> <li> <p> <code>AUTHOR</code>: A user who can create data sources, datasets, analyses, and dashboards.</p> </li> <li> <p> <code>ADMIN</code>: A user who is an author, who can also manage Amazon QuickSight settings.</p> </li> </ul> <p>The name of the QuickSight role is invisible to the user except for the console screens dealing with permissions.</p>
     #[serde(rename = "Role")]
-    pub role: String,
+    pub role: UserRole,
     /// <p>A flag that you use to indicate that you want to remove all custom permissions from this user. Using this parameter resets the user to the state it was in before a custom permissions profile was applied. This parameter defaults to NULL and it doesn't accept any other value.</p>
     #[serde(rename = "UnapplyCustomPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6194,7 +10332,7 @@ pub struct UploadSettings {
     /// <p>File format.</p>
     #[serde(rename = "Format")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: Option<FileFormat>,
     /// <p>A row number to start reading data from.</p>
     #[serde(rename = "StartFromRow")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6202,7 +10340,7 @@ pub struct UploadSettings {
     /// <p>Text qualifier.</p>
     #[serde(rename = "TextQualifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_qualifier: Option<String>,
+    pub text_qualifier: Option<TextQualifier>,
 }
 
 /// <p>A registered user of Amazon QuickSight. </p>
@@ -6228,7 +10366,7 @@ pub struct User {
     /// <p>The type of identity authentication used by the user.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>The principal ID of the user.</p>
     #[serde(rename = "PrincipalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6236,11 +10374,126 @@ pub struct User {
     /// <p><p>The Amazon QuickSight role for the user. The user role can be one of the following:.</p> <ul> <li> <p> <code>READER</code>: A user who has read-only access to dashboards.</p> </li> <li> <p> <code>AUTHOR</code>: A user who can create data sources, datasets, analyses, and dashboards.</p> </li> <li> <p> <code>ADMIN</code>: A user who is an author, who can also manage Amazon QuickSight settings.</p> </li> <li> <p> <code>RESTRICTED<em>READER</code>: This role isn&#39;t currently available for use.</p> </li> <li> <p> <code>RESTRICTED</em>AUTHOR</code>: This role isn&#39;t currently available for use.</p> </li> </ul></p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<UserRole>,
     /// <p>The user's user name.</p>
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserRole {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserRole {
+    Admin,
+    Author,
+    Reader,
+    RestrictedAuthor,
+    RestrictedReader,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserRole),
+}
+
+impl Default for UserRole {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserRole {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserRole {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserRole {
+    fn into(self) -> String {
+        match self {
+            UserRole::Admin => "ADMIN".to_string(),
+            UserRole::Author => "AUTHOR".to_string(),
+            UserRole::Reader => "READER".to_string(),
+            UserRole::RestrictedAuthor => "RESTRICTED_AUTHOR".to_string(),
+            UserRole::RestrictedReader => "RESTRICTED_READER".to_string(),
+            UserRole::UnknownVariant(UnknownUserRole { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserRole {
+    fn into(self) -> &'a str {
+        match self {
+            UserRole::Admin => &"ADMIN",
+            UserRole::Author => &"AUTHOR",
+            UserRole::Reader => &"READER",
+            UserRole::RestrictedAuthor => &"RESTRICTED_AUTHOR",
+            UserRole::RestrictedReader => &"RESTRICTED_READER",
+            UserRole::UnknownVariant(UnknownUserRole { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserRole {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN" => UserRole::Admin,
+            "AUTHOR" => UserRole::Author,
+            "READER" => UserRole::Reader,
+            "RESTRICTED_AUTHOR" => UserRole::RestrictedAuthor,
+            "RESTRICTED_READER" => UserRole::RestrictedReader,
+            _ => UserRole::UnknownVariant(UnknownUserRole {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserRole {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN" => UserRole::Admin,
+            "AUTHOR" => UserRole::Author,
+            "READER" => UserRole::Reader,
+            "RESTRICTED_AUTHOR" => UserRole::RestrictedAuthor,
+            "RESTRICTED_READER" => UserRole::RestrictedReader,
+            _ => UserRole::UnknownVariant(UnknownUserRole { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserRole {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserRole {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserRole {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>VPC connection properties.</p>
