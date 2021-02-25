@@ -1,4 +1,4 @@
-use crate::generated::{CloudWatch, CloudWatchClient, Dimension, MetricDatum, PutMetricDataInput};
+use crate::generated::{CloudWatch, CloudWatchClient, Dimension, MetricDatum, PutMetricDataInput, StandardUnit};
 
 use rusoto_core::param::Params;
 use rusoto_core::signature::SignedRequest;
@@ -52,7 +52,7 @@ async fn should_serialize_complex_metric_data_params() {
         metric_name: "buffers".to_string(),
         statistic_values: None,
         timestamp: None,
-        unit: Some("Bytes".to_string()),
+        unit: Some(StandardUnit::Bytes),
         value: Some(1.0),
         ..Default::default()
     }];

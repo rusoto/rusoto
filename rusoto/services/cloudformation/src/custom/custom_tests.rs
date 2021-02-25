@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use crate::generated::{CloudFormation, CloudFormationClient, ListStacksInput};
+use crate::generated::{CloudFormation, CloudFormationClient, ListStacksInput, StackStatus};
 
 use self::rusoto_mock::*;
 use rusoto_core::param::Params;
@@ -66,8 +66,8 @@ async fn should_serialize_list_parameters_in_request_body() {
         });
 
     let filters = vec![
-        "CREATE_IN_PROGRESS".to_owned(),
-        "DELETE_COMPLETE".to_owned(),
+        StackStatus::CreateInProgress,
+        StackStatus::DeleteComplete,
     ];
     let request = ListStacksInput {
         stack_status_filter: Some(filters),
